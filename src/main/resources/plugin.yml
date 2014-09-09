@@ -1,0 +1,179 @@
+name: PlotMe
+main: com.worldcretornica.plotme_core.PlotMe_Core
+version: ${project.version}
+author: ZachBora, flungo
+website: http://dev.bukkit.org/server-mods/plotme/
+softdepend: [WorldEdit, Vault, LWC, PlotMe-DefaultGenerator, Multiverse-Core, MultiWorld]
+description: >
+             Handles plot management and protection
+commands:
+    plotme:
+      description: List PlotMe commands
+      usage: /plotme
+      aliases: [p,plot]
+permissions:
+    plotme.use:
+      description: Gives default user commands
+      children:
+        plotme.use.claim: true
+        plotme.use.auto: true
+        plotme.use.home: true
+        plotme.use.info: true
+        plotme.use.comment: true
+        plotme.use.comments: true
+        plotme.use.biome: true
+        plotme.use.clear: true
+        plotme.use.list: true
+        plotme.use.buy: true
+        plotme.use.sell: true
+        plotme.use.auction: true
+        plotme.use.bid: true
+        plotme.use.dispose: true
+        plotme.use.done: true
+        plotme.use.deny: true
+        plotme.use.undeny: true
+        plotme.use.reset: true
+        plotme.limit.1: true
+    plotme.admin:
+      description: Gives default administrator commands
+      children:
+        plotme.admin.claim.other: true
+        plotme.admin.home.other: true
+        plotme.admin.tp: true
+        plotme.admin.id: true
+        plotme.admin.clear: true
+        plotme.admin.reset: true
+        plotme.admin.add: true
+        plotme.admin.remove: true
+        plotme.admin.setowner: true
+        plotme.admin.setheight: true
+        plotme.admin.setowner: true
+        plotme.admin.move: true
+        plotme.admin.weanywhere: true
+        plotme.admin.list: true
+        plotme.admin.reload: true
+        plotme.admin.buy: true
+        plotme.admin.sell: true
+        plotme.admin.auction: true
+        plotme.admin.dispose: true
+        plotme.admin.done: true
+        plotme.admin.addtime: true
+        plotme.admin.expired: true
+        plotme.admin.resetexpired: true
+        plotme.admin.deny: true
+        plotme.admin.undeny: true
+        plotme.admin.bypassdeny: true
+        plotme.admin.buildanywhere: true
+        plotme.admin.createworld: true
+    plotme.use.buy:
+      description: Gives the buy command
+    plotme.use.sell:
+      description: Gives the sell command
+    plotme.use.auction:
+      description: Gives the auction command
+    plotme.use.bid:
+      description: Gives the bid command
+    plotme.use.dispose:
+      description: Gives the dispose command
+    plotme.use.done:
+      description: Gives the done command
+    plotme.use.claim:
+      description: Gives the claim command
+    plotme.use.auto:
+      description: Gives the auto claim command
+    plotme.use.reset:
+      description: Gives the reset command for plots owned
+    plotme.use.home:
+      description: Gives the home command
+    plotme.use.info:
+      description: Gives the info command
+    plotme.use.comment:
+      description: Gives the comment command
+    plotme.use.comments:
+      description: Gives the comments command
+    plotme.use.biome:
+      description: Gives the biome and biomelist command
+    plotme.use.clear:
+      description: Gives the clear command for plots owned
+    plotme.use.list:
+      description: Gives the list command
+    plotme.use.add:
+      description: Gives the add command for plots owned
+    plotme.use.deny:
+      description: Gives the deny command for plots owned
+    plotme.use.remove:
+      description: Gives the remove command for plots owned
+    plotme.use.undeny:
+      description: Gives the undeny command for plots owned
+    plotme.use.protect:
+      description: Gives the protect command
+    plotme.limit.*:
+      description: Gives unlimited plots
+    plotme.limit.1:
+      description: Gives 1 plot
+    plotme.limit.2:
+      description: Gives 2 plots
+    plotme.limit.3:
+      description: Gives 3 plots
+    plotme.limit.4:
+      description: Gives 4 plots
+    plotme.limit.5:
+      description: Gives 5 plots
+    plotme.limit.10:
+      description: Gives 10 plots
+    plotme.admin.claim.other:
+      description: Gives the claim command for any player
+    plotme.admin.home.other:
+      description: Gives the home command for any players
+    plotme.admin.tp:
+      description: Gives the tp command
+    plotme.admin.id:
+      description: Gives the id command
+    plotme.admin.clear:
+      description: Gives the clear command for any plots
+    plotme.admin.reset:
+      description: Gives the reset command
+    plotme.admin.add:
+      description: Gives the add command for any plots
+    plotme.admin.deny:
+      description: Gives the deny command for any plots
+    plotme.admin.remove:
+      description: Gives the remove command for any plots
+    plotme.admin.undeny:
+      description: Gives the undeny command for any plots
+    plotme.admin.bypassdeny:
+      description: Allows to enter denied plots
+    plotme.admin.setowner:
+      description: Gives the setowner command
+    plotme.admin.setheight:
+      description: Gives the setheight, addheight, subheight commands
+    plotme.admin.setbase:
+      description: Gives the setbase command
+    plotme.admin.move:
+      description: Gives the move command
+    plotme.admin.weanywhere:
+      description: Gives the weanywhere command
+    plotme.admin.list:
+      description: Gives the list command for any players
+    plotme.admin.reload:
+      description: Gives the reload command
+    plotme.admin.buy:
+      description: Gives the buy command
+    plotme.admin.sell:
+      description: Gives the sell command for any plots
+    plotme.admin.auction:
+      description: Gives the auction command for any plots
+    plotme.admin.dispose:
+      description: Gives the dispose command for any plots
+    plotme.admin.done:
+      description: Gives the done command for any plots and the donelist command
+    plotme.admin.addtime:
+      description: Gives the addtime command for any plots
+    plotme.admin.expired:
+      description: Gives the expired command
+    plotme.admin.resetexpired:
+      description: Resets expired plots
+    plotme.admin.buildanywhere:
+      description: Allows to build anywhere in the plot world
+    plotme.admin.createworld:
+      description: Allows to create a new plot world
