@@ -3,9 +3,10 @@ package com.worldcretornica.plotme_core.commands;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.utils.MinecraftFontWidthCalculator;
-import java.util.List;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+
+import java.util.List;
 
 public class CmdExpired extends PlotCommand {
 
@@ -21,7 +22,7 @@ public class CmdExpired extends PlotCommand {
             } else {
                 int pagesize = 8;
                 int page = 1;
-                int maxpage = 0;
+                int maxpage;
                 World w = p.getWorld();
 
                 if (args.length == 2) {

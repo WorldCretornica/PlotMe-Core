@@ -124,9 +124,7 @@ public class CmdAuto extends PlotCommand {
 
                             p.sendMessage(C("MsgThisPlotYours") + " " + C("WordUse") + " " + RED + "/plotme " + C("CommandHome") + RESET + " " + C("MsgToGetToIt") + " " + Util().moneyFormat(-price));
 
-                            if (true) {
-                                plugin.getLogger().info(LOG + name + " " + C("MsgClaimedPlot") + " " + id + ((price != 0) ? " " + C("WordFor") + " " + price : ""));
-                            }
+                            plugin.getLogger().info(LOG + name + " " + C("MsgClaimedPlot") + " " + id + ((price != 0) ? " " + C("WordFor") + " " + price : ""));
 
                         }
                         return true;

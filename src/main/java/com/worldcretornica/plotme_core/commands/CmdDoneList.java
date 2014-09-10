@@ -4,8 +4,9 @@ import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.utils.MinecraftFontWidthCalculator;
-import java.util.List;
 import org.bukkit.entity.Player;
+
+import java.util.List;
 
 public class CmdDoneList extends PlotCommand {
 
@@ -21,7 +22,7 @@ public class CmdDoneList extends PlotCommand {
                 p.sendMessage(RED + C("MsgNotPlotWorld"));
                 return true;
             } else {
-                int maxpage = 0;
+                int maxpage;
                 int pagesize = 8;
                 int page = 1;
 

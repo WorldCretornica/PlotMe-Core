@@ -74,13 +74,7 @@
     <repositories>
         <repository>
             <id>bukkit-repo</id>
-            <url>http://repo.bukkit.org/content/groups/public</url>
-            <releases>
-                <updatePolicy>always</updatePolicy>
-            </releases>
-            <snapshots>
-                <updatePolicy>always</updatePolicy>
-            </snapshots>
+            <url>http://repo.bukkit.org/content/groups/public/</url>
         </repository>
         <repository>
             <id>flungo-repo</id>
@@ -108,7 +102,9 @@
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
-            <version>1.7.10-R0.1-SNAPSHOT</version>
+	        <version>1.7.10-R0.1-SNAPSHOT</version>
+	        <type>jar</type>
+	        <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>me.flungo.bukkit</groupId>
@@ -129,6 +125,7 @@
             <groupId>net.milkbowl.vault</groupId>
             <artifactId>VaultAPI</artifactId>
             <version>1.4</version>
+	        <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.getlwc</groupId>

@@ -23,15 +23,11 @@ public class CmdWEAnywhere extends PlotCommand {
             if (plugin.getPlotMeCoreManager().isPlayerIgnoringWELimit(p.getName())) {
                 p.sendMessage(C("MsgWorldEditAnywhere"));
 
-                if (true) {
-                    plugin.getLogger().info(LOG + name + " enabled WorldEdit anywhere");
-                }
+                plugin.getLogger().info(LOG + name + " enabled WorldEdit anywhere");
             } else {
                 p.sendMessage(C("MsgWorldEditInYourPlots"));
 
-                if (true) {
-                    plugin.getLogger().info(LOG + name + " disabled WorldEdit anywhere");
-                }
+                plugin.getLogger().info(LOG + name + " disabled WorldEdit anywhere");
             }
         } else {
             p.sendMessage(RED + C("MsgPermissionDenied"));

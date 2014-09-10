@@ -36,7 +36,7 @@ public class CmdBid extends PlotCommand {
 
                             try {
                                 bid = Double.parseDouble(args[1]);
-                            } catch (Exception e) {
+                            } catch (NumberFormatException e) {
                             }
 
                             if (bid < currentbid || (bid == currentbid && !currentbidder.equals(""))) {

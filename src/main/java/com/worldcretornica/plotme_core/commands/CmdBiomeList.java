@@ -2,12 +2,13 @@ package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.utils.MinecraftFontWidthCalculator;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import org.bukkit.block.Biome;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class CmdBiomeList extends PlotCommand {
 
@@ -16,12 +17,12 @@ public class CmdBiomeList extends PlotCommand {
     }
 
     public boolean exec(CommandSender s, String[] args) {
-        if (!(s instanceof Player) || plugin.cPerms((Player) s, "PlotMe.use.biome")) {
+        if (!(s instanceof Player) || plugin.cPerms(s, "PlotMe.use.biome")) {
             s.sendMessage(C("WordBiomes") + " : ");
 
             //int i = 0;
             StringBuilder line = new StringBuilder();
-            List<String> biomes = new ArrayList<String>();
+            List<String> biomes = new ArrayList<>();
 
             for (Biome b : Biome.values()) {
                 biomes.add(b.name());
@@ -29,9 +30,9 @@ public class CmdBiomeList extends PlotCommand {
 
             Collections.sort(biomes);
 
-            List<String> column1 = new ArrayList<String>();
-            List<String> column2 = new ArrayList<String>();
-            List<String> column3 = new ArrayList<String>();
+            List<String> column1 = new ArrayList<>();
+            List<String> column2 = new ArrayList<>();
+            List<String> column3 = new ArrayList<>();
 
             for (int ctr = 0; ctr < biomes.size(); ctr++) {
                 if (ctr < biomes.size() / 3) {

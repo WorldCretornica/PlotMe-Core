@@ -7,14 +7,15 @@ import com.worldcretornica.plotme_core.api.v0_14b.IPlotMe_ChunkGenerator;
 import com.worldcretornica.plotme_core.event.PlotMeEventFactory;
 import com.worldcretornica.plotme_core.event.PlotWorldCreateEvent;
 import com.worldcretornica.plotme_core.utils.MinecraftFontWidthCalculator;
-import java.util.HashMap;
-import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class CmdCreateWorld extends PlotCommand {
 
@@ -100,8 +101,8 @@ public class CmdCreateWorld extends PlotCommand {
                         return true;
                     }
 
-                    Map<String, String> parameters = new HashMap<String, String>();
-                    Map<String, String> genparameters = new HashMap<String, String>();
+                    Map<String, String> parameters = new HashMap<>();
+                    Map<String, String> genparameters;
 
                     //Prepare creation
                     if (args.length >= 2) {

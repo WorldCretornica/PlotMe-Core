@@ -2,10 +2,11 @@ package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import java.util.ArrayList;
-import java.util.List;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CmdShowHelp extends PlotCommand {
 
@@ -15,10 +16,10 @@ public class CmdShowHelp extends PlotCommand {
 
     public boolean exec(Player p, int page) {
         int max = 4;
-        int maxpage = 0;
+        int maxpage;
         boolean ecoon = plugin.getPlotMeCoreManager().isEconomyEnabled(p);
 
-        List<String> allowed_commands = new ArrayList<String>();
+        List<String> allowed_commands = new ArrayList<>();
 
         allowed_commands.add("limit");
         if (plugin.cPerms(p, "PlotMe.use.claim")) {

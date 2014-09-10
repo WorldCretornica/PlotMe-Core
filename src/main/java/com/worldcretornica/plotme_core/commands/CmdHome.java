@@ -21,7 +21,6 @@ public class CmdHome extends PlotCommand {
             if (!plugin.getPlotMeCoreManager().isPlotWorld(p) && !plugin.getConfig().getBoolean("allowWorldTeleport")) {
                 p.sendMessage(RED + C("MsgNotPlotWorld"));
             } else {
-                boolean found = false;
                 String playername = p.getName();
                 int nb = 1;
                 World w;
@@ -120,18 +119,16 @@ public class CmdHome extends PlotCommand {
                         }
                     }
 
-                    if (!found) {
-                        if (nb > 0) {
-                            if (!playername.equalsIgnoreCase(p.getName())) {
-                                p.sendMessage(RED + playername + " " + C("MsgDoesNotHavePlot") + " #" + nb);
-                            } else {
-                                p.sendMessage(RED + C("MsgPlotNotFound") + " #" + nb);
-                            }
-                        } else if (!playername.equalsIgnoreCase(p.getName())) {
-                            p.sendMessage(RED + playername + " " + C("MsgDoesNotHavePlot"));
+                    if (nb > 0) {
+                        if (!playername.equalsIgnoreCase(p.getName())) {
+                            p.sendMessage(RED + playername + " " + C("MsgDoesNotHavePlot") + " #" + nb);
                         } else {
-                            p.sendMessage(RED + C("MsgYouHaveNoPlot"));
+                            p.sendMessage(RED + C("MsgPlotNotFound") + " #" + nb);
                         }
+                    } else if (!playername.equalsIgnoreCase(p.getName())) {
+                        p.sendMessage(RED + playername + " " + C("MsgDoesNotHavePlot"));
+                    } else {
+                        p.sendMessage(RED + C("MsgYouHaveNoPlot"));
                     }
                 }
             }

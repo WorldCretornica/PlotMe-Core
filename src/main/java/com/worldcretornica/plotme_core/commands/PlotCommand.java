@@ -4,8 +4,6 @@ import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.utils.Util;
 import org.bukkit.ChatColor;
 
-;
-
 public abstract class PlotCommand {
 
     protected PlotMe_Core plugin;
