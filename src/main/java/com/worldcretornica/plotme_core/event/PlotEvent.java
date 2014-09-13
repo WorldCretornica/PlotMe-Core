@@ -2,11 +2,12 @@ package com.worldcretornica.plotme_core.event;
 
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import java.util.HashSet;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+
+import java.util.HashSet;
 
 public abstract class PlotEvent extends Event {
 
@@ -94,7 +95,7 @@ public abstract class PlotEvent extends Event {
         if (plot != null) {
             return plot.allowed();
         } else {
-            return new HashSet<String>();
+            return new HashSet<>();
         }
     }
 
@@ -109,7 +110,7 @@ public abstract class PlotEvent extends Event {
         if (plot != null) {
             return plot.denied();
         } else {
-            return new HashSet<String>();
+            return new HashSet<>();
         }
     }
 

@@ -10,12 +10,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerPortalEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.player.*;
 
 public class PlotWorldEditListener implements Listener {
 
@@ -111,7 +106,7 @@ public class PlotWorldEditListener implements Listener {
             } else if (event.getMessage().startsWith("//up")) {
                 Plot plot = plugin.getPlotMeCoreManager().getPlotById(p);
 
-                if (plot == null || !plot.isAllowed(p.getName(), p.getLocation().getBlockY())) {
+                if (plot == null || !plot.isAllowed(p.getName())) {
                     event.setCancelled(true);
                 }
             }
@@ -127,8 +122,8 @@ public class PlotWorldEditListener implements Listener {
 		    Block b = event.getClickedBlock();
 		    Plot plot = plugin.getPlotMeCoreManager().getPlotById(b);
 
-		    if (plot != null && plot.isAllowed(p.getName(), b.getY())) {
-			    plugin.getPlotWorldEdit().setMask(p, b.getLocation());
+            if (plot != null && plot.isAllowed(p.getName())) {
+                plugin.getPlotWorldEdit().setMask(p, b.getLocation());
 		    } else {
 			    event.setCancelled(true);
 		    }

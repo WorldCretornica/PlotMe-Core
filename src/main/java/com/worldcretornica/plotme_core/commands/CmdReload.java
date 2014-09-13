@@ -12,7 +12,7 @@ public class CmdReload extends PlotCommand {
     }
 
     public boolean exec(CommandSender s, String[] args) {
-        if (!(s instanceof Player) || plugin.cPerms((Player) s, "PlotMe.admin.reload")) {
+        if (!(s instanceof Player) || plugin.cPerms(s, "PlotMe.admin.reload")) {
             PlotMeEventFactory.callPlotReloadEvent();
 
             plugin.reload();

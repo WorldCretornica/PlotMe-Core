@@ -1,5 +1,9 @@
 package com.worldcretornica.plotme_core;
 
+import org.bukkit.Bukkit;
+import org.bukkit.World;
+import org.bukkit.block.Biome;
+
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -7,11 +11,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
-import org.bukkit.Bukkit;
-import org.bukkit.World;
-import org.bukkit.block.Biome;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
 
 public class Plot implements Comparable<Plot> {
 
@@ -22,8 +21,6 @@ public class Plot implements Comparable<Plot> {
     private HashSet<String> allowed;
     private HashSet<String> denied;
     private Biome biome;
-    private int baseY;
-    private int height;
     private Date expireddate;
     private boolean finished;
     private List<String[]> comments;
@@ -45,9 +42,6 @@ public class Plot implements Comparable<Plot> {
         this.allowed = new HashSet<>();
         this.denied = new HashSet<>();
         this.setBiome(Biome.PLAINS);
-
-        this.setBaseY(0);
-        this.setHeight(256);
 
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DAY_OF_YEAR, 7);
@@ -73,19 +67,6 @@ public class Plot implements Comparable<Plot> {
         this.setBiome(Biome.PLAINS);
         this.setId(tid);
 
-        FileConfiguration config = plugin.getConfig();
-
-        //TODO put these in the PlotMapInfo and get them from there, no reason to read from configs when creating a plot
-        ConfigurationSection plotWorldConfig = config.getConfigurationSection("worlds." + getWorld());
-
-        if (plotWorldConfig == null) {
-            this.setBaseY(0);
-            this.setHeight(256);
-        } else {
-            this.setBaseY(plotWorldConfig.getInt("DefaultPlotBase", 0));
-            this.setHeight(plotWorldConfig.getInt("DefaultPlotHeight", 256));
-        }
-
         if (days == 0) {
             this.setExpiredDate(null);
         } else {
@@ -105,15 +86,13 @@ public class Plot implements Comparable<Plot> {
         this.setCurrentBid(0);
     }
 
-    public Plot(PlotMe_Core instance, String o, String w, String bio, int baseY, int height, Date exp, boolean fini, HashSet<String> al,
-            List<String[]> comm, String tid, double custprice, boolean sale, String finishdt, boolean prot, String bidder,
-            Double bid, boolean isauctionned, HashSet<String> den, String auctdate) {
+    public Plot(PlotMe_Core instance, String o, String w, String bio, Date exp, boolean fini, HashSet<String> al,
+                List<String[]> comm, String tid, double custprice, boolean sale, String finishdt, boolean prot, String bidder,
+                Double bid, boolean isauctionned, HashSet<String> den, String auctdate) {
         this.plugin = instance;
         this.owner = o;
         this.setWorld(w);
         this.setBiome(Biome.valueOf(bio));
-        this.setBaseY(baseY);
-        this.setHeight(height);
         this.setExpiredDate(exp);
         this.setFinished(fini);
         this.allowed = al;
@@ -163,7 +142,7 @@ public class Plot implements Comparable<Plot> {
         this.setFinishedDate(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(Calendar.getInstance().getTime()));
         this.finished = true;
 
-        updateFinished(this.getFinishedDate(), this.finished);
+        updateFinished(this.getFinishedDate(), true);
     }
 
     public void setUnfinished() {
@@ -286,17 +265,10 @@ public class Plot implements Comparable<Plot> {
     }
 
     public boolean isAllowed(String name) {
-        return isAllowed(name, null);
+        return isAllowed(name, true, true);
     }
 
-    public boolean isAllowed(String name, Integer y) {
-        return isAllowed(name, y, true, true);
-    }
-
-    public boolean isAllowed(String name, Integer y, boolean IncludeStar, boolean IncludeGroup) {
-        if (y != null && !contains(y)) {
-            return false;
-        }
+    public boolean isAllowed(String name, boolean IncludeStar, boolean IncludeGroup) {
 
         if (this.owner.equalsIgnoreCase(name) || (IncludeStar && this.owner.equals("*"))) {
             return true;
@@ -323,16 +295,8 @@ public class Plot implements Comparable<Plot> {
         return false;
     }
 
-    private boolean contains(int y) {
-        return y >= this.getBaseY() && y <= this.getBaseY() + this.getHeight();
-    }
-
     public boolean isDenied(String name) {
-        return isDenied(name, null);
-    }
-
-    public boolean isDenied(String name, Integer y) {
-        if (isAllowed(name, y, false, false)) {
+        if (isAllowed(name, false, false)) {
             return false;
         }
 
@@ -395,22 +359,6 @@ public class Plot implements Comparable<Plot> {
 
     public final void setBiome(Biome biome) {
         this.biome = biome;
-    }
-
-    public final int getBaseY() {
-        return baseY;
-    }
-
-    public final void setBaseY(int baseY) {
-        this.baseY = baseY;
-    }
-
-    public final int getHeight() {
-        return height;
-    }
-
-    public final void setHeight(int height) {
-        this.height = height;
     }
 
     public final Date getExpiredDate() {

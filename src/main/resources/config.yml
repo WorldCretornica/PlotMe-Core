@@ -3,7 +3,6 @@ mySQLconn: jdbc:mysql://localhost:3306/minecraft
 mySQLuname: root
 mySQLpass: password
 globalUseEconomy: false
-AdvancedLogging: false
 language: english
 allowWorldTeleport: true
 defaultWEAnywhere: false

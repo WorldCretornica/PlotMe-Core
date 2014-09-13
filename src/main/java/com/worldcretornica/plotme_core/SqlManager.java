@@ -24,68 +24,6 @@ public class SqlManager {
 
     public final String sqlitedb = "plots.db";
 
-    //todo add update to table for customprice, forsale
-    //TODO Update the system to save both username (for display purposes) and UUID of player
-    //will need to migrate using mojang for exisitng plots
-    //have to be done on plots, comments, allowed, denied
-    private final String PLOT_TABLE = "CREATE TABLE `plotmePlots` ("
-            + "`idX` INTEGER,"
-            + "`idZ` INTEGER,"
-            + "`owner` varchar(32) NOT NULL,"
-            + "`world` varchar(32) NOT NULL DEFAULT '0',"
-            + "`topX` INTEGER NOT NULL DEFAULT '0',"
-            + "`bottomX` INTEGER NOT NULL DEFAULT '0',"
-            + "`topZ` INTEGER NOT NULL DEFAULT '0',"
-            + "`bottomZ` INTEGER NOT NULL DEFAULT '0',"
-            + "`biome` varchar(32) NOT NULL DEFAULT '0',"
-            + "`baseY` INTEGER NOT NULL DEFAULT '0',"
-            + "`height` INTEGER NOT NULL DEFAULT '256',"
-            + "`expireddate` DATETIME NULL,"
-            + "`finished` boolean NOT NULL DEFAULT '0',"
-            + "`customprice` double NOT NULL DEFAULT '0',"
-            + "`forsale` boolean NOT NULL DEFAULT '0',"
-            + "`finisheddate` varchar(16) NULL,"
-            + "`protected` boolean NOT NULL DEFAULT '0',"
-            + "`auctionned` boolean NOT NULL DEFAULT '0',"
-            + "`auctionneddate` varchar(16) NULL,"
-            + "`currentbid` double NOT NULL DEFAULT '0',"
-            + "`currentbidder` varchar(32) NULL,"
-            + "PRIMARY KEY (idX, idZ, world) "
-            + ");";
-
-    private final String COMMENT_TABLE = "CREATE TABLE `plotmeComments` ("
-            + "`idX` INTEGER,"
-            + "`idZ` INTEGER,"
-            + "`world` varchar(32) NOT NULL,"
-            + "`commentid` INTEGER,"
-            + "`player` varchar(32) NOT NULL,"
-            + "`comment` text,"
-            + "PRIMARY KEY (idX, idZ, world, commentid) "
-            + ");";
-
-    private final String ALLOWED_TABLE = "CREATE TABLE `plotmeAllowed` ("
-            + "`idX` INTEGER,"
-            + "`idZ` INTEGER,"
-            + "`world` varchar(32) NOT NULL,"
-            + "`player` varchar(32) NOT NULL,"
-            + "PRIMARY KEY (idX, idZ, world, player) "
-            + ");";
-
-    private final String DENIED_TABLE = "CREATE TABLE `plotmeDenied` ("
-            + "`idX` INTEGER,"
-            + "`idZ` INTEGER,"
-            + "`world` varchar(32) NOT NULL,"
-            + "`player` varchar(32) NOT NULL,"
-            + "PRIMARY KEY (idX, idZ, world, player) "
-            + ");";
-
-    private final String FREED_TABLE = "CREATE TABLE `plotmeFreed` ("
-            + "`idX` INTEGER,"
-            + "`idZ` INTEGER,"
-            + "`world` varchar(32) NOT NULL,"
-            + "PRIMARY KEY (idX, idZ, world) "
-            + ");";
-
     public SqlManager(PlotMe_Core instance, boolean usemysql, String sqlusername, String sqlpassword, String sqlconnection) {
         plugin = instance;
         this.mySQLconn = sqlconnection;
@@ -145,7 +83,7 @@ public class SqlManager {
                  */
                 //CustomPrice
                 set = statement.executeQuery("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '" + schema + "' AND "
-                        + "TABLE_NAME='plotmePlots' AND column_name='customprice'");
+                                                     + "TABLE_NAME='plotmePlots' AND column_name='customprice'");
                 if (!set.next()) {
                     statement.execute("ALTER TABLE plotmePlots ADD customprice double NOT NULL DEFAULT '0';");
                     conn.commit();
@@ -154,7 +92,7 @@ public class SqlManager {
 
                 //ForSale
                 set = statement.executeQuery("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '" + schema + "' AND "
-                        + "TABLE_NAME='plotmePlots' AND column_name='forsale'");
+                                                     + "TABLE_NAME='plotmePlots' AND column_name='forsale'");
                 if (!set.next()) {
                     statement.execute("ALTER TABLE plotmePlots ADD forsale boolean NOT NULL DEFAULT '0';");
                     conn.commit();
@@ -163,7 +101,7 @@ public class SqlManager {
 
                 //finisheddate
                 set = statement.executeQuery("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '" + schema + "' AND "
-                        + "TABLE_NAME='plotmePlots' AND column_name='finisheddate'");
+                                                     + "TABLE_NAME='plotmePlots' AND column_name='finisheddate'");
                 if (!set.next()) {
                     statement.execute("ALTER TABLE plotmePlots ADD finisheddate varchar(16) NULL;");
                     conn.commit();
@@ -172,7 +110,7 @@ public class SqlManager {
 
                 //Protected
                 set = statement.executeQuery("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '" + schema + "' AND "
-                        + "TABLE_NAME='plotmePlots' AND column_name='protected'");
+                                                     + "TABLE_NAME='plotmePlots' AND column_name='protected'");
                 if (!set.next()) {
                     statement.execute("ALTER TABLE plotmePlots ADD protected boolean NOT NULL DEFAULT '0';");
                     conn.commit();
@@ -181,7 +119,7 @@ public class SqlManager {
 
                 //Auctionned
                 set = statement.executeQuery("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '" + schema + "' AND "
-                        + "TABLE_NAME='plotmePlots' AND column_name='auctionned'");
+                                                     + "TABLE_NAME='plotmePlots' AND column_name='auctionned'");
                 if (!set.next()) {
                     statement.executeUpdate("ALTER TABLE plotmePlots ADD auctionned boolean NOT NULL DEFAULT '0';");
                     conn.commit();
@@ -190,7 +128,7 @@ public class SqlManager {
 
                 //Auctionenddate
                 set = statement.executeQuery("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '" + schema + "' AND "
-                        + "TABLE_NAME='plotmePlots' AND (column_name='auctionenddate' OR column_name='auctionneddate')");
+                                                     + "TABLE_NAME='plotmePlots' AND (column_name='auctionenddate' OR column_name='auctionneddate')");
                 if (!set.next()) {
                     statement.executeUpdate("ALTER TABLE plotmePlots ADD auctionenddate varchar(16) NULL;");
                     conn.commit();
@@ -199,7 +137,7 @@ public class SqlManager {
 
                 //Currentbidder
                 set = statement.executeQuery("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '" + schema + "' AND "
-                        + "TABLE_NAME='plotmePlots' AND column_name='currentbidder'");
+                                                     + "TABLE_NAME='plotmePlots' AND column_name='currentbidder'");
                 if (!set.next()) {
                     statement.executeUpdate("ALTER TABLE plotmePlots ADD currentbidder varchar(32) NULL;");
                     conn.commit();
@@ -208,7 +146,7 @@ public class SqlManager {
 
                 //Currentbid
                 set = statement.executeQuery("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '" + schema + "' AND "
-                        + "TABLE_NAME='plotmePlots' AND column_name='currentbid'");
+                                                     + "TABLE_NAME='plotmePlots' AND column_name='currentbid'");
                 if (!set.next()) {
                     statement.executeUpdate("ALTER TABLE plotmePlots ADD currentbid double NOT NULL DEFAULT '0';");
                     conn.commit();
@@ -223,7 +161,7 @@ public class SqlManager {
                  */
                 //Rename auctionneddate correctly
                 set = statement.executeQuery("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '" + schema + "' AND "
-                        + "TABLE_NAME='plotmePlots' AND column_name='auctionenddate'");
+                                                     + "TABLE_NAME='plotmePlots' AND column_name='auctionenddate'");
                 if (set.next()) {
                     statement.execute("ALTER TABLE plotmePlots CHANGE auctionenddate auctionneddate varchar(16) NULL;");
                     conn.commit();
@@ -233,30 +171,6 @@ public class SqlManager {
                  * * END Version 0.14 changes **
                  */
 
-                /**
-                 * * START Version 0.14 changes **
-                 */
-                //BaseY
-                set = statement.executeQuery("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '" + schema + "' AND "
-                        + "TABLE_NAME='plotmePlots' AND column_name='baseY'");
-                if (!set.next()) {
-                    statement.execute("ALTER TABLE plotmePlots ADD `baseY` INTEGER NOT NULL DEFAULT '0'");
-                    conn.commit();
-                }
-                set.close();
-
-                //Height
-                set = statement.executeQuery("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '" + schema + "' AND "
-                        + "TABLE_NAME='plotmePlots' AND column_name='height'");
-                if (!set.next()) {
-                    statement.execute("ALTER TABLE plotmePlots ADD `height` INTEGER NOT NULL DEFAULT '256'");
-                    conn.commit();
-                }
-                set.close();
-
-                /**
-                 * * END Version 0.14 changes **
-                 */
             } else {
                 String column;
                 boolean found = false;
@@ -434,48 +348,14 @@ public class SqlManager {
                         changestatement.close();
                     }
                     plotstatement.close();
-	                plotset.close();
+                    plotset.close();
 
-	                conn.commit();
+                    conn.commit();
                 }
                 set.close();
                 set = null;
-                found = false;
 
-                //baseY
-                set = statement.executeQuery("PRAGMA table_info(`plotmePlots`)");
-
-                while (set.next() && !found) {
-                    column = set.getString(2);
-                    if (column.equalsIgnoreCase("baseY")) {
-                        found = true;
-                    }
-                }
-
-                if (!found) {
-                    statement.execute("ALTER TABLE plotmePlots ADD `baseY` INTEGER NOT NULL DEFAULT '0';");
-                    conn.commit();
-                }
-                set.close();
-                found = false;
-
-                //baseY
-                set = statement.executeQuery("PRAGMA table_info(`plotmePlots`)");
-
-                while (set.next() && !found) {
-                    column = set.getString(2);
-                    if (column.equalsIgnoreCase("height")) {
-                        found = true;
-                    }
-                }
-
-                if (!found) {
-                    statement.execute("ALTER TABLE plotmePlots ADD `height` INTEGER NOT NULL DEFAULT '256';");
-                    conn.commit();
-                }
-                set.close();
-
-	            /**
+                /**
                  * * END Version 0.14 changes **
                  */
             }
@@ -540,7 +420,7 @@ public class SqlManager {
 
             DatabaseMetaData dbm = conn.getMetaData();
             rs = dbm.getTables(null, null, name, null);
-	        return rs.next();
+            return rs.next();
         } catch (SQLException ex) {
             plugin.getLogger().severe("Table Check Exception :");
             plugin.getLogger().severe("  " + ex.getMessage());
@@ -565,26 +445,77 @@ public class SqlManager {
             st = conn.createStatement();
 
             if (!tableExists("plotmePlots")) {
+                String PLOT_TABLE = "CREATE TABLE `plotmePlots` ("
+                                            + "`idX` INTEGER,"
+                                            + "`idZ` INTEGER,"
+                                            + "`owner` varchar(32) NOT NULL,"
+                                            + "`world` varchar(32) NOT NULL DEFAULT '0',"
+                                            + "`topX` INTEGER NOT NULL DEFAULT '0',"
+                                            + "`bottomX` INTEGER NOT NULL DEFAULT '0',"
+                                            + "`topZ` INTEGER NOT NULL DEFAULT '0',"
+                                            + "`bottomZ` INTEGER NOT NULL DEFAULT '0',"
+                                            + "`biome` varchar(32) NOT NULL DEFAULT '0',"
+                                            + "`expireddate` DATETIME NULL,"
+                                            + "`finished` boolean NOT NULL DEFAULT '0',"
+                                            + "`customprice` double NOT NULL DEFAULT '0',"
+                                            + "`forsale` boolean NOT NULL DEFAULT '0',"
+                                            + "`finisheddate` varchar(16) NULL,"
+                                            + "`protected` boolean NOT NULL DEFAULT '0',"
+                                            + "`auctionned` boolean NOT NULL DEFAULT '0',"
+                                            + "`auctionneddate` varchar(16) NULL,"
+                                            + "`currentbid` double NOT NULL DEFAULT '0',"
+                                            + "`currentbidder` varchar(32) NULL,"
+                                            + "PRIMARY KEY (idX, idZ, world) "
+                                            + ");";
                 st.executeUpdate(PLOT_TABLE);
                 conn.commit();
             }
 
             if (!tableExists("plotmeComments")) {
+                String COMMENT_TABLE = "CREATE TABLE `plotmeComments` ("
+                                               + "`idX` INTEGER,"
+                                               + "`idZ` INTEGER,"
+                                               + "`world` varchar(32) NOT NULL,"
+                                               + "`commentid` INTEGER,"
+                                               + "`player` varchar(32) NOT NULL,"
+                                               + "`comment` text,"
+                                               + "PRIMARY KEY (idX, idZ, world, commentid) "
+                                               + ");";
                 st.executeUpdate(COMMENT_TABLE);
                 conn.commit();
             }
 
             if (!tableExists("plotmeAllowed")) {
+                String ALLOWED_TABLE = "CREATE TABLE `plotmeAllowed` ("
+                                               + "`idX` INTEGER,"
+                                               + "`idZ` INTEGER,"
+                                               + "`world` varchar(32) NOT NULL,"
+                                               + "`player` varchar(32) NOT NULL,"
+                                               + "PRIMARY KEY (idX, idZ, world, player) "
+                                               + ");";
                 st.executeUpdate(ALLOWED_TABLE);
                 conn.commit();
             }
 
             if (!tableExists("plotmeDenied")) {
+                String DENIED_TABLE = "CREATE TABLE `plotmeDenied` ("
+                                              + "`idX` INTEGER,"
+                                              + "`idZ` INTEGER,"
+                                              + "`world` varchar(32) NOT NULL,"
+                                              + "`player` varchar(32) NOT NULL,"
+                                              + "PRIMARY KEY (idX, idZ, world, player) "
+                                              + ");";
                 st.executeUpdate(DENIED_TABLE);
                 conn.commit();
             }
 
             if (!tableExists("plotmeFreed")) {
+                String FREED_TABLE = "CREATE TABLE `plotmeFreed` ("
+                                             + "`idX` INTEGER,"
+                                             + "`idZ` INTEGER,"
+                                             + "`world` varchar(32) NOT NULL,"
+                                             + "PRIMARY KEY (idX, idZ, world) "
+                                             + ");";
                 st.executeUpdate(FREED_TABLE);
                 conn.commit();
             }
@@ -625,8 +556,6 @@ public class SqlManager {
                         int topZ = setPlots.getInt("topZ");
                         int bottomZ = setPlots.getInt("bottomZ");
                         String biome = setPlots.getString("biome");
-                        int baseY = setPlots.getInt("baseY");
-                        int height = setPlots.getInt("height");
                         java.sql.Date expireddate = null;
                         try {
                             expireddate = setPlots.getDate("expireddate");
@@ -646,7 +575,7 @@ public class SqlManager {
                         String auctionneddate;
                         try {
                             auctionneddate = setPlots.getString("auctionneddate");
-                        } catch (Exception e) {
+                        } catch (SQLException e) {
                             auctionneddate = setPlots.getString("auctionenddate");
                         }
 
@@ -656,17 +585,17 @@ public class SqlManager {
                             allowed.add(setAllowed.getString("player"));
                         }
 
-	                    setAllowed.close();
+                        setAllowed.close();
 
-	                    setDenied = slDenied.executeQuery("SELECT * FROM plotmeDenied WHERE idX = '" + idX + "' AND idZ = '" + idZ + "' AND world = '" + world + "'");
+                        setDenied = slDenied.executeQuery("SELECT * FROM plotmeDenied WHERE idX = '" + idX + "' AND idZ = '" + idZ + "' AND world = '" + world + "'");
 
                         while (setDenied.next()) {
                             denied.add(setDenied.getString("player"));
                         }
 
-	                    setDenied.close();
+                        setDenied.close();
 
-	                    setComments = slComments.executeQuery("SELECT * FROM plotmeComments WHERE idX = '" + idX + "' AND idZ = '" + idZ + "' AND world = '" + world + "'");
+                        setComments = slComments.executeQuery("SELECT * FROM plotmeComments WHERE idX = '" + idX + "' AND idZ = '" + idZ + "' AND world = '" + world + "'");
 
                         while (setComments.next()) {
                             String[] comment = new String[2];
@@ -675,9 +604,9 @@ public class SqlManager {
                             comments.add(comment);
                         }
 
-                        Plot plot = new Plot(plugin, owner, world, biome, baseY, height, expireddate, finished, allowed,
-                                comments, "" + idX + ";" + idZ, customprice, forsale, finisheddate,
-                                protect, currentbidder, currentbid, auctionned, denied, auctionneddate);
+                        Plot plot = new Plot(plugin, owner, world, biome, expireddate, finished, allowed,
+                                                    comments, "" + idX + ";" + idZ, customprice, forsale, finisheddate,
+                                                    protect, currentbidder, currentbid, auctionned, denied, auctionneddate);
                         addPlot(plot, idX, idZ, topX, bottomX, topZ, bottomZ);
 
                         size++;
@@ -693,8 +622,8 @@ public class SqlManager {
                     }
 
                     plugin.getLogger().info("Imported " + size + " plots from " + sqlitedb);
-	                slstatement.close();
-	                if (slAllowed != null) {
+                    slstatement.close();
+                    if (slAllowed != null) {
                         slAllowed.close();
                     }
                     if (slComments != null) {
@@ -706,8 +635,8 @@ public class SqlManager {
                     if (slFreed != null) {
                         slFreed.close();
                     }
-	                setPlots.close();
-	                if (setComments != null) {
+                    setPlots.close();
+                    if (setComments != null) {
                         setComments.close();
                     }
                     if (setDenied != null) {
@@ -716,10 +645,10 @@ public class SqlManager {
                     if (setAllowed != null) {
                         setAllowed.close();
                     }
-	                setFreed.close();
-	                sqliteconn.close();
+                    setFreed.close();
+                    sqliteconn.close();
 
-	                plugin.getLogger().info("Renaming " + sqlitedb + " to " + sqlitedb + ".old");
+                    plugin.getLogger().info("Renaming " + sqlitedb + " to " + sqlitedb + ".old");
                     if (!sqlitefile.renameTo(new File(plugin.getDataFolder(), sqlitedb + ".old"))) {
                         plugin.getLogger().severe("Failed to rename " + sqlitedb + "! Please rename this manually!");
                     }
@@ -752,7 +681,7 @@ public class SqlManager {
             conn = getConnection();
 
             ps = conn.prepareStatement("INSERT INTO plotmeFreed (idX, idZ, world) "
-                    + "VALUES (?,?,?)");
+                                               + "VALUES (?,?,?)");
             ps.setInt(1, idX);
             ps.setInt(2, idZ);
             ps.setString(3, world.toLowerCase());
@@ -782,9 +711,9 @@ public class SqlManager {
         try {
             conn = getConnection();
 
-            ps = conn.prepareStatement("INSERT INTO plotmePlots (idX, idZ, owner, world, topX, bottomX, topZ, bottomZ, biome, baseY, height, "
-                    + "expireddate, finished, customprice, forsale, finisheddate, protected, auctionned, auctionneddate, currentbid, currentbidder) "
-                    + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+            ps = conn.prepareStatement("INSERT INTO plotmePlots (idX, idZ, owner, world, topX, bottomX, topZ, bottomZ, biome, "
+                                               + "expireddate, finished, customprice, forsale, finisheddate, protected, auctionned, auctionneddate, currentbid, currentbidder) "
+                                               + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
             ps.setInt(1, idX);
             ps.setInt(2, idZ);
             ps.setString(3, plot.getOwner());
@@ -794,18 +723,16 @@ public class SqlManager {
             ps.setInt(7, topZ);
             ps.setInt(8, bottomZ);
             ps.setString(9, plot.getBiome().name());
-            ps.setInt(10, plot.getBaseY());
-            ps.setInt(11, plot.getHeight());
-            ps.setDate(12, plot.getExpiredDate());
-            ps.setBoolean(13, plot.isFinished());
-            ps.setDouble(14, plot.getCustomPrice());
-            ps.setBoolean(15, plot.isForSale());
-            ps.setString(16, plot.getFinishedDate());
-            ps.setBoolean(17, plot.isProtect());
-            ps.setBoolean(18, plot.isAuctionned());
-            ps.setString(19, "");
-            ps.setDouble(20, plot.getCurrentBid());
-            ps.setString(21, plot.getCurrentBidder());
+            ps.setDate(10, plot.getExpiredDate());
+            ps.setBoolean(11, plot.isFinished());
+            ps.setDouble(12, plot.getCustomPrice());
+            ps.setBoolean(13, plot.isForSale());
+            ps.setString(14, plot.getFinishedDate());
+            ps.setBoolean(15, plot.isProtect());
+            ps.setBoolean(16, plot.isAuctionned());
+            ps.setString(17, "");
+            ps.setDouble(18, plot.getCurrentBid());
+            ps.setString(19, plot.getCurrentBidder());
 
             ps.executeUpdate();
             conn.commit();
@@ -834,7 +761,7 @@ public class SqlManager {
             conn = getConnection();
 
             ps = conn.prepareStatement("UPDATE plotmePlots SET " + field + " = ? "
-                    + "WHERE idX = ? AND idZ = ? AND world = ?");
+                                               + "WHERE idX = ? AND idZ = ? AND world = ?");
 
             ps.setObject(1, value);
             ps.setInt(2, idX);
@@ -868,7 +795,7 @@ public class SqlManager {
             conn = getConnection();
 
             ps = conn.prepareStatement("INSERT INTO plotmeAllowed (idX, idZ, player, world) "
-                    + "VALUES (?,?,?,?)");
+                                               + "VALUES (?,?,?,?)");
 
             ps.setInt(1, idX);
             ps.setInt(2, idZ);
@@ -902,7 +829,7 @@ public class SqlManager {
             conn = getConnection();
 
             ps = conn.prepareStatement("INSERT INTO plotmeDenied (idX, idZ, player, world) "
-                    + "VALUES (?,?,?,?)");
+                                               + "VALUES (?,?,?,?)");
 
             ps.setInt(1, idX);
             ps.setInt(2, idZ);
@@ -936,7 +863,7 @@ public class SqlManager {
             conn = getConnection();
 
             ps = conn.prepareStatement("INSERT INTO plotmeAuctions (idX, idZ, player, world, bid) "
-                    + "VALUES (?,?,?,?,?)");
+                                               + "VALUES (?,?,?,?,?)");
 
             ps.setInt(1, idX);
             ps.setInt(2, idZ);
@@ -971,7 +898,7 @@ public class SqlManager {
             conn = getConnection();
 
             ps = conn.prepareStatement("INSERT INTO plotmeComments (idX, idZ, commentid, player, comment, world) "
-                    + "VALUES (?,?,?,?,?,?)");
+                                               + "VALUES (?,?,?,?,?,?)");
 
             ps.setInt(1, idX);
             ps.setInt(2, idZ);
@@ -1000,7 +927,7 @@ public class SqlManager {
 
     public void deletePlot(int idX, int idZ, String world) {
         PreparedStatement ps = null;
-	    try {
+        try {
             Connection conn = getConnection();
 
             ps = conn.prepareStatement("DELETE FROM plotmeComments WHERE idX = ? and idZ = ? and LOWER(world) = ?");
@@ -1044,7 +971,7 @@ public class SqlManager {
 
     public void deleteFreed(int idX, int idZ, String world) {
         PreparedStatement ps = null;
-	    try {
+        try {
             Connection conn = getConnection();
 
             ps = conn.prepareStatement("DELETE FROM plotmeFreed WHERE idX = ? and idZ = ? and LOWER(world) = ?");
@@ -1070,7 +997,7 @@ public class SqlManager {
 
     public void deletePlotComment(int idX, int idZ, int commentid, String world) {
         PreparedStatement ps = null;
-	    try {
+        try {
             Connection conn = getConnection();
 
             ps = conn.prepareStatement("DELETE FROM plotmeComments WHERE idX = ? and idZ = ? and commentid = ? and LOWER(world) = ?");
@@ -1099,7 +1026,7 @@ public class SqlManager {
     public void deletePlotAllowed(int idX, int idZ, String player, String world) {
         PreparedStatement ps = null;
 
-	    try {
+        try {
             Connection conn = getConnection();
 
             ps = conn.prepareStatement("DELETE FROM plotmeAllowed WHERE idX = ? and idZ = ? and player = ? and LOWER(world) = ?");
@@ -1128,7 +1055,7 @@ public class SqlManager {
     public void deletePlotDenied(int idX, int idZ, String player, String world) {
         PreparedStatement ps = null;
 
-	    try {
+        try {
             Connection conn = getConnection();
 
             ps = conn.prepareStatement("DELETE FROM plotmeDenied WHERE idX = ? and idZ = ? and player = ? and LOWER(world) = ?");
@@ -1157,7 +1084,7 @@ public class SqlManager {
     public void deletePlotBid(int idX, int idZ, String player, String world) {
         PreparedStatement ps = null;
 
-	    try {
+        try {
             Connection conn = getConnection();
 
             ps = conn.prepareStatement("DELETE FROM plotmeAuctions WHERE idX = ? and idZ = ? and player = ? and LOWER(world) = ?");
@@ -1186,7 +1113,7 @@ public class SqlManager {
     public void deleteAllPlotBids(int idX, int idZ, String world) {
         PreparedStatement ps = null;
 
-	    try {
+        try {
             Connection conn = getConnection();
 
             ps = conn.prepareStatement("DELETE FROM plotmeAuctions WHERE idX = ? and idZ = ? and LOWER(world) = ?");
@@ -1238,13 +1165,11 @@ public class SqlManager {
             if (setPlots.next()) {
                 String owner = setPlots.getString("owner");
                 String biome = setPlots.getString("biome");
-                int baseY = setPlots.getInt("baseY");
-                int height = setPlots.getInt("height");
                 java.sql.Date expireddate = null;
-	            try {
-		            expireddate = setPlots.getDate("expireddate");
-	            } catch (SQLException e) {
-	            }
+                try {
+                    expireddate = setPlots.getDate("expireddate");
+                } catch (SQLException e) {
+                }
                 boolean finished = setPlots.getBoolean("finished");
                 HashSet<String> allowed = new HashSet<>();
                 HashSet<String> denied = new HashSet<>();
@@ -1269,9 +1194,9 @@ public class SqlManager {
                     allowed.add(setAllowed.getString("player"));
                 }
 
-	            setAllowed.close();
+                setAllowed.close();
 
-	            statementDenied = conn.prepareStatement("SELECT * FROM plotmeDenied WHERE LOWER(world) = ? AND idX = ? AND idZ = ?");
+                statementDenied = conn.prepareStatement("SELECT * FROM plotmeDenied WHERE LOWER(world) = ? AND idX = ? AND idZ = ?");
                 statementDenied.setString(1, world);
                 statementDenied.setInt(2, idX);
                 statementDenied.setInt(3, idZ);
@@ -1282,9 +1207,9 @@ public class SqlManager {
                     denied.add(setDenied.getString("player"));
                 }
 
-	            setDenied.close();
+                setDenied.close();
 
-	            statementComment = conn.prepareStatement("SELECT * FROM plotmeComments WHERE LOWER(world) = ? AND idX = ? AND idZ = ?");
+                statementComment = conn.prepareStatement("SELECT * FROM plotmeComments WHERE LOWER(world) = ? AND idX = ? AND idZ = ?");
                 statementComment.setString(1, world);
                 statementComment.setInt(2, idX);
                 statementComment.setInt(3, idZ);
@@ -1297,9 +1222,9 @@ public class SqlManager {
                     comments.add(comment);
                 }
 
-                plot = new Plot(plugin, owner, world, biome, baseY, height, expireddate, finished, allowed,
-                        comments, "" + idX + ";" + idZ, customprice, forsale, finisheddate, protect,
-                        currentbidder, currentbid, auctionned, denied, auctionneddate);
+                plot = new Plot(plugin, owner, world, biome, expireddate, finished, allowed,
+                                       comments, "" + idX + ";" + idZ, customprice, forsale, finisheddate, protect,
+                                       currentbidder, currentbid, auctionned, denied, auctionneddate);
             }
         } catch (SQLException ex) {
             plugin.getLogger().severe("Plot load Exception :");
@@ -1342,24 +1267,24 @@ public class SqlManager {
         final String worldname = world;
 
         Bukkit.getServer().getScheduler().runTaskAsynchronously(plugin,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        plugin.getLogger().info("Starting to load plots for world " + worldname);
+                                                                       new Runnable() {
+                                                                           @Override
+                                                                           public void run() {
+                                                                               plugin.getLogger().info("Starting to load plots for world " + worldname);
 
-                        HashMap<String, Plot> plots = getPlots(worldname);
+                                                                               HashMap<String, Plot> plots = getPlots(worldname);
 
-                        PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(worldname);
+                                                                               PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(worldname);
 
-                        for (String id : plots.keySet()) {
-                            pmi.addPlot(id, plots.get(id));
-                            PlotMeEventFactory.callPlotLoadedEvent(plugin, Bukkit.getWorld(worldname), plots.get(id));
-                        }
-                        
-                        //plugin.getLogger().info("Done loading " + pmi.getNbPlots() + " plots for world " + worldname);
-                        PlotMeEventFactory.callPlotWorldLoadEvent(plugin, worldname, pmi.getNbPlots());
-                    }
-                }
+                                                                               for (String id : plots.keySet()) {
+                                                                                   pmi.addPlot(id, plots.get(id));
+                                                                                   PlotMeEventFactory.callPlotLoadedEvent(plugin, Bukkit.getWorld(worldname), plots.get(id));
+                                                                               }
+
+                                                                               //plugin.getLogger().info("Done loading " + pmi.getNbPlots() + " plots for world " + worldname);
+                                                                               PlotMeEventFactory.callPlotWorldLoadEvent(plugin, worldname, pmi.getNbPlots());
+                                                                           }
+                                                                       }
         );
     }
 
@@ -1386,13 +1311,11 @@ public class SqlManager {
                 int idZ = setPlots.getInt("idZ");
                 String owner = setPlots.getString("owner");
                 String biome = setPlots.getString("biome");
-                int baseY = setPlots.getInt("baseY");
-                int height = setPlots.getInt("height");
                 java.sql.Date expireddate = null;
-	            try {
-		            expireddate = setPlots.getDate("expireddate");
-	            } catch (SQLException e) {
-	            }
+                try {
+                    expireddate = setPlots.getDate("expireddate");
+                } catch (SQLException e) {
+                }
                 boolean finished = setPlots.getBoolean("finished");
                 HashSet<String> allowed = new HashSet<>();
                 HashSet<String> denied = new HashSet<>();
@@ -1413,18 +1336,18 @@ public class SqlManager {
                     allowed.add(setAllowed.getString("player"));
                 }
 
-	            setAllowed.close();
+                setAllowed.close();
 
-	            statementDenied = conn.createStatement();
+                statementDenied = conn.createStatement();
                 setDenied = statementDenied.executeQuery("SELECT * FROM plotmeDenied WHERE idX = '" + idX + "' AND idZ = '" + idZ + "' AND LOWER(world) = '" + world + "'");
 
                 while (setDenied.next()) {
                     denied.add(setDenied.getString("player"));
                 }
 
-	            setDenied.close();
+                setDenied.close();
 
-	            statementComment = conn.createStatement();
+                statementComment = conn.createStatement();
                 setComments = statementComment.executeQuery("SELECT * FROM plotmeComments WHERE idX = '" + idX + "' AND idZ = '" + idZ + "' AND LOWER(world) = '" + world + "'");
 
                 while (setComments.next()) {
@@ -1434,7 +1357,7 @@ public class SqlManager {
                     comments.add(comment);
                 }
 
-                Plot plot = new Plot(plugin, owner, world, biome, baseY, height, expireddate, finished, allowed, comments, "" + idX + ";" + idZ, customprice, forsale, finisheddate, protect, currentbidder, currentbid, auctionned, denied, auctionneddate);
+                Plot plot = new Plot(plugin, owner, world, biome, expireddate, finished, allowed, comments, "" + idX + ";" + idZ, customprice, forsale, finisheddate, protect, currentbidder, currentbid, auctionned, denied, auctionneddate);
                 ret.put("" + idX + ";" + idZ, plot);
             }
         } catch (SQLException ex) {
@@ -1734,10 +1657,10 @@ public class SqlManager {
                 String owner = setPlots.getString("owner");
 
                 java.sql.Date expireddate = null;
-	            try {
-		            expireddate = setPlots.getDate("expireddate");
-	            } catch (SQLException e) {
-	            }
+                try {
+                    expireddate = setPlots.getDate("expireddate");
+                } catch (SQLException e) {
+                }
 
                 Plot plot = new Plot(plugin);
                 plot.setOwner(owner);
@@ -1788,10 +1711,10 @@ public class SqlManager {
                 String owner = setPlots.getString("owner");
 
                 java.sql.Date expireddate = null;
-	            try {
-		            expireddate = setPlots.getDate("expireddate");
-	            } catch (SQLException e) {
-	            }
+                try {
+                    expireddate = setPlots.getDate("expireddate");
+                } catch (SQLException e) {
+                }
 
                 Plot plot = new Plot(plugin);
                 plot.setOwner(owner);
@@ -1853,7 +1776,7 @@ public class SqlManager {
             Connection conn = getConnection();
 
             statementPlot = conn.prepareStatement("SELECT A.* FROM plotmePlots A LEFT JOIN plotmeAllowed B ON A.idX = B.idX AND A.idZ = B.idZ AND A.world = B.world "
-                    + " WHERE owner LIKE ? OR B.player LIKE ? ORDER BY A.world");
+                                                          + " WHERE owner LIKE ? OR B.player LIKE ? ORDER BY A.world");
             statementPlot.setString(1, owner);
             statementPlot.setString(2, owner);
 
@@ -1863,13 +1786,11 @@ public class SqlManager {
                 int idX = setPlots.getInt("idX");
                 int idZ = setPlots.getInt("idZ");
                 String biome = setPlots.getString("biome");
-                int baseY = setPlots.getInt("baseY");
-                int height = setPlots.getInt("height");
                 java.sql.Date expireddate = null;
-	            try {
-		            expireddate = setPlots.getDate("expireddate");
-	            } catch (SQLException e) {
-	            }
+                try {
+                    expireddate = setPlots.getDate("expireddate");
+                } catch (SQLException e) {
+                }
                 boolean finished = setPlots.getBoolean("finished");
                 HashSet<String> allowed = new HashSet<>();
                 HashSet<String> denied = new HashSet<>();
@@ -1895,9 +1816,9 @@ public class SqlManager {
                     allowed.add(setAllowed.getString("player"));
                 }
 
-	            setAllowed.close();
+                setAllowed.close();
 
-	            statementDenied = conn.prepareStatement("SELECT * FROM plotmeDenied WHERE LOWER(world) = ? AND idX = ? AND idZ = ?");
+                statementDenied = conn.prepareStatement("SELECT * FROM plotmeDenied WHERE LOWER(world) = ? AND idX = ? AND idZ = ?");
                 statementDenied.setString(1, world);
                 statementDenied.setInt(2, idX);
                 statementDenied.setInt(3, idZ);
@@ -1908,9 +1829,9 @@ public class SqlManager {
                     denied.add(setDenied.getString("player"));
                 }
 
-	            setDenied.close();
+                setDenied.close();
 
-	            statementComment = conn.prepareStatement("SELECT * FROM plotmeComments WHERE LOWER(world) = ? AND idX = ? AND idZ = ?");
+                statementComment = conn.prepareStatement("SELECT * FROM plotmeComments WHERE LOWER(world) = ? AND idX = ? AND idZ = ?");
                 statementComment.setString(1, world);
                 statementComment.setInt(2, idX);
                 statementComment.setInt(3, idZ);
@@ -1923,9 +1844,9 @@ public class SqlManager {
                     comments.add(comment);
                 }
 
-                Plot plot = new Plot(plugin, owner, world, biome, baseY, height, expireddate, finished, allowed,
-                        comments, "" + idX + ";" + idZ, customprice, forsale, finisheddate, protect,
-                        currentbidder, currentbid, auctionned, denied, auctionneddate);
+                Plot plot = new Plot(plugin, owner, world, biome, expireddate, finished, allowed,
+                                            comments, "" + idX + ";" + idZ, customprice, forsale, finisheddate, protect,
+                                            currentbidder, currentbid, auctionned, denied, auctionneddate);
 
                 ret.add(plot);
             }
@@ -1972,13 +1893,11 @@ public class SqlManager {
                 int idX = setPlots.getInt("idX");
                 int idZ = setPlots.getInt("idZ");
                 String biome = setPlots.getString("biome");
-                int baseY = setPlots.getInt("baseY");
-                int height = setPlots.getInt("height");
                 java.sql.Date expireddate = null;
-	            try {
-		            expireddate = setPlots.getDate("expireddate");
-	            } catch (SQLException e) {
-	            }
+                try {
+                    expireddate = setPlots.getDate("expireddate");
+                } catch (SQLException e) {
+                }
                 boolean finished = setPlots.getBoolean("finished");
                 HashSet<String> allowed = new HashSet<>();
                 HashSet<String> denied = new HashSet<>();
@@ -2004,9 +1923,9 @@ public class SqlManager {
                     allowed.add(setAllowed.getString("player"));
                 }
 
-	            setAllowed.close();
+                setAllowed.close();
 
-	            statementDenied = conn.prepareStatement("SELECT * FROM plotmeDenied WHERE LOWER(world) = ? AND idX = ? AND idZ = ?");
+                statementDenied = conn.prepareStatement("SELECT * FROM plotmeDenied WHERE LOWER(world) = ? AND idX = ? AND idZ = ?");
                 statementDenied.setString(1, world);
                 statementDenied.setInt(2, idX);
                 statementDenied.setInt(3, idZ);
@@ -2017,9 +1936,9 @@ public class SqlManager {
                     denied.add(setDenied.getString("player"));
                 }
 
-	            setDenied.close();
+                setDenied.close();
 
-	            statementComment = conn.prepareStatement("SELECT * FROM plotmeComments WHERE LOWER(world) = ? AND idX = ? AND idZ = ?");
+                statementComment = conn.prepareStatement("SELECT * FROM plotmeComments WHERE LOWER(world) = ? AND idX = ? AND idZ = ?");
                 statementComment.setString(1, world);
                 statementComment.setInt(2, idX);
                 statementComment.setInt(3, idZ);
@@ -2032,9 +1951,9 @@ public class SqlManager {
                     comments.add(comment);
                 }
 
-                Plot plot = new Plot(plugin, owner, world, biome, baseY, height, expireddate, finished, allowed,
-                        comments, "" + idX + ";" + idZ, customprice, forsale, finisheddate, protect,
-                        currentbidder, currentbid, auctionned, denied, auctionneddate);
+                Plot plot = new Plot(plugin, owner, world, biome, expireddate, finished, allowed,
+                                            comments, "" + idX + ";" + idZ, customprice, forsale, finisheddate, protect,
+                                            currentbidder, currentbid, auctionned, denied, auctionneddate);
 
                 ret.add(plot);
             }

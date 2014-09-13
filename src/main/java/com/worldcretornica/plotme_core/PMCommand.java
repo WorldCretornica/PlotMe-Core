@@ -1,41 +1,6 @@
 package com.worldcretornica.plotme_core;
 
-import com.worldcretornica.plotme_core.commands.CmdAdd;
-import com.worldcretornica.plotme_core.commands.CmdAddTime;
-import com.worldcretornica.plotme_core.commands.CmdAuction;
-import com.worldcretornica.plotme_core.commands.CmdAuto;
-import com.worldcretornica.plotme_core.commands.CmdBid;
-import com.worldcretornica.plotme_core.commands.CmdBiome;
-import com.worldcretornica.plotme_core.commands.CmdBiomeList;
-import com.worldcretornica.plotme_core.commands.CmdBuy;
-import com.worldcretornica.plotme_core.commands.CmdClaim;
-import com.worldcretornica.plotme_core.commands.CmdClear;
-import com.worldcretornica.plotme_core.commands.CmdComment;
-import com.worldcretornica.plotme_core.commands.CmdComments;
-import com.worldcretornica.plotme_core.commands.CmdCreateWorld;
-import com.worldcretornica.plotme_core.commands.CmdDeny;
-import com.worldcretornica.plotme_core.commands.CmdDispose;
-import com.worldcretornica.plotme_core.commands.CmdDone;
-import com.worldcretornica.plotme_core.commands.CmdDoneList;
-import com.worldcretornica.plotme_core.commands.CmdExpired;
-import com.worldcretornica.plotme_core.commands.CmdHome;
-import com.worldcretornica.plotme_core.commands.CmdID;
-import com.worldcretornica.plotme_core.commands.CmdInfo;
-import com.worldcretornica.plotme_core.commands.CmdMove;
-import com.worldcretornica.plotme_core.commands.CmdPlotList;
-import com.worldcretornica.plotme_core.commands.CmdProtect;
-import com.worldcretornica.plotme_core.commands.CmdReload;
-import com.worldcretornica.plotme_core.commands.CmdRemove;
-import com.worldcretornica.plotme_core.commands.CmdReset;
-import com.worldcretornica.plotme_core.commands.CmdResetExpired;
-import com.worldcretornica.plotme_core.commands.CmdSell;
-import com.worldcretornica.plotme_core.commands.CmdSetBase;
-import com.worldcretornica.plotme_core.commands.CmdSetHeight;
-import com.worldcretornica.plotme_core.commands.CmdSetOwner;
-import com.worldcretornica.plotme_core.commands.CmdShowHelp;
-import com.worldcretornica.plotme_core.commands.CmdTP;
-import com.worldcretornica.plotme_core.commands.CmdUndeny;
-import com.worldcretornica.plotme_core.commands.CmdWEAnywhere;
+import com.worldcretornica.plotme_core.commands.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -73,8 +38,6 @@ public class PMCommand implements CommandExecutor {
     private final CmdResetExpired resetexpired;
     private final CmdSell sell;
     private final CmdSetOwner setowner;
-    private final CmdSetHeight setHeight;
-    private final CmdSetBase setBase;
     private final CmdShowHelp showhelp;
     private final CmdTP tp;
     private final CmdUndeny undeny;
@@ -112,8 +75,6 @@ public class PMCommand implements CommandExecutor {
         resetexpired = new CmdResetExpired(plugin);
         sell = new CmdSell(plugin);
         setowner = new CmdSetOwner(plugin);
-        setHeight = new CmdSetHeight(plugin);
-        setBase = new CmdSetBase(plugin);
         showhelp = new CmdShowHelp(plugin);
         tp = new CmdTP(plugin);
         undeny = new CmdUndeny(plugin);
@@ -135,7 +96,7 @@ public class PMCommand implements CommandExecutor {
                     s.sendMessage(C("ConsoleHelpReload"));
                     return true;
                 } else {
-                    String a0 = args[0].toString();
+                    String a0 = args[0];
                     if (a0.equalsIgnoreCase("reload")) {
                         return reload.exec(s, args);
                     }
@@ -157,7 +118,7 @@ public class PMCommand implements CommandExecutor {
 
                     try {
                         ipage = Integer.parseInt(a0);
-                    } catch (NumberFormatException e) {
+                    } catch (NumberFormatException ignored) {
                     }
 
                     if (ipage != -1) {
@@ -172,7 +133,7 @@ public class PMCommand implements CommandExecutor {
 
                                 try {
                                     ipage = Integer.parseInt(a1);
-                                } catch (NumberFormatException e) {
+                                } catch (NumberFormatException ignored) {
                                 }
                             }
 
@@ -231,18 +192,6 @@ public class PMCommand implements CommandExecutor {
                         }
                         if (a0.equalsIgnoreCase(C("CommandSetowner")) || a0.equalsIgnoreCase("o")) {
                             return setowner.exec(p, args);
-                        }
-                        if (a0.equalsIgnoreCase(C("CommandSetHeight")) || a0.equalsIgnoreCase("h")) {
-                            return setHeight.exec(p, args);
-                        }
-                        if (a0.equalsIgnoreCase(C("CommandAddHeight")) || a0.equalsIgnoreCase("+h")) {
-                            return setHeight.add(p, args);
-                        }
-                        if (a0.equalsIgnoreCase(C("CommandSubHeight")) || a0.equalsIgnoreCase("-h")) {
-                            return setHeight.subtract(p, args);
-                        }
-                        if (a0.equalsIgnoreCase(C("CommandSetBase"))) {
-                            return setBase.exec(p, args);
                         }
                         if (a0.equalsIgnoreCase(C("CommandMove")) || a0.equalsIgnoreCase("m")) {
                             return move.exec(p, args);

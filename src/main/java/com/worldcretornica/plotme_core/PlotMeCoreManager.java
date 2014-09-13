@@ -384,14 +384,10 @@ public class PlotMeCoreManager {
     }
 
     public boolean isPlotWorld(World w) {
-        if (w == null) {
+        if (w == null || getGenMan(w) == null) {
             return false;
         } else {
-            if (getGenMan(w) == null) {
-                return false;
-            } else {
-                return plotmaps.containsKey(w.getName().toLowerCase());
-            }
+            return plotmaps.containsKey(w.getName().toLowerCase());
         }
     }
 
@@ -404,50 +400,34 @@ public class PlotMeCoreManager {
     }
 
     public boolean isPlotWorld(Location l) {
-        if (l == null) {
+        if (l == null || getGenMan(l) == null) {
             return false;
         } else {
-            if (getGenMan(l) == null) {
-                return false;
-            } else {
-                return plotmaps.containsKey(l.getWorld().getName().toLowerCase());
-            }
+            return plotmaps.containsKey(l.getWorld().getName().toLowerCase());
         }
     }
 
     public boolean isPlotWorld(Player p) {
-        if (p == null) {
+        if (p == null || getGenMan(p.getWorld()) == null) {
             return false;
         } else {
-            if (getGenMan(p.getWorld()) == null) {
-                return false;
-            } else {
-                return plotmaps.containsKey(p.getWorld().getName().toLowerCase());
-            }
+            return plotmaps.containsKey(p.getWorld().getName().toLowerCase());
         }
     }
 
     public boolean isPlotWorld(Block b) {
-        if (b == null) {
+        if (b == null || getGenMan(b.getWorld()) == null) {
             return false;
         } else {
-            if (getGenMan(b.getWorld()) == null) {
-                return false;
-            } else {
-                return plotmaps.containsKey(b.getWorld().getName().toLowerCase());
-            }
+            return plotmaps.containsKey(b.getWorld().getName().toLowerCase());
         }
     }
 
     public boolean isPlotWorld(BlockState b) {
-        if (b == null) {
+        if (b == null || getGenMan(b.getWorld()) == null) {
             return false;
         } else {
-            if (getGenMan(b.getWorld()) == null) {
-                return false;
-            } else {
-                return plotmaps.containsKey(b.getWorld().getName().toLowerCase());
-            }
+            return plotmaps.containsKey(b.getWorld().getName().toLowerCase());
         }
     }
 
