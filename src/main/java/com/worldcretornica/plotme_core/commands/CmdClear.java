@@ -70,7 +70,9 @@ public class CmdClear extends PlotCommand {
                             if (!event.isCancelled()) {
                                 plugin.getPlotMeCoreManager().clear(w, plot, p, ClearReason.Clear);
 
-                                plugin.getLogger().info(LOG + playername + " " + C("MsgClearedPlot") + " " + id + ((price != 0) ? " " + C("WordFor") + " " + price : ""));
+                                if (isAdvancedLogging()) {
+                                    plugin.getLogger().info(LOG + playername + " " + C("MsgClearedPlot") + " " + id + ((price != 0) ? " " + C("WordFor") + " " + price : ""));
+                                }
                             }
                         } else {
                             p.sendMessage(RED + C("MsgThisPlot") + "(" + id + ") " + C("MsgNotYoursNotAllowedClear"));

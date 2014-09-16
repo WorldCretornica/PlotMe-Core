@@ -856,7 +856,6 @@ public class SqlManager {
         //Freed
         try {
             conn = getConnection();
-
             ps = conn.prepareStatement("INSERT INTO plotmeFreed (idX, idZ, world) VALUES (?,?,?)");
             ps.setInt(1, idX);
             ps.setInt(2, idZ);
@@ -998,7 +997,6 @@ public class SqlManager {
         //Plots
         try {
             conn = getConnection();
-
             ps = conn.prepareStatement("UPDATE plotmePlots SET " + field + " = ? "
                                                + "WHERE idX = ? AND idZ = ? AND world = ?");
 
@@ -1043,7 +1041,6 @@ public class SqlManager {
         //Allowed
         try {
             conn = getConnection();
-            plugin.getLogger().info("addPlotAllowed");
             ps = conn.prepareStatement("INSERT INTO plotmeAllowed (idX, idZ, player, world, playerid) "
                                                + "VALUES (?,?,?,?,?)");
 
@@ -1093,7 +1090,6 @@ public class SqlManager {
         //Denied
         try {
             conn = getConnection();
-plugin.getLogger().info("addPlotDenied");
             ps = conn.prepareStatement("INSERT INTO plotmeDenied (idX, idZ, player, world, playerid) "
                                                + "VALUES (?,?,?,?,?)");
 

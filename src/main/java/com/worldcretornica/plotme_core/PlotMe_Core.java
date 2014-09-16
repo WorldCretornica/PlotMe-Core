@@ -1,6 +1,5 @@
 package com.worldcretornica.plotme_core;
 
-import com.griefcraft.model.Protection;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.worldcretornica.plotme_core.api.v0_14b.IPlotMe_ChunkGenerator;
 import com.worldcretornica.plotme_core.api.v0_14b.IPlotMe_GeneratorManager;
@@ -16,9 +15,7 @@ import net.milkbowl.vault.economy.Economy;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -467,35 +464,6 @@ public class PlotMe_Core extends JavaPlugin {
 
         for (int ctr = 0; ctr < (howmanytimes / getNbPerDeletionProcessingExpired()); ctr++) {
             Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this, task, ctr * eachseconds * 20);
-        }
-    }
-
-    public void scheduleProtectionRemoval(final Location bottom, final Location top) {
-        int x1 = bottom.getBlockX();
-        int y1 = bottom.getBlockY();
-        int z1 = bottom.getBlockZ();
-        int x2 = top.getBlockX();
-        int y2 = top.getBlockY();
-        int z2 = top.getBlockZ();
-        World w = bottom.getWorld();
-
-        for (int x = x1; x <= x2; x++) {
-            for (int z = z1; z <= z2; z++) {
-                for (int y = y1; y <= y2; y++) {
-                    final Block block = w.getBlockAt(x, y, z);
-
-                    Bukkit.getScheduler().runTask(this, new Runnable() {
-                        @Override
-                        public void run() {
-                            Protection protection = com.griefcraft.lwc.LWC.getInstance().findProtection(block);
-
-                            if (protection != null) {
-                                protection.remove();
-                            }
-                        }
-                    });
-                }
-            }
         }
     }
 

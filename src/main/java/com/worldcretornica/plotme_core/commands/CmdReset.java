@@ -39,12 +39,8 @@ public class CmdReset extends PlotCommand {
                     if (plot.getOwner().equalsIgnoreCase(playername) || plugin.cPerms(p, "PlotMe.admin.reset")) {
                         World w = p.getWorld();
 
-                        plugin.getLogger().info("1");
-                        
                         PlotResetEvent event = PlotMeEventFactory.callPlotResetEvent(plugin, w, plot, p);
 
-                        plugin.getLogger().info("2");
-                        
                         if (!event.isCancelled()) {
                             plugin.getPlotMeCoreManager().setBiome(w, id, Biome.PLAINS);
                             plugin.getPlotMeCoreManager().clear(w, plot, p, ClearReason.Reset);
@@ -86,26 +82,19 @@ public class CmdReset extends PlotCommand {
                                 }
                             }
 
-                            plugin.getLogger().info("3");
-                            
                             if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, p)) {
                                 plugin.getPlotMeCoreManager().removePlot(w, id);
                             }
-                            
-                            plugin.getLogger().info("4");
 
                             plugin.getPlotMeCoreManager().removeOwnerSign(w, id);
                             plugin.getPlotMeCoreManager().removeSellSign(w, id);
-
-                            plugin.getLogger().info("5");
-                            
                             plugin.getSqlManager().deletePlot(plugin.getPlotMeCoreManager().getIdX(id), plugin.getPlotMeCoreManager().getIdZ(id), w.getName().toLowerCase());
 
                             pmi.addFreed(id);
-                            
-                            plugin.getLogger().info("6");
 
-                            plugin.getLogger().info(LOG + p.getName() + " " + C("MsgResetPlot") + " " + id);
+                            if (isAdvancedLogging()) {
+                                plugin.getLogger().info(LOG + p.getName() + " " + C("MsgResetPlot") + " " + id);
+                            }
                         }
                     } else {
                         p.sendMessage(RED + C("MsgThisPlot") + "(" + id + ") " + C("MsgNotYoursNotAllowedReset"));

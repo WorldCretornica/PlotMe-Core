@@ -808,9 +808,6 @@ public class PlotMeCoreManager {
     public void clear(World w, Plot plot, CommandSender cs, ClearReason reason) {
         String id = plot.getId();
 
-        /*getGenMan(w).clear(w, id);
-         adjustWall(w, plot);
-         RemoveLWC(w, plot);*/
         plot.setForSale(false);
         plot.setProtect(false);
         plot.setAuctionned(false);
@@ -835,6 +832,7 @@ public class PlotMeCoreManager {
             plugin.addPlotToClear(new PlotToClear(world, id, cs, reason));
         } else {
             plugin.getGenManager(w).clear(w, id);
+            RemoveLWC(w, id);
             cs.sendMessage(plugin.getUtil().C("MsgPlotCleared"));
         }
     }

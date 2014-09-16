@@ -113,7 +113,9 @@ public class CmdSetOwner extends PlotCommand {
 
                     p.sendMessage(C("MsgOwnerChangedTo") + " " + RED + newowner);
 
-                    plugin.getLogger().info(LOG + playername + " " + C("MsgChangedOwnerOf") + " " + id + " " + C("WordFrom") + " " + oldowner + " " + C("WordTo") + " " + newowner);
+                    if (isAdvancedLogging()) {
+                        plugin.getLogger().info(LOG + playername + " " + C("MsgChangedOwnerOf") + " " + id + " " + C("WordFrom") + " " + oldowner + " " + C("WordTo") + " " + newowner);
+                    }
                 }
             }
         } else {

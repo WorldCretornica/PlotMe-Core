@@ -42,6 +42,7 @@ public class CmdPlotList extends PlotCommand {
 
                 String oldworld = "";
 
+                // Get plots of that player
                 for (Plot plot : plugin.getSqlManager().getPlayerPlots(uuid, name)) {
                     if (!plot.getWorld().equals("")) {
                         World world = Bukkit.getWorld(plot.getWorld());
@@ -52,11 +53,13 @@ public class CmdPlotList extends PlotCommand {
 
                     StringBuilder addition = new StringBuilder();
 
+                    // Display worlds
                     if (!oldworld.equalsIgnoreCase(plot.getWorld())) {
                         oldworld = plot.getWorld();
                         p.sendMessage("  World: " + plot.getWorld());
                     }
 
+                    // Is it expired?
                     if (plot.getExpiredDate() != null) {
                         java.util.Date tempdate = plot.getExpiredDate();
 
@@ -67,28 +70,35 @@ public class CmdPlotList extends PlotCommand {
                         }
                     }
 
+                    // Is it auctionned?
                     if (plot.isAuctionned()) {
                         addition.append(" " + C("WordAuction") + ": " + GREEN + Util().round(plot.getCurrentBid()) + RESET + ((!plot.getCurrentBidder().equals("")) ? " " + plot.getCurrentBidder() : ""));
                     }
 
+                    // Is it for sale?
                     if (plot.isForSale()) {
                         addition.append(" " + C("WordSell") + ": " + GREEN + Util().round(plot.getCustomPrice()) + RESET);
                     }
 
+                    // Is the plot owner the name?
                     if (plot.getOwner().equalsIgnoreCase(name)) {
                         if (plot.allowedcount() == 0) {
+                            // Is the name the current player too?
                             if (name.equalsIgnoreCase(p.getName())) {
                                 p.sendMessage("  " + plot.getId() + " -> " + AQUA + ITALIC + C("WordYours") + RESET + addition);
                             } else {
                                 p.sendMessage("  " + plot.getId() + " -> " + AQUA + ITALIC + plot.getOwner() + RESET + addition);
                             }
                         } else {
-                            if (name.equalsIgnoreCase(p.getName())) {
+                            // Is the owner the current player?
+                            if (plot.getOwner().equalsIgnoreCase(p.getName())) {
                                 p.sendMessage("  " + plot.getId() + " -> " + AQUA + ITALIC + C("WordYours") + RESET + addition + ", " + C("WordHelpers") + ": " + plot.getAllowed());
                             } else {
                                 p.sendMessage("  " + plot.getId() + " -> " + AQUA + ITALIC + plot.getOwner() + RESET + addition + ", " + C("WordHelpers") + ": " + plot.getAllowed());
                             }
                         }
+
+                        // Is the name allowed to build there?
                     } else if (plot.isAllowedConsulting(name)) {
                         StringBuilder helpers = new StringBuilder();
                         for (String allowed : plot.allowed().getPlayers()) {
@@ -112,7 +122,6 @@ public class CmdPlotList extends PlotCommand {
                             p.sendMessage("  " + plot.getId() + " -> " + AQUA + plot.getOwner() + C("WordPossessive") + RESET + addition + ", " + C("WordHelpers") + ": " + helpers);
                         }
                     }
-
                 }
             }
         } else {
