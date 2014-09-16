@@ -4,7 +4,9 @@ import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.event.PlotCreateEvent;
 import com.worldcretornica.plotme_core.event.PlotMeEventFactory;
+
 import net.milkbowl.vault.economy.EconomyResponse;
+
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -83,15 +85,13 @@ public class CmdAuto extends PlotCommand {
                             }
                         }
 
-                        String name = p.getName();
-
                         double price = 0;
 
                         PlotCreateEvent event;
 
                         if (plugin.getPlotMeCoreManager().isEconomyEnabled(w)) {
                             price = pmi.getClaimPrice();
-                            double balance = plugin.getEconomy().getBalance(name);
+                            double balance = plugin.getEconomy().getBalance(p);
 
                             if (balance >= price) {
                                 event = PlotMeEventFactory.callPlotCreatedEvent(plugin, w, id, p);
@@ -99,7 +99,7 @@ public class CmdAuto extends PlotCommand {
                                 if (event.isCancelled()) {
                                     return true;
                                 } else {
-                                    EconomyResponse er = plugin.getEconomy().withdrawPlayer(name, price);
+                                    EconomyResponse er = plugin.getEconomy().withdrawPlayer(p, price);
 
                                     if (!er.transactionSuccess()) {
                                         p.sendMessage(RED + er.errorMessage);
@@ -116,7 +116,7 @@ public class CmdAuto extends PlotCommand {
                         }
 
                         if (!event.isCancelled()) {
-                            plugin.getPlotMeCoreManager().createPlot(w, id, name);
+                            plugin.getPlotMeCoreManager().createPlot(w, id, p.getName(), p.getUniqueId());
                             pmi.removeFreed(id);
 
                             //plugin.getPlotMeCoreManager().adjustLinkedPlots(id, w);
@@ -124,7 +124,9 @@ public class CmdAuto extends PlotCommand {
 
                             p.sendMessage(C("MsgThisPlotYours") + " " + C("WordUse") + " " + RED + "/plotme " + C("CommandHome") + RESET + " " + C("MsgToGetToIt") + " " + Util().moneyFormat(-price));
 
-                            plugin.getLogger().info(LOG + name + " " + C("MsgClaimedPlot") + " " + id + ((price != 0) ? " " + C("WordFor") + " " + price : ""));
+                            if (isAdvancedLogging()) {
+                                plugin.getLogger().info(LOG + p.getName() + " " + C("MsgClaimedPlot") + " " + id + ((price != 0) ? " " + C("WordFor") + " " + price : ""));
+                            }
 
                         }
                         return true;

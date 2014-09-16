@@ -5,8 +5,11 @@ import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.event.PlotMeEventFactory;
 import com.worldcretornica.plotme_core.event.PlotOwnerChangeEvent;
+
 import net.milkbowl.vault.economy.EconomyResponse;
+
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 public class CmdSetOwner extends PlotCommand {
@@ -35,7 +38,7 @@ public class CmdSetOwner extends PlotCommand {
 
                         PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(p);
                         oldowner = plot.getOwner();
-
+                        
                         PlotOwnerChangeEvent event;
 
                         if (plugin.getPlotMeCoreManager().isEconomyEnabled(p)) {
@@ -45,16 +48,19 @@ public class CmdSetOwner extends PlotCommand {
                                 if (event.isCancelled()) {
                                     return true;
                                 } else {
-                                    EconomyResponse er = plugin.getEconomy().depositPlayer(oldowner, pmi.getClaimPrice());
-
-                                    if (!er.transactionSuccess()) {
-                                        p.sendMessage(RED + er.errorMessage);
-                                        Util().warn(er.errorMessage);
-                                        return true;
-                                    } else {
-                                        Player player = Bukkit.getServer().getPlayerExact(oldowner);
-                                        if (player != null) {
-                                            player.sendMessage(C("MsgYourPlot") + " " + id + " " + C("MsgNowOwnedBy") + " " + newowner + ". " + Util().moneyFormat(pmi.getClaimPrice()));
+                                    if (plot.getOwnerId() != null) {
+                                        OfflinePlayer playeroldowner = Bukkit.getOfflinePlayer(plot.getOwnerId());
+                                        EconomyResponse er = plugin.getEconomy().depositPlayer(playeroldowner, pmi.getClaimPrice());
+    
+                                        if (!er.transactionSuccess()) {
+                                            p.sendMessage(RED + er.errorMessage);
+                                            Util().warn(er.errorMessage);
+                                            return true;
+                                        } else {
+                                            Player player = Bukkit.getServer().getPlayer(playeroldowner.getUniqueId());
+                                            if (player != null) {
+                                                player.sendMessage(C("MsgYourPlot") + " " + id + " " + C("MsgNowOwnedBy") + " " + newowner + ". " + Util().moneyFormat(pmi.getClaimPrice()));
+                                            }
                                         }
                                     }
                                 }
@@ -62,14 +68,15 @@ public class CmdSetOwner extends PlotCommand {
                                 event = PlotMeEventFactory.callPlotOwnerChangeEvent(plugin, p.getWorld(), plot, p, newowner);
                             }
 
-                            if (!plot.getCurrentBidder().isEmpty()) {
-                                EconomyResponse er = plugin.getEconomy().depositPlayer(plot.getCurrentBidder(), plot.getCurrentBid());
+                            if (plot.getCurrentBidderId() != null) {
+                                OfflinePlayer playercurrentbidder = Bukkit.getOfflinePlayer(plot.getCurrentBidderId());
+                                EconomyResponse er = plugin.getEconomy().depositPlayer(playercurrentbidder, plot.getCurrentBid());
 
                                 if (!er.transactionSuccess()) {
                                     p.sendMessage(er.errorMessage);
                                     Util().warn(er.errorMessage);
                                 } else {
-                                    Player player = Bukkit.getServer().getPlayerExact(plot.getCurrentBidder());
+                                    Player player = Bukkit.getServer().getPlayer(playercurrentbidder.getUniqueId());
                                     if (player != null) {
                                         player.sendMessage(C("WordPlot") + " " + id + " " + C("MsgChangedOwnerFrom") + " " + oldowner + " " + C("WordTo") + " " + newowner + ". " + Util().moneyFormat(plot.getCurrentBid()));
                                     }
@@ -81,6 +88,7 @@ public class CmdSetOwner extends PlotCommand {
 
                         if (!event.isCancelled()) {
                             plot.setCurrentBidder("");
+                            plot.setCurrentBidderId(null);
                             plot.setCurrentBid(0);
                             plot.setAuctionned(false);
                             plot.setForSale(false);
@@ -91,6 +99,7 @@ public class CmdSetOwner extends PlotCommand {
                             plot.updateField("currentbid", 0);
                             plot.updateField("auctionned", false);
                             plot.updateField("forsale", false);
+                            plot.updateField("currentbidderid", null);
 
                             plot.setOwner(newowner);
 
@@ -99,7 +108,7 @@ public class CmdSetOwner extends PlotCommand {
                             plot.updateField("owner", newowner);
                         }
                     } else {
-                        plugin.getPlotMeCoreManager().createPlot(p.getWorld(), id, newowner);
+                        plugin.getPlotMeCoreManager().createPlot(p.getWorld(), id, newowner, null);
                     }
 
                     p.sendMessage(C("MsgOwnerChangedTo") + " " + RED + newowner);

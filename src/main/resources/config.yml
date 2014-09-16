@@ -9,3 +9,4 @@ defaultWEAnywhere: false
 allowToDeny: true
 NbClearSpools: 3
 NbBlocksPerClearStep: 50000
+AdvancedLogging: false

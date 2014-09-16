@@ -67,7 +67,7 @@ public class PlotListener implements Listener {
 				} else {
 					Plot plot = plugin.getPlotMeCoreManager().getMap(p).getPlot(id);
 
-                    if (plot == null || !plot.isAllowed(p.getName())) {
+                    if (plot == null || !plot.isAllowed(p.getUniqueId())) {
                         if (!canbuild) {
 							p.sendMessage(plugin.getUtil().C("ErrCannotBuild"));
 							event.setCancelled(true);
@@ -113,7 +113,7 @@ public class PlotListener implements Listener {
 				} else {
 					Plot plot = plugin.getPlotMeCoreManager().getPlotById(p, id);
 
-                    if (plot == null || !plot.isAllowed(p.getName())) {
+                    if (plot == null || !plot.isAllowed(p.getUniqueId())) {
                         if (!canbuild) {
 							p.sendMessage(plugin.getUtil().C("ErrCannotBuild"));
 							event.setCancelled(true);
@@ -160,7 +160,7 @@ public class PlotListener implements Listener {
 						if (plot == null) {
 							p.sendMessage(plugin.getUtil().C("ErrCannotBuild"));
 							event.setCancelled(true);
-                        } else if (!plot.isAllowed(p.getName())) {
+                        } else if (!plot.isAllowed(p.getUniqueId())) {
                             p.sendMessage(plugin.getUtil().C("ErrCannotBuild"));
 							event.setCancelled(true);
 						}
@@ -203,7 +203,7 @@ public class PlotListener implements Listener {
 						if (plot == null) {
 							p.sendMessage(plugin.getUtil().C("ErrCannotBuild"));
 							event.setCancelled(true);
-                        } else if (!plot.isAllowed(p.getName())) {
+                        } else if (!plot.isAllowed(p.getUniqueId())) {
                             p.sendMessage(plugin.getUtil().C("ErrCannotBuild"));
 							event.setCancelled(true);
 						}
@@ -562,7 +562,7 @@ public class PlotListener implements Listener {
 						} else {
 							Plot plot = plugin.getPlotMeCoreManager().getPlotById(b, id);
 
-                            if (plot == null || !plot.isAllowed(p.getName())) {
+                            if (plot == null || !plot.isAllowed(p.getUniqueId())) {
                                 event.setCancelled(true);
 							}
 						}
@@ -605,7 +605,7 @@ public class PlotListener implements Listener {
 				} else {
 					Plot plot = plugin.getPlotMeCoreManager().getPlotById(p, id);
 
-                    if (plot == null || !plot.isAllowed(p.getName())) {
+                    if (plot == null || !plot.isAllowed(p.getUniqueId())) {
                         if (!canbuild) {
 							p.sendMessage(plugin.getUtil().C("ErrCannotBuild"));
 							event.setCancelled(true);
@@ -656,7 +656,7 @@ public class PlotListener implements Listener {
 					} else {
 						Plot plot = plugin.getPlotMeCoreManager().getPlotById(p, id);
 
-                        if (plot == null || !plot.isAllowed(p.getName())) {
+                        if (plot == null || !plot.isAllowed(p.getUniqueId())) {
                             if (!canbuild) {
 								p.sendMessage(plugin.getUtil().C("ErrCannotBuild"));
 								event.setCancelled(true);
@@ -703,7 +703,7 @@ public class PlotListener implements Listener {
 				} else {
 					Plot plot = plugin.getPlotMeCoreManager().getPlotById(p, id);
 
-                    if (plot == null || !plot.isAllowed(p.getName())) {
+                    if (plot == null || !plot.isAllowed(p.getUniqueId())) {
                         if (!canbuild) {
 							p.sendMessage(plugin.getUtil().C("ErrCannotBuild"));
 							event.setCancelled(true);
@@ -733,7 +733,7 @@ public class PlotListener implements Listener {
 			} else {
 				Plot plot = plugin.getPlotMeCoreManager().getPlotById(p, id);
 
-                if (plot == null || !plot.isAllowed(p.getName())) {
+                if (plot == null || !plot.isAllowed(p.getUniqueId())) {
                     if (!canbuild) {
 						p.sendMessage(plugin.getUtil().C("ErrCannotUseEggs"));
 						event.setHatching(false);

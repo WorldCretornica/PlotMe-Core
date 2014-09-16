@@ -78,12 +78,6 @@ public class PlotMeEventFactory {
         return event;
     }
 
-    public static PlotDenyPlayerEvent callPlotDenyPlayerEvent(PlotMe_Core plugin, World world, Plot plot, Player player, String denied) {
-        PlotDenyPlayerEvent event = new PlotDenyPlayerEvent(plugin, world, plot, player, denied);
-        Bukkit.getPluginManager().callEvent(event);
-        return event;
-    }
-
     public static PlotDisposeEvent callPlotDisposeEvent(PlotMe_Core plugin, World world, Plot plot, Player disposer) {
         PlotDisposeEvent event = new PlotDisposeEvent(plugin, world, plot, disposer);
         Bukkit.getPluginManager().callEvent(event);
@@ -126,7 +120,7 @@ public class PlotMeEventFactory {
         return event;
     }
 
-    public static PlotAddDeniedEvent PlotAddDeniedEvent(PlotMe_Core plugin, World world, Plot plot, Player player, String denied) {
+    public static PlotAddDeniedEvent callPlotAddDeniedEvent(PlotMe_Core plugin, World world, Plot plot, Player player, String denied) {
         PlotAddDeniedEvent event = new PlotAddDeniedEvent(plugin, world, plot, player, denied);
         Bukkit.getPluginManager().callEvent(event);
         return event;

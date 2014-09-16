@@ -4,9 +4,12 @@ import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.event.PlotBuyEvent;
 import com.worldcretornica.plotme_core.event.PlotMeEventFactory;
+
 import net.milkbowl.vault.economy.EconomyResponse;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
@@ -46,20 +49,25 @@ public class CmdBuy extends PlotCommand {
 
                                 double cost = plot.getCustomPrice();
 
-                                if (plugin.getEconomy().getBalance(buyer) < cost) {
+                                if (plugin.getEconomy().getBalance(p) < cost) {
                                     p.sendMessage(RED + C("MsgNotEnoughBuy"));
                                 } else {
 
                                     PlotBuyEvent event = PlotMeEventFactory.callPlotBuyEvent(plugin, w, plot, p, cost);
 
                                     if (!event.isCancelled()) {
-                                        EconomyResponse er = plugin.getEconomy().withdrawPlayer(buyer, cost);
+                                        EconomyResponse er = plugin.getEconomy().withdrawPlayer(p, cost);
 
                                         if (er.transactionSuccess()) {
                                             String oldowner = plot.getOwner();
+                                            OfflinePlayer playercurrentbidder = null;
+                                            
+                                            if (plot.getOwnerId() != null) {
+                                                playercurrentbidder = Bukkit.getOfflinePlayer(plot.getOwnerId());
+                                            }
 
-                                            if (!oldowner.equalsIgnoreCase("$Bank$")) {
-                                                EconomyResponse er2 = plugin.getEconomy().depositPlayer(oldowner, cost);
+                                            if (!oldowner.equalsIgnoreCase("$Bank$") && playercurrentbidder != null) {
+                                                EconomyResponse er2 = plugin.getEconomy().depositPlayer(playercurrentbidder, cost);
 
                                                 if (!er2.transactionSuccess()) {
                                                     p.sendMessage(RED + er2.errorMessage);

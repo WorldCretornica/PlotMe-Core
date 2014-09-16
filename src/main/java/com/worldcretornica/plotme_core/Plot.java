@@ -3,23 +3,27 @@ package com.worldcretornica.plotme_core;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
+import org.bukkit.entity.Player;
 
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 public class Plot implements Comparable<Plot> {
 
+    //TODO look into removing reference to plugin
     private PlotMe_Core plugin = null;
 
     private String owner;
+    private UUID ownerId;
     private String world;
-    private HashSet<String> allowed;
-    private HashSet<String> denied;
+    private PlayerList allowed;
+    private PlayerList denied;
     private Biome biome;
     private Date expireddate;
     private boolean finished;
@@ -32,15 +36,17 @@ public class Plot implements Comparable<Plot> {
     private boolean auctionned;
     private String currentbidder;
     private double currentbid;
+    private UUID currentbidderId;
     private String auctionneddate;
 
     public Plot(PlotMe_Core instance) {
         this.plugin = instance;
-        this.owner = "";
+        this.setOwner("");
+        this.setOwnerId(null);
         this.setWorld("");
         this.setId("");
-        this.allowed = new HashSet<>();
-        this.denied = new HashSet<>();
+        this.allowed = new PlayerList();
+        this.denied = new PlayerList();
         this.setBiome(Biome.PLAINS);
 
         Calendar cal = Calendar.getInstance();
@@ -55,17 +61,20 @@ public class Plot implements Comparable<Plot> {
         this.setProtect(false);
         this.setAuctionned(false);
         this.setCurrentBidder("");
+        this.setCurrentBidderId(null);
         this.setCurrentBid(0);
     }
 
-    public Plot(PlotMe_Core instance, String own, World wor, String tid, int days) {
+    @Deprecated
+    public Plot(PlotMe_Core instance, String owner, World world, String plotid, int days) {
         this.plugin = instance;
-        this.owner = own;
-        this.setWorld(wor.getName());
-        this.allowed = new HashSet<>();
-        this.denied = new HashSet<>();
+        this.setOwner(owner);
+        this.setOwnerId(null);
+        this.setWorld(world.getName());
+        this.allowed = new PlayerList();
+        this.denied = new PlayerList();
         this.setBiome(Biome.PLAINS);
-        this.setId(tid);
+        this.setId(plotid);
 
         if (days == 0) {
             this.setExpiredDate(null);
@@ -83,15 +92,84 @@ public class Plot implements Comparable<Plot> {
         this.setProtect(false);
         this.setAuctionned(false);
         this.setCurrentBidder("");
+        this.setCurrentBidderId(null);
         this.setCurrentBid(0);
     }
 
-    public Plot(PlotMe_Core instance, String o, String w, String bio, Date exp, boolean fini, HashSet<String> al,
-                List<String[]> comm, String tid, double custprice, boolean sale, String finishdt, boolean prot, String bidder,
-                Double bid, boolean isauctionned, HashSet<String> den, String auctdate) {
+    public Plot(PlotMe_Core instance, String owner, UUID uuid, World world, String plotid, int days) {
         this.plugin = instance;
-        this.owner = o;
-        this.setWorld(w);
+        this.setOwner(owner);
+        this.setOwnerId(uuid);
+        this.setWorld(world.getName());
+        this.allowed = new PlayerList();
+        this.denied = new PlayerList();
+        this.setBiome(Biome.PLAINS);
+        this.setId(plotid);
+
+        if (days == 0) {
+            this.setExpiredDate(null);
+        } else {
+            Calendar cal = Calendar.getInstance();
+            cal.add(Calendar.DAY_OF_YEAR, days);
+            java.util.Date utlDate = cal.getTime();
+            this.setExpiredDate(new java.sql.Date(utlDate.getTime()));
+        }
+
+        this.comments = new ArrayList<>();
+        this.setCustomPrice(0);
+        this.setForSale(false);
+        this.setFinishedDate("");
+        this.setProtect(false);
+        this.setAuctionned(false);
+        this.setCurrentBidder("");
+        this.setCurrentBidderId(null);
+        this.setCurrentBid(0);
+    }
+
+    public Plot(PlotMe_Core instance, UUID uuid, World world, String plotid, int days) {
+        this.plugin = instance;
+        this.setOwnerId(uuid);
+        
+        Player p = Bukkit.getPlayer(uuid);
+        if (p != null) {
+            this.setOwner(p.getName());
+        } else {
+            this.setOwner("");
+        }
+        this.setWorld(world.getName());
+        this.allowed = new PlayerList();
+        this.denied = new PlayerList();
+        this.setBiome(Biome.PLAINS);
+        this.setId(plotid);
+
+        if (days == 0) {
+            this.setExpiredDate(null);
+        } else {
+            Calendar cal = Calendar.getInstance();
+            cal.add(Calendar.DAY_OF_YEAR, days);
+            java.util.Date utlDate = cal.getTime();
+            this.setExpiredDate(new java.sql.Date(utlDate.getTime()));
+        }
+
+        this.comments = new ArrayList<>();
+        this.setCustomPrice(0);
+        this.setForSale(false);
+        this.setFinishedDate("");
+        this.setProtect(false);
+        this.setAuctionned(false);
+        this.setCurrentBidder("");
+        this.setCurrentBidderId(null);
+        this.setCurrentBid(0);
+    }
+
+    @Deprecated
+    public Plot(PlotMe_Core instance, String owner, String world, String bio, Date exp, boolean fini, PlayerList al,
+                List<String[]> comm, String tid, double custprice, boolean sale, String finishdt, boolean prot, String bidder,
+                Double bid, boolean isauctionned, PlayerList den, String auctdate) {
+        this.plugin = instance;
+        this.setOwner(owner);
+        this.setOwnerId(null);
+        this.setWorld(world);
         this.setBiome(Biome.valueOf(bio));
         this.setExpiredDate(exp);
         this.setFinished(fini);
@@ -104,6 +182,32 @@ public class Plot implements Comparable<Plot> {
         this.setProtect(prot);
         this.setAuctionned(isauctionned);
         this.setCurrentBidder(bidder);
+        this.setCurrentBidderId(null);
+        this.setCurrentBid(bid);
+        this.denied = den;
+        this.setAuctionnedDate(auctdate);
+    }
+
+    public Plot(PlotMe_Core instance, String owner, UUID ownerId, String world, String bio, Date exp, boolean fini, 
+            PlayerList al, List<String[]> comm, String tid, double custprice, boolean sale, String finishdt, 
+            boolean prot, String bidder, UUID bidderId, Double bid, boolean isauctionned, PlayerList den, String auctdate) {
+        this.plugin = instance;
+        this.setOwner(owner);
+        this.setOwnerId(ownerId);
+        this.setWorld(world);
+        this.setBiome(Biome.valueOf(bio));
+        this.setExpiredDate(exp);
+        this.setFinished(fini);
+        this.allowed = al;
+        this.comments = comm;
+        this.setId(tid);
+        this.setCustomPrice(custprice);
+        this.setForSale(sale);
+        this.setFinishedDate(finishdt);
+        this.setProtect(prot);
+        this.setAuctionned(isauctionned);
+        this.setCurrentBidder(bidder);
+        this.setCurrentBidderId(bidderId);
         this.setCurrentBid(bid);
         this.denied = den;
         this.setAuctionnedDate(auctdate);
@@ -156,36 +260,28 @@ public class Plot implements Comparable<Plot> {
         return this.biome;
     }
 
-    public String getOwner() {
+    public final String getOwner() {
         return this.owner;
     }
+    
+    public final UUID getOwnerId() {
+        return this.ownerId;
+    }
 
-    public void setOwner(String owner) {
+    public final void setOwner(String owner) {
         this.owner = owner;
+    }
+    
+    public final void setOwnerId(UUID uuid) {
+        this.ownerId = uuid;
     }
 
     public String getAllowed() {
-        String list = "";
-
-        for (String s : this.allowed) {
-            list = list + s + ", ";
-        }
-        if (list.length() > 1) {
-            list = list.substring(0, list.length() - 2);
-        }
-        return list;
+        return allowed.getPlayerList();
     }
 
     public String getDenied() {
-        String list = "";
-
-        for (String s : this.denied) {
-            list = list + s + ", ";
-        }
-        if (list.length() > 1) {
-            list = list.substring(0, list.length() - 2);
-        }
-        return list;
+        return denied.getPlayerList();
     }
 
     public int getCommentsCount() {
@@ -205,130 +301,278 @@ public class Plot implements Comparable<Plot> {
     }
 
     public void addAllowed(String name) {
-        if (!isAllowed(name)) {
-            this.allowed.add(name);
-            this.plugin.getSqlManager().addPlotAllowed(name, this.plugin.getPlotMeCoreManager().getIdX(this.getId()), this.plugin.getPlotMeCoreManager().getIdZ(this.getId()), this.getWorld());
+        if (!isAllowedConsulting(name)) {
+            allowed.put(name);
+            plugin.getSqlManager().addPlotAllowed(name, null, plugin.getPlotMeCoreManager().getIdX(id), plugin.getPlotMeCoreManager().getIdZ(id), world);
+        }
+    }
+
+    public void addAllowed(UUID uuid) {
+        if (!isAllowed(uuid)) {
+            String name = allowed.put(uuid);
+            plugin.getSqlManager().addPlotAllowed(name, uuid, plugin.getPlotMeCoreManager().getIdX(id), plugin.getPlotMeCoreManager().getIdZ(id), world);
         }
     }
 
     public void addDenied(String name) {
-        if (!isDenied(name)) {
-            this.denied.add(name);
-            this.plugin.getSqlManager().addPlotDenied(name, this.plugin.getPlotMeCoreManager().getIdX(this.getId()), this.plugin.getPlotMeCoreManager().getIdZ(this.getId()), this.getWorld());
+        if (!isDeniedConsulting(name)) {
+            denied.put(name);
+            plugin.getSqlManager().addPlotDenied(name, null, plugin.getPlotMeCoreManager().getIdX(id), plugin.getPlotMeCoreManager().getIdZ(id), world);
+        }
+    }
+
+    public void addDenied(UUID uuid) {
+        if (!isDenied(uuid)) {
+            String name = denied.put(uuid);
+            plugin.getSqlManager().addPlotDenied(name, uuid, plugin.getPlotMeCoreManager().getIdX(id), plugin.getPlotMeCoreManager().getIdZ(id), world);
         }
     }
 
     public void removeAllowed(String name) {
-        String found = "";
-
-        for (String n : this.allowed) {
-            if (n.equalsIgnoreCase(name)) {
-                found = n;
-                break;
+        if (allowed.contains(name)) {
+            UUID uuid = allowed.remove(name);
+            plugin.getSqlManager().deletePlotAllowed(plugin.getPlotMeCoreManager().getIdX(id), plugin.getPlotMeCoreManager().getIdZ(id), name, uuid, world);
+            
+            if(plugin.getPlotWorldEdit() != null) {
+                Player p = Bukkit.getPlayer(uuid);
+                
+                if(p != null) {
+                    if(plugin.getPlotMeCoreManager().isPlotWorld(p.getWorld())) {
+                        if(!plugin.getPlotMeCoreManager().isPlayerIgnoringWELimit(p.getUniqueId()))
+                            plugin.getPlotWorldEdit().setMask(p);
+                        else
+                            plugin.getPlotWorldEdit().removeMask(p);
+                    }
+                }
             }
         }
+    }
+    
+    public void removeAllowedGroup(String name) {
+        if (allowed.contains(name)) {
+            allowed.remove(name);
+            plugin.getSqlManager().deletePlotAllowed(plugin.getPlotMeCoreManager().getIdX(id), plugin.getPlotMeCoreManager().getIdZ(id), name, null, world);
+        }
+    }
 
-        if (!found.equals("")) {
-            this.allowed.remove(found);
-            this.plugin.getSqlManager().deletePlotAllowed(this.plugin.getPlotMeCoreManager().getIdX(this.getId()), this.plugin.getPlotMeCoreManager().getIdZ(this.getId()), found, this.getWorld());
+    public void removeAllowed(UUID uuid) {
+        if (allowed.contains(uuid)) {
+            String name = allowed.remove(uuid);
+            plugin.getSqlManager().deletePlotAllowed(plugin.getPlotMeCoreManager().getIdX(id), plugin.getPlotMeCoreManager().getIdZ(id), name, uuid, world);
+            
+            if(plugin.getPlotWorldEdit() != null) {
+                Player p = Bukkit.getPlayer(uuid);
+                
+                if(p != null) {
+                    if(plugin.getPlotMeCoreManager().isPlotWorld(p.getWorld())) {
+                        if(!plugin.getPlotMeCoreManager().isPlayerIgnoringWELimit(p.getUniqueId()))
+                            plugin.getPlotWorldEdit().setMask(p);
+                        else
+                            plugin.getPlotWorldEdit().removeMask(p);
+                    }
+                }
+            }
         }
     }
 
     public void removeDenied(String name) {
-        String found = "";
-
-        for (String n : this.denied) {
-            if (n.equalsIgnoreCase(name)) {
-                found = n;
-                break;
-            }
+        if (denied.contains(name)) {
+            UUID uuid = denied.remove(name);
+            plugin.getSqlManager().deletePlotDenied(plugin.getPlotMeCoreManager().getIdX(id), plugin.getPlotMeCoreManager().getIdZ(id), name, uuid, world);
         }
+    }
+    
+    public void removeDeniedGroup(String name) {
+        if (denied.contains(name)) {
+            denied.remove(name);
+            plugin.getSqlManager().deletePlotDenied(plugin.getPlotMeCoreManager().getIdX(id), plugin.getPlotMeCoreManager().getIdZ(id), name, null, world);
+        }
+    }
 
-        if (!found.equals("")) {
-            this.denied.remove(found);
-            this.plugin.getSqlManager().deletePlotDenied(this.plugin.getPlotMeCoreManager().getIdX(this.getId()), this.plugin.getPlotMeCoreManager().getIdZ(this.getId()), found, this.getWorld());
+    public void removeDenied(UUID uuid) {
+        if (denied.contains(uuid)) {
+            String name = denied.remove(uuid);
+            plugin.getSqlManager().deletePlotDenied(plugin.getPlotMeCoreManager().getIdX(id), plugin.getPlotMeCoreManager().getIdZ(id), name, uuid, world);
         }
     }
 
     public void removeAllAllowed() {
-        for (String n : this.allowed) {
-            this.plugin.getSqlManager().deletePlotAllowed(this.plugin.getPlotMeCoreManager().getIdX(this.getId()), this.plugin.getPlotMeCoreManager().getIdZ(this.getId()), n, this.getWorld());
+        HashMap<String, UUID> list = allowed.getAllPlayers();
+        for (String n : list.keySet()) {
+            UUID uuid = list.get(n);
+            plugin.getSqlManager().deletePlotAllowed(plugin.getPlotMeCoreManager().getIdX(id), plugin.getPlotMeCoreManager().getIdZ(id), n, uuid, world);
         }
-        this.allowed = new HashSet<>();
+        allowed.clear();
     }
 
     public void removeAllDenied() {
-        for (String n : this.denied) {
-            this.plugin.getSqlManager().deletePlotDenied(this.plugin.getPlotMeCoreManager().getIdX(this.getId()), this.plugin.getPlotMeCoreManager().getIdZ(this.getId()), n, this.getWorld());
+        HashMap<String, UUID> list = denied.getAllPlayers();
+        for (String n : list.keySet()) {
+            UUID uuid = list.get(n);
+            plugin.getSqlManager().deletePlotDenied(plugin.getPlotMeCoreManager().getIdX(id), plugin.getPlotMeCoreManager().getIdZ(id), n, uuid, world);
         }
-        this.denied = new HashSet<>();
+        denied.clear();
     }
 
+    @Deprecated
     public boolean isAllowed(String name) {
-        return isAllowed(name, true, true);
+        Player p = Bukkit.getServer().getPlayerExact(name);
+        if(p == null) {
+            return false;
+        } else {
+            return isAllowedInternal(p.getName(), p.getUniqueId(), true, true);
+        }
+    }
+    
+    public boolean isAllowedConsulting(String name) {
+        @SuppressWarnings("deprecation")
+        Player p = Bukkit.getServer().getPlayerExact(name);
+        if(p != null) {
+            return isAllowedInternal(name, p.getUniqueId(), true, true);
+        } else {
+            return isAllowedInternal(name, null, true, true);
+        }
+    }
+    
+    public boolean isGroupAllowed(String name) {
+        return isAllowedInternal(name, null, true, true);
+    }
+    
+    public boolean isAllowed(String name, UUID uuid) {
+        return isAllowedInternal(name, uuid, true, true);
+    }
+    
+    public boolean isAllowed(UUID uuid) {
+        return isAllowedInternal("", uuid, true, true);
     }
 
+    @Deprecated
     public boolean isAllowed(String name, boolean IncludeStar, boolean IncludeGroup) {
+        Player p = Bukkit.getServer().getPlayerExact(name);
+        if(p == null) {
+            return false;
+        } else {
+            return isAllowedInternal(p.getName(), p.getUniqueId(), IncludeStar, IncludeGroup);
+        }
+    }
+    
+    private boolean isAllowedInternal(String name, UUID uuid, boolean IncludeStar, boolean IncludeGroup) {
+                
+        if(IncludeStar && owner.equals("*")) {
+            return true;
+        }
+        
+        Player p = null;
 
-        if (this.owner.equalsIgnoreCase(name) || (IncludeStar && this.owner.equals("*"))) {
+        if (uuid != null) {
+            p = Bukkit.getServer().getPlayer(uuid);
+        }
+                
+        if (uuid != null && ownerId != null && ownerId.equals(uuid)) {
+            return true;
+        } else if(uuid == null && owner.equalsIgnoreCase(name)) {
             return true;
         }
 
-        if (IncludeGroup && this.owner.toLowerCase().startsWith("group:") && Bukkit.getServer().getPlayerExact(name) != null) {
-            if (Bukkit.getServer().getPlayerExact(name).hasPermission("plotme.group." + this.owner.replace("Group:", ""))) {
+        if (IncludeGroup && owner.toLowerCase().startsWith("group:") && p != null) {
+            if (p.hasPermission("plotme.group." + owner.replace("Group:", ""))) {
                 return true;
             }
         }
 
-        for (String str : this.allowed) {
-            if (str.equalsIgnoreCase(name) || (IncludeStar && str.equals("*"))) {
+        HashMap<String, UUID> list = allowed.getAllPlayers();
+        for (String str : list.keySet()) {
+            if(IncludeStar && str.equals("*")) {
+                return true;
+            }
+            
+            UUID u = list.get(str);
+            if (u != null && uuid != null && u.equals(uuid)) {
+                return true;
+            } else if(uuid == null && str.equalsIgnoreCase(name)) {
                 return true;
             }
 
-            if (IncludeGroup && str.toLowerCase().startsWith("group:") && Bukkit.getServer().getPlayerExact(name) != null) {
-                if (Bukkit.getServer().getPlayerExact(name).hasPermission("plotme.group." + str.replace("Group:", ""))) {
+            if (IncludeGroup && str.toLowerCase().startsWith("group:") && p != null)
+                if (p.hasPermission("plotme.group." + str.replace("Group:", "")))
                     return true;
-                }
-            }
         }
-
         return false;
     }
 
+    @Deprecated
     public boolean isDenied(String name) {
-        if (isAllowed(name, false, false)) {
+        Player p = Bukkit.getServer().getPlayerExact(name);
+        if(p == null) {
             return false;
+        } else {
+            return isDeniedInternal(name, null, true, true);
         }
+    }
+    
+    public boolean isDeniedConsulting(String name) {
+        @SuppressWarnings("deprecation")
+        Player p = Bukkit.getServer().getPlayerExact(name);
+        if(p != null) {
+            return isDeniedInternal(name, p.getUniqueId(), true, true);
+        } else {
+            return isDeniedInternal(name, null, true, true);
+        }
+    }
+    
+    public boolean isGroupDenied(String name) {
+        return isDeniedInternal(name, null, true, true);
+    }
 
-        for (String str : this.denied) {
-            if (str.equalsIgnoreCase(name) || str.equals("*")) {
+    public boolean isDenied(UUID uuid) {
+        return isDeniedInternal("", uuid, true, true);
+    }
+    
+    private boolean isDeniedInternal(String name, UUID uuid, boolean IncludeStar, boolean IncludeGroup) {
+        Player p = null;
+        
+        if (isAllowedInternal(name, uuid, false, false))
+            return false;
+        
+        if (uuid != null) {
+            p = Bukkit.getServer().getPlayer(uuid);
+        }
+        
+        HashMap<String, UUID> list = denied.getAllPlayers();
+        for (String str : list.keySet()) {
+            if(str.equals("*")) {
                 return true;
             }
-
-            if (str.toLowerCase().startsWith("group:") && Bukkit.getServer().getPlayerExact(name) != null) {
-                if (Bukkit.getServer().getPlayerExact(name).hasPermission("plotme.group." + str.replace("Group:", ""))) {
-                    return true;
-                }
+            
+            UUID u = list.get(str);
+            if (u != null && uuid != null && u.equals(uuid)) {
+                return true;
+            } else if(uuid == null && str.equalsIgnoreCase(name)) {
+                return true;
             }
+            
+            if (IncludeGroup && str.toLowerCase().startsWith("group:") && p != null)
+                if (p.hasPermission("plotme.group." + str.replace("Group:", "")))
+                    return true;
         }
 
         return false;
     }
 
-    public HashSet<String> allowed() {
-        return this.allowed;
+    public PlayerList allowed() {
+        return allowed;
     }
 
-    public HashSet<String> denied() {
-        return this.denied;
+    public PlayerList denied() {
+        return denied;
     }
 
     public int allowedcount() {
-        return this.allowed.size();
+        return allowed.size();
     }
 
     public int deniedcount() {
-        return this.denied.size();
+        return denied.size();
     }
 
     @Override
@@ -428,9 +672,17 @@ public class Plot implements Comparable<Plot> {
     public final String getCurrentBidder() {
         return currentbidder;
     }
+    
+    public final UUID getCurrentBidderId() {
+        return currentbidderId;
+    }
 
     public final void setCurrentBidder(String currentbidder) {
         this.currentbidder = currentbidder;
+    }
+    
+    public final void setCurrentBidderId(UUID uuid) {
+        this.currentbidderId = uuid;
     }
 
     public final double getCurrentBid() {

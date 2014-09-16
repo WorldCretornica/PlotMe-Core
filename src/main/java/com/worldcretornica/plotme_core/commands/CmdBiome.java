@@ -51,14 +51,14 @@ public class CmdBiome extends PlotCommand {
 
                                 if (plugin.getPlotMeCoreManager().isEconomyEnabled(w)) {
                                     price = pmi.getBiomeChangePrice();
-                                    double balance = plugin.getEconomy().getBalance(playername);
+                                    double balance = plugin.getEconomy().getBalance(p);
 
                                     if (balance >= price) {
                                         event = PlotMeEventFactory.callPlotBiomeChangeEvent(plugin, w, plot, p, biome);
                                         if (event.isCancelled()) {
                                             return true;
                                         } else {
-                                            EconomyResponse er = plugin.getEconomy().withdrawPlayer(playername, price);
+                                            EconomyResponse er = plugin.getEconomy().withdrawPlayer(p, price);
 
                                             if (!er.transactionSuccess()) {
                                                 p.sendMessage(RED + er.errorMessage);
@@ -80,8 +80,10 @@ public class CmdBiome extends PlotCommand {
 
                                     p.sendMessage(C("MsgBiomeSet") + " " + ChatColor.BLUE + Util().FormatBiome(biome.name()) + " " + Util().moneyFormat(-price));
 
-                                    plugin.getLogger().info(LOG + playername + " " + C("MsgChangedBiome") + " " + id + " " + C("WordTo") + " "
-                                                                    + Util().FormatBiome(biome.name()) + ((price != 0) ? " " + C("WordFor") + " " + price : ""));
+                                    if (isAdvancedLogging()) {
+                                        plugin.getLogger().info(LOG + playername + " " + C("MsgChangedBiome") + " " + id + " " + C("WordTo") + " "
+                                                                        + Util().FormatBiome(biome.name()) + ((price != 0) ? " " + C("WordFor") + " " + price : ""));
+                                    }
                                 }
                             } else {
                                 p.sendMessage(RED + C("MsgThisPlot") + "(" + id + ") " + C("MsgNotYoursNotAllowedBiome"));

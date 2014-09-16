@@ -4,6 +4,8 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -16,11 +18,6 @@ public class PlotMapInfo {
     private final String world;
     private final String worldPath;
 
-    /*public PlotMapInfo(PlotMe_Core instance) {
-     plugin = instance;
-     _plots = new ConcurrentHashMap<String, Plot>();
-     _freedplots = new ArrayList<String>();
-     }*/
     public PlotMapInfo(PlotMe_Core instance, String world) {
         this.plugin = instance;
         this.world = world;
@@ -52,8 +49,13 @@ public class PlotMapInfo {
 
     private ConfigurationSection getDefaultWorld() {
         InputStream defConfigStream = plugin.getResource("default-world.yml");
-
-        return YamlConfiguration.loadConfiguration(defConfigStream);
+        InputStreamReader isr;
+        try {
+            isr = new InputStreamReader(defConfigStream, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            isr = new InputStreamReader(defConfigStream);
+        }
+        return YamlConfiguration.loadConfiguration(isr);
     }
 
     public void saveConfig() {

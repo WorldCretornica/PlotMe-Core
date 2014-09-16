@@ -5,8 +5,11 @@ import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.event.PlotDisposeEvent;
 import com.worldcretornica.plotme_core.event.PlotMeEventFactory;
+
 import net.milkbowl.vault.economy.EconomyResponse;
+
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
@@ -42,7 +45,7 @@ public class CmdDispose extends PlotCommand {
                             PlotDisposeEvent event;
 
                             if (plugin.getPlotMeCoreManager().isEconomyEnabled(p)) {
-                                if (cost != 0 && plugin.getEconomy().getBalance(name) < cost) {
+                                if (cost != 0 && plugin.getEconomy().getBalance(p) < cost) {
                                     p.sendMessage(RED + C("MsgNotEnoughDispose"));
                                     return true;
                                 }
@@ -52,7 +55,7 @@ public class CmdDispose extends PlotCommand {
                                 if (event.isCancelled()) {
                                     return true;
                                 } else {
-                                    EconomyResponse er = plugin.getEconomy().withdrawPlayer(name, cost);
+                                    EconomyResponse er = plugin.getEconomy().withdrawPlayer(p, cost);
 
                                     if (!er.transactionSuccess()) {
                                         p.sendMessage(RED + er.errorMessage);
@@ -64,18 +67,17 @@ public class CmdDispose extends PlotCommand {
                                         String currentbidder = plot.getCurrentBidder();
 
                                         if (!currentbidder.isEmpty()) {
-                                            EconomyResponse er2 = plugin.getEconomy().depositPlayer(currentbidder, plot.getCurrentBid());
+                                            OfflinePlayer playercurrentbidder = Bukkit.getOfflinePlayer(plot.getCurrentBidderId());
+                                            EconomyResponse er2 = plugin.getEconomy().depositPlayer(playercurrentbidder, plot.getCurrentBid());
 
                                             if (!er2.transactionSuccess()) {
                                                 p.sendMessage(RED + er2.errorMessage);
                                                 Util().warn(er2.errorMessage);
                                             } else {
-                                                for (Player player : Bukkit.getServer().getOnlinePlayers()) {
-                                                    if (player.getName().equalsIgnoreCase(currentbidder)) {
-                                                        player.sendMessage(C("WordPlot")
-                                                                                   + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner() + " " + C("MsgWasDisposed") + " " + Util().moneyFormat(cost));
-                                                        break;
-                                                    }
+                                                Player player = Bukkit.getPlayer(playercurrentbidder.getUniqueId());
+                                                if (player != null) {
+                                                    player.sendMessage(C("WordPlot")
+                                                                               + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner() + " " + C("MsgWasDisposed") + " " + Util().moneyFormat(cost));
                                                 }
                                             }
                                         }

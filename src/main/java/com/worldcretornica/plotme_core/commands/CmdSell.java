@@ -5,9 +5,12 @@ import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.event.PlotMeEventFactory;
 import com.worldcretornica.plotme_core.event.PlotSellChangeEvent;
+
 import net.milkbowl.vault.economy.EconomyResponse;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
@@ -32,9 +35,8 @@ public class CmdSell extends PlotCommand {
                         if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, p)) {
                             Plot plot = plugin.getPlotMeCoreManager().getPlotById(p, id);
 
-                            if (plot.getOwner().equalsIgnoreCase(p.getName()) || plugin.cPerms(p, "PlotMe.admin.sell")) {
+                            if (plot.getOwnerId().equals(p.getUniqueId()) || plugin.cPerms(p, "PlotMe.admin.sell")) {
                                 World w = p.getWorld();
-                                String name = p.getName();
 
                                 PlotSellChangeEvent event;
 
@@ -53,7 +55,7 @@ public class CmdSell extends PlotCommand {
 
                                         p.sendMessage(C("MsgPlotNoLongerSale"));
 
-                                        plugin.getLogger().info(LOG + name + " " + C("MsgRemovedPlot") + " " + id + " " + C("MsgFromBeingSold"));
+                                        plugin.getLogger().info(LOG + p.getName() + " " + C("MsgRemovedPlot") + " " + id + " " + C("MsgFromBeingSold"));
                                     }
                                 } else {
                                     double price = pmi.getSellToPlayerPrice();
@@ -91,8 +93,9 @@ public class CmdSell extends PlotCommand {
 
                                             if (!currentbidder.equals("")) {
                                                 double bid = plot.getCurrentBid();
+                                                OfflinePlayer playercurrentbidder = Bukkit.getOfflinePlayer(plot.getCurrentBidderId());
 
-                                                EconomyResponse er = plugin.getEconomy().depositPlayer(currentbidder, bid);
+                                                EconomyResponse er = plugin.getEconomy().depositPlayer(playercurrentbidder, bid);
 
                                                 if (!er.transactionSuccess()) {
                                                     p.sendMessage(RED + er.errorMessage);
@@ -112,7 +115,7 @@ public class CmdSell extends PlotCommand {
                                             event = PlotMeEventFactory.callPlotSellChangeEvent(plugin, w, plot, p, pmi.getBuyFromBankPrice(), true, true);
 
                                             if (!event.isCancelled()) {
-                                                EconomyResponse er = plugin.getEconomy().depositPlayer(name, sellprice);
+                                                EconomyResponse er = plugin.getEconomy().depositPlayer(p, sellprice);
 
                                                 if (er.transactionSuccess()) {
                                                     plot.setOwner("$Bank$");
@@ -120,6 +123,7 @@ public class CmdSell extends PlotCommand {
                                                     plot.setCustomPrice(pmi.getBuyFromBankPrice());
                                                     plot.setAuctionned(false);
                                                     plot.setCurrentBidder("");
+                                                    plot.setCurrentBidderId(null);
                                                     plot.setCurrentBid(0);
 
                                                     plot.removeAllAllowed();
@@ -132,11 +136,12 @@ public class CmdSell extends PlotCommand {
                                                     plot.updateField("auctionned", true);
                                                     plot.updateField("customprice", plot.getCustomPrice());
                                                     plot.updateField("currentbidder", "");
+                                                    plot.updateField("currentbidderid", null);
                                                     plot.updateField("currentbid", 0);
 
                                                     p.sendMessage(C("MsgPlotSold") + " " + Util().moneyFormat(sellprice));
 
-                                                    plugin.getLogger().info(LOG + name + " " + C("MsgSoldToBankPlot") + " " + id + " " + C("WordFor") + " " + sellprice);
+                                                    plugin.getLogger().info(LOG + p.getName() + " " + C("MsgSoldToBankPlot") + " " + id + " " + C("WordFor") + " " + sellprice);
                                                 } else {
                                                     p.sendMessage(" " + er.errorMessage);
                                                     Util().warn(er.errorMessage);
@@ -161,7 +166,7 @@ public class CmdSell extends PlotCommand {
 
                                                 p.sendMessage(C("MsgPlotForSale"));
 
-                                                plugin.getLogger().info(LOG + name + " " + C("MsgPutOnSalePlot") + " " + id + " " + C("WordFor") + " " + price);
+                                                plugin.getLogger().info(LOG + p.getName() + " " + C("MsgPutOnSalePlot") + " " + id + " " + C("WordFor") + " " + price);
                                             }
                                         }
                                     }

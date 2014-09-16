@@ -9,8 +9,11 @@ import com.worldcretornica.plotme_core.listener.PlotDenyListener;
 import com.worldcretornica.plotme_core.listener.PlotListener;
 import com.worldcretornica.plotme_core.listener.PlotWorldEditListener;
 import com.worldcretornica.plotme_core.utils.Util;
+import com.worldcretornica.plotme_core.worldedit.PlotWorldEdit;
+
 import me.flungo.bukkit.tools.ConfigAccessor;
 import net.milkbowl.vault.economy.Economy;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -62,6 +65,7 @@ public class PlotMe_Core extends JavaPlugin {
     private SqlManager sqlmanager = null;
     private PlotWorldEdit plotworldedit = null;
     private Util util = null;
+    private Boolean initialized = false;
 
     @Override
     public void onDisable() {
@@ -74,6 +78,7 @@ public class PlotMe_Core extends JavaPlugin {
         creationbuffer = null;
         plotsToClear.clear();
         plotsToClear = null;
+        initialized = null;
 
         if (creationbuffer != null) {
             creationbuffer.clear();
@@ -94,6 +99,8 @@ public class PlotMe_Core extends JavaPlugin {
         setupHooks();
         setupClearSpools();
         doMetric();
+        initialized = true;
+        sqlmanager.plotConvertToUUIDAsynchronously();
     }
 
     public void reload() {
@@ -106,7 +113,6 @@ public class PlotMe_Core extends JavaPlugin {
         reloadCaptionConfig();
         setupDefaultCaptions();
         setupMySQL();
-
     }
 
     private void doMetric() {
@@ -336,7 +342,18 @@ public class PlotMe_Core extends JavaPlugin {
         }
 
         if (pm.getPlugin("WorldEdit") != null) {
-            setPlotWorldEdit(new PlotWorldEdit(this, (WorldEditPlugin) pm.getPlugin("WorldEdit")));
+            try {
+                Class.forName("com.sk89q.worldedit.function.mask.Mask");
+                setPlotWorldEdit((PlotWorldEdit) Class.forName("com.worldcretornica.plotme_core.worldedit.PlotWorldEdit6_0_0").getConstructor(PlotMe_Core.class, WorldEditPlugin.class).newInstance(this, (WorldEditPlugin) pm.getPlugin("WorldEdit")));
+            } catch (Exception unused) {
+                try {
+                    setPlotWorldEdit((PlotWorldEdit) Class.forName("com.worldcretornica.plotme_core.worldedit.PlotWorldEdit5_7").getConstructor(PlotMe_Core.class, WorldEditPlugin.class).newInstance(this, (WorldEditPlugin) pm.getPlugin("WorldEdit")));
+                } catch (Exception unused2) {
+                    getLogger().warning("Unable to hook to WorldEdit properly, please contact the developper of plotme with your WorldEdit version.");
+                    setPlotWorldEdit(null);
+                }
+            }
+            
             pm.registerEvents(new PlotWorldEditListener(this), this);
         }
 
@@ -604,5 +621,9 @@ public class PlotMe_Core extends JavaPlugin {
 
     private void setUtil(Util util) {
         this.util = util;
+    }
+    
+    public boolean getInitialized() {
+        return this.initialized;
     }
 }

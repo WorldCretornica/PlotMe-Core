@@ -1,6 +1,9 @@
 package com.worldcretornica.plotme_core.commands;
 
+import java.util.UUID;
+
 import com.worldcretornica.plotme_core.PlotMe_Core;
+
 import org.bukkit.entity.Player;
 
 public class CmdWEAnywhere extends PlotCommand {
@@ -12,15 +15,16 @@ public class CmdWEAnywhere extends PlotCommand {
     public boolean exec(Player p, String[] args) {
         if (plugin.cPerms(p, "PlotMe.admin.weanywhere")) {
             String name = p.getName();
+            UUID uuid = p.getUniqueId();
 
-            if (plugin.getPlotMeCoreManager().isPlayerIgnoringWELimit(p.getName()) && !plugin.getConfig().getBoolean("defaultWEAnywhere")
-                    || !plugin.getPlotMeCoreManager().isPlayerIgnoringWELimit(p.getName()) && plugin.getConfig().getBoolean("defaultWEAnywhere")) {
-                plugin.getPlotMeCoreManager().removePlayerIgnoringWELimit(p.getName());
+            if (plugin.getPlotMeCoreManager().isPlayerIgnoringWELimit(uuid) && !plugin.getConfig().getBoolean("defaultWEAnywhere")
+                    || !plugin.getPlotMeCoreManager().isPlayerIgnoringWELimit(uuid) && plugin.getConfig().getBoolean("defaultWEAnywhere")) {
+                plugin.getPlotMeCoreManager().removePlayerIgnoringWELimit(uuid);
             } else {
-                plugin.getPlotMeCoreManager().addPlayerIgnoringWELimit(p.getName());
+                plugin.getPlotMeCoreManager().addPlayerIgnoringWELimit(uuid);
             }
 
-            if (plugin.getPlotMeCoreManager().isPlayerIgnoringWELimit(p.getName())) {
+            if (plugin.getPlotMeCoreManager().isPlayerIgnoringWELimit(uuid)) {
                 p.sendMessage(C("MsgWorldEditAnywhere"));
 
                 plugin.getLogger().info(LOG + name + " enabled WorldEdit anywhere");

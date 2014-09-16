@@ -3,9 +3,11 @@ package com.worldcretornica.plotme_core.commands;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.event.PlotDenyPlayerEvent;
+import com.worldcretornica.plotme_core.event.PlotAddDeniedEvent;
 import com.worldcretornica.plotme_core.event.PlotMeEventFactory;
+
 import net.milkbowl.vault.economy.EconomyResponse;
+
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -36,7 +38,7 @@ public class CmdDeny extends PlotCommand {
                         String denied = args[1];
 
                         if (plot.getOwner().equalsIgnoreCase(playername) || plugin.cPerms(p, "PlotMe.admin.deny")) {
-                            if (plot.isDenied(denied)) {
+                            if (plot.isDeniedConsulting(denied) || plot.isGroupDenied(denied)) {
                                 p.sendMessage(C("WordPlayer") + " " + RED + args[1] + RESET + " " + C("MsgAlreadyDenied"));
                             } else {
                                 World w = p.getWorld();
@@ -45,19 +47,19 @@ public class CmdDeny extends PlotCommand {
 
                                 double price = 0;
 
-                                PlotDenyPlayerEvent event;
+                                PlotAddDeniedEvent event;
 
                                 if (plugin.getPlotMeCoreManager().isEconomyEnabled(w)) {
                                     price = pmi.getDenyPlayerPrice();
-                                    double balance = plugin.getEconomy().getBalance(playername);
+                                    double balance = plugin.getEconomy().getBalance(p);
 
                                     if (balance >= price) {
-                                        event = PlotMeEventFactory.callPlotDenyPlayerEvent(plugin, w, plot, p, denied);
+                                        event = PlotMeEventFactory.callPlotAddDeniedEvent(plugin, w, plot, p, denied);
 
                                         if (event.isCancelled()) {
                                             return true;
                                         } else {
-                                            EconomyResponse er = plugin.getEconomy().withdrawPlayer(playername, price);
+                                            EconomyResponse er = plugin.getEconomy().withdrawPlayer(p, price);
 
                                             if (!er.transactionSuccess()) {
                                                 p.sendMessage(RED + er.errorMessage);
@@ -70,22 +72,24 @@ public class CmdDeny extends PlotCommand {
                                         return true;
                                     }
                                 } else {
-                                    event = PlotMeEventFactory.callPlotDenyPlayerEvent(plugin, w, plot, p, denied);
+                                    event = PlotMeEventFactory.callPlotAddDeniedEvent(plugin, w, plot, p, denied);
                                 }
 
                                 if (!event.isCancelled()) {
                                     plot.addDenied(denied);
+                                    plot.removeAllowed(denied);
 
                                     if (denied.equals("*")) {
                                         List<Player> deniedplayers = plugin.getPlotMeCoreManager().getPlayersInPlot(w, id);
 
                                         for (Player deniedplayer : deniedplayers) {
-                                            if (!plot.isAllowed(deniedplayer.getName())) {
+                                            if (!plot.isAllowed(deniedplayer.getUniqueId())) {
                                                 deniedplayer.teleport(plugin.getPlotMeCoreManager().getPlotHome(w, plot.getId()));
                                             }
                                         }
                                     } else {
-                                        Player deniedplayer = Bukkit.getServer().getPlayer(denied);
+                                        @SuppressWarnings("deprecation")
+                                        Player deniedplayer = Bukkit.getServer().getPlayerExact(denied);
 
                                         if (deniedplayer != null) {
                                             if (deniedplayer.getWorld().equals(w)) {

@@ -26,4 +26,8 @@ public abstract class PlotCommand {
     protected String C(String caption) {
         return Util().C(caption);
     }
+    
+    protected boolean isAdvancedLogging() {
+        return plugin.getConfig().getBoolean("AdvancedLogging");
+    }
 }

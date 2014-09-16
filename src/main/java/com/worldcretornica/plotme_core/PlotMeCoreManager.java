@@ -7,6 +7,7 @@ import com.worldcretornica.plotme_core.api.v0_14b.IPlotMe_ChunkGenerator;
 import com.worldcretornica.plotme_core.api.v0_14b.IPlotMe_GeneratorManager;
 import com.worldcretornica.plotme_core.event.PlotMeEventFactory;
 import com.worldcretornica.plotme_core.utils.Util;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -25,6 +26,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class PlotMeCoreManager {
 
@@ -32,12 +34,12 @@ public class PlotMeCoreManager {
     private MultiWorldWrapper multiworld = null;
     private MultiverseWrapper multiverse = null;
 
-    private HashSet<String> playersignoringwelimit = null;
+    private HashSet<UUID> playersignoringwelimit = null;
     private HashMap<String, PlotMapInfo> plotmaps = null;
 
     public PlotMeCoreManager(PlotMe_Core instance) {
         plugin = instance;
-        setPlayersIgnoringWELimit(new HashSet<String>());
+        setPlayersIgnoringWELimit(new HashSet<UUID>());
         plotmaps = new HashMap<>();
     }
 
@@ -182,15 +184,15 @@ public class PlotMeCoreManager {
     }
 
     public int getNbOwnedPlot(Player p) {
-        return getNbOwnedPlot(p.getName(), p.getWorld());
+        return getNbOwnedPlot(p.getUniqueId(), p.getName(), p.getWorld());
     }
 
     public int getNbOwnedPlot(Player p, World w) {
-        return getNbOwnedPlot(p.getName(), w);
+        return getNbOwnedPlot(p.getUniqueId(), p.getName(), w);
     }
 
-    public int getNbOwnedPlot(String name, World w) {
-        return plugin.getSqlManager().getPlotCount(w.getName(), name);
+    public int getNbOwnedPlot(UUID uuid, String name, World w) {
+        return plugin.getSqlManager().getPlotCount(w.getName(), uuid, name);
     }
 
     public boolean isEconomyEnabled(String worldname) {
@@ -431,15 +433,15 @@ public class PlotMeCoreManager {
         }
     }
 
-    public Plot createPlot(World w, String id, String owner) {
-        if (isPlotAvailable(id, w) && !id.equals("")) {
-            Plot plot = new Plot(plugin, owner, w, id, getMap(w).getDaysToExpiration());
+    public Plot createPlot(World w, String id, String owner, UUID uuid) {
+        if (isPlotAvailable(id, w) && !id.isEmpty()) {
+            Plot plot = new Plot(plugin, owner, uuid, w, id, getMap(w).getDaysToExpiration());
 
             setOwnerSign(w, plot);
 
             addPlot(w, id, plot);
 
-            plugin.getSqlManager().addPlot(plot, getIdX(id), getIdZ(id), topX(id, w), bottomX(id, w), topZ(id, w), bottomZ(id, w));
+            plugin.getSqlManager().addPlot(plot, getIdX(id), getIdZ(id), w);
             return plot;
         } else {
             return null;
@@ -447,50 +449,11 @@ public class PlotMeCoreManager {
     }
 
     public boolean movePlot(World w, String idFrom, String idTo) {
-        /*Location plot1Bottom = getPlotBottomLoc(w, idFrom);
-         Location plot2Bottom = getPlotBottomLoc(w, idTo);
-         Location plot1Top = getPlotTopLoc(w, idFrom);
-
-         int distanceX = plot1Bottom.getBlockX() - plot2Bottom.getBlockX();
-         int distanceZ = plot1Bottom.getBlockZ() - plot2Bottom.getBlockZ();
-
-         for(int x = plot1Bottom.getBlockX(); x <= plot1Top.getBlockX(); x++)
-         {
-         for(int z = plot1Bottom.getBlockZ(); z <= plot1Top.getBlockZ(); z++)
-         {
-         Block plot1Block = w.getBlockAt(x, 0, z);
-         Block plot2Block = w.getBlockAt(x - distanceX, 0, z - distanceZ);
-
-         String plot1Biome = plot1Block.getBiome().name();
-         String plot2Biome = plot2Block.getBiome().name();
-
-         plot1Block.setBiome(Biome.valueOf(plot2Biome));
-         plot2Block.setBiome(Biome.valueOf(plot1Biome));
-
-         for(int y = 0; y < w.getMaxHeight() ; y++)
-         {
-         plot1Block = w.getBlockAt(new Location(w, x, y, z));
-         int plot1Type = plot1Block.getTypeId();
-         byte plot1Data = plot1Block.getData();
-
-         plot2Block = w.getBlockAt(new Location(w, x - distanceX, y, z - distanceZ));
-         int plot2Type = plot2Block.getTypeId();
-         byte plot2Data = plot2Block.getData();
-
-         plot1Block.setTypeIdAndData(plot2Type, plot2Data, false);
-         plot1Block.setData(plot2Data, false);
-
-         plot2Block.setTypeIdAndData(plot1Type, plot1Data, false);
-         plot2Block.setData(plot1Data, false);
-         }
-         }
-         }*/
 
         if (!getGenMan(w).movePlot(w, w, idFrom, idTo)) {
             return false;
         }
 
-        //HashMap<String, Plot> plots = getPlots(w);
         Plot plot1 = getPlotById(w, idFrom);
         Plot plot2 = getPlotById(w, idTo);
 
@@ -509,12 +472,29 @@ public class PlotMeCoreManager {
                 plugin.getSqlManager().addPlot(plot2, idX, idZ, topX(idFrom, w), bottomX(idFrom, w), topZ(idFrom, w), bottomZ(idFrom, w));
                 addPlot(w, idFrom, plot2);
 
-                for (int i = 0; i < plot2.getCommentsCount(); i++) {
-                    plugin.getSqlManager().addPlotComment(plot2.getComment(i), i, idX, idZ, plot2.getWorld());
-                }
+                List<String[]> comments = plot2.getComments();
+                for (int i = 0; i < comments.size(); i++) {
+                    String strUUID = "";
+                    UUID uuid = null;
 
-                for (String player : plot2.allowed()) {
-                    plugin.getSqlManager().addPlotAllowed(player, idX, idZ, plot2.getWorld());
+                    if (comments.get(i).length >= 3) {
+                        strUUID = comments.get(i)[2];
+                        try {
+                            uuid = UUID.fromString(strUUID);
+                        } catch (Exception e) {
+                        }
+                    }
+                    plugin.getSqlManager().addPlotComment(comments.get(i), i, idX, idZ, plot2.getWorld(), uuid);
+                }
+                
+                HashMap<String, UUID> allowed = plot2.allowed().getAllPlayers();
+                for (String player : allowed.keySet()) {
+                    plugin.getSqlManager().addPlotAllowed(player, allowed.get(player), idX, idZ, plot2.getWorld());
+                }
+                
+                HashMap<String, UUID> denied = plot2.denied().getAllPlayers();
+                for (String player : denied.keySet()) {
+                    plugin.getSqlManager().addPlotDenied(player, denied.get(player), idX, idZ, plot2.getWorld());
                 }
 
                 idX = getIdX(idTo);
@@ -523,12 +503,30 @@ public class PlotMeCoreManager {
                 plugin.getSqlManager().addPlot(plot1, idX, idZ, topX(idTo, w), bottomX(idTo, w), topZ(idTo, w), bottomZ(idTo, w));
                 addPlot(w, idTo, plot1);
 
-                for (int i = 0; i < plot1.getCommentsCount(); i++) {
-                    plugin.getSqlManager().addPlotComment(plot1.getComment(i), i, idX, idZ, plot1.getWorld());
+                
+                comments = plot1.getComments();
+                for (int i = 0; i < comments.size(); i++) {
+                    String strUUID = "";
+                    UUID uuid = null;
+
+                    if (comments.get(i).length >= 3) {
+                        strUUID = comments.get(i)[2];
+                        try {
+                            uuid = UUID.fromString(strUUID);
+                        } catch (Exception e) {
+                        }
+                    }
+                    plugin.getSqlManager().addPlotComment(comments.get(i), i, idX, idZ, plot1.getWorld(), uuid);
                 }
 
-                for (String player : plot1.allowed()) {
-                    plugin.getSqlManager().addPlotAllowed(player, idX, idZ, plot1.getWorld());
+                allowed = plot1.allowed().getAllPlayers();
+                for (String player : allowed.keySet()) {
+                    plugin.getSqlManager().addPlotAllowed(player, allowed.get(player), idX, idZ, plot1.getWorld());
+                }
+                
+                denied = plot1.denied().getAllPlayers();
+                for (String player : denied.keySet()) {
+                    plugin.getSqlManager().addPlotDenied(player, denied.get(player), idX, idZ, plot1.getWorld());
                 }
 
                 setOwnerSign(w, plot1);
@@ -547,12 +545,29 @@ public class PlotMeCoreManager {
                 plugin.getSqlManager().addPlot(plot1, idX, idZ, topX(idTo, w), bottomX(idTo, w), topZ(idTo, w), bottomZ(idTo, w));
                 addPlot(w, idTo, plot1);
 
-                for (int i = 0; i < plot1.getCommentsCount(); i++) {
-                    plugin.getSqlManager().addPlotComment(plot1.getComment(i), i, idX, idZ, plot1.getWorld());
-                }
+                List<String[]> comments = plot1.getComments();
+                for (int i = 0; i < comments.size(); i++) {
+                    String strUUID = "";
+                    UUID uuid = null;
 
-                for (String player : plot1.allowed()) {
-                    plugin.getSqlManager().addPlotAllowed(player, idX, idZ, plot1.getWorld());
+                    if (comments.get(i).length >= 3) {
+                        strUUID = comments.get(i)[2];
+                        try {
+                            uuid = UUID.fromString(strUUID);
+                        } catch (Exception e) {
+                        }
+                    }
+                    plugin.getSqlManager().addPlotComment(comments.get(i), i, idX, idZ, plot1.getWorld(), uuid);
+                }
+                
+                HashMap<String, UUID> allowed = plot1.allowed().getAllPlayers();
+                for (String player : allowed.keySet()) {
+                    plugin.getSqlManager().addPlotAllowed(player, allowed.get(player), idX, idZ, plot1.getWorld());
+                }
+                
+                HashMap<String, UUID> denied = plot1.denied().getAllPlayers();
+                for (String player : denied.keySet()) {
+                    plugin.getSqlManager().addPlotDenied(player, denied.get(player), idX, idZ, plot1.getWorld());
                 }
 
                 setOwnerSign(w, plot1);
@@ -574,12 +589,29 @@ public class PlotMeCoreManager {
                 plugin.getSqlManager().addPlot(plot2, idX, idZ, topX(idFrom, w), bottomX(idFrom, w), topZ(idFrom, w), bottomZ(idFrom, w));
                 addPlot(w, idFrom, plot2);
 
-                for (int i = 0; i < plot2.getCommentsCount(); i++) {
-                    plugin.getSqlManager().addPlotComment(plot2.getComment(i), i, idX, idZ, plot2.getWorld());
-                }
+                List<String[]> comments = plot2.getComments();
+                for (int i = 0; i < comments.size(); i++) {
+                    String strUUID = "";
+                    UUID uuid = null;
 
-                for (String player : plot2.allowed()) {
-                    plugin.getSqlManager().addPlotAllowed(player, idX, idZ, plot2.getWorld());
+                    if (comments.get(i).length >= 3) {
+                        strUUID = comments.get(i)[2];
+                        try {
+                            uuid = UUID.fromString(strUUID);
+                        } catch (Exception e) {
+                        }
+                    }
+                    plugin.getSqlManager().addPlotComment(comments.get(i), i, idX, idZ, plot2.getWorld(), uuid);
+                }
+                
+                HashMap<String, UUID> allowed = plot2.allowed().getAllPlayers();
+                for (String player : allowed.keySet()) {
+                    plugin.getSqlManager().addPlotAllowed(player, allowed.get(player), idX, idZ, plot2.getWorld());
+                }
+                
+                HashMap<String, UUID> denied = plot2.denied().getAllPlayers();
+                for (String player : denied.keySet()) {
+                    plugin.getSqlManager().addPlotDenied(player, denied.get(player), idX, idZ, plot2.getWorld());
                 }
 
                 setOwnerSign(w, plot2);
@@ -943,28 +975,24 @@ public class PlotMeCoreManager {
         return plugin.getPlotLocked(w, id);
     }
 
-    public HashSet<String> getPlayersIgnoringWELimit() {
+    public HashSet<UUID> getPlayersIgnoringWELimit() {
         return playersignoringwelimit;
     }
 
-    public void setPlayersIgnoringWELimit(HashSet<String> playersignoringwelimit) {
+    public void setPlayersIgnoringWELimit(HashSet<UUID> playersignoringwelimit) {
         this.playersignoringwelimit = playersignoringwelimit;
     }
 
-    public void addPlayerIgnoringWELimit(String player) {
-        if (!isPlayerIgnoringWELimit(player)) {
-            this.playersignoringwelimit.add(player);
-        }
+    public boolean addPlayerIgnoringWELimit(UUID uuid) {
+        return this.playersignoringwelimit.add(uuid);
     }
 
-    public void removePlayerIgnoringWELimit(String player) {
-        if (isPlayerIgnoringWELimit(player)) {
-            this.playersignoringwelimit.remove(player);
-        }
+    public boolean removePlayerIgnoringWELimit(UUID uuid) {
+        return this.playersignoringwelimit.remove(uuid);
     }
 
-    public boolean isPlayerIgnoringWELimit(String player) {
-        return this.playersignoringwelimit.contains(player);
+    public boolean isPlayerIgnoringWELimit(UUID uuid) {
+        return this.playersignoringwelimit.contains(uuid);
     }
 
     public Map<String, PlotMapInfo> getPlotMaps() {

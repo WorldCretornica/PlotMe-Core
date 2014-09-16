@@ -24,7 +24,7 @@ public class CmdComments extends PlotCommand {
                         if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, p)) {
                             Plot plot = plugin.getPlotMeCoreManager().getPlotById(p, id);
 
-                            if (plot.getOwner().equalsIgnoreCase(p.getName()) || plot.isAllowed(p.getName()) || plugin.cPerms(p, "PlotMe.admin")) {
+                            if (plot.getOwnerId().equals(p.getUniqueId()) || plot.isAllowed(p.getUniqueId()) || plugin.cPerms(p, "PlotMe.admin")) {
                                 if (plot.getCommentsCount() == 0) {
                                     p.sendMessage(C("MsgNoComments"));
                                 } else {

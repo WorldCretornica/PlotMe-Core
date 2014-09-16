@@ -1,11 +1,15 @@
 package com.worldcretornica.plotme_core.commands;
 
+import java.util.UUID;
+
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.event.PlotMeEventFactory;
 import com.worldcretornica.plotme_core.event.PlotTeleportHomeEvent;
+
 import net.milkbowl.vault.economy.EconomyResponse;
+
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -22,13 +26,19 @@ public class CmdHome extends PlotCommand {
                 p.sendMessage(RED + C("MsgNotPlotWorld"));
             } else {
                 String playername = p.getName();
+                UUID uuid = p.getUniqueId();
                 int nb = 1;
                 World w;
+                String worldname = "";
 
                 if (!plugin.getPlotMeCoreManager().isPlotWorld(p)) {
                     w = plugin.getPlotMeCoreManager().getFirstWorld();
                 } else {
                     w = p.getWorld();
+                }
+                
+                if (w != null) {
+                    worldname = w.getName();
                 }
 
                 if (args[0].contains(":")) {
@@ -51,6 +61,7 @@ public class CmdHome extends PlotCommand {
                     if (Bukkit.getWorld(args[1]) == null) {
                         if (plugin.cPerms(p, "PlotMe.admin.home.other")) {
                             playername = args[1];
+                            uuid = null;
                         }
                     } else {
                         w = Bukkit.getWorld(args[1]);
@@ -63,16 +74,17 @@ public class CmdHome extends PlotCommand {
                         return true;
                     } else {
                         w = Bukkit.getWorld(args[2]);
+                        worldname = args[2];
                     }
                 }
 
                 if (!plugin.getPlotMeCoreManager().isPlotWorld(w)) {
-                    p.sendMessage(RED + w.getName() + C("MsgWorldNotPlot"));
+                    p.sendMessage(RED + worldname + C("MsgWorldNotPlot"));
                 } else {
                     int i = nb - 1;
 
-                    for (Plot plot : plugin.getSqlManager().getOwnedPlots(w.getName(), playername)) {
-                        if (plot.getOwner().equalsIgnoreCase(playername)) {
+                    for (Plot plot : plugin.getSqlManager().getOwnedPlots(w.getName(), uuid, playername)) {
+                        if (uuid == null && plot.getOwner().equalsIgnoreCase(playername) || uuid != null && plot.getOwnerId() != null && plot.getOwnerId().equals(uuid)) {
                             if (i == 0) {
                                 PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(w);
 
@@ -82,7 +94,7 @@ public class CmdHome extends PlotCommand {
 
                                 if (plugin.getPlotMeCoreManager().isEconomyEnabled(w)) {
                                     price = pmi.getPlotHomePrice();
-                                    double balance = plugin.getEconomy().getBalance(playername);
+                                    double balance = plugin.getEconomy().getBalance(p);
 
                                     if (balance >= price) {
                                         event = PlotMeEventFactory.callPlotTeleportHomeEvent(plugin, w, plot, p);
@@ -90,7 +102,7 @@ public class CmdHome extends PlotCommand {
                                         if (event.isCancelled()) {
                                             return true;
                                         } else {
-                                            EconomyResponse er = plugin.getEconomy().withdrawPlayer(playername, price);
+                                            EconomyResponse er = plugin.getEconomy().withdrawPlayer(p, price);
 
                                             if (!er.transactionSuccess()) {
                                                 p.sendMessage(RED + er.errorMessage);

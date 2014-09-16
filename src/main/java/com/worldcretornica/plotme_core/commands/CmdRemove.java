@@ -1,11 +1,15 @@
 package com.worldcretornica.plotme_core.commands;
 
+import java.util.UUID;
+
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.event.PlotMeEventFactory;
 import com.worldcretornica.plotme_core.event.PlotRemoveAllowedEvent;
+
 import net.milkbowl.vault.economy.EconomyResponse;
+
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
@@ -28,11 +32,11 @@ public class CmdRemove extends PlotCommand {
                         p.sendMessage(C("WordUsage") + ": " + RED + "/plotme " + C("CommandRemove") + " <" + C("WordPlayer") + ">");
                     } else {
                         Plot plot = plugin.getPlotMeCoreManager().getPlotById(p, id);
-                        String playername = p.getName();
+                        UUID playeruuid = p.getUniqueId();
                         String allowed = args[1];
 
-                        if (plot.getOwner().equalsIgnoreCase(playername) || plugin.cPerms(p, "PlotMe.admin.remove")) {
-                            if (plot.isAllowed(allowed)) {
+                        if (plot.getOwnerId().equals(playeruuid) || plugin.cPerms(p, "PlotMe.admin.remove")) {
+                            if (plot.isAllowedConsulting(allowed) || plot.isGroupAllowed(allowed)) {
 
                                 World w = p.getWorld();
 
@@ -44,15 +48,15 @@ public class CmdRemove extends PlotCommand {
 
                                 if (plugin.getPlotMeCoreManager().isEconomyEnabled(w)) {
                                     price = pmi.getRemovePlayerPrice();
-                                    double balance = plugin.getEconomy().getBalance(playername);
+                                    double balance = plugin.getEconomy().getBalance(p);
 
                                     if (balance >= price) {
-                                        event = PlotMeEventFactory.callPlotRemoveAllowedEvent(plugin, w, plot, p, playername);
+                                        event = PlotMeEventFactory.callPlotRemoveAllowedEvent(plugin, w, plot, p, allowed);
 
                                         if (event.isCancelled()) {
                                             return true;
                                         } else {
-                                            EconomyResponse er = plugin.getEconomy().withdrawPlayer(playername, price);
+                                            EconomyResponse er = plugin.getEconomy().withdrawPlayer(p, price);
 
                                             if (!er.transactionSuccess()) {
                                                 p.sendMessage(RED + er.errorMessage);
@@ -65,7 +69,7 @@ public class CmdRemove extends PlotCommand {
                                         return true;
                                     }
                                 } else {
-                                    event = PlotMeEventFactory.callPlotRemoveAllowedEvent(plugin, w, plot, p, playername);
+                                    event = PlotMeEventFactory.callPlotRemoveAllowedEvent(plugin, w, plot, p, allowed);
                                 }
 
                                 if (!event.isCancelled()) {
@@ -73,7 +77,7 @@ public class CmdRemove extends PlotCommand {
 
                                     p.sendMessage(C("WordPlayer") + " " + RED + allowed + RESET + " " + C("WordRemoved") + ". " + Util().moneyFormat(-price));
 
-                                    plugin.getLogger().info(LOG + playername + " " + C("MsgRemovedPlayer") + " " + allowed + " " + C("MsgFromPlot") + " " + id + ((price != 0) ? " " + C("WordFor") + " " + price : ""));
+                                    plugin.getLogger().info(LOG + allowed + " " + C("MsgRemovedPlayer") + " " + allowed + " " + C("MsgFromPlot") + " " + id + ((price != 0) ? " " + C("WordFor") + " " + price : ""));
                                 }
                             } else {
                                 p.sendMessage(C("WordPlayer") + " " + RED + args[1] + RESET + " " + C("MsgWasNotAllowed"));

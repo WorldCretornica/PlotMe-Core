@@ -2,12 +2,16 @@ package com.worldcretornica.plotme_core.event;
 
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
+
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 public abstract class PlotEvent extends Event {
 
@@ -86,14 +90,29 @@ public abstract class PlotEvent extends Event {
 
     /**
      * Returns the list of people allowed to build on this plot. The function
-     * returns an empty HashSet if the plot is null.
+     * returns an empty Set if the plot is null.
      *
      * @return list of people allowed
      *
      */
-    public HashSet<String> getAllAllowed() {
+    public Set<String> getAllAllowed() {
         if (plot != null) {
-            return plot.allowed();
+            return plot.allowed().getAllPlayers().keySet();
+        } else {
+            return new HashSet<>();
+        }
+    }
+
+    /**
+     * Returns the collection of people allowed to build on this plot. The function
+     * returns an empty Collection if the plot is null.
+     *
+     * @return list of people allowed
+     *
+     */
+    public Collection<UUID> getAllAllowedUUID() {
+        if (plot != null) {
+            return plot.allowed().getAllPlayers().values();
         } else {
             return new HashSet<>();
         }
@@ -101,14 +120,29 @@ public abstract class PlotEvent extends Event {
 
     /**
      * Returns the list of people denied from building on this plot. The
-     * function returns an empty HashSet if the plot is null.
+     * function returns an empty Set if the plot is null.
      *
      * @return list of people denied
      *
      */
-    public HashSet<String> getAllDenied() {
+    public Set<String> getAllDenied() {
         if (plot != null) {
-            return plot.denied();
+            return plot.denied().getAllPlayers().keySet();
+        } else {
+            return new HashSet<>();
+        }
+    }
+
+    /**
+     * Returns the list of people denied from building on this plot. The
+     * function returns an empty Set if the plot is null.
+     *
+     * @return list of people denied
+     *
+     */
+    public Collection<UUID> getAllDeniedUUID() {
+        if (plot != null) {
+            return plot.denied().getAllPlayers().values();
         } else {
             return new HashSet<>();
         }

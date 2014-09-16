@@ -1,11 +1,15 @@
 package com.worldcretornica.plotme_core.commands;
 
+import java.util.UUID;
+
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.event.PlotCommentEvent;
 import com.worldcretornica.plotme_core.event.PlotMeEventFactory;
+
 import net.milkbowl.vault.economy.EconomyResponse;
+
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -30,7 +34,6 @@ public class CmdComment extends PlotCommand {
                 } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, p)) {
                     World w = p.getWorld();
                     PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(w);
-                    String playername = p.getName();
 
                     String text = StringUtils.join(args, " ");
                     text = text.substring(text.indexOf(" "));
@@ -43,7 +46,7 @@ public class CmdComment extends PlotCommand {
 
                     if (plugin.getPlotMeCoreManager().isEconomyEnabled(w)) {
                         price = pmi.getAddCommentPrice();
-                        double balance = plugin.getEconomy().getBalance(playername);
+                        double balance = plugin.getEconomy().getBalance(p);
 
                         if (balance >= price) {
                             event = PlotMeEventFactory.callPlotCommentEvent(plugin, p.getWorld(), plot, p, text);
@@ -51,7 +54,7 @@ public class CmdComment extends PlotCommand {
                             if (event.isCancelled()) {
                                 return true;
                             } else {
-                                EconomyResponse er = plugin.getEconomy().withdrawPlayer(playername, price);
+                                EconomyResponse er = plugin.getEconomy().withdrawPlayer(p, price);
 
                                 if (!er.transactionSuccess()) {
                                     p.sendMessage(RED + er.errorMessage);
@@ -68,12 +71,16 @@ public class CmdComment extends PlotCommand {
                     }
 
                     if (!event.isCancelled()) {
+                        String playername = p.getName();
+                        UUID uuid = p.getUniqueId();
+                        
                         String[] comment = new String[2];
                         comment[0] = playername;
                         comment[1] = text;
+                        comment[2] = uuid.toString();
 
                         plot.addComment(comment);
-                        plugin.getSqlManager().addPlotComment(comment, plot.getCommentsCount(), plugin.getPlotMeCoreManager().getIdX(id), plugin.getPlotMeCoreManager().getIdZ(id), plot.getWorld());
+                        plugin.getSqlManager().addPlotComment(comment, plot.getCommentsCount(), plugin.getPlotMeCoreManager().getIdX(id), plugin.getPlotMeCoreManager().getIdZ(id), plot.getWorld(), uuid);
 
                         p.sendMessage(C("MsgCommentAdded") + " " + Util().moneyFormat(-price));
 

@@ -2,8 +2,12 @@ package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
+
 import java.util.Calendar;
+import java.util.UUID;
+
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
@@ -20,18 +24,25 @@ public class CmdPlotList extends PlotCommand {
                 return true;
             } else {
                 String name;
+                UUID uuid = null;
 
                 if (plugin.cPerms(p, "PlotMe.admin.list") && args.length == 2) {
                     name = args[1];
+                    @SuppressWarnings("deprecation")
+                    OfflinePlayer op = Bukkit.getPlayerExact(name);
+                    if (op != null) {
+                        uuid = op.getUniqueId();
+                    }
                     p.sendMessage(C("MsgListOfPlotsWhere") + " " + AQUA + name + RESET + " " + C("MsgCanBuild"));
                 } else {
                     name = p.getName();
+                    uuid = p.getUniqueId();
                     p.sendMessage(C("MsgListOfPlotsWhereYou"));
                 }
 
                 String oldworld = "";
 
-                for (Plot plot : plugin.getSqlManager().getPlayerPlots(name)) {
+                for (Plot plot : plugin.getSqlManager().getPlayerPlots(uuid, name)) {
                     if (!plot.getWorld().equals("")) {
                         World world = Bukkit.getWorld(plot.getWorld());
                         if (world != null) {
@@ -72,31 +83,23 @@ public class CmdPlotList extends PlotCommand {
                                 p.sendMessage("  " + plot.getId() + " -> " + AQUA + ITALIC + plot.getOwner() + RESET + addition);
                             }
                         } else {
-                            StringBuilder helpers = new StringBuilder();
-                            for (int i = 0; i < plot.allowedcount(); i++) {
-                                helpers.append(AQUA).append(plot.allowed().toArray()[i]).append(RESET).append(", ");
-                            }
-                            if (helpers.length() > 2) {
-                                helpers.delete(helpers.length() - 2, helpers.length());
-                            }
-
                             if (name.equalsIgnoreCase(p.getName())) {
-                                p.sendMessage("  " + plot.getId() + " -> " + AQUA + ITALIC + C("WordYours") + RESET + addition + ", " + C("WordHelpers") + ": " + helpers);
+                                p.sendMessage("  " + plot.getId() + " -> " + AQUA + ITALIC + C("WordYours") + RESET + addition + ", " + C("WordHelpers") + ": " + plot.getAllowed());
                             } else {
-                                p.sendMessage("  " + plot.getId() + " -> " + AQUA + ITALIC + plot.getOwner() + RESET + addition + ", " + C("WordHelpers") + ": " + helpers);
+                                p.sendMessage("  " + plot.getId() + " -> " + AQUA + ITALIC + plot.getOwner() + RESET + addition + ", " + C("WordHelpers") + ": " + plot.getAllowed());
                             }
                         }
-                    } else if (plot.isAllowed(name)) {
+                    } else if (plot.isAllowedConsulting(name)) {
                         StringBuilder helpers = new StringBuilder();
-                        for (int i = 0; i < plot.allowedcount(); i++) {
-                            if (p.getName().equalsIgnoreCase((String) plot.allowed().toArray()[i])) {
+                        for (String allowed : plot.allowed().getPlayers()) {
+                            if (p.getName().equalsIgnoreCase(allowed)) {
                                 if (name.equalsIgnoreCase(p.getName())) {
                                     helpers.append(AQUA).append(ITALIC).append("You").append(RESET).append(", ");
                                 } else {
-                                    helpers.append(AQUA).append(ITALIC).append(name).append(RESET).append(", ");
+                                    helpers.append(AQUA).append(ITALIC).append(args[1]).append(RESET).append(", ");
                                 }
                             } else {
-                                helpers.append(AQUA).append(plot.allowed().toArray()[i]).append(RESET).append(", ");
+                                helpers.append(AQUA).append(allowed).append(RESET).append(", ");
                             }
                         }
                         if (helpers.length() > 2) {

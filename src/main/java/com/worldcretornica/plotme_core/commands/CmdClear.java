@@ -43,7 +43,7 @@ public class CmdClear extends PlotCommand {
 
                             if (plugin.getPlotMeCoreManager().isEconomyEnabled(w)) {
                                 price = pmi.getClearPrice();
-                                double balance = plugin.getEconomy().getBalance(playername);
+                                double balance = plugin.getEconomy().getBalance(p);
 
                                 if (balance >= price) {
                                     event = PlotMeEventFactory.callPlotClearEvent(plugin, w, plot, p);
@@ -51,7 +51,7 @@ public class CmdClear extends PlotCommand {
                                     if (event.isCancelled()) {
                                         return true;
                                     } else {
-                                        EconomyResponse er = plugin.getEconomy().withdrawPlayer(playername, price);
+                                        EconomyResponse er = plugin.getEconomy().withdrawPlayer(p, price);
 
                                         if (!er.transactionSuccess()) {
                                             p.sendMessage(RED + er.errorMessage);
@@ -69,10 +69,7 @@ public class CmdClear extends PlotCommand {
 
                             if (!event.isCancelled()) {
                                 plugin.getPlotMeCoreManager().clear(w, plot, p, ClearReason.Clear);
-                                //RemoveLWC(w, plot, p);
-                                //plugin.getPlotMeCoreManager().regen(w, plot);
 
-                                //p.sendMessage(C("MsgPlotCleared") + " " + Util.moneyFormat(-price));
                                 plugin.getLogger().info(LOG + playername + " " + C("MsgClearedPlot") + " " + id + ((price != 0) ? " " + C("WordFor") + " " + price : ""));
                             }
                         } else {

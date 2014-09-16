@@ -5,8 +5,11 @@ import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.event.PlotAuctionEvent;
 import com.worldcretornica.plotme_core.event.PlotMeEventFactory;
+
 import net.milkbowl.vault.economy.EconomyResponse;
+
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
@@ -35,11 +38,12 @@ public class CmdAuction extends PlotCommand {
                             World w = p.getWorld();
 
                             if (plot.isAuctionned()) {
-                                if (!plot.getCurrentBidder().equals("") && !plugin.cPerms(p, "PlotMe.admin.auction")) {
+                                if (plot.getCurrentBidderId() != null && !plugin.cPerms(p, "PlotMe.admin.auction")) {
                                     p.sendMessage(RED + C("MsgPlotHasBidsAskAdmin"));
                                 } else {
-                                    if (!plot.getCurrentBidder().equals("")) {
-                                        EconomyResponse er = plugin.getEconomy().depositPlayer(plot.getCurrentBidder(), plot.getCurrentBid());
+                                    if (plot.getCurrentBidderId() != null) {
+                                        OfflinePlayer playercurrentbidder = Bukkit.getOfflinePlayer(plot.getCurrentBidderId());
+                                        EconomyResponse er = plugin.getEconomy().depositPlayer(playercurrentbidder, plot.getCurrentBid());
 
                                         if (!er.transactionSuccess()) {
                                             p.sendMessage(RED + er.errorMessage);
@@ -63,11 +67,14 @@ public class CmdAuction extends PlotCommand {
 
                                     plot.updateField("currentbid", 0);
                                     plot.updateField("currentbidder", "");
+                                    plot.updateField("currentbidderid", null);
                                     plot.updateField("auctionned", false);
 
                                     p.sendMessage(C("MsgAuctionCancelled"));
 
-                                    plugin.getLogger().info(LOG + name + " " + C("MsgStoppedTheAuctionOnPlot") + " " + id);
+                                    if (isAdvancedLogging()) {
+                                        plugin.getLogger().info(LOG + name + " " + C("MsgStoppedTheAuctionOnPlot") + " " + id);
+                                    }
                                 }
                             } else {
                                 double bid = 1;
@@ -96,7 +103,9 @@ public class CmdAuction extends PlotCommand {
 
                                         p.sendMessage(C("MsgAuctionStarted"));
 
-                                        plugin.getLogger().info(LOG + name + " " + C("MsgStartedAuctionOnPlot") + " " + id + " " + C("WordAt") + " " + bid);
+                                        if (isAdvancedLogging()) {
+                                            plugin.getLogger().info(LOG + name + " " + C("MsgStartedAuctionOnPlot") + " " + id + " " + C("WordAt") + " " + bid);
+                                        }
                                     }
                                 }
                             }

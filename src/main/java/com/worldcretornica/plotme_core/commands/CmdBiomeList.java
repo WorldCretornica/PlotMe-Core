@@ -1,7 +1,6 @@
 package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.utils.MinecraftFontWidthCalculator;
 import org.bukkit.block.Biome;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -18,18 +17,39 @@ public class CmdBiomeList extends PlotCommand {
 
     public boolean exec(CommandSender s, String[] args) {
         if (!(s instanceof Player) || plugin.cPerms(s, "PlotMe.use.biome")) {
-            s.sendMessage(C("WordBiomes") + " : ");
-
-            //int i = 0;
-            StringBuilder line = new StringBuilder();
             List<String> biomes = new ArrayList<>();
-
+            
             for (Biome b : Biome.values()) {
                 biomes.add(b.name());
             }
 
             Collections.sort(biomes);
+            
+            int biomesperpage = 19;
+            int page = 1;
+            int pages = (int) Math.ceil(((double) biomes.size()) / biomesperpage);
+            
+            if (args.length > 1 && !args[1].isEmpty()) {
+                try{
+                    page = Integer.parseInt(args[1]);
+                } catch (NumberFormatException notused) {}
+            }
+            
+            if (page <= pages) {
+                page = 1;
+            }
+            
+            s.sendMessage(C("WordBiomes") + " (" + page + "/" + pages + ") : ");
+            
+            for (int ctr = 0; ctr < biomesperpage; ctr++) {
+                if (biomes.size() <= ctr + ((page - 1) * biomesperpage)) {
+                    return true;
+                } else {
+                    s.sendMessage("  " + AQUA + biomes.get(ctr + ((page - 1) * biomesperpage)));
+                }
+            }
 
+            /*
             List<String> column1 = new ArrayList<>();
             List<String> column2 = new ArrayList<>();
             List<String> column3 = new ArrayList<>();
@@ -80,8 +100,8 @@ public class CmdBiomeList extends PlotCommand {
                  else
                  {
                  line.append(b).append(whitespace(318 - nameLength));
-                 }*/
-            }
+                 }
+            }*/
         } else {
             s.sendMessage(RED + C("MsgPermissionDenied"));
         }

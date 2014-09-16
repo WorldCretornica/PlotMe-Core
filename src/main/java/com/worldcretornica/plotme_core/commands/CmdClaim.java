@@ -1,11 +1,15 @@
 package com.worldcretornica.plotme_core.commands;
 
+import java.util.UUID;
+
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.event.PlotCreateEvent;
 import com.worldcretornica.plotme_core.event.PlotMeEventFactory;
+
 import net.milkbowl.vault.economy.EconomyResponse;
+
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
@@ -28,10 +32,12 @@ public class CmdClaim extends PlotCommand {
                     p.sendMessage(RED + C("MsgThisPlotOwned"));
                 } else {
                     String playername = p.getName();
+                    UUID uuid = p.getUniqueId();
 
                     if (args.length == 2) {
                         if (plugin.cPerms(p, "PlotMe.admin.claim.other")) {
                             playername = args[1];
+                            uuid = null;
                         }
                     }
 
@@ -50,7 +56,7 @@ public class CmdClaim extends PlotCommand {
 
                         if (plugin.getPlotMeCoreManager().isEconomyEnabled(w)) {
                             price = pmi.getClaimPrice();
-                            double balance = plugin.getEconomy().getBalance(playername);
+                            double balance = plugin.getEconomy().getBalance(p);
 
                             if (balance >= price) {
                                 event = PlotMeEventFactory.callPlotCreatedEvent(plugin, w, id, p);
@@ -58,7 +64,7 @@ public class CmdClaim extends PlotCommand {
                                 if (event.isCancelled()) {
                                     return true;
                                 } else {
-                                    EconomyResponse er = plugin.getEconomy().withdrawPlayer(playername, price);
+                                    EconomyResponse er = plugin.getEconomy().withdrawPlayer(p, price);
 
                                     if (!er.transactionSuccess()) {
                                         p.sendMessage(RED + er.errorMessage);
@@ -75,7 +81,7 @@ public class CmdClaim extends PlotCommand {
                         }
 
                         if (!event.isCancelled()) {
-                            Plot plot = plugin.getPlotMeCoreManager().createPlot(w, id, playername);
+                            Plot plot = plugin.getPlotMeCoreManager().createPlot(w, id, playername, uuid);
 
                             //plugin.getPlotMeCoreManager().adjustLinkedPlots(id, w);
                             if (plot == null) {

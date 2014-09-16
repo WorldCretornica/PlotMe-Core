@@ -53,7 +53,7 @@ public class CmdProtect extends PlotCommand {
                             if (plugin.getPlotMeCoreManager().isEconomyEnabled(p)) {
                                 cost = pmi.getProtectPrice();
 
-                                if (plugin.getEconomy().getBalance(name) < cost) {
+                                if (plugin.getEconomy().getBalance(p) < cost) {
                                     p.sendMessage(RED + C("MsgNotEnoughProtectPlot"));
                                     return true;
                                 } else {
@@ -62,7 +62,7 @@ public class CmdProtect extends PlotCommand {
                                     if (event.isCancelled()) {
                                         return true;
                                     } else {
-                                        EconomyResponse er = plugin.getEconomy().withdrawPlayer(name, cost);
+                                        EconomyResponse er = plugin.getEconomy().withdrawPlayer(p, cost);
 
                                         if (!er.transactionSuccess()) {
                                             p.sendMessage(RED + er.errorMessage);

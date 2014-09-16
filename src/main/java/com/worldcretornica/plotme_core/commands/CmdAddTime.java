@@ -29,7 +29,9 @@ public class CmdAddTime extends PlotCommand {
                         plot.resetExpire(plugin.getPlotMeCoreManager().getMap(p).getDaysToExpiration());
                         p.sendMessage(C("MsgPlotExpirationReset"));
 
-                        plugin.getLogger().info(LOG + name + " reset expiration on plot " + id);
+                        if (isAdvancedLogging()) {
+                            plugin.getLogger().info(LOG + name + " reset expiration on plot " + id);
+                        }
                     }
                 } else {
                     p.sendMessage(RED + C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));

@@ -33,7 +33,7 @@ public class CmdAdd extends PlotCommand {
                         String allowed = args[1];
 
                         if (plot.getOwner().equalsIgnoreCase(playername) || plugin.cPerms(p, "PlotMe.admin.add")) {
-                            if (plot.isAllowed(allowed)) {
+                            if (plot.isAllowedConsulting(allowed) || plot.isGroupAllowed(allowed)) {
                                 p.sendMessage(C("WordPlayer") + " " + RED + args[1] + RESET + " " + C("MsgAlreadyAllowed"));
                             } else {
                                 World w = p.getWorld();
@@ -42,33 +42,44 @@ public class CmdAdd extends PlotCommand {
 
                                 double price = 0;
 
-                                PlotAddAllowedEvent event = PlotMeEventFactory.callPlotAddAllowedEvent(plugin, w, plot, p, allowed);
+                                PlotAddAllowedEvent event;
 
-                                if (!event.isCancelled()) {
-                                    if (plugin.getPlotMeCoreManager().isEconomyEnabled(w)) {
-                                        price = pmi.getAddPlayerPrice();
-                                        double balance = plugin.getEconomy().getBalance(playername);
+                                if (plugin.getPlotMeCoreManager().isEconomyEnabled(w)) {
+                                    price = pmi.getAddPlayerPrice();
+                                    double balance = plugin.getEconomy().getBalance(p);
 
-                                        if (balance >= price) {
-                                            EconomyResponse er = plugin.getEconomy().withdrawPlayer(playername, price);
-
+                                    if (balance >= price) {
+                                        event = PlotMeEventFactory.callPlotAddAllowedEvent(plugin, w, plot, p, allowed);
+                                        
+                                        if (event.isCancelled()) {
+                                            return true;
+                                        } else {
+                                            EconomyResponse er = plugin.getEconomy().withdrawPlayer(p, price);
+    
                                             if (!er.transactionSuccess()) {
                                                 p.sendMessage(RED + er.errorMessage);
                                                 plugin.getUtil().warn(er.errorMessage);
                                                 return true;
                                             }
-                                        } else {
-                                            p.sendMessage(RED + C("MsgNotEnoughAdd") + " " + C("WordMissing") + " " + RESET + Util().moneyFormat(price - balance, false));
-                                            return true;
                                         }
+                                    } else {
+                                        p.sendMessage(RED + C("MsgNotEnoughAdd") + " " + C("WordMissing") + " " + RESET + Util().moneyFormat(price - balance, false));
+                                        return true;
                                     }
+                                } else {
+                                    event = PlotMeEventFactory.callPlotAddAllowedEvent(plugin, w, plot, p, allowed);
+                                }
 
-                                    plot.addAllowed(args[1]);
+                                if (!event.isCancelled()) {
+                                    plot.addAllowed(allowed);
+                                    plot.removeDenied(allowed);
 
                                     p.sendMessage(C("WordPlayer") + " " + RED + allowed + RESET + " " + C("MsgNowAllowed") + " " + Util().moneyFormat(-price));
 
-                                    plugin.getLogger().info(LOG + playername + " " + C("MsgAddedPlayer") + " " + allowed + " " + C("MsgToPlot") + " "
-                                                                    + id + ((price != 0) ? " " + C("WordFor") + " " + price : ""));
+                                    if (isAdvancedLogging()) {
+                                        plugin.getLogger().info(LOG + playername + " " + C("MsgAddedPlayer") + " " + allowed + " " + C("MsgToPlot") + " "
+                                                                        + id + ((price != 0) ? " " + C("WordFor") + " " + price : ""));
+                                    }
                                 }
                             }
                         } else {
