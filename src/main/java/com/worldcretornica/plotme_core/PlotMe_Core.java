@@ -9,10 +9,8 @@ import com.worldcretornica.plotme_core.listener.PlotListener;
 import com.worldcretornica.plotme_core.listener.PlotWorldEditListener;
 import com.worldcretornica.plotme_core.utils.Util;
 import com.worldcretornica.plotme_core.worldedit.PlotWorldEdit;
-
 import me.flungo.bukkit.tools.ConfigAccessor;
 import net.milkbowl.vault.economy.Economy;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
@@ -175,7 +173,6 @@ public class PlotMe_Core extends JavaPlugin {
 
         // Delete old configs
         config.set("Language", null);
-        config.set("AdvancedLogging", null);
 
         // If no world exists add config for a world
         if (!config.contains("worlds") || config.getConfigurationSection("worlds").getKeys(false).isEmpty()) {
@@ -341,10 +338,10 @@ public class PlotMe_Core extends JavaPlugin {
         if (pm.getPlugin("WorldEdit") != null) {
             try {
                 Class.forName("com.sk89q.worldedit.function.mask.Mask");
-                setPlotWorldEdit((PlotWorldEdit) Class.forName("com.worldcretornica.plotme_core.worldedit.PlotWorldEdit6_0_0").getConstructor(PlotMe_Core.class, WorldEditPlugin.class).newInstance(this, (WorldEditPlugin) pm.getPlugin("WorldEdit")));
+                setPlotWorldEdit((PlotWorldEdit) Class.forName("com.worldcretornica.plotme_core.worldedit.PlotWorldEdit6_0_0").getConstructor(PlotMe_Core.class, WorldEditPlugin.class).newInstance(this, pm.getPlugin("WorldEdit")));
             } catch (Exception unused) {
                 try {
-                    setPlotWorldEdit((PlotWorldEdit) Class.forName("com.worldcretornica.plotme_core.worldedit.PlotWorldEdit5_7").getConstructor(PlotMe_Core.class, WorldEditPlugin.class).newInstance(this, (WorldEditPlugin) pm.getPlugin("WorldEdit")));
+                    setPlotWorldEdit((PlotWorldEdit) Class.forName("com.worldcretornica.plotme_core.worldedit.PlotWorldEdit5_7").getConstructor(PlotMe_Core.class, WorldEditPlugin.class).newInstance(this, pm.getPlugin("WorldEdit")));
                 } catch (Exception unused2) {
                     getLogger().warning("Unable to hook to WorldEdit properly, please contact the developper of plotme with your WorldEdit version.");
                     setPlotWorldEdit(null);

@@ -8,11 +8,7 @@ import org.bukkit.entity.Player;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class Plot implements Comparable<Plot> {
 
@@ -467,10 +463,8 @@ public class Plot implements Comparable<Plot> {
         if (uuid != null) {
             p = Bukkit.getServer().getPlayer(uuid);
         }
-                
-        if (uuid != null && ownerId != null && ownerId.equals(uuid)) {
-            return true;
-        } else if(uuid == null && owner.equalsIgnoreCase(name)) {
+
+        if (uuid != null && ownerId != null && ownerId.equals(uuid) || uuid == null && owner.equalsIgnoreCase(name)) {
             return true;
         }
 
@@ -487,9 +481,7 @@ public class Plot implements Comparable<Plot> {
             }
             
             UUID u = list.get(str);
-            if (u != null && uuid != null && u.equals(uuid)) {
-                return true;
-            } else if(uuid == null && str.equalsIgnoreCase(name)) {
+            if (u != null && uuid != null && u.equals(uuid) || uuid == null && str.equalsIgnoreCase(name)) {
                 return true;
             }
 
@@ -545,12 +537,10 @@ public class Plot implements Comparable<Plot> {
             }
             
             UUID u = list.get(str);
-            if (u != null && uuid != null && u.equals(uuid)) {
-                return true;
-            } else if(uuid == null && str.equalsIgnoreCase(name)) {
+            if (u != null && uuid != null && u.equals(uuid) || uuid == null && str.equalsIgnoreCase(name)) {
                 return true;
             }
-            
+
             if (IncludeGroup && str.toLowerCase().startsWith("group:") && p != null)
                 if (p.hasPermission("plotme.group." + str.replace("Group:", "")))
                     return true;

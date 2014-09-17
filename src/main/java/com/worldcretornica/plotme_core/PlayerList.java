@@ -1,11 +1,10 @@
 package com.worldcretornica.plotme_core;
 
+import org.bukkit.Bukkit;
+
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Set;
 import java.util.UUID;
-
-import org.bukkit.Bukkit;
 
 public class PlayerList {
 
@@ -109,11 +108,8 @@ public class PlayerList {
     public void replace(UUID uuid, String newname) {
         if(uuid != null && playerlist != null) {
             if(this.contains(uuid)) {
-                Iterator<String> it = playerlist.keySet().iterator();
-                while (it.hasNext()) {
-                    String name = it.next();
-                    
-                    if(playerlist.get(name) != null && playerlist.get(name).equals(uuid)) {
+                for (String name : playerlist.keySet()) {
+                    if (playerlist.get(name) != null && playerlist.get(name).equals(uuid)) {
                         playerlist.remove(name);
                         playerlist.put(newname, uuid);
                         return;
@@ -126,11 +122,8 @@ public class PlayerList {
     public void replace(String name, UUID newuuid) {
         if(newuuid != null && playerlist != null) {
             if(this.contains(name)) {
-                Iterator<String> it = playerlist.keySet().iterator();
-                while (it.hasNext()) {
-                    String key = it.next();
-                    
-                    if(key.equalsIgnoreCase(name)) {
+                for (String key : playerlist.keySet()) {
+                    if (key.equalsIgnoreCase(name)) {
                         playerlist.remove(key);
                         playerlist.put(name, newuuid);
                         return;

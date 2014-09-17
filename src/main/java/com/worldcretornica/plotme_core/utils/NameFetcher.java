@@ -1,9 +1,9 @@
 package com.worldcretornica.plotme_core.utils;
- 
+
 import com.google.common.collect.ImmutableList;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
- 
+
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -23,7 +23,7 @@ public class NameFetcher implements Callable<Map<UUID, String>> {
  
     @Override
     public Map<UUID, String> call() throws Exception {
-        Map<UUID, String> uuidStringMap = new HashMap<UUID, String>();
+        Map<UUID, String> uuidStringMap = new HashMap<>();
         for (UUID uuid: uuids) {
             HttpURLConnection connection = (HttpURLConnection) new URL(PROFILE_URL+uuid.toString().replace("-", "")).openConnection();
             JSONObject response = (JSONObject) jsonParser.parse(new InputStreamReader(connection.getInputStream()));

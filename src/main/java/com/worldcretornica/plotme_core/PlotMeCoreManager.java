@@ -7,7 +7,6 @@ import com.worldcretornica.plotme_core.api.v0_14b.IPlotMe_ChunkGenerator;
 import com.worldcretornica.plotme_core.api.v0_14b.IPlotMe_GeneratorManager;
 import com.worldcretornica.plotme_core.event.PlotMeEventFactory;
 import com.worldcretornica.plotme_core.utils.Util;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -22,11 +21,7 @@ import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class PlotMeCoreManager {
 
@@ -474,7 +469,7 @@ public class PlotMeCoreManager {
 
                 List<String[]> comments = plot2.getComments();
                 for (int i = 0; i < comments.size(); i++) {
-                    String strUUID = "";
+                    String strUUID;
                     UUID uuid = null;
 
                     if (comments.get(i).length >= 3) {
@@ -506,7 +501,7 @@ public class PlotMeCoreManager {
                 
                 comments = plot1.getComments();
                 for (int i = 0; i < comments.size(); i++) {
-                    String strUUID = "";
+                    String strUUID;
                     UUID uuid = null;
 
                     if (comments.get(i).length >= 3) {
@@ -547,7 +542,7 @@ public class PlotMeCoreManager {
 
                 List<String[]> comments = plot1.getComments();
                 for (int i = 0; i < comments.size(); i++) {
-                    String strUUID = "";
+                    String strUUID;
                     UUID uuid = null;
 
                     if (comments.get(i).length >= 3) {
@@ -591,7 +586,7 @@ public class PlotMeCoreManager {
 
                 List<String[]> comments = plot2.getComments();
                 for (int i = 0; i < comments.size(); i++) {
-                    String strUUID = "";
+                    String strUUID;
                     UUID uuid = null;
 
                     if (comments.get(i).length >= 3) {

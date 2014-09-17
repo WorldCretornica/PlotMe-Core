@@ -2,7 +2,6 @@ package com.worldcretornica.plotme_core;
 
 import com.worldcretornica.plotme_core.event.PlotMeEventFactory;
 import com.worldcretornica.plotme_core.utils.UUIDFetcher;
-
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
@@ -11,11 +10,8 @@ import org.bukkit.entity.Player;
 import java.io.File;
 import java.io.IOException;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.sql.Date;
+import java.util.*;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 
@@ -951,7 +947,7 @@ public class SqlManager {
             if (plot.getComments() != null && !plot.getComments().isEmpty()) {
                 int commentid = 1;
                 for (String[] comments : plot.getComments()) {
-                    String strUUID = "";
+                    String strUUID;
                     UUID uuid = null;
 
                     if (comments.length >= 3) {
@@ -1163,7 +1159,8 @@ public class SqlManager {
         if(comment.length > 2) {
             try{
                 uuid = UUID.fromString(comment[2]);
-            }catch(IllegalArgumentException e){}
+            } catch (IllegalArgumentException e) {
+            }
         }
         addPlotComment(comment, commentid, idX, idZ, world, uuid);
     }
@@ -1318,7 +1315,6 @@ public class SqlManager {
 
     public void deletePlotAllowed(int idX, int idZ, String player, UUID playerid, String world) {
         PreparedStatement ps = null;
-        ResultSet set = null;
 
         try {
             Connection conn = getConnection();
@@ -1344,9 +1340,6 @@ public class SqlManager {
                 if (ps != null) {
                     ps.close();
                 }
-                if (set != null) {
-                    set.close();
-                }
             } catch (SQLException ex) {
                 plugin.getLogger().severe("Delete Exception (on close) :");
                 plugin.getLogger().severe("  " + ex.getMessage());
@@ -1366,7 +1359,6 @@ public class SqlManager {
 
     public void deletePlotDenied(int idX, int idZ, String player, UUID playerid, String world) {
         PreparedStatement ps = null;
-        ResultSet set = null;
 
         try {
             Connection conn = getConnection();
@@ -1391,9 +1383,6 @@ public class SqlManager {
             try {
                 if (ps != null) {
                     ps.close();
-                }
-                if (set != null) {
-                    set.close();
                 }
             } catch (SQLException ex) {
                 plugin.getLogger().severe("Delete Exception (on close) :");
@@ -2499,8 +2488,8 @@ public class SqlManager {
                 
                 ResultSet setPlayers = null;
                 int nbConverted = 0;
-                String sql = "";
-                int count = 0;
+                String sql;
+                int count;
 
                 try {
                     Connection conn = getConnection();
@@ -2517,7 +2506,7 @@ public class SqlManager {
                     setPlayers = statementPlayers.executeQuery(sql);
 
                     if (setPlayers.next()) {
-                        List<String> names = new ArrayList<String>();
+                        List<String> names = new ArrayList<>();
 
                         //Prepare delete statements
                         psDeleteOwner = conn.prepareStatement("UPDATE plotmePlots SET owner = '' WHERE owner = ? ");
@@ -2753,13 +2742,13 @@ public class SqlManager {
                             uuid = null;
                             newname = "";
                         } else {
-                            List<String> names = new ArrayList<String>();
+                            List<String> names = new ArrayList<>();
     
                             names.add(name);
     
                             UUIDFetcher fetcher = new UUIDFetcher(names);
-    
-                            Map<String, UUID> response = null;
+
+                            Map<String, UUID> response;
     
                             try {
                                 //plugin.getLogger().info("Fetching " + names.size() + " UUIDs from Mojang servers...");
@@ -2829,7 +2818,6 @@ public class SqlManager {
                                     plot.denied().put(newname, uuid);
                                     break;
                                 default:
-                                    return;
                                 }
                             }
                         }
