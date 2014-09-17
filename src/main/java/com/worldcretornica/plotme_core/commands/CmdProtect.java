@@ -43,7 +43,9 @@ public class CmdProtect extends PlotCommand {
 
                                 p.sendMessage(C("MsgPlotNoLongerProtected"));
 
-                                plugin.getLogger().info(LOG + name + " " + C("MsgUnprotectedPlot") + " " + id);
+                                if (isAdvancedLogging()) {
+                                    plugin.getLogger().info(LOG + name + " " + C("MsgUnprotectedPlot") + " " + id);
+                                }
                             }
                         } else {
                             PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(p);
@@ -84,7 +86,9 @@ public class CmdProtect extends PlotCommand {
 
                                 p.sendMessage(C("MsgPlotNowProtected") + " " + Util().moneyFormat(-cost));
 
-                                plugin.getLogger().info(LOG + name + " " + C("MsgProtectedPlot") + " " + id);
+                                if (isAdvancedLogging()) {
+                                    plugin.getLogger().info(LOG + name + " " + C("MsgProtectedPlot") + " " + id);
+                                }
                             }
                         }
                     } else {

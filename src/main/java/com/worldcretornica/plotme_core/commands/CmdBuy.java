@@ -97,7 +97,9 @@ public class CmdBuy extends PlotCommand {
 
                                             p.sendMessage(C("MsgPlotBought") + " " + Util().moneyFormat(-cost));
 
-                                            plugin.getLogger().info(LOG + buyer + " " + C("MsgBoughtPlot") + " " + id + " " + C("WordFor") + " " + cost);
+                                            if (isAdvancedLogging()) {
+                                                plugin.getLogger().info(LOG + buyer + " " + C("MsgBoughtPlot") + " " + id + " " + C("WordFor") + " " + cost);
+                                            }
                                         } else {
                                             p.sendMessage(RED + er.errorMessage);
                                             Util().warn(er.errorMessage);

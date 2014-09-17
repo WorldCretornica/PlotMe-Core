@@ -34,12 +34,16 @@ public class CmdDone extends PlotCommand {
                                 plot.setUnfinished();
                                 p.sendMessage(C("MsgUnmarkFinished"));
 
-                                plugin.getLogger().info(LOG + name + " " + C("WordMarked") + " " + id + " " + C("WordFinished"));
+                                if (isAdvancedLogging()) {
+                                    plugin.getLogger().info(LOG + name + " " + C("WordMarked") + " " + id + " " + C("WordFinished"));
+                                }
                             } else {
                                 plot.setFinished();
                                 p.sendMessage(C("MsgMarkFinished"));
 
-                                plugin.getLogger().info(LOG + name + " " + C("WordMarked") + " " + id + " " + C("WordUnfinished"));
+                                if (isAdvancedLogging()) {
+                                    plugin.getLogger().info(LOG + name + " " + C("WordMarked") + " " + id + " " + C("WordUnfinished"));
+                                }
                             }
                         }
                     }

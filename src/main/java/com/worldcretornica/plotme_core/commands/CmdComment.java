@@ -74,7 +74,7 @@ public class CmdComment extends PlotCommand {
                         String playername = p.getName();
                         UUID uuid = p.getUniqueId();
                         
-                        String[] comment = new String[2];
+                        String[] comment = new String[3];
                         comment[0] = playername;
                         comment[1] = text;
                         comment[2] = uuid.toString();
@@ -84,7 +84,9 @@ public class CmdComment extends PlotCommand {
 
                         p.sendMessage(C("MsgCommentAdded") + " " + Util().moneyFormat(-price));
 
-                        plugin.getLogger().info(LOG + playername + " " + C("MsgCommentedPlot") + " " + id + ((price != 0) ? " " + C("WordFor") + " " + price : ""));
+                        if (isAdvancedLogging()) {
+                            plugin.getLogger().info(LOG + playername + " " + C("MsgCommentedPlot") + " " + id + ((price != 0) ? " " + C("WordFor") + " " + price : ""));
+                        }
                     }
                 } else {
                     p.sendMessage(RED + C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));

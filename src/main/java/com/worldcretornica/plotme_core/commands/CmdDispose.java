@@ -76,8 +76,7 @@ public class CmdDispose extends PlotCommand {
                                             } else {
                                                 Player player = Bukkit.getPlayer(playercurrentbidder.getUniqueId());
                                                 if (player != null) {
-                                                    player.sendMessage(C("WordPlot")
-                                                                               + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner() + " " + C("MsgWasDisposed") + " " + Util().moneyFormat(cost));
+                                                    player.sendMessage(C("WordPlot") + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner() + " " + C("MsgWasDisposed") + " " + Util().moneyFormat(cost));
                                                 }
                                             }
                                         }
@@ -100,7 +99,9 @@ public class CmdDispose extends PlotCommand {
 
                                 p.sendMessage(C("MsgPlotDisposedAnyoneClaim"));
 
-                                plugin.getLogger().info(LOG + name + " " + C("MsgDisposedPlot") + " " + id);
+                                if (isAdvancedLogging()) {
+                                    plugin.getLogger().info(LOG + name + " " + C("MsgDisposedPlot") + " " + id);
+                                }
                             }
                         } else {
                             p.sendMessage(RED + C("MsgThisPlot") + "(" + id + ") " + C("MsgNotYoursCannotDispose"));

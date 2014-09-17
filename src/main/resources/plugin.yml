@@ -47,7 +47,6 @@ permissions:
         plotme.admin.add: true
         plotme.admin.remove: true
         plotme.admin.setowner: true
-        plotme.admin.setowner: true
         plotme.admin.move: true
         plotme.admin.weanywhere: true
         plotme.admin.list: true
@@ -111,12 +110,6 @@ permissions:
       description: Gives unlimited plots
     plotme.limit.1:
       description: Gives 1 plot
-    plotme.limit.2:
-      description: Gives 2 plots
-    plotme.limit.3:
-      description: Gives 3 plots
-    plotme.limit.4:
-      description: Gives 4 plots
     plotme.limit.5:
       description: Gives 5 plots
     plotme.limit.10:
@@ -145,10 +138,6 @@ permissions:
       description: Allows to enter denied plots
     plotme.admin.setowner:
       description: Gives the setowner command
-    plotme.admin.setheight:
-      description: Gives the setheight, addheight, subheight commands
-    plotme.admin.setbase:
-      description: Gives the setbase command
     plotme.admin.move:
       description: Gives the move command
     plotme.admin.weanywhere:

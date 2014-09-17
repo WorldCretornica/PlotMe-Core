@@ -55,7 +55,9 @@ public class CmdSell extends PlotCommand {
 
                                         p.sendMessage(C("MsgPlotNoLongerSale"));
 
-                                        plugin.getLogger().info(LOG + p.getName() + " " + C("MsgRemovedPlot") + " " + id + " " + C("MsgFromBeingSold"));
+                                        if (isAdvancedLogging()) {
+                                            plugin.getLogger().info(LOG + p.getName() + " " + C("MsgRemovedPlot") + " " + id + " " + C("MsgFromBeingSold"));
+                                        }
                                     }
                                 } else {
                                     double price = pmi.getSellToPlayerPrice();
@@ -141,7 +143,9 @@ public class CmdSell extends PlotCommand {
 
                                                     p.sendMessage(C("MsgPlotSold") + " " + Util().moneyFormat(sellprice));
 
-                                                    plugin.getLogger().info(LOG + p.getName() + " " + C("MsgSoldToBankPlot") + " " + id + " " + C("WordFor") + " " + sellprice);
+                                                    if (isAdvancedLogging()) {
+                                                        plugin.getLogger().info(LOG + p.getName() + " " + C("MsgSoldToBankPlot") + " " + id + " " + C("WordFor") + " " + sellprice);
+                                                    }
                                                 } else {
                                                     p.sendMessage(" " + er.errorMessage);
                                                     Util().warn(er.errorMessage);
@@ -166,7 +170,9 @@ public class CmdSell extends PlotCommand {
 
                                                 p.sendMessage(C("MsgPlotForSale"));
 
-                                                plugin.getLogger().info(LOG + p.getName() + " " + C("MsgPutOnSalePlot") + " " + id + " " + C("WordFor") + " " + price);
+                                                if (isAdvancedLogging()) {
+                                                    plugin.getLogger().info(LOG + p.getName() + " " + C("MsgPutOnSalePlot") + " " + id + " " + C("WordFor") + " " + price);
+                                                }
                                             }
                                         }
                                     }

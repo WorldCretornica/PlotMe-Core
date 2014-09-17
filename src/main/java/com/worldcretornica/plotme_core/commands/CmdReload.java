@@ -18,7 +18,9 @@ public class CmdReload extends PlotCommand {
             plugin.reload();
             s.sendMessage(C("MsgReloadedSuccess"));
 
-            plugin.getLogger().info(LOG + s.getName() + " " + C("MsgReloadedConfigurations"));
+            if (isAdvancedLogging()) {
+                plugin.getLogger().info(LOG + s.getName() + " " + C("MsgReloadedConfigurations"));
+            }
         } else {
             s.sendMessage(RED + C("MsgPermissionDenied"));
         }
