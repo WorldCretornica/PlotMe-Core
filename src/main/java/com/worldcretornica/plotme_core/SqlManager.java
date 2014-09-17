@@ -2150,7 +2150,7 @@ public class SqlManager {
         return ret;
     }
 
-    public List<Plot> getPlayerPlots(UUID ownerId, String owner) {
+    public List<Plot> getPlayerPlots(UUID playerId, String playername) {
         List<Plot> ret = new ArrayList<>();
         PreparedStatement statementPlot = null;
         PreparedStatement statementAllowed;
@@ -2164,16 +2164,16 @@ public class SqlManager {
         try {
             Connection conn = getConnection();
 
-            if (ownerId == null) {
-                statementPlot = conn.prepareStatement("SELECT A.* FROM plotmePlots A LEFT JOIN plotmeAllowed B ON A.idX = B.idX AND A.idZ = B.idZ AND A.world = B.world "
+            if (playerId == null) {
+                statementPlot = conn.prepareStatement("SELECT DISTINCT A.* FROM plotmePlots A LEFT JOIN plotmeAllowed B ON A.idX = B.idX AND A.idZ = B.idZ AND A.world = B.world "
                         + " WHERE owner = ? OR B.player = ? ORDER BY A.world");
-                statementPlot.setString(1, owner);
-                statementPlot.setString(2, owner);
+                statementPlot.setString(1, playername);
+                statementPlot.setString(2, playername);
             } else {
-                statementPlot = conn.prepareStatement("SELECT A.* FROM plotmePlots A LEFT JOIN plotmeAllowed B ON A.idX = B.idX AND A.idZ = B.idZ AND A.world = B.world "
+                statementPlot = conn.prepareStatement("SELECT DISTINCT A.* FROM plotmePlots A LEFT JOIN plotmeAllowed B ON A.idX = B.idX AND A.idZ = B.idZ AND A.world = B.world "
                                                               + " WHERE ownerId = ? OR B.playerId = ? ORDER BY A.world");
-                statementPlot.setBytes(1, UUIDFetcher.toBytes(ownerId));
-                statementPlot.setBytes(2, UUIDFetcher.toBytes(ownerId));
+                statementPlot.setBytes(1, UUIDFetcher.toBytes(playerId));
+                statementPlot.setBytes(2, UUIDFetcher.toBytes(playerId));
             }
 
             setPlots = statementPlot.executeQuery();
@@ -2200,11 +2200,13 @@ public class SqlManager {
                 boolean auctionned = setPlots.getBoolean("auctionned");
                 String auctionneddate = setPlots.getString("auctionneddate");
                 String world = setPlots.getString("world");
+                String owner = setPlots.getString("owner");
 
                 byte[] byBidder = setPlots.getBytes("currentbidderid");
                 byte[] byOwner = setPlots.getBytes("ownerid");
 
                 UUID currentbidderid = null;
+                UUID ownerId = null;
 
                 if (byBidder != null) {
                     currentbidderid = UUIDFetcher.fromBytes(byBidder);

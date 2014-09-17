@@ -92,9 +92,9 @@ public class CmdPlotList extends PlotCommand {
                         } else {
                             // Is the owner the current player?
                             if (plot.getOwner().equalsIgnoreCase(p.getName())) {
-                                p.sendMessage("  " + plot.getId() + " -> " + AQUA + ITALIC + C("WordYours") + RESET + addition + ", " + C("WordHelpers") + ": " + plot.getAllowed());
+                                p.sendMessage("  " + plot.getId() + " -> " + AQUA + ITALIC + C("WordYours") + RESET + addition + ", " + C("WordHelpers") + ": " + AQUA + plot.getAllowed().replace(",", "" + RESET + "," + AQUA));
                             } else {
-                                p.sendMessage("  " + plot.getId() + " -> " + AQUA + ITALIC + plot.getOwner() + RESET + addition + ", " + C("WordHelpers") + ": " + plot.getAllowed());
+                                p.sendMessage("  " + plot.getId() + " -> " + AQUA + ITALIC + plot.getOwner() + RESET + addition + ", " + C("WordHelpers") + ": " + AQUA + plot.getAllowed().replace(",", "" + RESET + "," + AQUA));
                             }
                         }
 
