@@ -54,8 +54,7 @@ public class CmdShowHelp extends PlotCommand {
             allowed_commands.add("biome");
             allowed_commands.add("biomelist");
         }
-        if (plugin.cPerms(p, "PlotMe.use.done")
-                || plugin.cPerms(p, "PlotMe.admin.done")) {
+        if (plugin.cPerms(p, "PlotMe.use.done") || plugin.cPerms(p, "PlotMe.admin.done")) {
             allowed_commands.add("done");
         }
         if (plugin.cPerms(p, "PlotMe.admin.done")) {
@@ -67,45 +66,31 @@ public class CmdShowHelp extends PlotCommand {
         if (plugin.cPerms(p, "PlotMe.admin.id")) {
             allowed_commands.add("id");
         }
-        if (plugin.cPerms(p, "PlotMe.use.clear")
-                || plugin.cPerms(p, "PlotMe.admin.clear")) {
+        if (plugin.cPerms(p, "PlotMe.use.clear") || plugin.cPerms(p, "PlotMe.admin.clear")) {
             allowed_commands.add("clear");
         }
-        if (plugin.cPerms(p, "PlotMe.admin.dispose")
-                || plugin.cPerms(p, "PlotMe.use.dispose")) {
+        if (plugin.cPerms(p, "PlotMe.admin.dispose") || plugin.cPerms(p, "PlotMe.use.dispose")) {
             allowed_commands.add("dispose");
         }
         if (plugin.cPerms(p, "PlotMe.admin.reset")) {
             allowed_commands.add("reset");
         }
-        if (plugin.cPerms(p, "PlotMe.use.add")
-                || plugin.cPerms(p, "PlotMe.admin.add")) {
+        if (plugin.cPerms(p, "PlotMe.use.add") || plugin.cPerms(p, "PlotMe.admin.add")) {
             allowed_commands.add("add");
         }
-        if (plugin.cPerms(p, "PlotMe.use.remove")
-                || plugin.cPerms(p, "PlotMe.admin.remove")) {
+        if (plugin.cPerms(p, "PlotMe.use.remove") || plugin.cPerms(p, "PlotMe.admin.remove")) {
             allowed_commands.add("remove");
         }
         if (plugin.getConfig().getBoolean("allowToDeny")) {
-            if (plugin.cPerms(p, "PlotMe.use.deny")
-                    || plugin.cPerms(p, "PlotMe.admin.deny")) {
+            if (plugin.cPerms(p, "PlotMe.use.deny") || plugin.cPerms(p, "PlotMe.admin.deny")) {
                 allowed_commands.add("deny");
             }
-            if (plugin.cPerms(p, "PlotMe.use.undeny")
-                    || plugin.cPerms(p, "PlotMe.admin.undeny")) {
+            if (plugin.cPerms(p, "PlotMe.use.undeny") || plugin.cPerms(p, "PlotMe.admin.undeny")) {
                 allowed_commands.add("undeny");
             }
         }
         if (plugin.cPerms(p, "PlotMe.admin.setowner")) {
             allowed_commands.add("setowner");
-        }
-        if (plugin.cPerms(p, "PlotMe.admin.setheight")) {
-            allowed_commands.add("setheight");
-            allowed_commands.add("addheight");
-            allowed_commands.add("subheight");
-        }
-        if (plugin.cPerms(p, "PlotMe.admin.setbase")) {
-            allowed_commands.add("setbase");
         }
         if (plugin.cPerms(p, "PlotMe.admin.move")) {
             allowed_commands.add("move");
@@ -174,11 +159,9 @@ public class CmdShowHelp extends PlotCommand {
                     int ownedplots = plugin.getPlotMeCoreManager().getNbOwnedPlot(p, w);
 
                     if (maxplots == -1) {
-                        p.sendMessage(GREEN + C("HelpYourPlotLimitWorld") + " : " + AQUA + ownedplots
-                                + GREEN + " " + C("HelpUsedOf") + " " + AQUA + C("WordInfinite"));
+                        p.sendMessage(GREEN + C("HelpYourPlotLimitWorld") + " : " + AQUA + ownedplots + GREEN + " " + C("HelpUsedOf") + " " + AQUA + C("WordInfinite"));
                     } else {
-                        p.sendMessage(GREEN + C("HelpYourPlotLimitWorld") + " : " + AQUA + ownedplots
-                                + GREEN + " " + C("HelpUsedOf") + " " + AQUA + maxplots);
+                        p.sendMessage(GREEN + C("HelpYourPlotLimitWorld") + " : " + AQUA + ownedplots + GREEN + " " + C("HelpUsedOf") + " " + AQUA + maxplots);
                     }
                 } else {
                     p.sendMessage(GREEN + C("HelpYourPlotLimitWorld") + " : " + AQUA + C("MsgNotPlotWorld"));
@@ -320,18 +303,6 @@ public class CmdShowHelp extends PlotCommand {
             } else if (allowedcmd.equalsIgnoreCase("setowner")) {
                 p.sendMessage(GREEN + " /plotme " + C("CommandSetowner") + " <" + C("WordPlayer") + ">");
                 p.sendMessage(AQUA + " " + C("HelpSetowner"));
-            } else if (allowedcmd.equalsIgnoreCase("setheight")) {
-                p.sendMessage(GREEN + " /plotme " + C("CommandSetHeight") + " <" + C("WordHeight") + ">");
-                p.sendMessage(AQUA + " " + C("HelpSetHeight"));
-            } else if (allowedcmd.equalsIgnoreCase("addheight")) {
-                p.sendMessage(GREEN + " /plotme " + C("CommandAddHeight") + " <" + C("WordHeight") + ">");
-                p.sendMessage(AQUA + " " + C("HelpAddHeight"));
-            } else if (allowedcmd.equalsIgnoreCase("subheight")) {
-                p.sendMessage(GREEN + " /plotme " + C("CommandSubHeight") + " <" + C("WordHeight") + ">");
-                p.sendMessage(AQUA + " " + C("HelpSubHeight"));
-            } else if (allowedcmd.equalsIgnoreCase("setbase")) {
-                p.sendMessage(GREEN + " /plotme " + C("CommandSetBase") + " <" + C("WordHeight") + ">");
-                p.sendMessage(AQUA + " " + C("HelpSetBase"));
             } else if (allowedcmd.equalsIgnoreCase("move")) {
                 p.sendMessage(GREEN + " /plotme " + C("CommandMove") + " <" + C("WordIdFrom") + "> <" + C("WordIdTo") + ">");
                 p.sendMessage(AQUA + " " + C("HelpMove"));

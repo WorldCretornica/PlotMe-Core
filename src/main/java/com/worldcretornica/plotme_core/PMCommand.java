@@ -220,7 +220,6 @@ public class PMCommand implements CommandExecutor {
                         if (a0.equalsIgnoreCase(C("CommandProtect"))) {
                             return protect.exec(p, args);
                         }
-
                         if (a0.equalsIgnoreCase(C("CommandSell"))) {
                             return sell.exec(p, args);
                         }

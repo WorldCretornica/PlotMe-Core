@@ -2313,7 +2313,7 @@ public class SqlManager {
             Connection conn = getConnection();
 
             if (ownerId == null) {
-                statementPlot = conn.prepareStatement("SELECT * FROM plotmePlots WHERE world LIKE ? AND owner = ? ORDER BY world");
+                statementPlot = conn.prepareStatement("SELECT * FROM plotmePlots WHERE world LIKE ? AND owner LIKE ? ORDER BY world");
                 statementPlot.setString(1, w);
                 statementPlot.setString(2, owner);
             } else {

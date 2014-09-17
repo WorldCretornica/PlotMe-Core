@@ -44,15 +44,13 @@ public class CmdHome extends PlotCommand {
                 if (args[0].contains(":")) {
                     try {
                         if (args[0].split(":").length == 1 || args[0].split(":")[1].equals("")) {
-                            p.sendMessage(C("WordUsage") + ": " + RED + "/plotme " + C("CommandHome") + ":# "
-                                    + RESET + C("WordExample") + ": " + RED + "/plotme " + C("CommandHome") + ":1");
+                            p.sendMessage(C("WordUsage") + ": " + RED + "/plotme " + C("CommandHome") + ":# " + RESET + C("WordExample") + ": " + RED + "/plotme " + C("CommandHome") + ":1");
                             return true;
                         } else {
                             nb = Integer.parseInt(args[0].split(":")[1]);
                         }
                     } catch (Exception ex) {
-                        p.sendMessage(C("WordUsage") + ": " + RED + "/plotme " + C("CommandHome") + ":# "
-                                + RESET + C("WordExample") + ": " + RED + "/plotme " + C("CommandHome") + ":1");
+                        p.sendMessage(C("WordUsage") + ": " + RED + "/plotme " + C("CommandHome") + ":# " + RESET + C("WordExample") + ": " + RED + "/plotme " + C("CommandHome") + ":1");
                         return true;
                     }
                 }

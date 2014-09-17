@@ -20,8 +20,12 @@ public class CmdWEAnywhere extends PlotCommand {
             if (plugin.getPlotMeCoreManager().isPlayerIgnoringWELimit(uuid) && !plugin.getConfig().getBoolean("defaultWEAnywhere")
                     || !plugin.getPlotMeCoreManager().isPlayerIgnoringWELimit(uuid) && plugin.getConfig().getBoolean("defaultWEAnywhere")) {
                 plugin.getPlotMeCoreManager().removePlayerIgnoringWELimit(uuid);
+                if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
+                    plugin.getPlotWorldEdit().setMask(p);
+                }
             } else {
                 plugin.getPlotMeCoreManager().addPlayerIgnoringWELimit(uuid);
+                plugin.getPlotWorldEdit().removeMask(p);
             }
 
             if (plugin.getPlotMeCoreManager().isPlayerIgnoringWELimit(uuid)) {

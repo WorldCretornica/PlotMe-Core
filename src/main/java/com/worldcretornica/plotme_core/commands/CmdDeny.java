@@ -38,6 +38,11 @@ public class CmdDeny extends PlotCommand {
                         String denied = args[1];
 
                         if (plot.getOwner().equalsIgnoreCase(playername) || plugin.cPerms(p, "PlotMe.admin.deny")) {
+                            if (plot.getOwner().equalsIgnoreCase(denied)) {
+                                //TODO output something using a caption that says like "Cannot deny owner"
+                                return true;
+                            }
+                            
                             if (plot.isDeniedConsulting(denied) || plot.isGroupDenied(denied)) {
                                 p.sendMessage(C("WordPlayer") + " " + RED + args[1] + RESET + " " + C("MsgAlreadyDenied"));
                             } else {
