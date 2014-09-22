@@ -469,11 +469,10 @@ public class PlotMeCoreManager {
 
                 List<String[]> comments = plot2.getComments();
                 for (int i = 0; i < comments.size(); i++) {
-                    String strUUID;
                     UUID uuid = null;
 
                     if (comments.get(i).length >= 3) {
-                        strUUID = comments.get(i)[2];
+                        String strUUID = comments.get(i)[2];
                         try {
                             uuid = UUID.fromString(strUUID);
                         } catch (Exception e) {
@@ -501,11 +500,10 @@ public class PlotMeCoreManager {
                 
                 comments = plot1.getComments();
                 for (int i = 0; i < comments.size(); i++) {
-                    String strUUID;
                     UUID uuid = null;
 
                     if (comments.get(i).length >= 3) {
-                        strUUID = comments.get(i)[2];
+                        String strUUID = comments.get(i)[2];
                         try {
                             uuid = UUID.fromString(strUUID);
                         } catch (Exception e) {
@@ -542,11 +540,10 @@ public class PlotMeCoreManager {
 
                 List<String[]> comments = plot1.getComments();
                 for (int i = 0; i < comments.size(); i++) {
-                    String strUUID;
                     UUID uuid = null;
 
                     if (comments.get(i).length >= 3) {
-                        strUUID = comments.get(i)[2];
+                        String strUUID = comments.get(i)[2];
                         try {
                             uuid = UUID.fromString(strUUID);
                         } catch (Exception e) {
@@ -585,11 +582,10 @@ public class PlotMeCoreManager {
 
             List<String[]> comments = plot2.getComments();
             for (int i = 0; i < comments.size(); i++) {
-                String strUUID;
                 UUID uuid = null;
 
                 if (comments.get(i).length >= 3) {
-                    strUUID = comments.get(i)[2];
+                    String strUUID = comments.get(i)[2];
                     try {
                         uuid = UUID.fromString(strUUID);
                     } catch (Exception e) {
@@ -646,8 +642,6 @@ public class PlotMeCoreManager {
     public void setOwnerSign(World w, Plot plot) {
         String line1;
         String line2 = "";
-        String line3;
-        String line4;
         String id = plot.getId();
 
         if ((Util().C("SignId") + id).length() > 16) {
@@ -660,17 +654,8 @@ public class PlotMeCoreManager {
         } else {
             line1 = Util().C("SignId") + id;
         }
-        if ((Util().C("SignOwner") + plot.getOwner()).length() > 16) {
-            line3 = (Util().C("SignOwner") + plot.getOwner()).substring(0, 16);
-            if ((Util().C("SignOwner") + plot.getOwner()).length() > 32) {
-                line4 = (Util().C("SignOwner") + plot.getOwner()).substring(16, 32);
-            } else {
-                line4 = (Util().C("SignOwner") + plot.getOwner()).substring(16);
-            }
-        } else {
-            line3 = Util().C("SignOwner") + plot.getOwner();
-            line4 = "";
-        }
+        String line3 = plot.getOwner();
+        String line4 = "";
 
         getGenMan(w).setOwnerDisplay(w, plot.getId(), line1, line2, line3, line4);
     }

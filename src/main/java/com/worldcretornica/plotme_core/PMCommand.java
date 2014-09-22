@@ -98,14 +98,13 @@ public class PMCommand implements CommandExecutor {
                     s.sendMessage(C("ConsoleHelpReload"));
                     return true;
                 } else {
-                    String a0 = args[0];
-                    if (a0.equalsIgnoreCase("reload")) {
+                    if (args[0].equalsIgnoreCase("reload")) {
                         return reload.exec(s, args);
                     }
-                    if (a0.equalsIgnoreCase(C("CommandResetExpired"))) {
+                    if (args[0].equalsIgnoreCase(C("CommandResetExpired"))) {
                         return resetexpired.exec(s, args);
                     }
-                    if (a0.equalsIgnoreCase(C("CommandCreateWorld"))) {
+                    if (args[0].equalsIgnoreCase(C("CommandCreateWorld"))) {
                         return createworld.exec(s, args);
                     }
                 }

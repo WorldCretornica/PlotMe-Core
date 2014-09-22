@@ -973,7 +973,6 @@ public class SqlManager {
                 int commentid = 1;
                 for (String[] comments : plot.getComments()) {
                     UUID uuid = null;
-
                     if (comments.length >= 3) {
                         String strUUID = comments[2];
                         try {
