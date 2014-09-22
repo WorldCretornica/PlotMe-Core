@@ -412,16 +412,6 @@ public class Plot implements Comparable<Plot> {
         denied.clear();
     }
 
-    @Deprecated
-    public boolean isAllowed(String name) {
-        Player p = Bukkit.getServer().getPlayerExact(name);
-        if(p == null) {
-            return false;
-        } else {
-            return isAllowedInternal(p.getName(), p.getUniqueId(), true, true);
-        }
-    }
-    
     public boolean isAllowedConsulting(String name) {
         @SuppressWarnings("deprecation")
         Player p = Bukkit.getServer().getPlayerExact(name);
@@ -444,16 +434,6 @@ public class Plot implements Comparable<Plot> {
         return isAllowedInternal("", uuid, true, true);
     }
 
-    @Deprecated
-    public boolean isAllowed(String name, boolean IncludeStar, boolean IncludeGroup) {
-        Player p = Bukkit.getServer().getPlayerExact(name);
-        if(p == null) {
-            return false;
-        } else {
-            return isAllowedInternal(p.getName(), p.getUniqueId(), IncludeStar, IncludeGroup);
-        }
-    }
-    
     private boolean isAllowedInternal(String name, UUID uuid, boolean IncludeStar, boolean IncludeGroup) {
                 
         if(IncludeStar && owner.equals("*")) {
@@ -494,16 +474,6 @@ public class Plot implements Comparable<Plot> {
         return false;
     }
 
-    @Deprecated
-    public boolean isDenied(String name) {
-        Player p = Bukkit.getServer().getPlayerExact(name);
-        if(p == null) {
-            return false;
-        } else {
-            return isDeniedInternal(name, null, true, true);
-        }
-    }
-    
     public boolean isDeniedConsulting(String name) {
         @SuppressWarnings("deprecation")
         Player p = Bukkit.getServer().getPlayerExact(name);

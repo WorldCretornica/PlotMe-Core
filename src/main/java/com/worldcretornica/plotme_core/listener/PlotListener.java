@@ -251,7 +251,7 @@ public class PlotListener implements Listener {
 					} else {
 						Plot plot = plugin.getPlotMeCoreManager().getPlotById(p, id);
 
-                        if (plot == null || !plot.isAllowed(p.getName())) {
+                        if (plot == null || !plot.isAllowed(p.getUniqueId())) {
                             if (!canbuild) {
                                 p.sendMessage(plugin.getUtil().C("ErrCannotBuild"));
                                 event.setCancelled(true);
@@ -291,7 +291,7 @@ public class PlotListener implements Listener {
 						} else {
 							Plot plot = plugin.getPlotMeCoreManager().getPlotById(p, id);
 
-                            if ((plot == null || !plot.isAllowed(p.getName())) && !canbuild) {
+                            if ((plot == null || !plot.isAllowed(p.getUniqueId())) && !canbuild) {
                                 if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
                                     p.sendMessage(plugin.getUtil().C("ErrCannotUse"));
                                 }
