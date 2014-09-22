@@ -34,6 +34,7 @@ public class Plot implements Comparable<Plot> {
     private double currentbid;
     private UUID currentbidderId;
     private String auctionneddate;
+    private String plotName;
 
     public Plot(PlotMe_Core instance) {
         this.plugin = instance;
@@ -184,9 +185,9 @@ public class Plot implements Comparable<Plot> {
         this.setAuctionnedDate(auctdate);
     }
 
-    public Plot(PlotMe_Core instance, String owner, UUID ownerId, String world, String bio, Date exp, boolean fini, 
-            PlayerList al, List<String[]> comm, String tid, double custprice, boolean sale, String finishdt, 
-            boolean prot, String bidder, UUID bidderId, Double bid, boolean isauctionned, PlayerList den, String auctdate) {
+    public Plot(PlotMe_Core instance, String owner, UUID ownerId, String world, String bio, Date exp, boolean fini,
+                PlayerList al, List<String[]> comm, String tid, double custprice, boolean sale, String finishdt,
+                boolean prot, String bidder, UUID bidderId, Double bid, boolean isauctionned, PlayerList den, String auctdate, String plotname) {
         this.plugin = instance;
         this.setOwner(owner);
         this.setOwnerId(ownerId);
@@ -207,6 +208,7 @@ public class Plot implements Comparable<Plot> {
         this.setCurrentBid(bid);
         this.denied = den;
         this.setAuctionnedDate(auctdate);
+        this.setPlotName(plotname);
     }
 
     public void setExpire(Date date) {
@@ -689,5 +691,13 @@ public class Plot implements Comparable<Plot> {
 
     public final void setAuctionnedDate(String auctionneddate) {
         this.auctionneddate = auctionneddate;
+    }
+
+    public String getPlotName() {
+        return plotName;
+    }
+
+    public void setPlotName(String plotName) {
+        this.plotName = plotName;
     }
 }

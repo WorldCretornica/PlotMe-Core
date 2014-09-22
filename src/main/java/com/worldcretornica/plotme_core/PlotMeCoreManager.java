@@ -571,49 +571,47 @@ public class PlotMeCoreManager {
                 getGenMan(w).removeSellerDisplay(w, idFrom);
 
             }
-        } else {
-            if (plot2 != null) {
-                int idX = getIdX(idTo);
-                int idZ = getIdZ(idTo);
-                plugin.getSqlManager().deletePlot(idX, idZ, plot2.getWorld());
-                removePlot(w, idTo);
+        } else if (plot2 != null) {
+            int idX = getIdX(idTo);
+            int idZ = getIdZ(idTo);
+            plugin.getSqlManager().deletePlot(idX, idZ, plot2.getWorld());
+            removePlot(w, idTo);
 
-                idX = getIdX(idFrom);
-                idZ = getIdZ(idFrom);
-                plot2.setId(idFrom);
-                plugin.getSqlManager().addPlot(plot2, idX, idZ, topX(idFrom, w), bottomX(idFrom, w), topZ(idFrom, w), bottomZ(idFrom, w));
-                addPlot(w, idFrom, plot2);
+            idX = getIdX(idFrom);
+            idZ = getIdZ(idFrom);
+            plot2.setId(idFrom);
+            plugin.getSqlManager().addPlot(plot2, idX, idZ, topX(idFrom, w), bottomX(idFrom, w), topZ(idFrom, w), bottomZ(idFrom, w));
+            addPlot(w, idFrom, plot2);
 
-                List<String[]> comments = plot2.getComments();
-                for (int i = 0; i < comments.size(); i++) {
-                    String strUUID;
-                    UUID uuid = null;
+            List<String[]> comments = plot2.getComments();
+            for (int i = 0; i < comments.size(); i++) {
+                String strUUID;
+                UUID uuid = null;
 
-                    if (comments.get(i).length >= 3) {
-                        strUUID = comments.get(i)[2];
-                        try {
-                            uuid = UUID.fromString(strUUID);
-                        } catch (Exception e) {
-                        }
+                if (comments.get(i).length >= 3) {
+                    strUUID = comments.get(i)[2];
+                    try {
+                        uuid = UUID.fromString(strUUID);
+                    } catch (Exception e) {
                     }
-                    plugin.getSqlManager().addPlotComment(comments.get(i), i, idX, idZ, plot2.getWorld(), uuid);
                 }
-                
-                HashMap<String, UUID> allowed = plot2.allowed().getAllPlayers();
-                for (String player : allowed.keySet()) {
-                    plugin.getSqlManager().addPlotAllowed(player, allowed.get(player), idX, idZ, plot2.getWorld());
-                }
-                
-                HashMap<String, UUID> denied = plot2.denied().getAllPlayers();
-                for (String player : denied.keySet()) {
-                    plugin.getSqlManager().addPlotDenied(player, denied.get(player), idX, idZ, plot2.getWorld());
-                }
-
-                setOwnerSign(w, plot2);
-                setSellSign(w, plot2);
-                getGenMan(w).removeOwnerDisplay(w, idTo);
-                getGenMan(w).removeSellerDisplay(w, idTo);
+                plugin.getSqlManager().addPlotComment(comments.get(i), i, idX, idZ, plot2.getWorld(), uuid);
             }
+
+            HashMap<String, UUID> allowed = plot2.allowed().getAllPlayers();
+            for (String player : allowed.keySet()) {
+                plugin.getSqlManager().addPlotAllowed(player, allowed.get(player), idX, idZ, plot2.getWorld());
+            }
+
+            HashMap<String, UUID> denied = plot2.denied().getAllPlayers();
+            for (String player : denied.keySet()) {
+                plugin.getSqlManager().addPlotDenied(player, denied.get(player), idX, idZ, plot2.getWorld());
+            }
+
+            setOwnerSign(w, plot2);
+            setSellSign(w, plot2);
+            getGenMan(w).removeOwnerDisplay(w, idTo);
+            getGenMan(w).removeSellerDisplay(w, idTo);
         }
 
         return true;

@@ -4,9 +4,7 @@ import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.event.PlotBidEvent;
 import com.worldcretornica.plotme_core.event.PlotMeEventFactory;
-
 import net.milkbowl.vault.economy.EconomyResponse;
-
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -29,7 +27,6 @@ public class CmdBid extends PlotCommand {
 
                     if (plot.isAuctionned()) {
                         String bidder = p.getName();
-                        OfflinePlayer playerbidder = p;
 
                         if (plot.getOwner().equalsIgnoreCase(bidder)) {
                             p.sendMessage(RED + C("MsgCannotBidOwnPlot"));
@@ -47,7 +44,7 @@ public class CmdBid extends PlotCommand {
                             if (bid < currentbid || (bid == currentbid && !currentbidder.equals(""))) {
                                 p.sendMessage(RED + C("MsgInvalidBidMustBeAbove") + " " + RESET + Util().moneyFormat(plot.getCurrentBid(), false));
                             } else {
-                                double balance = plugin.getEconomy().getBalance(playerbidder);
+                                double balance = plugin.getEconomy().getBalance(p);
 
                                 if (bid >= balance && !currentbidder.equals(bidder)
                                             || currentbidder.equals(bidder) && bid > (balance + currentbid)) {
@@ -56,7 +53,7 @@ public class CmdBid extends PlotCommand {
                                     PlotBidEvent event = PlotMeEventFactory.callPlotBidEvent(plugin, p.getWorld(), plot, p, bid);
 
                                     if (!event.isCancelled()) {
-                                        EconomyResponse er = plugin.getEconomy().withdrawPlayer(playerbidder, bid);
+                                        EconomyResponse er = plugin.getEconomy().withdrawPlayer(p, bid);
 
                                         if (er.transactionSuccess()) {
                                             if (playercurrentbidder != null) {

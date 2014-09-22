@@ -5,9 +5,7 @@ import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.event.PlotAuctionEvent;
 import com.worldcretornica.plotme_core.event.PlotMeEventFactory;
-
 import net.milkbowl.vault.economy.EconomyResponse;
-
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
@@ -38,27 +36,46 @@ public class CmdAuction extends PlotCommand {
                             World w = p.getWorld();
 
                             if (plot.isAuctionned()) {
-                                if (plot.getCurrentBidderId() != null && !plugin.cPerms(p, "PlotMe.admin.auction")) {
-                                    p.sendMessage(RED + C("MsgPlotHasBidsAskAdmin"));
-                                } else {
-                                    if (plot.getCurrentBidderId() != null) {
-                                        OfflinePlayer playercurrentbidder = Bukkit.getOfflinePlayer(plot.getCurrentBidderId());
-                                        EconomyResponse er = plugin.getEconomy().depositPlayer(playercurrentbidder, plot.getCurrentBid());
+                                if (plot.getCurrentBidderId() != null) {
+                                    if (!plugin.cPerms(p, "PlotMe.admin.auction")) {
+                                        p.sendMessage(RED + C("MsgPlotHasBidsAskAdmin"));
+                                    } else {
+                                        if (plot.getCurrentBidderId() != null) {
+                                            OfflinePlayer playercurrentbidder = Bukkit.getOfflinePlayer(plot.getCurrentBidderId());
+                                            EconomyResponse er = plugin.getEconomy().depositPlayer(playercurrentbidder, plot.getCurrentBid());
 
-                                        if (!er.transactionSuccess()) {
-                                            p.sendMessage(RED + er.errorMessage);
-                                            plugin.getUtil().warn(er.errorMessage);
-                                        } else {
-                                            for (Player player : Bukkit.getServer().getOnlinePlayers()) {
-                                                if (player.getName().equalsIgnoreCase(plot.getCurrentBidder())) {
-                                                    player.sendMessage(C("MsgAuctionCancelledOnPlot")
-                                                                               + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner() + ". " + plugin.getUtil().moneyFormat(plot.getCurrentBid()));
-                                                    break;
+                                            if (!er.transactionSuccess()) {
+                                                p.sendMessage(RED + er.errorMessage);
+                                                plugin.getUtil().warn(er.errorMessage);
+                                            } else {
+                                                for (Player player : Bukkit.getServer().getOnlinePlayers()) {
+                                                    if (player.getName().equalsIgnoreCase(plot.getCurrentBidder())) {
+                                                        player.sendMessage(C("MsgAuctionCancelledOnPlot")
+                                                                                   + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner() + ". " + plugin.getUtil().moneyFormat(plot.getCurrentBid()));
+                                                        break;
+                                                    }
                                                 }
                                             }
                                         }
-                                    }
 
+                                        plot.setAuctionned(false);
+                                        plugin.getPlotMeCoreManager().adjustWall(p.getLocation());
+                                        plugin.getPlotMeCoreManager().setSellSign(w, plot);
+                                        plot.setCurrentBid(0);
+                                        plot.setCurrentBidder("");
+
+                                        plot.updateField("currentbid", 0);
+                                        plot.updateField("currentbidder", "");
+                                        plot.updateField("currentbidderid", null);
+                                        plot.updateField("auctionned", false);
+
+                                        p.sendMessage(C("MsgAuctionCancelled"));
+
+                                        if (isAdvancedLogging()) {
+                                            plugin.getLogger().info(LOG + name + " " + C("MsgStoppedTheAuctionOnPlot") + " " + id);
+                                        }
+                                    }
+                                } else {
                                     plot.setAuctionned(false);
                                     plugin.getPlotMeCoreManager().adjustWall(p.getLocation());
                                     plugin.getPlotMeCoreManager().setSellSign(w, plot);

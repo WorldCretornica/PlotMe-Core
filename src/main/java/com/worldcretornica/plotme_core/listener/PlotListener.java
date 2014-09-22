@@ -251,28 +251,19 @@ public class PlotListener implements Listener {
 					} else {
 						Plot plot = plugin.getPlotMeCoreManager().getPlotById(p, id);
 
-						if (plot == null) {
-							if (!canbuild) {
-								p.sendMessage(plugin.getUtil().C("ErrCannotBuild"));
-								event.setCancelled(true);
-							}
-						} else {
-                            if (!plot.isAllowed(p.getName())) {
-                                if (!canbuild) {
-									p.sendMessage(plugin.getUtil().C("ErrCannotBuild"));
-									event.setCancelled(true);
-								}
-							} else {
-								plot.resetExpire(plugin.getPlotMeCoreManager().getMap(b).getDaysToExpiration());
-							}
-						}
-					}
+                        if (plot == null || !plot.isAllowed(p.getName())) {
+                            if (!canbuild) {
+                                p.sendMessage(plugin.getUtil().C("ErrCannotBuild"));
+                                event.setCancelled(true);
+                            }
+                        } else {
+                            plot.resetExpire(plugin.getPlotMeCoreManager().getMap(b).getDaysToExpiration());
+                        }
+                    }
 				} else {
-					if (pmi.isProtectedBlock(b.getTypeId())) {
-						if (!plugin.cPerms(p, "plotme.unblock." + b.getTypeId())) {
-							blocked = true;
-						}
-					}
+                    if (pmi.isProtectedBlock(b.getTypeId()) && !plugin.cPerms(p, "plotme.unblock." + b.getTypeId())) {
+                        blocked = true;
+                    }
 
 					ItemStack is = event.getItem();
 
@@ -280,9 +271,8 @@ public class PlotListener implements Listener {
 						int itemid = is.getType().getId();
 						byte itemdata = is.getData().getData();
 
-						if (pmi.isPreventedItem("" + itemid)
-								|| pmi.isPreventedItem("" + itemid + ":" + itemdata)) {
-							if (!plugin.cPerms(p, "plotme.unblock." + itemid)) {
+                        if (pmi.isPreventedItem("" + itemid) || pmi.isPreventedItem("" + itemid + ":" + itemdata)) {
+                            if (!plugin.cPerms(p, "plotme.unblock." + itemid)) {
 								blocked = true;
 							}
 						}
@@ -301,13 +291,11 @@ public class PlotListener implements Listener {
 						} else {
 							Plot plot = plugin.getPlotMeCoreManager().getPlotById(p, id);
 
-                            if (plot == null || !plot.isAllowed(p.getName())) {
-                                if (!canbuild) {
-									if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-										p.sendMessage(plugin.getUtil().C("ErrCannotUse"));
-									}
-									event.setCancelled(true);
-								}
+                            if ((plot == null || !plot.isAllowed(p.getName())) && !canbuild) {
+                                if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+                                    p.sendMessage(plugin.getUtil().C("ErrCannotUse"));
+                                }
+                                event.setCancelled(true);
                             }
                         }
                     }
@@ -720,13 +708,11 @@ public class PlotListener implements Listener {
 			} else {
 				Plot plot = plugin.getPlotMeCoreManager().getPlotById(p, id);
 
-                if (plot == null || !plot.isAllowed(p.getUniqueId())) {
-                    if (!canbuild) {
-						p.sendMessage(plugin.getUtil().C("ErrCannotUseEggs"));
-						event.setHatching(false);
-					}
-				}
-			}
+                if ((plot == null || !plot.isAllowed(p.getUniqueId())) && !canbuild) {
+                    p.sendMessage(plugin.getUtil().C("ErrCannotUseEggs"));
+                    event.setHatching(false);
+                }
+            }
 		}
 	}
 

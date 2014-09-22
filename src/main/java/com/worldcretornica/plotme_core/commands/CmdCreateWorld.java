@@ -37,45 +37,43 @@ public class CmdCreateWorld extends PlotCommand {
                             cs.sendMessage(C("MsgWorldCreationSuccess"));
                         }
                     }
-                } else {
-                    if (args.length >= 2) {
-                        //cancel
-                        if (args[1].equalsIgnoreCase(C("CommandCreateWorld-Cancel"))) {
-                            plugin.creationbuffer.remove(cs.getName());
-                            return true;
-                        } //settings
-                        else if (args[1].equalsIgnoreCase(C("CommandCreateWorld-Setting"))) {
-                            if (args.length == 4) {
-                                String key = args[2];
-                                String value = args[3];
+                } else if (args.length >= 2) {
+                    //cancel
+                    if (args[1].equalsIgnoreCase(C("CommandCreateWorld-Cancel"))) {
+                        plugin.creationbuffer.remove(cs.getName());
+                        return true;
+                    } //settings
+                    else if (args[1].equalsIgnoreCase(C("CommandCreateWorld-Setting"))) {
+                        if (args.length == 4) {
+                            String key = args[2];
+                            String value = args[3];
 
-                                Map<String, String> parameters = plugin.creationbuffer.get(cs.getName());
+                            Map<String, String> parameters = plugin.creationbuffer.get(cs.getName());
 
-                                if (parameters != null) {
-                                    for (String ckey : parameters.keySet()) {
-                                        if (key.equalsIgnoreCase(ckey)) {
-                                            parameters.remove(ckey);
-                                            parameters.put(ckey, value);
+                            if (parameters != null) {
+                                for (String ckey : parameters.keySet()) {
+                                    if (key.equalsIgnoreCase(ckey)) {
+                                        parameters.remove(ckey);
+                                        parameters.put(ckey, value);
 
-                                            cs.sendMessage(C("MsgSettingChanged") + " " + GREEN + ckey + RESET + "=" + AQUA + value);
+                                        cs.sendMessage(C("MsgSettingChanged") + " " + GREEN + ckey + RESET + "=" + AQUA + value);
 
-                                            return true;
-                                        }
+                                        return true;
                                     }
-
-                                    showCurrentSettings(cs, parameters);
-                                    return true;
                                 }
+
+                                showCurrentSettings(cs, parameters);
+                                return true;
                             }
                         }
-
-                        cs.sendMessage(C("WordUsage") + ": ");
-                        cs.sendMessage("/plotme " + C("CommandCreateWorld") + " " + C("CommandCreateWorld-Setting")
-                                + "<" + C("WordConfig") + ">" + " " + "<" + C("WordValue") + "> "
-                                + C("MsgCreateWorldParameters4"));
-                        cs.sendMessage("/plotme " + C("CommandCreateWorld") + " " + C("CommandCreateWorld-Cancel") + " "
-                                + C("MsgCreateWorldParameters5"));
                     }
+
+                    cs.sendMessage(C("WordUsage") + ": ");
+                    cs.sendMessage("/plotme " + C("CommandCreateWorld") + " " + C("CommandCreateWorld-Setting")
+                                           + "<" + C("WordConfig") + ">" + " " + "<" + C("WordValue") + "> "
+                                           + C("MsgCreateWorldParameters4"));
+                    cs.sendMessage("/plotme " + C("CommandCreateWorld") + " " + C("CommandCreateWorld-Cancel") + " "
+                                           + C("MsgCreateWorldParameters5"));
                 }
             } else {
                 //Usage
