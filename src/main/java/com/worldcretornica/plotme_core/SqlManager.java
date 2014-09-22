@@ -874,11 +874,10 @@ public class SqlManager {
 
     public void addFreed(int idX, int idZ, String world) {
         PreparedStatement ps = null;
-        Connection conn;
 
         //Freed
         try {
-            conn = getConnection();
+            Connection conn = getConnection();
             ps = conn.prepareStatement("INSERT INTO plotmeFreed (idX, idZ, world) VALUES (?,?,?)");
             ps.setInt(1, idX);
             ps.setInt(2, idZ);
@@ -911,12 +910,11 @@ public class SqlManager {
 
     public void addPlot(Plot plot, int idX, int idZ, int topX, int bottomX, int topZ, int bottomZ) {
         PreparedStatement ps = null;
-        Connection conn;
         StringBuilder strSql = new StringBuilder();
 
         // Plots
         try {
-            conn = getConnection();
+            Connection conn = getConnection();
 
             strSql.append("INSERT INTO plotmePlots (idX, idZ, owner, world, topX, bottomX, topZ, bottomZ, ");
             strSql.append("biome, expireddate, finished, customprice, forsale, finisheddate, protected,");
@@ -974,11 +972,10 @@ public class SqlManager {
             if (plot.getComments() != null && !plot.getComments().isEmpty()) {
                 int commentid = 1;
                 for (String[] comments : plot.getComments()) {
-                    String strUUID;
                     UUID uuid = null;
 
                     if (comments.length >= 3) {
-                        strUUID = comments[2];
+                        String strUUID = comments[2];
                         try {
                             uuid = UUID.fromString(strUUID);
                         } catch (Exception e) {
@@ -1015,11 +1012,10 @@ public class SqlManager {
 
     public void updatePlot(int idX, int idZ, String world, String field, Object value) {
         PreparedStatement ps = null;
-        Connection conn;
 
         //Plots
         try {
-            conn = getConnection();
+            Connection conn = getConnection();
             ps = conn.prepareStatement("UPDATE plotmePlots SET " + field + " = ? "
                                                + "WHERE idX = ? AND idZ = ? AND world = ?");
 
@@ -1059,11 +1055,10 @@ public class SqlManager {
 
     public void addPlotAllowed(String player, UUID playerid, int idX, int idZ, String world) {
         PreparedStatement ps = null;
-        Connection conn;
 
         //Allowed
         try {
-            conn = getConnection();
+            Connection conn = getConnection();
             ps = conn.prepareStatement("INSERT INTO plotmeAllowed (idX, idZ, player, world, playerid) "
                                                + "VALUES (?,?,?,?,?)");
 
@@ -2157,13 +2152,7 @@ public class SqlManager {
     public List<Plot> getPlayerPlots(UUID playerId, String playername) {
         List<Plot> ret = new ArrayList<>();
         PreparedStatement statementPlot = null;
-        PreparedStatement statementAllowed;
-        PreparedStatement statementDenied;
-        PreparedStatement statementComment;
         ResultSet setPlots = null;
-        ResultSet setAllowed;
-        ResultSet setDenied;
-        ResultSet setComments;
 
         try {
             Connection conn = getConnection();
@@ -2221,12 +2210,12 @@ public class SqlManager {
                     ownerId = UUIDFetcher.fromBytes(byOwner);
                 }
 
-                statementAllowed = conn.prepareStatement("SELECT * FROM plotmeAllowed WHERE LOWER(world) = ? AND idX = ? AND idZ = ?");
+                PreparedStatement statementAllowed = conn.prepareStatement("SELECT * FROM plotmeAllowed WHERE LOWER(world) = ? AND idX = ? AND idZ = ?");
                 statementAllowed.setString(1, world);
                 statementAllowed.setInt(2, idX);
                 statementAllowed.setInt(3, idZ);
 
-                setAllowed = statementAllowed.executeQuery();
+                ResultSet setAllowed = statementAllowed.executeQuery();
 
                 while (setAllowed.next()) {
                     byte[] byPlayerId = setAllowed.getBytes("playerid");
@@ -2237,15 +2226,14 @@ public class SqlManager {
                     }
                 }
 
-                if (setAllowed != null)
-                    setAllowed.close();
+                setAllowed.close();
 
-                statementDenied = conn.prepareStatement("SELECT * FROM plotmeDenied WHERE LOWER(world) = ? AND idX = ? AND idZ = ?");
+                PreparedStatement statementDenied = conn.prepareStatement("SELECT * FROM plotmeDenied WHERE LOWER(world) = ? AND idX = ? AND idZ = ?");
                 statementDenied.setString(1, world);
                 statementDenied.setInt(2, idX);
                 statementDenied.setInt(3, idZ);
 
-                setDenied = statementDenied.executeQuery();
+                ResultSet setDenied = statementDenied.executeQuery();
 
                 while (setDenied.next()) {
                     byte[] byPlayerId = setDenied.getBytes("playerid");
@@ -2256,14 +2244,13 @@ public class SqlManager {
                     }
                 }
 
-                if (setDenied != null)
-                    setDenied.close();
+                setDenied.close();
 
-                statementComment = conn.prepareStatement("SELECT * FROM plotmeComments WHERE LOWER(world) = ? AND idX = ? AND idZ = ?");
+                PreparedStatement statementComment = conn.prepareStatement("SELECT * FROM plotmeComments WHERE LOWER(world) = ? AND idX = ? AND idZ = ?");
                 statementComment.setString(1, world);
                 statementComment.setInt(2, idX);
                 statementComment.setInt(3, idZ);
-                setComments = statementComment.executeQuery();
+                ResultSet setComments = statementComment.executeQuery();
 
                 while (setComments.next()) {
                     String[] comment = new String[3];
@@ -2754,11 +2741,9 @@ public class SqlManager {
 
                             UUIDFetcher fetcher = new UUIDFetcher(names);
 
-                            Map<String, UUID> response;
-
                             try {
                                 //plugin.getLogger().info("Fetching " + names.size() + " UUIDs from Mojang servers...");
-                                response = fetcher.call();
+                                Map<String, UUID> response = fetcher.call();
                                 //plugin.getLogger().info("Received " + response.size() + " UUIDs. Starting database update...");
 
                                 if (response.size() > 0) {
