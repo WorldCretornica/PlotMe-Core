@@ -335,7 +335,7 @@ public class Plot implements Comparable<Plot> {
                 Player p = Bukkit.getPlayer(uuid);
                 
                 if(p != null) {
-                    if(plugin.getPlotMeCoreManager().isPlotWorld(p.getWorld())) {
+                    if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
                         if(!plugin.getPlotMeCoreManager().isPlayerIgnoringWELimit(p.getUniqueId()))
                             plugin.getPlotWorldEdit().setMask(p);
                         else
@@ -362,7 +362,7 @@ public class Plot implements Comparable<Plot> {
                 Player p = Bukkit.getPlayer(uuid);
                 
                 if(p != null) {
-                    if(plugin.getPlotMeCoreManager().isPlotWorld(p.getWorld())) {
+                    if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
                         if(!plugin.getPlotMeCoreManager().isPlayerIgnoringWELimit(p.getUniqueId()))
                             plugin.getPlotWorldEdit().setMask(p);
                         else

@@ -380,11 +380,7 @@ public class PlotMeCoreManager {
     }
 
     public boolean isPlotWorld(World w) {
-        if (w == null || getGenMan(w) == null) {
-            return false;
-        } else {
-            return plotmaps.containsKey(w.getName().toLowerCase());
-        }
+        return getGenMan(w) != null && plotmaps.containsKey(w.getName().toLowerCase());
     }
 
     public boolean isPlotWorld(String name) {

@@ -74,69 +74,71 @@ public class CmdHome extends PlotCommand {
                     }
                 }
 
-                if (!plugin.getPlotMeCoreManager().isPlotWorld(w)) {
-                    p.sendMessage(RED + worldname + C("MsgWorldNotPlot"));
-                } else {
-                    int i = nb - 1;
+                if (w != null) {
+                    if (!plugin.getPlotMeCoreManager().isPlotWorld(w)) {
+                        p.sendMessage(RED + worldname + C("MsgWorldNotPlot"));
+                    } else {
+                        int i = nb - 1;
 
-                    for (Plot plot : plugin.getSqlManager().getOwnedPlots(w.getName(), uuid, playername)) {
-                        if (plot.getOwnerId() != null && plot.getOwnerId().equals(uuid) || uuid == null && plot.getOwner().equalsIgnoreCase(playername)) {
-                            if (i == 0) {
-                                PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(w);
+                        for (Plot plot : plugin.getSqlManager().getOwnedPlots(w.getName(), uuid, playername)) {
+                            if (plot.getOwnerId() != null && plot.getOwnerId().equals(uuid) || uuid == null && plot.getOwner().equalsIgnoreCase(playername)) {
+                                if (i == 0) {
+                                    PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(w);
 
-                                double price = 0;
+                                    double price = 0;
 
-                                PlotTeleportHomeEvent event;
+                                    PlotTeleportHomeEvent event;
 
-                                if (plugin.getPlotMeCoreManager().isEconomyEnabled(w)) {
-                                    price = pmi.getPlotHomePrice();
-                                    double balance = plugin.getEconomy().getBalance(p);
+                                    if (plugin.getPlotMeCoreManager().isEconomyEnabled(w)) {
+                                        price = pmi.getPlotHomePrice();
+                                        double balance = plugin.getEconomy().getBalance(p);
 
-                                    if (balance >= price) {
-                                        event = PlotMeEventFactory.callPlotTeleportHomeEvent(plugin, w, plot, p);
+                                        if (balance >= price) {
+                                            event = PlotMeEventFactory.callPlotTeleportHomeEvent(plugin, w, plot, p);
 
-                                        if (event.isCancelled()) {
-                                            return true;
-                                        } else {
-                                            EconomyResponse er = plugin.getEconomy().withdrawPlayer(p, price);
-
-                                            if (!er.transactionSuccess()) {
-                                                p.sendMessage(RED + er.errorMessage);
+                                            if (event.isCancelled()) {
                                                 return true;
+                                            } else {
+                                                EconomyResponse er = plugin.getEconomy().withdrawPlayer(p, price);
+
+                                                if (!er.transactionSuccess()) {
+                                                    p.sendMessage(RED + er.errorMessage);
+                                                    return true;
+                                                }
                                             }
+                                        } else {
+                                            p.sendMessage(RED + C("MsgNotEnoughTp") + " " + C("WordMissing") + " " + RESET + Util().moneyFormat(price - balance, false));
+                                            return true;
                                         }
                                     } else {
-                                        p.sendMessage(RED + C("MsgNotEnoughTp") + " " + C("WordMissing") + " " + RESET + Util().moneyFormat(price - balance, false));
-                                        return true;
+                                        event = PlotMeEventFactory.callPlotTeleportHomeEvent(plugin, w, plot, p);
                                     }
+
+                                    if (!event.isCancelled()) {
+                                        p.teleport(event.getHomeLocation());
+
+                                        if (price != 0) {
+                                            p.sendMessage(Util().moneyFormat(-price));
+                                        }
+                                    }
+                                    return true;
                                 } else {
-                                    event = PlotMeEventFactory.callPlotTeleportHomeEvent(plugin, w, plot, p);
+                                    i--;
                                 }
-
-                                if (!event.isCancelled()) {
-                                    p.teleport(event.getHomeLocation());
-
-                                    if (price != 0) {
-                                        p.sendMessage(Util().moneyFormat(-price));
-                                    }
-                                }
-                                return true;
-                            } else {
-                                i--;
                             }
                         }
-                    }
 
-                    if (nb > 0) {
-                        if (!playername.equalsIgnoreCase(p.getName())) {
-                            p.sendMessage(RED + playername + " " + C("MsgDoesNotHavePlot") + " #" + nb);
+                        if (nb > 0) {
+                            if (!playername.equalsIgnoreCase(p.getName())) {
+                                p.sendMessage(RED + playername + " " + C("MsgDoesNotHavePlot") + " #" + nb);
+                            } else {
+                                p.sendMessage(RED + C("MsgPlotNotFound") + " #" + nb);
+                            }
+                        } else if (!playername.equalsIgnoreCase(p.getName())) {
+                            p.sendMessage(RED + playername + " " + C("MsgDoesNotHavePlot"));
                         } else {
-                            p.sendMessage(RED + C("MsgPlotNotFound") + " #" + nb);
+                            p.sendMessage(RED + C("MsgYouHaveNoPlot"));
                         }
-                    } else if (!playername.equalsIgnoreCase(p.getName())) {
-                        p.sendMessage(RED + playername + " " + C("MsgDoesNotHavePlot"));
-                    } else {
-                        p.sendMessage(RED + C("MsgYouHaveNoPlot"));
                     }
                 }
             }
