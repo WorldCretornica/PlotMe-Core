@@ -36,8 +36,6 @@ public class CmdTP extends PlotCommand {
 				            }
 			            }
 		            }
-	            } else if (!plugin.getPlotMeCoreManager().isPlotWorld(p)) {
-		            w = plugin.getPlotMeCoreManager().getFirstWorld();
 	            } else {
 		            w = p.getWorld();
 	            }
