@@ -136,7 +136,7 @@ public class CmdCreateWorld extends PlotCommand {
                     return false;
                 } else {
                     ChunkGenerator cg = bukkitplugin.getDefaultWorldGenerator(parameters.get("worldname"), "");
-                    if (cg != null && cg instanceof IPlotMe_ChunkGenerator) {
+                    if (cg instanceof IPlotMe_ChunkGenerator) {
                         //Get the generator configurations
                         genparameters = ((IPlotMe_ChunkGenerator) cg).getManager().getDefaultGenerationConfig();
 

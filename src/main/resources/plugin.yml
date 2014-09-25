@@ -16,6 +16,7 @@ permissions:
     plotme.use:
       description: Gives default user commands
       children:
+        plotme.use.add.special: true
         plotme.use.nameplot: true
         plotme.use.claim: true
         plotme.use.auto: true
@@ -65,6 +66,8 @@ permissions:
         plotme.admin.bypassdeny: true
         plotme.admin.buildanywhere: true
         plotme.admin.createworld: true
+    plotme.use.add.special:
+      description: Gives the ability to add everyone or groups in the add command.
     plotme.use.buy:
       description: Gives the buy command
     plotme.use.sell:

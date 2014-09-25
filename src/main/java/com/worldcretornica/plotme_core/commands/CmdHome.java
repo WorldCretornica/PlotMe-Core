@@ -1,18 +1,16 @@
 package com.worldcretornica.plotme_core.commands;
 
-import java.util.UUID;
-
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.event.PlotMeEventFactory;
 import com.worldcretornica.plotme_core.event.PlotTeleportHomeEvent;
-
 import net.milkbowl.vault.economy.EconomyResponse;
-
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+
+import java.util.UUID;
 
 public class CmdHome extends PlotCommand {
 
@@ -43,7 +41,7 @@ public class CmdHome extends PlotCommand {
 
                 if (args[0].contains(":")) {
                     try {
-                        if (args[0].split(":").length == 1 || args[0].split(":")[1].equals("")) {
+                        if (args[0].split(":").length == 1 || args[0].split(":")[1].isEmpty()) {
                             p.sendMessage(C("WordUsage") + ": " + RED + "/plotme " + C("CommandHome") + ":# " + RESET + C("WordExample") + ": " + RED + "/plotme " + C("CommandHome") + ":1");
                             return true;
                         } else {
@@ -82,7 +80,7 @@ public class CmdHome extends PlotCommand {
                     int i = nb - 1;
 
                     for (Plot plot : plugin.getSqlManager().getOwnedPlots(w.getName(), uuid, playername)) {
-                        if (uuid == null && plot.getOwner().equalsIgnoreCase(playername) || uuid != null && plot.getOwnerId() != null && plot.getOwnerId().equals(uuid)) {
+                        if (plot.getOwnerId() != null && plot.getOwnerId().equals(uuid) || uuid == null && plot.getOwner().equalsIgnoreCase(playername)) {
                             if (i == 0) {
                                 PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(w);
 

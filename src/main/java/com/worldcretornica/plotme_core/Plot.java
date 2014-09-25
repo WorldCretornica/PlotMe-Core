@@ -446,10 +446,6 @@ public class Plot implements Comparable<Plot> {
             p = Bukkit.getServer().getPlayer(uuid);
         }
 
-        if (uuid != null && ownerId != null && ownerId.equals(uuid) || uuid == null && owner.equalsIgnoreCase(name)) {
-            return true;
-        }
-
         if (IncludeGroup && owner.toLowerCase().startsWith("group:") && p != null) {
             if (p.hasPermission("plotme.group." + owner.replace("Group:", ""))) {
                 return true;
@@ -463,7 +459,7 @@ public class Plot implements Comparable<Plot> {
             }
             
             UUID u = list.get(str);
-            if (u != null && uuid != null && u.equals(uuid) || uuid == null && str.equalsIgnoreCase(name)) {
+            if (u != null && u.equals(uuid) || uuid == null && str.equalsIgnoreCase(name)) {
                 return true;
             }
 
@@ -509,7 +505,7 @@ public class Plot implements Comparable<Plot> {
             }
             
             UUID u = list.get(str);
-            if (u != null && uuid != null && u.equals(uuid) || uuid == null && str.equalsIgnoreCase(name)) {
+            if (str.equalsIgnoreCase(name) || uuid != null && u != null && u.equals(uuid)) {
                 return true;
             }
 
@@ -539,10 +535,10 @@ public class Plot implements Comparable<Plot> {
 
     @Override
     public int compareTo(Plot plot) {
-        if (this.getExpiredDate().compareTo(plot.getExpiredDate()) == 0) {
-            return this.owner.compareTo(plot.owner);
+        if (getExpiredDate().compareTo(plot.getExpiredDate()) == 0) {
+            return owner.compareTo(plot.owner);
         } else {
-            return this.getExpiredDate().compareTo(plot.getExpiredDate());
+            return getExpiredDate().compareTo(plot.getExpiredDate());
         }
     }
 

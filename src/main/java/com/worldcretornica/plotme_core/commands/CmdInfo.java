@@ -17,7 +17,7 @@ public class CmdInfo extends PlotCommand {
             } else {
                 String id = plugin.getPlotMeCoreManager().getPlotId(p.getLocation());
 
-                if (id.equals("")) {
+                if (id.isEmpty()) {
                     p.sendMessage(RED + C("MsgNoPlotFound"));
                 } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, p)) {
                     Plot plot = plugin.getPlotMeCoreManager().getPlotById(p, id);
@@ -39,7 +39,7 @@ public class CmdInfo extends PlotCommand {
                     }
 
                     if (plugin.getPlotMeCoreManager().isEconomyEnabled(p)) {
-                        if (plot.getCurrentBidder().equals("")) {
+                        if (plot.getCurrentBidder().isEmpty()) {
                             p.sendMessage(GREEN + C("InfoAuctionned") + ": " + AQUA + ((plot.isAuctionned()) ? C("WordYes")
                                                                                                                        + GREEN + " " + C("InfoMinimumBid") + ": " + AQUA + Util().round(plot.getCurrentBid()) : C("WordNo"))
                                                   + GREEN + " " + C("InfoForSale") + ": " + AQUA + ((plot.isForSale()) ? AQUA + Util().round(plot.getCustomPrice()) : C("WordNo")));

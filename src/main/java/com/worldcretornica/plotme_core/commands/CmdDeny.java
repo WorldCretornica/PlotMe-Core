@@ -81,6 +81,7 @@ public class CmdDeny extends PlotCommand {
                                 }
 
                                 if (!event.isCancelled()) {
+
                                     plot.addDenied(denied);
                                     plot.removeAllowed(denied);
 
