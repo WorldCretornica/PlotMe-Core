@@ -27,7 +27,7 @@ public class CmdSell extends PlotCommand {
                     Location l = p.getLocation();
                     String id = plugin.getPlotMeCoreManager().getPlotId(l);
 
-                    if (id.isEmpty()) {
+                    if (id.equals("")) {
                         p.sendMessage(RED + C("MsgNoPlotFound"));
                     } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, p)) {
                         Plot plot = plugin.getPlotMeCoreManager().getPlotById(p, id);
@@ -88,7 +88,7 @@ public class CmdSell extends PlotCommand {
                                     } else {
                                         String currentbidder = plot.getCurrentBidder();
 
-                                        if (!currentbidder.isEmpty()) {
+                                        if (!currentbidder.equals("")) {
                                             double bid = plot.getCurrentBid();
                                             OfflinePlayer playercurrentbidder = Bukkit.getOfflinePlayer(plot.getCurrentBidderId());
 

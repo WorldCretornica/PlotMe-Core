@@ -2,13 +2,14 @@ package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
+
+import java.util.Calendar;
+import java.util.UUID;
+
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-
-import java.util.Calendar;
-import java.util.UUID;
 
 public class CmdPlotList extends PlotCommand {
 
@@ -43,7 +44,7 @@ public class CmdPlotList extends PlotCommand {
 
                 // Get plots of that player
                 for (Plot plot : plugin.getSqlManager().getPlayerPlots(uuid, name)) {
-                    if (!plot.getWorld().isEmpty()) {
+                    if (!plot.getWorld().equals("")) {
                         World world = Bukkit.getWorld(plot.getWorld());
                         if (world != null) {
                             plugin.getPlotMeCoreManager().getMap(world).addPlot(plot.getId(), plot);
@@ -63,15 +64,15 @@ public class CmdPlotList extends PlotCommand {
                         java.util.Date tempdate = plot.getExpiredDate();
 
                         if (tempdate.compareTo(Calendar.getInstance().getTime()) < 0) {
-                            addition.append(RED + " @" + plot.getExpiredDate() + RESET);
+                            addition.append(RED + " @" + plot.getExpiredDate().toString() + RESET);
                         } else {
-                            addition.append(" @" + plot.getExpiredDate());
+                            addition.append(" @" + plot.getExpiredDate().toString());
                         }
                     }
 
                     // Is it auctionned?
                     if (plot.isAuctionned()) {
-                        addition.append(" " + C("WordAuction") + ": " + GREEN + Util().round(plot.getCurrentBid()) + RESET + ((!plot.getCurrentBidder().isEmpty()) ? " " + plot.getCurrentBidder() : ""));
+                        addition.append(" " + C("WordAuction") + ": " + GREEN + Util().round(plot.getCurrentBid()) + RESET + ((!plot.getCurrentBidder().equals("")) ? " " + plot.getCurrentBidder() : ""));
                     }
 
                     // Is it for sale?

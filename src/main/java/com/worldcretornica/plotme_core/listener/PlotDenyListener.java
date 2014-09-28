@@ -28,7 +28,7 @@ public class PlotDenyListener implements Listener {
 
             String idTo = plugin.getPlotMeCoreManager().getPlotId(to);
 
-            if (!idTo.isEmpty()) {
+            if (!idTo.equals("")) {
                 Plot plot = plugin.getPlotMeCoreManager().getPlotById(p, idTo);
 
                 if (plot != null && plot.isDenied(p.getUniqueId())) {
@@ -47,7 +47,7 @@ public class PlotDenyListener implements Listener {
 
             String idTo = plugin.getPlotMeCoreManager().getPlotId(to);
 
-            if (!idTo.isEmpty()) {
+            if (!idTo.equals("")) {
                 Plot plot = plugin.getPlotMeCoreManager().getPlotById(p, idTo);
 
                 if (plot != null && plot.isDenied(p.getUniqueId())) {
@@ -64,7 +64,7 @@ public class PlotDenyListener implements Listener {
         if (plugin.getPlotMeCoreManager().isPlotWorld(p) && !plugin.cPerms(p, "plotme.admin.bypassdeny")) {
             String id = plugin.getPlotMeCoreManager().getPlotId(p.getLocation());
 
-            if (!id.isEmpty()) {
+            if (!id.equals("")) {
                 Plot plot = plugin.getPlotMeCoreManager().getPlotById(p, id);
 
                 if (plot != null && plot.isDenied(p.getUniqueId())) {

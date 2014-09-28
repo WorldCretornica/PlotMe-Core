@@ -43,7 +43,7 @@ public class CmdDoneList extends PlotCommand {
 
                 List<Plot> finishedplots = plugin.getSqlManager().getDonePlots(p.getWorld().getName(), page, pagesize);
 
-                if (finishedplots.isEmpty()) {
+                if (finishedplots.size() == 0) {
                     p.sendMessage(C("MsgNoPlotsFinished"));
                 } else {
                     p.sendMessage(C("MsgFinishedPlotsPage") + " " + page + "/" + maxpage);

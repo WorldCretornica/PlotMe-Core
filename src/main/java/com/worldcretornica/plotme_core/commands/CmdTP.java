@@ -36,11 +36,13 @@ public class CmdTP extends PlotCommand {
 				            }
 			            }
 		            }
+	            } else if (!plugin.getPlotMeCoreManager().isPlotWorld(p)) {
+		            w = plugin.getPlotMeCoreManager().getFirstWorld();
 	            } else {
 		            w = p.getWorld();
 	            }
 
-	            if (!plugin.getPlotMeCoreManager().isPlotWorld(w)) {
+	            if (w == null || !plugin.getPlotMeCoreManager().isPlotWorld(w)) {
 		            p.sendMessage(RED + C("MsgNoPlotworldFound"));
 	            } else if (!plugin.getPlotMeCoreManager().isValidId(w, id)) {
 		            if (plugin.getConfig().getBoolean("allowWorldTeleport")) {

@@ -20,7 +20,7 @@ public class CmdBid extends PlotCommand {
             if (plugin.cPerms(p, "PlotMe.use.bid")) {
                 String id = plugin.getPlotMeCoreManager().getPlotId(p.getLocation());
 
-                if (id.isEmpty()) {
+                if (id.equals("")) {
                     p.sendMessage(RED + C("MsgNoPlotFound"));
                 } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, p)) {
                     Plot plot = plugin.getPlotMeCoreManager().getPlotById(p, id);

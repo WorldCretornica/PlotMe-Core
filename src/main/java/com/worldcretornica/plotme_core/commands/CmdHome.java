@@ -1,16 +1,18 @@
 package com.worldcretornica.plotme_core.commands;
 
+import java.util.UUID;
+
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.event.PlotMeEventFactory;
 import com.worldcretornica.plotme_core.event.PlotTeleportHomeEvent;
+
 import net.milkbowl.vault.economy.EconomyResponse;
+
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-
-import java.util.UUID;
 
 public class CmdHome extends PlotCommand {
 
@@ -41,7 +43,7 @@ public class CmdHome extends PlotCommand {
 
                 if (args[0].contains(":")) {
                     try {
-                        if (args[0].split(":").length == 1 || args[0].split(":")[1].isEmpty()) {
+                        if (args[0].split(":").length == 1 || args[0].split(":")[1].equals("")) {
                             p.sendMessage(C("WordUsage") + ": " + RED + "/plotme " + C("CommandHome") + ":# " + RESET + C("WordExample") + ": " + RED + "/plotme " + C("CommandHome") + ":1");
                             return true;
                         } else {
@@ -74,71 +76,69 @@ public class CmdHome extends PlotCommand {
                     }
                 }
 
-                if (w != null) {
-                    if (!plugin.getPlotMeCoreManager().isPlotWorld(w)) {
-                        p.sendMessage(RED + worldname + C("MsgWorldNotPlot"));
-                    } else {
-                        int i = nb - 1;
+                if (!plugin.getPlotMeCoreManager().isPlotWorld(w)) {
+                    p.sendMessage(RED + worldname + C("MsgWorldNotPlot"));
+                } else {
+                    int i = nb - 1;
 
-                        for (Plot plot : plugin.getSqlManager().getOwnedPlots(w.getName(), uuid, playername)) {
-                            if (plot.getOwnerId() != null && plot.getOwnerId().equals(uuid) || uuid == null && plot.getOwner().equalsIgnoreCase(playername)) {
-                                if (i == 0) {
-                                    PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(w);
+                    for (Plot plot : plugin.getSqlManager().getOwnedPlots(w.getName(), uuid, playername)) {
+                        if (uuid == null && plot.getOwner().equalsIgnoreCase(playername) || uuid != null && plot.getOwnerId() != null && plot.getOwnerId().equals(uuid)) {
+                            if (i == 0) {
+                                PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(w);
 
-                                    double price = 0;
+                                double price = 0;
 
-                                    PlotTeleportHomeEvent event;
+                                PlotTeleportHomeEvent event;
 
-                                    if (plugin.getPlotMeCoreManager().isEconomyEnabled(w)) {
-                                        price = pmi.getPlotHomePrice();
-                                        double balance = plugin.getEconomy().getBalance(p);
+                                if (plugin.getPlotMeCoreManager().isEconomyEnabled(w)) {
+                                    price = pmi.getPlotHomePrice();
+                                    double balance = plugin.getEconomy().getBalance(p);
 
-                                        if (balance >= price) {
-                                            event = PlotMeEventFactory.callPlotTeleportHomeEvent(plugin, w, plot, p);
+                                    if (balance >= price) {
+                                        event = PlotMeEventFactory.callPlotTeleportHomeEvent(plugin, w, plot, p);
 
-                                            if (event.isCancelled()) {
-                                                return true;
-                                            } else {
-                                                EconomyResponse er = plugin.getEconomy().withdrawPlayer(p, price);
-
-                                                if (!er.transactionSuccess()) {
-                                                    p.sendMessage(RED + er.errorMessage);
-                                                    return true;
-                                                }
-                                            }
-                                        } else {
-                                            p.sendMessage(RED + C("MsgNotEnoughTp") + " " + C("WordMissing") + " " + RESET + Util().moneyFormat(price - balance, false));
+                                        if (event.isCancelled()) {
                                             return true;
+                                        } else {
+                                            EconomyResponse er = plugin.getEconomy().withdrawPlayer(p, price);
+
+                                            if (!er.transactionSuccess()) {
+                                                p.sendMessage(RED + er.errorMessage);
+                                                return true;
+                                            }
                                         }
                                     } else {
-                                        event = PlotMeEventFactory.callPlotTeleportHomeEvent(plugin, w, plot, p);
+                                        p.sendMessage(RED + C("MsgNotEnoughTp") + " " + C("WordMissing") + " " + RESET + Util().moneyFormat(price - balance, false));
+                                        return true;
                                     }
-
-                                    if (!event.isCancelled()) {
-                                        p.teleport(event.getHomeLocation());
-
-                                        if (price != 0) {
-                                            p.sendMessage(Util().moneyFormat(-price));
-                                        }
-                                    }
-                                    return true;
                                 } else {
-                                    i--;
+                                    event = PlotMeEventFactory.callPlotTeleportHomeEvent(plugin, w, plot, p);
                                 }
-                            }
-                        }
 
-                        if (nb > 0) {
-                            if (!playername.equalsIgnoreCase(p.getName())) {
-                                p.sendMessage(RED + playername + " " + C("MsgDoesNotHavePlot") + " #" + nb);
+                                if (!event.isCancelled()) {
+                                    p.teleport(event.getHomeLocation());
+
+                                    if (price != 0) {
+                                        p.sendMessage(Util().moneyFormat(-price));
+                                    }
+                                }
+                                return true;
                             } else {
-                                p.sendMessage(RED + C("MsgPlotNotFound") + " #" + nb);
+                                i--;
                             }
-                        } else if (!playername.equalsIgnoreCase(p.getName())) {
-                            p.sendMessage(RED + playername + " " + C("MsgDoesNotHavePlot"));
-                        } else {
-                            p.sendMessage(RED + C("MsgYouHaveNoPlot"));
                         }
+                    }
+
+                    if (nb > 0) {
+                        if (!playername.equalsIgnoreCase(p.getName())) {
+                            p.sendMessage(RED + playername + " " + C("MsgDoesNotHavePlot") + " #" + nb);
+                        } else {
+                            p.sendMessage(RED + C("MsgPlotNotFound") + " #" + nb);
+                        }
+                    } else if (!playername.equalsIgnoreCase(p.getName())) {
+                        p.sendMessage(RED + playername + " " + C("MsgDoesNotHavePlot"));
+                    } else {
+                        p.sendMessage(RED + C("MsgYouHaveNoPlot"));
                     }
                 }
             }

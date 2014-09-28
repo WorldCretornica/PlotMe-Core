@@ -18,7 +18,7 @@ public class CmdID extends PlotCommand {
             } else {
                 String plotid = plugin.getPlotMeCoreManager().getPlotId(p.getLocation());
 
-                if (plotid.isEmpty()) {
+                if (plotid.equals("")) {
                     p.sendMessage(RED + C("MsgNoPlotFound"));
                 } else {
                     p.sendMessage(AQUA + C("WordPlot") + " " + C("WordId") + ": " + RESET + plotid);

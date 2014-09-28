@@ -70,7 +70,7 @@ public class PlotMeCoreManager {
             return false;
         } else {
             ChunkGenerator cg = bukkitplugin.getDefaultWorldGenerator(worldname, "");
-            if (cg instanceof IPlotMe_ChunkGenerator) {
+            if (cg != null && cg instanceof IPlotMe_ChunkGenerator) {
                 //Create the generator configurations
                 if (!((IPlotMe_ChunkGenerator) cg).getManager().createConfig(worldname, args, cs)) {
                     cs.sendMessage("[" + plugin.getName() + "] " + Util().C("ErrCannotCreateGen1") + " '" + generator + "' " + Util().C("ErrCannotCreateGen2"));
@@ -258,6 +258,7 @@ public class PlotMeCoreManager {
             return null;
         } else {
             String worldname = p.getWorld().getName().toLowerCase();
+
             if (plotmaps.containsKey(worldname)) {
                 return plotmaps.get(worldname);
             } else {
@@ -318,7 +319,7 @@ public class PlotMeCoreManager {
         PlotMapInfo pmi = getMap(l);
         String id = getPlotId(l);
 
-        if (pmi == null || id.isEmpty()) {
+        if (pmi == null || id.equals("")) {
             return null;
         }
 
@@ -372,7 +373,7 @@ public class PlotMeCoreManager {
     public World getFirstWorld(String player) {
         String world = plugin.getSqlManager().getFirstWorld(player);
 
-        if (!world.isEmpty()) {
+        if (!world.equals("")) {
             return Bukkit.getWorld(world);
         } else {
             return null;
@@ -380,7 +381,11 @@ public class PlotMeCoreManager {
     }
 
     public boolean isPlotWorld(World w) {
-        return getGenMan(w) != null && plotmaps.containsKey(w.getName().toLowerCase());
+        if (w == null || getGenMan(w) == null) {
+            return false;
+        } else {
+            return plotmaps.containsKey(w.getName().toLowerCase());
+        }
     }
 
     public boolean isPlotWorld(String name) {
@@ -637,23 +642,22 @@ public class PlotMeCoreManager {
     public void setOwnerSign(World w, Plot plot) {
         String line1;
         String line2 = "";
-        String line4 = "";
-        if (plot.getPlotName().length() > 16){
-            line1 = plot.getPlotName().substring(0,16);
-            line2 = plot.getPlotName().substring(16);
-        } else{
-            line1 = plot.getPlotName();
-        }
         String id = plot.getId();
+
         if ((Util().C("SignId") + id).length() > 16) {
-            //ERROR ID1
-            plugin.getLogger().info("Error has occurred. Error Code: ID1. Please report this error to http://dev.bukkit.org/bukkit-plugins/plotme/");
+            line1 = (Util().C("SignId") + id).substring(0, 16);
+            if ((Util().C("SignId") + id).length() > 32) {
+                line2 = (Util().C("SignId") + id).substring(16, 32);
+            } else {
+                line2 = (Util().C("SignId") + id).substring(16);
+            }
         } else {
-            line4 = Util().C("SignId") + id;
+            line1 = Util().C("SignId") + id;
         }
         String line3 = plot.getOwner();
+        String line4 = "";
 
-        getGenMan(w).setOwnerDisplay(w, id, line1, line2, line3, line4);
+        getGenMan(w).setOwnerDisplay(w, plot.getId(), line1, line2, line3, line4);
     }
 
     public void setSellSign(World w, Plot plot) {
@@ -686,7 +690,7 @@ public class PlotMeCoreManager {
 
             if (plot.isAuctionned()) {
                 line1 = Util().C("SignOnAuction");
-                if (plot.getCurrentBidder().isEmpty()) {
+                if (plot.getCurrentBidder().equals("")) {
                     line2 = Util().C("SignMinimumBid");
                 } else {
                     line2 = Util().C("SignCurrentBid");
@@ -699,7 +703,7 @@ public class PlotMeCoreManager {
                 line4 = "/plotme " + Util().C("CommandBid") + " <x>";
             }
 
-            getGenMan(w).setAuctionDisplay(w, id, line1, line2, line3, line4);
+            getGenMan(w).setAuctionDisplay(w, plot.getId(), line1, line2, line3, line4);
         }
     }
 
@@ -830,25 +834,31 @@ public class PlotMeCoreManager {
     }
 
     public String getPlotId(Location l) {
+        if (getGenMan(l) == null) {
+            return "";
+        }
+
         IPlotMe_GeneratorManager gen = getGenMan(l);
+
         if (gen == null) {
             return "";
         } else {
             return gen.getPlotId(l);
         }
-
-
     }
 
     public String getPlotId(Player p) {
+        if (getGenMan(p.getLocation()) == null) {
+            return "";
+        }
+
         IPlotMe_GeneratorManager gen = getGenMan(p.getLocation());
+
         if (gen == null) {
             return "";
         } else {
             return gen.getPlotId(p.getLocation());
         }
-
-
     }
 
     public IPlotMe_GeneratorManager getGenMan(World w) {
@@ -950,15 +960,15 @@ public class PlotMeCoreManager {
     }
 
     public boolean addPlayerIgnoringWELimit(UUID uuid) {
-        return playersignoringwelimit.add(uuid);
+        return this.playersignoringwelimit.add(uuid);
     }
 
     public boolean removePlayerIgnoringWELimit(UUID uuid) {
-        return playersignoringwelimit.remove(uuid);
+        return this.playersignoringwelimit.remove(uuid);
     }
 
     public boolean isPlayerIgnoringWELimit(UUID uuid) {
-        return playersignoringwelimit.contains(uuid);
+        return this.playersignoringwelimit.contains(uuid);
     }
 
     public Map<String, PlotMapInfo> getPlotMaps() {
@@ -966,11 +976,11 @@ public class PlotMeCoreManager {
     }
 
     public void addPlotMap(String world, PlotMapInfo map) {
-        plotmaps.put(world, map);
+        this.plotmaps.put(world, map);
     }
 
     public void removePlotMap(String world) {
-        plotmaps.remove(world);
+        this.plotmaps.remove(world);
     }
 
     private Util Util() {

@@ -5,12 +5,9 @@ import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.event.PlotAddAllowedEvent;
 import com.worldcretornica.plotme_core.event.PlotMeEventFactory;
-import com.worldcretornica.plotme_core.utils.UUIDFetcher;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-
-import java.util.UUID;
 
 public class CmdAdd extends PlotCommand {
 
@@ -24,10 +21,10 @@ public class CmdAdd extends PlotCommand {
                 p.sendMessage(RED + C("MsgNotPlotWorld"));
             } else {
                 String id = plugin.getPlotMeCoreManager().getPlotId(p.getLocation());
-                if (id.isEmpty()) {
+                if (id.equals("")) {
                     p.sendMessage(RED + C("MsgNoPlotFound"));
                 } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, p)) {
-                    if (args.length < 2 || args[1].isEmpty()) {
+                    if (args.length < 2 || args[1].equals("")) {
                         p.sendMessage(C("WordUsage") + " " + RED + "/plotme " + C("CommandAdd") + " <" + C("WordPlayer") + ">");
                     } else {
 
@@ -73,14 +70,8 @@ public class CmdAdd extends PlotCommand {
                                     event = PlotMeEventFactory.callPlotAddAllowedEvent(plugin, w, plot, p, allowed);
                                 }
 
-                                UUID allowedUUID = null;
                                 if (!event.isCancelled()) {
-                                    try {
-                                        allowedUUID = UUIDFetcher.getUUIDOf(allowed);
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    }
-                                    plot.addAllowed(allowedUUID);
+                                    plot.addAllowed(allowed);
                                     plot.removeDenied(allowed);
 
                                     p.sendMessage(C("WordPlayer") + " " + RED + allowed + RESET + " " + C("MsgNowAllowed") + " " + Util().moneyFormat(-price));

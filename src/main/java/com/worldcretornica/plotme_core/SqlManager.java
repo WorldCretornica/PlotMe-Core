@@ -220,7 +220,7 @@ public class SqlManager {
                 set = statement.executeQuery("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '" + schema + "' AND "
                                                      + "TABLE_NAME='plotmePlots' AND column_name='plotname'");
                 if (!set.next()) {
-                    statement.execute("ALTER TABLE plotmePlots ADD plotname varchar(16) NULL;");
+                    statement.execute("ALTER TABLE plotmePlots ADD plotname varchar(32) NULL;");
                     conn.commit();
                 }
                 set.close();
@@ -507,7 +507,7 @@ public class SqlManager {
                 }
 
                 if (!found) {
-                    statement.execute("ALTER TABLE plotmePlots ADD plotname varchar(16) NULL;");
+                    statement.execute("ALTER TABLE plotmePlots ADD plotname varchar(32) NULL;");
                     conn.commit();
                 }
                 set.close();
@@ -626,7 +626,7 @@ public class SqlManager {
                                             + "`currentbidder` varchar(32) NULL,"
                                             + "`currentbidderId` blob(16),"
                                             + "`ownerId` blob(16),"
-                                            + "`plotname` varchar(16) NULL,"
+                                            + "`plotname` varchar(32) NULL,"
                                             + "PRIMARY KEY (idX, idZ, world) "
                                             + ");";
                 st.executeUpdate(PLOT_TABLE);
@@ -986,11 +986,11 @@ public class SqlManager {
                 }
             }
 
-            if (plot.getOwner() != null && !plot.getOwner().isEmpty() && plot.getOwnerId() == null) {
+            if (plot.getOwner() != null && !plot.getOwner().equals("") && plot.getOwnerId() == null) {
                 fetchOwnerUUIDAsync(idX, idZ, plot.getWorld().toLowerCase(), plot.getOwner());
             }
 
-            if (plot.getCurrentBidder() != null && !plot.getCurrentBidder().isEmpty() && plot.getCurrentBidderId() == null) {
+            if (plot.getCurrentBidder() != null && !plot.getCurrentBidder().equals("") && plot.getCurrentBidderId() == null) {
                 fetchBidderUUIDAsync(idX, idZ, plot.getWorld().toLowerCase(), plot.getCurrentBidder());
             }
 
@@ -2509,7 +2509,7 @@ public class SqlManager {
 
                         do {
                             String name = setPlayers.getString("Name");
-                            if (!name.isEmpty()) {
+                            if (!name.equals("")) {
                                 if (name.matches("^[a-zA-Z0-9_]{1,16}$")) {
                                     names.add(name);
                                 } else {
@@ -2643,7 +2643,7 @@ public class SqlManager {
                     plugin.getLogger().severe("Conversion to UUID failed :");
                     plugin.getLogger().severe("  " + ex.getMessage());
                     for (StackTraceElement e : ex.getStackTrace()) {
-                        plugin.getLogger().severe("  " + e);
+                        plugin.getLogger().severe("  " + e.toString());
                     }
                 } finally {
                     try {
@@ -2687,7 +2687,7 @@ public class SqlManager {
                         plugin.getLogger().severe("Conversion to UUID failed (on close) :");
                         plugin.getLogger().severe("  " + ex.getMessage());
                         for (StackTraceElement e : ex.getStackTrace()) {
-                            plugin.getLogger().severe("  " + e);
+                            plugin.getLogger().severe("  " + e.toString());
                         }
                     }
                 }
@@ -2745,7 +2745,7 @@ public class SqlManager {
                                 Map<String, UUID> response = fetcher.call();
                                 //plugin.getLogger().info("Received " + response.size() + " UUIDs. Starting database update...");
 
-                                if (!response.isEmpty()) {
+                                if (response.size() > 0) {
                                     uuid = response.values().toArray(new UUID[0])[0];
                                     newname = response.keySet().toArray(new String[0])[0];
                                 }
@@ -2815,7 +2815,7 @@ public class SqlManager {
                         plugin.getLogger().severe("Conversion to UUID failed :");
                         plugin.getLogger().severe("  " + ex.getMessage());
                         for (StackTraceElement e : ex.getStackTrace()) {
-                            plugin.getLogger().severe("  " + e);
+                            plugin.getLogger().severe("  " + e.toString());
                         }
                     } finally {
                         try {
@@ -2826,7 +2826,7 @@ public class SqlManager {
                             plugin.getLogger().severe("Conversion to UUID failed (on close) :");
                             plugin.getLogger().severe("  " + ex.getMessage());
                             for (StackTraceElement e : ex.getStackTrace()) {
-                                plugin.getLogger().severe("  " + e);
+                                plugin.getLogger().severe("  " + e.toString());
                             }
                         }
                     }
@@ -2866,7 +2866,7 @@ public class SqlManager {
                     plugin.getLogger().severe("Update player in database from uuid failed :");
                     plugin.getLogger().severe("  " + ex.getMessage());
                     for (StackTraceElement e : ex.getStackTrace()) {
-                        plugin.getLogger().severe("  " + e);
+                        plugin.getLogger().severe("  " + e.toString());
                     }
                 } finally {
                     try {
@@ -2879,7 +2879,7 @@ public class SqlManager {
                         plugin.getLogger().severe("Update player in database from uuid failed (on close) :");
                         plugin.getLogger().severe("  " + ex.getMessage());
                         for (StackTraceElement e : ex.getStackTrace()) {
-                            plugin.getLogger().severe("  " + e);
+                            plugin.getLogger().severe("  " + e.toString());
                         }
                     }
                 }

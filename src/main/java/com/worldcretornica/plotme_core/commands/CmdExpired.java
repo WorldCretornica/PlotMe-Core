@@ -36,7 +36,7 @@ public class CmdExpired extends PlotCommand {
 
                 List<Plot> expiredplots = plugin.getSqlManager().getExpiredPlots(w.getName(), page, pagesize);
 
-                if (expiredplots.isEmpty()) {
+                if (expiredplots.size() == 0) {
                     p.sendMessage(C("MsgNoPlotExpired"));
                 } else {
                     p.sendMessage(C("MsgExpiredPlotsPage") + " " + page + "/" + maxpage);
@@ -48,7 +48,7 @@ public class CmdExpired extends PlotCommand {
 
                         int textLength = MinecraftFontWidthCalculator.getStringWidth(starttext);
 
-                        String line = starttext + Util().whitespace(550 - textLength) + "@" + plot.getExpiredDate();
+                        String line = starttext + Util().whitespace(550 - textLength) + "@" + plot.getExpiredDate().toString();
 
                         p.sendMessage(line);
                     }

@@ -43,7 +43,7 @@ public class PlayerList {
                 continue;
             }
         }
-        if(!found.isEmpty()) {
+        if(!found.equals("")) {
             uuid = playerlist.get(found);
             playerlist.remove(found);
         }
