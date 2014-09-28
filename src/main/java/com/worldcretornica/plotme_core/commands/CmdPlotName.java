@@ -30,7 +30,7 @@ public class CmdPlotName extends PlotCommand {
                         for (int i = 1, argLength = arg.length; i < argLength; i++) {
                             name += arg[i] + " ";
                         }
-                            name = name.trim();
+                        name = name.trim();
                         if (name.length() > 32) {
                             player.sendMessage(RED + "Plot Name is too long.");
                         } else {
@@ -42,7 +42,6 @@ public class CmdPlotName extends PlotCommand {
                         player.sendMessage(RED + C("MsgThisPlot") + "(" + id + ") " + C("MsgNotYoursNotAllowedName"));
                     }
                 }
-                // plugin.getPlotMeCoreManager().setBiome(w, id, biome);
             }
         }
         return false;
