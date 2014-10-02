@@ -25,12 +25,12 @@ import java.util.*;
 
 public class PlotMeCoreManager {
 
-    private PlotMe_Core plugin = null;
-    private MultiWorldWrapper multiworld = null;
-    private MultiverseWrapper multiverse = null;
+    private PlotMe_Core plugin;
+    private MultiWorldWrapper multiworld;
+    private MultiverseWrapper multiverse;
 
-    private HashSet<UUID> playersignoringwelimit = null;
-    private HashMap<String, PlotMapInfo> plotmaps = null;
+    private HashSet<UUID> playersignoringwelimit;
+    private HashMap<String, PlotMapInfo> plotmaps;
 
     public PlotMeCoreManager(PlotMe_Core instance) {
         plugin = instance;
@@ -40,7 +40,7 @@ public class PlotMeCoreManager {
 
     public boolean CreatePlotWorld(CommandSender cs, String worldname, String generator, Map<String, String> args) {
         //Get a seed
-        Long seed = (new java.util.Random()).nextLong();
+        Long seed = new Random().nextLong();
 
         //Check if we have multiworld
         if (getMultiworld() == null) {
@@ -51,7 +51,7 @@ public class PlotMeCoreManager {
         //Check if we have multiverse
         if (getMultiverse() == null) {
             if (Bukkit.getPluginManager().isPluginEnabled("Multiverse-Core")) {
-                setMultiverse(((JavaPlugin) Bukkit.getPluginManager().getPlugin("Multiverse-Core")));
+                setMultiverse((JavaPlugin) Bukkit.getPluginManager().getPlugin("Multiverse-Core"));
             }
         }
 
@@ -469,11 +469,10 @@ public class PlotMeCoreManager {
 
                 List<String[]> comments = plot2.getComments();
                 for (int i = 0; i < comments.size(); i++) {
-                    String strUUID;
                     UUID uuid = null;
 
                     if (comments.get(i).length >= 3) {
-                        strUUID = comments.get(i)[2];
+                        String strUUID = comments.get(i)[2];
                         try {
                             uuid = UUID.fromString(strUUID);
                         } catch (Exception e) {
@@ -501,11 +500,10 @@ public class PlotMeCoreManager {
                 
                 comments = plot1.getComments();
                 for (int i = 0; i < comments.size(); i++) {
-                    String strUUID;
                     UUID uuid = null;
 
                     if (comments.get(i).length >= 3) {
-                        strUUID = comments.get(i)[2];
+                        String strUUID = comments.get(i)[2];
                         try {
                             uuid = UUID.fromString(strUUID);
                         } catch (Exception e) {
@@ -542,11 +540,10 @@ public class PlotMeCoreManager {
 
                 List<String[]> comments = plot1.getComments();
                 for (int i = 0; i < comments.size(); i++) {
-                    String strUUID;
                     UUID uuid = null;
 
                     if (comments.get(i).length >= 3) {
-                        strUUID = comments.get(i)[2];
+                        String strUUID = comments.get(i)[2];
                         try {
                             uuid = UUID.fromString(strUUID);
                         } catch (Exception e) {
@@ -571,49 +568,46 @@ public class PlotMeCoreManager {
                 getGenMan(w).removeSellerDisplay(w, idFrom);
 
             }
-        } else {
-            if (plot2 != null) {
-                int idX = getIdX(idTo);
-                int idZ = getIdZ(idTo);
-                plugin.getSqlManager().deletePlot(idX, idZ, plot2.getWorld());
-                removePlot(w, idTo);
+        } else if (plot2 != null) {
+            int idX = getIdX(idTo);
+            int idZ = getIdZ(idTo);
+            plugin.getSqlManager().deletePlot(idX, idZ, plot2.getWorld());
+            removePlot(w, idTo);
 
-                idX = getIdX(idFrom);
-                idZ = getIdZ(idFrom);
-                plot2.setId(idFrom);
-                plugin.getSqlManager().addPlot(plot2, idX, idZ, topX(idFrom, w), bottomX(idFrom, w), topZ(idFrom, w), bottomZ(idFrom, w));
-                addPlot(w, idFrom, plot2);
+            idX = getIdX(idFrom);
+            idZ = getIdZ(idFrom);
+            plot2.setId(idFrom);
+            plugin.getSqlManager().addPlot(plot2, idX, idZ, topX(idFrom, w), bottomX(idFrom, w), topZ(idFrom, w), bottomZ(idFrom, w));
+            addPlot(w, idFrom, plot2);
 
-                List<String[]> comments = plot2.getComments();
-                for (int i = 0; i < comments.size(); i++) {
-                    String strUUID;
-                    UUID uuid = null;
+            List<String[]> comments = plot2.getComments();
+            for (int i = 0; i < comments.size(); i++) {
+                UUID uuid = null;
 
-                    if (comments.get(i).length >= 3) {
-                        strUUID = comments.get(i)[2];
-                        try {
-                            uuid = UUID.fromString(strUUID);
-                        } catch (Exception e) {
-                        }
+                if (comments.get(i).length >= 3) {
+                    String strUUID = comments.get(i)[2];
+                    try {
+                        uuid = UUID.fromString(strUUID);
+                    } catch (Exception e) {
                     }
-                    plugin.getSqlManager().addPlotComment(comments.get(i), i, idX, idZ, plot2.getWorld(), uuid);
                 }
-                
-                HashMap<String, UUID> allowed = plot2.allowed().getAllPlayers();
-                for (String player : allowed.keySet()) {
-                    plugin.getSqlManager().addPlotAllowed(player, allowed.get(player), idX, idZ, plot2.getWorld());
-                }
-                
-                HashMap<String, UUID> denied = plot2.denied().getAllPlayers();
-                for (String player : denied.keySet()) {
-                    plugin.getSqlManager().addPlotDenied(player, denied.get(player), idX, idZ, plot2.getWorld());
-                }
-
-                setOwnerSign(w, plot2);
-                setSellSign(w, plot2);
-                getGenMan(w).removeOwnerDisplay(w, idTo);
-                getGenMan(w).removeSellerDisplay(w, idTo);
+                plugin.getSqlManager().addPlotComment(comments.get(i), i, idX, idZ, plot2.getWorld(), uuid);
             }
+
+            HashMap<String, UUID> allowed = plot2.allowed().getAllPlayers();
+            for (String player : allowed.keySet()) {
+                plugin.getSqlManager().addPlotAllowed(player, allowed.get(player), idX, idZ, plot2.getWorld());
+            }
+
+            HashMap<String, UUID> denied = plot2.denied().getAllPlayers();
+            for (String player : denied.keySet()) {
+                plugin.getSqlManager().addPlotDenied(player, denied.get(player), idX, idZ, plot2.getWorld());
+            }
+
+            setOwnerSign(w, plot2);
+            setSellSign(w, plot2);
+            getGenMan(w).removeOwnerDisplay(w, idTo);
+            getGenMan(w).removeSellerDisplay(w, idTo);
         }
 
         return true;
@@ -648,8 +642,6 @@ public class PlotMeCoreManager {
     public void setOwnerSign(World w, Plot plot) {
         String line1;
         String line2 = "";
-        String line3;
-        String line4;
         String id = plot.getId();
 
         if ((Util().C("SignId") + id).length() > 16) {
@@ -662,17 +654,8 @@ public class PlotMeCoreManager {
         } else {
             line1 = Util().C("SignId") + id;
         }
-        if ((Util().C("SignOwner") + plot.getOwner()).length() > 16) {
-            line3 = (Util().C("SignOwner") + plot.getOwner()).substring(0, 16);
-            if ((Util().C("SignOwner") + plot.getOwner()).length() > 32) {
-                line4 = (Util().C("SignOwner") + plot.getOwner()).substring(16, 32);
-            } else {
-                line4 = (Util().C("SignOwner") + plot.getOwner()).substring(16);
-            }
-        } else {
-            line3 = Util().C("SignOwner") + plot.getOwner();
-            line4 = "";
-        }
+        String line3 = plot.getOwner();
+        String line4 = plot.getPlotName();
 
         getGenMan(w).setOwnerDisplay(w, plot.getId(), line1, line2, line3, line4);
     }

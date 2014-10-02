@@ -8,6 +8,7 @@ import com.worldcretornica.plotme_core.event.PlotMeEventFactory;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
+import org.bukkit.block.Biome;
 import org.bukkit.entity.Player;
 
 public class CmdBiome extends PlotCommand {
@@ -28,9 +29,9 @@ public class CmdBiome extends PlotCommand {
                     World w = p.getWorld();
 
                     if (args.length == 2) {
-                        org.bukkit.block.Biome biome = null;
+                        Biome biome = null;
 
-                        for (org.bukkit.block.Biome bio : org.bukkit.block.Biome.values()) {
+                        for (Biome bio : Biome.values()) {
                             if (bio.name().equalsIgnoreCase(args[1])) {
                                 biome = bio;
                             }

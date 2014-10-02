@@ -1,4 +1,3 @@
-DefaultPlotBase: 0
 PlotAutoLimit: 1000
 DaysToExpiration: 7
 ProtectedBlocks:

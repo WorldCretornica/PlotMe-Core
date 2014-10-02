@@ -113,7 +113,9 @@ public class CmdShowHelp extends PlotCommand {
         if (plugin.cPerms(p, "PlotMe.admin.resetexpired")) {
             allowed_commands.add("resetexpired");
         }
-
+        if (plugin.cPerms(p, "Plotme.use.nameplot")) {
+            allowed_commands.add("name");
+        }
         PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(p);
 
         if (plugin.getPlotMeCoreManager().isPlotWorld(p) && ecoon) {
@@ -351,6 +353,10 @@ public class CmdShowHelp extends PlotCommand {
             } else if (allowedcmd.equalsIgnoreCase("bid")) {
                 p.sendMessage(GREEN + " /plotme " + C("CommandBid") + " <" + C("WordAmount") + ">");
                 p.sendMessage(AQUA + " " + C("HelpBid"));
+            } else if (allowedcmd.equalsIgnoreCase("name")) {
+                // TODO: Add captions for this command.
+                p.sendMessage(GREEN + " /plotme " + C("CommandName") + " <name>");
+                p.sendMessage(AQUA + "Give your plot a custom name");
             }
         }
 

@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 
 public class PMCommand implements CommandExecutor {
 
-    private PlotMe_Core plugin = null;
+    private PlotMe_Core plugin;
     private final CmdAdd add;
     private final CmdAddTime addtime;
     private final CmdAuction auction;
@@ -43,6 +43,7 @@ public class PMCommand implements CommandExecutor {
     private final CmdUndeny undeny;
     private final CmdWEAnywhere weanywhere;
     private final CmdCreateWorld createworld;
+    private final CmdPlotName name;
 
     public PMCommand(PlotMe_Core instance) {
         plugin = instance;
@@ -80,6 +81,7 @@ public class PMCommand implements CommandExecutor {
         undeny = new CmdUndeny(plugin);
         weanywhere = new CmdWEAnywhere(plugin);
         createworld = new CmdCreateWorld(plugin);
+        name = new CmdPlotName(plugin);
     }
 
     private String C(String caption) {
@@ -96,14 +98,13 @@ public class PMCommand implements CommandExecutor {
                     s.sendMessage(C("ConsoleHelpReload"));
                     return true;
                 } else {
-                    String a0 = args[0];
-                    if (a0.equalsIgnoreCase("reload")) {
+                    if (args[0].equalsIgnoreCase("reload")) {
                         return reload.exec(s, args);
                     }
-                    if (a0.equalsIgnoreCase(C("CommandResetExpired"))) {
+                    if (args[0].equalsIgnoreCase(C("CommandResetExpired"))) {
                         return resetexpired.exec(s, args);
                     }
-                    if (a0.equalsIgnoreCase(C("CommandCreateWorld"))) {
+                    if (args[0].equalsIgnoreCase(C("CommandCreateWorld"))) {
                         return createworld.exec(s, args);
                     }
                 }
@@ -129,7 +130,6 @@ public class PMCommand implements CommandExecutor {
 
                             if (args.length > 1) {
                                 String a1 = args[1];
-                                ipage = -1;
 
                                 try {
                                     ipage = Integer.parseInt(a1);
@@ -231,6 +231,9 @@ public class PMCommand implements CommandExecutor {
                         }
                         if (a0.equalsIgnoreCase(C("CommandBuy"))) {
                             return buy.exec(p, args);
+                        }
+                        if (a0.equalsIgnoreCase(C("CommandName"))) {
+                            return name.exec(p, args);
                         }
                         if (a0.equalsIgnoreCase(C("CommandBid"))) {
                             return bid.exec(p, args);

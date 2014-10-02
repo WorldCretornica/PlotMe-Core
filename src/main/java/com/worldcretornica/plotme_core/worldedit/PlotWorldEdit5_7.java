@@ -1,12 +1,5 @@
 package com.worldcretornica.plotme_core.worldedit;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
-import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
-
 import com.sk89q.worldedit.LocalSession;
 import com.sk89q.worldedit.LocalWorld;
 import com.sk89q.worldedit.Vector;
@@ -16,7 +9,12 @@ import com.sk89q.worldedit.masks.RegionMask;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.sk89q.worldedit.masks.Mask;
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.entity.Player;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 @SuppressWarnings({ "deprecation", "unused" })
 public class PlotWorldEdit5_7 implements PlotWorldEdit {

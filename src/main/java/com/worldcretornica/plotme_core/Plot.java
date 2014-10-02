@@ -34,6 +34,7 @@ public class Plot implements Comparable<Plot> {
     private double currentbid;
     private UUID currentbidderId;
     private String auctionneddate;
+    private String plotName;
 
     public Plot(PlotMe_Core instance) {
         this.plugin = instance;
@@ -184,9 +185,9 @@ public class Plot implements Comparable<Plot> {
         this.setAuctionnedDate(auctdate);
     }
 
-    public Plot(PlotMe_Core instance, String owner, UUID ownerId, String world, String bio, Date exp, boolean fini, 
-            PlayerList al, List<String[]> comm, String tid, double custprice, boolean sale, String finishdt, 
-            boolean prot, String bidder, UUID bidderId, Double bid, boolean isauctionned, PlayerList den, String auctdate) {
+    public Plot(PlotMe_Core instance, String owner, UUID ownerId, String world, String bio, Date exp, boolean fini,
+                PlayerList al, List<String[]> comm, String tid, double custprice, boolean sale, String finishdt,
+                boolean prot, String bidder, UUID bidderId, Double bid, boolean isauctionned, PlayerList den, String auctdate, String plotname) {
         this.plugin = instance;
         this.setOwner(owner);
         this.setOwnerId(ownerId);
@@ -207,6 +208,7 @@ public class Plot implements Comparable<Plot> {
         this.setCurrentBid(bid);
         this.denied = den;
         this.setAuctionnedDate(auctdate);
+        this.setPlotName(plotname);
     }
 
     public void setExpire(Date date) {
@@ -410,16 +412,6 @@ public class Plot implements Comparable<Plot> {
         denied.clear();
     }
 
-    @Deprecated
-    public boolean isAllowed(String name) {
-        Player p = Bukkit.getServer().getPlayerExact(name);
-        if(p == null) {
-            return false;
-        } else {
-            return isAllowedInternal(p.getName(), p.getUniqueId(), true, true);
-        }
-    }
-    
     public boolean isAllowedConsulting(String name) {
         @SuppressWarnings("deprecation")
         Player p = Bukkit.getServer().getPlayerExact(name);
@@ -442,16 +434,6 @@ public class Plot implements Comparable<Plot> {
         return isAllowedInternal("", uuid, true, true);
     }
 
-    @Deprecated
-    public boolean isAllowed(String name, boolean IncludeStar, boolean IncludeGroup) {
-        Player p = Bukkit.getServer().getPlayerExact(name);
-        if(p == null) {
-            return false;
-        } else {
-            return isAllowedInternal(p.getName(), p.getUniqueId(), IncludeStar, IncludeGroup);
-        }
-    }
-    
     private boolean isAllowedInternal(String name, UUID uuid, boolean IncludeStar, boolean IncludeGroup) {
                 
         if(IncludeStar && owner.equals("*")) {
@@ -492,35 +474,25 @@ public class Plot implements Comparable<Plot> {
         return false;
     }
 
-    @Deprecated
-    public boolean isDenied(String name) {
-        Player p = Bukkit.getServer().getPlayerExact(name);
-        if(p == null) {
-            return false;
-        } else {
-            return isDeniedInternal(name, null, true, true);
-        }
-    }
-    
     public boolean isDeniedConsulting(String name) {
         @SuppressWarnings("deprecation")
         Player p = Bukkit.getServer().getPlayerExact(name);
         if(p != null) {
-            return isDeniedInternal(name, p.getUniqueId(), true, true);
+            return isDeniedInternal(name, p.getUniqueId(), true);
         } else {
-            return isDeniedInternal(name, null, true, true);
+            return isDeniedInternal(name, null, true);
         }
     }
     
     public boolean isGroupDenied(String name) {
-        return isDeniedInternal(name, null, true, true);
+        return isDeniedInternal(name, null, true);
     }
 
     public boolean isDenied(UUID uuid) {
-        return isDeniedInternal("", uuid, true, true);
+        return isDeniedInternal("", uuid, true);
     }
-    
-    private boolean isDeniedInternal(String name, UUID uuid, boolean IncludeStar, boolean IncludeGroup) {
+
+    private boolean isDeniedInternal(String name, UUID uuid, boolean IncludeGroup) {
         Player p = null;
         
         if (isAllowedInternal(name, uuid, false, false))
@@ -580,7 +552,7 @@ public class Plot implements Comparable<Plot> {
     }
 
     public void updateField(String field, Object value) {
-        this.plugin.getSqlManager().updatePlot(this.plugin.getPlotMeCoreManager().getIdX(this.getId()), this.plugin.getPlotMeCoreManager().getIdZ(this.getId()), this.getWorld(), field, value);
+        plugin.getSqlManager().updatePlot(plugin.getPlotMeCoreManager().getIdX(getId()), plugin.getPlotMeCoreManager().getIdZ(getId()), getWorld(), field, value);
     }
 
     public final String getWorld() {
@@ -689,5 +661,13 @@ public class Plot implements Comparable<Plot> {
 
     public final void setAuctionnedDate(String auctionneddate) {
         this.auctionneddate = auctionneddate;
+    }
+
+    public String getPlotName() {
+        return plotName;
+    }
+
+    public void setPlotName(String plotName) {
+        this.plotName = plotName;
     }
 }
