@@ -25,12 +25,12 @@ import java.util.*;
 
 public class PlotMeCoreManager {
 
-    private PlotMe_Core plugin = null;
-    private MultiWorldWrapper multiworld = null;
-    private MultiverseWrapper multiverse = null;
+    private PlotMe_Core plugin;
+    private MultiWorldWrapper multiworld;
+    private MultiverseWrapper multiverse;
 
-    private HashSet<UUID> playersignoringwelimit = null;
-    private HashMap<String, PlotMapInfo> plotmaps = null;
+    private HashSet<UUID> playersignoringwelimit;
+    private HashMap<String, PlotMapInfo> plotmaps;
 
     public PlotMeCoreManager(PlotMe_Core instance) {
         plugin = instance;
@@ -40,7 +40,7 @@ public class PlotMeCoreManager {
 
     public boolean CreatePlotWorld(CommandSender cs, String worldname, String generator, Map<String, String> args) {
         //Get a seed
-        Long seed = (new java.util.Random()).nextLong();
+        Long seed = new Random().nextLong();
 
         //Check if we have multiworld
         if (getMultiworld() == null) {
@@ -51,7 +51,7 @@ public class PlotMeCoreManager {
         //Check if we have multiverse
         if (getMultiverse() == null) {
             if (Bukkit.getPluginManager().isPluginEnabled("Multiverse-Core")) {
-                setMultiverse(((JavaPlugin) Bukkit.getPluginManager().getPlugin("Multiverse-Core")));
+                setMultiverse((JavaPlugin) Bukkit.getPluginManager().getPlugin("Multiverse-Core"));
             }
         }
 
@@ -655,7 +655,7 @@ public class PlotMeCoreManager {
             line1 = Util().C("SignId") + id;
         }
         String line3 = plot.getOwner();
-        String line4 = "";
+        String line4 = plot.getPlotName();
 
         getGenMan(w).setOwnerDisplay(w, plot.getId(), line1, line2, line3, line4);
     }

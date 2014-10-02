@@ -14,7 +14,6 @@ public class CmdPlotName extends PlotCommand {
         super(plugin);
     }
 
-    //TODO: NAMING PLOTS.
     public boolean exec(Player player, String[] arg) {
         if (plugin.cPerms(player, "plotme.use.nameplot")) {
             if (!plugin.getPlotMeCoreManager().isPlotWorld(player)) {
@@ -36,6 +35,7 @@ public class CmdPlotName extends PlotCommand {
                         } else {
                             plot.setPlotName(arg[1]);
                             plot.updateField("plotname", name);
+                            plugin.getPlotMeCoreManager().setOwnerSign(player.getWorld(), plot);
                             player.sendMessage("Your plot is now named : " + name);
                         }
                     } else{
