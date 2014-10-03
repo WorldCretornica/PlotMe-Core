@@ -2,8 +2,9 @@ package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.event.PlotDoneChangeEvent;
-import com.worldcretornica.plotme_core.event.PlotMeEventFactory;
+import com.worldcretornica.plotme_core.bukkit.event.PlotDoneChangeEvent;
+import com.worldcretornica.plotme_core.bukkit.event.BukkitEventFactory;
+
 import org.bukkit.entity.Player;
 
 public class CmdDone extends PlotCommand {
@@ -27,7 +28,7 @@ public class CmdDone extends PlotCommand {
                     String name = p.getName();
 
                     if (plot.getOwner().equalsIgnoreCase(name) || plugin.cPerms(p, "PlotMe.admin.done")) {
-                        PlotDoneChangeEvent event = PlotMeEventFactory.callPlotDoneEvent(plugin, p.getWorld(), plot, p, plot.isFinished());
+                        PlotDoneChangeEvent event = BukkitEventFactory.callPlotDoneEvent(plugin, p.getWorld(), plot, p, plot.isFinished());
 
                         if (!event.isCancelled()) {
                             if (plot.isFinished()) {

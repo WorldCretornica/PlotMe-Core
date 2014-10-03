@@ -1,11 +1,9 @@
 package com.worldcretornica.plotme_core;
 
-import com.worldcretornica.plotme_core.event.PlotMeEventFactory;
+import com.worldcretornica.plotme_core.api.IOfflinePlayer;
+import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.utils.UUIDFetcher;
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.io.IOException;
@@ -44,7 +42,7 @@ public class SqlManager {
                 conn.setAutoCommit(false);
             } else {
                 Class.forName("org.sqlite.JDBC");
-                conn = DriverManager.getConnection("jdbc:sqlite:" + plugin.getDataFolder().getAbsolutePath() + "/plots.db");
+                conn = DriverManager.getConnection("jdbc:sqlite:" + plugin.getServerObjectBuilder().getDataFolder() + "/plots.db");
                 conn.setAutoCommit(false);
             }
         } catch (SQLException ex) {
@@ -663,13 +661,13 @@ public class SqlManager {
             if (usemySQL) {
                 plugin.getLogger().info("Modifying database for MySQL support");
 
-                File sqlitefile = new File(plugin.getDataFolder(), sqlitedb);
+                File sqlitefile = new File(plugin.getServerObjectBuilder().getDataFolder(), sqlitedb);
                 if (!sqlitefile.exists()) {
                     //plotmecore.getLogger().info("Could not find old " + sqlitedb);
                 } else {
                     plugin.getLogger().info("Trying to import plots from plots.db");
                     Class.forName("org.sqlite.JDBC");
-                    Connection sqliteconn = DriverManager.getConnection("jdbc:sqlite:" + plugin.getDataFolder().getAbsolutePath() + "\\" + sqlitedb);
+                    Connection sqliteconn = DriverManager.getConnection("jdbc:sqlite:" + plugin.getServerObjectBuilder().getDataFolder() + "\\" + sqlitedb);
 
                     sqliteconn.setAutoCommit(false);
                     Statement slstatement = sqliteconn.createStatement();
@@ -822,7 +820,7 @@ public class SqlManager {
                     sqliteconn.close();
 
                     plugin.getLogger().info("Renaming " + sqlitedb + " to " + sqlitedb + ".old");
-                    if (!sqlitefile.renameTo(new File(plugin.getDataFolder(), sqlitedb + ".old"))) {
+                    if (!sqlitefile.renameTo(new File(plugin.getServerObjectBuilder().getDataFolder(), sqlitedb + ".old"))) {
                         plugin.getLogger().severe("Failed to rename " + sqlitedb + "! Please rename this manually!");
                     }
                 }
@@ -874,7 +872,7 @@ public class SqlManager {
         }
     }
 
-    public void addPlot(Plot plot, int idX, int idZ, World w) {
+    public void addPlot(Plot plot, int idX, int idZ, IWorld w) {
         addPlot(plot, idX, idZ, 
                 plugin.getPlotMeCoreManager().topX(plot.getId(), w), 
                 plugin.getPlotMeCoreManager().bottomX(plot.getId(), w), 
@@ -1071,7 +1069,7 @@ public class SqlManager {
 
     @Deprecated
     public void addPlotDenied(String player, int idX, int idZ, String world) {
-        OfflinePlayer op = Bukkit.getOfflinePlayer(player);
+        IOfflinePlayer op = plugin.getServerObjectBuilder().getOfflinePlayer(player);
         if (op == null) {
             addPlotDenied(player, null, idX, idZ, world);
         } else {
@@ -1305,7 +1303,7 @@ public class SqlManager {
 
     @Deprecated
     public void deletePlotAllowed(int idX, int idZ, String player, String world) {
-        OfflinePlayer op = Bukkit.getOfflinePlayer(player);
+        IOfflinePlayer op = plugin.getServerObjectBuilder().getOfflinePlayer(player);
         if (op == null) {
             deletePlotAllowed(idX, idZ, player, null, world);
         } else {
@@ -1349,7 +1347,7 @@ public class SqlManager {
 
     @Deprecated
     public void deletePlotDenied(int idX, int idZ, String player, String world) {
-        OfflinePlayer op = Bukkit.getOfflinePlayer(player);
+        IOfflinePlayer op = plugin.getServerObjectBuilder().getOfflinePlayer(player);
         if (op == null) {
             deletePlotDenied(idX, idZ, player, null, world);
         } else {
@@ -1606,8 +1604,8 @@ public class SqlManager {
 
     public void loadPlotsAsynchronously(String world) {
         final String worldname = world;
-
-        Bukkit.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+        
+        plugin.getServerObjectBuilder().runTaskAsynchronously(new Runnable() {
             @Override
             public void run() {
                 plugin.getLogger().info("Starting to load plots for world " + worldname);
@@ -1618,12 +1616,12 @@ public class SqlManager {
 
                 for (String id : plots.keySet()) {
                     pmi.addPlot(id, plots.get(id));
-                    PlotMeEventFactory.callPlotLoadedEvent(plugin, Bukkit.getWorld(worldname), plots.get(id));
+                    plugin.getServerObjectBuilder().getEventFactory().callPlotLoadedEvent(plugin, plugin.getServerObjectBuilder().getWorld(worldname), plots.get(id));
                 }
 
                 // plugin.getLogger().info("Done loading " + pmi.getNbPlots() +
                 // " plots for world " + worldname);
-                PlotMeEventFactory.callPlotWorldLoadEvent(plugin, worldname, pmi.getNbPlots());
+                plugin.getServerObjectBuilder().getEventFactory().callPlotWorldLoadEvent(plugin, worldname, pmi.getNbPlots());
             }
         });
     }
@@ -2467,7 +2465,7 @@ public class SqlManager {
 
     
     public void plotConvertToUUIDAsynchronously() {
-        Bukkit.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+        plugin.getServerObjectBuilder().runTaskAsynchronously(new Runnable() {
             @Override
             public void run() {
                 plugin.getLogger().info("Checking if conversion to UUID needed...");
@@ -2721,7 +2719,7 @@ public class SqlManager {
 
     private void _fetchUUIDAsync(final int idX, final int idZ, final String world, final String Property, final String name) {
         if (plugin.getInitialized()) {
-            Bukkit.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+            plugin.getServerObjectBuilder().runTaskAsynchronously(new Runnable() {
                 @Override
                 public void run() {
     
@@ -2730,8 +2728,7 @@ public class SqlManager {
                     try {
                         Connection conn = getConnection();
     
-                        @SuppressWarnings("deprecation")
-                        Player p = Bukkit.getPlayerExact(name);
+                        IPlayer p = plugin.getServerObjectBuilder().getPlayerExact(name);
                         UUID uuid = null;
                         String newname = name;
     
@@ -2846,7 +2843,7 @@ public class SqlManager {
     }
     
     public void updatePlotsNewUUID(final UUID uuid, final String newname) {
-        Bukkit.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+        plugin.getServerObjectBuilder().runTaskAsynchronously(new Runnable() {
             @Override
             public void run() {
                 PreparedStatement[] pss = new PreparedStatement[5];

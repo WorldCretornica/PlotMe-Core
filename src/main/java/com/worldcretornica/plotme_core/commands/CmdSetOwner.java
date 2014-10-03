@@ -3,8 +3,8 @@ package com.worldcretornica.plotme_core.commands;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.event.PlotMeEventFactory;
-import com.worldcretornica.plotme_core.event.PlotOwnerChangeEvent;
+import com.worldcretornica.plotme_core.bukkit.event.BukkitEventFactory;
+import com.worldcretornica.plotme_core.bukkit.event.PlotOwnerChangeEvent;
 
 import net.milkbowl.vault.economy.EconomyResponse;
 
@@ -43,7 +43,7 @@ public class CmdSetOwner extends PlotCommand {
 
                         if (plugin.getPlotMeCoreManager().isEconomyEnabled(p)) {
                             if (pmi.isRefundClaimPriceOnSetOwner() && newowner != oldowner) {
-                                event = PlotMeEventFactory.callPlotOwnerChangeEvent(plugin, p.getWorld(), plot, p, newowner);
+                                event = BukkitEventFactory.callPlotOwnerChangeEvent(plugin, p.getWorld(), plot, p, newowner);
 
                                 if (event.isCancelled()) {
                                     return true;
@@ -65,7 +65,7 @@ public class CmdSetOwner extends PlotCommand {
                                     }
                                 }
                             } else {
-                                event = PlotMeEventFactory.callPlotOwnerChangeEvent(plugin, p.getWorld(), plot, p, newowner);
+                                event = BukkitEventFactory.callPlotOwnerChangeEvent(plugin, p.getWorld(), plot, p, newowner);
                             }
 
                             if (plot.getCurrentBidderId() != null) {
@@ -83,7 +83,7 @@ public class CmdSetOwner extends PlotCommand {
                                 }
                             }
                         } else {
-                            event = PlotMeEventFactory.callPlotOwnerChangeEvent(plugin, p.getWorld(), plot, p, newowner);
+                            event = BukkitEventFactory.callPlotOwnerChangeEvent(plugin, p.getWorld(), plot, p, newowner);
                         }
 
                         if (!event.isCancelled()) {

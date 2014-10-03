@@ -5,10 +5,14 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.UUID;
 
-import org.bukkit.Bukkit;
-
 public class PlayerList {
 
+    private PlotMe_Core api;
+    
+    public PlayerList(PlotMe_Core api) {
+        this.api = api;
+    }
+    
     private HashMap<String, UUID> playerlist;
     
     public PlayerList() {
@@ -28,7 +32,7 @@ public class PlayerList {
     }
     
     public String put(UUID uuid) {
-        String name = Bukkit.getOfflinePlayer(uuid).getName();
+        String name = api.getServerObjectBuilder().getOfflinePlayer(uuid).getName();
         playerlist.put(name, uuid);
         return name;
     }

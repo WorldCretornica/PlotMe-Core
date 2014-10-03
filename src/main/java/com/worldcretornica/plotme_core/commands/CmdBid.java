@@ -2,14 +2,10 @@ package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.event.PlotBidEvent;
-import com.worldcretornica.plotme_core.event.PlotMeEventFactory;
+import com.worldcretornica.plotme_core.api.*;
+import com.worldcretornica.plotme_core.api.event.InternalPlotBidEvent;
 
 import net.milkbowl.vault.economy.EconomyResponse;
-
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
 
 public class CmdBid extends PlotCommand {
 
@@ -17,7 +13,7 @@ public class CmdBid extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(Player p, String[] args) {
+    public boolean exec(IPlayer p, String[] args) {
         if (plugin.getPlotMeCoreManager().isEconomyEnabled(p)) {
             if (plugin.cPerms(p, "PlotMe.use.bid")) {
                 String id = plugin.getPlotMeCoreManager().getPlotId(p.getLocation());
@@ -29,7 +25,7 @@ public class CmdBid extends PlotCommand {
 
                     if (plot.isAuctionned()) {
                         String bidder = p.getName();
-                        OfflinePlayer playerbidder = p;
+                        IOfflinePlayer playerbidder = p;
 
                         if (plot.getOwner().equalsIgnoreCase(bidder)) {
                             p.sendMessage(RED + C("MsgCannotBidOwnPlot"));
@@ -37,7 +33,7 @@ public class CmdBid extends PlotCommand {
                             double bid = 0;
                             double currentbid = plot.getCurrentBid();
                             String currentbidder = plot.getCurrentBidder();
-                            OfflinePlayer playercurrentbidder = Bukkit.getOfflinePlayer(plot.getCurrentBidderId());
+                            IOfflinePlayer playercurrentbidder = sob.getOfflinePlayer(plot.getCurrentBidderId());
 
                             try {
                                 bid = Double.parseDouble(args[1]);
@@ -47,26 +43,26 @@ public class CmdBid extends PlotCommand {
                             if (bid < currentbid || (bid == currentbid && !currentbidder.equals(""))) {
                                 p.sendMessage(RED + C("MsgInvalidBidMustBeAbove") + " " + RESET + Util().moneyFormat(plot.getCurrentBid(), false));
                             } else {
-                                double balance = plugin.getEconomy().getBalance(playerbidder);
+                                double balance = sob.getBalance(playerbidder);
 
                                 if (bid >= balance && !currentbidder.equals(bidder)
                                             || currentbidder.equals(bidder) && bid > (balance + currentbid)) {
                                     p.sendMessage(RED + C("MsgNotEnoughBid"));
                                 } else {
-                                    PlotBidEvent event = PlotMeEventFactory.callPlotBidEvent(plugin, p.getWorld(), plot, p, bid);
+                                    InternalPlotBidEvent event = sob.getEventFactory().callPlotBidEvent(plugin, p.getWorld(), plot, p, bid);
 
                                     if (!event.isCancelled()) {
-                                        EconomyResponse er = plugin.getEconomy().withdrawPlayer(playerbidder, bid);
+                                        EconomyResponse er = sob.withdrawPlayer(playerbidder, bid);
 
                                         if (er.transactionSuccess()) {
                                             if (playercurrentbidder != null) {
-                                                EconomyResponse er2 = plugin.getEconomy().depositPlayer(playercurrentbidder, currentbid);
+                                                EconomyResponse er2 = sob.depositPlayer(playercurrentbidder, currentbid);
 
                                                 if (!er2.transactionSuccess()) {
                                                     p.sendMessage(er2.errorMessage);
                                                     Util().warn(er2.errorMessage);
                                                 } else {
-                                                    for (Player player : Bukkit.getServer().getOnlinePlayers()) {
+                                                    for (IPlayer player : sob.getOnlinePlayers()) {
                                                         if (player.getName().equalsIgnoreCase(currentbidder)) {
                                                             player.sendMessage(C("MsgOutbidOnPlot") + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner() + ". " + Util().moneyFormat(bid));
                                                             break;

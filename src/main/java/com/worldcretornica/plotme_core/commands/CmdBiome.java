@@ -3,12 +3,10 @@ package com.worldcretornica.plotme_core.commands;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.event.PlotBiomeChangeEvent;
-import com.worldcretornica.plotme_core.event.PlotMeEventFactory;
+import com.worldcretornica.plotme_core.api.*;
+import com.worldcretornica.plotme_core.api.event.InternalPlotBiomeChangeEvent;
+
 import net.milkbowl.vault.economy.EconomyResponse;
-import org.bukkit.ChatColor;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
 
 public class CmdBiome extends PlotCommand {
 
@@ -16,7 +14,7 @@ public class CmdBiome extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(Player p, String[] args) {
+    public boolean exec(IPlayer p, String[] args) {
         if (plugin.cPerms(p, "PlotMe.use.biome")) {
             if (!plugin.getPlotMeCoreManager().isPlotWorld(p)) {
                 p.sendMessage(RED + C("MsgNotPlotWorld"));
@@ -25,17 +23,13 @@ public class CmdBiome extends PlotCommand {
                 if (id.equals("")) {
                     p.sendMessage(RED + C("MsgNoPlotFound"));
                 } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, p)) {
-                    World w = p.getWorld();
+                    IWorld w = p.getWorld();
 
                     if (args.length == 2) {
-                        org.bukkit.block.Biome biome = null;
+                        IBiome biome = null;
 
-                        for (org.bukkit.block.Biome bio : org.bukkit.block.Biome.values()) {
-                            if (bio.name().equalsIgnoreCase(args[1])) {
-                                biome = bio;
-                            }
-                        }
-
+                        biome = sob.getBiome(args[1]);
+                                
                         if (biome == null) {
                             p.sendMessage(RED + args[1] + RESET + " " + C("MsgIsInvalidBiome"));
                         } else {
@@ -47,18 +41,18 @@ public class CmdBiome extends PlotCommand {
 
                                 double price = 0;
 
-                                PlotBiomeChangeEvent event;
+                                InternalPlotBiomeChangeEvent event;
 
                                 if (plugin.getPlotMeCoreManager().isEconomyEnabled(w)) {
                                     price = pmi.getBiomeChangePrice();
-                                    double balance = plugin.getEconomy().getBalance(p);
+                                    double balance = sob.getBalance(p);
 
                                     if (balance >= price) {
-                                        event = PlotMeEventFactory.callPlotBiomeChangeEvent(plugin, w, plot, p, biome);
+                                        event = sob.getEventFactory().callPlotBiomeChangeEvent(plugin, w, plot, p, biome);
                                         if (event.isCancelled()) {
                                             return true;
                                         } else {
-                                            EconomyResponse er = plugin.getEconomy().withdrawPlayer(p, price);
+                                            EconomyResponse er = sob.withdrawPlayer(p, price);
 
                                             if (!er.transactionSuccess()) {
                                                 p.sendMessage(RED + er.errorMessage);
@@ -71,14 +65,14 @@ public class CmdBiome extends PlotCommand {
                                         return true;
                                     }
                                 } else {
-                                    event = PlotMeEventFactory.callPlotBiomeChangeEvent(plugin, w, plot, p, biome);
+                                    event = sob.getEventFactory().callPlotBiomeChangeEvent(plugin, w, plot, p, biome);
                                 }
 
                                 if (!event.isCancelled()) {
                                     plugin.getPlotMeCoreManager().setBiome(w, id, biome);
                                     plot.setBiome(biome);
 
-                                    p.sendMessage(C("MsgBiomeSet") + " " + ChatColor.BLUE + Util().FormatBiome(biome.name()) + " " + Util().moneyFormat(-price));
+                                    p.sendMessage(C("MsgBiomeSet") + " " + BLUE + Util().FormatBiome(biome.name()) + " " + Util().moneyFormat(-price));
 
                                     if (isAdvancedLogging()) {
                                         plugin.getLogger().info(LOG + playername + " " + C("MsgChangedBiome") + " " + id + " " + C("WordTo") + " "
@@ -92,7 +86,7 @@ public class CmdBiome extends PlotCommand {
                     } else {
                         Plot plot = plugin.getPlotMeCoreManager().getMap(w).getPlot(id);
 
-                        p.sendMessage(C("MsgPlotUsingBiome") + " " + ChatColor.BLUE + Util().FormatBiome(plot.getBiome().name()));
+                        p.sendMessage(C("MsgPlotUsingBiome") + " " + BLUE + Util().FormatBiome(plot.getBiome().name()));
                     }
                 } else {
                     p.sendMessage(RED + C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));

@@ -3,8 +3,8 @@ package com.worldcretornica.plotme_core.commands;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.event.PlotMeEventFactory;
-import com.worldcretornica.plotme_core.event.PlotSellChangeEvent;
+import com.worldcretornica.plotme_core.bukkit.event.BukkitEventFactory;
+import com.worldcretornica.plotme_core.bukkit.event.PlotSellChangeEvent;
 
 import net.milkbowl.vault.economy.EconomyResponse;
 
@@ -41,7 +41,7 @@ public class CmdSell extends PlotCommand {
                                 PlotSellChangeEvent event;
 
                                 if (plot.isForSale()) {
-                                    event = PlotMeEventFactory.callPlotSellChangeEvent(plugin, w, plot, p, plot.getCustomPrice(), false, false);
+                                    event = BukkitEventFactory.callPlotSellChangeEvent(plugin, w, plot, p, plot.getCustomPrice(), false, false);
 
                                     if (!event.isCancelled()) {
                                         plot.setCustomPrice(0);
@@ -114,7 +114,7 @@ public class CmdSell extends PlotCommand {
 
                                             double sellprice = pmi.getSellToBankPrice();
 
-                                            event = PlotMeEventFactory.callPlotSellChangeEvent(plugin, w, plot, p, pmi.getBuyFromBankPrice(), true, true);
+                                            event = BukkitEventFactory.callPlotSellChangeEvent(plugin, w, plot, p, pmi.getBuyFromBankPrice(), true, true);
 
                                             if (!event.isCancelled()) {
                                                 EconomyResponse er = plugin.getEconomy().depositPlayer(p, sellprice);
@@ -156,7 +156,7 @@ public class CmdSell extends PlotCommand {
                                         if (price < 0) {
                                             p.sendMessage(RED + C("MsgInvalidAmount"));
                                         } else {
-                                            event = PlotMeEventFactory.callPlotSellChangeEvent(plugin, w, plot, p, price, false, true);
+                                            event = BukkitEventFactory.callPlotSellChangeEvent(plugin, w, plot, p, price, false, true);
 
                                             if (!event.isCancelled()) {
                                                 plot.setCustomPrice(price);

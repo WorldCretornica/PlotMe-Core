@@ -3,11 +3,9 @@ package com.worldcretornica.plotme_core.commands;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.event.PlotAddAllowedEvent;
-import com.worldcretornica.plotme_core.event.PlotMeEventFactory;
+import com.worldcretornica.plotme_core.api.*;
+import com.worldcretornica.plotme_core.api.event.InternalPlotAddAllowedEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
 
 public class CmdAdd extends PlotCommand {
 
@@ -15,7 +13,7 @@ public class CmdAdd extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(Player p, String[] args) {
+    public boolean exec(IPlayer p, String[] args) {
         if (plugin.cPerms(p, "PlotMe.admin.add") || plugin.cPerms(p, "PlotMe.use.add")) {
             if (!plugin.getPlotMeCoreManager().isPlotWorld(p)) {
                 p.sendMessage(RED + C("MsgNotPlotWorld"));
@@ -36,25 +34,25 @@ public class CmdAdd extends PlotCommand {
                             if (plot.isAllowedConsulting(allowed) || plot.isGroupAllowed(allowed)) {
                                 p.sendMessage(C("WordPlayer") + " " + RED + args[1] + RESET + " " + C("MsgAlreadyAllowed"));
                             } else {
-                                World w = p.getWorld();
+                                IWorld w = p.getWorld();
 
                                 PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(w);
 
                                 double price = 0;
 
-                                PlotAddAllowedEvent event;
+                                InternalPlotAddAllowedEvent event;
 
                                 if (plugin.getPlotMeCoreManager().isEconomyEnabled(w)) {
                                     price = pmi.getAddPlayerPrice();
-                                    double balance = plugin.getEconomy().getBalance(p);
+                                    double balance = sob.getBalance(p);
 
                                     if (balance >= price) {
-                                        event = PlotMeEventFactory.callPlotAddAllowedEvent(plugin, w, plot, p, allowed);
+                                        event = sob.getEventFactory().callPlotAddAllowedEvent(plugin, w, plot, p, allowed);
                                         
                                         if (event.isCancelled()) {
                                             return true;
                                         } else {
-                                            EconomyResponse er = plugin.getEconomy().withdrawPlayer(p, price);
+                                            EconomyResponse er = sob.withdrawPlayer(p, price);
     
                                             if (!er.transactionSuccess()) {
                                                 p.sendMessage(RED + er.errorMessage);
@@ -67,7 +65,7 @@ public class CmdAdd extends PlotCommand {
                                         return true;
                                     }
                                 } else {
-                                    event = PlotMeEventFactory.callPlotAddAllowedEvent(plugin, w, plot, p, allowed);
+                                    event = sob.getEventFactory().callPlotAddAllowedEvent(plugin, w, plot, p, allowed);
                                 }
 
                                 if (!event.isCancelled()) {

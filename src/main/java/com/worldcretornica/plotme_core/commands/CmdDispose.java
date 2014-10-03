@@ -3,8 +3,8 @@ package com.worldcretornica.plotme_core.commands;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.event.PlotDisposeEvent;
-import com.worldcretornica.plotme_core.event.PlotMeEventFactory;
+import com.worldcretornica.plotme_core.bukkit.event.PlotDisposeEvent;
+import com.worldcretornica.plotme_core.bukkit.event.BukkitEventFactory;
 
 import net.milkbowl.vault.economy.EconomyResponse;
 
@@ -50,7 +50,7 @@ public class CmdDispose extends PlotCommand {
                                     return true;
                                 }
 
-                                event = PlotMeEventFactory.callPlotDisposeEvent(plugin, w, plot, p);
+                                event = BukkitEventFactory.callPlotDisposeEvent(plugin, w, plot, p);
 
                                 if (event.isCancelled()) {
                                     return true;
@@ -83,7 +83,7 @@ public class CmdDispose extends PlotCommand {
                                     }
                                 }
                             } else {
-                                event = PlotMeEventFactory.callPlotDisposeEvent(plugin, w, plot, p);
+                                event = BukkitEventFactory.callPlotDisposeEvent(plugin, w, plot, p);
                             }
 
                             if (!event.isCancelled()) {

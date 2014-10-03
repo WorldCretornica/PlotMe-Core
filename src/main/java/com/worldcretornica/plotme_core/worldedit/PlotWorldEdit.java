@@ -1,15 +1,15 @@
 package com.worldcretornica.plotme_core.worldedit;
 
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
+import com.worldcretornica.plotme_core.api.ILocation;
+import com.worldcretornica.plotme_core.api.IPlayer;
 
 public interface PlotWorldEdit {
 
-    public void setMask(Player p);
+    public void setMask(IPlayer p);
 
-    public void setMask(Player p, Location l);
+    public void setMask(IPlayer p, ILocation l);
 
-    public void setMask(Player p, String id);
+    public void setMask(IPlayer p, String id);
 
-    public void removeMask(Player p);
+    public void removeMask(IPlayer p);
 }

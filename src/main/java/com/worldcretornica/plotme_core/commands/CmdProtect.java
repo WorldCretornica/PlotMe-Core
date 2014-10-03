@@ -3,9 +3,11 @@ package com.worldcretornica.plotme_core.commands;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.event.PlotMeEventFactory;
-import com.worldcretornica.plotme_core.event.PlotProtectChangeEvent;
+import com.worldcretornica.plotme_core.bukkit.event.BukkitEventFactory;
+import com.worldcretornica.plotme_core.bukkit.event.PlotProtectChangeEvent;
+
 import net.milkbowl.vault.economy.EconomyResponse;
+
 import org.bukkit.entity.Player;
 
 public class CmdProtect extends PlotCommand {
@@ -33,7 +35,7 @@ public class CmdProtect extends PlotCommand {
                         PlotProtectChangeEvent event;
 
                         if (plot.isProtect()) {
-                            event = PlotMeEventFactory.callPlotProtectChangeEvent(plugin, p.getWorld(), plot, p, false);
+                            event = BukkitEventFactory.callPlotProtectChangeEvent(plugin, p.getWorld(), plot, p, false);
 
                             if (!event.isCancelled()) {
                                 plot.setProtect(false);
@@ -59,7 +61,7 @@ public class CmdProtect extends PlotCommand {
                                     p.sendMessage(RED + C("MsgNotEnoughProtectPlot"));
                                     return true;
                                 } else {
-                                    event = PlotMeEventFactory.callPlotProtectChangeEvent(plugin, p.getWorld(), plot, p, true);
+                                    event = BukkitEventFactory.callPlotProtectChangeEvent(plugin, p.getWorld(), plot, p, true);
 
                                     if (event.isCancelled()) {
                                         return true;
@@ -75,7 +77,7 @@ public class CmdProtect extends PlotCommand {
                                 }
 
                             } else {
-                                event = PlotMeEventFactory.callPlotProtectChangeEvent(plugin, p.getWorld(), plot, p, true);
+                                event = BukkitEventFactory.callPlotProtectChangeEvent(plugin, p.getWorld(), plot, p, true);
                             }
 
                             if (!event.isCancelled()) {

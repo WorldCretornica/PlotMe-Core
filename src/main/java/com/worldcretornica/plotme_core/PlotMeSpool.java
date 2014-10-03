@@ -1,9 +1,7 @@
 package com.worldcretornica.plotme_core;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.World;
+import com.worldcretornica.plotme_core.api.ILocation;
+import com.worldcretornica.plotme_core.api.IWorld;
 
 public class PlotMeSpool implements Runnable {
 
@@ -32,13 +30,13 @@ public class PlotMeSpool implements Runnable {
     @Override
     public void run() {
         if (this.plottoclear != null) {
-            World w = Bukkit.getWorld(this.plottoclear.getWorld());
+            IWorld w = plugin.getServerObjectBuilder().getWorld(this.plottoclear.getWorld());
 
             if (w != null) {
                 if (this.currentClear == null)
-                    this.currentClear = this.plugin.getGenManager(w).clear(w, getPlotToClear().getPlotId(), plugin.getConfig().getInt("NbBlocksPerClearStep"), true, null);
+                    this.currentClear = this.plugin.getGenManager(w).clear(w, getPlotToClear().getPlotId(), plugin.getServerObjectBuilder().getConfig().getInt("NbBlocksPerClearStep"), true, null);
                 else {
-                    this.currentClear = this.plugin.getGenManager(w).clear(w, getPlotToClear().getPlotId(), plugin.getConfig().getInt("NbBlocksPerClearStep"), false, this.currentClear);
+                    this.currentClear = this.plugin.getGenManager(w).clear(w, getPlotToClear().getPlotId(), plugin.getServerObjectBuilder().getConfig().getInt("NbBlocksPerClearStep"), false, this.currentClear);
                 }
 
                 ShowProgress();
@@ -69,16 +67,19 @@ public class PlotMeSpool implements Runnable {
         long total = getTotalPlotBlocks();
         double percent = ((double) done) / ((double) total) * 100;
 
-        Msg(plugin.getUtil().C("WordPlot") + " " + ChatColor.GREEN + getPlotToClear().getPlotId() + ChatColor.RESET + " " + plugin.getUtil().C("WordIn") + " "
-                + ChatColor.GREEN + getPlotToClear().getWorld() + ChatColor.RESET + " "
-                + plugin.getUtil().C("WordIs") + " " + ChatColor.GREEN + ((double) Math.round(percent * 10) / 10) + "% " + ChatColor.RESET + plugin.getUtil().C("WordCleared")
-                + " (" + ChatColor.GREEN + format(done) + ChatColor.RESET + "/" + ChatColor.GREEN + format(total) + ChatColor.RESET + " " + plugin.getUtil().C("WordBlocks") + ")");
+        String green = plugin.getServerObjectBuilder().getColor("GREEN");
+        String reset = plugin.getServerObjectBuilder().getColor("RESET");
+        
+        Msg(plugin.getUtil().C("WordPlot") + " " + green + getPlotToClear().getPlotId() + reset + " " + plugin.getUtil().C("WordIn") + " "
+                + green + getPlotToClear().getWorld() + reset + " "
+                + plugin.getUtil().C("WordIs") + " " + green + ((double) Math.round(percent * 10) / 10) + "% " + reset + plugin.getUtil().C("WordCleared")
+                + " (" + green + format(done) + reset + "/" + green + format(total) + reset + " " + plugin.getUtil().C("WordBlocks") + ")");
     }
 
     private long getTotalPlotBlocks() {
-        World w = Bukkit.getWorld(getPlotToClear().getWorld());
-        Location bottom = plugin.getGenManager(w).getPlotBottomLoc(w, getPlotToClear().getPlotId());
-        Location top = plugin.getGenManager(w).getPlotTopLoc(w, getPlotToClear().getPlotId());
+        IWorld w = plugin.getServerObjectBuilder().getWorld(getPlotToClear().getWorld());
+        ILocation bottom = plugin.getGenManager(w).getPlotBottomLoc(w, getPlotToClear().getPlotId());
+        ILocation top = plugin.getGenManager(w).getPlotTopLoc(w, getPlotToClear().getPlotId());
 
         return (top.getBlockX() - bottom.getBlockX() + 1) * (top.getBlockY() - bottom.getBlockY() + 1) * (top.getBlockZ() - bottom.getBlockZ() + 1);
     }

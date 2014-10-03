@@ -1,10 +1,8 @@
 package com.worldcretornica.plotme_core;
 
-import com.worldcretornica.plotme_core.event.PlotMeEventFactory;
-import com.worldcretornica.plotme_core.event.PlotResetEvent;
+import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.api.event.InternalPlotResetEvent;
 import java.util.List;
-import org.bukkit.ChatColor;
-import org.bukkit.World;
 
 public class PlotRunnableDeleteExpire implements Runnable {
 
@@ -20,7 +18,7 @@ public class PlotRunnableDeleteExpire implements Runnable {
         PlotMeCoreManager coremanager = plugin.getPlotMeCoreManager();
 
         if (plugin.getWorldCurrentlyProcessingExpired() != null) {
-            World w = plugin.getWorldCurrentlyProcessingExpired();
+            IWorld w = plugin.getWorldCurrentlyProcessingExpired();
             List<Plot> expiredplots = sqlmanager.getExpiredPlots(w.getName(), 0, plugin.getNbPerDeletionProcessingExpired());
 
             if (expiredplots.isEmpty()) {
@@ -29,13 +27,13 @@ public class PlotRunnableDeleteExpire implements Runnable {
                 String ids = "";
 
                 for (Plot expiredplot : expiredplots) {
-                    PlotResetEvent event = PlotMeEventFactory.callPlotResetEvent(plugin, w, expiredplot, plugin.getCommandSenderCurrentlyProcessingExpired());
+                    InternalPlotResetEvent event = plugin.getServerObjectBuilder().getEventFactory().callPlotResetEvent(plugin, w, expiredplot, plugin.getCommandSenderCurrentlyProcessingExpired());
 
                     if (!event.isCancelled()) {
                         coremanager.clear(w, expiredplot, plugin.getCommandSenderCurrentlyProcessingExpired(), ClearReason.Expired);
 
                         String id = expiredplot.getId();
-                        ids += ChatColor.RED + id + ChatColor.RESET + ", ";
+                        ids += plugin.getServerObjectBuilder().getColor("RED") + id + plugin.getServerObjectBuilder().getColor("RESET") + ", ";
 
                         coremanager.removePlot(w, id);
                         coremanager.removeOwnerSign(w, id);

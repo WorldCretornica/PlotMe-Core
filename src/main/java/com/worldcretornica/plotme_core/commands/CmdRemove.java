@@ -5,8 +5,8 @@ import java.util.UUID;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.event.PlotMeEventFactory;
-import com.worldcretornica.plotme_core.event.PlotRemoveAllowedEvent;
+import com.worldcretornica.plotme_core.bukkit.event.BukkitEventFactory;
+import com.worldcretornica.plotme_core.bukkit.event.PlotRemoveAllowedEvent;
 
 import net.milkbowl.vault.economy.EconomyResponse;
 
@@ -51,7 +51,7 @@ public class CmdRemove extends PlotCommand {
                                     double balance = plugin.getEconomy().getBalance(p);
 
                                     if (balance >= price) {
-                                        event = PlotMeEventFactory.callPlotRemoveAllowedEvent(plugin, w, plot, p, allowed);
+                                        event = BukkitEventFactory.callPlotRemoveAllowedEvent(plugin, w, plot, p, allowed);
 
                                         if (event.isCancelled()) {
                                             return true;
@@ -69,7 +69,7 @@ public class CmdRemove extends PlotCommand {
                                         return true;
                                     }
                                 } else {
-                                    event = PlotMeEventFactory.callPlotRemoveAllowedEvent(plugin, w, plot, p, allowed);
+                                    event = BukkitEventFactory.callPlotRemoveAllowedEvent(plugin, w, plot, p, allowed);
                                 }
 
                                 if (!event.isCancelled()) {

@@ -1,35 +1,14 @@
 package com.worldcretornica.plotme_core;
 
-import com.sk89q.worldedit.bukkit.WorldEditPlugin;
-import com.worldcretornica.plotme_core.api.v0_14b.IPlotMe_ChunkGenerator;
+import com.worldcretornica.plotme_core.api.*;
 import com.worldcretornica.plotme_core.api.v0_14b.IPlotMe_GeneratorManager;
-import com.worldcretornica.plotme_core.listener.PlayerListener;
-import com.worldcretornica.plotme_core.listener.PlotDenyListener;
-import com.worldcretornica.plotme_core.listener.PlotListener;
-import com.worldcretornica.plotme_core.listener.PlotWorldEditListener;
 import com.worldcretornica.plotme_core.utils.Util;
-import com.worldcretornica.plotme_core.worldedit.PlotWorldEdit;
-import me.flungo.bukkit.tools.ConfigAccessor;
-import net.milkbowl.vault.economy.Economy;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.World;
-import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.RegisteredServiceProvider;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.mcstats.Metrics;
-import org.mcstats.Metrics.Graph;
-
-import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
-public class PlotMe_Core extends JavaPlugin {
+public class PlotMe_Core {
 
     public static final String LANG_PATH = "language";
     public static final String DEFAULT_LANG = "english";
@@ -37,16 +16,13 @@ public class PlotMe_Core extends JavaPlugin {
     public static final String DEFAULT_GENERATOR_URL = "http://dev.bukkit.org/bukkit-plugins/plotme/";
 
     //Config accessors for language <lang, accessor>
-    private final HashMap<String, ConfigAccessor> captionsCA = new HashMap<>();
-
-    private Economy economy = null;
-    private Boolean usinglwc = false;
+    private final HashMap<String, IConfigSection> captionsCA = new HashMap<>();
 
     // Worlds that do not have a world generator
     private final Set<String> badWorlds = new HashSet<>();
 
-    private World worldcurrentlyprocessingexpired;
-    private CommandSender cscurrentlyprocessingexpired;
+    private IWorld worldcurrentlyprocessingexpired;
+    private ICommandSender cscurrentlyprocessingexpired;
     private Integer counterexpired;
     private Integer nbperdeletionprocessingexpired;
 
@@ -58,15 +34,19 @@ public class PlotMe_Core extends JavaPlugin {
     //Global variables
     private PlotMeCoreManager plotmecoremanager = null;
     private SqlManager sqlmanager = null;
-    private PlotWorldEdit plotworldedit = null;
     private Util util = null;
     private Boolean initialized = false;
+    
+    //Bridge
+    private IServerObjectBuilder serverObjectBuilder = null;
 
-    @Override
-    public void onDisable() {
+    public PlotMe_Core(IServerObjectBuilder serverObjectBuilder) {
+        this.serverObjectBuilder = serverObjectBuilder;
+    }
+    
+    public void disable() {
         getSqlManager().closeConnection();
-        setEconomy(null);
-        setUsinglwc(null);
+        serverObjectBuilder.unHook();
         getPlotMeCoreManager().setPlayersIgnoringWELimit(null);
         setWorldCurrentlyProcessingExpired(null);
         setCommandSenderCurrentlyProcessingExpired(null);
@@ -81,26 +61,24 @@ public class PlotMe_Core extends JavaPlugin {
         }
     }
 
-    @Override
-    public void onEnable() {
+    public void enable() {
         setupMySQL();
         setupConfig();
         setupDefaultCaptions();
         setPlotMeCoreManager(new PlotMeCoreManager(this));
         setUtil(new Util(this));
         setupWorlds(); // TODO: Remove concept of pmi so this is not needed
-        setupListeners();
-        setupCommands();
-        setupHooks();
+        serverObjectBuilder.setupListeners();
+        serverObjectBuilder.setupCommands();
+        serverObjectBuilder.setupHooks();
         setupClearSpools();
-        doMetric();
         initialized = true;
         sqlmanager.plotConvertToUUIDAsynchronously();
     }
 
     public void reload() {
         getSqlManager().closeConnection();
-        reloadConfig();
+        serverObjectBuilder.reloadConfig();
         setupConfig();
         for (String lang : captionsCA.keySet()) {
             reloadCaptionConfig(lang);
@@ -109,64 +87,22 @@ public class PlotMe_Core extends JavaPlugin {
         setupDefaultCaptions();
         setupMySQL();
     }
-
-    private void doMetric() {
-        try {
-            Metrics metrics = new Metrics(this);
-
-            Graph graphNbWorlds = metrics.createGraph("Plot worlds");
-
-            graphNbWorlds.addPlotter(new Metrics.Plotter("Number of plot worlds") {
-                @Override
-                public int getValue() {
-                    return getPlotMeCoreManager().getPlotMaps().size();
-                }
-            });
-
-            graphNbWorlds.addPlotter(new Metrics.Plotter("Average Plot size") {
-                @Override
-                public int getValue() {
-
-                    if (!getPlotMeCoreManager().getPlotMaps().isEmpty()) {
-                        int totalplotsize = 0;
-
-                        for (String s : getPlotMeCoreManager().getPlotMaps().keySet()) {
-                            if (getPlotMeCoreManager().getGenMan(s) != null) {
-                                if (getPlotMeCoreManager().getGenMan(s).getPlotSize(s) != 0) {
-                                    totalplotsize += getPlotMeCoreManager().getGenMan(s).getPlotSize(s);
-                                }
-                            }
-                        }
-
-                        return totalplotsize / getPlotMeCoreManager().getPlotMaps().size();
-                    } else {
-                        return 0;
-                    }
-                }
-            });
-
-            graphNbWorlds.addPlotter(new Metrics.Plotter("Number of plots") {
-                @Override
-                public int getValue() {
-                    int nbplot = 0;
-
-                    for (String map : getPlotMeCoreManager().getPlotMaps().keySet()) {
-                        nbplot += getSqlManager().getPlotCount(map);
-                    }
-
-                    return nbplot;
-                }
-            });
-
-            metrics.start();
-        } catch (IOException e) {
-            // Failed to submit the stats :-(
-        }
+    
+    public IServerObjectBuilder getServerObjectBuilder() {
+        return serverObjectBuilder;
+    }
+    
+    public Logger getLogger() {
+        return getServerObjectBuilder().getLogger();
+    }
+    
+    public String getName() {
+        return "PlotMe-Core";
     }
 
     private void setupConfig() {
         // Get the config we will be working with
-        final FileConfiguration config = getConfig();
+        final IConfigSection config = getServerObjectBuilder().getConfig();
 
         // Move old configs to new locations
         config.set(LANG_PATH, config.getString("Language"));
@@ -187,8 +123,7 @@ public class PlotMe_Core extends JavaPlugin {
 
         // Load config-old.yml
         // config-old.yml should be used to import settings from by DefaultGenerator
-        final ConfigAccessor oldConfCA = new ConfigAccessor(this, "config-old.yml");
-        final FileConfiguration oldConfig = oldConfCA.getConfig();
+        final IConfigSection oldConfig = getServerObjectBuilder().getConfig("config-old.yml");
 
         // Create a list of old world configs that should be moved to config-old.yml
         final Set<String> oldWorldConfigs = new HashSet<>();
@@ -208,17 +143,17 @@ public class PlotMe_Core extends JavaPlugin {
         oldWorldConfigs.add("AuctionWallBlockId");
 
         // Copy defaults for all worlds
-        ConfigurationSection worldsCS = config.getConfigurationSection("worlds");
-        ConfigurationSection oldWorldsCS = oldConfig.getConfigurationSection("worlds");
+        IConfigSection worldsCS = config.getConfigurationSection("worlds");
+        IConfigSection oldWorldsCS = oldConfig.getConfigurationSection("worlds");
         if (oldWorldsCS == null) {
             oldWorldsCS = oldConfig.createSection("worlds");
         }
         for (String worldname : worldsCS.getKeys(false)) {
             // Get the current config section
-            final ConfigurationSection worldCS = worldsCS.getConfigurationSection(worldname);
+            final IConfigSection worldCS = worldsCS.getConfigurationSection(worldname);
 
             // Find old world data an move it to oldConfig
-            ConfigurationSection oldWorldCS = oldWorldsCS.getConfigurationSection(worldname);
+            IConfigSection oldWorldCS = oldWorldsCS.getConfigurationSection(worldname);
             for (String path : oldWorldConfigs) {
                 if (worldCS.contains(path)) {
                     if (oldWorldCS == null) {
@@ -231,23 +166,23 @@ public class PlotMe_Core extends JavaPlugin {
         }
 
         // Copy new values over
-        config.options().copyDefaults(true);
+        config.copyDefaults(true);
 
         // Save the config file back to disk
         if (!oldWorldsCS.getKeys(false).isEmpty()) {
-            oldConfCA.saveConfig();
+            oldConfig.saveConfig();
         }
-        saveConfig();
+        config.saveConfig();
     }
 
     private void setupWorlds() {
-        final ConfigurationSection worldsCS = getConfig().getConfigurationSection("worlds");
+        final IConfigSection worldsCS = getServerObjectBuilder().getConfig().getConfigurationSection("worlds");
         for (String worldname : worldsCS.getKeys(false)) {
             getPlotMeCoreManager().addPlotMap(worldname.toLowerCase(), new PlotMapInfo(this, worldname));
             if (getGenManager(worldname) == null) {
-                getLogger().log(Level.SEVERE, "The world {0} either does not exist or not using a PlotMe generator", worldname);
-                getLogger().log(Level.SEVERE, "Please ensure that {0} is set up and that it is using a PlotMe generator", worldname);
-                getLogger().log(Level.SEVERE, "The default generator can be downloaded from " + DEFAULT_GENERATOR_URL);
+                serverObjectBuilder.getLogger().log(Level.SEVERE, "The world {0} either does not exist or not using a PlotMe generator", worldname);
+                serverObjectBuilder.getLogger().log(Level.SEVERE, "Please ensure that {0} is set up and that it is using a PlotMe generator", worldname);
+                serverObjectBuilder.getLogger().log(Level.SEVERE, "The default generator can be downloaded from " + DEFAULT_GENERATOR_URL);
                 badWorlds.add(worldname);
             }
         }
@@ -256,14 +191,14 @@ public class PlotMe_Core extends JavaPlugin {
     private String loadCaptionConfig(String lang) {
         if (!captionsCA.containsKey(lang)) {
             String configFilename = String.format(CAPTIONS_PATTERN, lang);
-            ConfigAccessor ca = new ConfigAccessor(this, configFilename);
+            IConfigSection ca = getServerObjectBuilder().getConfig(configFilename);
             captionsCA.put(lang, ca);
         }
-        if (captionsCA.get(lang).getConfig().getKeys(false).isEmpty()) {
+        if (captionsCA.get(lang).getKeys(false).isEmpty()) {
             if (lang.equals(DEFAULT_LANG)) {
                 setupDefaultCaptions();
             } else {
-                getLogger().log(Level.WARNING, "Could not load caption file for {0}"
+                serverObjectBuilder.getLogger().log(Level.WARNING, "Could not load caption file for {0}"
                         + " or the language file was empty. Using " + DEFAULT_LANG, lang);
                 return loadCaptionConfig(DEFAULT_LANG);
             }
@@ -271,21 +206,21 @@ public class PlotMe_Core extends JavaPlugin {
         return lang;
     }
 
-    private ConfigAccessor getCaptionConfigCA(String lang) {
+    private IConfigSection getCaptionConfigCA(String lang) {
         lang = loadCaptionConfig(lang);
         return captionsCA.get(lang);
     }
 
-    public FileConfiguration getCaptionConfig() {
-        return getCaptionConfig(getConfig().getString(LANG_PATH));
+    public IConfigSection getCaptionConfig() {
+        return getCaptionConfig(getServerObjectBuilder().getConfig().getString(LANG_PATH));
     }
 
-    public FileConfiguration getCaptionConfig(String lang) {
-        return getCaptionConfigCA(lang).getConfig();
+    public IConfigSection getCaptionConfig(String lang) {
+        return getCaptionConfigCA(lang);
     }
 
     public void reloadCaptionConfig() {
-        reloadCaptionConfig(getConfig().getString(LANG_PATH));
+        reloadCaptionConfig(getServerObjectBuilder().getConfig().getString(LANG_PATH));
     }
 
     public void reloadCaptionConfig(String lang) {
@@ -293,7 +228,7 @@ public class PlotMe_Core extends JavaPlugin {
     }
 
     public void saveCaptionConfig() {
-        saveCaptionConfig(getConfig().getString(LANG_PATH));
+        saveCaptionConfig(getServerObjectBuilder().getConfig().getString(LANG_PATH));
     }
 
     public void saveCaptionConfig(String lang) {
@@ -302,11 +237,11 @@ public class PlotMe_Core extends JavaPlugin {
 
     private void setupDefaultCaptions() {
         String fileName = String.format(CAPTIONS_PATTERN, DEFAULT_LANG);
-        saveResource(fileName, true);
+        getServerObjectBuilder().saveResource(fileName, true);
     }
 
     private void setupMySQL() {
-        FileConfiguration config = getConfig();
+        IConfigSection config = getServerObjectBuilder().getConfig();
 
         boolean usemySQL = config.getBoolean("usemySQL", false);
         String mySQLconn = config.getString("mySQLconn", "jdbc:mysql://localhost:3306/minecraft");
@@ -316,89 +251,33 @@ public class PlotMe_Core extends JavaPlugin {
         setSqlManager(new SqlManager(this, usemySQL, mySQLuname, mySQLpass, mySQLconn));
     }
 
-    private void setupListeners() {
-        PluginManager pm = getServer().getPluginManager();
-
-        pm.registerEvents(new PlayerListener(this), this);
-
-        pm.registerEvents(new PlotListener(this), this);
-
-        if (getConfig().getBoolean("allowToDeny")) {
-            pm.registerEvents(new PlotDenyListener(this), this);
-        }
-    }
-
-    private void setupHooks() {
-        PluginManager pm = getServer().getPluginManager();
-
-        if (pm.getPlugin("Vault") != null) {
-            setupEconomy();
-        }
-
-        if (pm.getPlugin("WorldEdit") != null) {
-            try {
-                Class.forName("com.sk89q.worldedit.function.mask.Mask");
-                setPlotWorldEdit((PlotWorldEdit) Class.forName("com.worldcretornica.plotme_core.worldedit.PlotWorldEdit6_0_0").getConstructor(PlotMe_Core.class, WorldEditPlugin.class).newInstance(this, pm.getPlugin("WorldEdit")));
-            } catch (Exception unused) {
-                try {
-                    setPlotWorldEdit((PlotWorldEdit) Class.forName("com.worldcretornica.plotme_core.worldedit.PlotWorldEdit5_7").getConstructor(PlotMe_Core.class, WorldEditPlugin.class).newInstance(this, pm.getPlugin("WorldEdit")));
-                } catch (Exception unused2) {
-                    getLogger().warning("Unable to hook to WorldEdit properly, please contact the developper of plotme with your WorldEdit version.");
-                    setPlotWorldEdit(null);
-                }
-            }
-            
-            pm.registerEvents(new PlotWorldEditListener(this), this);
-        }
-
-        if (pm.getPlugin("LWC") != null) {
-            setUsinglwc(true);
-        }
-    }
-
-    private void setupCommands() {
-        getCommand("plotme").setExecutor(new PMCommand(this));
-    }
-
     private void setupClearSpools() {
         creationbuffer = new HashMap<>();
         plotsToClear = new ConcurrentLinkedQueue<>();
     }
 
-    public void sendMessage(CommandSender cs, String message) {
-        cs.sendMessage(ChatColor.AQUA + "[" + message + "] " + ChatColor.RESET + message);
-    }
-
-    public boolean cPerms(CommandSender sender, String node) {
+    public boolean cPerms(ICommandSender sender, String node) {
         return sender.hasPermission(node);
     }
 
-    public IPlotMe_GeneratorManager getGenManager(World w) {
-        if (w.getGenerator() instanceof IPlotMe_ChunkGenerator) {
-            IPlotMe_ChunkGenerator cg = (IPlotMe_ChunkGenerator) w.getGenerator();
-            return cg.getManager();
+    public IPlotMe_GeneratorManager getGenManager(IWorld w) {
+        if (w.isPlotMeGenerator()) {
+            return w.getGenerator().getManager();
         } else {
             return null;
         }
     }
 
     public IPlotMe_GeneratorManager getGenManager(String name) {
-        World w = getServer().getWorld(name);
+        IWorld w = serverObjectBuilder.getWorld(name);
         if (w == null) {
             return null;
         } else {
-            return getGenManager(getServer().getWorld(name));
+            return getGenManager(w);
         }
     }
 
-    private void setupEconomy() {
-        RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
-        if (economyProvider != null) {
-            setEconomy(economyProvider.getProvider());
-        }
-    }
-
-    public int getPlotLimit(Player p) {
+    public int getPlotLimit(IPlayer p) {
         int max = -2;
 
         int maxlimit = 255;
@@ -460,24 +339,23 @@ public class PlotMe_Core extends JavaPlugin {
         getCommandSenderCurrentlyProcessingExpired().sendMessage(getUtil().C("MsgStartDeleteSession"));
 
         for (int ctr = 0; ctr < (howmanytimes / getNbPerDeletionProcessingExpired()); ctr++) {
-            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this, task, ctr * eachseconds * 20);
+            serverObjectBuilder.scheduleSyncDelayedTask(task, ctr * eachseconds * 20);
         }
     }
 
     public String getVersion() {
-        return getDescription().getVersion();
+        return serverObjectBuilder.getVersion();
     }
 
     public Set<String> getBadWorlds() {
         return badWorlds;
     }
 
-    public World getWorldCurrentlyProcessingExpired() {
+    public IWorld getWorldCurrentlyProcessingExpired() {
         return worldcurrentlyprocessingexpired;
     }
 
-    public void setWorldCurrentlyProcessingExpired(
-            World worldcurrentlyprocessingexpired) {
+    public void setWorldCurrentlyProcessingExpired(IWorld worldcurrentlyprocessingexpired) {
         this.worldcurrentlyprocessingexpired = worldcurrentlyprocessingexpired;
     }
 
@@ -489,33 +367,17 @@ public class PlotMe_Core extends JavaPlugin {
         this.counterexpired = counterexpired;
     }
 
-    public Economy getEconomy() {
-        return economy;
-    }
-
-    private void setEconomy(Economy economy) {
-        this.economy = economy;
-    }
-
-    public Boolean getUsinglwc() {
-        return usinglwc;
-    }
-
-    public void setUsinglwc(Boolean usinglwc) {
-        this.usinglwc = usinglwc;
-    }
-
     public void addPlotToClear(PlotToClear plotToClear) {
         this.plotsToClear.offer(plotToClear);
         
         PlotMeSpool pms = new PlotMeSpool(this, plotToClear);
-        Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, pms, 0L, 200L);
+        serverObjectBuilder.scheduleSyncRepeatingTask(pms, 0L, 200L);
     }
     
     public void removePlotToClear(PlotToClear plotToClear, int taskid) {
         this.plotsToClear.remove(plotToClear);
 
-        Bukkit.getScheduler().cancelTask(taskid);
+        serverObjectBuilder.cancelTask(taskid);
     }
 
     public boolean isPlotLocked(String world, String id) {
@@ -547,12 +409,11 @@ public class PlotMe_Core extends JavaPlugin {
         this.nbperdeletionprocessingexpired = nbperdeletionprocessingexpired;
     }
 
-    public CommandSender getCommandSenderCurrentlyProcessingExpired() {
+    public ICommandSender getCommandSenderCurrentlyProcessingExpired() {
         return cscurrentlyprocessingexpired;
     }
 
-    public void setCommandSenderCurrentlyProcessingExpired(
-            CommandSender cscurrentlyprocessingexpired) {
+    public void setCommandSenderCurrentlyProcessingExpired(ICommandSender cscurrentlyprocessingexpired) {
         this.cscurrentlyprocessingexpired = cscurrentlyprocessingexpired;
     }
 
@@ -570,14 +431,6 @@ public class PlotMe_Core extends JavaPlugin {
 
     private void setSqlManager(SqlManager sqlmanager) {
         this.sqlmanager = sqlmanager;
-    }
-
-    public PlotWorldEdit getPlotWorldEdit() {
-        return plotworldedit;
-    }
-
-    private void setPlotWorldEdit(PlotWorldEdit plotworldedit) {
-        this.plotworldedit = plotworldedit;
     }
 
     public Util getUtil() {

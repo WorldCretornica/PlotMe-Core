@@ -1,8 +1,9 @@
 package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.event.PlotMeEventFactory;
-import com.worldcretornica.plotme_core.event.PlotMoveEvent;
+import com.worldcretornica.plotme_core.bukkit.event.BukkitEventFactory;
+import com.worldcretornica.plotme_core.bukkit.event.PlotMoveEvent;
+
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
@@ -29,7 +30,7 @@ public class CmdMove extends PlotCommand {
                                           + RESET + C("WordExample") + ": " + RED + "/plotme " + C("CommandMove") + " 0;1 2;-1");
                     return true;
                 } else {
-                    PlotMoveEvent event = PlotMeEventFactory.callPlotMoveEvent(plugin, w, w, plot1, plot2, p);
+                    PlotMoveEvent event = BukkitEventFactory.callPlotMoveEvent(plugin, w, w, plot1, plot2, p);
 
                     if (!event.isCancelled()) {
                         if (plugin.getPlotMeCoreManager().movePlot(p.getWorld(), plot1, plot2)) {

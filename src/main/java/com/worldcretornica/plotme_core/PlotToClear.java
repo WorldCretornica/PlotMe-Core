@@ -1,15 +1,15 @@
 package com.worldcretornica.plotme_core;
 
-import org.bukkit.command.CommandSender;
+import com.worldcretornica.plotme_core.api.ICommandSender;
 
 public class PlotToClear {
 
     private String world;
     private String plotid;
-    private CommandSender commandsender; //TODO Make it work if player relogs
+    private ICommandSender commandsender; //TODO Make it work if player relogs
     private ClearReason reason;
 
-    public PlotToClear(String w, String id, CommandSender cs, ClearReason r) {
+    public PlotToClear(String w, String id, ICommandSender cs, ClearReason r) {
         setWorld(w);
         setPlotId(id);
         setCommandSender(cs);
@@ -32,11 +32,11 @@ public class PlotToClear {
         this.plotid = plotid;
     }
 
-    public final CommandSender getCommandSender() {
+    public final ICommandSender getCommandSender() {
         return commandsender;
     }
 
-    public final void setCommandSender(CommandSender commandsender) {
+    public final void setCommandSender(ICommandSender commandsender) {
         this.commandsender = commandsender;
     }
 

@@ -1,7 +1,11 @@
 package com.worldcretornica.plotme_core.utils;
 
 import com.worldcretornica.plotme_core.PlotMe_Core;
+
 import java.util.logging.Level;
+
+import net.milkbowl.vault.economy.Economy;
+
 import org.bukkit.ChatColor;
 
 public class Util {
@@ -60,8 +64,10 @@ public class Util {
 
         String format = round(Math.abs(price));
 
-        if (plugin.getEconomy() != null) {
-            format = (price <= 1 && price >= -1) ? format + " " + plugin.getEconomy().currencyNameSingular() : format + " " + plugin.getEconomy().currencyNamePlural();
+        Economy econ = plugin.getServerObjectBuilder().getEconomy();
+        
+        if (econ != null) {
+            format = (price <= 1 && price >= -1) ? format + " " + econ.currencyNameSingular() : format + " " + econ.currencyNamePlural();
         }
 
         if (showsign) {

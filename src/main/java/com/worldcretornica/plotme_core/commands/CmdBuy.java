@@ -2,16 +2,10 @@ package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.event.PlotBuyEvent;
-import com.worldcretornica.plotme_core.event.PlotMeEventFactory;
+import com.worldcretornica.plotme_core.api.*;
+import com.worldcretornica.plotme_core.api.event.InternalPlotBuyEvent;
 
 import net.milkbowl.vault.economy.EconomyResponse;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
 
 public class CmdBuy extends PlotCommand {
 
@@ -19,10 +13,10 @@ public class CmdBuy extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(Player p, String[] args) {
+    public boolean exec(IPlayer p, String[] args) {
         if (plugin.getPlotMeCoreManager().isEconomyEnabled(p)) {
             if (plugin.cPerms(p, "PlotMe.use.buy") || plugin.cPerms(p, "PlotMe.admin.buy")) {
-                Location l = p.getLocation();
+                ILocation l = p.getLocation();
                 String id = plugin.getPlotMeCoreManager().getPlotId(l);
 
                 if (id.equals("")) {
@@ -45,35 +39,35 @@ public class CmdBuy extends PlotCommand {
                                                       + plugin.getPlotMeCoreManager().getNbOwnedPlot(p) + "/" + plugin.getPlotLimit(p) + "). "
                                                       + C("WordUse") + " " + RED + "/plotme " + C("CommandHome") + RESET + " " + C("MsgToGetToIt"));
                             } else {
-                                World w = p.getWorld();
+                                IWorld w = p.getWorld();
 
                                 double cost = plot.getCustomPrice();
 
-                                if (plugin.getEconomy().getBalance(p) < cost) {
+                                if (sob.getBalance(p) < cost) {
                                     p.sendMessage(RED + C("MsgNotEnoughBuy"));
                                 } else {
 
-                                    PlotBuyEvent event = PlotMeEventFactory.callPlotBuyEvent(plugin, w, plot, p, cost);
+                                    InternalPlotBuyEvent event = sob.getEventFactory().callPlotBuyEvent(plugin, w, plot, p, cost);
 
                                     if (!event.isCancelled()) {
-                                        EconomyResponse er = plugin.getEconomy().withdrawPlayer(p, cost);
+                                        EconomyResponse er = sob.withdrawPlayer(p, cost);
 
                                         if (er.transactionSuccess()) {
                                             String oldowner = plot.getOwner();
-                                            OfflinePlayer playercurrentbidder = null;
+                                            IOfflinePlayer playercurrentbidder = null;
                                             
                                             if (plot.getOwnerId() != null) {
-                                                playercurrentbidder = Bukkit.getOfflinePlayer(plot.getOwnerId());
+                                                playercurrentbidder = sob.getOfflinePlayer(plot.getOwnerId());
                                             }
 
                                             if (!oldowner.equalsIgnoreCase("$Bank$") && playercurrentbidder != null) {
-                                                EconomyResponse er2 = plugin.getEconomy().depositPlayer(playercurrentbidder, cost);
+                                                EconomyResponse er2 = sob.depositPlayer(playercurrentbidder, cost);
 
                                                 if (!er2.transactionSuccess()) {
                                                     p.sendMessage(RED + er2.errorMessage);
                                                     Util().warn(er2.errorMessage);
                                                 } else {
-                                                    for (Player player : Bukkit.getServer().getOnlinePlayers()) {
+                                                    for (IPlayer player : sob.getOnlinePlayers()) {
                                                         if (player.getName().equalsIgnoreCase(oldowner)) {
                                                             player.sendMessage(C("WordPlot") + " " + id + " "
                                                                                        + C("MsgSoldTo") + " " + buyer + ". " + Util().moneyFormat(cost));

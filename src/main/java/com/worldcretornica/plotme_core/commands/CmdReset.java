@@ -4,8 +4,8 @@ import com.worldcretornica.plotme_core.ClearReason;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.event.PlotMeEventFactory;
-import com.worldcretornica.plotme_core.event.PlotResetEvent;
+import com.worldcretornica.plotme_core.bukkit.event.BukkitEventFactory;
+import com.worldcretornica.plotme_core.bukkit.event.PlotResetEvent;
 
 import net.milkbowl.vault.economy.EconomyResponse;
 
@@ -39,7 +39,7 @@ public class CmdReset extends PlotCommand {
                     if (plot.getOwner().equalsIgnoreCase(playername) || plugin.cPerms(p, "PlotMe.admin.reset")) {
                         World w = p.getWorld();
 
-                        PlotResetEvent event = PlotMeEventFactory.callPlotResetEvent(plugin, w, plot, p);
+                        PlotResetEvent event = BukkitEventFactory.callPlotResetEvent(plugin, w, plot, p);
 
                         if (!event.isCancelled()) {
                             plugin.getPlotMeCoreManager().setBiome(w, id, Biome.PLAINS);

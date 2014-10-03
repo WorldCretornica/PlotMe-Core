@@ -4,11 +4,10 @@ import com.worldcretornica.plotme_core.ClearReason;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.event.PlotClearEvent;
-import com.worldcretornica.plotme_core.event.PlotMeEventFactory;
+import com.worldcretornica.plotme_core.api.*;
+import com.worldcretornica.plotme_core.api.event.InternalPlotClearEvent;
+
 import net.milkbowl.vault.economy.EconomyResponse;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
 
 public class CmdClear extends PlotCommand {
 
@@ -16,7 +15,7 @@ public class CmdClear extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(Player p, String[] args) {
+    public boolean exec(IPlayer p, String[] args) {
         if (plugin.cPerms(p, "PlotMe.admin.clear") || plugin.cPerms(p, "PlotMe.use.clear")) {
             if (!plugin.getPlotMeCoreManager().isPlotWorld(p)) {
                 p.sendMessage(RED + C("MsgNotPlotWorld"));
@@ -33,25 +32,25 @@ public class CmdClear extends PlotCommand {
                         String playername = p.getName();
 
                         if (plot.getOwner().equalsIgnoreCase(playername) || plugin.cPerms(p, "PlotMe.admin.clear")) {
-                            World w = p.getWorld();
+                            IWorld w = p.getWorld();
 
                             PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(w);
 
                             double price = 0;
 
-                            PlotClearEvent event;
+                            InternalPlotClearEvent event;
 
                             if (plugin.getPlotMeCoreManager().isEconomyEnabled(w)) {
                                 price = pmi.getClearPrice();
-                                double balance = plugin.getEconomy().getBalance(p);
+                                double balance = sob.getBalance(p);
 
                                 if (balance >= price) {
-                                    event = PlotMeEventFactory.callPlotClearEvent(plugin, w, plot, p);
+                                    event = sob.getEventFactory().callPlotClearEvent(plugin, w, plot, p);
 
                                     if (event.isCancelled()) {
                                         return true;
                                     } else {
-                                        EconomyResponse er = plugin.getEconomy().withdrawPlayer(p, price);
+                                        EconomyResponse er = sob.withdrawPlayer(p, price);
 
                                         if (!er.transactionSuccess()) {
                                             p.sendMessage(RED + er.errorMessage);
@@ -60,11 +59,11 @@ public class CmdClear extends PlotCommand {
                                         }
                                     }
                                 } else {
-                                    p.sendMessage(RED + C("MsgNotEnoughClear") + " " + C("WordMissing") + " " + RESET + (price - balance) + RED + " " + plugin.getEconomy().currencyNamePlural());
+                                    p.sendMessage(RED + C("MsgNotEnoughClear") + " " + C("WordMissing") + " " + RESET + (price - balance) + RED + " " + sob.getEconomy().currencyNamePlural());
                                     return true;
                                 }
                             } else {
-                                event = PlotMeEventFactory.callPlotClearEvent(plugin, w, plot, p);
+                                event = sob.getEventFactory().callPlotClearEvent(plugin, w, plot, p);
                             }
 
                             if (!event.isCancelled()) {

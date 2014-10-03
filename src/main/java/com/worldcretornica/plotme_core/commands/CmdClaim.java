@@ -5,13 +5,10 @@ import java.util.UUID;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.event.PlotCreateEvent;
-import com.worldcretornica.plotme_core.event.PlotMeEventFactory;
+import com.worldcretornica.plotme_core.api.*;
+import com.worldcretornica.plotme_core.api.event.InternalPlotCreateEvent;
 
 import net.milkbowl.vault.economy.EconomyResponse;
-
-import org.bukkit.World;
-import org.bukkit.entity.Player;
 
 public class CmdClaim extends PlotCommand {
 
@@ -19,7 +16,7 @@ public class CmdClaim extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(Player p, String[] args) {
+    public boolean exec(IPlayer p, String[] args) {
         if (plugin.cPerms(p, "PlotMe.use.claim") || plugin.cPerms(p, "PlotMe.admin.claim.other")) {
             if (!plugin.getPlotMeCoreManager().isPlotWorld(p)) {
                 p.sendMessage(RED + C("MsgNotPlotWorld"));
@@ -47,24 +44,24 @@ public class CmdClaim extends PlotCommand {
                         p.sendMessage(RED + C("MsgAlreadyReachedMaxPlots") + " ("
                                 + plugin.getPlotMeCoreManager().getNbOwnedPlot(p) + "/" + plugin.getPlotLimit(p) + "). " + C("WordUse") + " " + RED + "/plotme " + C("CommandHome") + RESET + " " + C("MsgToGetToIt"));
                     } else {
-                        World w = p.getWorld();
+                        IWorld w = p.getWorld();
                         PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(w);
 
                         double price = 0;
 
-                        PlotCreateEvent event;
+                        InternalPlotCreateEvent event;
 
                         if (plugin.getPlotMeCoreManager().isEconomyEnabled(w)) {
                             price = pmi.getClaimPrice();
-                            double balance = plugin.getEconomy().getBalance(p);
+                            double balance = sob.getBalance(p);
 
                             if (balance >= price) {
-                                event = PlotMeEventFactory.callPlotCreatedEvent(plugin, w, id, p);
+                                event = sob.getEventFactory().callPlotCreatedEvent(plugin, w, id, p);
 
                                 if (event.isCancelled()) {
                                     return true;
                                 } else {
-                                    EconomyResponse er = plugin.getEconomy().withdrawPlayer(p, price);
+                                    EconomyResponse er = sob.withdrawPlayer(p, price);
 
                                     if (!er.transactionSuccess()) {
                                         p.sendMessage(RED + er.errorMessage);
@@ -73,11 +70,11 @@ public class CmdClaim extends PlotCommand {
                                     }
                                 }
                             } else {
-                                p.sendMessage(RED + C("MsgNotEnoughBuy") + " " + C("WordMissing") + " " + RESET + (price - balance) + RED + " " + plugin.getEconomy().currencyNamePlural());
+                                p.sendMessage(RED + C("MsgNotEnoughBuy") + " " + C("WordMissing") + " " + RESET + (price - balance) + RED + " " + sob.getEconomy().currencyNamePlural());
                                 return true;
                             }
                         } else {
-                            event = PlotMeEventFactory.callPlotCreatedEvent(plugin, w, id, p);
+                            event = sob.getEventFactory().callPlotCreatedEvent(plugin, w, id, p);
                         }
 
                         if (!event.isCancelled()) {

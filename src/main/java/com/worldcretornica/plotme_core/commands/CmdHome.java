@@ -5,8 +5,8 @@ import java.util.UUID;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.event.PlotMeEventFactory;
-import com.worldcretornica.plotme_core.event.PlotTeleportHomeEvent;
+import com.worldcretornica.plotme_core.bukkit.event.BukkitEventFactory;
+import com.worldcretornica.plotme_core.bukkit.event.PlotTeleportHomeEvent;
 
 import net.milkbowl.vault.economy.EconomyResponse;
 
@@ -95,7 +95,7 @@ public class CmdHome extends PlotCommand {
                                     double balance = plugin.getEconomy().getBalance(p);
 
                                     if (balance >= price) {
-                                        event = PlotMeEventFactory.callPlotTeleportHomeEvent(plugin, w, plot, p);
+                                        event = BukkitEventFactory.callPlotTeleportHomeEvent(plugin, w, plot, p);
 
                                         if (event.isCancelled()) {
                                             return true;
@@ -112,7 +112,7 @@ public class CmdHome extends PlotCommand {
                                         return true;
                                     }
                                 } else {
-                                    event = PlotMeEventFactory.callPlotTeleportHomeEvent(plugin, w, plot, p);
+                                    event = BukkitEventFactory.callPlotTeleportHomeEvent(plugin, w, plot, p);
                                 }
 
                                 if (!event.isCancelled()) {

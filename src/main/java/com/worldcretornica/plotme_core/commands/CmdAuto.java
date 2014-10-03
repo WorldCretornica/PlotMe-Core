@@ -2,14 +2,9 @@ package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.event.PlotCreateEvent;
-import com.worldcretornica.plotme_core.event.PlotMeEventFactory;
-
+import com.worldcretornica.plotme_core.api.*;
+import com.worldcretornica.plotme_core.api.event.InternalPlotCreateEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
-
-import org.bukkit.Bukkit;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
 
 public class CmdAuto extends PlotCommand {
 
@@ -17,16 +12,16 @@ public class CmdAuto extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(Player p, String[] args) {
+    public boolean exec(IPlayer p, String[] args) {
         if (plugin.cPerms(p, "PlotMe.use.auto")) {
-            if (!plugin.getPlotMeCoreManager().isPlotWorld(p) && !plugin.getConfig().getBoolean("allowWorldTeleport")) {
+            if (!plugin.getPlotMeCoreManager().isPlotWorld(p) && !sob.getConfig().getBoolean("allowWorldTeleport")) {
                 p.sendMessage(RED + C("MsgNotPlotWorld"));
             } else {
-                World w;
+                IWorld w;
 
-                if (!plugin.getPlotMeCoreManager().isPlotWorld(p) && plugin.getConfig().getBoolean("allowWorldTeleport")) {
+                if (!plugin.getPlotMeCoreManager().isPlotWorld(p) && sob.getConfig().getBoolean("allowWorldTeleport")) {
                     if (args.length == 2) {
-                        w = Bukkit.getWorld(args[1]);
+                        w = sob.getWorld(args[1]);
                     } else {
                         w = plugin.getPlotMeCoreManager().getFirstWorld();
                     }
@@ -87,19 +82,19 @@ public class CmdAuto extends PlotCommand {
 
                         double price = 0;
 
-                        PlotCreateEvent event;
+                        InternalPlotCreateEvent event;
 
                         if (plugin.getPlotMeCoreManager().isEconomyEnabled(w)) {
                             price = pmi.getClaimPrice();
-                            double balance = plugin.getEconomy().getBalance(p);
+                            double balance = sob.getBalance(p);
 
                             if (balance >= price) {
-                                event = PlotMeEventFactory.callPlotCreatedEvent(plugin, w, id, p);
+                                event = sob.getEventFactory().callPlotCreatedEvent(plugin, w, id, p);
 
                                 if (event.isCancelled()) {
                                     return true;
                                 } else {
-                                    EconomyResponse er = plugin.getEconomy().withdrawPlayer(p, price);
+                                    EconomyResponse er = sob.withdrawPlayer(p, price);
 
                                     if (!er.transactionSuccess()) {
                                         p.sendMessage(RED + er.errorMessage);
@@ -112,7 +107,7 @@ public class CmdAuto extends PlotCommand {
                                 return true;
                             }
                         } else {
-                            event = PlotMeEventFactory.callPlotCreatedEvent(plugin, w, id, p);
+                            event = sob.getEventFactory().callPlotCreatedEvent(plugin, w, id, p);
                         }
 
                         if (!event.isCancelled()) {

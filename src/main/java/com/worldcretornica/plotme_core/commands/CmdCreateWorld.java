@@ -1,18 +1,10 @@
 package com.worldcretornica.plotme_core.commands;
 
-import com.worldcretornica.plotme_core.DelegateClassException;
-import com.worldcretornica.plotme_core.MultiWorldWrapper;
 import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.api.*;
+import com.worldcretornica.plotme_core.api.event.InternalPlotWorldCreateEvent;
 import com.worldcretornica.plotme_core.api.v0_14b.IPlotMe_ChunkGenerator;
-import com.worldcretornica.plotme_core.event.PlotMeEventFactory;
-import com.worldcretornica.plotme_core.event.PlotWorldCreateEvent;
 import com.worldcretornica.plotme_core.utils.MinecraftFontWidthCalculator;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.generator.ChunkGenerator;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,14 +15,14 @@ public class CmdCreateWorld extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(CommandSender cs, String[] args) {
+    public boolean exec(ICommandSender cs, String[] args) {
         if (plugin.cPerms(cs, "PlotMe.admin.createworld")) {
             if (plugin.creationbuffer.containsKey(cs.getName())) {
                 if (args.length == 1) {
                     //try to create world
                     Map<String, String> parameters = plugin.creationbuffer.get(cs.getName());
 
-                    PlotWorldCreateEvent event = PlotMeEventFactory.callPlotWorldCreateEvent(parameters.get("worldname"), cs, parameters);
+                    InternalPlotWorldCreateEvent event = sob.getEventFactory().callPlotWorldCreateEvent(parameters.get("worldname"), cs, parameters);
 
                     if (!event.isCancelled()) {
                         if (plugin.getPlotMeCoreManager().CreatePlotWorld(cs, parameters.get("worldname"), parameters.get("generator"), parameters)) {
@@ -84,15 +76,11 @@ public class CmdCreateWorld extends PlotCommand {
                     cs.sendMessage("  " + C("MsgCreateWorldHelp"));
                 } else {
                     if (plugin.getPlotMeCoreManager().getMultiworld() == null) {
-                        if (Bukkit.getPluginManager().isPluginEnabled("MultiWorld")) {
-                            plugin.getPlotMeCoreManager().setMultiworld((JavaPlugin) Bukkit.getPluginManager().getPlugin("MultiWorld"));
-                        }
+                        plugin.getPlotMeCoreManager().setMultiworld();
                     }
 
                     if (plugin.getPlotMeCoreManager().getMultiverse() == null) {
-                        if (Bukkit.getPluginManager().isPluginEnabled("Multiverse-Core")) {
-                            plugin.getPlotMeCoreManager().setMultiverse((JavaPlugin) Bukkit.getPluginManager().getPlugin("Multiverse-Core"));
-                        }
+                        plugin.getPlotMeCoreManager().setMultiverse();
                     }
 
                     if ((plugin.getPlotMeCoreManager().getMultiworld() == null || !plugin.getPlotMeCoreManager().getMultiworld().isEnabled())
@@ -109,14 +97,12 @@ public class CmdCreateWorld extends PlotCommand {
                         parameters.put("worldname", args[1]);
 
                         if (plugin.getPlotMeCoreManager().getMultiworld() != null && plugin.getPlotMeCoreManager().getMultiworld().isEnabled()) {
-                            try {
-                                MultiWorldWrapper.Utils.checkWorldName(args[1]);
-                            } catch (DelegateClassException e) {
+                            if (!sob.checkWorldName(args[1])) {
                                 cs.sendMessage("[" + plugin.getName() + "] " + C("ErrInvalidWorldName") + " '" + parameters.get("worldname") + "'");
                                 return true;
                             }
                         } else if (plugin.getPlotMeCoreManager().getMultiverse() != null && plugin.getPlotMeCoreManager().getMultiverse().isEnabled()) {
-
+                            //TODO ?
                         }
                     }
 
@@ -127,31 +113,25 @@ public class CmdCreateWorld extends PlotCommand {
                     }
 
                     //Check if world exists
-                    if (Bukkit.getWorlds().contains(parameters.get("worldname"))) {
+                    if (sob.worldExists(parameters.get("worldname"))) {
                         cs.sendMessage("[" + plugin.getName() + "] " + C("ErrWorldExists") + " '" + parameters.get("worldname") + "'");
                         return false;
                     }
 
                     //Find generator
-                    Plugin bukkitplugin = Bukkit.getPluginManager().getPlugin(parameters.get("generator"));
+                    IPlotMe_ChunkGenerator generator = sob.getPlotMeGenerator(parameters.get("worldname"));
 
-                    if (bukkitplugin == null) {
-                        cs.sendMessage("[" + plugin.getName() + "] " + C("ErrCannotFindWorldGen") + " '" + parameters.get("generator") + "'");
-                        return false;
-                    } else {
-                        ChunkGenerator cg = bukkitplugin.getDefaultWorldGenerator(parameters.get("worldname"), "");
-                        if (cg != null && cg instanceof IPlotMe_ChunkGenerator) {
-                            //Get the generator configurations
-                            genparameters = ((IPlotMe_ChunkGenerator) cg).getManager().getDefaultGenerationConfig();
+                    if (generator != null) {
+                        //Get the generator configurations
+                        genparameters = generator.getManager().getDefaultGenerationConfig();
 
-                            if (genparameters == null) {
-                                cs.sendMessage("[" + plugin.getName() + "] " + C("ErrCannotCreateGen1") + " '" + parameters.get("generator") + "' " + C("ErrCannotCreateGen2"));
-                                return false;
-                            }
-                        } else {
-                            cs.sendMessage("[" + plugin.getName() + "] " + C("ErrCannotCreateGen1") + " '" + parameters.get("generator") + "' " + C("ErrCannotCreateGen3"));
+                        if (genparameters == null) {
+                            cs.sendMessage("[" + plugin.getName() + "] " + C("ErrCannotCreateGen1") + " '" + parameters.get("generator") + "' " + C("ErrCannotCreateGen2"));
                             return false;
                         }
+                    } else {
+                        cs.sendMessage("[" + plugin.getName() + "] " + C("ErrCannotCreateGen1") + " '" + parameters.get("generator") + "' " + C("ErrCannotCreateGen3"));
+                        return false;
                     }
 
                     parameters.put("PlotAutoLimit", "1000");
@@ -211,11 +191,11 @@ public class CmdCreateWorld extends PlotCommand {
         return true;
     }
 
-    private void showCurrentSettings(CommandSender cs, Map<String, String> parameters) {
+    private void showCurrentSettings(ICommandSender cs, Map<String, String> parameters) {
         String buffer = " ";
 
         for (String key : parameters.keySet()) {
-            if (MinecraftFontWidthCalculator.getStringWidth(ChatColor.stripColor(buffer + key + "=" + parameters.get(key) + " ")) >= 1250) {
+            if (MinecraftFontWidthCalculator.getStringWidth(sob.stripColor(buffer + key + "=" + parameters.get(key) + " ")) >= 1250) {
                 cs.sendMessage(buffer);
                 buffer = " ";
             }

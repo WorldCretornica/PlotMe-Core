@@ -5,14 +5,12 @@ import java.util.UUID;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.event.PlotCommentEvent;
-import com.worldcretornica.plotme_core.event.PlotMeEventFactory;
+import com.worldcretornica.plotme_core.api.*;
+import com.worldcretornica.plotme_core.api.event.InternalPlotCommentEvent;
 
 import net.milkbowl.vault.economy.EconomyResponse;
 
 import org.apache.commons.lang.StringUtils;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
 
 public class CmdComment extends PlotCommand {
 
@@ -20,7 +18,7 @@ public class CmdComment extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(Player p, String[] args) {
+    public boolean exec(IPlayer p, String[] args) {
         if (plugin.cPerms(p, "PlotMe.use.comment")) {
             if (!plugin.getPlotMeCoreManager().isPlotWorld(p)) {
                 p.sendMessage(RED + C("MsgNotPlotWorld"));
@@ -32,7 +30,7 @@ public class CmdComment extends PlotCommand {
                 if (id.isEmpty()) {
                     p.sendMessage(RED + C("MsgNoPlotFound"));
                 } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, p)) {
-                    World w = p.getWorld();
+                    IWorld w = p.getWorld();
                     PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(w);
 
                     String text = StringUtils.join(args, " ");
@@ -42,19 +40,19 @@ public class CmdComment extends PlotCommand {
 
                     Plot plot = plugin.getPlotMeCoreManager().getPlotById(p, id);
 
-                    PlotCommentEvent event;
+                    InternalPlotCommentEvent event;
 
                     if (plugin.getPlotMeCoreManager().isEconomyEnabled(w)) {
                         price = pmi.getAddCommentPrice();
-                        double balance = plugin.getEconomy().getBalance(p);
+                        double balance = sob.getBalance(p);
 
                         if (balance >= price) {
-                            event = PlotMeEventFactory.callPlotCommentEvent(plugin, p.getWorld(), plot, p, text);
+                            event = sob.getEventFactory().callPlotCommentEvent(plugin, p.getWorld(), plot, p, text);
 
                             if (event.isCancelled()) {
                                 return true;
                             } else {
-                                EconomyResponse er = plugin.getEconomy().withdrawPlayer(p, price);
+                                EconomyResponse er = sob.withdrawPlayer(p, price);
 
                                 if (!er.transactionSuccess()) {
                                     p.sendMessage(RED + er.errorMessage);
@@ -67,7 +65,7 @@ public class CmdComment extends PlotCommand {
                             return true;
                         }
                     } else {
-                        event = PlotMeEventFactory.callPlotCommentEvent(plugin, p.getWorld(), plot, p, text);
+                        event = sob.getEventFactory().callPlotCommentEvent(plugin, p.getWorld(), plot, p, text);
                     }
 
                     if (!event.isCancelled()) {
