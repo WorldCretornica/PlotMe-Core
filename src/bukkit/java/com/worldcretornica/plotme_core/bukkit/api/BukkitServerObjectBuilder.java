@@ -3,6 +3,7 @@ package com.worldcretornica.plotme_core.bukkit.api;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Logger;
 
@@ -12,6 +13,7 @@ import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.WorldType;
 import org.bukkit.block.Biome;
@@ -22,14 +24,14 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
+import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.*;
 import com.worldcretornica.plotme_core.api.event.IEventFactory;
-import com.worldcretornica.plotme_core.api.v0_14b.IPlotMe_ChunkGenerator;
 import com.worldcretornica.plotme_core.bukkit.*;
+import com.worldcretornica.plotme_core.bukkit.MultiWorldWrapper.WorldGeneratorWrapper;
 import com.worldcretornica.plotme_core.bukkit.event.BukkitEventFactory;
 import com.worldcretornica.plotme_core.bukkit.listener.*;
-import com.worldcretornica.plotme_core.worldedit.PlotWorldEdit;
 
 public class BukkitServerObjectBuilder implements IServerObjectBuilder {
 
@@ -38,6 +40,9 @@ public class BukkitServerObjectBuilder implements IServerObjectBuilder {
     private PlotWorldEdit plotworldedit = null;
     private boolean usinglwc = false;
     private IEventFactory eventfactory = null;
+    
+    private MultiWorldWrapper multiworld = null;
+    private MultiverseWrapper multiverse = null;
     
     public BukkitServerObjectBuilder(PlotMe_CorePlugin instance) {
         plugin = instance;
@@ -260,24 +265,6 @@ public class BukkitServerObjectBuilder implements IServerObjectBuilder {
     }
 
     @Override
-    public MultiWorldWrapper getMultiWorldWrapper() {
-        if (Bukkit.getPluginManager().isPluginEnabled("MultiWorld")) {
-            return new MultiWorldWrapper((JavaPlugin) Bukkit.getPluginManager().getPlugin("MultiWorld"));
-        } else {
-            return null;
-        }
-    }
-
-    @Override
-    public MultiverseWrapper getMultiverseWrapper() {
-        if (Bukkit.getPluginManager().isPluginEnabled("Multiverse-Core")) {
-            return new MultiverseWrapper((JavaPlugin) Bukkit.getPluginManager().getPlugin("Multiverse-Core"));
-        } else {
-            return null;
-        }
-    }
-
-    @Override
     public IPlotMe_ChunkGenerator getPlotMeGenerator(String pluginname, String worldname) {
         if (Bukkit.getPluginManager().isPluginEnabled(pluginname)) {
             JavaPlugin genplugin = (JavaPlugin) Bukkit.getPluginManager().getPlugin(pluginname);
@@ -344,5 +331,192 @@ public class BukkitServerObjectBuilder implements IServerObjectBuilder {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public IPlotMe_ChunkGenerator getPlotMeGenerator(String worldname) {
+        World w = Bukkit.getWorld(worldname);
+        if (w != null) {
+            ChunkGenerator cg = w.getGenerator();
+            if (cg != null && cg instanceof IPlotMe_ChunkGenerator) {
+                return (IPlotMe_ChunkGenerator) cg;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public boolean worldExists(String worldname) {
+        return Bukkit.getWorlds().contains(worldname);
+    }
+
+    @Override
+    public List<IWorld> getWorlds() {
+        List<IWorld> worlds = new ArrayList<>();
+        
+        for(World w : Bukkit.getWorlds()) {
+            worlds.add(new BukkitWorld(w));
+        }
+        
+        return worlds;
+    }
+
+    @Override
+    public boolean CreatePlotWorld(ICommandSender cs, String worldname, String generator, Map<String, String> args) {
+        //Get a seed
+        Long seed = (new java.util.Random()).nextLong();
+
+        //Check if we have multiworld
+        if (getMultiWorld() == null) {
+            if (Bukkit.getPluginManager().isPluginEnabled("MultiWorld")) {
+                setMultiworld((JavaPlugin) Bukkit.getPluginManager().getPlugin("MultiWorld"));
+            }
+        }
+        //Check if we have multiverse
+        if (getMultiverse() == null) {
+            if (Bukkit.getPluginManager().isPluginEnabled("Multiverse-Core")) {
+                setMultiverse((JavaPlugin) Bukkit.getPluginManager().getPlugin("Multiverse-Core"));
+            }
+        }
+
+        //Do we have one of them
+        if (getMultiWorld() == null && getMultiverse() == null) {
+            cs.sendMessage("[" + plugin.getName() + "] " + plugin.getAPI().getUtil().C("ErrWorldPluginNotFound"));
+            return false;
+        }
+
+        //Find generator
+        IPlotMe_ChunkGenerator bukkitplugin = plugin.getServerObjectBuilder().getPlotMeGenerator(generator, worldname);
+
+        //Make generator create settings
+        if (bukkitplugin == null) {
+            cs.sendMessage("[" + plugin.getName() + "] " + plugin.getAPI().getUtil().C("ErrCannotFindWorldGen") + " '" + generator + "'");
+            return false;
+        } else {
+            //Create the generator configurations
+            if (!(bukkitplugin).getManager().createConfig(worldname, args, cs)) {
+                cs.sendMessage("[" + plugin.getName() + "] " + plugin.getAPI().getUtil().C("ErrCannotCreateGen1") + " '" + generator + "' " + plugin.getAPI().getUtil().C("ErrCannotCreateGen2"));
+                return false;
+            }
+        }
+
+        PlotMapInfo tempPlotInfo = new PlotMapInfo(plugin.getAPI(), worldname);
+
+        tempPlotInfo.setPlotAutoLimit(Integer.parseInt(args.get("PlotAutoLimit")));
+        tempPlotInfo.setDaysToExpiration(Integer.parseInt(args.get("DaysToExpiration")));
+        tempPlotInfo.setAutoLinkPlots(Boolean.parseBoolean(args.get("AutoLinkPlots")));
+        tempPlotInfo.setDisableExplosion(Boolean.parseBoolean(args.get("DisableExplosion")));
+        tempPlotInfo.setDisableIgnition(Boolean.parseBoolean(args.get("DisableIgnition")));
+        tempPlotInfo.setUseProgressiveClear(Boolean.parseBoolean(args.get("UseProgressiveClear")));
+        tempPlotInfo.setUseEconomy(Boolean.parseBoolean(args.get("UseEconomy")));
+        tempPlotInfo.setCanPutOnSale(Boolean.parseBoolean(args.get("CanPutOnSale")));
+        tempPlotInfo.setCanSellToBank(Boolean.parseBoolean(args.get("CanSellToBank")));
+        tempPlotInfo.setRefundClaimPriceOnReset(Boolean.parseBoolean(args.get("RefundClaimPriceOnReset")));
+        tempPlotInfo.setRefundClaimPriceOnSetOwner(Boolean.parseBoolean(args.get("RefundClaimPriceOnSetOwner")));
+        tempPlotInfo.setClaimPrice(Double.parseDouble(args.get("ClaimPrice")));
+        tempPlotInfo.setClearPrice(Double.parseDouble(args.get("ClearPrice")));
+        tempPlotInfo.setAddPlayerPrice(Double.parseDouble(args.get("AddPlayerPrice")));
+        tempPlotInfo.setDenyPlayerPrice(Double.parseDouble(args.get("DenyPlayerPrice")));
+        tempPlotInfo.setRemovePlayerPrice(Double.parseDouble(args.get("RemovePlayerPrice")));
+        tempPlotInfo.setUndenyPlayerPrice(Double.parseDouble(args.get("UndenyPlayerPrice")));
+        tempPlotInfo.setPlotHomePrice(Double.parseDouble(args.get("PlotHomePrice")));
+        tempPlotInfo.setCanCustomizeSellPrice(Boolean.parseBoolean(args.get("CanCustomizeSellPrice")));
+        tempPlotInfo.setSellToPlayerPrice(Double.parseDouble(args.get("SellToPlayerPrice")));
+        tempPlotInfo.setSellToBankPrice(Double.parseDouble(args.get("SellToBankPrice")));
+        tempPlotInfo.setBuyFromBankPrice(Double.parseDouble(args.get("BuyFromBankPrice")));
+        tempPlotInfo.setAddCommentPrice(Double.parseDouble(args.get("AddCommentPrice")));
+        tempPlotInfo.setBiomeChangePrice(Double.parseDouble(args.get("BiomeChangePrice")));
+        tempPlotInfo.setProtectPrice(Double.parseDouble(args.get("ProtectPrice")));
+        tempPlotInfo.setDisposePrice(Double.parseDouble(args.get("DisposePrice")));
+
+        plugin.getAPI().getPlotMeCoreManager().addPlotMap(worldname.toLowerCase(), tempPlotInfo);
+
+        //Are we using multiworld?
+        if (getMultiWorldWrapper() != null) {
+            boolean success = false;
+
+            if (getMultiWorld().isEnabled()) {
+                WorldGeneratorWrapper env;
+
+                try {
+                    env = WorldGeneratorWrapper.getGenByName("plugin");
+                } catch (DelegateClassException ex) {
+                    ex.printStackTrace();
+                    return false;
+                }
+
+                try {
+                    success = getMultiWorld().getDataManager().makeWorld(worldname, env, seed, generator);
+                } catch (DelegateClassException ex) {
+                    ex.printStackTrace();
+                    return false;
+                }
+
+                if (success) {
+                    try {
+                        getMultiWorld().getDataManager().loadWorld(worldname, true);
+                        getMultiWorld().getDataManager().save();
+                    } catch (DelegateClassException ex) {
+                        ex.printStackTrace();
+                        return false;
+                    }
+                } else {
+                    cs.sendMessage("[" + plugin.getName() + "] " + plugin.getAPI().getUtil().C("ErrCannotCreateMW"));
+                }
+            } else {
+                cs.sendMessage("[" + plugin.getName() + "] " + plugin.getAPI().getUtil().C("ErrMWDisabled"));
+            }
+            return success;
+        }
+
+        //Are we using multiverse?
+        if (getMultiverse() != null) {
+            boolean success = false;
+
+            if (getMultiverse().isEnabled()) {
+                success = plugin.getServerObjectBuilder().addMultiverseWorld(worldname, "NORMAL", seed.toString(), "NORMAL", true, generator);
+
+                if (!success) {
+                    cs.sendMessage("[" + plugin.getName() + "] " + plugin.getAPI().getUtil().C("ErrCannotCreateMV"));
+                }
+            } else {
+                cs.sendMessage("[" + plugin.getName() + "] " + plugin.getAPI().getUtil().C("ErrMVDisabled"));
+            }
+            return success;
+        }
+
+        return false;
+    }
+
+    private MultiWorldWrapper getMultiWorld() {
+        return multiworld;
+    }
+    
+    private MultiverseWrapper getMultiverse() {
+        return multiverse;
+    }
+    
+    private void setMultiverse(JavaPlugin multiverse) {
+        this.multiverse = new MultiverseWrapper(multiverse);
+    }
+    
+    private void setMultiworld(JavaPlugin multiworld) {
+        this.multiworld = new MultiWorldWrapper(multiworld);
+    }
+    
+    private MultiWorldWrapper getMultiWorldWrapper() {
+        if (Bukkit.getPluginManager().isPluginEnabled("MultiWorld")) {
+            return new MultiWorldWrapper((JavaPlugin) Bukkit.getPluginManager().getPlugin("MultiWorld"));
+        } else {
+            return null;
+        }
+    }
+
+    private MultiverseWrapper getMultiverseWrapper() {
+        if (Bukkit.getPluginManager().isPluginEnabled("Multiverse-Core")) {
+            return new MultiverseWrapper((JavaPlugin) Bukkit.getPluginManager().getPlugin("Multiverse-Core"));
+        } else {
+            return null;
+        }
     }
 }

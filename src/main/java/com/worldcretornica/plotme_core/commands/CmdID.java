@@ -1,9 +1,7 @@
 package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
+import com.worldcretornica.plotme_core.api.*;
 
 public class CmdID extends PlotCommand {
 
@@ -11,7 +9,7 @@ public class CmdID extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(Player p, String[] args) {
+    public boolean exec(IPlayer p, String[] args) {
         if (plugin.cPerms(p, "PlotMe.admin.id")) {
             if (!plugin.getPlotMeCoreManager().isPlotWorld(p)) {
                 p.sendMessage(RED + C("MsgNotPlotWorld"));
@@ -23,11 +21,11 @@ public class CmdID extends PlotCommand {
                 } else {
                     p.sendMessage(AQUA + C("WordPlot") + " " + C("WordId") + ": " + RESET + plotid);
 
-                    Location bottom = plugin.getPlotMeCoreManager().getPlotBottomLoc(p.getWorld(), plotid);
-                    Location top = plugin.getPlotMeCoreManager().getPlotTopLoc(p.getWorld(), plotid);
+                    ILocation bottom = plugin.getPlotMeCoreManager().getPlotBottomLoc(p.getWorld(), plotid);
+                    ILocation top = plugin.getPlotMeCoreManager().getPlotTopLoc(p.getWorld(), plotid);
 
-                    p.sendMessage(AQUA + C("WordBottom") + ": " + RESET + bottom.getBlockX() + ChatColor.BLUE + "," + RESET + bottom.getBlockZ());
-                    p.sendMessage(AQUA + C("WordTop") + ": " + RESET + top.getBlockX() + ChatColor.BLUE + "," + RESET + top.getBlockZ());
+                    p.sendMessage(AQUA + C("WordBottom") + ": " + RESET + bottom.getBlockX() + BLUE + "," + RESET + bottom.getBlockZ());
+                    p.sendMessage(AQUA + C("WordTop") + ": " + RESET + top.getBlockX() + BLUE + "," + RESET + top.getBlockZ());
                 }
             }
         } else {

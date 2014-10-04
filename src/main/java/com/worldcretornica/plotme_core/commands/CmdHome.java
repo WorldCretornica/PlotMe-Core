@@ -5,14 +5,10 @@ import java.util.UUID;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.bukkit.event.BukkitEventFactory;
-import com.worldcretornica.plotme_core.bukkit.event.PlotTeleportHomeEvent;
+import com.worldcretornica.plotme_core.api.*;
+import com.worldcretornica.plotme_core.api.event.InternalPlotTeleportHomeEvent;
 
 import net.milkbowl.vault.economy.EconomyResponse;
-
-import org.bukkit.Bukkit;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
 
 public class CmdHome extends PlotCommand {
 
@@ -20,15 +16,15 @@ public class CmdHome extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(Player p, String[] args) {
+    public boolean exec(IPlayer p, String[] args) {
         if (plugin.cPerms(p, "PlotMe.use.home") || plugin.cPerms(p, "PlotMe.admin.home.other")) {
-            if (!plugin.getPlotMeCoreManager().isPlotWorld(p) && !plugin.getConfig().getBoolean("allowWorldTeleport")) {
+            if (!plugin.getPlotMeCoreManager().isPlotWorld(p) && !sob.getConfig().getBoolean("allowWorldTeleport")) {
                 p.sendMessage(RED + C("MsgNotPlotWorld"));
             } else {
                 String playername = p.getName();
                 UUID uuid = p.getUniqueId();
                 int nb = 1;
-                World w;
+                IWorld w;
                 String worldname = "";
 
                 if (!plugin.getPlotMeCoreManager().isPlotWorld(p)) {
@@ -56,22 +52,22 @@ public class CmdHome extends PlotCommand {
                 }
 
                 if (args.length >= 2) {
-                    if (Bukkit.getWorld(args[1]) == null) {
+                    if (sob.getWorld(args[1]) == null) {
                         if (plugin.cPerms(p, "PlotMe.admin.home.other")) {
                             playername = args[1];
                             uuid = null;
                         }
                     } else {
-                        w = Bukkit.getWorld(args[1]);
+                        w = sob.getWorld(args[1]);
                     }
                 }
 
                 if (args.length == 3) {
-                    if (Bukkit.getWorld(args[2]) == null) {
+                    if (sob.getWorld(args[2]) == null) {
                         p.sendMessage(RED + args[2] + C("MsgWorldNotPlot"));
                         return true;
                     } else {
-                        w = Bukkit.getWorld(args[2]);
+                        w = sob.getWorld(args[2]);
                         worldname = args[2];
                     }
                 }
@@ -88,19 +84,19 @@ public class CmdHome extends PlotCommand {
 
                                 double price = 0;
 
-                                PlotTeleportHomeEvent event;
+                                InternalPlotTeleportHomeEvent event;
 
                                 if (plugin.getPlotMeCoreManager().isEconomyEnabled(w)) {
                                     price = pmi.getPlotHomePrice();
-                                    double balance = plugin.getEconomy().getBalance(p);
+                                    double balance = sob.getBalance(p);
 
                                     if (balance >= price) {
-                                        event = BukkitEventFactory.callPlotTeleportHomeEvent(plugin, w, plot, p);
+                                        event = sob.getEventFactory().callPlotTeleportHomeEvent(plugin, w, plot, p);
 
                                         if (event.isCancelled()) {
                                             return true;
                                         } else {
-                                            EconomyResponse er = plugin.getEconomy().withdrawPlayer(p, price);
+                                            EconomyResponse er = sob.withdrawPlayer(p, price);
 
                                             if (!er.transactionSuccess()) {
                                                 p.sendMessage(RED + er.errorMessage);
@@ -112,7 +108,7 @@ public class CmdHome extends PlotCommand {
                                         return true;
                                     }
                                 } else {
-                                    event = BukkitEventFactory.callPlotTeleportHomeEvent(plugin, w, plot, p);
+                                    event = sob.getEventFactory().callPlotTeleportHomeEvent(plugin, w, plot, p);
                                 }
 
                                 if (!event.isCancelled()) {

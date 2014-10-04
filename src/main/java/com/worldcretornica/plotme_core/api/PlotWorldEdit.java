@@ -1,7 +1,5 @@
-package com.worldcretornica.plotme_core.worldedit;
+package com.worldcretornica.plotme_core.api;
 
-import com.worldcretornica.plotme_core.api.ILocation;
-import com.worldcretornica.plotme_core.api.IPlayer;
 
 public interface PlotWorldEdit {
 

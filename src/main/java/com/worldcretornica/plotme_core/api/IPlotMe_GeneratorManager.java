@@ -1,9 +1,7 @@
-package com.worldcretornica.plotme_core.api.v0_14b;
+package com.worldcretornica.plotme_core.api;
 
 import java.util.List;
 import java.util.Map;
-
-import com.worldcretornica.plotme_core.api.*;
 
 public interface IPlotMe_GeneratorManager {
 

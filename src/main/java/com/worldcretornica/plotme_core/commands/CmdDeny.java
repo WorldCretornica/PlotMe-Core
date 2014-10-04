@@ -3,14 +3,10 @@ package com.worldcretornica.plotme_core.commands;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.bukkit.event.PlotAddDeniedEvent;
-import com.worldcretornica.plotme_core.bukkit.event.BukkitEventFactory;
+import com.worldcretornica.plotme_core.api.*;
+import com.worldcretornica.plotme_core.api.event.InternalPlotAddDeniedEvent;
 
 import net.milkbowl.vault.economy.EconomyResponse;
-
-import org.bukkit.Bukkit;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
 
 import java.util.List;
 
@@ -20,7 +16,7 @@ public class CmdDeny extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(Player p, String[] args) {
+    public boolean exec(IPlayer p, String[] args) {
         if (plugin.cPerms(p, "PlotMe.admin.deny") || plugin.cPerms(p, "PlotMe.use.deny")) {
             if (!plugin.getPlotMeCoreManager().isPlotWorld(p)) {
                 p.sendMessage(RED + C("MsgNotPlotWorld"));
@@ -46,25 +42,25 @@ public class CmdDeny extends PlotCommand {
                             if (plot.isDeniedConsulting(denied) || plot.isGroupDenied(denied)) {
                                 p.sendMessage(C("WordPlayer") + " " + RED + args[1] + RESET + " " + C("MsgAlreadyDenied"));
                             } else {
-                                World w = p.getWorld();
+                                IWorld w = p.getWorld();
 
                                 PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(w);
 
                                 double price = 0;
 
-                                PlotAddDeniedEvent event;
+                                InternalPlotAddDeniedEvent event;
 
                                 if (plugin.getPlotMeCoreManager().isEconomyEnabled(w)) {
                                     price = pmi.getDenyPlayerPrice();
-                                    double balance = plugin.getEconomy().getBalance(p);
+                                    double balance = sob.getBalance(p);
 
                                     if (balance >= price) {
-                                        event = BukkitEventFactory.callPlotAddDeniedEvent(plugin, w, plot, p, denied);
+                                        event = sob.getEventFactory().callPlotAddDeniedEvent(plugin, w, plot, p, denied);
 
                                         if (event.isCancelled()) {
                                             return true;
                                         } else {
-                                            EconomyResponse er = plugin.getEconomy().withdrawPlayer(p, price);
+                                            EconomyResponse er = sob.withdrawPlayer(p, price);
 
                                             if (!er.transactionSuccess()) {
                                                 p.sendMessage(RED + er.errorMessage);
@@ -77,7 +73,7 @@ public class CmdDeny extends PlotCommand {
                                         return true;
                                     }
                                 } else {
-                                    event = BukkitEventFactory.callPlotAddDeniedEvent(plugin, w, plot, p, denied);
+                                    event = sob.getEventFactory().callPlotAddDeniedEvent(plugin, w, plot, p, denied);
                                 }
 
                                 if (!event.isCancelled()) {
@@ -85,16 +81,15 @@ public class CmdDeny extends PlotCommand {
                                     plot.removeAllowed(denied);
 
                                     if (denied.equals("*")) {
-                                        List<Player> deniedplayers = plugin.getPlotMeCoreManager().getPlayersInPlot(w, id);
+                                        List<IPlayer> deniedplayers = plugin.getPlotMeCoreManager().getPlayersInPlot(w, id);
 
-                                        for (Player deniedplayer : deniedplayers) {
+                                        for (IPlayer deniedplayer : deniedplayers) {
                                             if (!plot.isAllowed(deniedplayer.getUniqueId())) {
                                                 deniedplayer.teleport(plugin.getPlotMeCoreManager().getPlotHome(w, plot.getId()));
                                             }
                                         }
                                     } else {
-                                        @SuppressWarnings("deprecation")
-                                        Player deniedplayer = Bukkit.getServer().getPlayerExact(denied);
+                                        IPlayer deniedplayer = sob.getPlayerExact(denied);
 
                                         if (deniedplayer != null) {
                                             if (deniedplayer.getWorld().equals(w)) {

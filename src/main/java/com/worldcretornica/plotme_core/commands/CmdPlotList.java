@@ -2,14 +2,10 @@ package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.api.*;
 
 import java.util.Calendar;
 import java.util.UUID;
-
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
 
 public class CmdPlotList extends PlotCommand {
 
@@ -17,7 +13,7 @@ public class CmdPlotList extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(Player p, String[] args) {
+    public boolean exec(IPlayer p, String[] args) {
         if (plugin.cPerms(p, "PlotMe.use.list")) {
             if (!plugin.getPlotMeCoreManager().isPlotWorld(p)) {
                 p.sendMessage(RED + C("MsgNotPlotWorld"));
@@ -28,8 +24,7 @@ public class CmdPlotList extends PlotCommand {
 
                 if (plugin.cPerms(p, "PlotMe.admin.list") && args.length == 2) {
                     name = args[1];
-                    @SuppressWarnings("deprecation")
-                    OfflinePlayer op = Bukkit.getPlayerExact(name);
+                    IOfflinePlayer op = sob.getPlayerExact(name);
                     if (op != null) {
                         uuid = op.getUniqueId();
                     }
@@ -45,7 +40,7 @@ public class CmdPlotList extends PlotCommand {
                 // Get plots of that player
                 for (Plot plot : plugin.getSqlManager().getPlayerPlots(uuid, name)) {
                     if (!plot.getWorld().equals("")) {
-                        World world = Bukkit.getWorld(plot.getWorld());
+                        IWorld world = sob.getWorld(plot.getWorld());
                         if (world != null) {
                             plugin.getPlotMeCoreManager().getMap(world).addPlot(plot.getId(), plot);
                         }

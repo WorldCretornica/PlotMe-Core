@@ -1,11 +1,8 @@
 package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.bukkit.event.BukkitEventFactory;
-import com.worldcretornica.plotme_core.bukkit.event.PlotMoveEvent;
-
-import org.bukkit.World;
-import org.bukkit.entity.Player;
+import com.worldcretornica.plotme_core.api.*;
+import com.worldcretornica.plotme_core.api.event.InternalPlotMoveEvent;
 
 public class CmdMove extends PlotCommand {
 
@@ -13,7 +10,7 @@ public class CmdMove extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(Player p, String[] args) {
+    public boolean exec(IPlayer p, String[] args) {
         if (plugin.cPerms(p, "PlotMe.admin.move")) {
             if (!plugin.getPlotMeCoreManager().isPlotWorld(p)) {
                 p.sendMessage(RED + C("MsgNotPlotWorld"));
@@ -23,14 +20,14 @@ public class CmdMove extends PlotCommand {
             } else {
                 String plot1 = args[1];
                 String plot2 = args[2];
-                World w = p.getWorld();
+                IWorld w = p.getWorld();
 
                 if (!plugin.getPlotMeCoreManager().isValidId(w, plot1) || !plugin.getPlotMeCoreManager().isValidId(w, plot2)) {
                     p.sendMessage(C("WordUsage") + ": " + RED + "/plotme " + C("CommandMove") + " <" + C("WordIdFrom") + "> <" + C("WordIdTo") + "> "
                                           + RESET + C("WordExample") + ": " + RED + "/plotme " + C("CommandMove") + " 0;1 2;-1");
                     return true;
                 } else {
-                    PlotMoveEvent event = BukkitEventFactory.callPlotMoveEvent(plugin, w, w, plot1, plot2, p);
+                    InternalPlotMoveEvent event = sob.getEventFactory().callPlotMoveEvent(plugin, w, w, plot1, plot2, p);
 
                     if (!event.isCancelled()) {
                         if (plugin.getPlotMeCoreManager().movePlot(p.getWorld(), plot1, plot2)) {

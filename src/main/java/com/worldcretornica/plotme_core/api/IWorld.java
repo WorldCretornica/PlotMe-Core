@@ -1,6 +1,5 @@
 package com.worldcretornica.plotme_core.api;
 
-import com.worldcretornica.plotme_core.api.v0_14b.IPlotMe_ChunkGenerator;
 
 public interface IWorld {
 
@@ -11,5 +10,13 @@ public interface IWorld {
     public String getName();
 
     public IBlock getBlockAt(int i, int j, int k);
+
+    public void refreshChunk(int x, int z);
+
+    public IChunk getChunkAt(int cx, int cz);
+
+    public int getMaxHeight();
+
+    public ILocation createLocation(int x, int y, int z);
 
 }

@@ -3,16 +3,10 @@ package com.worldcretornica.plotme_core.commands;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.bukkit.event.BukkitEventFactory;
-import com.worldcretornica.plotme_core.bukkit.event.PlotSellChangeEvent;
+import com.worldcretornica.plotme_core.api.*;
+import com.worldcretornica.plotme_core.api.event.InternalPlotSellChangeEvent;
 
 import net.milkbowl.vault.economy.EconomyResponse;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
 
 public class CmdSell extends PlotCommand {
 
@@ -20,13 +14,13 @@ public class CmdSell extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(Player p, String[] args) {
+    public boolean exec(IPlayer p, String[] args) {
         if (plugin.getPlotMeCoreManager().isEconomyEnabled(p)) {
             PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(p);
 
             if (pmi.isCanSellToBank() || pmi.isCanPutOnSale()) {
                 if (plugin.cPerms(p, "PlotMe.use.sell") || plugin.cPerms(p, "PlotMe.admin.sell")) {
-                    Location l = p.getLocation();
+                    ILocation l = p.getLocation();
                     String id = plugin.getPlotMeCoreManager().getPlotId(l);
 
                     if (id.equals("")) {
@@ -36,12 +30,12 @@ public class CmdSell extends PlotCommand {
                             Plot plot = plugin.getPlotMeCoreManager().getPlotById(p, id);
 
                             if (plot.getOwnerId().equals(p.getUniqueId()) || plugin.cPerms(p, "PlotMe.admin.sell")) {
-                                World w = p.getWorld();
+                                IWorld w = p.getWorld();
 
-                                PlotSellChangeEvent event;
+                                InternalPlotSellChangeEvent event;
 
                                 if (plot.isForSale()) {
-                                    event = BukkitEventFactory.callPlotSellChangeEvent(plugin, w, plot, p, plot.getCustomPrice(), false, false);
+                                    event = sob.getEventFactory().callPlotSellChangeEvent(plugin, w, plot, p, plot.getCustomPrice(), false, false);
 
                                     if (!event.isCancelled()) {
                                         plot.setCustomPrice(0);
@@ -95,15 +89,15 @@ public class CmdSell extends PlotCommand {
 
                                             if (!currentbidder.equals("")) {
                                                 double bid = plot.getCurrentBid();
-                                                OfflinePlayer playercurrentbidder = Bukkit.getOfflinePlayer(plot.getCurrentBidderId());
+                                                IOfflinePlayer playercurrentbidder = sob.getOfflinePlayer(plot.getCurrentBidderId());
 
-                                                EconomyResponse er = plugin.getEconomy().depositPlayer(playercurrentbidder, bid);
+                                                EconomyResponse er = sob.depositPlayer(playercurrentbidder, bid);
 
                                                 if (!er.transactionSuccess()) {
                                                     p.sendMessage(RED + er.errorMessage);
                                                     Util().warn(er.errorMessage);
                                                 } else {
-                                                    for (Player player : Bukkit.getServer().getOnlinePlayers()) {
+                                                    for (IPlayer player : sob.getOnlinePlayers()) {
                                                         if (player.getName().equalsIgnoreCase(currentbidder)) {
                                                             player.sendMessage(C("WordPlot") + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner() + " " + C("MsgSoldToBank") + " " + Util().moneyFormat(bid));
                                                             break;
@@ -114,10 +108,10 @@ public class CmdSell extends PlotCommand {
 
                                             double sellprice = pmi.getSellToBankPrice();
 
-                                            event = BukkitEventFactory.callPlotSellChangeEvent(plugin, w, plot, p, pmi.getBuyFromBankPrice(), true, true);
+                                            event = sob.getEventFactory().callPlotSellChangeEvent(plugin, w, plot, p, pmi.getBuyFromBankPrice(), true, true);
 
                                             if (!event.isCancelled()) {
-                                                EconomyResponse er = plugin.getEconomy().depositPlayer(p, sellprice);
+                                                EconomyResponse er = sob.depositPlayer(p, sellprice);
 
                                                 if (er.transactionSuccess()) {
                                                     plot.setOwner("$Bank$");
@@ -156,7 +150,7 @@ public class CmdSell extends PlotCommand {
                                         if (price < 0) {
                                             p.sendMessage(RED + C("MsgInvalidAmount"));
                                         } else {
-                                            event = BukkitEventFactory.callPlotSellChangeEvent(plugin, w, plot, p, price, false, true);
+                                            event = sob.getEventFactory().callPlotSellChangeEvent(plugin, w, plot, p, price, false, true);
 
                                             if (!event.isCancelled()) {
                                                 plot.setCustomPrice(price);

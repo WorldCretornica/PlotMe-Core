@@ -1,9 +1,13 @@
 package com.worldcretornica.plotme_core.bukkit.api;
 
+import org.bukkit.Location;
 import org.bukkit.World;
+
 import com.worldcretornica.plotme_core.api.IBlock;
+import com.worldcretornica.plotme_core.api.IChunk;
+import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IWorld;
-import com.worldcretornica.plotme_core.api.v0_14b.IPlotMe_ChunkGenerator;
+import com.worldcretornica.plotme_core.api.IPlotMe_ChunkGenerator;
 
 public class BukkitWorld implements IWorld {
 
@@ -35,5 +39,25 @@ public class BukkitWorld implements IWorld {
     
     public World getWorld() {
         return world;
+    }
+
+    @Override
+    public void refreshChunk(int x, int z) {
+        world.refreshChunk(x, z);
+    }
+
+    @Override
+    public IChunk getChunkAt(int cx, int cz) {
+        return new BukkitChunk(world.getChunkAt(cx, cx));
+    }
+
+    @Override
+    public int getMaxHeight() {
+        return world.getMaxHeight();
+    }
+
+    @Override
+    public ILocation createLocation(int x, int y, int z) {
+        return new BukkitLocation(new Location(world, x, y, z));
     }
 }

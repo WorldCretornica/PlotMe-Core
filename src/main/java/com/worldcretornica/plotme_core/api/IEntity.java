@@ -2,5 +2,11 @@ package com.worldcretornica.plotme_core.api;
 
 public interface IEntity {
 
-    //TODO
+    ILocation getLocation();
+
+    void remove();
+
+    IEntityType getType();
+
+    void teleport(ILocation newl);
 }

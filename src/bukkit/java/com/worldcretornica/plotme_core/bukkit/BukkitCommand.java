@@ -1,6 +1,7 @@
 package com.worldcretornica.plotme_core.bukkit;
 
 import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.bukkit.api.*;
 import com.worldcretornica.plotme_core.commands.*;
 
 import org.bukkit.command.Command;
@@ -102,17 +103,17 @@ public class BukkitCommand implements CommandExecutor {
                 } else {
                     String a0 = args[0];
                     if (a0.equalsIgnoreCase("reload")) {
-                        return reload.exec(s, args);
+                        return reload.exec(new BukkitCommandSender(s), args);
                     }
                     if (a0.equalsIgnoreCase(C("CommandResetExpired"))) {
-                        return resetexpired.exec(s, args);
+                        return resetexpired.exec(new BukkitCommandSender(s), args);
                     }
                     if (a0.equalsIgnoreCase(C("CommandCreateWorld"))) {
-                        return createworld.exec(s, args);
+                        return createworld.exec(new BukkitCommandSender(s), args);
                     }
                 }
             } else {
-                Player p = (Player) s;
+                BukkitPlayer p = new BukkitPlayer((Player) s);
 
                 if (args.length == 0) {
                     return showhelp.exec(p, 1);
@@ -201,7 +202,7 @@ public class BukkitCommand implements CommandExecutor {
                             return move.exec(p, args);
                         }
                         if (a0.equalsIgnoreCase("reload")) {
-                            return reload.exec(s, args);
+                            return reload.exec(new BukkitCommandSender(s), args);
                         }
                         if (a0.equalsIgnoreCase(C("CommandWEAnywhere"))) {
                             return weanywhere.exec(p, args);

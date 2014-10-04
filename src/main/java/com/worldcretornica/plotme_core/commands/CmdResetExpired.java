@@ -2,8 +2,7 @@ package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.PlotRunnableDeleteExpire;
-import org.bukkit.World;
-import org.bukkit.command.CommandSender;
+import com.worldcretornica.plotme_core.api.*;
 
 public class CmdResetExpired extends PlotCommand {
 
@@ -11,7 +10,7 @@ public class CmdResetExpired extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(CommandSender s, String[] args) {
+    public boolean exec(ICommandSender s, String[] args) {
         if (plugin.cPerms(s, "PlotMe.admin.resetexpired")) {
             if (args.length <= 1) {
                 s.sendMessage(C("WordUsage") + ": " + RED + "/plotme " + C("CommandResetExpired") + " <" + C("WordWorld") + "> " + RESET + "Example: " + RED + "/plotme " + C("CommandResetExpired") + " plotworld ");
@@ -19,7 +18,7 @@ public class CmdResetExpired extends PlotCommand {
                 if (plugin.getWorldCurrentlyProcessingExpired() != null) {
                     s.sendMessage(plugin.getCommandSenderCurrentlyProcessingExpired().getName() + " " + C("MsgAlreadyProcessingPlots"));
                 } else {
-                    World w = s.getServer().getWorld(args[1]);
+                    IWorld w = sob.getWorld(args[1]);
 
                     if (w == null) {
                         s.sendMessage(RED + C("WordWorld") + " '" + args[1] + "' " + C("MsgDoesNotExistOrNotLoaded"));

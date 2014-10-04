@@ -3,8 +3,8 @@ package com.worldcretornica.plotme_core.commands;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.utils.MinecraftFontWidthCalculator;
-import org.bukkit.entity.Player;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ public class CmdDoneList extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(Player p, String[] args) {
+    public boolean exec(IPlayer p, String[] args) {
         if (plugin.cPerms(p, "PlotMe.admin.done")) {
             PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(p);
 

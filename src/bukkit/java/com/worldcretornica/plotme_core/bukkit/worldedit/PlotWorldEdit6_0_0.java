@@ -1,6 +1,7 @@
 package com.worldcretornica.plotme_core.bukkit.worldedit;
 
 import org.bukkit.Location;
+
 import com.sk89q.worldedit.LocalSession;
 import com.sk89q.worldedit.Vector;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
@@ -11,10 +12,10 @@ import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.api.PlotWorldEdit;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitLocation;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitWorld;
-import com.worldcretornica.plotme_core.worldedit.PlotWorldEdit;
 
 public class PlotWorldEdit6_0_0 implements PlotWorldEdit {
 

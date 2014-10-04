@@ -1,140 +1,161 @@
 package com.worldcretornica.plotme_core.bukkit.api;
 
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
+import java.util.Set;
 
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 import com.worldcretornica.plotme_core.api.IConfigSection;
 import com.worldcretornica.plotme_core.bukkit.PlotMe_CorePlugin;
 
 public class BukkitConfigSection implements IConfigSection {
 
-    private FileConfiguration section;
+    private FileConfiguration master;
+    private ConfigurationSection section;
     private PlotMe_CorePlugin plugin;
     
     public BukkitConfigSection(PlotMe_CorePlugin instance) {
         plugin = instance;
-        section = plugin.getConfig();
+        master = plugin.getConfig();
+        section = master;
+    }
+    
+    public BukkitConfigSection(PlotMe_CorePlugin instance, FileConfiguration master, ConfigurationSection configurationSection) {
+        plugin = instance;
+        this.section = configurationSection;
+        this.master = master;
     }
     
     
     @Override
     public List<Integer> getIntegerList(String configpath) {
-        // TODO Auto-generated method stub
-        return null;
+        return section.getIntegerList(configpath);
     }
 
     @Override
     public void loadConfig(String worldPath) {
-        // TODO Auto-generated method stub
-        
+        ConfigurationSection defaultCS = getDefaultWorld();
+        ConfigurationSection configCS;
+        if (plugin.getConfig().contains(worldPath)) {
+            configCS = plugin.getConfig().getConfigurationSection(worldPath);
+        } else {
+            plugin.getConfig().set(worldPath, defaultCS);
+            saveConfig();
+            configCS = plugin.getConfig().getConfigurationSection(worldPath);
+        }
+        for (String path : defaultCS.getKeys(true)) {
+            configCS.addDefault(path, defaultCS.get(path));
+        }
+    }
+    
+    private ConfigurationSection getDefaultWorld() {
+        InputStream defConfigStream = plugin.getResource("default-world.yml");
+        InputStreamReader isr;
+        try {
+            isr = new InputStreamReader(defConfigStream, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            isr = new InputStreamReader(defConfigStream);
+        }
+        return YamlConfiguration.loadConfiguration(isr);
     }
 
     @Override
     public void saveConfig() {
-        // TODO Auto-generated method stub
+        plugin.saveConfig();
     }
 
     @Override
     public void set(String string, Object value) {
-        // TODO Auto-generated method stub
-        
+        section.set(string, value);
     }
 
     @Override
     public List<String> getStringList(String configpath) {
-        // TODO Auto-generated method stub
-        return null;
+        return section.getStringList(configpath);
     }
 
     @Override
     public String getString(String string) {
-        // TODO Auto-generated method stub
-        return null;
+        return section.getString(string);
     }
 
     @Override
     public String getString(String string, String defaultvalue) {
-        // TODO Auto-generated method stub
-        return null;
+        return section.getString(string, defaultvalue);
     }
 
     @Override
     public int getInt(String string) {
-        // TODO Auto-generated method stub
-        return 0;
+        return section.getInt(string);
     }
 
     @Override
     public int getInt(String string, int defaultvalue) {
-        // TODO Auto-generated method stub
-        return 0;
+        return section.getInt(string, defaultvalue);
     }
 
     @Override
     public IConfigSection getConfigurationSection(String path) {
-        // TODO Auto-generated method stub
-        return null;
+        if (section.contains(path)) {
+            return new BukkitConfigSection(plugin, master, section.getConfigurationSection(path));
+        } else {
+            return null;
+        }
     }
 
     @Override
     public boolean getBoolean(String string) {
-        // TODO Auto-generated method stub
-        return false;
+        return section.getBoolean(string);
     }
 
     @Override
     public boolean getBoolean(String string, boolean defaultvalue) {
-        // TODO Auto-generated method stub
-        return false;
+        return section.getBoolean(string, defaultvalue);
     }
 
     @Override
     public double getDouble(String string) {
-        // TODO Auto-generated method stub
-        return 0;
+        return section.getDouble(string);
     }
 
     @Override
     public double getDouble(String string, double defaultvalue) {
-        // TODO Auto-generated method stub
-        return 0;
+        return section.getDouble(string, defaultvalue);
     }
 
     @Override
     public boolean contains(String string) {
-        // TODO Auto-generated method stub
-        return false;
+        return section.contains(string);
     }
 
     @Override
-    public List<String> getKeys(boolean b) {
-        // TODO Auto-generated method stub
-        return null;
+    public Set<String> getKeys(boolean b) {
+        return section.getKeys(b);
     }
 
     @Override
     public IConfigSection createSection(String string) {
-        // TODO Auto-generated method stub
-        return null;
+        return new BukkitConfigSection(plugin, master, section.createSection(string));
     }
 
     @Override
     public void copyDefaults(boolean b) {
-        // TODO Auto-generated method stub
-        
+        master.options().copyDefaults();
     }
 
     @Override
     public Object get(String path) {
-        // TODO Auto-generated method stub
-        return null;
+        return section.get(path);
     }
 
     @Override
     public void reloadConfig() {
-        // TODO Auto-generated method stub
-        
+        plugin.reloadConfig();
     }
 
 }

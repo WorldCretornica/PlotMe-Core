@@ -1,6 +1,8 @@
 package com.worldcretornica.plotme_core.api;
 
+import java.io.File;
 import java.util.List;
+import java.util.Set;
 
 public interface IConfigSection {
 
@@ -30,7 +32,7 @@ public interface IConfigSection {
 
     public boolean contains(String string);
 
-    public List<String> getKeys(boolean b);
+    public Set<String> getKeys(boolean b);
 
     public IConfigSection createSection(String string);
 
@@ -39,4 +41,8 @@ public interface IConfigSection {
     public Object get(String path);
 
     public void reloadConfig();
+
+    public void setDefaults(IConfigSection defConfig);
+
+    public void save(File configFile);
 }

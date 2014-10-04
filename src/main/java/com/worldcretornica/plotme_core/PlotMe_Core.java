@@ -1,7 +1,6 @@
 package com.worldcretornica.plotme_core;
 
 import com.worldcretornica.plotme_core.api.*;
-import com.worldcretornica.plotme_core.api.v0_14b.IPlotMe_GeneratorManager;
 import com.worldcretornica.plotme_core.utils.Util;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;

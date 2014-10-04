@@ -2,9 +2,8 @@ package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.api.*;
 import com.worldcretornica.plotme_core.utils.MinecraftFontWidthCalculator;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
 
 import java.util.List;
 
@@ -14,7 +13,7 @@ public class CmdExpired extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(Player p, String[] args) {
+    public boolean exec(IPlayer p, String[] args) {
         if (plugin.cPerms(p, "PlotMe.admin.expired")) {
             if (!plugin.getPlotMeCoreManager().isPlotWorld(p)) {
                 p.sendMessage(RED + C("MsgNotPlotWorld"));
@@ -23,7 +22,7 @@ public class CmdExpired extends PlotCommand {
                 int pagesize = 8;
                 int page = 1;
                 int maxpage;
-                World w = p.getWorld();
+                IWorld w = p.getWorld();
 
                 if (args.length == 2) {
                     try {

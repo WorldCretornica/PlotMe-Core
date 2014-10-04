@@ -3,12 +3,6 @@ package com.worldcretornica.plotme_core;
 import com.griefcraft.lwc.LWC;
 import com.griefcraft.model.Protection;
 import com.worldcretornica.plotme_core.api.*;
-import com.worldcretornica.plotme_core.api.v0_14b.IPlotMe_ChunkGenerator;
-import com.worldcretornica.plotme_core.api.v0_14b.IPlotMe_GeneratorManager;
-import com.worldcretornica.plotme_core.bukkit.DelegateClassException;
-import com.worldcretornica.plotme_core.bukkit.MultiWorldWrapper;
-import com.worldcretornica.plotme_core.bukkit.MultiverseWrapper;
-import com.worldcretornica.plotme_core.bukkit.MultiWorldWrapper.WorldGeneratorWrapper;
 import com.worldcretornica.plotme_core.utils.Util;
 
 import java.util.*;
@@ -16,9 +10,6 @@ import java.util.*;
 public class PlotMeCoreManager {
 
     private PlotMe_Core plugin = null;
-    private MultiWorldWrapper multiworld = null;
-    private MultiverseWrapper multiverse = null;
-
     private HashSet<UUID> playersignoringwelimit = null;
     private HashMap<String, PlotMapInfo> plotmaps = null;
 
@@ -26,136 +17,6 @@ public class PlotMeCoreManager {
         plugin = instance;
         setPlayersIgnoringWELimit(new HashSet<UUID>());
         plotmaps = new HashMap<>();
-    }
-
-    public boolean CreatePlotWorld(ICommandSender cs, String worldname, String generator, Map<String, String> args) {
-        //Get a seed
-        Long seed = (new java.util.Random()).nextLong();
-
-        //Check if we have multiworld
-        if (getMultiworld() == null) {
-            setMultiworld();
-        }
-        //Check if we have multiverse
-        if (getMultiverse() == null) {
-            setMultiverse();
-        }
-
-        //Do we have one of them
-        if (getMultiworld() == null && getMultiverse() == null) {
-            cs.sendMessage("[" + plugin.getName() + "] " + Util().C("ErrWorldPluginNotFound"));
-            return false;
-        }
-
-        //Find generator
-        IPlotMe_ChunkGenerator bukkitplugin = plugin.getServerObjectBuilder().getPlotMeGenerator(generator, worldname);
-
-        //Make generator create settings
-        if (bukkitplugin == null) {
-            cs.sendMessage("[" + plugin.getName() + "] " + Util().C("ErrCannotFindWorldGen") + " '" + generator + "'");
-            return false;
-        } else {
-            //Create the generator configurations
-            if (!(bukkitplugin).getManager().createConfig(worldname, args, cs)) {
-                cs.sendMessage("[" + plugin.getName() + "] " + Util().C("ErrCannotCreateGen1") + " '" + generator + "' " + Util().C("ErrCannotCreateGen2"));
-                return false;
-            }
-        }
-
-        PlotMapInfo tempPlotInfo = new PlotMapInfo(plugin, worldname);
-
-        tempPlotInfo.setPlotAutoLimit(Integer.parseInt(args.get("PlotAutoLimit")));
-        tempPlotInfo.setDaysToExpiration(Integer.parseInt(args.get("DaysToExpiration")));
-        tempPlotInfo.setAutoLinkPlots(Boolean.parseBoolean(args.get("AutoLinkPlots")));
-        tempPlotInfo.setDisableExplosion(Boolean.parseBoolean(args.get("DisableExplosion")));
-        tempPlotInfo.setDisableIgnition(Boolean.parseBoolean(args.get("DisableIgnition")));
-        tempPlotInfo.setUseProgressiveClear(Boolean.parseBoolean(args.get("UseProgressiveClear")));
-        tempPlotInfo.setUseEconomy(Boolean.parseBoolean(args.get("UseEconomy")));
-        tempPlotInfo.setCanPutOnSale(Boolean.parseBoolean(args.get("CanPutOnSale")));
-        tempPlotInfo.setCanSellToBank(Boolean.parseBoolean(args.get("CanSellToBank")));
-        tempPlotInfo.setRefundClaimPriceOnReset(Boolean.parseBoolean(args.get("RefundClaimPriceOnReset")));
-        tempPlotInfo.setRefundClaimPriceOnSetOwner(Boolean.parseBoolean(args.get("RefundClaimPriceOnSetOwner")));
-        tempPlotInfo.setClaimPrice(Double.parseDouble(args.get("ClaimPrice")));
-        tempPlotInfo.setClearPrice(Double.parseDouble(args.get("ClearPrice")));
-        tempPlotInfo.setAddPlayerPrice(Double.parseDouble(args.get("AddPlayerPrice")));
-        tempPlotInfo.setDenyPlayerPrice(Double.parseDouble(args.get("DenyPlayerPrice")));
-        tempPlotInfo.setRemovePlayerPrice(Double.parseDouble(args.get("RemovePlayerPrice")));
-        tempPlotInfo.setUndenyPlayerPrice(Double.parseDouble(args.get("UndenyPlayerPrice")));
-        tempPlotInfo.setPlotHomePrice(Double.parseDouble(args.get("PlotHomePrice")));
-        tempPlotInfo.setCanCustomizeSellPrice(Boolean.parseBoolean(args.get("CanCustomizeSellPrice")));
-        tempPlotInfo.setSellToPlayerPrice(Double.parseDouble(args.get("SellToPlayerPrice")));
-        tempPlotInfo.setSellToBankPrice(Double.parseDouble(args.get("SellToBankPrice")));
-        tempPlotInfo.setBuyFromBankPrice(Double.parseDouble(args.get("BuyFromBankPrice")));
-        tempPlotInfo.setAddCommentPrice(Double.parseDouble(args.get("AddCommentPrice")));
-        tempPlotInfo.setBiomeChangePrice(Double.parseDouble(args.get("BiomeChangePrice")));
-        tempPlotInfo.setProtectPrice(Double.parseDouble(args.get("ProtectPrice")));
-        tempPlotInfo.setDisposePrice(Double.parseDouble(args.get("DisposePrice")));
-
-        addPlotMap(worldname.toLowerCase(), tempPlotInfo);
-
-        //Are we using multiworld?
-        if (getMultiworld() != null) {
-            boolean success = false;
-
-            if (getMultiworld().isEnabled()) {
-                WorldGeneratorWrapper env;
-
-                try {
-                    env = WorldGeneratorWrapper.getGenByName("plugin");
-                } catch (DelegateClassException ex) {
-                    ex.printStackTrace();
-                    return false;
-                }
-
-                try {
-                    success = getMultiworld().getDataManager().makeWorld(worldname, env, seed, generator);
-                } catch (DelegateClassException ex) {
-                    ex.printStackTrace();
-                    return false;
-                }
-
-                if (success) {
-                    try {
-                        getMultiworld().getDataManager().loadWorld(worldname, true);
-                        getMultiworld().getDataManager().save();
-                    } catch (DelegateClassException ex) {
-                        ex.printStackTrace();
-                        return false;
-                    }
-                } else {
-                    cs.sendMessage("[" + plugin.getName() + "] " + Util().C("ErrCannotCreateMW"));
-                }
-            } else {
-                cs.sendMessage("[" + plugin.getName() + "] " + Util().C("ErrMWDisabled"));
-            }
-            return success;
-        }
-
-        //Are we using multiverse?
-        if (getMultiverse() != null) {
-            boolean success = false;
-
-            if (getMultiverse().isEnabled()) {
-                success = plugin.getServerObjectBuilder().addMultiverseWorld(worldname, "NORMAL", seed.toString(), "NORMAL", true, generator);
-
-                if (!success) {
-                    cs.sendMessage("[" + plugin.getName() + "] " + Util().C("ErrCannotCreateMV"));
-                }
-            } else {
-                cs.sendMessage("[" + plugin.getName() + "] " + Util().C("ErrMVDisabled"));
-            }
-            return success;
-        }
-
-        return false;
-    }
-
-    public void setMultiverse() {
-        this.multiverse = plugin.getServerObjectBuilder().getMultiverseWrapper();
-    }
-
-    public void setMultiworld() {
-        this.multiworld = plugin.getServerObjectBuilder().getMultiWorldWrapper();
     }
 
     public int getIdX(String id) {
@@ -990,13 +851,5 @@ public class PlotMeCoreManager {
 
     private Util Util() {
         return plugin.getUtil();
-    }
-
-    public MultiWorldWrapper getMultiworld() {
-        return multiworld;
-    }
-
-    public MultiverseWrapper getMultiverse() {
-        return multiverse;
     }
 }

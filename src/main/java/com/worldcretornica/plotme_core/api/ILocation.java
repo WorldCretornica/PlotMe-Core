@@ -10,4 +10,14 @@ public interface ILocation {
     
     public int getBlockZ();
 
+    public int getX();
+
+    public int getY();
+
+    public int getZ();
+
+    public IBlock getBlock();
+
+    public ILocation add(int i, int j, int k);
+
 }

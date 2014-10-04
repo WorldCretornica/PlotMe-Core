@@ -2,7 +2,7 @@ package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import org.bukkit.entity.Player;
+import com.worldcretornica.plotme_core.api.IPlayer;
 
 public class CmdInfo extends PlotCommand {
 
@@ -10,7 +10,7 @@ public class CmdInfo extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(Player p, String[] args) {
+    public boolean exec(IPlayer p, String[] args) {
         if (plugin.cPerms(p, "PlotMe.use.info")) {
             if (!plugin.getPlotMeCoreManager().isPlotWorld(p)) {
                 p.sendMessage(RED + C("MsgNotPlotWorld"));
@@ -35,7 +35,7 @@ public class CmdInfo extends PlotCommand {
                             p.sendMessage(GREEN + C("InfoHelpers") + ": " + AQUA + plot.getAllowed());
                         }
 
-                        if (plugin.getConfig().getBoolean("allowToDeny") && plot.deniedcount() > 0) {
+                        if (sob.getConfig().getBoolean("allowToDeny") && plot.deniedcount() > 0) {
                             p.sendMessage(GREEN + C("InfoDenied") + ": " + AQUA + plot.getDenied());
                         }
 

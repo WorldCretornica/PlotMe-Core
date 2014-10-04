@@ -3,7 +3,7 @@ package com.worldcretornica.plotme_core.commands;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.*;
 import com.worldcretornica.plotme_core.api.event.InternalPlotWorldCreateEvent;
-import com.worldcretornica.plotme_core.api.v0_14b.IPlotMe_ChunkGenerator;
+import com.worldcretornica.plotme_core.api.IPlotMe_ChunkGenerator;
 import com.worldcretornica.plotme_core.utils.MinecraftFontWidthCalculator;
 
 import java.util.HashMap;
@@ -25,7 +25,7 @@ public class CmdCreateWorld extends PlotCommand {
                     InternalPlotWorldCreateEvent event = sob.getEventFactory().callPlotWorldCreateEvent(parameters.get("worldname"), cs, parameters);
 
                     if (!event.isCancelled()) {
-                        if (plugin.getPlotMeCoreManager().CreatePlotWorld(cs, parameters.get("worldname"), parameters.get("generator"), parameters)) {
+                        if (sob.CreatePlotWorld(cs, parameters.get("worldname"), parameters.get("generator"), parameters)) {
                             cs.sendMessage(C("MsgWorldCreationSuccess"));
                         }
                     }
@@ -75,20 +75,7 @@ public class CmdCreateWorld extends PlotCommand {
                     cs.sendMessage(C("WordUsage") + ": " + RED + "/plotme " + C("CommandCreateWorld") + " <" + C("WordWorld") + "> [" + C("WordGenerator") + "]");
                     cs.sendMessage("  " + C("MsgCreateWorldHelp"));
                 } else {
-                    if (plugin.getPlotMeCoreManager().getMultiworld() == null) {
-                        plugin.getPlotMeCoreManager().setMultiworld();
-                    }
-
-                    if (plugin.getPlotMeCoreManager().getMultiverse() == null) {
-                        plugin.getPlotMeCoreManager().setMultiverse();
-                    }
-
-                    if ((plugin.getPlotMeCoreManager().getMultiworld() == null || !plugin.getPlotMeCoreManager().getMultiworld().isEnabled())
-                            && (plugin.getPlotMeCoreManager().getMultiverse() == null || !plugin.getPlotMeCoreManager().getMultiverse().isEnabled())) {
-                        cs.sendMessage("[" + plugin.getName() + "] " + C("ErrWorldPluginNotFound"));
-                        return true;
-                    }
-
+                    
                     Map<String, String> parameters = new HashMap<>();
                     Map<String, String> genparameters;
 
@@ -96,13 +83,9 @@ public class CmdCreateWorld extends PlotCommand {
                     if (args.length >= 2) {
                         parameters.put("worldname", args[1]);
 
-                        if (plugin.getPlotMeCoreManager().getMultiworld() != null && plugin.getPlotMeCoreManager().getMultiworld().isEnabled()) {
-                            if (!sob.checkWorldName(args[1])) {
-                                cs.sendMessage("[" + plugin.getName() + "] " + C("ErrInvalidWorldName") + " '" + parameters.get("worldname") + "'");
-                                return true;
-                            }
-                        } else if (plugin.getPlotMeCoreManager().getMultiverse() != null && plugin.getPlotMeCoreManager().getMultiverse().isEnabled()) {
-                            //TODO ?
+                        if (!sob.checkWorldName(args[1])) {
+                            cs.sendMessage("[" + plugin.getName() + "] " + C("ErrInvalidWorldName") + " '" + parameters.get("worldname") + "'");
+                            return true;
                         }
                     }
 

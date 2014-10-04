@@ -6,7 +6,7 @@ import com.worldcretornica.plotme_core.api.IBiome;
 
 public class BukkitBiome implements IBiome {
 
-    Biome biome;
+    private Biome biome;
     
     public BukkitBiome(Biome biome) {
         this.biome = biome;

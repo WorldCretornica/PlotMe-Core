@@ -3,12 +3,10 @@ package com.worldcretornica.plotme_core.commands;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.bukkit.event.BukkitEventFactory;
-import com.worldcretornica.plotme_core.bukkit.event.PlotProtectChangeEvent;
+import com.worldcretornica.plotme_core.api.*;
+import com.worldcretornica.plotme_core.api.event.InternalPlotProtectChangeEvent;
 
 import net.milkbowl.vault.economy.EconomyResponse;
-
-import org.bukkit.entity.Player;
 
 public class CmdProtect extends PlotCommand {
 
@@ -16,7 +14,7 @@ public class CmdProtect extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(Player p, String[] args) {
+    public boolean exec(IPlayer p, String[] args) {
         if (plugin.cPerms(p, "PlotMe.admin.protect") || plugin.cPerms(p, "PlotMe.use.protect")) {
             if (!plugin.getPlotMeCoreManager().isPlotWorld(p)) {
                 p.sendMessage(RED + C("MsgNotPlotWorld"));
@@ -32,10 +30,10 @@ public class CmdProtect extends PlotCommand {
                     String name = p.getName();
 
                     if (plot.getOwner().equalsIgnoreCase(name) || plugin.cPerms(p, "PlotMe.admin.protect")) {
-                        PlotProtectChangeEvent event;
+                        InternalPlotProtectChangeEvent event;
 
                         if (plot.isProtect()) {
-                            event = BukkitEventFactory.callPlotProtectChangeEvent(plugin, p.getWorld(), plot, p, false);
+                            event = sob.getEventFactory().callPlotProtectChangeEvent(plugin, p.getWorld(), plot, p, false);
 
                             if (!event.isCancelled()) {
                                 plot.setProtect(false);
@@ -57,16 +55,16 @@ public class CmdProtect extends PlotCommand {
                             if (plugin.getPlotMeCoreManager().isEconomyEnabled(p)) {
                                 cost = pmi.getProtectPrice();
 
-                                if (plugin.getEconomy().getBalance(p) < cost) {
+                                if (sob.getBalance(p) < cost) {
                                     p.sendMessage(RED + C("MsgNotEnoughProtectPlot"));
                                     return true;
                                 } else {
-                                    event = BukkitEventFactory.callPlotProtectChangeEvent(plugin, p.getWorld(), plot, p, true);
+                                    event = sob.getEventFactory().callPlotProtectChangeEvent(plugin, p.getWorld(), plot, p, true);
 
                                     if (event.isCancelled()) {
                                         return true;
                                     } else {
-                                        EconomyResponse er = plugin.getEconomy().withdrawPlayer(p, cost);
+                                        EconomyResponse er = sob.withdrawPlayer(p, cost);
 
                                         if (!er.transactionSuccess()) {
                                             p.sendMessage(RED + er.errorMessage);
@@ -77,7 +75,7 @@ public class CmdProtect extends PlotCommand {
                                 }
 
                             } else {
-                                event = BukkitEventFactory.callPlotProtectChangeEvent(plugin, p.getWorld(), plot, p, true);
+                                event = sob.getEventFactory().callPlotProtectChangeEvent(plugin, p.getWorld(), plot, p, true);
                             }
 
                             if (!event.isCancelled()) {

@@ -3,13 +3,10 @@ package com.worldcretornica.plotme_core.commands;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.bukkit.event.BukkitEventFactory;
-import com.worldcretornica.plotme_core.bukkit.event.PlotRemoveDeniedEvent;
+import com.worldcretornica.plotme_core.api.*;
+import com.worldcretornica.plotme_core.api.event.InternalPlotRemoveDeniedEvent;
 
 import net.milkbowl.vault.economy.EconomyResponse;
-
-import org.bukkit.World;
-import org.bukkit.entity.Player;
 
 public class CmdUndeny extends PlotCommand {
 
@@ -17,7 +14,7 @@ public class CmdUndeny extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(Player p, String[] args) {
+    public boolean exec(IPlayer p, String[] args) {
         if (plugin.cPerms(p, "PlotMe.admin.undeny") || plugin.cPerms(p, "PlotMe.use.undeny")) {
             if (!plugin.getPlotMeCoreManager().isPlotWorld(p)) {
                 p.sendMessage(RED + C("MsgNotPlotWorld"));
@@ -36,25 +33,25 @@ public class CmdUndeny extends PlotCommand {
                         if (plot.getOwner().equalsIgnoreCase(playername) || plugin.cPerms(p, "PlotMe.admin.undeny")) {
                             if (plot.isDeniedConsulting(denied) || plot.isGroupDenied(denied)) {
 
-                                World w = p.getWorld();
+                                IWorld w = p.getWorld();
 
                                 PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(w);
 
                                 double price = 0;
 
-                                PlotRemoveDeniedEvent event;
+                                InternalPlotRemoveDeniedEvent event;
                                 
                                 if (plugin.getPlotMeCoreManager().isEconomyEnabled(w)) {
                                     price = pmi.getUndenyPlayerPrice();
-                                    double balance = plugin.getEconomy().getBalance(p);
+                                    double balance = sob.getBalance(p);
 
                                     if (balance >= price) {
-                                        event = BukkitEventFactory.callPlotRemoveDeniedEvent(plugin, w, plot, p, denied);
+                                        event = sob.getEventFactory().callPlotRemoveDeniedEvent(plugin, w, plot, p, denied);
                                         
                                         if (event.isCancelled()) {
                                             return true;
                                         } else {
-                                            EconomyResponse er = plugin.getEconomy().withdrawPlayer(p, price);
+                                            EconomyResponse er = sob.withdrawPlayer(p, price);
     
                                             if (!er.transactionSuccess()) {
                                                 p.sendMessage(RED + er.errorMessage);
@@ -67,7 +64,7 @@ public class CmdUndeny extends PlotCommand {
                                         return true;
                                     }
                                 } else {
-                                    event = BukkitEventFactory.callPlotRemoveDeniedEvent(plugin, w, plot, p, denied);
+                                    event = sob.getEventFactory().callPlotRemoveDeniedEvent(plugin, w, plot, p, denied);
                                 }
                                 
                                 if (!event.isCancelled()) {

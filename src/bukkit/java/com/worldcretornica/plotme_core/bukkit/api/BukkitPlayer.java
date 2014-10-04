@@ -54,4 +54,9 @@ public class BukkitPlayer extends BukkitOfflinePlayer implements IPlayer {
     public IItemStack getItemInHand() {
         return new BukkitItemStack(player.getItemInHand());
     }
+
+    @Override
+    public void remove() {
+        player.remove();
+    }
 }

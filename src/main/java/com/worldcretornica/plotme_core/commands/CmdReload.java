@@ -1,10 +1,7 @@
 package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.bukkit.event.BukkitEventFactory;
-
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+import com.worldcretornica.plotme_core.api.*;
 
 public class CmdReload extends PlotCommand {
 
@@ -12,9 +9,9 @@ public class CmdReload extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(CommandSender s, String[] args) {
-        if (!(s instanceof Player) || plugin.cPerms(s, "PlotMe.admin.reload")) {
-            BukkitEventFactory.callPlotReloadEvent();
+    public boolean exec(ICommandSender s, String[] args) {
+        if (!(s instanceof IPlayer) || plugin.cPerms(s, "PlotMe.admin.reload")) {
+            sob.getEventFactory().callPlotReloadEvent();
 
             plugin.reload();
             s.sendMessage(C("MsgReloadedSuccess"));

@@ -25,4 +25,9 @@ public class BukkitCommandSender implements ICommandSender {
     public CommandSender getCommandSender() {
         return commandsender;
     }
+
+    @Override
+    public String getName() {
+        return commandsender.getName();
+    }
 }

@@ -2,6 +2,7 @@ package com.worldcretornica.plotme_core.bukkit.api;
 
 import org.bukkit.block.Block;
 
+import com.worldcretornica.plotme_core.api.IBiome;
 import com.worldcretornica.plotme_core.api.IBlock;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IWorld;
@@ -43,5 +44,15 @@ public class BukkitBlock implements IBlock {
     @Override
     public int getTypeId() {
         return block.getTypeId();
+    }
+
+    @Override
+    public void setBiome(IBiome b) {
+        block.setBiome(((BukkitBiome) b).getBiome());
+    }
+
+    @Override
+    public IBiome getBiome() {
+        return new BukkitBiome(block.getBiome());
     }
 }

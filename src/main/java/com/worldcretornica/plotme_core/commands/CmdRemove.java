@@ -5,13 +5,10 @@ import java.util.UUID;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.bukkit.event.BukkitEventFactory;
-import com.worldcretornica.plotme_core.bukkit.event.PlotRemoveAllowedEvent;
+import com.worldcretornica.plotme_core.api.*;
+import com.worldcretornica.plotme_core.api.event.InternalPlotRemoveAllowedEvent;
 
 import net.milkbowl.vault.economy.EconomyResponse;
-
-import org.bukkit.World;
-import org.bukkit.entity.Player;
 
 public class CmdRemove extends PlotCommand {
 
@@ -19,7 +16,7 @@ public class CmdRemove extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(Player p, String[] args) {
+    public boolean exec(IPlayer p, String[] args) {
         if (plugin.cPerms(p, "PlotMe.admin.remove") || plugin.cPerms(p, "PlotMe.use.remove")) {
             if (!plugin.getPlotMeCoreManager().isPlotWorld(p)) {
                 p.sendMessage(RED + C("MsgNotPlotWorld"));
@@ -38,25 +35,25 @@ public class CmdRemove extends PlotCommand {
                         if (plot.getOwnerId().equals(playeruuid) || plugin.cPerms(p, "PlotMe.admin.remove")) {
                             if (plot.isAllowedConsulting(allowed) || plot.isGroupAllowed(allowed)) {
 
-                                World w = p.getWorld();
+                                IWorld w = p.getWorld();
 
                                 PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(w);
 
                                 double price = 0;
 
-                                PlotRemoveAllowedEvent event;
+                                InternalPlotRemoveAllowedEvent event;
 
                                 if (plugin.getPlotMeCoreManager().isEconomyEnabled(w)) {
                                     price = pmi.getRemovePlayerPrice();
-                                    double balance = plugin.getEconomy().getBalance(p);
+                                    double balance = sob.getBalance(p);
 
                                     if (balance >= price) {
-                                        event = BukkitEventFactory.callPlotRemoveAllowedEvent(plugin, w, plot, p, allowed);
+                                        event = sob.getEventFactory().callPlotRemoveAllowedEvent(plugin, w, plot, p, allowed);
 
                                         if (event.isCancelled()) {
                                             return true;
                                         } else {
-                                            EconomyResponse er = plugin.getEconomy().withdrawPlayer(p, price);
+                                            EconomyResponse er = sob.withdrawPlayer(p, price);
 
                                             if (!er.transactionSuccess()) {
                                                 p.sendMessage(RED + er.errorMessage);
@@ -69,7 +66,7 @@ public class CmdRemove extends PlotCommand {
                                         return true;
                                     }
                                 } else {
-                                    event = BukkitEventFactory.callPlotRemoveAllowedEvent(plugin, w, plot, p, allowed);
+                                    event = sob.getEventFactory().callPlotRemoveAllowedEvent(plugin, w, plot, p, allowed);
                                 }
 
                                 if (!event.isCancelled()) {

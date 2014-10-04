@@ -2,14 +2,11 @@ package com.worldcretornica.plotme_core.api;
 
 import java.io.InputStream;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Logger;
 
 import com.worldcretornica.plotme_core.api.event.IEventFactory;
-import com.worldcretornica.plotme_core.api.v0_14b.IPlotMe_ChunkGenerator;
-import com.worldcretornica.plotme_core.bukkit.MultiWorldWrapper;
-import com.worldcretornica.plotme_core.bukkit.MultiverseWrapper;
-import com.worldcretornica.plotme_core.worldedit.PlotWorldEdit;
 
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
@@ -75,10 +72,6 @@ public interface IServerObjectBuilder {
 
     public void saveResource(String fileName, boolean b);
     
-    public MultiWorldWrapper getMultiWorldWrapper();
-    
-    public MultiverseWrapper getMultiverseWrapper();
-    
     public IPlotMe_ChunkGenerator getPlotMeGenerator(String pluginname, String worldname);
     
     public IPlotMe_ChunkGenerator getPlotMeGenerator(String worldname);
@@ -94,4 +87,16 @@ public interface IServerObjectBuilder {
     public boolean checkWorldName(String string);
 
     public boolean worldExists(String string);
+
+    public List<IWorld> getWorlds();
+    
+    public boolean CreatePlotWorld(ICommandSender cs, String worldname, String generator, Map<String, String> args);
+
+    public IMaterial getMaterial(String string);
+
+    public ILocation createLocation(IWorld w, int x, int y, int z);
+
+    public IEntityType getEntityType(String string);
+
+    public IConfigSection getConfig(InputStream defConfigStream);
 }

@@ -17,7 +17,6 @@ import com.worldcretornica.plotme_core.api.*;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitLocation;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitWorld;
-import com.worldcretornica.plotme_core.worldedit.PlotWorldEdit;
 import com.sk89q.worldedit.masks.Mask;
 
 @SuppressWarnings({ "deprecation", "unused" })
