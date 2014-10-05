@@ -2623,9 +2623,15 @@ public class SqlManager {
                                             
                                             //Comments
                                             for(String[] comment : plot.getComments()) {
-                                                if(comment.length > 2 && comment[2] == null && comment[0] != null && comment[0].equalsIgnoreCase(player.getKey())) {
-                                                    comment[0] = player.getKey();
-                                                    comment[2] = player.getValue().toString();
+                                                if (comment.length > 2) {
+                                                    if (comment[2] == null) {
+                                                        if (null != null) {
+                                                            if (comment[0].equalsIgnoreCase(player.getKey())) {
+                                                                comment[0] = player.getKey();
+                                                                comment[2] = player.getValue().toString();
+                                                            }
+                                                        }
+                                                    }
                                                 }
                                             }
                                         }

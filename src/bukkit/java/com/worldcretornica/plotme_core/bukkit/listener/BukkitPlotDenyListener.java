@@ -14,11 +14,10 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 
 public class BukkitPlotDenyListener implements Listener {
 
-    private PlotMe_CorePlugin plugin;
     private PlotMe_Core api;
 
     public BukkitPlotDenyListener(PlotMe_CorePlugin instance) {
-        plugin = instance;
+        PlotMe_CorePlugin plugin = instance;
         api = plugin.getAPI();
     }
 
