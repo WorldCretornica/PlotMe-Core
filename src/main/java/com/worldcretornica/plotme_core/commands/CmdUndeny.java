@@ -3,9 +3,9 @@ package com.worldcretornica.plotme_core.commands;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.*;
+import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotRemoveDeniedEvent;
-
 import net.milkbowl.vault.economy.EconomyResponse;
 
 public class CmdUndeny extends PlotCommand {
@@ -16,9 +16,7 @@ public class CmdUndeny extends PlotCommand {
 
     public boolean exec(IPlayer p, String[] args) {
         if (plugin.cPerms(p, "PlotMe.admin.undeny") || plugin.cPerms(p, "PlotMe.use.undeny")) {
-            if (!plugin.getPlotMeCoreManager().isPlotWorld(p)) {
-                p.sendMessage(RED + C("MsgNotPlotWorld"));
-            } else {
+            if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
                 String id = plugin.getPlotMeCoreManager().getPlotId(p.getLocation());
                 if (id.isEmpty()) {
                     p.sendMessage(RED + C("MsgNoPlotFound"));
@@ -40,19 +38,19 @@ public class CmdUndeny extends PlotCommand {
                                 double price = 0;
 
                                 InternalPlotRemoveDeniedEvent event;
-                                
+
                                 if (plugin.getPlotMeCoreManager().isEconomyEnabled(w)) {
                                     price = pmi.getUndenyPlayerPrice();
                                     double balance = sob.getBalance(p);
 
                                     if (balance >= price) {
                                         event = sob.getEventFactory().callPlotRemoveDeniedEvent(plugin, w, plot, p, denied);
-                                        
+
                                         if (event.isCancelled()) {
                                             return true;
                                         } else {
                                             EconomyResponse er = sob.withdrawPlayer(p, price);
-    
+
                                             if (!er.transactionSuccess()) {
                                                 p.sendMessage(RED + er.errorMessage);
                                                 Util().warn(er.errorMessage);
@@ -66,14 +64,14 @@ public class CmdUndeny extends PlotCommand {
                                 } else {
                                     event = sob.getEventFactory().callPlotRemoveDeniedEvent(plugin, w, plot, p, denied);
                                 }
-                                
+
                                 if (!event.isCancelled()) {
                                     plot.removeDenied(denied);
-    
+
                                     p.sendMessage(C("WordPlayer") + " " + RED + denied + RESET + " " + C("MsgNowUndenied") + " " + Util().moneyFormat(-price));
-    
+
                                     if (isAdvancedLogging()) {
-                                        plugin.getLogger().info(LOG + playername + " " + C("MsgUndeniedPlayer") + " " + denied + " " + C("MsgFromPlot") + " " + id + ((price != 0) ? " " + C("WordFor") + " " + price : ""));
+                                        plugin.getLogger().info(LOG + playername + " " + C("MsgUndeniedPlayer") + " " + denied + " " + C("MsgFromPlot") + " " + id + (price != 0 ? " " + C("WordFor") + " " + price : ""));
                                     }
                                 }
                             } else {
@@ -86,6 +84,8 @@ public class CmdUndeny extends PlotCommand {
                 } else {
                     p.sendMessage(RED + C("MsgThisPlot") + " (" + id + ") " + C("MsgHasNoOwner"));
                 }
+            } else {
+                p.sendMessage(RED + C("MsgNotPlotWorld"));
             }
         } else {
             p.sendMessage(RED + C("MsgPermissionDenied"));

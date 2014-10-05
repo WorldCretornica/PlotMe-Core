@@ -2,22 +2,22 @@ package com.worldcretornica.plotme_core.api;
 
 public interface ILocation {
 
-    public IWorld getWorld();
+    IWorld getWorld();
 
-    public int getBlockX();
-    
-    public int getBlockY();
-    
-    public int getBlockZ();
+    int getBlockX();
 
-    public int getX();
+    int getBlockY();
 
-    public int getY();
+    int getBlockZ();
 
-    public int getZ();
+    double getX();
 
-    public IBlock getBlock();
+    double getY();
 
-    public ILocation add(int i, int j, int k);
+    double getZ();
+
+    IBlock getBlock();
+
+    ILocation add(int i, int j, int k);
 
 }

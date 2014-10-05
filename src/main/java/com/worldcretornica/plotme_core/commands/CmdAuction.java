@@ -3,9 +3,10 @@ package com.worldcretornica.plotme_core.commands;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.*;
+import com.worldcretornica.plotme_core.api.IOfflinePlayer;
+import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotAuctionEvent;
-
 import net.milkbowl.vault.economy.EconomyResponse;
 
 public class CmdAuction extends PlotCommand {
@@ -22,7 +23,7 @@ public class CmdAuction extends PlotCommand {
                 if (plugin.cPerms(p, "PlotMe.use.auction") || plugin.cPerms(p, "PlotMe.admin.auction")) {
                     String id = plugin.getPlotMeCoreManager().getPlotId(p.getLocation());
 
-                    if (id.equals("")) {
+                    if (id.isEmpty()) {
                         p.sendMessage(RED + C("MsgNoPlotFound"));
                     } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, p)) {
                         Plot plot = plugin.getPlotMeCoreManager().getPlotById(p, id);

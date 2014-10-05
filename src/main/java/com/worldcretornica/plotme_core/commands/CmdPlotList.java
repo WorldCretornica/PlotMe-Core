@@ -2,7 +2,9 @@ package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.*;
+import com.worldcretornica.plotme_core.api.IOfflinePlayer;
+import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.api.IWorld;
 
 import java.util.Calendar;
 import java.util.UUID;
@@ -15,10 +17,7 @@ public class CmdPlotList extends PlotCommand {
 
     public boolean exec(IPlayer p, String[] args) {
         if (plugin.cPerms(p, "PlotMe.use.list")) {
-            if (!plugin.getPlotMeCoreManager().isPlotWorld(p)) {
-                p.sendMessage(RED + C("MsgNotPlotWorld"));
-                return true;
-            } else {
+            if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
                 String name;
                 UUID uuid = null;
 
@@ -39,7 +38,7 @@ public class CmdPlotList extends PlotCommand {
 
                 // Get plots of that player
                 for (Plot plot : plugin.getSqlManager().getPlayerPlots(uuid, name)) {
-                    if (!plot.getWorld().equals("")) {
+                    if (!plot.getWorld().isEmpty()) {
                         IWorld world = sob.getWorld(plot.getWorld());
                         if (world != null) {
                             plugin.getPlotMeCoreManager().getMap(world).addPlot(plot.getId(), plot);
@@ -59,15 +58,15 @@ public class CmdPlotList extends PlotCommand {
                         java.util.Date tempdate = plot.getExpiredDate();
 
                         if (tempdate.compareTo(Calendar.getInstance().getTime()) < 0) {
-                            addition.append(RED + " @" + plot.getExpiredDate().toString() + RESET);
+                            addition.append(RED + " @" + plot.getExpiredDate() + RESET);
                         } else {
-                            addition.append(" @" + plot.getExpiredDate().toString());
+                            addition.append(" @" + plot.getExpiredDate());
                         }
                     }
 
                     // Is it auctionned?
                     if (plot.isAuctionned()) {
-                        addition.append(" " + C("WordAuction") + ": " + GREEN + Util().round(plot.getCurrentBid()) + RESET + ((!plot.getCurrentBidder().equals("")) ? " " + plot.getCurrentBidder() : ""));
+                        addition.append(" " + C("WordAuction") + ": " + GREEN + Util().round(plot.getCurrentBid()) + RESET + (!plot.getCurrentBidder().isEmpty() ? " " + plot.getCurrentBidder() : ""));
                     }
 
                     // Is it for sale?
@@ -118,6 +117,9 @@ public class CmdPlotList extends PlotCommand {
                         }
                     }
                 }
+            } else {
+                p.sendMessage(RED + C("MsgNotPlotWorld"));
+                return true;
             }
         } else {
             p.sendMessage(RED + C("MsgPermissionDenied"));

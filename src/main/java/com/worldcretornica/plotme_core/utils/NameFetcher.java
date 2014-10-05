@@ -33,7 +33,7 @@ public class NameFetcher implements Callable<Map<UUID, String>> {
             }
             String cause = (String) response.get("cause");
             String errorMessage = (String) response.get("errorMessage");
-            if (cause != null && cause.length() > 0) {
+            if (cause != null && !cause.isEmpty()) {
                 throw new IllegalStateException(errorMessage);
             }
             uuidStringMap.put(uuid, name);

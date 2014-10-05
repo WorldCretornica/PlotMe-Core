@@ -3,9 +3,8 @@ package com.worldcretornica.plotme_core.commands;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.*;
+import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.event.InternalPlotProtectChangeEvent;
-
 import net.milkbowl.vault.economy.EconomyResponse;
 
 public class CmdProtect extends PlotCommand {
@@ -16,10 +15,7 @@ public class CmdProtect extends PlotCommand {
 
     public boolean exec(IPlayer p, String[] args) {
         if (plugin.cPerms(p, "PlotMe.admin.protect") || plugin.cPerms(p, "PlotMe.use.protect")) {
-            if (!plugin.getPlotMeCoreManager().isPlotWorld(p)) {
-                p.sendMessage(RED + C("MsgNotPlotWorld"));
-                return true;
-            } else {
+            if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
                 String id = plugin.getPlotMeCoreManager().getPlotId(p.getLocation());
 
                 if (id.isEmpty()) {
@@ -97,6 +93,9 @@ public class CmdProtect extends PlotCommand {
                 } else {
                     p.sendMessage(RED + C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
                 }
+            } else {
+                p.sendMessage(RED + C("MsgNotPlotWorld"));
+                return true;
             }
         } else {
             p.sendMessage(RED + C("MsgPermissionDenied"));

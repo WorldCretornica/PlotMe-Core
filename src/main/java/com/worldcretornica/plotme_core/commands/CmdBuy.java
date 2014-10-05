@@ -2,9 +2,11 @@ package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.*;
+import com.worldcretornica.plotme_core.api.ILocation;
+import com.worldcretornica.plotme_core.api.IOfflinePlayer;
+import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotBuyEvent;
-
 import net.milkbowl.vault.economy.EconomyResponse;
 
 public class CmdBuy extends PlotCommand {
@@ -19,14 +21,12 @@ public class CmdBuy extends PlotCommand {
                 ILocation l = p.getLocation();
                 String id = plugin.getPlotMeCoreManager().getPlotId(l);
 
-                if (id.equals("")) {
+                if (id.isEmpty()) {
                     p.sendMessage(RED + C("MsgNoPlotFound"));
                 } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, p)) {
                     Plot plot = plugin.getPlotMeCoreManager().getPlotById(p, id);
 
-                    if (!plot.isForSale()) {
-                        p.sendMessage(RED + C("MsgPlotNotForSale"));
-                    } else {
+                    if (plot.isForSale()) {
                         String buyer = p.getName();
 
                         if (plot.getOwner().equalsIgnoreCase(buyer)) {
@@ -55,7 +55,7 @@ public class CmdBuy extends PlotCommand {
                                         if (er.transactionSuccess()) {
                                             String oldowner = plot.getOwner();
                                             IOfflinePlayer playercurrentbidder = null;
-                                            
+
                                             if (plot.getOwnerId() != null) {
                                                 playercurrentbidder = sob.getOfflinePlayer(plot.getOwnerId());
                                             }
@@ -63,10 +63,7 @@ public class CmdBuy extends PlotCommand {
                                             if (!oldowner.equalsIgnoreCase("$Bank$") && playercurrentbidder != null) {
                                                 EconomyResponse er2 = sob.depositPlayer(playercurrentbidder, cost);
 
-                                                if (!er2.transactionSuccess()) {
-                                                    p.sendMessage(RED + er2.errorMessage);
-                                                    Util().warn(er2.errorMessage);
-                                                } else {
+                                                if (er2.transactionSuccess()) {
                                                     for (IPlayer player : sob.getOnlinePlayers()) {
                                                         if (player.getName().equalsIgnoreCase(oldowner)) {
                                                             player.sendMessage(C("WordPlot") + " " + id + " "
@@ -74,6 +71,9 @@ public class CmdBuy extends PlotCommand {
                                                             break;
                                                         }
                                                     }
+                                                } else {
+                                                    p.sendMessage(RED + er2.errorMessage);
+                                                    Util().warn(er2.errorMessage);
                                                 }
                                             }
 
@@ -102,6 +102,8 @@ public class CmdBuy extends PlotCommand {
                                 }
                             }
                         }
+                    } else {
+                        p.sendMessage(RED + C("MsgPlotNotForSale"));
                     }
                 } else {
                     p.sendMessage(RED + C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));

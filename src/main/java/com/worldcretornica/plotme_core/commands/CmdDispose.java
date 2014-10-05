@@ -3,9 +3,10 @@ package com.worldcretornica.plotme_core.commands;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.*;
+import com.worldcretornica.plotme_core.api.IOfflinePlayer;
+import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotDisposeEvent;
-
 import net.milkbowl.vault.economy.EconomyResponse;
 
 public class CmdDispose extends PlotCommand {
@@ -16,9 +17,7 @@ public class CmdDispose extends PlotCommand {
 
     public boolean exec(IPlayer p, String[] args) {
         if (plugin.cPerms(p, "PlotMe.admin.dispose") || plugin.cPerms(p, "PlotMe.use.dispose")) {
-            if (!plugin.getPlotMeCoreManager().isPlotWorld(p)) {
-                p.sendMessage(RED + C("MsgNotPlotWorld"));
-            } else {
+            if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
                 String id = plugin.getPlotMeCoreManager().getPlotId(p.getLocation());
                 if (id.isEmpty()) {
                     p.sendMessage(RED + C("MsgNoPlotFound"));
@@ -65,14 +64,14 @@ public class CmdDispose extends PlotCommand {
                                             IOfflinePlayer playercurrentbidder = sob.getOfflinePlayer(plot.getCurrentBidderId());
                                             EconomyResponse er2 = sob.depositPlayer(playercurrentbidder, plot.getCurrentBid());
 
-                                            if (!er2.transactionSuccess()) {
-                                                p.sendMessage(RED + er2.errorMessage);
-                                                Util().warn(er2.errorMessage);
-                                            } else {
+                                            if (er2.transactionSuccess()) {
                                                 IPlayer player = sob.getPlayer(playercurrentbidder.getUniqueId());
                                                 if (player != null) {
                                                     player.sendMessage(C("WordPlot") + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner() + " " + C("MsgWasDisposed") + " " + Util().moneyFormat(cost));
                                                 }
+                                            } else {
+                                                p.sendMessage(RED + er2.errorMessage);
+                                                Util().warn(er2.errorMessage);
                                             }
                                         }
                                     }
@@ -105,6 +104,8 @@ public class CmdDispose extends PlotCommand {
                 } else {
                     p.sendMessage(RED + C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
                 }
+            } else {
+                p.sendMessage(RED + C("MsgNotPlotWorld"));
             }
         } else {
             p.sendMessage(RED + C("MsgPermissionDenied"));

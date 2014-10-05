@@ -1,28 +1,5 @@
 package com.worldcretornica.plotme_core.bukkit.api;
 
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.logging.Logger;
-
-import net.milkbowl.vault.economy.Economy;
-import net.milkbowl.vault.economy.EconomyResponse;
-
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.World;
-import org.bukkit.World.Environment;
-import org.bukkit.WorldType;
-import org.bukkit.block.Biome;
-import org.bukkit.entity.Player;
-import org.bukkit.generator.ChunkGenerator;
-import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.RegisteredServiceProvider;
-import org.bukkit.plugin.java.JavaPlugin;
-
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
@@ -31,18 +8,38 @@ import com.worldcretornica.plotme_core.api.event.IEventFactory;
 import com.worldcretornica.plotme_core.bukkit.*;
 import com.worldcretornica.plotme_core.bukkit.MultiWorldWrapper.WorldGeneratorWrapper;
 import com.worldcretornica.plotme_core.bukkit.event.BukkitEventFactory;
-import com.worldcretornica.plotme_core.bukkit.listener.*;
+import com.worldcretornica.plotme_core.bukkit.listener.BukkitPlayerListener;
+import com.worldcretornica.plotme_core.bukkit.listener.BukkitPlotDenyListener;
+import com.worldcretornica.plotme_core.bukkit.listener.BukkitPlotListener;
+import com.worldcretornica.plotme_core.bukkit.listener.BukkitPlotWorldEditListener;
+import net.milkbowl.vault.economy.Economy;
+import net.milkbowl.vault.economy.EconomyResponse;
+import org.bukkit.*;
+import org.bukkit.World.Environment;
+import org.bukkit.block.Biome;
+import org.bukkit.entity.Player;
+import org.bukkit.generator.ChunkGenerator;
+import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.RegisteredServiceProvider;
+import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.logging.Logger;
 
 public class BukkitServerObjectBuilder implements IServerObjectBuilder {
 
     private PlotMe_CorePlugin plugin;
-    private Economy economy = null;
-    private PlotWorldEdit plotworldedit = null;
-    private boolean usinglwc = false;
-    private IEventFactory eventfactory = null;
-    
-    private MultiWorldWrapper multiworld = null;
-    private MultiverseWrapper multiverse = null;
+    private Economy economy;
+    private PlotWorldEdit plotworldedit;
+    private boolean usinglwc;
+    private IEventFactory eventfactory;
+
+    private MultiWorldWrapper multiworld;
+    private MultiverseWrapper multiverse;
     
     public BukkitServerObjectBuilder(PlotMe_CorePlugin instance) {
         plugin = instance;
@@ -129,6 +126,7 @@ public class BukkitServerObjectBuilder implements IServerObjectBuilder {
         this.plotworldedit = plotworldedit;
     }
 
+    @Override
     public boolean getUsinglwc() {
         return usinglwc;
     }
@@ -270,7 +268,7 @@ public class BukkitServerObjectBuilder implements IServerObjectBuilder {
             JavaPlugin genplugin = (JavaPlugin) Bukkit.getPluginManager().getPlugin(pluginname);
             if (genplugin != null) {
                 ChunkGenerator gen = genplugin.getDefaultWorldGenerator(worldname, "");
-                if (gen != null && gen instanceof IPlotMe_ChunkGenerator) {
+                if (gen instanceof IPlotMe_ChunkGenerator) {
                     return (IPlotMe_ChunkGenerator) gen;
                 }
             }
@@ -338,7 +336,7 @@ public class BukkitServerObjectBuilder implements IServerObjectBuilder {
         World w = Bukkit.getWorld(worldname);
         if (w != null) {
             ChunkGenerator cg = w.getGenerator();
-            if (cg != null && cg instanceof IPlotMe_ChunkGenerator) {
+            if (cg instanceof IPlotMe_ChunkGenerator) {
                 return (IPlotMe_ChunkGenerator) cg;
             }
         }
@@ -364,7 +362,7 @@ public class BukkitServerObjectBuilder implements IServerObjectBuilder {
     @Override
     public boolean CreatePlotWorld(ICommandSender cs, String worldname, String generator, Map<String, String> args) {
         //Get a seed
-        Long seed = (new java.util.Random()).nextLong();
+        Long seed = new java.util.Random().nextLong();
 
         //Check if we have multiworld
         if (getMultiWorld() == null) {
@@ -394,7 +392,7 @@ public class BukkitServerObjectBuilder implements IServerObjectBuilder {
             return false;
         } else {
             //Create the generator configurations
-            if (!(bukkitplugin).getManager().createConfig(worldname, args, cs)) {
+            if (!bukkitplugin.getManager().createConfig(worldname, args, cs)) {
                 cs.sendMessage("[" + plugin.getName() + "] " + plugin.getAPI().getUtil().C("ErrCannotCreateGen1") + " '" + generator + "' " + plugin.getAPI().getUtil().C("ErrCannotCreateGen2"));
                 return false;
             }

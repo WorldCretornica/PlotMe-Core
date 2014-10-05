@@ -5,11 +5,11 @@ import com.worldcretornica.plotme_core.api.IWorld;
 
 public class PlotMeSpool implements Runnable {
 
-    private PlotMe_Core plugin = null;
-    private Long[] currentClear = null;
-    private PlotToClear plottoclear = null;
+    private PlotMe_Core plugin;
+    private Long[] currentClear;
+    private PlotToClear plottoclear;
 
-    private int taskid = 0;
+    private int taskid;
 
     private static String T;
     private static String G;
@@ -65,14 +65,14 @@ public class PlotMeSpool implements Runnable {
     private void ShowProgress() {
         long done = getDoneBlocks();
         long total = getTotalPlotBlocks();
-        double percent = ((double) done) / ((double) total) * 100;
+        double percent = (double) done / (double) total * 100;
 
         String green = plugin.getServerObjectBuilder().getColor("GREEN");
         String reset = plugin.getServerObjectBuilder().getColor("RESET");
         
         Msg(plugin.getUtil().C("WordPlot") + " " + green + getPlotToClear().getPlotId() + reset + " " + plugin.getUtil().C("WordIn") + " "
                 + green + getPlotToClear().getWorld() + reset + " "
-                + plugin.getUtil().C("WordIs") + " " + green + ((double) Math.round(percent * 10) / 10) + "% " + reset + plugin.getUtil().C("WordCleared")
+                    + plugin.getUtil().C("WordIs") + " " + green + (double) Math.round(percent * 10) / 10 + "% " + reset + plugin.getUtil().C("WordCleared")
                 + " (" + green + format(done) + reset + "/" + green + format(total) + reset + " " + plugin.getUtil().C("WordBlocks") + ")");
     }
 
@@ -92,21 +92,21 @@ public class PlotMeSpool implements Runnable {
         double buffer;
 
         if (count > 1000000000000L) {
-            buffer = ((double) count / 1000000000000L);
-            buffer = ((double) Math.round(buffer * 10) / 10);
+            buffer = (double) count / 1000000000000L;
+            buffer = (double) Math.round(buffer * 10) / 10;
             return buffer + T;
         }
         if (count > 1000000000) {
-            buffer = ((double) count / 1000000000);
-            buffer = ((double) Math.round(buffer * 10) / 10);
+            buffer = (double) count / 1000000000;
+            buffer = (double) Math.round(buffer * 10) / 10;
             return buffer + G;
         } else if (count > 1000000) {
-            buffer = ((double) count / 1000000);
-            buffer = ((double) Math.round(buffer * 10) / 10);
+            buffer = (double) count / 1000000;
+            buffer = (double) Math.round(buffer * 10) / 10;
             return buffer + M;
         } else if (count > 1000) {
-            buffer = ((double) count / 1000);
-            buffer = ((double) Math.round(buffer * 10) / 10);
+            buffer = (double) count / 1000;
+            buffer = (double) Math.round(buffer * 10) / 10;
             return buffer + k;
         }
         return count.toString();

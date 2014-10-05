@@ -1,20 +1,19 @@
 package com.worldcretornica.plotme_core.bukkit;
 
-import java.io.IOException;
-
+import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.api.IServerObjectBuilder;
+import com.worldcretornica.plotme_core.bukkit.api.BukkitServerObjectBuilder;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.Metrics;
 import org.mcstats.Metrics.Graph;
 
-import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.IServerObjectBuilder;
-import com.worldcretornica.plotme_core.bukkit.api.BukkitServerObjectBuilder;
+import java.io.IOException;
 
 
 public class PlotMe_CorePlugin extends JavaPlugin {
 
     private PlotMe_Core plotme;
-    private IServerObjectBuilder serverObjectBuilder = null;
+    private IServerObjectBuilder serverObjectBuilder;
 
     @Override
     public void onDisable() {

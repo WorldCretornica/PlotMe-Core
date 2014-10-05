@@ -43,12 +43,12 @@ public class CmdDoneList extends PlotCommand {
 
                 List<Plot> finishedplots = plugin.getSqlManager().getDonePlots(p.getWorld().getName(), page, pagesize);
 
-                if (finishedplots.size() == 0) {
+                if (finishedplots.isEmpty()) {
                     p.sendMessage(C("MsgNoPlotsFinished"));
                 } else {
                     p.sendMessage(C("MsgFinishedPlotsPage") + " " + page + "/" + maxpage);
 
-                    for (int i = (page - 1) * pagesize; i < finishedplots.size() && i < (page * pagesize); i++) {
+                    for (int i = (page - 1) * pagesize; i < finishedplots.size() && i < page * pagesize; i++) {
                         Plot plot = finishedplots.get(i);
 
                         String starttext = "  " + AQUA + plot.getId() + RESET + " -> " + plot.getOwner();

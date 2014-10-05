@@ -3,9 +3,9 @@ package com.worldcretornica.plotme_core.commands;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.*;
+import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotAddDeniedEvent;
-
 import net.milkbowl.vault.economy.EconomyResponse;
 
 import java.util.List;
@@ -18,9 +18,7 @@ public class CmdDeny extends PlotCommand {
 
     public boolean exec(IPlayer p, String[] args) {
         if (plugin.cPerms(p, "PlotMe.admin.deny") || plugin.cPerms(p, "PlotMe.use.deny")) {
-            if (!plugin.getPlotMeCoreManager().isPlotWorld(p)) {
-                p.sendMessage(RED + C("MsgNotPlotWorld"));
-            } else {
+            if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
                 String id = plugin.getPlotMeCoreManager().getPlotId(p.getLocation());
                 if (id.isEmpty()) {
                     p.sendMessage(RED + C("MsgNoPlotFound"));
@@ -38,7 +36,7 @@ public class CmdDeny extends PlotCommand {
                                 //TODO output something using a caption that says like "Cannot deny owner"
                                 return true;
                             }
-                            
+
                             if (plot.isDeniedConsulting(denied) || plot.isGroupDenied(denied)) {
                                 p.sendMessage(C("WordPlayer") + " " + RED + args[1] + RESET + " " + C("MsgAlreadyDenied"));
                             } else {
@@ -105,7 +103,7 @@ public class CmdDeny extends PlotCommand {
                                     p.sendMessage(C("WordPlayer") + " " + RED + denied + RESET + " " + C("MsgNowDenied") + " " + Util().moneyFormat(-price));
 
                                     if (isAdvancedLogging()) {
-                                        plugin.getLogger().info(LOG + playername + " " + C("MsgDeniedPlayer") + " " + denied + " " + C("MsgToPlot") + " " + id + ((price != 0) ? " " + C("WordFor") + " " + price : ""));
+                                        plugin.getLogger().info(LOG + playername + " " + C("MsgDeniedPlayer") + " " + denied + " " + C("MsgToPlot") + " " + id + (price != 0 ? " " + C("WordFor") + " " + price : ""));
                                     }
                                 }
                             }
@@ -116,6 +114,8 @@ public class CmdDeny extends PlotCommand {
                 } else {
                     p.sendMessage(RED + C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
                 }
+            } else {
+                p.sendMessage(RED + C("MsgNotPlotWorld"));
             }
         } else {
             p.sendMessage(RED + C("MsgPermissionDenied"));

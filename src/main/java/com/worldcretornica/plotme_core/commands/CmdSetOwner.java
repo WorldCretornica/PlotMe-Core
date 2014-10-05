@@ -3,9 +3,9 @@ package com.worldcretornica.plotme_core.commands;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.*;
+import com.worldcretornica.plotme_core.api.IOfflinePlayer;
+import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.event.InternalPlotOwnerChangeEvent;
-
 import net.milkbowl.vault.economy.EconomyResponse;
 
 public class CmdSetOwner extends PlotCommand {
@@ -16,9 +16,7 @@ public class CmdSetOwner extends PlotCommand {
 
     public boolean exec(IPlayer p, String[] args) {
         if (plugin.cPerms(p, "PlotMe.admin.setowner")) {
-            if (!plugin.getPlotMeCoreManager().isPlotWorld(p)) {
-                p.sendMessage(RED + C("MsgNotPlotWorld"));
-            } else {
+            if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
                 String id = plugin.getPlotMeCoreManager().getPlotId(p.getLocation());
                 if (id.isEmpty()) {
                     p.sendMessage(RED + C("MsgNoPlotFound"));
@@ -34,30 +32,28 @@ public class CmdSetOwner extends PlotCommand {
 
                         PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(p);
                         oldowner = plot.getOwner();
-                        
+
                         InternalPlotOwnerChangeEvent event;
 
                         if (plugin.getPlotMeCoreManager().isEconomyEnabled(p)) {
-                            if (pmi.isRefundClaimPriceOnSetOwner() && newowner != oldowner) {
+                            if (pmi.isRefundClaimPriceOnSetOwner() && !newowner.equals(oldowner)) {
                                 event = sob.getEventFactory().callPlotOwnerChangeEvent(plugin, p.getWorld(), plot, p, newowner);
 
                                 if (event.isCancelled()) {
                                     return true;
-                                } else {
-                                    if (plot.getOwnerId() != null) {
-                                        IOfflinePlayer playeroldowner = sob.getOfflinePlayer(plot.getOwnerId());
-                                        EconomyResponse er = sob.depositPlayer(playeroldowner, pmi.getClaimPrice());
-    
-                                        if (!er.transactionSuccess()) {
-                                            p.sendMessage(RED + er.errorMessage);
-                                            Util().warn(er.errorMessage);
-                                            return true;
-                                        } else {
-                                            IPlayer player = sob.getPlayer(playeroldowner.getUniqueId());
-                                            if (player != null) {
-                                                player.sendMessage(C("MsgYourPlot") + " " + id + " " + C("MsgNowOwnedBy") + " " + newowner + ". " + Util().moneyFormat(pmi.getClaimPrice()));
-                                            }
+                                } else if (plot.getOwnerId() != null) {
+                                    IOfflinePlayer playeroldowner = sob.getOfflinePlayer(plot.getOwnerId());
+                                    EconomyResponse er = sob.depositPlayer(playeroldowner, pmi.getClaimPrice());
+
+                                    if (er.transactionSuccess()) {
+                                        IPlayer player = sob.getPlayer(playeroldowner.getUniqueId());
+                                        if (player != null) {
+                                            player.sendMessage(C("MsgYourPlot") + " " + id + " " + C("MsgNowOwnedBy") + " " + newowner + ". " + Util().moneyFormat(pmi.getClaimPrice()));
                                         }
+                                    } else {
+                                        p.sendMessage(RED + er.errorMessage);
+                                        Util().warn(er.errorMessage);
+                                        return true;
                                     }
                                 }
                             } else {
@@ -68,14 +64,14 @@ public class CmdSetOwner extends PlotCommand {
                                 IOfflinePlayer playercurrentbidder = sob.getOfflinePlayer(plot.getCurrentBidderId());
                                 EconomyResponse er = sob.depositPlayer(playercurrentbidder, plot.getCurrentBid());
 
-                                if (!er.transactionSuccess()) {
-                                    p.sendMessage(er.errorMessage);
-                                    Util().warn(er.errorMessage);
-                                } else {
+                                if (er.transactionSuccess()) {
                                     IPlayer player = sob.getPlayer(playercurrentbidder.getUniqueId());
                                     if (player != null) {
                                         player.sendMessage(C("WordPlot") + " " + id + " " + C("MsgChangedOwnerFrom") + " " + oldowner + " " + C("WordTo") + " " + newowner + ". " + Util().moneyFormat(plot.getCurrentBid()));
                                     }
+                                } else {
+                                    p.sendMessage(er.errorMessage);
+                                    Util().warn(er.errorMessage);
                                 }
                             }
                         } else {
@@ -113,6 +109,8 @@ public class CmdSetOwner extends PlotCommand {
                         plugin.getLogger().info(LOG + playername + " " + C("MsgChangedOwnerOf") + " " + id + " " + C("WordFrom") + " " + oldowner + " " + C("WordTo") + " " + newowner);
                     }
                 }
+            } else {
+                p.sendMessage(RED + C("MsgNotPlotWorld"));
             }
         } else {
             p.sendMessage(RED + C("MsgPermissionDenied"));

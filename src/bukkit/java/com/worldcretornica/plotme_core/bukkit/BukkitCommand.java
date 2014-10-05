@@ -1,9 +1,9 @@
 package com.worldcretornica.plotme_core.bukkit;
 
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.bukkit.api.*;
+import com.worldcretornica.plotme_core.bukkit.api.BukkitCommandSender;
+import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
 import com.worldcretornica.plotme_core.commands.*;
-
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -11,8 +11,8 @@ import org.bukkit.entity.Player;
 
 public class BukkitCommand implements CommandExecutor {
 
-    private PlotMe_Core api = null;
-    private PlotMe_CorePlugin plugin = null;
+    private PlotMe_Core api;
+    private PlotMe_CorePlugin plugin;
     private final CmdAdd add;
     private final CmdAddTime addtime;
     private final CmdAuction auction;

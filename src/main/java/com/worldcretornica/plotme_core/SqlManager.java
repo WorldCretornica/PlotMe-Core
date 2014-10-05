@@ -15,14 +15,14 @@ import java.util.logging.Level;
 
 public class SqlManager {
 
-    private PlotMe_Core plugin = null;
+    private PlotMe_Core plugin;
 
     private final Boolean usemySQL;
     private final String mySQLuname;
     private final String mySQLpass;
     private final String mySQLconn;
 
-    private static Connection conn = null;
+    private static Connection conn;
 
     public final String sqlitedb = "plots.db";
 
@@ -961,11 +961,11 @@ public class SqlManager {
                 }
             }
 
-            if (plot.getOwner() != null && !plot.getOwner().equals("") && plot.getOwnerId() == null) {
+            if (plot.getOwner() != null && !plot.getOwner().isEmpty() && plot.getOwnerId() == null) {
                 fetchOwnerUUIDAsync(idX, idZ, plot.getWorld().toLowerCase(), plot.getOwner());
             }
 
-            if (plot.getCurrentBidder() != null && !plot.getCurrentBidder().equals("") && plot.getCurrentBidderId() == null) {
+            if (plot.getCurrentBidder() != null && !plot.getCurrentBidder().isEmpty() && plot.getCurrentBidderId() == null) {
                 fetchBidderUUIDAsync(idX, idZ, plot.getWorld().toLowerCase(), plot.getCurrentBidder());
             }
 
@@ -2515,7 +2515,7 @@ public class SqlManager {
 
                         do {
                             String name = setPlayers.getString("Name");
-                            if (!name.equals("")) {
+                            if (!name.isEmpty()) {
                                 if (name.matches("^[a-zA-Z0-9_]{1,16}$")) {
                                     names.add(name);
                                 } else {
@@ -2649,7 +2649,7 @@ public class SqlManager {
                     plugin.getLogger().severe("Conversion to UUID failed :");
                     plugin.getLogger().severe("  " + ex.getMessage());
                     for (StackTraceElement e : ex.getStackTrace()) {
-                        plugin.getLogger().severe("  " + e.toString());
+                        plugin.getLogger().severe("  " + e);
                     }
                 } finally {
                     try {
@@ -2693,7 +2693,7 @@ public class SqlManager {
                         plugin.getLogger().severe("Conversion to UUID failed (on close) :");
                         plugin.getLogger().severe("  " + ex.getMessage());
                         for (StackTraceElement e : ex.getStackTrace()) {
-                            plugin.getLogger().severe("  " + e.toString());
+                            plugin.getLogger().severe("  " + e);
                         }
                     }
                 }
@@ -2751,8 +2751,8 @@ public class SqlManager {
                                 //plugin.getLogger().info("Fetching " + names.size() + " UUIDs from Mojang servers...");
                                 response = fetcher.call();
                                 //plugin.getLogger().info("Received " + response.size() + " UUIDs. Starting database update...");
-                                
-                                if (response.size() > 0) {
+
+                                if (!response.isEmpty()) {
                                     uuid = response.values().toArray(new UUID[0])[0];
                                     newname = response.keySet().toArray(new String[0])[0];
                                 }
@@ -2822,7 +2822,7 @@ public class SqlManager {
                         plugin.getLogger().severe("Conversion to UUID failed :");
                         plugin.getLogger().severe("  " + ex.getMessage());
                         for (StackTraceElement e : ex.getStackTrace()) {
-                            plugin.getLogger().severe("  " + e.toString());
+                            plugin.getLogger().severe("  " + e);
                         }
                     } finally {
                         try {
@@ -2833,7 +2833,7 @@ public class SqlManager {
                             plugin.getLogger().severe("Conversion to UUID failed (on close) :");
                             plugin.getLogger().severe("  " + ex.getMessage());
                             for (StackTraceElement e : ex.getStackTrace()) {
-                                plugin.getLogger().severe("  " + e.toString());
+                                plugin.getLogger().severe("  " + e);
                             }
                         }
                     }
@@ -2873,7 +2873,7 @@ public class SqlManager {
                     plugin.getLogger().severe("Update player in database from uuid failed :");
                     plugin.getLogger().severe("  " + ex.getMessage());
                     for (StackTraceElement e : ex.getStackTrace()) {
-                        plugin.getLogger().severe("  " + e.toString());
+                        plugin.getLogger().severe("  " + e);
                     }
                 } finally {
                     try {
@@ -2886,7 +2886,7 @@ public class SqlManager {
                         plugin.getLogger().severe("Update player in database from uuid failed (on close) :");
                         plugin.getLogger().severe("  " + ex.getMessage());
                         for (StackTraceElement e : ex.getStackTrace()) {
-                            plugin.getLogger().severe("  " + e.toString());
+                            plugin.getLogger().severe("  " + e);
                         }
                     }
                 }

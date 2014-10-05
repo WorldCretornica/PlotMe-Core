@@ -1,14 +1,14 @@
 package com.worldcretornica.plotme_core.commands;
 
-import java.util.UUID;
-
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.*;
+import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotRemoveAllowedEvent;
-
 import net.milkbowl.vault.economy.EconomyResponse;
+
+import java.util.UUID;
 
 public class CmdRemove extends PlotCommand {
 
@@ -18,9 +18,7 @@ public class CmdRemove extends PlotCommand {
 
     public boolean exec(IPlayer p, String[] args) {
         if (plugin.cPerms(p, "PlotMe.admin.remove") || plugin.cPerms(p, "PlotMe.use.remove")) {
-            if (!plugin.getPlotMeCoreManager().isPlotWorld(p)) {
-                p.sendMessage(RED + C("MsgNotPlotWorld"));
-            } else {
+            if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
                 String id = plugin.getPlotMeCoreManager().getPlotId(p.getLocation());
                 if (id.isEmpty()) {
                     p.sendMessage(RED + C("MsgNoPlotFound"));
@@ -75,7 +73,7 @@ public class CmdRemove extends PlotCommand {
                                     p.sendMessage(C("WordPlayer") + " " + RED + allowed + RESET + " " + C("WordRemoved") + ". " + Util().moneyFormat(-price));
 
                                     if (isAdvancedLogging()) {
-                                        plugin.getLogger().info(LOG + allowed + " " + C("MsgRemovedPlayer") + " " + allowed + " " + C("MsgFromPlot") + " " + id + ((price != 0) ? " " + C("WordFor") + " " + price : ""));
+                                        plugin.getLogger().info(LOG + allowed + " " + C("MsgRemovedPlayer") + " " + allowed + " " + C("MsgFromPlot") + " " + id + (price != 0 ? " " + C("WordFor") + " " + price : ""));
                                     }
                                 }
                             } else {
@@ -88,6 +86,8 @@ public class CmdRemove extends PlotCommand {
                 } else {
                     p.sendMessage(RED + C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
                 }
+            } else {
+                p.sendMessage(RED + C("MsgNotPlotWorld"));
             }
         } else {
             p.sendMessage(RED + C("MsgPermissionDenied"));

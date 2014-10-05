@@ -47,7 +47,7 @@ public class PlayerList {
                 continue;
             }
         }
-        if(!found.equals("")) {
+        if (!found.isEmpty()) {
             uuid = playerlist.get(found);
             playerlist.remove(found);
         }

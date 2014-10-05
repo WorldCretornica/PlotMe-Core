@@ -12,7 +12,7 @@ import java.util.*;
 public class Plot implements Comparable<Plot> {
 
     //TODO look into removing reference to plugin
-    private PlotMe_Core plugin = null;
+    private PlotMe_Core plugin;
 
     private String owner;
     private UUID ownerId;
@@ -496,28 +496,28 @@ public class Plot implements Comparable<Plot> {
         if(p == null) {
             return false;
         } else {
-            return isDeniedInternal(name, null, true, true);
+            return isDeniedInternal(name, null, true);
         }
     }
     
     public boolean isDeniedConsulting(String name) {
         IPlayer p = plugin.getServerObjectBuilder().getPlayerExact(name);
         if(p != null) {
-            return isDeniedInternal(name, p.getUniqueId(), true, true);
+            return isDeniedInternal(name, p.getUniqueId(), true);
         } else {
-            return isDeniedInternal(name, null, true, true);
+            return isDeniedInternal(name, null, true);
         }
     }
     
     public boolean isGroupDenied(String name) {
-        return isDeniedInternal(name, null, true, true);
+        return isDeniedInternal(name, null, true);
     }
 
     public boolean isDenied(UUID uuid) {
-        return isDeniedInternal("", uuid, true, true);
+        return isDeniedInternal("", uuid, true);
     }
-    
-    private boolean isDeniedInternal(String name, UUID uuid, boolean IncludeStar, boolean IncludeGroup) {
+
+    private boolean isDeniedInternal(String name, UUID uuid, boolean IncludeGroup) {
         IPlayer p = null;
         
         if (isAllowedInternal(name, uuid, false, false))

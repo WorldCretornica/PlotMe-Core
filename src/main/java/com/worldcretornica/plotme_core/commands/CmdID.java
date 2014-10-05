@@ -1,7 +1,8 @@
 package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.*;
+import com.worldcretornica.plotme_core.api.ILocation;
+import com.worldcretornica.plotme_core.api.IPlayer;
 
 public class CmdID extends PlotCommand {
 
@@ -11,12 +12,10 @@ public class CmdID extends PlotCommand {
 
     public boolean exec(IPlayer p, String[] args) {
         if (plugin.cPerms(p, "PlotMe.admin.id")) {
-            if (!plugin.getPlotMeCoreManager().isPlotWorld(p)) {
-                p.sendMessage(RED + C("MsgNotPlotWorld"));
-            } else {
+            if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
                 String plotid = plugin.getPlotMeCoreManager().getPlotId(p.getLocation());
 
-                if (plotid.equals("")) {
+                if (plotid.isEmpty()) {
                     p.sendMessage(RED + C("MsgNoPlotFound"));
                 } else {
                     p.sendMessage(AQUA + C("WordPlot") + " " + C("WordId") + ": " + RESET + plotid);
@@ -27,6 +26,8 @@ public class CmdID extends PlotCommand {
                     p.sendMessage(AQUA + C("WordBottom") + ": " + RESET + bottom.getBlockX() + BLUE + "," + RESET + bottom.getBlockZ());
                     p.sendMessage(AQUA + C("WordTop") + ": " + RESET + top.getBlockX() + BLUE + "," + RESET + top.getBlockZ());
                 }
+            } else {
+                p.sendMessage(RED + C("MsgNotPlotWorld"));
             }
         } else {
             p.sendMessage(RED + C("MsgPermissionDenied"));

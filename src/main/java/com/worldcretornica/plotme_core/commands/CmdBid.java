@@ -2,9 +2,9 @@ package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.*;
+import com.worldcretornica.plotme_core.api.IOfflinePlayer;
+import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.event.InternalPlotBidEvent;
-
 import net.milkbowl.vault.economy.EconomyResponse;
 
 public class CmdBid extends PlotCommand {
@@ -18,14 +18,13 @@ public class CmdBid extends PlotCommand {
             if (plugin.cPerms(p, "PlotMe.use.bid")) {
                 String id = plugin.getPlotMeCoreManager().getPlotId(p.getLocation());
 
-                if (id.equals("")) {
+                if (id.isEmpty()) {
                     p.sendMessage(RED + C("MsgNoPlotFound"));
                 } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, p)) {
                     Plot plot = plugin.getPlotMeCoreManager().getPlotById(p, id);
 
                     if (plot.isAuctionned()) {
                         String bidder = p.getName();
-                        IOfflinePlayer playerbidder = p;
 
                         if (plot.getOwner().equalsIgnoreCase(bidder)) {
                             p.sendMessage(RED + C("MsgCannotBidOwnPlot"));
@@ -40,19 +39,19 @@ public class CmdBid extends PlotCommand {
                             } catch (NumberFormatException e) {
                             }
 
-                            if (bid < currentbid || (bid == currentbid && !currentbidder.equals(""))) {
+                            if (bid < currentbid || bid == currentbid && !currentbidder.isEmpty()) {
                                 p.sendMessage(RED + C("MsgInvalidBidMustBeAbove") + " " + RESET + Util().moneyFormat(plot.getCurrentBid(), false));
                             } else {
-                                double balance = sob.getBalance(playerbidder);
+                                double balance = sob.getBalance(p);
 
                                 if (bid >= balance && !currentbidder.equals(bidder)
-                                            || currentbidder.equals(bidder) && bid > (balance + currentbid)) {
+                                            || currentbidder.equals(bidder) && bid > balance + currentbid) {
                                     p.sendMessage(RED + C("MsgNotEnoughBid"));
                                 } else {
                                     InternalPlotBidEvent event = sob.getEventFactory().callPlotBidEvent(plugin, p.getWorld(), plot, p, bid);
 
                                     if (!event.isCancelled()) {
-                                        EconomyResponse er = sob.withdrawPlayer(playerbidder, bid);
+                                        EconomyResponse er = sob.withdrawPlayer(p, bid);
 
                                         if (er.transactionSuccess()) {
                                             if (playercurrentbidder != null) {

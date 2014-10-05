@@ -2,6 +2,7 @@ package com.worldcretornica.plotme_core;
 
 import com.worldcretornica.plotme_core.api.*;
 import com.worldcretornica.plotme_core.utils.Util;
+
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Level;
@@ -25,19 +26,19 @@ public class PlotMe_Core {
     private Integer counterexpired;
     private Integer nbperdeletionprocessingexpired;
 
-    public Map<String, Map<String, String>> creationbuffer = null;
+    public Map<String, Map<String, String>> creationbuffer;
 
     //Spool stuff
-    private ConcurrentLinkedQueue<PlotToClear> plotsToClear = null;
+    private ConcurrentLinkedQueue<PlotToClear> plotsToClear;
 
     //Global variables
-    private PlotMeCoreManager plotmecoremanager = null;
-    private SqlManager sqlmanager = null;
-    private Util util = null;
+    private PlotMeCoreManager plotmecoremanager;
+    private SqlManager sqlmanager;
+    private Util util;
     private Boolean initialized = false;
     
     //Bridge
-    private IServerObjectBuilder serverObjectBuilder = null;
+    private IServerObjectBuilder serverObjectBuilder;
 
     public PlotMe_Core(IServerObjectBuilder serverObjectBuilder) {
         this.serverObjectBuilder = serverObjectBuilder;
@@ -337,7 +338,7 @@ public class PlotMe_Core {
     public void scheduleTask(Runnable task, int eachseconds, int howmanytimes) {
         getCommandSenderCurrentlyProcessingExpired().sendMessage(getUtil().C("MsgStartDeleteSession"));
 
-        for (int ctr = 0; ctr < (howmanytimes / getNbPerDeletionProcessingExpired()); ctr++) {
+        for (int ctr = 0; ctr < howmanytimes / getNbPerDeletionProcessingExpired(); ctr++) {
             serverObjectBuilder.scheduleSyncDelayedTask(task, ctr * eachseconds * 20);
         }
     }

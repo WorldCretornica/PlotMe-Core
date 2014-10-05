@@ -1,14 +1,14 @@
 package com.worldcretornica.plotme_core.commands;
 
-import java.util.UUID;
-
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.*;
+import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotTeleportHomeEvent;
-
 import net.milkbowl.vault.economy.EconomyResponse;
+
+import java.util.UUID;
 
 public class CmdHome extends PlotCommand {
 
@@ -18,28 +18,26 @@ public class CmdHome extends PlotCommand {
 
     public boolean exec(IPlayer p, String[] args) {
         if (plugin.cPerms(p, "PlotMe.use.home") || plugin.cPerms(p, "PlotMe.admin.home.other")) {
-            if (!plugin.getPlotMeCoreManager().isPlotWorld(p) && !sob.getConfig().getBoolean("allowWorldTeleport")) {
-                p.sendMessage(RED + C("MsgNotPlotWorld"));
-            } else {
+            if (plugin.getPlotMeCoreManager().isPlotWorld(p) || sob.getConfig().getBoolean("allowWorldTeleport")) {
                 String playername = p.getName();
                 UUID uuid = p.getUniqueId();
                 int nb = 1;
                 IWorld w;
                 String worldname = "";
 
-                if (!plugin.getPlotMeCoreManager().isPlotWorld(p)) {
-                    w = plugin.getPlotMeCoreManager().getFirstWorld();
-                } else {
+                if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
                     w = p.getWorld();
+                } else {
+                    w = plugin.getPlotMeCoreManager().getFirstWorld();
                 }
-                
+
                 if (w != null) {
                     worldname = w.getName();
                 }
 
                 if (args[0].contains(":")) {
                     try {
-                        if (args[0].split(":").length == 1 || args[0].split(":")[1].equals("")) {
+                        if (args[0].split(":").length == 1 || args[0].split(":")[1].isEmpty()) {
                             p.sendMessage(C("WordUsage") + ": " + RED + "/plotme " + C("CommandHome") + ":# " + RESET + C("WordExample") + ": " + RED + "/plotme " + C("CommandHome") + ":1");
                             return true;
                         } else {
@@ -72,9 +70,7 @@ public class CmdHome extends PlotCommand {
                     }
                 }
 
-                if (!plugin.getPlotMeCoreManager().isPlotWorld(w)) {
-                    p.sendMessage(RED + worldname + C("MsgWorldNotPlot"));
-                } else {
+                if (plugin.getPlotMeCoreManager().isPlotWorld(w)) {
                     int i = nb - 1;
 
                     for (Plot plot : plugin.getSqlManager().getOwnedPlots(w.getName(), uuid, playername)) {
@@ -126,17 +122,21 @@ public class CmdHome extends PlotCommand {
                     }
 
                     if (nb > 0) {
-                        if (!playername.equalsIgnoreCase(p.getName())) {
-                            p.sendMessage(RED + playername + " " + C("MsgDoesNotHavePlot") + " #" + nb);
-                        } else {
+                        if (playername.equalsIgnoreCase(p.getName())) {
                             p.sendMessage(RED + C("MsgPlotNotFound") + " #" + nb);
+                        } else {
+                            p.sendMessage(RED + playername + " " + C("MsgDoesNotHavePlot") + " #" + nb);
                         }
                     } else if (!playername.equalsIgnoreCase(p.getName())) {
                         p.sendMessage(RED + playername + " " + C("MsgDoesNotHavePlot"));
                     } else {
                         p.sendMessage(RED + C("MsgYouHaveNoPlot"));
                     }
+                } else {
+                    p.sendMessage(RED + worldname + C("MsgWorldNotPlot"));
                 }
+            } else {
+                p.sendMessage(RED + C("MsgNotPlotWorld"));
             }
         } else {
             p.sendMessage(RED + C("MsgPermissionDenied"));

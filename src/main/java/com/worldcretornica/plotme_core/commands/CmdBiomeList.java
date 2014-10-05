@@ -1,7 +1,8 @@
 package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.*;
+import com.worldcretornica.plotme_core.api.ICommandSender;
+import com.worldcretornica.plotme_core.api.IPlayer;
 
 import java.util.Collections;
 import java.util.List;
@@ -20,7 +21,7 @@ public class CmdBiomeList extends PlotCommand {
             
             int biomesperpage = 19;
             int page = 1;
-            int pages = (int) Math.ceil(((double) biomes.size()) / biomesperpage);
+            int pages = (int) Math.ceil((double) biomes.size() / biomesperpage);
             
             if (args.length > 1 && !args[1].isEmpty()) {
                 try{
@@ -35,10 +36,10 @@ public class CmdBiomeList extends PlotCommand {
             s.sendMessage(C("WordBiomes") + " (" + page + "/" + pages + ") : ");
             
             for (int ctr = 0; ctr < biomesperpage; ctr++) {
-                if (biomes.size() <= ctr + ((page - 1) * biomesperpage)) {
+                if (biomes.size() <= ctr + (page - 1) * biomesperpage) {
                     return true;
                 } else {
-                    s.sendMessage("  " + AQUA + biomes.get(ctr + ((page - 1) * biomesperpage)));
+                    s.sendMessage("  " + AQUA + biomes.get(ctr + (page - 1) * biomesperpage));
                 }
             }
         } else {

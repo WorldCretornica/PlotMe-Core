@@ -3,8 +3,8 @@ package com.worldcretornica.plotme_core.bukkit.listener;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.bukkit.PlotMe_CorePlugin;
-import com.worldcretornica.plotme_core.bukkit.api.*;
-
+import com.worldcretornica.plotme_core.bukkit.api.BukkitLocation;
+import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -14,8 +14,8 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 
 public class BukkitPlotDenyListener implements Listener {
 
-    private PlotMe_CorePlugin plugin = null;
-    private PlotMe_Core api = null;
+    private PlotMe_CorePlugin plugin;
+    private PlotMe_Core api;
 
     public BukkitPlotDenyListener(PlotMe_CorePlugin instance) {
         plugin = instance;
@@ -31,7 +31,7 @@ public class BukkitPlotDenyListener implements Listener {
 
             String idTo = api.getPlotMeCoreManager().getPlotId(to);
 
-            if (!idTo.equals("")) {
+            if (!idTo.isEmpty()) {
                 Plot plot = api.getPlotMeCoreManager().getPlotById(p, idTo);
 
                 if (plot != null && plot.isDenied(p.getUniqueId())) {
@@ -50,7 +50,7 @@ public class BukkitPlotDenyListener implements Listener {
 
             String idTo = api.getPlotMeCoreManager().getPlotId(to);
 
-            if (!idTo.equals("")) {
+            if (!idTo.isEmpty()) {
                 Plot plot = api.getPlotMeCoreManager().getPlotById(p, idTo);
 
                 if (plot != null && plot.isDenied(p.getUniqueId())) {
@@ -68,7 +68,7 @@ public class BukkitPlotDenyListener implements Listener {
         if (api.getPlotMeCoreManager().isPlotWorld(p) && !api.cPerms(p, "plotme.admin.bypassdeny")) {
             String id = api.getPlotMeCoreManager().getPlotId(p.getLocation());
 
-            if (!id.equals("")) {
+            if (!id.isEmpty()) {
                 Plot plot = api.getPlotMeCoreManager().getPlotById(p, id);
 
                 if (plot != null && plot.isDenied(p.getUniqueId())) {

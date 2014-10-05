@@ -4,9 +4,9 @@ import com.worldcretornica.plotme_core.ClearReason;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.*;
+import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotClearEvent;
-
 import net.milkbowl.vault.economy.EconomyResponse;
 
 public class CmdClear extends PlotCommand {
@@ -17,9 +17,7 @@ public class CmdClear extends PlotCommand {
 
     public boolean exec(IPlayer p, String[] args) {
         if (plugin.cPerms(p, "PlotMe.admin.clear") || plugin.cPerms(p, "PlotMe.use.clear")) {
-            if (!plugin.getPlotMeCoreManager().isPlotWorld(p)) {
-                p.sendMessage(RED + C("MsgNotPlotWorld"));
-            } else {
+            if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
                 String id = plugin.getPlotMeCoreManager().getPlotId(p.getLocation());
                 if (id.isEmpty()) {
                     p.sendMessage(RED + C("MsgNoPlotFound"));
@@ -70,7 +68,7 @@ public class CmdClear extends PlotCommand {
                                 plugin.getPlotMeCoreManager().clear(w, plot, p, ClearReason.Clear);
 
                                 if (isAdvancedLogging()) {
-                                    plugin.getLogger().info(LOG + playername + " " + C("MsgClearedPlot") + " " + id + ((price != 0) ? " " + C("WordFor") + " " + price : ""));
+                                    plugin.getLogger().info(LOG + playername + " " + C("MsgClearedPlot") + " " + id + (price != 0 ? " " + C("WordFor") + " " + price : ""));
                                 }
                             }
                         } else {
@@ -80,6 +78,8 @@ public class CmdClear extends PlotCommand {
                 } else {
                     p.sendMessage(RED + C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
                 }
+            } else {
+                p.sendMessage(RED + C("MsgNotPlotWorld"));
             }
         } else {
             p.sendMessage(RED + C("MsgPermissionDenied"));

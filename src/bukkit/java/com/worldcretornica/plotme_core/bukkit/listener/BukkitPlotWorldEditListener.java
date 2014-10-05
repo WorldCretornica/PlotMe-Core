@@ -3,8 +3,10 @@ package com.worldcretornica.plotme_core.bukkit.listener;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.bukkit.PlotMe_CorePlugin;
-import com.worldcretornica.plotme_core.bukkit.api.*;
-
+import com.worldcretornica.plotme_core.bukkit.api.BukkitBlock;
+import com.worldcretornica.plotme_core.bukkit.api.BukkitLocation;
+import com.worldcretornica.plotme_core.bukkit.api.BukkitMaterial;
+import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -14,7 +16,7 @@ import org.bukkit.event.player.*;
 
 public class BukkitPlotWorldEditListener implements Listener {
 
-    private PlotMe_Core api = null;
+    private PlotMe_Core api;
 
     public BukkitPlotWorldEditListener(PlotMe_CorePlugin plugin) {
         this.api = plugin.getAPI();

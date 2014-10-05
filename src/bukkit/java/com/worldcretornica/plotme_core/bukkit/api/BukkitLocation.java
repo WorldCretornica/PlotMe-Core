@@ -1,9 +1,8 @@
 package com.worldcretornica.plotme_core.bukkit.api;
 
-import org.bukkit.Location;
-
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IWorld;
+import org.bukkit.Location;
 
 public class BukkitLocation implements ILocation {
 
@@ -32,7 +31,22 @@ public class BukkitLocation implements ILocation {
     public int getBlockZ() {
         return location.getBlockZ();
     }
-    
+
+    @Override
+    public double getX() {
+        return location.getX();
+    }
+
+    @Override
+    public double getY() {
+        return location.getY();
+    }
+
+    @Override
+    public double getZ() {
+        return location.getZ();
+    }
+
     public Location getLocation() {
         return location;
     }

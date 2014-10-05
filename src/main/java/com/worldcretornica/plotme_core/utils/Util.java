@@ -1,12 +1,10 @@
 package com.worldcretornica.plotme_core.utils;
 
 import com.worldcretornica.plotme_core.PlotMe_Core;
+import net.milkbowl.vault.economy.Economy;
+import org.bukkit.ChatColor;
 
 import java.util.logging.Level;
-
-import net.milkbowl.vault.economy.Economy;
-
-import org.bukkit.ChatColor;
 
 public class Util {
 
@@ -38,7 +36,7 @@ public class Util {
 
         StringBuilder ret = new StringBuilder();
 
-        for (int i = 0; (i + spaceWidth) < length; i += spaceWidth) {
+        for (int i = 0; i + spaceWidth < length; i += spaceWidth) {
             ret.append(" ");
         }
 
@@ -46,7 +44,7 @@ public class Util {
     }
 
     public String round(double money) {
-        return (money % 1 == 0) ? "" + Math.round(money) : "" + money;
+        return money % 1 == 0 ? "" + Math.round(money) : "" + money;
     }
 
     public void warn(String msg) {
@@ -67,11 +65,11 @@ public class Util {
         Economy econ = plugin.getServerObjectBuilder().getEconomy();
         
         if (econ != null) {
-            format = (price <= 1 && price >= -1) ? format + " " + econ.currencyNameSingular() : format + " " + econ.currencyNamePlural();
+            format = price <= 1 && price >= -1 ? format + " " + econ.currencyNameSingular() : format + " " + econ.currencyNamePlural();
         }
 
         if (showsign) {
-            return GREEN + ((price > 0) ? "+" + format : "-" + format);
+            return GREEN + (price > 0 ? "+" + format : "-" + format);
         } else {
             return GREEN + format;
         }
@@ -87,7 +85,7 @@ public class Util {
         for (String token : tokens) {
             token = token.substring(0, 1).toUpperCase() + token.substring(1);
 
-            if (biome.equals("")) {
+            if (biome.isEmpty()) {
                 biome = token;
             } else {
                 biome = biome + "_" + token;

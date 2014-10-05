@@ -3,9 +3,10 @@ package com.worldcretornica.plotme_core.commands;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.*;
+import com.worldcretornica.plotme_core.api.IBiome;
+import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotBiomeChangeEvent;
-
 import net.milkbowl.vault.economy.EconomyResponse;
 
 public class CmdBiome extends PlotCommand {
@@ -20,13 +21,13 @@ public class CmdBiome extends PlotCommand {
                 p.sendMessage(RED + C("MsgNotPlotWorld"));
             } else {
                 String id = plugin.getPlotMeCoreManager().getPlotId(p.getLocation());
-                if (id.equals("")) {
+                if (id.isEmpty()) {
                     p.sendMessage(RED + C("MsgNoPlotFound"));
                 } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, p)) {
                     IWorld w = p.getWorld();
 
                     if (args.length == 2) {
-                        IBiome biome = null;
+                        IBiome biome;
 
                         biome = sob.getBiome(args[1]);
                                 
@@ -76,7 +77,7 @@ public class CmdBiome extends PlotCommand {
 
                                     if (isAdvancedLogging()) {
                                         plugin.getLogger().info(LOG + playername + " " + C("MsgChangedBiome") + " " + id + " " + C("WordTo") + " "
-                                                                        + Util().FormatBiome(biome.name()) + ((price != 0) ? " " + C("WordFor") + " " + price : ""));
+                                                                        + Util().FormatBiome(biome.name()) + (price != 0 ? " " + C("WordFor") + " " + price : ""));
                                     }
                                 }
                             } else {
