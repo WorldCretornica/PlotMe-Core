@@ -2,25 +2,25 @@ package com.worldcretornica.plotme_core.api;
 
 public interface IBlock {
 
-    public ILocation getLocation();
-    
-    public IWorld getWorld();
+    ILocation getLocation();
 
-    public int getX();
-    
-    public int getY();
-    
-    public int getZ();
-    
-    public int getTypeId();
+    IWorld getWorld();
 
-    public void setBiome(IBiome b);
+    int getX();
 
-    public IBiome getBiome();
+    int getY();
 
-    public boolean setTypeIdAndData(Short id, Byte data, boolean applyPhysics);
+    int getZ();
 
-    public byte getData();
+    int getTypeId();
 
-    public void setTypeId(int i, boolean b);
+    void setBiome(IBiome b);
+
+    IBiome getBiome();
+
+    boolean setTypeIdAndData(Short id, byte data, boolean applyPhysics);
+
+    byte getData();
+
+    void setTypeId(int i, boolean b);
 }

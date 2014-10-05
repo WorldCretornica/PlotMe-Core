@@ -1,5 +1,6 @@
 package com.worldcretornica.plotme_core.bukkit.api;
 
+import com.worldcretornica.plotme_core.api.IBlock;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IWorld;
 import org.bukkit.Location;
@@ -47,6 +48,11 @@ public class BukkitLocation implements ILocation {
         return location.getZ();
     }
 
+    @Override
+    public IBlock getBlock() {
+        return new BukkitBlock(location.getBlock());
+    }
+    
     public Location getLocation() {
         return location;
     }

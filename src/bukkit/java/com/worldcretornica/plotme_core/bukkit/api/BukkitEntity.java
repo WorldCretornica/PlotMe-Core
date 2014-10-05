@@ -1,9 +1,9 @@
 package com.worldcretornica.plotme_core.bukkit.api;
 
-import org.bukkit.entity.Entity;
-
 import com.worldcretornica.plotme_core.api.IEntity;
 import com.worldcretornica.plotme_core.api.ILocation;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 
 public class BukkitEntity implements IEntity {
 
@@ -22,4 +22,10 @@ public class BukkitEntity implements IEntity {
     public void remove() {
         entity.remove();
     }
+
+    @Override
+    public EntityType getType() {
+        return entity.getType();
+    }
+
 }

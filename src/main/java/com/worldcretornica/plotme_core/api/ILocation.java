@@ -18,6 +18,6 @@ public interface ILocation {
 
     IBlock getBlock();
 
-    ILocation add(int i, int j, int k);
+    ILocation add(double x, double y, double z);
 
 }
