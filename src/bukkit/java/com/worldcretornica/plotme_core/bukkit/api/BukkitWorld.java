@@ -57,7 +57,7 @@ public class BukkitWorld implements IWorld {
     }
 
     @Override
-    public ILocation createLocation(int x, int y, int z) {
+    public ILocation createLocation(double x, double y, double z) {
         return new BukkitLocation(new Location(world, x, y, z));
     }
 }

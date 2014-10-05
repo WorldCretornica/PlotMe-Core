@@ -1,6 +1,7 @@
 package com.worldcretornica.plotme_core.api;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
@@ -44,5 +45,5 @@ public interface IConfigSection {
 
     public void setDefaults(IConfigSection defConfig);
 
-    public void save(File configFile);
+    public void save(File configFile) throws IOException;
 }

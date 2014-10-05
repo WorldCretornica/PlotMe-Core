@@ -1,9 +1,10 @@
 package com.worldcretornica.plotme_core.bukkit.api;
 
 import com.worldcretornica.plotme_core.api.IEntity;
+import com.worldcretornica.plotme_core.api.IEntityType;
 import com.worldcretornica.plotme_core.api.ILocation;
+
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 
 public class BukkitEntity implements IEntity {
 
@@ -24,8 +25,13 @@ public class BukkitEntity implements IEntity {
     }
 
     @Override
-    public EntityType getType() {
-        return entity.getType();
+    public IEntityType getType() {
+        return new BukkitEntityType(entity.getType());
+    }
+
+    @Override
+    public void teleport(ILocation newl) {
+        entity.teleport(((BukkitLocation) newl).getLocation());
     }
 
 }

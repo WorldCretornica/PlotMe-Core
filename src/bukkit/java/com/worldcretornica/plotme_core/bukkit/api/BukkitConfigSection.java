@@ -1,5 +1,7 @@
 package com.worldcretornica.plotme_core.bukkit.api;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
@@ -23,6 +25,12 @@ public class BukkitConfigSection implements IConfigSection {
         plugin = instance;
         master = plugin.getConfig();
         section = master;
+    }
+    
+    public BukkitConfigSection(PlotMe_CorePlugin instance, FileConfiguration master) {
+        plugin = instance;
+        this.section = master;
+        this.master = master;
     }
     
     public BukkitConfigSection(PlotMe_CorePlugin instance, FileConfiguration master, ConfigurationSection configurationSection) {
@@ -156,6 +164,16 @@ public class BukkitConfigSection implements IConfigSection {
     @Override
     public void reloadConfig() {
         plugin.reloadConfig();
+    }
+
+    @Override
+    public void setDefaults(IConfigSection defConfig) {
+        master.setDefaults(((BukkitConfigSection) defConfig).master);
+    }
+
+    @Override
+    public void save(File configFile) throws IOException {
+        master.save(configFile);
     }
 
 }

@@ -56,4 +56,9 @@ public class BukkitLocation implements ILocation {
     public Location getLocation() {
         return location;
     }
+
+    @Override
+    public ILocation add(double x, double y, double z) {
+        return new BukkitLocation(location.add(x, y, z));
+    }
 }

@@ -4,6 +4,7 @@ import com.worldcretornica.plotme_core.api.IBiome;
 import com.worldcretornica.plotme_core.api.IBlock;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IWorld;
+
 import org.bukkit.block.Block;
 
 public class BukkitBlock implements IBlock {
@@ -55,16 +56,19 @@ public class BukkitBlock implements IBlock {
         return new BukkitBiome(block.getBiome());
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public boolean setTypeIdAndData(Short id, byte data, boolean applyPhysics) {
         return block.setTypeIdAndData(id, data, applyPhysics);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public byte getData() {
         return block.getData();
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void setTypeId(int i, boolean b) {
         block.setTypeId(i, b);

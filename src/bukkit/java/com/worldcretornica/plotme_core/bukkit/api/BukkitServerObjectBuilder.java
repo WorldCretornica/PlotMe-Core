@@ -12,12 +12,16 @@ import com.worldcretornica.plotme_core.bukkit.listener.BukkitPlayerListener;
 import com.worldcretornica.plotme_core.bukkit.listener.BukkitPlotDenyListener;
 import com.worldcretornica.plotme_core.bukkit.listener.BukkitPlotListener;
 import com.worldcretornica.plotme_core.bukkit.listener.BukkitPlotWorldEditListener;
+
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
+
 import org.bukkit.*;
 import org.bukkit.World.Environment;
 import org.bukkit.block.Biome;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.EntityType;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -516,5 +520,26 @@ public class BukkitServerObjectBuilder implements IServerObjectBuilder {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public IMaterial getMaterial(String string) {
+        return new BukkitMaterial(Material.valueOf(string));
+    }
+
+    @Override
+    public ILocation createLocation(IWorld w, int x, int y, int z) {
+        return w.createLocation(x, y, z);
+    }
+
+    @Override
+    public IEntityType getEntityType(String string) {
+        return new BukkitEntityType(EntityType.valueOf(string));
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public IConfigSection getConfig(InputStream defConfigStream) {
+        return new BukkitConfigSection(plugin, YamlConfiguration.loadConfiguration(defConfigStream));
     }
 }

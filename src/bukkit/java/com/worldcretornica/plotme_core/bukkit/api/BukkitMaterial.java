@@ -1,6 +1,7 @@
 package com.worldcretornica.plotme_core.bukkit.api;
 
 import com.worldcretornica.plotme_core.api.IMaterial;
+
 import org.bukkit.Material;
 
 public class BukkitMaterial implements IMaterial {
@@ -15,6 +16,7 @@ public class BukkitMaterial implements IMaterial {
         return material;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public Integer getId() {
         return material.getId();

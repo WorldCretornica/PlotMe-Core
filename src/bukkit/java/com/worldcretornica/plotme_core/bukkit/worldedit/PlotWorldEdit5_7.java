@@ -19,7 +19,7 @@ import org.bukkit.Location;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-@SuppressWarnings({ "deprecation", "unused" })
+@SuppressWarnings({ "deprecation" })
 public class PlotWorldEdit5_7 implements PlotWorldEdit {
 
     private final PlotMe_Core plugin;

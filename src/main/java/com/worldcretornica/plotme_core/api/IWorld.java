@@ -9,7 +9,7 @@ public interface IWorld {
 
     public String getName();
 
-    public IBlock getBlockAt(int i, int j, int k);
+    public IBlock getBlockAt(int x, int y, int z);
 
     public void refreshChunk(int x, int z);
 
@@ -17,6 +17,6 @@ public interface IWorld {
 
     public int getMaxHeight();
 
-    public ILocation createLocation(int x, int y, int z);
+    public ILocation createLocation(double x, double y, double z);
 
 }

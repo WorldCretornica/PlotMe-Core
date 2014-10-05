@@ -2,6 +2,7 @@ package com.worldcretornica.plotme_core.bukkit.api;
 
 import org.bukkit.entity.Player;
 
+import com.worldcretornica.plotme_core.api.IEntityType;
 import com.worldcretornica.plotme_core.api.IItemStack;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
@@ -58,5 +59,10 @@ public class BukkitPlayer extends BukkitOfflinePlayer implements IPlayer {
     @Override
     public void remove() {
         player.remove();
+    }
+
+    @Override
+    public IEntityType getType() {
+        return new BukkitEntityType(player.getType());
     }
 }
