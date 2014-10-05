@@ -60,10 +60,6 @@ public class PlotMeCoreManager {
         return isEconomyEnabled(p.getWorld().getName());
     }
 
-    public boolean isEconomyEnabled(IBlock b) {
-        return isEconomyEnabled(b.getWorld().getName());
-    }
-
     public PlotMapInfo getMap(IWorld w) {
         if (w == null) {
             return null;
@@ -160,10 +156,6 @@ public class PlotMeCoreManager {
         return pmi.getPlot(id);
     }
 
-    public Plot getPlotById(IPlayer p) {
-        return getPlotById(p.getLocation());
-    }
-
     public Plot getPlotById(ILocation l) {
         PlotMapInfo pmi = getMap(l);
         String id = getPlotId(l);
@@ -185,9 +177,6 @@ public class PlotMeCoreManager {
         return pmi.getPlot(id);
     }
 
-    public Plot getPlotById(IBlock b) {
-        return getPlotById(b.getLocation());
-    }
 
     public void removePlot(IWorld w, String id) {
         PlotMapInfo pmi = getMap(w);
@@ -262,11 +251,7 @@ public class PlotMeCoreManager {
     }
 
     public boolean isPlotWorld(IBlock b) {
-        if (b == null || getGenMan(b.getWorld()) == null) {
-            return false;
-        } else {
-            return plotmaps.containsKey(b.getWorld().getName().toLowerCase());
-        }
+        return getGenMan(b.getWorld()) != null && plotmaps.containsKey(b.getWorld().getName().toLowerCase());
     }
 
     public boolean isPlotWorld(IBlockState b) {
@@ -505,17 +490,8 @@ public class PlotMeCoreManager {
         } else {
             line1 = Util().C("SignId") + id;
         }
-        if ((Util().C("SignOwner") + plot.getOwner()).length() > 16) {
-            line3 = (Util().C("SignOwner") + plot.getOwner()).substring(0, 16);
-            if ((Util().C("SignOwner") + plot.getOwner()).length() > 32) {
-                line4 = (Util().C("SignOwner") + plot.getOwner()).substring(16, 32);
-            } else {
-                line4 = (Util().C("SignOwner") + plot.getOwner()).substring(16);
-            }
-        } else {
-            line3 = Util().C("SignOwner") + plot.getOwner();
-            line4 = "";
-        }
+        line3 = plot.getOwner();
+        line4 = "";
 
         getGenMan(w).setOwnerDisplay(w, plot.getId(), line1, line2, line3, line4);
     }

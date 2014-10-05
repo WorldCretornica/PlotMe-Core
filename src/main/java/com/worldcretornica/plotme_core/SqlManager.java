@@ -679,7 +679,6 @@ public class SqlManager {
                     Statement slComments = sqliteconn.createStatement();
                     ResultSet setComments = null;
                     Statement slFreed = sqliteconn.createStatement();
-                    ResultSet setFreed;
 
                     int size = 0;
                     while (setPlots.next()) {
@@ -695,7 +694,7 @@ public class SqlManager {
                         java.sql.Date expireddate = null;
                         try {
                             expireddate = setPlots.getDate("expireddate");
-                        } catch (SQLException e) {
+                        } catch (SQLException ignored) {
                         }
                         boolean finished = setPlots.getBoolean("finished");
                         PlayerList allowed = new PlayerList();
@@ -783,7 +782,7 @@ public class SqlManager {
                         size++;
                     }
 
-                    setFreed = slstatement.executeQuery("SELECT * FROM plotmeFreed");
+                    ResultSet setFreed = slstatement.executeQuery("SELECT * FROM plotmeFreed");
                     while (setFreed.next()) {
                         int idX = setPlots.getInt("idX");
                         int idZ = setPlots.getInt("idZ");
@@ -945,14 +944,13 @@ public class SqlManager {
             if (plot.getComments() != null && !plot.getComments().isEmpty()) {
                 int commentid = 1;
                 for (String[] comments : plot.getComments()) {
-                    String strUUID;
                     UUID uuid = null;
 
                     if (comments.length >= 3) {
-                        strUUID = comments[2];
+                        String strUUID = comments[2];
                         try {
                             uuid = UUID.fromString(strUUID);
-                        } catch (Exception e) {
+                        } catch (Exception ignored) {
                         }
                     }
 
@@ -986,11 +984,10 @@ public class SqlManager {
 
     public void updatePlot(int idX, int idZ, String world, String field, Object value) {
         PreparedStatement ps = null;
-        Connection conn;
 
         //Plots
         try {
-            conn = getConnection();
+            Connection conn = getConnection();
             ps = conn.prepareStatement("UPDATE plotmePlots SET " + field + " = ? "
                                                + "WHERE idX = ? AND idZ = ? AND world = ?");
 
@@ -1030,11 +1027,10 @@ public class SqlManager {
 
     public void addPlotAllowed(String player, UUID playerid, int idX, int idZ, String world) {
         PreparedStatement ps = null;
-        Connection conn;
 
         //Allowed
         try {
-            conn = getConnection();
+            Connection conn = getConnection();
             ps = conn.prepareStatement("INSERT INTO plotmeAllowed (idX, idZ, player, world, playerid) "
                                                + "VALUES (?,?,?,?,?)");
 
@@ -1079,11 +1075,10 @@ public class SqlManager {
 
     public void addPlotDenied(String player, UUID playerid, int idX, int idZ, String world) {
         PreparedStatement ps = null;
-        Connection conn;
 
         //Denied
         try {
-            conn = getConnection();
+            Connection conn = getConnection();
             ps = conn.prepareStatement("INSERT INTO plotmeDenied (idX, idZ, player, world, playerid) "
                                                + "VALUES (?,?,?,?,?)");
 
@@ -1118,11 +1113,10 @@ public class SqlManager {
 
     public void addPlotBid(String player, double bid, int idX, int idZ, String world) {
         PreparedStatement ps = null;
-        Connection conn;
 
         //Auctions
         try {
-            conn = getConnection();
+            Connection conn = getConnection();
 
             ps = conn.prepareStatement("INSERT INTO plotmeAuctions (idX, idZ, player, world, bid) "
                                                + "VALUES (?,?,?,?,?)");
@@ -1157,7 +1151,7 @@ public class SqlManager {
         if(comment.length > 2) {
             try{
                 uuid = UUID.fromString(comment[2]);
-            } catch (IllegalArgumentException e) {
+            } catch (IllegalArgumentException ignored) {
             }
         }
         addPlotComment(comment, commentid, idX, idZ, world, uuid);
@@ -1165,11 +1159,10 @@ public class SqlManager {
 
     public void addPlotComment(String[] comment, int commentid, int idX, int idZ, String world, UUID uuid) {
         PreparedStatement ps = null;
-        Connection conn;
 
         // Comments
         try {
-            conn = getConnection();
+            Connection conn = getConnection();
 
             ps = conn.prepareStatement("INSERT INTO plotmeComments (idX, idZ, commentid, player, comment, world, playerid) " + "VALUES (?,?,?,?,?,?,?)");
             
@@ -1476,7 +1469,7 @@ public class SqlManager {
                 java.sql.Date expireddate = null;
                 try {
                     expireddate = setPlots.getDate("expireddate");
-                } catch (SQLException e) {
+                } catch (SQLException ignored) {
                 }
                 boolean finished = setPlots.getBoolean("finished");
                 PlayerList allowed = new PlayerList();
@@ -1652,7 +1645,7 @@ public class SqlManager {
                 java.sql.Date expireddate = null;
                 try {
                     expireddate = setPlots.getDate("expireddate");
-                } catch (SQLException e) {
+                } catch (SQLException ignored) {
                 }
                 boolean finished = setPlots.getBoolean("finished");
                 PlayerList allowed = new PlayerList();
@@ -2035,7 +2028,7 @@ public class SqlManager {
                 java.sql.Date expireddate = null;
                 try {
                     expireddate = setPlots.getDate("expireddate");
-                } catch (SQLException e) {
+                } catch (SQLException ignored) {
                 }
 
                 Plot plot = new Plot(plugin);
@@ -2089,7 +2082,7 @@ public class SqlManager {
                 java.sql.Date expireddate = null;
                 try {
                     expireddate = setPlots.getDate("expireddate");
-                } catch (SQLException e) {
+                } catch (SQLException ignored) {
                 }
 
                 Plot plot = new Plot(plugin);
@@ -2140,13 +2133,7 @@ public class SqlManager {
     public List<Plot> getPlayerPlots(UUID playerId, String playername) {
         List<Plot> ret = new ArrayList<>();
         PreparedStatement statementPlot = null;
-        PreparedStatement statementAllowed;
-        PreparedStatement statementDenied;
-        PreparedStatement statementComment;
         ResultSet setPlots = null;
-        ResultSet setAllowed;
-        ResultSet setDenied;
-        ResultSet setComments;
 
         try {
             Connection conn = getConnection();
@@ -2172,7 +2159,7 @@ public class SqlManager {
                 java.sql.Date expireddate = null;
                 try {
                     expireddate = setPlots.getDate("expireddate");
-                } catch (SQLException e) {
+                } catch (SQLException ignored) {
                 }
                 boolean finished = setPlots.getBoolean("finished");
                 PlayerList allowed = new PlayerList();
@@ -2202,13 +2189,13 @@ public class SqlManager {
                 if (byOwner != null) {
                     ownerId = UUIDFetcher.fromBytes(byOwner);
                 }
-                
-                statementAllowed = conn.prepareStatement("SELECT * FROM plotmeAllowed WHERE LOWER(world) = ? AND idX = ? AND idZ = ?");
+
+                PreparedStatement statementAllowed = conn.prepareStatement("SELECT * FROM plotmeAllowed WHERE LOWER(world) = ? AND idX = ? AND idZ = ?");
                 statementAllowed.setString(1, world);
                 statementAllowed.setInt(2, idX);
                 statementAllowed.setInt(3, idZ);
 
-                setAllowed = statementAllowed.executeQuery();
+                ResultSet setAllowed = statementAllowed.executeQuery();
 
                 while (setAllowed.next()) {
                     byte[] byPlayerId = setAllowed.getBytes("playerid");
@@ -2222,12 +2209,12 @@ public class SqlManager {
                 if (setAllowed != null)
                     setAllowed.close();
 
-                statementDenied = conn.prepareStatement("SELECT * FROM plotmeDenied WHERE LOWER(world) = ? AND idX = ? AND idZ = ?");
+                PreparedStatement statementDenied = conn.prepareStatement("SELECT * FROM plotmeDenied WHERE LOWER(world) = ? AND idX = ? AND idZ = ?");
                 statementDenied.setString(1, world);
                 statementDenied.setInt(2, idX);
                 statementDenied.setInt(3, idZ);
 
-                setDenied = statementDenied.executeQuery();
+                ResultSet setDenied = statementDenied.executeQuery();
 
                 while (setDenied.next()) {
                     byte[] byPlayerId = setDenied.getBytes("playerid");
@@ -2241,11 +2228,11 @@ public class SqlManager {
                 if (setDenied != null)
                     setDenied.close();
 
-                statementComment = conn.prepareStatement("SELECT * FROM plotmeComments WHERE LOWER(world) = ? AND idX = ? AND idZ = ?");
+                PreparedStatement statementComment = conn.prepareStatement("SELECT * FROM plotmeComments WHERE LOWER(world) = ? AND idX = ? AND idZ = ?");
                 statementComment.setString(1, world);
                 statementComment.setInt(2, idX);
                 statementComment.setInt(3, idZ);
-                setComments = statementComment.executeQuery();
+                ResultSet setComments = statementComment.executeQuery();
 
                 while (setComments.next()) {
                     String[] comment = new String[3];
@@ -2288,13 +2275,7 @@ public class SqlManager {
     public List<Plot> getOwnedPlots(String w, UUID ownerId, String owner) {
         List<Plot> ret = new ArrayList<>();
         PreparedStatement statementPlot = null;
-        PreparedStatement statementAllowed;
-        PreparedStatement statementDenied;
-        PreparedStatement statementComment;
         ResultSet setPlots = null;
-        ResultSet setAllowed;
-        ResultSet setDenied;
-        ResultSet setComments;
 
         try {
             Connection conn = getConnection();
@@ -2318,7 +2299,7 @@ public class SqlManager {
                 java.sql.Date expireddate = null;
                 try {
                     expireddate = setPlots.getDate("expireddate");
-                } catch (SQLException e) {
+                } catch (SQLException ignored) {
                 }
                 boolean finished = setPlots.getBoolean("finished");
                 PlayerList allowed = new PlayerList();
@@ -2346,13 +2327,13 @@ public class SqlManager {
                 if (byOwner != null) {
                     ownerId = UUIDFetcher.fromBytes(byOwner);
                 }
-                
-                statementAllowed = conn.prepareStatement("SELECT * FROM plotmeAllowed WHERE LOWER(world) = ? AND idX = ? AND idZ = ?");
+
+                PreparedStatement statementAllowed = conn.prepareStatement("SELECT * FROM plotmeAllowed WHERE LOWER(world) = ? AND idX = ? AND idZ = ?");
                 statementAllowed.setString(1, world);
                 statementAllowed.setInt(2, idX);
                 statementAllowed.setInt(3, idZ);
 
-                setAllowed = statementAllowed.executeQuery();
+                ResultSet setAllowed = statementAllowed.executeQuery();
 
                 while (setAllowed.next()) {
                     byte[] byPlayerId = setAllowed.getBytes("playerid");
@@ -2363,15 +2344,14 @@ public class SqlManager {
                     }
                 }
 
-                if (setAllowed != null)
-                    setAllowed.close();
+                setAllowed.close();
 
-                statementDenied = conn.prepareStatement("SELECT * FROM plotmeDenied WHERE LOWER(world) = ? AND idX = ? AND idZ = ?");
+                PreparedStatement statementDenied = conn.prepareStatement("SELECT * FROM plotmeDenied WHERE LOWER(world) = ? AND idX = ? AND idZ = ?");
                 statementDenied.setString(1, world);
                 statementDenied.setInt(2, idX);
                 statementDenied.setInt(3, idZ);
 
-                setDenied = statementDenied.executeQuery();
+                ResultSet setDenied = statementDenied.executeQuery();
 
                 while (setDenied.next()) {
                     byte[] byPlayerId = setDenied.getBytes("playerid");
@@ -2382,14 +2362,13 @@ public class SqlManager {
                     }
                 }
 
-                if (setDenied != null)
-                    setDenied.close();
+                setDenied.close();
 
-                statementComment = conn.prepareStatement("SELECT * FROM plotmeComments WHERE LOWER(world) = ? AND idX = ? AND idZ = ?");
+                PreparedStatement statementComment = conn.prepareStatement("SELECT * FROM plotmeComments WHERE LOWER(world) = ? AND idX = ? AND idZ = ?");
                 statementComment.setString(1, world);
                 statementComment.setInt(2, idX);
                 statementComment.setInt(3, idZ);
-                setComments = statementComment.executeQuery();
+                ResultSet setComments = statementComment.executeQuery();
 
                 while (setComments.next()) {
                     String[] comment = new String[3];

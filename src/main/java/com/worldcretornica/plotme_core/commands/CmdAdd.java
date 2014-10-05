@@ -16,9 +16,7 @@ public class CmdAdd extends PlotCommand {
 
     public boolean exec(IPlayer p, String[] args) {
         if (plugin.cPerms(p, "PlotMe.admin.add") || plugin.cPerms(p, "PlotMe.use.add")) {
-            if (!plugin.getPlotMeCoreManager().isPlotWorld(p)) {
-                p.sendMessage(RED + C("MsgNotPlotWorld"));
-            } else {
+            if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
                 String id = plugin.getPlotMeCoreManager().getPlotId(p.getLocation());
                 if (id.isEmpty()) {
                     p.sendMessage(RED + C("MsgNoPlotFound"));
@@ -49,12 +47,12 @@ public class CmdAdd extends PlotCommand {
 
                                     if (balance >= price) {
                                         event = sob.getEventFactory().callPlotAddAllowedEvent(plugin, w, plot, p, allowed);
-                                        
+
                                         if (event.isCancelled()) {
                                             return true;
                                         } else {
                                             EconomyResponse er = sob.withdrawPlayer(p, price);
-    
+
                                             if (!er.transactionSuccess()) {
                                                 p.sendMessage(RED + er.errorMessage);
                                                 plugin.getUtil().warn(er.errorMessage);
@@ -88,6 +86,8 @@ public class CmdAdd extends PlotCommand {
                 } else {
                     p.sendMessage(RED + C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
                 }
+            } else {
+                p.sendMessage(RED + C("MsgNotPlotWorld"));
             }
         } else {
             p.sendMessage(RED + C("MsgPermissionDenied"));

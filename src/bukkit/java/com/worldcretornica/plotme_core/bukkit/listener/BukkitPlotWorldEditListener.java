@@ -106,7 +106,7 @@ public class BukkitPlotWorldEditListener implements Listener {
             if (event.getMessage().startsWith("//gmask")) {
                 event.setCancelled(true);
             } else if (event.getMessage().startsWith("//up")) {
-                Plot plot = api.getPlotMeCoreManager().getPlotById(p);
+                Plot plot = api.getPlotMeCoreManager().getPlotById(p.getLocation());
 
                 if (plot == null || !plot.isAllowed(p.getUniqueId())) {
                     event.setCancelled(true);
@@ -124,7 +124,7 @@ public class BukkitPlotWorldEditListener implements Listener {
                 (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK) && 
                 p.getItemInHand() != null && ((BukkitMaterial) p.getItemInHand().getType()).getMaterial() != Material.AIR) {
             BukkitBlock b = new BukkitBlock(event.getClickedBlock());
-            Plot plot = api.getPlotMeCoreManager().getPlotById(b);
+            Plot plot = api.getPlotMeCoreManager().getPlotById(b.getLocation());
 
             if (plot != null && plot.isAllowed(p.getUniqueId())) {
                 api.getServerObjectBuilder().getPlotWorldEdit().setMask(p, b.getLocation());

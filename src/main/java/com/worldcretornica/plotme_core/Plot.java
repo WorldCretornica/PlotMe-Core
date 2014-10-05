@@ -479,7 +479,7 @@ public class Plot implements Comparable<Plot> {
             }
             
             UUID u = list.get(str);
-            if (u != null && uuid != null && u.equals(uuid) || uuid == null && str.equalsIgnoreCase(name)) {
+            if (u != null && u.equals(uuid) || uuid == null && str.equalsIgnoreCase(name)) {
                 return true;
             }
 
@@ -496,28 +496,28 @@ public class Plot implements Comparable<Plot> {
         if(p == null) {
             return false;
         } else {
-            return isDeniedInternal(name, null, true);
+            return isDeniedInternal(name, null);
         }
     }
     
     public boolean isDeniedConsulting(String name) {
         IPlayer p = plugin.getServerObjectBuilder().getPlayerExact(name);
         if(p != null) {
-            return isDeniedInternal(name, p.getUniqueId(), true);
+            return isDeniedInternal(name, p.getUniqueId());
         } else {
-            return isDeniedInternal(name, null, true);
+            return isDeniedInternal(name, null);
         }
     }
     
     public boolean isGroupDenied(String name) {
-        return isDeniedInternal(name, null, true);
+        return isDeniedInternal(name, null);
     }
 
     public boolean isDenied(UUID uuid) {
-        return isDeniedInternal("", uuid, true);
+        return isDeniedInternal("", uuid);
     }
 
-    private boolean isDeniedInternal(String name, UUID uuid, boolean IncludeGroup) {
+    private boolean isDeniedInternal(String name, UUID uuid) {
         IPlayer p = null;
         
         if (isAllowedInternal(name, uuid, false, false))
@@ -534,15 +534,11 @@ public class Plot implements Comparable<Plot> {
             }
             
             UUID u = list.get(str);
-            if (u != null && uuid != null && u.equals(uuid) || uuid == null && str.equalsIgnoreCase(name)) {
+            if (str.equalsIgnoreCase(name) || uuid != null && (u != null && u.equals(uuid) ||
+                                                                       str.toLowerCase().startsWith("group:") && p != null && p.hasPermission("plotme.group." + str.replace("Group:", "")))) {
                 return true;
             }
-
-            if (IncludeGroup && str.toLowerCase().startsWith("group:") && p != null)
-                if (p.hasPermission("plotme.group." + str.replace("Group:", "")))
-                    return true;
         }
-
         return false;
     }
 
