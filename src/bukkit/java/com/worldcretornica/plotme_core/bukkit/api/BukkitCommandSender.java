@@ -6,7 +6,7 @@ import com.worldcretornica.plotme_core.api.ICommandSender;
 
 public class BukkitCommandSender implements ICommandSender {
 
-    CommandSender commandsender;
+    private CommandSender commandsender;
     
     public BukkitCommandSender(CommandSender cs) {
         this.commandsender = cs;

@@ -11,17 +11,16 @@ import com.worldcretornica.plotme_core.api.event.IEventFactory;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 
-public interface IServerObjectBuilder {
+public interface IServerBridge {
 
+    public IPlotMe_ChunkGenerator getPlotMeGenerator(String pluginname, String worldname);
+    public IPlotMe_ChunkGenerator getPlotMeGenerator(String worldname);
+    
     public IOfflinePlayer getOfflinePlayer(UUID uuid);
-    
     public IOfflinePlayer getOfflinePlayer(String player);
-    
     public IPlayer getPlayer(UUID uuid);
-    
     public IPlayer getPlayerExact(String name);
-    
-    public void reloadConfig();
+    public List<IPlayer> getOnlinePlayers();
     
     public Logger getLogger();
     
@@ -66,19 +65,12 @@ public interface IServerObjectBuilder {
     
     public String getColor(String color);
     
+    public void reloadConfig();
     public IConfigSection getConfig();
-    
     public IConfigSection getConfig(String path);
-
     public void saveResource(String fileName, boolean b);
-    
-    public IPlotMe_ChunkGenerator getPlotMeGenerator(String pluginname, String worldname);
-    
-    public IPlotMe_ChunkGenerator getPlotMeGenerator(String worldname);
-    
+        
     public boolean addMultiverseWorld(String worldname, String environment, String seed, String worldtype, boolean bool, String generator);
-
-    public List<IPlayer> getOnlinePlayers();
 
     public List<String> getBiomes();
 

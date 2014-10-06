@@ -38,9 +38,9 @@ public class PlotMe_Core {
     private Boolean initialized = false;
     
     //Bridge
-    private IServerObjectBuilder serverObjectBuilder;
+    private IServerBridge serverObjectBuilder;
 
-    public PlotMe_Core(IServerObjectBuilder serverObjectBuilder) {
+    public PlotMe_Core(IServerBridge serverObjectBuilder) {
         this.serverObjectBuilder = serverObjectBuilder;
     }
     
@@ -88,7 +88,7 @@ public class PlotMe_Core {
         setupMySQL();
     }
     
-    public IServerObjectBuilder getServerObjectBuilder() {
+    public IServerBridge getServerObjectBuilder() {
         return serverObjectBuilder;
     }
     
@@ -125,53 +125,56 @@ public class PlotMe_Core {
         // config-old.yml should be used to import settings from by DefaultGenerator
         final IConfigSection oldConfig = getServerObjectBuilder().getConfig("config-old.yml");
 
-        // Create a list of old world configs that should be moved to config-old.yml
-        final Set<String> oldWorldConfigs = new HashSet<>();
-        oldWorldConfigs.add("PathWidth");
-        oldWorldConfigs.add("PlotSize");
-        oldWorldConfigs.add("XTranslation");
-        oldWorldConfigs.add("ZTranslation");
-        oldWorldConfigs.add("BottomBlockId");
-        oldWorldConfigs.add("WallBlockId");
-        oldWorldConfigs.add("PlotFloorBlockId");
-        oldWorldConfigs.add("PlotFillingBlockId");
-        oldWorldConfigs.add("RoadMainBlockId");
-        oldWorldConfigs.add("RoadStripeBlockId");
-        oldWorldConfigs.add("RoadHeight");
-        oldWorldConfigs.add("ProtectedWallBlockId");
-        oldWorldConfigs.add("ForSaleWallBlockId");
-        oldWorldConfigs.add("AuctionWallBlockId");
-
-        // Copy defaults for all worlds
-        IConfigSection worldsCS = config.getConfigurationSection("worlds");
-        IConfigSection oldWorldsCS = oldConfig.getConfigurationSection("worlds");
-        if (oldWorldsCS == null) {
-            oldWorldsCS = oldConfig.createSection("worlds");
-        }
-        for (String worldname : worldsCS.getKeys(false)) {
-            // Get the current config section
-            final IConfigSection worldCS = worldsCS.getConfigurationSection(worldname);
-
-            // Find old world data an move it to oldConfig
-            IConfigSection oldWorldCS = oldWorldsCS.getConfigurationSection(worldname);
-            for (String path : oldWorldConfigs) {
-                if (worldCS.contains(path)) {
-                    if (oldWorldCS == null) {
-                        oldWorldCS = oldWorldsCS.createSection(worldname);
+        if (oldConfig != null) {
+            // Create a list of old world configs that should be moved to config-old.yml
+            final Set<String> oldWorldConfigs = new HashSet<>();
+            oldWorldConfigs.add("PathWidth");
+            oldWorldConfigs.add("PlotSize");
+            oldWorldConfigs.add("XTranslation");
+            oldWorldConfigs.add("ZTranslation");
+            oldWorldConfigs.add("BottomBlockId");
+            oldWorldConfigs.add("WallBlockId");
+            oldWorldConfigs.add("PlotFloorBlockId");
+            oldWorldConfigs.add("PlotFillingBlockId");
+            oldWorldConfigs.add("RoadMainBlockId");
+            oldWorldConfigs.add("RoadStripeBlockId");
+            oldWorldConfigs.add("RoadHeight");
+            oldWorldConfigs.add("ProtectedWallBlockId");
+            oldWorldConfigs.add("ForSaleWallBlockId");
+            oldWorldConfigs.add("AuctionWallBlockId");
+    
+            // Copy defaults for all worlds
+            IConfigSection worldsCS = config.getConfigurationSection("worlds");
+            IConfigSection oldWorldsCS = oldConfig.getConfigurationSection("worlds");
+            if (oldWorldsCS == null) {
+                oldWorldsCS = oldConfig.createSection("worlds");
+            }
+            for (String worldname : worldsCS.getKeys(false)) {
+                // Get the current config section
+                final IConfigSection worldCS = worldsCS.getConfigurationSection(worldname);
+    
+                // Find old world data an move it to oldConfig
+                IConfigSection oldWorldCS = oldWorldsCS.getConfigurationSection(worldname);
+                for (String path : oldWorldConfigs) {
+                    if (worldCS.contains(path)) {
+                        if (oldWorldCS == null) {
+                            oldWorldCS = oldWorldsCS.createSection(worldname);
+                        }
+                        oldWorldCS.set(path, worldCS.get(path));
+                        worldCS.set(path, null);
                     }
-                    oldWorldCS.set(path, worldCS.get(path));
-                    worldCS.set(path, null);
                 }
+            }
+            
+            // Copy new values over
+            config.copyDefaults(true);
+
+            // Save the config file back to disk
+            if (!oldWorldsCS.getKeys(false).isEmpty()) {
+                oldConfig.saveConfig();
             }
         }
 
-        // Copy new values over
-        config.copyDefaults(true);
-
-        // Save the config file back to disk
-        if (!oldWorldsCS.getKeys(false).isEmpty()) {
-            oldConfig.saveConfig();
-        }
         config.saveConfig();
     }
 

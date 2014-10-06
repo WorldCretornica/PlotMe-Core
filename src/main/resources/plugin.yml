@@ -1,5 +1,5 @@
 name: PlotMe
-main: com.worldcretornica.plotme_core.PlotMe_Core
+main: com.worldcretornica.plotme_core.bukkit.PlotMe_CorePlugin
 version: ${project.version}
 author: ZachBora
 authors: [flungo, MattBDev]

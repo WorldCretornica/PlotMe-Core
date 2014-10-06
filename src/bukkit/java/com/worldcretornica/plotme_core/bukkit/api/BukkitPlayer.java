@@ -10,7 +10,7 @@ import com.worldcretornica.plotme_core.api.IWorld;
 
 public class BukkitPlayer extends BukkitOfflinePlayer implements IPlayer {
 
-    Player player;
+    private Player player;
     
     public BukkitPlayer(Player player) {
         super(player);
@@ -44,7 +44,7 @@ public class BukkitPlayer extends BukkitOfflinePlayer implements IPlayer {
 
     @Override
     public void teleport(ILocation location) {
-        player.teleport(((BukkitLocation) location).location);
+        player.teleport(((BukkitLocation) location).getLocation());
     }
     
     public Player getPlayer() {

@@ -34,7 +34,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Logger;
 
-public class BukkitServerObjectBuilder implements IServerObjectBuilder {
+public class BukkitServerBridge implements IServerBridge {
 
     private PlotMe_CorePlugin plugin;
     private Economy economy;
@@ -45,7 +45,7 @@ public class BukkitServerObjectBuilder implements IServerObjectBuilder {
     private MultiWorldWrapper multiworld;
     private MultiverseWrapper multiverse;
     
-    public BukkitServerObjectBuilder(PlotMe_CorePlugin instance) {
+    public BukkitServerBridge(PlotMe_CorePlugin instance) {
         plugin = instance;
         eventfactory = new BukkitEventFactory();
     }
@@ -272,8 +272,8 @@ public class BukkitServerObjectBuilder implements IServerObjectBuilder {
             JavaPlugin genplugin = (JavaPlugin) Bukkit.getPluginManager().getPlugin(pluginname);
             if (genplugin != null) {
                 ChunkGenerator gen = genplugin.getDefaultWorldGenerator(worldname, "");
-                if (gen instanceof IPlotMe_ChunkGenerator) {
-                    return (IPlotMe_ChunkGenerator) gen;
+                if (gen instanceof IBukkitPlotMe_ChunkGenerator) {
+                    return new BukkitPlotMe_ChunkGeneratorBridge((IBukkitPlotMe_ChunkGenerator) gen);
                 }
             }
         }

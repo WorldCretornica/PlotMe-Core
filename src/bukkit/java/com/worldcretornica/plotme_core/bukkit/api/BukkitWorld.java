@@ -11,7 +11,7 @@ import com.worldcretornica.plotme_core.api.IPlotMe_ChunkGenerator;
 
 public class BukkitWorld implements IWorld {
 
-    World world;
+    private World world;
     
     public BukkitWorld(World world) {
         this.world = world;

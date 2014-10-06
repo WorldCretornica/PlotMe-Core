@@ -1,8 +1,8 @@
 package com.worldcretornica.plotme_core.bukkit;
 
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.IServerObjectBuilder;
-import com.worldcretornica.plotme_core.bukkit.api.BukkitServerObjectBuilder;
+import com.worldcretornica.plotme_core.api.IServerBridge;
+import com.worldcretornica.plotme_core.bukkit.api.BukkitServerBridge;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.Metrics;
 import org.mcstats.Metrics.Graph;
@@ -13,7 +13,7 @@ import java.io.IOException;
 public class PlotMe_CorePlugin extends JavaPlugin {
 
     private PlotMe_Core plotme;
-    private IServerObjectBuilder serverObjectBuilder;
+    private IServerBridge serverObjectBuilder;
 
     @Override
     public void onDisable() {
@@ -22,7 +22,7 @@ public class PlotMe_CorePlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        serverObjectBuilder = new BukkitServerObjectBuilder(this);
+        serverObjectBuilder = new BukkitServerBridge(this);
         plotme = new PlotMe_Core(serverObjectBuilder);
         plotme.enable();
         doMetric();
@@ -32,7 +32,7 @@ public class PlotMe_CorePlugin extends JavaPlugin {
         return plotme;
     }
     
-    public IServerObjectBuilder getServerObjectBuilder() {
+    public IServerBridge getServerObjectBuilder() {
         return serverObjectBuilder;
     }
     

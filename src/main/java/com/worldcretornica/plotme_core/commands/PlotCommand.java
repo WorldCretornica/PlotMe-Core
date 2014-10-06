@@ -1,7 +1,7 @@
 package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.IServerObjectBuilder;
+import com.worldcretornica.plotme_core.api.IServerBridge;
 import com.worldcretornica.plotme_core.utils.Util;
 
 public abstract class PlotCommand {
@@ -15,7 +15,7 @@ public abstract class PlotCommand {
     protected final String BLUE = plugin.getServerObjectBuilder().getColor("BLUE");
     protected final String ITALIC = plugin.getServerObjectBuilder().getColor("ITALIC");
     protected final String LOG = "[Event] ";
-    protected final IServerObjectBuilder sob;
+    protected final IServerBridge sob;
 
     public PlotCommand(PlotMe_Core instance) {
         plugin = instance;
