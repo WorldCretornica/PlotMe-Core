@@ -21,9 +21,7 @@ public class CmdHome extends PlotCommand {
             if (plugin.getPlotMeCoreManager().isPlotWorld(p) || sob.getConfig().getBoolean("allowWorldTeleport")) {
                 String playername = p.getName();
                 UUID uuid = p.getUniqueId();
-                int nb = 1;
                 IWorld w;
-                String worldname = "";
 
                 if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
                     w = p.getWorld();
@@ -31,10 +29,12 @@ public class CmdHome extends PlotCommand {
                     w = plugin.getPlotMeCoreManager().getFirstWorld();
                 }
 
+                String worldname = "";
                 if (w != null) {
                     worldname = w.getName();
                 }
 
+                int nb = 1;
                 if (args[0].contains(":")) {
                     try {
                         if (args[0].split(":").length == 1 || args[0].split(":")[1].isEmpty()) {

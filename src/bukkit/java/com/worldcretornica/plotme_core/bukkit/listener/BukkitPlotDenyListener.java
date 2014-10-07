@@ -17,8 +17,7 @@ public class BukkitPlotDenyListener implements Listener {
     private PlotMe_Core api;
 
     public BukkitPlotDenyListener(PlotMe_CorePlugin instance) {
-        PlotMe_CorePlugin plugin = instance;
-        api = plugin.getAPI();
+        api = instance.getAPI();
     }
 
     @EventHandler(priority = EventPriority.HIGH)

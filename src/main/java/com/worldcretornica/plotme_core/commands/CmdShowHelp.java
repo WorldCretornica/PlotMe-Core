@@ -15,8 +15,6 @@ public class CmdShowHelp extends PlotCommand {
     }
 
     public boolean exec(IPlayer p, int page) {
-        int max = 4;
-        int maxpage;
         boolean ecoon = plugin.getPlotMeCoreManager().isEconomyEnabled(p);
 
         List<String> allowed_commands = new ArrayList<>();
@@ -134,7 +132,8 @@ public class CmdShowHelp extends PlotCommand {
             }
         }
 
-        maxpage = (int) Math.ceil((double) allowed_commands.size() / max);
+        int max = 4;
+        int maxpage = (int) Math.ceil((double) allowed_commands.size() / max);
 
         if (page > maxpage) {
             page = 1;

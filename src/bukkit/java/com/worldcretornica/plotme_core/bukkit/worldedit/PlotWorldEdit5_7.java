@@ -4,6 +4,7 @@ import com.sk89q.worldedit.LocalSession;
 import com.sk89q.worldedit.LocalWorld;
 import com.sk89q.worldedit.Vector;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
+import com.sk89q.worldedit.masks.Mask;
 import com.sk89q.worldedit.masks.RegionMask;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.worldcretornica.plotme_core.Plot;
@@ -115,7 +116,6 @@ public class PlotWorldEdit5_7 implements PlotWorldEdit {
     public void removeMask(IPlayer p) {
         BukkitPlayer bp = (BukkitPlayer) p;
         LocalSession session = we.getSession(bp.getPlayer());
-        RegionMask mask = null;
-        session.setMask(mask);
+        session.setMask((Mask) null);
     }
 }

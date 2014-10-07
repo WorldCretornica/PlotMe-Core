@@ -12,26 +12,22 @@ import com.worldcretornica.plotme_core.bukkit.listener.BukkitPlayerListener;
 import com.worldcretornica.plotme_core.bukkit.listener.BukkitPlotDenyListener;
 import com.worldcretornica.plotme_core.bukkit.listener.BukkitPlotListener;
 import com.worldcretornica.plotme_core.bukkit.listener.BukkitPlotWorldEditListener;
-
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
-
 import org.bukkit.*;
 import org.bukkit.World.Environment;
 import org.bukkit.block.Biome;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.generator.ChunkGenerator;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.logging.Logger;
 
 public class BukkitServerBridge implements IServerBridge {
@@ -269,7 +265,7 @@ public class BukkitServerBridge implements IServerBridge {
     @Override
     public IPlotMe_ChunkGenerator getPlotMeGenerator(String pluginname, String worldname) {
         if (Bukkit.getPluginManager().isPluginEnabled(pluginname)) {
-            JavaPlugin genplugin = (JavaPlugin) Bukkit.getPluginManager().getPlugin(pluginname);
+            Plugin genplugin = Bukkit.getPluginManager().getPlugin(pluginname);
             if (genplugin != null) {
                 ChunkGenerator gen = genplugin.getDefaultWorldGenerator(worldname, "");
                 if (gen instanceof IBukkitPlotMe_ChunkGenerator) {
@@ -366,7 +362,7 @@ public class BukkitServerBridge implements IServerBridge {
     @Override
     public boolean CreatePlotWorld(ICommandSender cs, String worldname, String generator, Map<String, String> args) {
         //Get a seed
-        Long seed = new java.util.Random().nextLong();
+        Long seed = new Random().nextLong();
 
         //Check if we have multiworld
         if (getMultiWorld() == null) {

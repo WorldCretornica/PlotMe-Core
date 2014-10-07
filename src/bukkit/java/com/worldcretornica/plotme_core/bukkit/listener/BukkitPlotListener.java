@@ -243,7 +243,6 @@ public class BukkitPlotListener implements Listener {
             } else {
                 boolean canbuild = api.cPerms(p, "plotme.admin.buildanywhere");
                 PlotMapInfo pmi = api.getPlotMeCoreManager().getMap(b);
-                boolean blocked = false;
 
                 if (event.isBlockInHand() && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
                     BlockFace face = event.getBlockFace();
@@ -259,23 +258,17 @@ public class BukkitPlotListener implements Listener {
                     } else {
                         Plot plot = api.getPlotMeCoreManager().getPlotById(p, id);
 
-                        if (plot == null) {
+                        if (plot == null || !plot.isAllowed(p.getName())) {
                             if (!canbuild) {
                                 p.sendMessage(api.getUtil().C("ErrCannotBuild"));
                                 event.setCancelled(true);
                             }
                         } else {
-                            if (!plot.isAllowed(p.getName())) {
-                                if (!canbuild) {
-                                    p.sendMessage(api.getUtil().C("ErrCannotBuild"));
-                                    event.setCancelled(true);
-                                }
-                            } else {
-                                plot.resetExpire(api.getPlotMeCoreManager().getMap(b).getDaysToExpiration());
-                            }
+                            plot.resetExpire(api.getPlotMeCoreManager().getMap(b).getDaysToExpiration());
                         }
                     }
                 } else {
+                    boolean blocked = false;
                     if (pmi.isProtectedBlock(b.getTypeId())) {
                         if (!api.cPerms(p, "plotme.unblock." + b.getTypeId())) {
                             blocked = true;
@@ -308,13 +301,11 @@ public class BukkitPlotListener implements Listener {
                         } else {
                             Plot plot = api.getPlotMeCoreManager().getPlotById(p, id);
 
-                            if (plot == null || !plot.isAllowed(p.getName())) {
-                                if (!canbuild) {
-                                    if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-                                        p.sendMessage(api.getUtil().C("ErrCannotUse"));
-                                    }
-                                    event.setCancelled(true);
+                            if ((plot == null || !plot.isAllowed(p.getName())) && !canbuild) {
+                                if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+                                    p.sendMessage(api.getUtil().C("ErrCannotUse"));
                                 }
+                                event.setCancelled(true);
                             }
                         }
                     }

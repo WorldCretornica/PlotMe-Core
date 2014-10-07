@@ -24,7 +24,7 @@ public class CmdAuto extends PlotCommand {
                         w = plugin.getPlotMeCoreManager().getFirstWorld();
                     }
 
-                    if (w == null || !plugin.getPlotMeCoreManager().isPlotWorld(w)) {
+                    if (!plugin.getPlotMeCoreManager().isPlotWorld(w)) {
                         p.sendMessage(RED + args[1] + " " + C("MsgWorldNotPlot"));
                         return true;
                     }

@@ -60,37 +60,6 @@ public class Plot implements Comparable<Plot> {
         this.setCurrentBid(0);
     }
 
-    @Deprecated
-    public Plot(PlotMe_Core instance, String owner, IWorld world, String plotid, int days) {
-        this.plugin = instance;
-        this.setOwner(owner);
-        this.setOwnerId(null);
-        this.setWorld(world.getName());
-        this.allowed = new PlayerList();
-        this.denied = new PlayerList();
-        this.setBiome(plugin.getServerObjectBuilder().getBiome("PLAINS"));
-        this.setId(plotid);
-
-        if (days == 0) {
-            this.setExpiredDate(null);
-        } else {
-            Calendar cal = Calendar.getInstance();
-            cal.add(Calendar.DAY_OF_YEAR, days);
-            java.util.Date utlDate = cal.getTime();
-            this.setExpiredDate(new java.sql.Date(utlDate.getTime()));
-        }
-
-        this.comments = new ArrayList<>();
-        this.setCustomPrice(0);
-        this.setForSale(false);
-        this.setFinishedDate("");
-        this.setProtect(false);
-        this.setAuctionned(false);
-        this.setCurrentBidder("");
-        this.setCurrentBidderId(null);
-        this.setCurrentBid(0);
-    }
-
     public Plot(PlotMe_Core instance, String owner, UUID uuid, IWorld w, String plotid, int days) {
         this.plugin = instance;
         this.setOwner(owner);
@@ -155,32 +124,6 @@ public class Plot implements Comparable<Plot> {
         this.setCurrentBidder("");
         this.setCurrentBidderId(null);
         this.setCurrentBid(0);
-    }
-
-    @Deprecated
-    public Plot(PlotMe_Core instance, String owner, String world, String bio, Date exp, boolean fini, PlayerList al,
-                List<String[]> comm, String tid, double custprice, boolean sale, String finishdt, boolean prot, String bidder,
-                Double bid, boolean isauctionned, PlayerList den, String auctdate) {
-        this.plugin = instance;
-        this.setOwner(owner);
-        this.setOwnerId(null);
-        this.setWorld(world);
-        this.setBiome(plugin.getServerObjectBuilder().getBiome(bio));
-        this.setExpiredDate(exp);
-        this.setFinished(fini);
-        this.allowed = al;
-        this.comments = comm;
-        this.setId(tid);
-        this.setCustomPrice(custprice);
-        this.setForSale(sale);
-        this.setFinishedDate(finishdt);
-        this.setProtect(prot);
-        this.setAuctionned(isauctionned);
-        this.setCurrentBidder(bidder);
-        this.setCurrentBidderId(null);
-        this.setCurrentBid(bid);
-        this.denied = den;
-        this.setAuctionnedDate(auctdate);
     }
 
     public Plot(PlotMe_Core instance, String owner, UUID ownerId, String world, String bio, Date exp, boolean fini, 
@@ -518,11 +461,11 @@ public class Plot implements Comparable<Plot> {
     }
 
     private boolean isDeniedInternal(String name, UUID uuid) {
-        IPlayer p = null;
-        
+
         if (isAllowedInternal(name, uuid, false, false))
             return false;
-        
+
+        IPlayer p = null;
         if (uuid != null) {
             p = plugin.getServerObjectBuilder().getPlayer(uuid);
         }
@@ -534,8 +477,7 @@ public class Plot implements Comparable<Plot> {
             }
             
             UUID u = list.get(str);
-            if (str.equalsIgnoreCase(name) || uuid != null && (u != null && u.equals(uuid) ||
-                                                                       str.toLowerCase().startsWith("group:") && p != null && p.hasPermission("plotme.group." + str.replace("Group:", "")))) {
+            if (str.equalsIgnoreCase(name) || uuid != null && (u != null && u.equals(uuid) || str.toLowerCase().startsWith("group:") && p != null && p.hasPermission("plotme.group." + str.replace("Group:", "")))) {
                 return true;
             }
         }
