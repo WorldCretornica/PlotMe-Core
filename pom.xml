@@ -35,7 +35,6 @@
                             <createDependencyReducedPom>false</createDependencyReducedPom>
                             <artifactSet>
                                 <includes>
-                                    <include>me.flungo.bukkit:BukkitTools</include>
                                     <include>org.mcstats.bukkit:metrics</include>
                                 </includes>
                             </artifactSet>
