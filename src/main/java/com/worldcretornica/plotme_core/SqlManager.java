@@ -219,14 +219,14 @@ public class SqlManager {
                  */
 
             } else {
-                String column;
-                boolean found = false;
 
                 /**
                  * * START Version 0.8 changes **
                  */
                 //CustomPrice
                 set = statement.executeQuery("PRAGMA table_info(`plotmePlots`)");
+                String column;
+                boolean found = false;
                 while (set.next() && !found) {
                     column = set.getString(2);
                     if (column.equalsIgnoreCase("customprice")) {
@@ -717,11 +717,11 @@ public class SqlManager {
                         byte[] byOwner = setPlots.getBytes("ownerId");
                         byte[] byBidder = setPlots.getBytes("currentbidderid");
                         UUID ownerId = null;
-                        UUID currentbidderid = null;
-                        
+
                         if (byOwner != null) {
                             ownerId = UUIDFetcher.fromBytes(byOwner);
                         }
+                        UUID currentbidderid = null;
                         if (byBidder != null) {
                             currentbidderid = UUIDFetcher.fromBytes(byBidder);
                         }
@@ -844,11 +844,10 @@ public class SqlManager {
 
     public void addFreed(int idX, int idZ, String world) {
         PreparedStatement ps = null;
-        Connection conn;
 
         //Freed
         try {
-            conn = getConnection();
+            Connection conn = getConnection();
             ps = conn.prepareStatement("INSERT INTO plotmeFreed (idX, idZ, world) VALUES (?,?,?)");
             ps.setInt(1, idX);
             ps.setInt(2, idZ);
@@ -881,12 +880,11 @@ public class SqlManager {
 
     public void addPlot(Plot plot, int idX, int idZ, int topX, int bottomX, int topZ, int bottomZ) {
         PreparedStatement ps = null;
-        Connection conn;
         StringBuilder strSql = new StringBuilder();
 
         // Plots
         try {
-            conn = getConnection();
+            Connection conn = getConnection();
 
             strSql.append("INSERT INTO plotmePlots (idX, idZ, owner, world, topX, bottomX, topZ, bottomZ, ");
             strSql.append("biome, expireddate, finished, customprice, forsale, finisheddate, protected,");
@@ -1488,11 +1486,11 @@ public class SqlManager {
                 byte[] byBidder = setPlots.getBytes("currentbidderid");
 
                 UUID ownerId = null;
-                UUID currentbidderid = null;
 
                 if (byOwner != null) {
                     ownerId = UUIDFetcher.fromBytes(byOwner);
                 }
+                UUID currentbidderid = null;
                 if (byBidder != null) {
                     currentbidderid = UUIDFetcher.fromBytes(byBidder);
                 }
@@ -1664,11 +1662,11 @@ public class SqlManager {
                 byte[] byBidder = setPlots.getBytes("currentbidderid");
 
                 UUID ownerId = null;
-                UUID currentbidderid = null;
 
                 if (byOwner != null) {
                     ownerId = UUIDFetcher.fromBytes(byOwner);
                 }
+                UUID currentbidderid = null;
                 if (byBidder != null) {
                     currentbidderid = UUIDFetcher.fromBytes(byBidder);
                 }
@@ -1920,7 +1918,7 @@ public class SqlManager {
         try {
             Connection conn = getConnection();
 
-            java.util.Calendar cal = java.util.Calendar.getInstance();
+            Calendar cal = Calendar.getInstance();
             java.util.Date utilDate = cal.getTime();
             java.sql.Date sqlDate = new Date(utilDate.getTime());
 
@@ -2008,7 +2006,7 @@ public class SqlManager {
         try {
             Connection conn = getConnection();
 
-            java.util.Calendar cal = java.util.Calendar.getInstance();
+            Calendar cal = Calendar.getInstance();
             java.util.Date utilDate = cal.getTime();
             java.sql.Date sqlDate = new Date(utilDate.getTime());
 
@@ -2064,7 +2062,7 @@ public class SqlManager {
         try {
             Connection conn = getConnection();
 
-            java.util.Calendar cal = java.util.Calendar.getInstance();
+            Calendar cal = Calendar.getInstance();
             java.util.Date utilDate = cal.getTime();
             java.sql.Date sqlDate = new Date(utilDate.getTime());
 
@@ -2180,12 +2178,12 @@ public class SqlManager {
                 byte[] byOwner = setPlots.getBytes("ownerid");
 
                 UUID currentbidderid = null;
-                UUID ownerId = null;
 
                 if (byBidder != null) {
                     currentbidderid = UUIDFetcher.fromBytes(byBidder);
                 }
-                
+
+                UUID ownerId = null;
                 if (byOwner != null) {
                     ownerId = UUIDFetcher.fromBytes(byOwner);
                 }
@@ -2449,7 +2447,6 @@ public class SqlManager {
             public void run() {
                 plugin.getLogger().info("Checking if conversion to UUID needed...");
 
-                boolean boConversion = false;
                 Statement statementPlayers = null;
                 PreparedStatement psOwnerId = null;
                 PreparedStatement psCurrentBidderId = null;
@@ -2464,9 +2461,6 @@ public class SqlManager {
                 PreparedStatement psDeleteComments = null;
                 
                 ResultSet setPlayers = null;
-                int nbConverted = 0;
-                String sql;
-                int count;
 
                 try {
                     Connection conn = getConnection();
@@ -2474,7 +2468,7 @@ public class SqlManager {
                     // Get all the players
                     statementPlayers = conn.createStatement();
                     // Exclude groups and names with * or missing
-                    sql = "SELECT LOWER(owner) as Name FROM plotmePlots WHERE NOT owner IS NULL AND Not owner LIKE 'group:%' AND Not owner LIKE '%*%' AND ownerid IS NULL GROUP BY LOWER(owner) ";
+                    String sql = "SELECT LOWER(owner) as Name FROM plotmePlots WHERE NOT owner IS NULL AND Not owner LIKE 'group:%' AND Not owner LIKE '%*%' AND ownerid IS NULL GROUP BY LOWER(owner) ";
                     sql = sql + "UNION SELECT LOWER(currentbidder) as Name FROM plotmePlots WHERE NOT currentbidder IS NULL AND currentbidderid IS NULL GROUP BY LOWER(currentbidder) ";
                     sql = sql + "UNION SELECT LOWER(player) as Name FROM plotmeAllowed WHERE NOT player IS NULL AND Not player LIKE 'group:%' AND Not player LIKE '%*%' AND playerid IS NULL GROUP BY LOWER(player) ";
                     sql = sql + "UNION SELECT LOWER(player) as Name FROM plotmeDenied WHERE NOT player IS NULL AND Not player LIKE 'group:%' AND Not player LIKE '%*%' AND playerid IS NULL GROUP BY LOWER(player) ";
@@ -2482,6 +2476,7 @@ public class SqlManager {
 
                     setPlayers = statementPlayers.executeQuery(sql);
 
+                    boolean boConversion = false;
                     if (setPlayers.next()) {
                         List<String> names = new ArrayList<>();
 
@@ -2540,12 +2535,13 @@ public class SqlManager {
                                 psAllowedPlayerId = conn.prepareStatement("UPDATE plotmeAllowed SET playerid = ? WHERE LOWER(player) = ? AND playerid IS NULL");
                                 psDeniedPlayerId = conn.prepareStatement("UPDATE plotmeDenied SET playerid = ? WHERE LOWER(player) = ? AND playerid IS NULL");
                                 psCommentsPlayerId = conn.prepareStatement("UPDATE plotmeComments SET playerid = ? WHERE LOWER(player) = ? AND playerid IS NULL");
-    
+
+                                int nbConverted = 0;
                                 for (String key : response.keySet()) {
-                                    count = 0;
                                     // Owner
                                     psOwnerId.setBytes(1, UUIDFetcher.toBytes(response.get(key)));
                                     psOwnerId.setString(2, key.toLowerCase());
+                                    int count = 0;
                                     count += psOwnerId.executeUpdate();
                                     // Bidder
                                     psCurrentBidderId.setBytes(1, UUIDFetcher.toBytes(response.get(key)));
@@ -2730,11 +2726,9 @@ public class SqlManager {
     
                             UUIDFetcher fetcher = new UUIDFetcher(names);
 
-                            Map<String, UUID> response;
-    
                             try {
                                 //plugin.getLogger().info("Fetching " + names.size() + " UUIDs from Mojang servers...");
-                                response = fetcher.call();
+                                Map<String, UUID> response = fetcher.call();
                                 //plugin.getLogger().info("Received " + response.size() + " UUIDs. Starting database update...");
 
                                 if (!response.isEmpty()) {

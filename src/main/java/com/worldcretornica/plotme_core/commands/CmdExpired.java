@@ -17,9 +17,7 @@ public class CmdExpired extends PlotCommand {
     public boolean exec(IPlayer p, String[] args) {
         if (plugin.cPerms(p, "PlotMe.admin.expired")) {
             if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
-                int pagesize = 8;
                 int page = 1;
-                int maxpage;
                 IWorld w = p.getWorld();
 
                 if (args.length == 2) {
@@ -29,7 +27,8 @@ public class CmdExpired extends PlotCommand {
                     }
                 }
 
-                maxpage = (int) Math.ceil((double) plugin.getSqlManager().getExpiredPlotCount(p.getWorld().getName()) / (double) pagesize);
+                int pagesize = 8;
+                int maxpage = (int) Math.ceil((double) plugin.getSqlManager().getExpiredPlotCount(p.getWorld().getName()) / (double) pagesize);
 
                 List<Plot> expiredplots = plugin.getSqlManager().getExpiredPlots(w.getName(), page, pagesize);
 

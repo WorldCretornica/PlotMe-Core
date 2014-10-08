@@ -75,7 +75,6 @@ public class CmdCreateWorld extends PlotCommand {
                 } else {
                     
                     Map<String, String> parameters = new HashMap<>();
-                    Map<String, String> genparameters;
 
                     //Prepare creation
                     if (args.length >= 2) {
@@ -102,6 +101,7 @@ public class CmdCreateWorld extends PlotCommand {
                     //Find generator
                     IPlotMe_ChunkGenerator generator = sob.getPlotMeGenerator(parameters.get("worldname"));
 
+                    Map<String, String> genparameters;
                     if (generator != null) {
                         //Get the generator configurations
                         genparameters = generator.getManager().getDefaultGenerationConfig();

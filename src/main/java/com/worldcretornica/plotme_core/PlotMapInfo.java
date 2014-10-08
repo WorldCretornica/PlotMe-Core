@@ -3,6 +3,7 @@ package com.worldcretornica.plotme_core;
 import com.worldcretornica.plotme_core.api.IConfigSection;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class PlotMapInfo {
@@ -45,7 +46,7 @@ public class PlotMapInfo {
         return plots.get(id);
     }
 
-    public ConcurrentHashMap<String, Plot> getLoadedPlots() {
+    public Map<String, Plot> getLoadedPlots() {
         return plots;
     }
 

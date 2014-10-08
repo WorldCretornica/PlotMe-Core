@@ -39,7 +39,7 @@ public class CmdTP extends PlotCommand {
                         w = p.getWorld();
                     }
 
-                    if (w == null || !plugin.getPlotMeCoreManager().isPlotWorld(w)) {
+                    if (!plugin.getPlotMeCoreManager().isPlotWorld(w)) {
                         p.sendMessage(RED + C("MsgNoPlotworldFound"));
                     } else if (!plugin.getPlotMeCoreManager().isValidId(w, id)) {
                         if (sob.getConfig().getBoolean("allowWorldTeleport")) {

@@ -1,13 +1,12 @@
 package com.worldcretornica.plotme_core.bukkit.worldedit;
 
-import org.bukkit.Location;
-
 import com.sk89q.worldedit.LocalSession;
 import com.sk89q.worldedit.Vector;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldedit.function.mask.Mask;
 import com.sk89q.worldedit.function.mask.RegionMask;
 import com.sk89q.worldedit.regions.CuboidRegion;
+import com.sk89q.worldedit.world.World;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ILocation;
@@ -16,6 +15,7 @@ import com.worldcretornica.plotme_core.api.PlotWorldEdit;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitLocation;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitWorld;
+import org.bukkit.Location;
 
 public class PlotWorldEdit6_0_0 implements PlotWorldEdit {
 
@@ -53,7 +53,7 @@ public class PlotWorldEdit6_0_0 implements PlotWorldEdit {
                 top = (BukkitLocation) plugin.getPlotMeCoreManager().getPlotTopLoc(w, id);
 
                 LocalSession localsession = we.getSession(bp.getPlayer());
-                com.sk89q.worldedit.world.World world = localsession.getSelectionWorld();
+                World world = localsession.getSelectionWorld();
 
                 Vector pos1 = new Vector(bottom.getBlockX(), bottom.getBlockY(), bottom.getBlockZ());
                 Vector pos2 = new Vector(top.getBlockX(), top.getBlockY(), top.getBlockZ());
@@ -74,7 +74,7 @@ public class PlotWorldEdit6_0_0 implements PlotWorldEdit {
 
         if (session.getMask() == null) {
             LocalSession localsession = we.getSession(bp.getPlayer());
-            com.sk89q.worldedit.world.World world = localsession.getSelectionWorld();
+            World world = localsession.getSelectionWorld();
 
             Vector pos1 = new Vector(bottom.getBlockX(), bottom.getBlockY(), bottom.getBlockZ());
             Vector pos2 = new Vector(top.getBlockX(), top.getBlockY(), top.getBlockZ());
@@ -90,7 +90,6 @@ public class PlotWorldEdit6_0_0 implements PlotWorldEdit {
     public void removeMask(IPlayer p) {
         BukkitPlayer bp = (BukkitPlayer) p;
         LocalSession session = we.getSession(bp.getPlayer());
-        Mask mask = null;
-        session.setMask(mask);
+        session.setMask((Mask) null);
     }
 }

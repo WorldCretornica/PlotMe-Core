@@ -3,6 +3,7 @@ package com.worldcretornica.plotme_core;
 import com.worldcretornica.plotme_core.api.*;
 import com.worldcretornica.plotme_core.utils.Util;
 
+import java.sql.Date;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Level;
@@ -16,7 +17,7 @@ public class PlotMe_Core {
     public static final String DEFAULT_GENERATOR_URL = "http://dev.bukkit.org/bukkit-plugins/plotme/";
 
     //Config accessors for language <lang, accessor>
-    private final HashMap<String, IConfigSection> captionsCA = new HashMap<>();
+    private final Map<String, IConfigSection> captionsCA = new HashMap<>();
 
     // Worlds that do not have a world generator
     private final Set<String> badWorlds = new HashSet<>();
@@ -127,7 +128,7 @@ public class PlotMe_Core {
 
         if (oldConfig != null) {
             // Create a list of old world configs that should be moved to config-old.yml
-            final Set<String> oldWorldConfigs = new HashSet<>();
+            final Collection<String> oldWorldConfigs = new HashSet<>();
             oldWorldConfigs.add("PathWidth");
             oldWorldConfigs.add("PlotSize");
             oldWorldConfigs.add("XTranslation");
@@ -286,11 +287,10 @@ public class PlotMe_Core {
     public int getPlotLimit(IPlayer p) {
         int max = -2;
 
-        int maxlimit = 255;
-
         if (p.hasPermission("plotme.limit.*")) {
             return -1;
         } else {
+            int maxlimit = 255;
             for (int ctr = 0; ctr < maxlimit; ctr++) {
                 if (p.hasPermission("plotme.limit." + ctr)) {
                     max = ctr;
@@ -320,7 +320,6 @@ public class PlotMe_Core {
         int imonth = cal.get(Calendar.MONTH) + 1;
         int iday = cal.get(Calendar.DAY_OF_MONTH) + 1;
         String month;
-        String day;
 
         if (imonth < 10) {
             month = "0" + imonth;
@@ -328,6 +327,7 @@ public class PlotMe_Core {
             month = "" + imonth;
         }
 
+        String day;
         if (iday < 10) {
             day = "0" + iday;
         } else {
@@ -337,7 +337,7 @@ public class PlotMe_Core {
         return "" + cal.get(Calendar.YEAR) + "-" + month + "-" + day;
     }
 
-    public String getDate(java.sql.Date expireddate) {
+    public String getDate(Date expireddate) {
         return expireddate.toString();
     }
 

@@ -22,8 +22,6 @@ public class CmdDoneList extends PlotCommand {
                 p.sendMessage(RED + C("MsgNotPlotWorld"));
                 return true;
             } else {
-                int maxpage;
-                int pagesize = 8;
                 int page = 1;
 
                 if (args.length == 2) {
@@ -33,7 +31,8 @@ public class CmdDoneList extends PlotCommand {
                     }
                 }
 
-                maxpage = (int) Math.ceil((double) plugin.getSqlManager().getFinishedPlotCount(p.getWorld().getName()) / (double) pagesize);
+                int pagesize = 8;
+                int maxpage = (int) Math.ceil((double) plugin.getSqlManager().getFinishedPlotCount(p.getWorld().getName()) / (double) pagesize);
 
                 if (page < 0) {
                     page = 1;

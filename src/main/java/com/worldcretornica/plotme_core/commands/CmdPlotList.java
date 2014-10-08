@@ -7,6 +7,7 @@ import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.UUID;
 
 public class CmdPlotList extends PlotCommand {
@@ -55,7 +56,7 @@ public class CmdPlotList extends PlotCommand {
 
                     // Is it expired?
                     if (plot.getExpiredDate() != null) {
-                        java.util.Date tempdate = plot.getExpiredDate();
+                        Date tempdate = plot.getExpiredDate();
 
                         if (tempdate.compareTo(Calendar.getInstance().getTime()) < 0) {
                             addition.append(RED + " @" + plot.getExpiredDate() + RESET);

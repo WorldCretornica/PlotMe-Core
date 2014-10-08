@@ -219,11 +219,7 @@ public class PlotMeCoreManager {
     }
 
     public boolean isPlotWorld(IWorld w) {
-        if (w == null || getGenMan(w) == null) {
-            return false;
-        } else {
-            return plotmaps.containsKey(w.getName().toLowerCase());
-        }
+        return !(w == null || getGenMan(w) == null) && plotmaps.containsKey(w.getName().toLowerCase());
     }
 
     public boolean isPlotWorld(String name) {
@@ -331,7 +327,7 @@ public class PlotMeCoreManager {
                 plugin.getSqlManager().addPlot(plot1, idX, idZ, topX(idTo, w), bottomX(idTo, w), topZ(idTo, w), bottomZ(idTo, w));
                 addPlot(w, idTo, plot1);
 
-                
+
                 comments = plot1.getComments();
                 for (int i = 0; i < comments.size(); i++) {
                     UUID uuid = null;
@@ -462,7 +458,7 @@ public class PlotMeCoreManager {
             plugin.getServerBridge().runTaskAsynchronously(new Runnable() {
                 @Override
                 public void run() {
-                    LWC lwc = com.griefcraft.lwc.LWC.getInstance();
+                    LWC lwc = LWC.getInstance();
                     List<Protection> protections = lwc.getPhysicalDatabase().loadProtections(wname, x1, x2, y1, y2, z1, z2);
 
                     for (Protection protection : protections) {
@@ -476,8 +472,6 @@ public class PlotMeCoreManager {
     public void setOwnerSign(IWorld w, Plot plot) {
         String line1;
         String line2 = "";
-        String line3;
-        String line4;
         String id = plot.getId();
 
         if ((Util().C("SignId") + id).length() > 16) {
@@ -490,22 +484,22 @@ public class PlotMeCoreManager {
         } else {
             line1 = Util().C("SignId") + id;
         }
-        line3 = plot.getOwner();
-        line4 = "";
+        String line3 = plot.getOwner();
+        String line4 = "";
 
         getGenMan(w).setOwnerDisplay(w, plot.getId(), line1, line2, line3, line4);
     }
 
     public void setSellSign(IWorld w, Plot plot) {
-        String line1 = "";
-        String line2 = "";
-        String line3 = "";
-        String line4 = "";
         String id = plot.getId();
 
         getGenMan(w).removeSellerDisplay(w, id);
 
         if (plot.isForSale() || plot.isAuctionned()) {
+            String line1 = "";
+            String line2 = "";
+            String line3 = "";
+            String line4 = "";
             if (plot.isForSale()) {
                 line1 = Util().C("SignForSale");
                 line2 = Util().C("SignPrice");
@@ -680,20 +674,6 @@ public class PlotMeCoreManager {
             return "";
         } else {
             return gen.getPlotId(l);
-        }
-    }
-
-    public String getPlotId(IPlayer p) {
-        if (getGenMan(p.getLocation()) == null) {
-            return "";
-        }
-
-        IPlotMe_GeneratorManager gen = getGenMan(p.getLocation());
-
-        if (gen == null) {
-            return "";
-        } else {
-            return gen.getPlotId(p.getLocation());
         }
     }
 

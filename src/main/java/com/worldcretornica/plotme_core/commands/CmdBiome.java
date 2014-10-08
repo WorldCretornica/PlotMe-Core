@@ -27,10 +27,9 @@ public class CmdBiome extends PlotCommand {
                     IWorld w = p.getWorld();
 
                     if (args.length == 2) {
-                        IBiome biome;
 
-                        biome = sob.getBiome(args[1]);
-                                
+                        IBiome biome = sob.getBiome(args[1]);
+
                         if (biome == null) {
                             p.sendMessage(RED + args[1] + RESET + " " + C("MsgIsInvalidBiome"));
                         } else {

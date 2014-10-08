@@ -27,7 +27,6 @@ public class BukkitPlotWorldEditListener implements Listener {
         BukkitLocation from = new BukkitLocation(event.getFrom());
         BukkitLocation to = new BukkitLocation(event.getTo());
 
-        boolean changemask = false;
         BukkitPlayer p = new BukkitPlayer(event.getPlayer());
 
         if (event.getTo() == null) {
@@ -35,6 +34,7 @@ public class BukkitPlotWorldEditListener implements Listener {
         } else {
             String idTo = "";
 
+            boolean changemask = false;
             if (from != null) {
                 if (!from.getWorld().getName().equalsIgnoreCase(to.getWorld().getName())) {
                     changemask = true;
