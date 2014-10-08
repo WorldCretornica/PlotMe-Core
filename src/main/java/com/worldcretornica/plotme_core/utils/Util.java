@@ -62,7 +62,7 @@ public class Util {
 
         String format = round(Math.abs(price));
 
-        Economy econ = plugin.getServerObjectBuilder().getEconomy();
+        Economy econ = plugin.getServerBridge().getEconomy();
         
         if (econ != null) {
             format = price <= 1 && price >= -1 ? format + " " + econ.currencyNameSingular() : format + " " + econ.currencyNamePlural();

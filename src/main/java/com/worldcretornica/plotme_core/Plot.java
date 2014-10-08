@@ -42,7 +42,7 @@ public class Plot implements Comparable<Plot> {
         this.setId("");
         this.allowed = new PlayerList();
         this.denied = new PlayerList();
-        this.setBiome(plugin.getServerObjectBuilder().getBiome("PLAINS"));
+        this.setBiome(plugin.getServerBridge().getBiome("PLAINS"));
 
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DAY_OF_YEAR, 7);
@@ -68,7 +68,7 @@ public class Plot implements Comparable<Plot> {
         this.setWorld(world.getName());
         this.allowed = new PlayerList();
         this.denied = new PlayerList();
-        this.setBiome(plugin.getServerObjectBuilder().getBiome("PLAINS"));
+        this.setBiome(plugin.getServerBridge().getBiome("PLAINS"));
         this.setId(plotid);
 
         if (days == 0) {
@@ -98,7 +98,7 @@ public class Plot implements Comparable<Plot> {
         this.setWorld(w.getName());
         this.allowed = new PlayerList();
         this.denied = new PlayerList();
-        this.setBiome(plugin.getServerObjectBuilder().getBiome("PLAINS"));
+        this.setBiome(plugin.getServerBridge().getBiome("PLAINS"));
         this.setId(plotid);
 
         if (days == 0) {
@@ -125,7 +125,7 @@ public class Plot implements Comparable<Plot> {
         this.plugin = instance;
         this.setOwnerId(uuid);
         
-        IPlayer p = plugin.getServerObjectBuilder().getPlayer(uuid);
+        IPlayer p = plugin.getServerBridge().getPlayer(uuid);
         if (p != null) {
             this.setOwner(p.getName());
         } else {
@@ -134,7 +134,7 @@ public class Plot implements Comparable<Plot> {
         this.setWorld(world.getName());
         this.allowed = new PlayerList();
         this.denied = new PlayerList();
-        this.setBiome(plugin.getServerObjectBuilder().getBiome("PLAINS"));
+        this.setBiome(plugin.getServerBridge().getBiome("PLAINS"));
         this.setId(plotid);
 
         if (days == 0) {
@@ -165,7 +165,7 @@ public class Plot implements Comparable<Plot> {
         this.setOwner(owner);
         this.setOwnerId(null);
         this.setWorld(world);
-        this.setBiome(plugin.getServerObjectBuilder().getBiome(bio));
+        this.setBiome(plugin.getServerBridge().getBiome(bio));
         this.setExpiredDate(exp);
         this.setFinished(fini);
         this.allowed = al;
@@ -190,7 +190,7 @@ public class Plot implements Comparable<Plot> {
         this.setOwner(owner);
         this.setOwnerId(ownerId);
         this.setWorld(world);
-        this.setBiome(plugin.getServerObjectBuilder().getBiome(bio));
+        this.setBiome(plugin.getServerBridge().getBiome(bio));
         this.setExpiredDate(exp);
         this.setFinished(fini);
         this.allowed = al;
@@ -328,15 +328,15 @@ public class Plot implements Comparable<Plot> {
             UUID uuid = allowed.remove(name);
             plugin.getSqlManager().deletePlotAllowed(plugin.getPlotMeCoreManager().getIdX(id), plugin.getPlotMeCoreManager().getIdZ(id), name, uuid, world);
             
-            if(plugin.getServerObjectBuilder().getPlotWorldEdit() != null) {
-                IPlayer p = plugin.getServerObjectBuilder().getPlayer(uuid);
+            if(plugin.getServerBridge().getPlotWorldEdit() != null) {
+                IPlayer p = plugin.getServerBridge().getPlayer(uuid);
                 
                 if(p != null) {
                     if(plugin.getPlotMeCoreManager().isPlotWorld(p.getWorld())) {
                         if(!plugin.getPlotMeCoreManager().isPlayerIgnoringWELimit(p.getUniqueId()))
-                            plugin.getServerObjectBuilder().getPlotWorldEdit().setMask(p);
+                            plugin.getServerBridge().getPlotWorldEdit().setMask(p);
                         else
-                            plugin.getServerObjectBuilder().getPlotWorldEdit().removeMask(p);
+                            plugin.getServerBridge().getPlotWorldEdit().removeMask(p);
                     }
                 }
             }
@@ -355,15 +355,15 @@ public class Plot implements Comparable<Plot> {
             String name = allowed.remove(uuid);
             plugin.getSqlManager().deletePlotAllowed(plugin.getPlotMeCoreManager().getIdX(id), plugin.getPlotMeCoreManager().getIdZ(id), name, uuid, world);
             
-            if(plugin.getServerObjectBuilder().getPlotWorldEdit() != null) {
-                IPlayer p = plugin.getServerObjectBuilder().getPlayer(uuid);
+            if(plugin.getServerBridge().getPlotWorldEdit() != null) {
+                IPlayer p = plugin.getServerBridge().getPlayer(uuid);
                 
                 if(p != null) {
                     if(plugin.getPlotMeCoreManager().isPlotWorld(p.getWorld())) {
                         if(!plugin.getPlotMeCoreManager().isPlayerIgnoringWELimit(p.getUniqueId()))
-                            plugin.getServerObjectBuilder().getPlotWorldEdit().setMask(p);
+                            plugin.getServerBridge().getPlotWorldEdit().setMask(p);
                         else
-                            plugin.getServerObjectBuilder().getPlotWorldEdit().removeMask(p);
+                            plugin.getServerBridge().getPlotWorldEdit().removeMask(p);
                     }
                 }
             }
@@ -411,7 +411,7 @@ public class Plot implements Comparable<Plot> {
 
     @Deprecated
     public boolean isAllowed(String name) {
-        IPlayer p = plugin.getServerObjectBuilder().getPlayerExact(name);
+        IPlayer p = plugin.getServerBridge().getPlayerExact(name);
         if(p == null) {
             return false;
         } else {
@@ -420,7 +420,7 @@ public class Plot implements Comparable<Plot> {
     }
     
     public boolean isAllowedConsulting(String name) {
-        IPlayer p = plugin.getServerObjectBuilder().getPlayerExact(name);
+        IPlayer p = plugin.getServerBridge().getPlayerExact(name);
         if(p != null) {
             return isAllowedInternal(name, p.getUniqueId(), true, true);
         } else {
@@ -442,7 +442,7 @@ public class Plot implements Comparable<Plot> {
 
     @Deprecated
     public boolean isAllowed(String name, boolean IncludeStar, boolean IncludeGroup) {
-        IPlayer p = plugin.getServerObjectBuilder().getPlayerExact(name);
+        IPlayer p = plugin.getServerBridge().getPlayerExact(name);
         if(p == null) {
             return false;
         } else {
@@ -459,7 +459,7 @@ public class Plot implements Comparable<Plot> {
         IPlayer p = null;
 
         if (uuid != null) {
-            p = plugin.getServerObjectBuilder().getPlayer(uuid);
+            p = plugin.getServerBridge().getPlayer(uuid);
         }
 
         if (uuid != null && ownerId != null && ownerId.equals(uuid) || uuid == null && owner.equalsIgnoreCase(name)) {
@@ -492,7 +492,7 @@ public class Plot implements Comparable<Plot> {
 
     @Deprecated
     public boolean isDenied(String name) {
-        IPlayer p = plugin.getServerObjectBuilder().getPlayerExact(name);
+        IPlayer p = plugin.getServerBridge().getPlayerExact(name);
         if(p == null) {
             return false;
         } else {
@@ -501,7 +501,7 @@ public class Plot implements Comparable<Plot> {
     }
     
     public boolean isDeniedConsulting(String name) {
-        IPlayer p = plugin.getServerObjectBuilder().getPlayerExact(name);
+        IPlayer p = plugin.getServerBridge().getPlayerExact(name);
         if(p != null) {
             return isDeniedInternal(name, p.getUniqueId());
         } else {
@@ -524,7 +524,7 @@ public class Plot implements Comparable<Plot> {
             return false;
         
         if (uuid != null) {
-            p = plugin.getServerObjectBuilder().getPlayer(uuid);
+            p = plugin.getServerBridge().getPlayer(uuid);
         }
         
         HashMap<String, UUID> list = denied.getAllPlayers();

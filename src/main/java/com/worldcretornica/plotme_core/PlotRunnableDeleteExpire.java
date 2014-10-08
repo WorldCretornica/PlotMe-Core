@@ -28,13 +28,13 @@ public class PlotRunnableDeleteExpire implements Runnable {
                 String ids = "";
 
                 for (Plot expiredplot : expiredplots) {
-                    InternalPlotResetEvent event = plugin.getServerObjectBuilder().getEventFactory().callPlotResetEvent(plugin, w, expiredplot, plugin.getCommandSenderCurrentlyProcessingExpired());
+                    InternalPlotResetEvent event = plugin.getServerBridge().getEventFactory().callPlotResetEvent(plugin, w, expiredplot, plugin.getCommandSenderCurrentlyProcessingExpired());
 
                     if (!event.isCancelled()) {
                         coremanager.clear(w, expiredplot, plugin.getCommandSenderCurrentlyProcessingExpired(), ClearReason.Expired);
 
                         String id = expiredplot.getId();
-                        ids += plugin.getServerObjectBuilder().getColor("RED") + id + plugin.getServerObjectBuilder().getColor("RESET") + ", ";
+                        ids += plugin.getServerBridge().getColor("RED") + id + plugin.getServerBridge().getColor("RESET") + ", ";
 
                         coremanager.removePlot(w, id);
                         coremanager.removeOwnerSign(w, id);

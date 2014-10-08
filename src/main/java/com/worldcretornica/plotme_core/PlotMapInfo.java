@@ -12,13 +12,15 @@ public class PlotMapInfo {
     private final ConcurrentHashMap<String, Plot> plots;
     private final List<String> freedplots;
     private final String world;
+    private final String worldPath;
     private final IConfigSection config;
 
     public PlotMapInfo(PlotMe_Core instance, String world) {
         this.plugin = instance;
         this.world = world;
-        config = plugin.getServerObjectBuilder().getConfig().getConfigurationSection(world);
-        config.loadConfig(world);
+        this.worldPath = "worlds." + world;
+        config = plugin.getServerBridge().getConfig().getConfigurationSection(worldPath);
+        config.loadConfig(worldPath);
         this.plots = new ConcurrentHashMap<>(1000, 0.75f, 5);
         this.freedplots = plugin.getSqlManager().getFreed(world);
     }

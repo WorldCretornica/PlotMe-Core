@@ -42,7 +42,7 @@ public class SqlManager {
                 conn.setAutoCommit(false);
             } else {
                 Class.forName("org.sqlite.JDBC");
-                conn = DriverManager.getConnection("jdbc:sqlite:" + plugin.getServerObjectBuilder().getDataFolder() + "/plots.db");
+                conn = DriverManager.getConnection("jdbc:sqlite:" + plugin.getServerBridge().getDataFolder() + "/plots.db");
                 conn.setAutoCommit(false);
             }
         } catch (SQLException ex) {
@@ -661,13 +661,13 @@ public class SqlManager {
             if (usemySQL) {
                 plugin.getLogger().info("Modifying database for MySQL support");
 
-                File sqlitefile = new File(plugin.getServerObjectBuilder().getDataFolder(), sqlitedb);
+                File sqlitefile = new File(plugin.getServerBridge().getDataFolder(), sqlitedb);
                 if (!sqlitefile.exists()) {
                     //plotmecore.getLogger().info("Could not find old " + sqlitedb);
                 } else {
                     plugin.getLogger().info("Trying to import plots from plots.db");
                     Class.forName("org.sqlite.JDBC");
-                    Connection sqliteconn = DriverManager.getConnection("jdbc:sqlite:" + plugin.getServerObjectBuilder().getDataFolder() + "\\" + sqlitedb);
+                    Connection sqliteconn = DriverManager.getConnection("jdbc:sqlite:" + plugin.getServerBridge().getDataFolder() + "\\" + sqlitedb);
 
                     sqliteconn.setAutoCommit(false);
                     Statement slstatement = sqliteconn.createStatement();
@@ -819,7 +819,7 @@ public class SqlManager {
                     sqliteconn.close();
 
                     plugin.getLogger().info("Renaming " + sqlitedb + " to " + sqlitedb + ".old");
-                    if (!sqlitefile.renameTo(new File(plugin.getServerObjectBuilder().getDataFolder(), sqlitedb + ".old"))) {
+                    if (!sqlitefile.renameTo(new File(plugin.getServerBridge().getDataFolder(), sqlitedb + ".old"))) {
                         plugin.getLogger().severe("Failed to rename " + sqlitedb + "! Please rename this manually!");
                     }
                 }
@@ -1065,7 +1065,7 @@ public class SqlManager {
 
     @Deprecated
     public void addPlotDenied(String player, int idX, int idZ, String world) {
-        IOfflinePlayer op = plugin.getServerObjectBuilder().getOfflinePlayer(player);
+        IOfflinePlayer op = plugin.getServerBridge().getOfflinePlayer(player);
         if (op == null) {
             addPlotDenied(player, null, idX, idZ, world);
         } else {
@@ -1296,7 +1296,7 @@ public class SqlManager {
 
     @Deprecated
     public void deletePlotAllowed(int idX, int idZ, String player, String world) {
-        IOfflinePlayer op = plugin.getServerObjectBuilder().getOfflinePlayer(player);
+        IOfflinePlayer op = plugin.getServerBridge().getOfflinePlayer(player);
         if (op == null) {
             deletePlotAllowed(idX, idZ, player, null, world);
         } else {
@@ -1340,7 +1340,7 @@ public class SqlManager {
 
     @Deprecated
     public void deletePlotDenied(int idX, int idZ, String player, String world) {
-        IOfflinePlayer op = plugin.getServerObjectBuilder().getOfflinePlayer(player);
+        IOfflinePlayer op = plugin.getServerBridge().getOfflinePlayer(player);
         if (op == null) {
             deletePlotDenied(idX, idZ, player, null, world);
         } else {
@@ -1598,7 +1598,7 @@ public class SqlManager {
     public void loadPlotsAsynchronously(String world) {
         final String worldname = world;
         
-        plugin.getServerObjectBuilder().runTaskAsynchronously(new Runnable() {
+        plugin.getServerBridge().runTaskAsynchronously(new Runnable() {
             @Override
             public void run() {
                 plugin.getLogger().info("Starting to load plots for world " + worldname);
@@ -1609,12 +1609,12 @@ public class SqlManager {
 
                 for (String id : plots.keySet()) {
                     pmi.addPlot(id, plots.get(id));
-                    plugin.getServerObjectBuilder().getEventFactory().callPlotLoadedEvent(plugin, plugin.getServerObjectBuilder().getWorld(worldname), plots.get(id));
+                    plugin.getServerBridge().getEventFactory().callPlotLoadedEvent(plugin, plugin.getServerBridge().getWorld(worldname), plots.get(id));
                 }
 
                 // plugin.getLogger().info("Done loading " + pmi.getNbPlots() +
                 // " plots for world " + worldname);
-                plugin.getServerObjectBuilder().getEventFactory().callPlotWorldLoadEvent(plugin, worldname, pmi.getNbPlots());
+                plugin.getServerBridge().getEventFactory().callPlotWorldLoadEvent(plugin, worldname, pmi.getNbPlots());
             }
         });
     }
@@ -2444,7 +2444,7 @@ public class SqlManager {
 
     
     public void plotConvertToUUIDAsynchronously() {
-        plugin.getServerObjectBuilder().runTaskAsynchronously(new Runnable() {
+        plugin.getServerBridge().runTaskAsynchronously(new Runnable() {
             @Override
             public void run() {
                 plugin.getLogger().info("Checking if conversion to UUID needed...");
@@ -2704,7 +2704,7 @@ public class SqlManager {
 
     private void _fetchUUIDAsync(final int idX, final int idZ, final String world, final String Property, final String name) {
         if (plugin.getInitialized()) {
-            plugin.getServerObjectBuilder().runTaskAsynchronously(new Runnable() {
+            plugin.getServerBridge().runTaskAsynchronously(new Runnable() {
                 @Override
                 public void run() {
     
@@ -2713,7 +2713,7 @@ public class SqlManager {
                     try {
                         Connection conn = getConnection();
     
-                        IPlayer p = plugin.getServerObjectBuilder().getPlayerExact(name);
+                        IPlayer p = plugin.getServerBridge().getPlayerExact(name);
                         UUID uuid = null;
                         String newname = name;
     
@@ -2828,7 +2828,7 @@ public class SqlManager {
     }
     
     public void updatePlotsNewUUID(final UUID uuid, final String newname) {
-        plugin.getServerObjectBuilder().runTaskAsynchronously(new Runnable() {
+        plugin.getServerBridge().runTaskAsynchronously(new Runnable() {
             @Override
             public void run() {
                 PreparedStatement[] pss = new PreparedStatement[5];

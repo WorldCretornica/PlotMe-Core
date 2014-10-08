@@ -30,13 +30,13 @@ public class PlotMeSpool implements Runnable {
     @Override
     public void run() {
         if (this.plottoclear != null) {
-            IWorld w = plugin.getServerObjectBuilder().getWorld(this.plottoclear.getWorld());
+            IWorld w = plugin.getServerBridge().getWorld(this.plottoclear.getWorld());
 
             if (w != null) {
                 if (this.currentClear == null)
-                    this.currentClear = this.plugin.getGenManager(w).clear(w, getPlotToClear().getPlotId(), plugin.getServerObjectBuilder().getConfig().getInt("NbBlocksPerClearStep"), true, null);
+                    this.currentClear = this.plugin.getGenManager(w).clear(w, getPlotToClear().getPlotId(), plugin.getServerBridge().getConfig().getInt("NbBlocksPerClearStep"), true, null);
                 else {
-                    this.currentClear = this.plugin.getGenManager(w).clear(w, getPlotToClear().getPlotId(), plugin.getServerObjectBuilder().getConfig().getInt("NbBlocksPerClearStep"), false, this.currentClear);
+                    this.currentClear = this.plugin.getGenManager(w).clear(w, getPlotToClear().getPlotId(), plugin.getServerBridge().getConfig().getInt("NbBlocksPerClearStep"), false, this.currentClear);
                 }
 
                 ShowProgress();
@@ -67,8 +67,8 @@ public class PlotMeSpool implements Runnable {
         long total = getTotalPlotBlocks();
         double percent = (double) done / (double) total * 100;
 
-        String green = plugin.getServerObjectBuilder().getColor("GREEN");
-        String reset = plugin.getServerObjectBuilder().getColor("RESET");
+        String green = plugin.getServerBridge().getColor("GREEN");
+        String reset = plugin.getServerBridge().getColor("RESET");
         
         Msg(plugin.getUtil().C("WordPlot") + " " + green + getPlotToClear().getPlotId() + reset + " " + plugin.getUtil().C("WordIn") + " "
                 + green + getPlotToClear().getWorld() + reset + " "
@@ -77,7 +77,7 @@ public class PlotMeSpool implements Runnable {
     }
 
     private long getTotalPlotBlocks() {
-        IWorld w = plugin.getServerObjectBuilder().getWorld(getPlotToClear().getWorld());
+        IWorld w = plugin.getServerBridge().getWorld(getPlotToClear().getWorld());
         ILocation bottom = plugin.getGenManager(w).getPlotBottomLoc(w, getPlotToClear().getPlotId());
         ILocation top = plugin.getGenManager(w).getPlotTopLoc(w, getPlotToClear().getPlotId());
 

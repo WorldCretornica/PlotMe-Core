@@ -38,15 +38,15 @@ public class PlotMe_Core {
     private Boolean initialized = false;
     
     //Bridge
-    private IServerBridge serverObjectBuilder;
+    private IServerBridge serverBridge;
 
     public PlotMe_Core(IServerBridge serverObjectBuilder) {
-        this.serverObjectBuilder = serverObjectBuilder;
+        this.serverBridge = serverObjectBuilder;
     }
     
     public void disable() {
         getSqlManager().closeConnection();
-        serverObjectBuilder.unHook();
+        serverBridge.unHook();
         getPlotMeCoreManager().setPlayersIgnoringWELimit(null);
         setWorldCurrentlyProcessingExpired(null);
         setCommandSenderCurrentlyProcessingExpired(null);
@@ -68,9 +68,9 @@ public class PlotMe_Core {
         setPlotMeCoreManager(new PlotMeCoreManager(this));
         setUtil(new Util(this));
         setupWorlds(); // TODO: Remove concept of pmi so this is not needed
-        serverObjectBuilder.setupListeners();
-        serverObjectBuilder.setupCommands();
-        serverObjectBuilder.setupHooks();
+        serverBridge.setupListeners();
+        serverBridge.setupCommands();
+        serverBridge.setupHooks();
         setupClearSpools();
         initialized = true;
         sqlmanager.plotConvertToUUIDAsynchronously();
@@ -78,7 +78,7 @@ public class PlotMe_Core {
 
     public void reload() {
         getSqlManager().closeConnection();
-        serverObjectBuilder.reloadConfig();
+        serverBridge.reloadConfig();
         setupConfig();
         for (String lang : captionsCA.keySet()) {
             reloadCaptionConfig(lang);
@@ -88,12 +88,12 @@ public class PlotMe_Core {
         setupMySQL();
     }
     
-    public IServerBridge getServerObjectBuilder() {
-        return serverObjectBuilder;
+    public IServerBridge getServerBridge() {
+        return serverBridge;
     }
     
     public Logger getLogger() {
-        return getServerObjectBuilder().getLogger();
+        return getServerBridge().getLogger();
     }
     
     public String getName() {
@@ -102,7 +102,7 @@ public class PlotMe_Core {
 
     private void setupConfig() {
         // Get the config we will be working with
-        final IConfigSection config = getServerObjectBuilder().getConfig();
+        final IConfigSection config = getServerBridge().getConfig();
 
         // Move old configs to new locations
         config.set(LANG_PATH, config.getString("Language"));
@@ -123,7 +123,7 @@ public class PlotMe_Core {
 
         // Load config-old.yml
         // config-old.yml should be used to import settings from by DefaultGenerator
-        final IConfigSection oldConfig = getServerObjectBuilder().getConfig("config-old.yml");
+        final IConfigSection oldConfig = getServerBridge().getConfig("config-old.yml");
 
         if (oldConfig != null) {
             // Create a list of old world configs that should be moved to config-old.yml
@@ -173,19 +173,22 @@ public class PlotMe_Core {
             if (!oldWorldsCS.getKeys(false).isEmpty()) {
                 oldConfig.saveConfig();
             }
+        } else {
+            // Copy new values over
+            config.copyDefaults(true);
         }
 
         config.saveConfig();
     }
 
     private void setupWorlds() {
-        final IConfigSection worldsCS = getServerObjectBuilder().getConfig().getConfigurationSection("worlds");
+        final IConfigSection worldsCS = getServerBridge().getConfig().getConfigurationSection("worlds");
         for (String worldname : worldsCS.getKeys(false)) {
             getPlotMeCoreManager().addPlotMap(worldname.toLowerCase(), new PlotMapInfo(this, worldname));
             if (getGenManager(worldname) == null) {
-                serverObjectBuilder.getLogger().log(Level.SEVERE, "The world {0} either does not exist or not using a PlotMe generator", worldname);
-                serverObjectBuilder.getLogger().log(Level.SEVERE, "Please ensure that {0} is set up and that it is using a PlotMe generator", worldname);
-                serverObjectBuilder.getLogger().log(Level.SEVERE, "The default generator can be downloaded from " + DEFAULT_GENERATOR_URL);
+                serverBridge.getLogger().log(Level.SEVERE, "The world {0} either does not exist or not using a PlotMe generator", worldname);
+                serverBridge.getLogger().log(Level.SEVERE, "Please ensure that {0} is set up and that it is using a PlotMe generator", worldname);
+                serverBridge.getLogger().log(Level.SEVERE, "The default generator can be downloaded from " + DEFAULT_GENERATOR_URL);
                 badWorlds.add(worldname);
             }
         }
@@ -194,14 +197,14 @@ public class PlotMe_Core {
     private String loadCaptionConfig(String lang) {
         if (!captionsCA.containsKey(lang)) {
             String configFilename = String.format(CAPTIONS_PATTERN, lang);
-            IConfigSection ca = getServerObjectBuilder().getConfig(configFilename);
+            IConfigSection ca = getServerBridge().getConfig(configFilename);
             captionsCA.put(lang, ca);
         }
         if (captionsCA.get(lang).getKeys(false).isEmpty()) {
             if (lang.equals(DEFAULT_LANG)) {
                 setupDefaultCaptions();
             } else {
-                serverObjectBuilder.getLogger().log(Level.WARNING, "Could not load caption file for {0}"
+                serverBridge.getLogger().log(Level.WARNING, "Could not load caption file for {0}"
                         + " or the language file was empty. Using " + DEFAULT_LANG, lang);
                 return loadCaptionConfig(DEFAULT_LANG);
             }
@@ -215,7 +218,7 @@ public class PlotMe_Core {
     }
 
     public IConfigSection getCaptionConfig() {
-        return getCaptionConfig(getServerObjectBuilder().getConfig().getString(LANG_PATH));
+        return getCaptionConfig(getServerBridge().getConfig().getString(LANG_PATH));
     }
 
     public IConfigSection getCaptionConfig(String lang) {
@@ -223,7 +226,7 @@ public class PlotMe_Core {
     }
 
     public void reloadCaptionConfig() {
-        reloadCaptionConfig(getServerObjectBuilder().getConfig().getString(LANG_PATH));
+        reloadCaptionConfig(getServerBridge().getConfig().getString(LANG_PATH));
     }
 
     public void reloadCaptionConfig(String lang) {
@@ -231,7 +234,7 @@ public class PlotMe_Core {
     }
 
     public void saveCaptionConfig() {
-        saveCaptionConfig(getServerObjectBuilder().getConfig().getString(LANG_PATH));
+        saveCaptionConfig(getServerBridge().getConfig().getString(LANG_PATH));
     }
 
     public void saveCaptionConfig(String lang) {
@@ -240,11 +243,11 @@ public class PlotMe_Core {
 
     private void setupDefaultCaptions() {
         String fileName = String.format(CAPTIONS_PATTERN, DEFAULT_LANG);
-        getServerObjectBuilder().saveResource(fileName, true);
+        getServerBridge().saveResource(fileName, true);
     }
 
     private void setupMySQL() {
-        IConfigSection config = getServerObjectBuilder().getConfig();
+        IConfigSection config = getServerBridge().getConfig();
 
         boolean usemySQL = config.getBoolean("usemySQL", false);
         String mySQLconn = config.getString("mySQLconn", "jdbc:mysql://localhost:3306/minecraft");
@@ -272,7 +275,7 @@ public class PlotMe_Core {
     }
 
     public IPlotMe_GeneratorManager getGenManager(String name) {
-        IWorld w = serverObjectBuilder.getWorld(name);
+        IWorld w = serverBridge.getWorld(name);
         if (w == null) {
             return null;
         } else {
@@ -342,12 +345,12 @@ public class PlotMe_Core {
         getCommandSenderCurrentlyProcessingExpired().sendMessage(getUtil().C("MsgStartDeleteSession"));
 
         for (int ctr = 0; ctr < howmanytimes / getNbPerDeletionProcessingExpired(); ctr++) {
-            serverObjectBuilder.scheduleSyncDelayedTask(task, ctr * eachseconds * 20);
+            serverBridge.scheduleSyncDelayedTask(task, ctr * eachseconds * 20);
         }
     }
 
     public String getVersion() {
-        return serverObjectBuilder.getVersion();
+        return serverBridge.getVersion();
     }
 
     public Set<String> getBadWorlds() {
@@ -374,13 +377,13 @@ public class PlotMe_Core {
         this.plotsToClear.offer(plotToClear);
         
         PlotMeSpool pms = new PlotMeSpool(this, plotToClear);
-        serverObjectBuilder.scheduleSyncRepeatingTask(pms, 0L, 200L);
+        serverBridge.scheduleSyncRepeatingTask(pms, 0L, 200L);
     }
     
     public void removePlotToClear(PlotToClear plotToClear, int taskid) {
         this.plotsToClear.remove(plotToClear);
 
-        serverObjectBuilder.cancelTask(taskid);
+        serverBridge.cancelTask(taskid);
     }
 
     public boolean isPlotLocked(String world, String id) {

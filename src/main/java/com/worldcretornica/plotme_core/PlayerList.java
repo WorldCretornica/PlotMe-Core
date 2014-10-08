@@ -32,7 +32,7 @@ public class PlayerList {
     }
     
     public String put(UUID uuid) {
-        String name = api.getServerObjectBuilder().getOfflinePlayer(uuid).getName();
+        String name = api.getServerBridge().getOfflinePlayer(uuid).getName();
         playerlist.put(name, uuid);
         return name;
     }

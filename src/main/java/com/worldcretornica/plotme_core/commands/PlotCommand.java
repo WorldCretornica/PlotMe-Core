@@ -8,18 +8,18 @@ public abstract class PlotCommand {
 
     protected PlotMe_Core plugin;
 
-    protected final String RED = plugin.getServerObjectBuilder().getColor("RED");
-    protected final String RESET = plugin.getServerObjectBuilder().getColor("RESET");
-    protected final String AQUA = plugin.getServerObjectBuilder().getColor("AQUA");
-    protected final String GREEN = plugin.getServerObjectBuilder().getColor("GREEN");
-    protected final String BLUE = plugin.getServerObjectBuilder().getColor("BLUE");
-    protected final String ITALIC = plugin.getServerObjectBuilder().getColor("ITALIC");
+    protected final String RED = plugin.getServerBridge().getColor("RED");
+    protected final String RESET = plugin.getServerBridge().getColor("RESET");
+    protected final String AQUA = plugin.getServerBridge().getColor("AQUA");
+    protected final String GREEN = plugin.getServerBridge().getColor("GREEN");
+    protected final String BLUE = plugin.getServerBridge().getColor("BLUE");
+    protected final String ITALIC = plugin.getServerBridge().getColor("ITALIC");
     protected final String LOG = "[Event] ";
     protected final IServerBridge sob;
 
     public PlotCommand(PlotMe_Core instance) {
         plugin = instance;
-        sob = plugin.getServerObjectBuilder();
+        sob = plugin.getServerBridge();
     }
 
     protected Util Util() {
@@ -31,6 +31,6 @@ public abstract class PlotCommand {
     }
     
     protected boolean isAdvancedLogging() {
-        return plugin.getServerObjectBuilder().getConfig().getBoolean("AdvancedLogging");
+        return plugin.getServerBridge().getConfig().getBoolean("AdvancedLogging");
     }
 }

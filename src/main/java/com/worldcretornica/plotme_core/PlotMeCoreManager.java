@@ -40,7 +40,7 @@ public class PlotMeCoreManager {
     }
 
     public boolean isEconomyEnabled(String worldname) {
-        if (plugin.getServerObjectBuilder().getConfig().getBoolean("globalUseEconomy") || plugin.getServerObjectBuilder().getEconomy() != null) {
+        if (plugin.getServerBridge().getConfig().getBoolean("globalUseEconomy") || plugin.getServerBridge().getEconomy() != null) {
             return false;
         }
         PlotMapInfo pmi = getMap(worldname);
@@ -48,7 +48,7 @@ public class PlotMeCoreManager {
         if (pmi == null) {
             return false;
         } else {
-            return pmi.isUseEconomy() && plugin.getServerObjectBuilder().getConfig().getBoolean("globalUseEconomy") && plugin.getServerObjectBuilder().getEconomy() != null;
+            return pmi.isUseEconomy() && plugin.getServerBridge().getConfig().getBoolean("globalUseEconomy") && plugin.getServerBridge().getEconomy() != null;
         }
     }
 
@@ -196,13 +196,13 @@ public class PlotMeCoreManager {
         }
 
         pmi.addPlot(id, plot);
-        plugin.getServerObjectBuilder().getEventFactory().callPlotLoadedEvent(plugin, w, plot);
+        plugin.getServerBridge().getEventFactory().callPlotLoadedEvent(plugin, w, plot);
     }
 
     public IWorld getFirstWorld() {
         if (plotmaps != null) {
 	        if (plotmaps.keySet().toArray().length > 0) {
-	            return plugin.getServerObjectBuilder().getWorld((String) plotmaps.keySet().toArray()[0]);
+	            return plugin.getServerBridge().getWorld((String) plotmaps.keySet().toArray()[0]);
 	        }
         }
         return null;
@@ -212,7 +212,7 @@ public class PlotMeCoreManager {
         String world = plugin.getSqlManager().getFirstWorld(player);
 
         if (!world.isEmpty()) {
-            return plugin.getServerObjectBuilder().getWorld(world);
+            return plugin.getServerBridge().getWorld(world);
         } else {
             return null;
         }
@@ -448,7 +448,7 @@ public class PlotMeCoreManager {
     }
 
     public void RemoveLWC(IWorld w, String id) {
-        if (plugin.getServerObjectBuilder().getUsinglwc()) {
+        if (plugin.getServerBridge().getUsinglwc()) {
             ILocation bottom = getGenMan(w).getBottom(w, id);
             ILocation top = getGenMan(w).getTop(w, id);
             final int x1 = bottom.getBlockX();
@@ -459,7 +459,7 @@ public class PlotMeCoreManager {
             final int z2 = top.getBlockZ();
             final String wname = w.getName();
 
-            plugin.getServerObjectBuilder().runTaskAsynchronously(new Runnable() {
+            plugin.getServerBridge().runTaskAsynchronously(new Runnable() {
                 @Override
                 public void run() {
                     LWC lwc = com.griefcraft.lwc.LWC.getInstance();
