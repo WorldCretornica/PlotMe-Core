@@ -1,4 +1,4 @@
-package com.worldcretornica.plotme_core.bukkit.api;
+package com.worldcretornica.plotme_core.bukkit;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +12,12 @@ import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IPlotMe_GeneratorManager;
 import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.bukkit.api.BukkitBiome;
+import com.worldcretornica.plotme_core.bukkit.api.BukkitCommandSender;
+import com.worldcretornica.plotme_core.bukkit.api.BukkitLocation;
+import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
+import com.worldcretornica.plotme_core.bukkit.api.BukkitWorld;
+import com.worldcretornica.plotme_core.bukkit.api.IBukkitPlotMe_GeneratorManager;
 
 public class BukkitPlotMe_GeneratorManagerBridge implements IPlotMe_GeneratorManager {
 

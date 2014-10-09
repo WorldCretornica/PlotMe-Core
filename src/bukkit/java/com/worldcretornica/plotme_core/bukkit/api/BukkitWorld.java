@@ -8,6 +8,7 @@ import com.worldcretornica.plotme_core.api.IChunk;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.IPlotMe_ChunkGenerator;
+import com.worldcretornica.plotme_core.bukkit.BukkitPlotMe_ChunkGeneratorBridge;
 
 public class BukkitWorld implements IWorld {
 
@@ -19,12 +20,12 @@ public class BukkitWorld implements IWorld {
 
     @Override
     public boolean isPlotMeGenerator() {
-        return this.world.getGenerator() instanceof IPlotMe_ChunkGenerator;
+        return this.world.getGenerator() instanceof IBukkitPlotMe_ChunkGenerator;
     }
 
     @Override
     public IPlotMe_ChunkGenerator getGenerator() {
-        return (IPlotMe_ChunkGenerator) world.getGenerator();
+        return (IPlotMe_ChunkGenerator) new BukkitPlotMe_ChunkGeneratorBridge((IBukkitPlotMe_ChunkGenerator) world.getGenerator());
     }
 
     @Override

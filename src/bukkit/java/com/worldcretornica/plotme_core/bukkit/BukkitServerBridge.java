@@ -1,22 +1,25 @@
-package com.worldcretornica.plotme_core.bukkit.api;
+package com.worldcretornica.plotme_core.bukkit;
 
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.*;
 import com.worldcretornica.plotme_core.api.event.IEventFactory;
-import com.worldcretornica.plotme_core.bukkit.*;
 import com.worldcretornica.plotme_core.bukkit.MultiWorldWrapper.WorldGeneratorWrapper;
+import com.worldcretornica.plotme_core.bukkit.api.*;
 import com.worldcretornica.plotme_core.bukkit.event.BukkitEventFactory;
 import com.worldcretornica.plotme_core.bukkit.listener.BukkitPlayerListener;
 import com.worldcretornica.plotme_core.bukkit.listener.BukkitPlotDenyListener;
 import com.worldcretornica.plotme_core.bukkit.listener.BukkitPlotListener;
 import com.worldcretornica.plotme_core.bukkit.listener.BukkitPlotWorldEditListener;
+
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
+
 import org.bukkit.*;
 import org.bukkit.World.Environment;
 import org.bukkit.block.Biome;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -26,6 +29,9 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 import java.util.logging.Logger;
@@ -85,12 +91,18 @@ public class BukkitServerBridge implements IServerBridge {
         }
 
         if (pm.getPlugin("WorldEdit") != null) {
+            
+            PlotMe_Core plotme_core = plugin.getAPI();
+            WorldEditPlugin worldeditplugin = (WorldEditPlugin) pm.getPlugin("WorldEdit");
+
             try {
                 Class.forName("com.sk89q.worldedit.function.mask.Mask");
-                setPlotWorldEdit((PlotWorldEdit) Class.forName("com.worldcretornica.plotme_core.worldedit.PlotWorldEdit6_0_0").getConstructor(PlotMe_Core.class, WorldEditPlugin.class).newInstance(this, pm.getPlugin("WorldEdit")));
+                PlotWorldEdit pwe = (PlotWorldEdit) Class.forName("com.worldcretornica.plotme_core.bukkit.worldedit.PlotWorldEdit6_0_0").getConstructor(PlotMe_Core.class, WorldEditPlugin.class).newInstance(plotme_core, worldeditplugin);
+                setPlotWorldEdit(pwe);
             } catch (Exception unused) {
                 try {
-                    setPlotWorldEdit((PlotWorldEdit) Class.forName("com.worldcretornica.plotme_core.worldedit.PlotWorldEdit5_7").getConstructor(PlotMe_Core.class, WorldEditPlugin.class).newInstance(this, pm.getPlugin("WorldEdit")));
+                    PlotWorldEdit pwe = (PlotWorldEdit) Class.forName("com.worldcretornica.plotme_core.bukkit.worldedit.PlotWorldEdit5_7").getConstructor(PlotMe_Core.class, WorldEditPlugin.class).newInstance(plotme_core, worldeditplugin);
+                    setPlotWorldEdit(pwe);
                 } catch (Exception unused2) {
                     getLogger().warning("Unable to hook to WorldEdit properly, please contact the developper of plotme with your WorldEdit version.");
                     setPlotWorldEdit(null);
@@ -253,8 +265,28 @@ public class BukkitServerBridge implements IServerBridge {
     }
 
     @Override
-    public IConfigSection getConfig(String path) {
-        return new BukkitConfigSection(plugin).getConfigurationSection(path);
+    public IConfigSection getConfig(String file) {
+        
+        File configfile = new File(plugin.getDataFolder().getAbsolutePath(), file);
+        YamlConfiguration config = new YamlConfiguration();
+        
+        try 
+        {
+            config.load(configfile);
+        }
+        catch (FileNotFoundException e) {} 
+        catch (IOException e) 
+        {
+            plugin.getLogger().severe("Can't read configuration file");
+            e.printStackTrace();
+        } 
+        catch (InvalidConfigurationException e) 
+        {
+            plugin.getLogger().severe("Invalid configuration format");
+            e.printStackTrace();
+        }
+        
+        return new BukkitConfigSection(plugin, config);
     }
 
     @Override

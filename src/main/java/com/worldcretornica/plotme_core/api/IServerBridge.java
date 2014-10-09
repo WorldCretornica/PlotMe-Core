@@ -67,7 +67,7 @@ public interface IServerBridge {
     
     public void reloadConfig();
     public IConfigSection getConfig();
-    public IConfigSection getConfig(String path);
+    public IConfigSection getConfig(String file);
     public void saveResource(String fileName, boolean b);
         
     public boolean addMultiverseWorld(String worldname, String environment, String seed, String worldtype, boolean bool, String generator);

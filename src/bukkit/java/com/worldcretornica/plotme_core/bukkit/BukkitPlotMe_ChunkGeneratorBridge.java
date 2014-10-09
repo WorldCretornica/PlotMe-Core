@@ -1,7 +1,8 @@
-package com.worldcretornica.plotme_core.bukkit.api;
+package com.worldcretornica.plotme_core.bukkit;
 
 import com.worldcretornica.plotme_core.api.IPlotMe_ChunkGenerator;
 import com.worldcretornica.plotme_core.api.IPlotMe_GeneratorManager;
+import com.worldcretornica.plotme_core.bukkit.api.IBukkitPlotMe_ChunkGenerator;
 
 public class BukkitPlotMe_ChunkGeneratorBridge implements IPlotMe_ChunkGenerator {
 

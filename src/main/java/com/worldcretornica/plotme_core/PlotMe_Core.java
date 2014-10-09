@@ -205,8 +205,7 @@ public class PlotMe_Core {
             if (lang.equals(DEFAULT_LANG)) {
                 setupDefaultCaptions();
             } else {
-                serverBridge.getLogger().log(Level.WARNING, "Could not load caption file for {0}"
-                        + " or the language file was empty. Using " + DEFAULT_LANG, lang);
+                serverBridge.getLogger().log(Level.WARNING, "Could not load caption file for {0} or the language file was empty. Using " + DEFAULT_LANG, lang);
                 return loadCaptionConfig(DEFAULT_LANG);
             }
         }
