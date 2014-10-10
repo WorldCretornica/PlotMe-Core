@@ -41,10 +41,7 @@ public class CmdAuction extends PlotCommand {
                                         IOfflinePlayer playercurrentbidder = sob.getOfflinePlayer(plot.getCurrentBidderId());
                                         EconomyResponse er = sob.depositPlayer(playercurrentbidder, plot.getCurrentBid());
 
-                                        if (!er.transactionSuccess()) {
-                                            p.sendMessage(RED + er.errorMessage);
-                                            plugin.getUtil().warn(er.errorMessage);
-                                        } else {
+                                        if (er.transactionSuccess()) {
                                             for (IPlayer player : sob.getOnlinePlayers()) {
                                                 if (player.getName().equalsIgnoreCase(plot.getCurrentBidder())) {
                                                     player.sendMessage(C("MsgAuctionCancelledOnPlot")
@@ -52,6 +49,9 @@ public class CmdAuction extends PlotCommand {
                                                     break;
                                                 }
                                             }
+                                        } else {
+                                            p.sendMessage(RED + er.errorMessage);
+                                            plugin.getUtil().warn(er.errorMessage);
                                         }
                                     }
 

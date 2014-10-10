@@ -1,14 +1,9 @@
 package com.worldcretornica.plotme_core.bukkit.api;
 
+import com.worldcretornica.plotme_core.api.*;
+import com.worldcretornica.plotme_core.bukkit.BukkitPlotMe_ChunkGeneratorBridge;
 import org.bukkit.Location;
 import org.bukkit.World;
-
-import com.worldcretornica.plotme_core.api.IBlock;
-import com.worldcretornica.plotme_core.api.IChunk;
-import com.worldcretornica.plotme_core.api.ILocation;
-import com.worldcretornica.plotme_core.api.IWorld;
-import com.worldcretornica.plotme_core.api.IPlotMe_ChunkGenerator;
-import com.worldcretornica.plotme_core.bukkit.BukkitPlotMe_ChunkGeneratorBridge;
 
 public class BukkitWorld implements IWorld {
 
@@ -25,7 +20,7 @@ public class BukkitWorld implements IWorld {
 
     @Override
     public IPlotMe_ChunkGenerator getGenerator() {
-        return (IPlotMe_ChunkGenerator) new BukkitPlotMe_ChunkGeneratorBridge((IBukkitPlotMe_ChunkGenerator) world.getGenerator());
+        return new BukkitPlotMe_ChunkGeneratorBridge((IBukkitPlotMe_ChunkGenerator) world.getGenerator());
     }
 
     @Override

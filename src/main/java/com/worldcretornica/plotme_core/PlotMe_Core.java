@@ -55,11 +55,6 @@ public class PlotMe_Core {
         plotsToClear.clear();
         plotsToClear = null;
         initialized = null;
-
-        if (creationbuffer != null) {
-            creationbuffer.clear();
-            creationbuffer = null;
-        }
     }
 
     public void enable() {

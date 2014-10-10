@@ -27,15 +27,18 @@ public class PlotWorldEdit6_0_0 implements PlotWorldEdit {
         this.we = wep;
     }
 
+    @Override
     public void setMask(IPlayer p) {
         setMask(p, p.getLocation());
     }
 
+    @Override
     public void setMask(IPlayer p, ILocation l) {
         String id = plugin.getPlotMeCoreManager().getPlotId(l);
         setMask(p, id);
     }
 
+    @Override
     public void setMask(IPlayer p, String id) {
         BukkitWorld w = (BukkitWorld) p.getWorld();
         BukkitPlayer bp = (BukkitPlayer) p;
@@ -87,6 +90,7 @@ public class PlotWorldEdit6_0_0 implements PlotWorldEdit {
         }
     }
 
+    @Override
     public void removeMask(IPlayer p) {
         BukkitPlayer bp = (BukkitPlayer) p;
         LocalSession session = we.getSession(bp.getPlayer());

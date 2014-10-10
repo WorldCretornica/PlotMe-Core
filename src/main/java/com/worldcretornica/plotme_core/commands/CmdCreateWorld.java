@@ -35,7 +35,7 @@ public class CmdCreateWorld extends PlotCommand {
                         plugin.creationbuffer.remove(cs.getName());
                         return true;
                     } //settings
-                    else if (args[1].equalsIgnoreCase(C("CommandCreateWorld-Setting"))) {
+                    if (args[1].equalsIgnoreCase(C("CommandCreateWorld-Setting"))) {
                         if (args.length == 4) {
                             String key = args[2];
                             String value = args[3];

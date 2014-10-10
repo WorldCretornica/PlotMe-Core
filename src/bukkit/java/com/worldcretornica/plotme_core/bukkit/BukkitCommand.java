@@ -126,12 +126,8 @@ public class BukkitCommand implements CommandExecutor {
                     } catch (NumberFormatException ignored) {
                     }
 
-                    if (ipage != -1) {
-                        return showhelp.exec(p, ipage);
-                    } else {
+                    if (ipage == -1) {
                         if (a0.equalsIgnoreCase(C("CommandHelp"))) {
-                            ipage = -1;
-
                             if (args.length > 1) {
                                 String a1 = args[1];
                                 ipage = -1;
@@ -142,10 +138,10 @@ public class BukkitCommand implements CommandExecutor {
                                 }
                             }
 
-                            if (ipage != -1) {
-                                return showhelp.exec(p, ipage);
-                            } else {
+                            if (ipage == -1) {
                                 return showhelp.exec(p, 1);
+                            } else {
+                                return showhelp.exec(p, ipage);
                             }
                         }
                         if (a0.equalsIgnoreCase(C("CommandClaim"))) {
@@ -249,6 +245,8 @@ public class BukkitCommand implements CommandExecutor {
                         if (a0.equalsIgnoreCase(C("CommandCreateWorld"))) {
                             return createworld.exec(p, args);
                         }
+                    } else {
+                        return showhelp.exec(p, ipage);
                     }
                 }
             }

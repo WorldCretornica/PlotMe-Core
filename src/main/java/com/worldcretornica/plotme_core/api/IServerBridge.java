@@ -1,94 +1,104 @@
 package com.worldcretornica.plotme_core.api;
 
+import com.worldcretornica.plotme_core.api.event.IEventFactory;
+import net.milkbowl.vault.economy.Economy;
+import net.milkbowl.vault.economy.EconomyResponse;
+
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Logger;
 
-import com.worldcretornica.plotme_core.api.event.IEventFactory;
-
-import net.milkbowl.vault.economy.Economy;
-import net.milkbowl.vault.economy.EconomyResponse;
-
 public interface IServerBridge {
 
-    public IPlotMe_ChunkGenerator getPlotMeGenerator(String pluginname, String worldname);
-    public IPlotMe_ChunkGenerator getPlotMeGenerator(String worldname);
-    
-    public IOfflinePlayer getOfflinePlayer(UUID uuid);
-    public IOfflinePlayer getOfflinePlayer(String player);
-    public IPlayer getPlayer(UUID uuid);
-    public IPlayer getPlayerExact(String name);
-    public List<IPlayer> getOnlinePlayers();
-    
-    public Logger getLogger();
-    
-    public void scheduleSyncRepeatingTask(Runnable func, long l, long l2);
-    
-    public void cancelTask(int taskid);
+    IPlotMe_ChunkGenerator getPlotMeGenerator(String pluginname, String worldname);
 
-    public void scheduleSyncDelayedTask(Runnable task, int i);
-    
-    public void setupHooks();
-    
-    public Economy getEconomy();
-    public double getBalance(IOfflinePlayer playerbidder);
-    public EconomyResponse withdrawPlayer(IOfflinePlayer p, double price);
-    public EconomyResponse depositPlayer(IOfflinePlayer playercurrentbidder, double currentBid);
-    
-    public PlotWorldEdit getPlotWorldEdit();
-    
-    public boolean getUsinglwc();
+    IPlotMe_ChunkGenerator getPlotMeGenerator(String worldname);
 
-    public String getVersion();
+    IOfflinePlayer getOfflinePlayer(UUID uuid);
 
-    public IWorld getWorld(String name);
-    
-    public void sendMessage(ICommandSender cs, String message);
-    
-    public void setupCommands();
+    IOfflinePlayer getOfflinePlayer(String player);
 
-    public void unHook();
+    IPlayer getPlayer(UUID uuid);
 
-    public void setupListeners();
+    IPlayer getPlayerExact(String name);
 
-    public void runTaskAsynchronously(Runnable runnable);
-    
-    public IBiome getBiome(String name);
-   
-    public IEventFactory getEventFactory();
-    
-    public InputStream getResource(String path);
-    
-    public String getDataFolder();
-    
-    public String getColor(String color);
-    
-    public void reloadConfig();
-    public IConfigSection getConfig();
-    public IConfigSection getConfig(String file);
-    public void saveResource(String fileName, boolean b);
-        
-    public boolean addMultiverseWorld(String worldname, String environment, String seed, String worldtype, boolean bool, String generator);
+    List<IPlayer> getOnlinePlayers();
 
-    public List<String> getBiomes();
+    Logger getLogger();
 
-    public String stripColor(String string);
+    void scheduleSyncRepeatingTask(Runnable func, long l, long l2);
 
-    public boolean checkWorldName(String string);
+    void cancelTask(int taskid);
 
-    public boolean worldExists(String string);
+    void scheduleSyncDelayedTask(Runnable task, int i);
 
-    public List<IWorld> getWorlds();
-    
-    public boolean CreatePlotWorld(ICommandSender cs, String worldname, String generator, Map<String, String> args);
+    void setupHooks();
 
-    public IMaterial getMaterial(String string);
+    Economy getEconomy();
 
-    public ILocation createLocation(IWorld w, int x, int y, int z);
+    double getBalance(IOfflinePlayer playerbidder);
 
-    public IEntityType getEntityType(String string);
+    EconomyResponse withdrawPlayer(IOfflinePlayer p, double price);
 
-    public IConfigSection getConfig(InputStream defConfigStream);
+    EconomyResponse depositPlayer(IOfflinePlayer playercurrentbidder, double currentBid);
+
+    PlotWorldEdit getPlotWorldEdit();
+
+    boolean getUsinglwc();
+
+    String getVersion();
+
+    IWorld getWorld(String name);
+
+    void sendMessage(ICommandSender cs, String message);
+
+    void setupCommands();
+
+    void unHook();
+
+    void setupListeners();
+
+    void runTaskAsynchronously(Runnable runnable);
+
+    IBiome getBiome(String name);
+
+    IEventFactory getEventFactory();
+
+    InputStream getResource(String path);
+
+    String getDataFolder();
+
+    String getColor(String color);
+
+    void reloadConfig();
+
+    IConfigSection getConfig();
+
+    IConfigSection getConfig(String file);
+
+    void saveResource(String fileName, boolean b);
+
+    boolean addMultiverseWorld(String worldname, String environment, String seed, String worldtype, boolean bool, String generator);
+
+    List<String> getBiomes();
+
+    String stripColor(String string);
+
+    boolean checkWorldName(String string);
+
+    boolean worldExists(String string);
+
+    List<IWorld> getWorlds();
+
+    boolean CreatePlotWorld(ICommandSender cs, String worldname, String generator, Map<String, String> args);
+
+    IMaterial getMaterial(String string);
+
+    ILocation createLocation(IWorld w, int x, int y, int z);
+
+    IEntityType getEntityType(String string);
+
+    IConfigSection getConfig(InputStream defConfigStream);
 }
