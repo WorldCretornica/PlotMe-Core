@@ -1,6 +1,5 @@
 package com.worldcretornica.plotme_core;
 
-import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.utils.UUIDFetcher;
@@ -23,8 +22,6 @@ public class SqlManager {
     private final String mySQLconn;
 
     private static Connection conn;
-
-    public final String sqlitedb = "plots.db";
 
     public SqlManager(PlotMe_Core instance, boolean usemysql, String sqlusername, String sqlpassword, String sqlconnection) {
         plugin = instance;
@@ -661,6 +658,7 @@ public class SqlManager {
             if (usemySQL) {
                 plugin.getLogger().info("Modifying database for MySQL support");
 
+                String sqlitedb = "plots.db";
                 File sqlitefile = new File(plugin.getServerBridge().getDataFolder(), sqlitedb);
                 if (!sqlitefile.exists()) {
                     //plotmecore.getLogger().info("Could not find old " + sqlitedb);
@@ -737,9 +735,7 @@ public class SqlManager {
                             }
                         }
 
-                        if (setAllowed != null) {
-                            setAllowed.close();
-                        }
+                        setAllowed.close();
 
                         setDenied = slDenied.executeQuery("SELECT * FROM plotmeDenied WHERE idX = '" + idX + "' AND idZ = '" + idZ + "' AND world = '" + world + "'");
 
@@ -752,9 +748,7 @@ public class SqlManager {
                             }
                         }
 
-                        if (setDenied != null) {
-                            setDenied.close();
-                        }
+                        setDenied.close();
 
                         setComments = slComments.executeQuery("SELECT * FROM plotmeComments WHERE idX = '" + idX + "' AND idZ = '" + idZ + "' AND world = '" + world + "'");
 
@@ -1018,11 +1012,6 @@ public class SqlManager {
         }
     }
 
-    @Deprecated
-    public void addPlotAllowed(String player, int idX, int idZ, String world) {
-        addPlotAllowed(player, null, idX, idZ, world);
-    }
-
     public void addPlotAllowed(String player, UUID playerid, int idX, int idZ, String world) {
         PreparedStatement ps = null;
 
@@ -1058,16 +1047,6 @@ public class SqlManager {
                 plugin.getLogger().severe("Insert Exception (on close) :");
                 plugin.getLogger().severe("  " + ex.getMessage());
             }
-        }
-    }
-
-    @Deprecated
-    public void addPlotDenied(String player, int idX, int idZ, String world) {
-        IOfflinePlayer op = plugin.getServerBridge().getOfflinePlayer(player);
-        if (op == null) {
-            addPlotDenied(player, null, idX, idZ, world);
-        } else {
-            addPlotDenied(player, op.getUniqueId(), idX, idZ, world);
         }
     }
 
@@ -1107,52 +1086,6 @@ public class SqlManager {
                 plugin.getLogger().severe("  " + ex.getMessage());
             }
         }
-    }
-
-    public void addPlotBid(String player, double bid, int idX, int idZ, String world) {
-        PreparedStatement ps = null;
-
-        //Auctions
-        try {
-            Connection conn = getConnection();
-
-            ps = conn.prepareStatement("INSERT INTO plotmeAuctions (idX, idZ, player, world, bid) "
-                                               + "VALUES (?,?,?,?,?)");
-
-            ps.setInt(1, idX);
-            ps.setInt(2, idZ);
-            ps.setString(3, player);
-            ps.setString(4, world.toLowerCase());
-            ps.setDouble(5, bid);
-
-            ps.executeUpdate();
-            conn.commit();
-
-        } catch (SQLException ex) {
-            plugin.getLogger().severe("Insert Exception :");
-            plugin.getLogger().severe("  " + ex.getMessage());
-        } finally {
-            try {
-                if (ps != null) {
-                    ps.close();
-                }
-            } catch (SQLException ex) {
-                plugin.getLogger().severe("Insert Exception (on close) :");
-                plugin.getLogger().severe("  " + ex.getMessage());
-            }
-        }
-    }
-
-    @Deprecated
-    public void addPlotComment(String[] comment, int commentid, int idX, int idZ, String world) {
-        UUID uuid = null;
-        if(comment.length > 2) {
-            try{
-                uuid = UUID.fromString(comment[2]);
-            } catch (IllegalArgumentException ignored) {
-            }
-        }
-        addPlotComment(comment, commentid, idX, idZ, world, uuid);
     }
 
     public void addPlotComment(String[] comment, int commentid, int idX, int idZ, String world, UUID uuid) {
@@ -1292,16 +1225,6 @@ public class SqlManager {
         }
     }
 
-    @Deprecated
-    public void deletePlotAllowed(int idX, int idZ, String player, String world) {
-        IOfflinePlayer op = plugin.getServerBridge().getOfflinePlayer(player);
-        if (op == null) {
-            deletePlotAllowed(idX, idZ, player, null, world);
-        } else {
-            deletePlotAllowed(idX, idZ, player, op.getUniqueId(), world);
-        }
-    }
-
     public void deletePlotAllowed(int idX, int idZ, String player, UUID playerid, String world) {
         PreparedStatement ps = null;
 
@@ -1336,16 +1259,6 @@ public class SqlManager {
         }
     }
 
-    @Deprecated
-    public void deletePlotDenied(int idX, int idZ, String player, String world) {
-        IOfflinePlayer op = plugin.getServerBridge().getOfflinePlayer(player);
-        if (op == null) {
-            deletePlotDenied(idX, idZ, player, null, world);
-        } else {
-            deletePlotDenied(idX, idZ, player, op.getUniqueId(), world);
-        }
-    }
-
     public void deletePlotDenied(int idX, int idZ, String player, UUID playerid, String world) {
         PreparedStatement ps = null;
 
@@ -1362,63 +1275,6 @@ public class SqlManager {
             ps.setInt(1, idX);
             ps.setInt(2, idZ);
             ps.setString(4, world);
-            ps.executeUpdate();
-            conn.commit();
-
-        } catch (SQLException ex) {
-            plugin.getLogger().severe("Delete Exception :");
-            plugin.getLogger().severe("  " + ex.getMessage());
-        } finally {
-            try {
-                if (ps != null) {
-                    ps.close();
-                }
-            } catch (SQLException ex) {
-                plugin.getLogger().severe("Delete Exception (on close) :");
-                plugin.getLogger().severe("  " + ex.getMessage());
-            }
-        }
-    }
-
-    public void deletePlotBid(int idX, int idZ, String player, String world) {
-        PreparedStatement ps = null;
-
-        try {
-            Connection conn = getConnection();
-
-            ps = conn.prepareStatement("DELETE FROM plotmeAuctions WHERE idX = ? and idZ = ? and player = ? and LOWER(world) = ?");
-            ps.setInt(1, idX);
-            ps.setInt(2, idZ);
-            ps.setString(3, player);
-            ps.setString(4, world);
-            ps.executeUpdate();
-            conn.commit();
-
-        } catch (SQLException ex) {
-            plugin.getLogger().severe("Delete Exception :");
-            plugin.getLogger().severe("  " + ex.getMessage());
-        } finally {
-            try {
-                if (ps != null) {
-                    ps.close();
-                }
-            } catch (SQLException ex) {
-                plugin.getLogger().severe("Delete Exception (on close) :");
-                plugin.getLogger().severe("  " + ex.getMessage());
-            }
-        }
-    }
-
-    public void deleteAllPlotBids(int idX, int idZ, String world) {
-        PreparedStatement ps = null;
-
-        try {
-            Connection conn = getConnection();
-
-            ps = conn.prepareStatement("DELETE FROM plotmeAuctions WHERE idX = ? and idZ = ? and LOWER(world) = ?");
-            ps.setInt(1, idX);
-            ps.setInt(2, idZ);
-            ps.setString(3, world);
             ps.executeUpdate();
             conn.commit();
 
@@ -2204,8 +2060,7 @@ public class SqlManager {
                     }
                 }
 
-                if (setAllowed != null)
-                    setAllowed.close();
+                setAllowed.close();
 
                 PreparedStatement statementDenied = conn.prepareStatement("SELECT * FROM plotmeDenied WHERE LOWER(world) = ? AND idX = ? AND idZ = ?");
                 statementDenied.setString(1, world);
@@ -2223,8 +2078,7 @@ public class SqlManager {
                     }
                 }
 
-                if (setDenied != null)
-                    setDenied.close();
+                setDenied.close();
 
                 PreparedStatement statementComment = conn.prepareStatement("SELECT * FROM plotmeComments WHERE LOWER(world) = ? AND idX = ? AND idZ = ?");
                 statementComment.setString(1, world);
@@ -2579,13 +2433,13 @@ public class SqlManager {
                                     for(Plot plot : pmi.getLoadedPlots().values()) {
                                         for(Entry<String, UUID> player : response.entrySet()) {
                                             //Owner
-                                            if(plot.getOwnerId() == null && plot.getOwner() != null && plot.getOwner().equalsIgnoreCase(player.getKey())) {
+                                            if (plot.getOwnerId() == null && plot.getOwner().equalsIgnoreCase(player.getKey())) {
                                                 plot.setOwner(player.getKey());
                                                 plot.setOwnerId(player.getValue());
                                             }
                                             
                                             //Bidder
-                                            if(plot.getCurrentBidderId() == null && plot.getCurrentBidder() != null && plot.getCurrentBidder().equalsIgnoreCase(player.getKey())) {
+                                            if (plot.getCurrentBidderId() == null && plot.getCurrentBidder().equalsIgnoreCase(player.getKey())) {
                                                 plot.setCurrentBidder(player.getKey());
                                                 plot.setCurrentBidderId(player.getValue());
                                             }

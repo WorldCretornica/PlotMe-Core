@@ -2,7 +2,6 @@ package com.worldcretornica.plotme_core.bukkit;
 
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IServerBridge;
-
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.Metrics;
 import org.mcstats.Metrics.Graph;
@@ -35,7 +34,10 @@ public class PlotMe_CorePlugin extends JavaPlugin {
     public IServerBridge getServerObjectBuilder() {
         return serverObjectBuilder;
     }
-    
+
+    /**
+     * Metrics
+     */
     private void doMetric() {
         try {
             Metrics metrics = new Metrics(this);

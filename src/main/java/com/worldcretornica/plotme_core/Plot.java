@@ -405,7 +405,7 @@ public class Plot implements Comparable<Plot> {
             p = plugin.getServerBridge().getPlayer(uuid);
         }
 
-        if (uuid != null && ownerId != null && ownerId.equals(uuid) || uuid == null && owner.equalsIgnoreCase(name)) {
+        if (owner.equalsIgnoreCase(name) || uuid != null && ownerId.equals(uuid)) {
             return true;
         }
 
@@ -422,10 +422,9 @@ public class Plot implements Comparable<Plot> {
             }
             
             UUID u = list.get(str);
-            if (u != null && u.equals(uuid) || uuid == null && str.equalsIgnoreCase(name)) {
+            if (u.equals(uuid) || uuid == null && str.equalsIgnoreCase(name)) {
                 return true;
             }
-
             if (IncludeGroup && str.toLowerCase().startsWith("group:") && p != null)
                 if (p.hasPermission("plotme.group." + str.replace("Group:", "")))
                     return true;
@@ -477,7 +476,7 @@ public class Plot implements Comparable<Plot> {
             }
             
             UUID u = list.get(str);
-            if (str.equalsIgnoreCase(name) || uuid != null && (u != null && u.equals(uuid) || str.toLowerCase().startsWith("group:") && p != null && p.hasPermission("plotme.group." + str.replace("Group:", "")))) {
+            if (str.equalsIgnoreCase(name) || uuid != null && (u.equals(uuid) || str.toLowerCase().startsWith("group:") && p != null && p.hasPermission("plotme.group." + str.replace("Group:", "")))) {
                 return true;
             }
         }

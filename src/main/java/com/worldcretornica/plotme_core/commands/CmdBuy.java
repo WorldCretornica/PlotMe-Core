@@ -15,7 +15,7 @@ public class CmdBuy extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(IPlayer p, String[] args) {
+    public boolean exec(IPlayer p) {
         if (plugin.getPlotMeCoreManager().isEconomyEnabled(p)) {
             if (plugin.cPerms(p, "PlotMe.use.buy") || plugin.cPerms(p, "PlotMe.admin.buy")) {
                 ILocation l = p.getLocation();

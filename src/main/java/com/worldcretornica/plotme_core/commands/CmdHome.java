@@ -74,7 +74,7 @@ public class CmdHome extends PlotCommand {
                     int i = nb - 1;
 
                     for (Plot plot : plugin.getSqlManager().getOwnedPlots(w.getName(), uuid, playername)) {
-                        if (uuid == null && plot.getOwner().equalsIgnoreCase(playername) || uuid != null && plot.getOwnerId() != null && plot.getOwnerId().equals(uuid)) {
+                        if (plot.getOwnerId().equals(uuid) || uuid == null && plot.getOwner().equalsIgnoreCase(playername)) {
                             if (i == 0) {
                                 PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(w);
 

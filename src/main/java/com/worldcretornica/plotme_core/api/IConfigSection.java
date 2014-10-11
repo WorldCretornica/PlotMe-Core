@@ -7,43 +7,47 @@ import java.util.Set;
 
 public interface IConfigSection {
 
-    public List<Integer> getIntegerList(String configpath);
-    
-    public void loadConfig(String worldPath);
-    
-    public void saveConfig();
+    List<Integer> getIntegerList(String configpath);
 
-    public void set(String string, Object value);
+    void loadConfig(String worldPath);
 
-    public List<String> getStringList(String configpath);
+    void saveConfig();
 
-    public String getString(String string);
-    public String getString(String string, String defaultvalue);
+    void set(String string, Object value);
 
-    public int getInt(String string);
-    public int getInt(String string, int defaultvalue);
-    
-    public IConfigSection getConfigurationSection(String path);
+    List<String> getStringList(String configpath);
 
-    public boolean getBoolean(String string);
-    public boolean getBoolean(String string, boolean defaultvalue);
+    String getString(String string);
 
-    public double getDouble(String string);
-    public double getDouble(String string, double defaultvalue);
+    String getString(String string, String defaultvalue);
 
-    public boolean contains(String string);
+    int getInt(String string);
 
-    public Set<String> getKeys(boolean b);
+    int getInt(String string, int defaultvalue);
 
-    public IConfigSection createSection(String string);
+    IConfigSection getConfigurationSection(String path);
 
-    public void copyDefaults(boolean b);
+    boolean getBoolean(String string);
 
-    public Object get(String path);
+    boolean getBoolean(String string, boolean defaultvalue);
 
-    public void reloadConfig();
+    double getDouble(String string);
 
-    public void setDefaults(IConfigSection defConfig);
+    double getDouble(String string, double defaultvalue);
 
-    public void save(File configFile) throws IOException;
+    boolean contains(String string);
+
+    Set<String> getKeys(boolean b);
+
+    IConfigSection createSection(String string);
+
+    void copyDefaults(boolean b);
+
+    Object get(String path);
+
+    void reloadConfig();
+
+    void setDefaults(IConfigSection defConfig);
+
+    void save(File configFile) throws IOException;
 }

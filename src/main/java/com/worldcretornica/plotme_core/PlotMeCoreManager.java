@@ -218,10 +218,21 @@ public class PlotMeCoreManager {
         }
     }
 
-    public boolean isPlotWorld(IWorld w) {
-        return !(w == null || getGenMan(w) == null) && plotmaps.containsKey(w.getName().toLowerCase());
+    /**
+     * Checks if world is a PlotWorld
+     *
+     * @param world world to be checked
+     * @return true if world is plotworld, false otherwise
+     */
+    public boolean isPlotWorld(IWorld world) {
+        return !(world == null || getGenMan(world) == null) && plotmaps.containsKey(world.getName().toLowerCase());
     }
 
+    /**
+     * Checks if world is a PlotWorld
+     * @param name name of the world to be checked
+     * @return true if world is plotworld, false otherwise
+     */
     public boolean isPlotWorld(String name) {
         if (getGenMan(name) == null) {
             return false;
@@ -230,6 +241,11 @@ public class PlotMeCoreManager {
         }
     }
 
+    /**
+     * Checks if location is a PlotWorld
+     * @param l location to be checked
+     * @return true if world is plotworld, false otherwise
+     */
     public boolean isPlotWorld(ILocation l) {
         if (l == null || getGenMan(l) == null) {
             return false;

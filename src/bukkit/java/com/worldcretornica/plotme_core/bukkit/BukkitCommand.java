@@ -1,6 +1,7 @@
 package com.worldcretornica.plotme_core.bukkit;
 
 import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitCommandSender;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
 import com.worldcretornica.plotme_core.commands.*;
@@ -95,7 +96,7 @@ public class BukkitCommand implements CommandExecutor {
     public boolean onCommand(CommandSender s, Command c, String l, String[] args) {
         if (l.equalsIgnoreCase("plotme") || l.equalsIgnoreCase("plot") || l.equalsIgnoreCase("p")) {
             if (!(s instanceof Player)) {
-                if (args.length == 0 || args[0].equalsIgnoreCase("1")) {
+                if (args.length == 0) {
                     s.sendMessage(C("ConsoleHelpMain"));
                     s.sendMessage(" - /plotme reload");
                     s.sendMessage(C("ConsoleHelpReload"));
@@ -111,9 +112,10 @@ public class BukkitCommand implements CommandExecutor {
                     if (a0.equalsIgnoreCase(C("CommandCreateWorld"))) {
                         return createworld.exec(new BukkitCommandSender(s), args);
                     }
+
                 }
             } else {
-                BukkitPlayer p = new BukkitPlayer((Player) s);
+                IPlayer p = new BukkitPlayer((Player) s);
 
                 if (args.length == 0) {
                     return showhelp.exec(p, 1);
@@ -172,7 +174,7 @@ public class BukkitCommand implements CommandExecutor {
                             return tp.exec(p, args);
                         }
                         if (a0.equalsIgnoreCase(C("CommandClear"))) {
-                            return clear.exec(p, args);
+                            return clear.exec(p);
                         }
                         if (a0.equalsIgnoreCase(C("CommandReset"))) {
                             return reset.exec(p, args);
@@ -225,13 +227,13 @@ public class BukkitCommand implements CommandExecutor {
                             return sell.exec(p, args);
                         }
                         if (a0.equalsIgnoreCase(C("CommandDispose"))) {
-                            return dispose.exec(p, args);
+                            return dispose.exec(p);
                         }
                         if (a0.equalsIgnoreCase(C("CommandAuction"))) {
                             return auction.exec(p, args);
                         }
                         if (a0.equalsIgnoreCase(C("CommandBuy"))) {
-                            return buy.exec(p, args);
+                            return buy.exec(p);
                         }
                         if (a0.equalsIgnoreCase(C("CommandBid"))) {
                             return bid.exec(p, args);

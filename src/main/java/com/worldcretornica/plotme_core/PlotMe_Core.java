@@ -279,18 +279,16 @@ public class PlotMe_Core {
     }
 
     public int getPlotLimit(IPlayer p) {
-        int max = -2;
 
         if (p.hasPermission("plotme.limit.*")) {
             return -1;
-        } else {
-            int maxlimit = 255;
-            for (int ctr = 0; ctr < maxlimit; ctr++) {
-                if (p.hasPermission("plotme.limit." + ctr)) {
-                    max = ctr;
-                }
+        }
+        int maxlimit = 255;
+        int max = -2;
+        for (int ctr = 0; ctr < maxlimit; ctr++) {
+            if (p.hasPermission("plotme.limit." + ctr)) {
+                max = ctr;
             }
-
         }
 
         if (max == -2) {
