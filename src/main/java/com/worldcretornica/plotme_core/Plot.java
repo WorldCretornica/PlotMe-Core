@@ -405,7 +405,7 @@ public class Plot implements Comparable<Plot> {
             p = plugin.getServerBridge().getPlayer(uuid);
         }
 
-        if (owner.equalsIgnoreCase(name) || uuid != null && ownerId.equals(uuid)) {
+        if (uuid == null && owner.equalsIgnoreCase(name) || uuid != null && ownerId.equals(uuid)) {
             return true;
         }
 
