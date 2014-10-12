@@ -2433,13 +2433,13 @@ public class SqlManager {
                                     for(Plot plot : pmi.getLoadedPlots().values()) {
                                         for(Entry<String, UUID> player : response.entrySet()) {
                                             //Owner
-                                            if (plot.getOwnerId() == null && plot.getOwner().equalsIgnoreCase(player.getKey())) {
+                                            if (plot.getOwnerId() == null && plot.getOwner() != null && plot.getOwner().equalsIgnoreCase(player.getKey())) {
                                                 plot.setOwner(player.getKey());
                                                 plot.setOwnerId(player.getValue());
                                             }
                                             
                                             //Bidder
-                                            if (plot.getCurrentBidderId() == null && plot.getCurrentBidder().equalsIgnoreCase(player.getKey())) {
+                                            if (plot.getCurrentBidderId() == null && plot.getCurrentBidder() != null && plot.getCurrentBidder().equalsIgnoreCase(player.getKey())) {
                                                 plot.setCurrentBidder(player.getKey());
                                                 plot.setCurrentBidderId(player.getValue());
                                             }

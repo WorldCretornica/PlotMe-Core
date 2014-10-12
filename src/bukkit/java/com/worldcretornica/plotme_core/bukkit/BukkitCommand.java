@@ -203,7 +203,7 @@ public class BukkitCommand implements CommandExecutor {
                             return reload.exec(new BukkitCommandSender(s), args);
                         }
                         if (a0.equalsIgnoreCase(C("CommandWEAnywhere"))) {
-                            return weanywhere.exec(p, args);
+                            return weanywhere.exec(p);
                         }
                         if (a0.equalsIgnoreCase(C("CommandList"))) {
                             return plotlist.exec(p, args);

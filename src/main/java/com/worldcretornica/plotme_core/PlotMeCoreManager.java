@@ -791,12 +791,12 @@ public class PlotMeCoreManager {
         this.playersignoringwelimit = playersignoringwelimit;
     }
 
-    public boolean addPlayerIgnoringWELimit(UUID uuid) {
-        return this.playersignoringwelimit.add(uuid);
+    public void addPlayerIgnoringWELimit(UUID uuid) {
+        this.playersignoringwelimit.add(uuid);
     }
 
-    public boolean removePlayerIgnoringWELimit(UUID uuid) {
-        return this.playersignoringwelimit.remove(uuid);
+    public void removePlayerIgnoringWELimit(UUID uuid) {
+        this.playersignoringwelimit.remove(uuid);
     }
 
     public boolean isPlayerIgnoringWELimit(UUID uuid) {
