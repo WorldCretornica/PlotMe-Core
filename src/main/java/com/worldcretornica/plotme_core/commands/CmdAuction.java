@@ -34,10 +34,8 @@ public class CmdAuction extends PlotCommand {
                             IWorld w = p.getWorld();
 
                             if (plot.isAuctionned()) {
-                                if (plot.getCurrentBidderId() != null && !plugin.cPerms(p, "PlotMe.admin.auction")) {
-                                    p.sendMessage(RED + C("MsgPlotHasBidsAskAdmin"));
-                                } else {
-                                    if (plot.getCurrentBidderId() != null) {
+                                if (plot.getCurrentBidderId() != null) {
+                                    if (plugin.cPerms(p, "PlotMe.admin.auction")) {
                                         IOfflinePlayer playercurrentbidder = sob.getOfflinePlayer(plot.getCurrentBidderId());
                                         EconomyResponse er = sob.depositPlayer(playercurrentbidder, plot.getCurrentBid());
 
@@ -53,8 +51,27 @@ public class CmdAuction extends PlotCommand {
                                             p.sendMessage(RED + er.errorMessage);
                                             plugin.getUtil().warn(er.errorMessage);
                                         }
-                                    }
 
+                                        plot.setAuctionned(false);
+                                        plugin.getPlotMeCoreManager().adjustWall(p.getLocation());
+                                        plugin.getPlotMeCoreManager().setSellSign(w, plot);
+                                        plot.setCurrentBid(0);
+                                        plot.setCurrentBidder("");
+
+                                        plot.updateField("currentbid", 0);
+                                        plot.updateField("currentbidder", "");
+                                        plot.updateField("currentbidderid", null);
+                                        plot.updateField("auctionned", false);
+
+                                        p.sendMessage(C("MsgAuctionCancelled"));
+
+                                        if (isAdvancedLogging()) {
+                                            plugin.getLogger().info(LOG + name + " " + C("MsgStoppedTheAuctionOnPlot") + " " + id);
+                                        }
+                                    } else {
+                                        p.sendMessage(RED + C("MsgPlotHasBidsAskAdmin"));
+                                    }
+                                } else {
                                     plot.setAuctionned(false);
                                     plugin.getPlotMeCoreManager().adjustWall(p.getLocation());
                                     plugin.getPlotMeCoreManager().setSellSign(w, plot);
@@ -113,6 +130,7 @@ public class CmdAuction extends PlotCommand {
                     }
                 } else {
                     p.sendMessage(RED + C("MsgPermissionDenied"));
+                    return false;
                 }
             } else {
                 p.sendMessage(RED + C("MsgSellingPlotsIsDisabledWorld"));

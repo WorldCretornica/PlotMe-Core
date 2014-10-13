@@ -176,6 +176,7 @@ public class CmdSell extends PlotCommand {
                     }
                 } else {
                     p.sendMessage(RED + C("MsgPermissionDenied"));
+                    return false;
                 }
             } else {
                 p.sendMessage(RED + C("MsgSellingPlotsIsDisabledWorld"));

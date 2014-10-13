@@ -103,6 +103,7 @@ public class CmdBid extends PlotCommand {
                 }
             } else {
                 p.sendMessage(RED + C("MsgPermissionDenied"));
+                return false;
             }
         } else {
             p.sendMessage(RED + C("MsgEconomyDisabledWorld"));

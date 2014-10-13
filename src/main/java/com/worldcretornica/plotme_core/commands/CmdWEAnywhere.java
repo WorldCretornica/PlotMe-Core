@@ -42,6 +42,7 @@ public class CmdWEAnywhere extends PlotCommand {
             }
         } else {
             p.sendMessage(RED + C("MsgPermissionDenied"));
+            return false;
         }
         return true;
     }

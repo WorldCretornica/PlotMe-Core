@@ -10,7 +10,7 @@ public class CmdInfo extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(IPlayer p, String[] args) {
+    public boolean exec(IPlayer p) {
         if (plugin.cPerms(p, "PlotMe.use.info")) {
             if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
                 String id = plugin.getPlotMeCoreManager().getPlotId(p.getLocation());
@@ -20,7 +20,7 @@ public class CmdInfo extends PlotCommand {
                 } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, p)) {
                     Plot plot = plugin.getPlotMeCoreManager().getPlotById(p, id);
 
-                    p.sendMessage(GREEN + C("InfoId") + ": " + AQUA + id
+                    p.sendMessage(GREEN + "ID: " + AQUA + id
                                           + GREEN + " " + C("InfoOwner") + ": " + AQUA + plot.getOwner()
                                           + GREEN + " " + C("InfoBiome") + ": " + AQUA + Util().FormatBiome(plot.getBiome().name()));
 
@@ -56,6 +56,7 @@ public class CmdInfo extends PlotCommand {
             }
         } else {
             p.sendMessage(RED + C("MsgPermissionDenied"));
+            return false;
         }
         return true;
     }

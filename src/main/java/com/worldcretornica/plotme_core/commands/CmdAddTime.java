@@ -35,10 +35,10 @@ public class CmdAddTime extends PlotCommand {
                 }
             } else {
                 p.sendMessage(RED + C("MsgNotPlotWorld"));
-                return true;
             }
         } else {
             p.sendMessage(RED + C("MsgPermissionDenied"));
+            return false;
         }
         return true;
     }

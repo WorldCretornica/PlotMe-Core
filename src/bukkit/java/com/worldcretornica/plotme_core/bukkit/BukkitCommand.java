@@ -104,15 +104,11 @@ public class BukkitCommand implements CommandExecutor {
                 } else {
                     String a0 = args[0];
                     if (a0.equalsIgnoreCase("reload")) {
-                        return reload.exec(new BukkitCommandSender(s), args);
+                        return reload.exec(new BukkitCommandSender(s));
                     }
                     if (a0.equalsIgnoreCase(C("CommandResetExpired"))) {
                         return resetexpired.exec(new BukkitCommandSender(s), args);
                     }
-                    if (a0.equalsIgnoreCase(C("CommandCreateWorld"))) {
-                        return createworld.exec(new BukkitCommandSender(s), args);
-                    }
-
                 }
             } else {
                 IPlayer p = new BukkitPlayer((Player) s);
@@ -153,7 +149,7 @@ public class BukkitCommand implements CommandExecutor {
                             return auto.exec(p, args);
                         }
                         if (a0.equalsIgnoreCase(C("CommandInfo")) || a0.equalsIgnoreCase("i")) {
-                            return info.exec(p, args);
+                            return info.exec(p);
                         }
                         if (a0.equalsIgnoreCase(C("CommandComment"))) {
                             return comment.exec(p, args);
@@ -167,8 +163,8 @@ public class BukkitCommand implements CommandExecutor {
                         if (a0.equalsIgnoreCase(C("CommandBiomelist"))) {
                             return biomelist.exec(p, args);
                         }
-                        if (a0.equalsIgnoreCase(C("CommandId"))) {
-                            return id.exec(p, args);
+                        if (a0.equalsIgnoreCase("id")) {
+                            return id.exec(p);
                         }
                         if (a0.equalsIgnoreCase(C("CommandTp"))) {
                             return tp.exec(p, args);
@@ -200,7 +196,7 @@ public class BukkitCommand implements CommandExecutor {
                             return move.exec(p, args);
                         }
                         if (a0.equalsIgnoreCase("reload")) {
-                            return reload.exec(new BukkitCommandSender(s), args);
+                            return reload.exec(new BukkitCommandSender(s));
                         }
                         if (a0.equalsIgnoreCase(C("CommandWEAnywhere"))) {
                             return weanywhere.exec(p);
@@ -221,7 +217,7 @@ public class BukkitCommand implements CommandExecutor {
                             return donelist.exec(p, args);
                         }
                         if (a0.equalsIgnoreCase(C("CommandProtect"))) {
-                            return protect.exec(p, args);
+                            return protect.exec(p);
                         }
                         if (a0.equalsIgnoreCase(C("CommandSell"))) {
                             return sell.exec(p, args);
@@ -240,9 +236,6 @@ public class BukkitCommand implements CommandExecutor {
                         }
                         if (a0.startsWith(C("CommandHome")) || a0.startsWith("h")) {
                             return home.exec(p, args);
-                        }
-                        if (a0.equalsIgnoreCase(C("CommandResetExpired"))) {
-                            return resetexpired.exec(p, args);
                         }
                         if (a0.equalsIgnoreCase(C("CommandCreateWorld"))) {
                             return createworld.exec(p, args);

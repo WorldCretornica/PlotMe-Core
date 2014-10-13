@@ -91,10 +91,6 @@ public class PlotMe_Core {
     public Logger getLogger() {
         return getServerBridge().getLogger();
     }
-    
-    public String getName() {
-        return "PlotMe-Core";
-    }
 
     private void setupConfig() {
         // Get the config we will be working with

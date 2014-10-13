@@ -490,15 +490,11 @@ public class PlotMeCoreManager {
         String line2 = "";
         String id = plot.getId();
 
-        if ((Util().C("SignId") + id).length() > 16) {
-            line1 = (Util().C("SignId") + id).substring(0, 16);
-            if ((Util().C("SignId") + id).length() > 32) {
-                line2 = (Util().C("SignId") + id).substring(16, 32);
-            } else {
-                line2 = (Util().C("SignId") + id).substring(16);
-            }
+        if (("ID: " + id).length() > 16) {
+            line1 = ("ID: " + id).substring(0, 16);
+            line2 = ("ID: " + id).substring(16);
         } else {
-            line1 = Util().C("SignId") + id;
+            line1 = "ID: " + id;
         }
         String line3 = plot.getOwner();
         String line4 = "";
@@ -672,11 +668,7 @@ public class PlotMeCoreManager {
     public boolean isPlotAvailable(String id, String world) {
         PlotMapInfo pmi = getMap(world);
 
-        if (pmi != null) {
-            return pmi.getPlot(id) == null;
-        } else {
-            return false;
-        }
+        return pmi != null && pmi.getPlot(id) == null;
     }
 
     public String getPlotId(ILocation l) {

@@ -1,7 +1,7 @@
 package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.*;
+import com.worldcretornica.plotme_core.api.ICommandSender;
 
 public class CmdReload extends PlotCommand {
 
@@ -9,18 +9,14 @@ public class CmdReload extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(ICommandSender s, String[] args) {
-        if (!(s instanceof IPlayer) || plugin.cPerms(s, "PlotMe.admin.reload")) {
-            sob.getEventFactory().callPlotReloadEvent();
+    public boolean exec(ICommandSender s) {
+        sob.getEventFactory().callPlotReloadEvent();
 
-            plugin.reload();
-            s.sendMessage(C("MsgReloadedSuccess"));
+        plugin.reload();
+        s.sendMessage(C("MsgReloadedSuccess"));
 
-            if (isAdvancedLogging()) {
-                plugin.getLogger().info(LOG + s.getName() + " " + C("MsgReloadedConfigurations"));
-            }
-        } else {
-            s.sendMessage(RED + C("MsgPermissionDenied"));
+        if (isAdvancedLogging()) {
+            plugin.getLogger().info(LOG + s.getName() + " " + C("MsgReloadedConfigurations"));
         }
         return true;
     }

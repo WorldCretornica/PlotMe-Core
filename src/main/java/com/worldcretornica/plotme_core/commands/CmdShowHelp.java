@@ -252,14 +252,14 @@ public class CmdShowHelp extends PlotCommand {
                 p.sendMessage(AQUA + " " + C("HelpDone"));
             } else if (allowedcmd.equalsIgnoreCase("tp")) {
                 if (sob.getConfig().getBoolean("allowWorldTeleport")) {
-                    p.sendMessage(GREEN + " /plotme " + C("CommandTp") + " <" + C("WordId") + "> [" + C("WordWorld") + "]");
+                    p.sendMessage(GREEN + " /plotme " + C("CommandTp") + " <ID> [" + C("WordWorld") + "]");
                 } else {
-                    p.sendMessage(GREEN + " /plotme " + C("CommandTp") + " <" + C("WordId") + ">");
+                    p.sendMessage(GREEN + " /plotme " + C("CommandTp") + " <ID>");
                 }
 
                 p.sendMessage(AQUA + " " + C("HelpTp"));
             } else if (allowedcmd.equalsIgnoreCase("id")) {
-                p.sendMessage(GREEN + " /plotme " + C("CommandId"));
+                p.sendMessage(GREEN + " /plotme id");
                 p.sendMessage(AQUA + " " + C("HelpId"));
             } else if (allowedcmd.equalsIgnoreCase("clear")) {
                 p.sendMessage(GREEN + " /plotme " + C("CommandClear"));
@@ -344,9 +344,6 @@ public class CmdShowHelp extends PlotCommand {
             } else if (allowedcmd.equalsIgnoreCase("auction")) {
                 p.sendMessage(GREEN + " /plotme " + C("CommandAuction") + " [" + C("WordAmount") + "]");
                 p.sendMessage(AQUA + " " + C("HelpAuction") + " " + C("WordDefault") + " : " + RESET + "1");
-            } else if (allowedcmd.equalsIgnoreCase("resetexpired")) {
-                p.sendMessage(GREEN + " /plotme " + C("CommandResetExpired") + " <" + C("WordWorld") + ">");
-                p.sendMessage(AQUA + " " + C("HelpResetExpired"));
             } else if (allowedcmd.equalsIgnoreCase("bid")) {
                 p.sendMessage(GREEN + " /plotme " + C("CommandBid") + " <" + C("WordAmount") + ">");
                 p.sendMessage(AQUA + " " + C("HelpBid"));

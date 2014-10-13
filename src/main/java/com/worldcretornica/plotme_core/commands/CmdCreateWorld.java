@@ -81,7 +81,7 @@ public class CmdCreateWorld extends PlotCommand {
                         parameters.put("worldname", args[1]);
 
                         if (!sob.checkWorldName(args[1])) {
-                            cs.sendMessage("[" + plugin.getName() + "] " + C("ErrInvalidWorldName") + " '" + parameters.get("worldname") + "'");
+                            cs.sendMessage("[PlotMe-Core] " + C("ErrInvalidWorldName") + " '" + parameters.get("worldname") + "'");
                             return true;
                         }
                     }
@@ -94,7 +94,7 @@ public class CmdCreateWorld extends PlotCommand {
 
                     //Check if world exists
                     if (sob.worldExists(parameters.get("worldname"))) {
-                        cs.sendMessage("[" + plugin.getName() + "] " + C("ErrWorldExists") + " '" + parameters.get("worldname") + "'");
+                        cs.sendMessage("[PlotMe-Core] " + C("ErrWorldExists") + " '" + parameters.get("worldname") + "'");
                         return false;
                     }
 
@@ -107,11 +107,11 @@ public class CmdCreateWorld extends PlotCommand {
                         genparameters = generator.getManager().getDefaultGenerationConfig();
 
                         if (genparameters == null) {
-                            cs.sendMessage("[" + plugin.getName() + "] " + C("ErrCannotCreateGen1") + " '" + parameters.get("generator") + "' " + C("ErrCannotCreateGen2"));
+                            cs.sendMessage("[PlotMe-Core] " + C("ErrCannotCreateGen1") + " '" + parameters.get("generator") + "' " + C("ErrCannotCreateGen2"));
                             return false;
                         }
                     } else {
-                        cs.sendMessage("[" + plugin.getName() + "] " + C("ErrCannotCreateGen1") + " '" + parameters.get("generator") + "' " + C("ErrCannotCreateGen3"));
+                        cs.sendMessage("[PlotMe-Core] " + C("ErrCannotCreateGen1") + " '" + parameters.get("generator") + "' " + C("ErrCannotCreateGen3"));
                         return false;
                     }
 
@@ -168,6 +168,7 @@ public class CmdCreateWorld extends PlotCommand {
             }
         } else {
             cs.sendMessage(RED + C("MsgPermissionDenied"));
+            return false;
         }
         return true;
     }
