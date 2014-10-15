@@ -279,9 +279,8 @@ public class PlotMe_Core {
         if (p.hasPermission("plotme.limit.*")) {
             return -1;
         }
-        int maxlimit = 255;
         int max = -2;
-        for (int ctr = 0; ctr < maxlimit; ctr++) {
+        for (int ctr = 0; ctr < 255; ctr++) {
             if (p.hasPermission("plotme.limit." + ctr)) {
                 max = ctr;
             }

@@ -17,10 +17,9 @@ public class CmdBiomeList extends PlotCommand {
             List<String> biomes = sob.getBiomes();
             
             Collections.sort(biomes);
-            
-            int biomesperpage = 19;
+
             int page = 1;
-            int pages = (int) Math.ceil((double) biomes.size() / biomesperpage);
+            int pages = (int) Math.ceil((double) biomes.size() / 19);
             
             if (args.length > 1 && !args[1].isEmpty()) {
                 try{
@@ -33,12 +32,12 @@ public class CmdBiomeList extends PlotCommand {
             }
 
             p.sendMessage(C("WordBiomes") + " (" + page + "/" + pages + ") : ");
-            
-            for (int ctr = 0; ctr < biomesperpage; ctr++) {
-                if (biomes.size() <= ctr + (page - 1) * biomesperpage) {
+
+            for (int ctr = 0; ctr < 19; ctr++) {
+                if (biomes.size() <= ctr + (page - 1) * 19) {
                     return true;
                 } else {
-                    p.sendMessage("  " + AQUA + biomes.get(ctr + (page - 1) * biomesperpage));
+                    p.sendMessage("  " + AQUA + biomes.get(ctr + (page - 1) * 19));
                 }
             }
         } else {

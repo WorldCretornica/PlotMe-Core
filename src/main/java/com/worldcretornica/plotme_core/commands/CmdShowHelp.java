@@ -108,9 +108,6 @@ public class CmdShowHelp extends PlotCommand {
         if (plugin.cPerms(p, "PlotMe.admin.addtime")) {
             allowed_commands.add("addtime");
         }
-        if (plugin.cPerms(p, "PlotMe.admin.resetexpired")) {
-            allowed_commands.add("resetexpired");
-        }
 
         PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(p);
 
@@ -132,8 +129,7 @@ public class CmdShowHelp extends PlotCommand {
             }
         }
 
-        int max = 4;
-        int maxpage = (int) Math.ceil((double) allowed_commands.size() / max);
+        int maxpage = (int) Math.ceil((double) allowed_commands.size() / 4);
 
         if (page > maxpage) {
             page = 1;
@@ -141,7 +137,7 @@ public class CmdShowHelp extends PlotCommand {
 
         p.sendMessage(RED + " ---==" + AQUA + C("HelpTitle") + " " + page + "/" + maxpage + RED + "==--- ");
 
-        for (int ctr = (page - 1) * max; ctr < (page * max) && ctr < allowed_commands.size(); ctr++) {
+        for (int ctr = (page - 1) * 4; ctr < (page * 4) && ctr < allowed_commands.size(); ctr++) {
             String allowedcmd = allowed_commands.get(ctr);
 
             if (allowedcmd.equalsIgnoreCase("limit")) {
@@ -349,7 +345,6 @@ public class CmdShowHelp extends PlotCommand {
                 p.sendMessage(AQUA + " " + C("HelpBid"));
             }
         }
-
         return true;
     }
 }

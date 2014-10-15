@@ -109,6 +109,9 @@ public class BukkitCommand implements CommandExecutor {
                     if (a0.equalsIgnoreCase(C("CommandResetExpired"))) {
                         return resetexpired.exec(new BukkitCommandSender(s), args);
                     }
+                    if (a0.equalsIgnoreCase(C("CommandCreateWorld"))) {
+                        return createworld.exec(new BukkitCommandSender(s), args);
+                    }
                 }
             } else {
                 IPlayer p = new BukkitPlayer((Player) s);
@@ -173,7 +176,7 @@ public class BukkitCommand implements CommandExecutor {
                             return clear.exec(p);
                         }
                         if (a0.equalsIgnoreCase(C("CommandReset"))) {
-                            return reset.exec(p, args);
+                            return reset.exec(p);
                         }
                         if (a0.equalsIgnoreCase(C("CommandAdd")) || a0.equalsIgnoreCase("+")) {
                             return add.exec(p, args);
@@ -208,10 +211,10 @@ public class BukkitCommand implements CommandExecutor {
                             return expired.exec(p, args);
                         }
                         if (a0.equalsIgnoreCase(C("CommandAddtime"))) {
-                            return addtime.exec(p, args);
+                            return addtime.exec(p);
                         }
                         if (a0.equalsIgnoreCase(C("CommandDone"))) {
-                            return done.exec(p, args);
+                            return done.exec(p);
                         }
                         if (a0.equalsIgnoreCase(C("CommandDoneList"))) {
                             return donelist.exec(p, args);
@@ -236,9 +239,6 @@ public class BukkitCommand implements CommandExecutor {
                         }
                         if (a0.startsWith(C("CommandHome")) || a0.startsWith("h")) {
                             return home.exec(p, args);
-                        }
-                        if (a0.equalsIgnoreCase(C("CommandCreateWorld"))) {
-                            return createworld.exec(p, args);
                         }
                     } else {
                         return showhelp.exec(p, ipage);

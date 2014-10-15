@@ -16,7 +16,7 @@ public class CmdReset extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(IPlayer p, String[] args) {
+    public boolean exec(IPlayer p) {
         if (plugin.cPerms(p, "PlotMe.admin.reset") || plugin.cPerms(p, "PlotMe.use.reset")) {
             if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
                 Plot plot = plugin.getPlotMeCoreManager().getPlotById(p.getLocation());

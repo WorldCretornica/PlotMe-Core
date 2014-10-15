@@ -208,16 +208,6 @@ public class PlotMeCoreManager {
         return null;
     }
 
-    public IWorld getFirstWorld(String player) {
-        String world = plugin.getSqlManager().getFirstWorld(player);
-
-        if (!world.isEmpty()) {
-            return plugin.getServerBridge().getWorld(world);
-        } else {
-            return null;
-        }
-    }
-
     /**
      * Checks if world is a PlotWorld
      *
@@ -715,11 +705,6 @@ public class PlotMeCoreManager {
         } else {
             getGenMan(w).adjustPlotFor(w, id, true, plot.isProtect(), plot.isAuctionned(), plot.isForSale());
         }
-    }
-
-    public void adjustWall(IWorld w, Plot plot) {
-        String id = plot.getId();
-        getGenMan(w).adjustPlotFor(w, id, true, plot.isProtect(), plot.isAuctionned(), plot.isForSale());
     }
 
     public void removeOwnerSign(IWorld w, String id) {

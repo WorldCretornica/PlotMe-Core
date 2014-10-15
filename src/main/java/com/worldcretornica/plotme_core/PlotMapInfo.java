@@ -93,10 +93,10 @@ public class PlotMapInfo {
     }
 
     public String getNextFreed() {
-        if (!freedplots.isEmpty()) {
-            return freedplots.get(0);
-        } else {
+        if (freedplots.isEmpty()) {
             return config.getString("NextFreed");
+        } else {
+            return freedplots.get(0);
         }
     }
 

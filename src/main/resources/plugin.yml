@@ -62,7 +62,6 @@ permissions:
         plotme.admin.undeny: true
         plotme.admin.bypassdeny: true
         plotme.admin.buildanywhere: true
-        plotme.admin.createworld: true
     plotme.use.buy:
       description: Gives the buy command
     plotme.use.sell:
@@ -161,5 +160,3 @@ permissions:
       description: Gives the expired command
     plotme.admin.buildanywhere:
       description: Allows to build anywhere in the plot world
-    plotme.admin.createworld:
-      description: Allows to create a new plot world
