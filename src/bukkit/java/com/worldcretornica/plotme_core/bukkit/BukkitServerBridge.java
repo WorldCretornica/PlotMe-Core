@@ -12,10 +12,8 @@ import com.worldcretornica.plotme_core.bukkit.listener.BukkitPlayerListener;
 import com.worldcretornica.plotme_core.bukkit.listener.BukkitPlotDenyListener;
 import com.worldcretornica.plotme_core.bukkit.listener.BukkitPlotListener;
 import com.worldcretornica.plotme_core.bukkit.listener.BukkitPlotWorldEditListener;
-
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
-
 import org.bukkit.*;
 import org.bukkit.World.Environment;
 import org.bukkit.block.Biome;
@@ -276,8 +274,8 @@ public class BukkitServerBridge implements IServerBridge {
         try 
         {
             config.load(configfile);
+        } catch (FileNotFoundException ignored) {
         }
-        catch (FileNotFoundException e) {} 
         catch (IOException e) 
         {
             plugin.getLogger().severe("Can't read configuration file");
@@ -425,12 +423,9 @@ public class BukkitServerBridge implements IServerBridge {
         if (bukkitplugin == null) {
             cs.sendMessage("[" + plugin.getName() + "] " + plugin.getAPI().getUtil().C("ErrCannotFindWorldGen") + " '" + generator + "'");
             return false;
-        } else {
-            //Create the generator configurations
-            if (!bukkitplugin.getManager().createConfig(worldname, args, cs)) {
-                cs.sendMessage("[" + plugin.getName() + "] " + plugin.getAPI().getUtil().C("ErrCannotCreateGen1") + " '" + generator + "' " + plugin.getAPI().getUtil().C("ErrCannotCreateGen2"));
-                return false;
-            }
+        } else if (!bukkitplugin.getManager().createConfig(worldname, args, cs)) { //Create the generator configurations
+            cs.sendMessage("[" + plugin.getName() + "] " + plugin.getAPI().getUtil().C("ErrCannotCreateGen1") + " '" + generator + "' " + plugin.getAPI().getUtil().C("ErrCannotCreateGen2"));
+            return false;
         }
 
         PlotMapInfo tempPlotInfo = new PlotMapInfo(plugin.getAPI(), worldname);
@@ -505,7 +500,6 @@ public class BukkitServerBridge implements IServerBridge {
         //Are we using multiverse?
         if (getMultiverse() != null) {
             boolean success = false;
-
             if (getMultiverse().isEnabled()) {
                 success = plugin.getServerObjectBuilder().addMultiverseWorld(worldname, "NORMAL", seed.toString(), "NORMAL", true, generator);
 

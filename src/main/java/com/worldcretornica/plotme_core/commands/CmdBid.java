@@ -57,16 +57,16 @@ public class CmdBid extends PlotCommand {
                                             if (playercurrentbidder != null) {
                                                 EconomyResponse er2 = sob.depositPlayer(playercurrentbidder, currentbid);
 
-                                                if (!er2.transactionSuccess()) {
-                                                    p.sendMessage(er2.errorMessage);
-                                                    Util().warn(er2.errorMessage);
-                                                } else {
+                                                if (er2.transactionSuccess()) {
                                                     for (IPlayer player : sob.getOnlinePlayers()) {
                                                         if (player.getName().equalsIgnoreCase(currentbidder)) {
                                                             player.sendMessage(C("MsgOutbidOnPlot") + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner() + ". " + Util().moneyFormat(bid));
                                                             break;
                                                         }
                                                     }
+                                                } else {
+                                                    p.sendMessage(er2.errorMessage);
+                                                    Util().warn(er2.errorMessage);
                                                 }
                                             }
 
@@ -103,6 +103,7 @@ public class CmdBid extends PlotCommand {
                 }
             } else {
                 p.sendMessage(RED + C("MsgPermissionDenied"));
+                return false;
             }
         } else {
             p.sendMessage(RED + C("MsgEconomyDisabledWorld"));

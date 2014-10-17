@@ -1,9 +1,9 @@
 package com.worldcretornica.plotme_core.commands;
 
-import java.util.UUID;
-
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IPlayer;
+
+import java.util.UUID;
 
 public class CmdWEAnywhere extends PlotCommand {
 
@@ -11,7 +11,7 @@ public class CmdWEAnywhere extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(IPlayer p, String[] args) {
+    public boolean exec(IPlayer p) {
         if (plugin.cPerms(p, "PlotMe.admin.weanywhere")) {
             String name = p.getName();
             UUID uuid = p.getUniqueId();
@@ -42,6 +42,7 @@ public class CmdWEAnywhere extends PlotCommand {
             }
         } else {
             p.sendMessage(RED + C("MsgPermissionDenied"));
+            return false;
         }
         return true;
     }

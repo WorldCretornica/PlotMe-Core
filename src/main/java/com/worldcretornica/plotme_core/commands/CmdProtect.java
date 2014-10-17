@@ -13,7 +13,7 @@ public class CmdProtect extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(IPlayer p, String[] args) {
+    public boolean exec(IPlayer p) {
         if (plugin.cPerms(p, "PlotMe.admin.protect") || plugin.cPerms(p, "PlotMe.use.protect")) {
             if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
                 String id = plugin.getPlotMeCoreManager().getPlotId(p.getLocation());
@@ -99,6 +99,7 @@ public class CmdProtect extends PlotCommand {
             }
         } else {
             p.sendMessage(RED + C("MsgPermissionDenied"));
+            return false;
         }
         return true;
     }

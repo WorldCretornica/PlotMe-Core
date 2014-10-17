@@ -18,9 +18,6 @@ package com.worldcretornica.plotme_core.bukkit.listener;
 
 import com.worldcretornica.plotme_core.bukkit.PlotMe_CorePlugin;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
-
-import java.util.Set;
-
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
@@ -28,10 +25,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
-/**
- *
- * @author Fabrizio Lungo <fab@lungo.co.uk>
- */
+import java.util.Set;
+
 public class BukkitPlayerListener implements Listener {
 
     private final PlotMe_CorePlugin plugin;

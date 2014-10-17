@@ -27,17 +27,16 @@ public class CmdExpired extends PlotCommand {
                     }
                 }
 
-                int pagesize = 8;
-                int maxpage = (int) Math.ceil((double) plugin.getSqlManager().getExpiredPlotCount(p.getWorld().getName()) / (double) pagesize);
+                int maxpage = (int) Math.ceil((double) plugin.getSqlManager().getExpiredPlotCount(p.getWorld().getName()) / (double) 8);
 
-                List<Plot> expiredplots = plugin.getSqlManager().getExpiredPlots(w.getName(), page, pagesize);
+                List<Plot> expiredplots = plugin.getSqlManager().getExpiredPlots(w.getName(), page, 8);
 
                 if (expiredplots.isEmpty()) {
                     p.sendMessage(C("MsgNoPlotExpired"));
                 } else {
                     p.sendMessage(C("MsgExpiredPlotsPage") + " " + page + "/" + maxpage);
 
-                    for (int i = (page - 1) * pagesize; i < expiredplots.size() && i < page * pagesize; i++) {
+                    for (int i = (page - 1) * 8; i < expiredplots.size() && i < page * 8; i++) {
                         Plot plot = expiredplots.get(i);
 
                         String starttext = "  " + AQUA + plot.getId() + RESET + " -> " + plot.getOwner();
@@ -55,6 +54,7 @@ public class CmdExpired extends PlotCommand {
             }
         } else {
             p.sendMessage(RED + C("MsgPermissionDenied"));
+            return false;
         }
         return true;
     }

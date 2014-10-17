@@ -355,11 +355,7 @@ public class Plot implements Comparable<Plot> {
     @Deprecated
     public boolean isAllowed(String name) {
         IPlayer p = plugin.getServerBridge().getPlayerExact(name);
-        if(p == null) {
-            return false;
-        } else {
-            return isAllowedInternal(p.getName(), p.getUniqueId(), true, true);
-        }
+        return p != null && isAllowedInternal(p.getName(), p.getUniqueId(), true, true);
     }
     
     public boolean isAllowedConsulting(String name) {
@@ -383,16 +379,6 @@ public class Plot implements Comparable<Plot> {
         return isAllowedInternal("", uuid, true, true);
     }
 
-    @Deprecated
-    public boolean isAllowed(String name, boolean IncludeStar, boolean IncludeGroup) {
-        IPlayer p = plugin.getServerBridge().getPlayerExact(name);
-        if(p == null) {
-            return false;
-        } else {
-            return isAllowedInternal(p.getName(), p.getUniqueId(), IncludeStar, IncludeGroup);
-        }
-    }
-    
     private boolean isAllowedInternal(String name, UUID uuid, boolean IncludeStar, boolean IncludeGroup) {
                 
         if(IncludeStar && owner.equals("*")) {
@@ -425,7 +411,6 @@ public class Plot implements Comparable<Plot> {
             if (u != null && u.equals(uuid) || uuid == null && str.equalsIgnoreCase(name)) {
                 return true;
             }
-
             if (IncludeGroup && str.toLowerCase().startsWith("group:") && p != null)
                 if (p.hasPermission("plotme.group." + str.replace("Group:", "")))
                     return true;
@@ -433,16 +418,6 @@ public class Plot implements Comparable<Plot> {
         return false;
     }
 
-    @Deprecated
-    public boolean isDenied(String name) {
-        IPlayer p = plugin.getServerBridge().getPlayerExact(name);
-        if(p == null) {
-            return false;
-        } else {
-            return isDeniedInternal(name, null);
-        }
-    }
-    
     public boolean isDeniedConsulting(String name) {
         IPlayer p = plugin.getServerBridge().getPlayerExact(name);
         if(p != null) {

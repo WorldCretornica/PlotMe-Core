@@ -1,7 +1,6 @@
 package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 
 import java.util.Collections;
@@ -13,15 +12,14 @@ public class CmdBiomeList extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(ICommandSender s, String[] args) {
-        if (!(s instanceof IPlayer) || plugin.cPerms(s, "PlotMe.use.biome")) {
+    public boolean exec(IPlayer p, String[] args) {
+        if (plugin.cPerms(p, "PlotMe.use.biome")) {
             List<String> biomes = sob.getBiomes();
             
             Collections.sort(biomes);
-            
-            int biomesperpage = 19;
+
             int page = 1;
-            int pages = (int) Math.ceil((double) biomes.size() / biomesperpage);
+            int pages = (int) Math.ceil((double) biomes.size() / 19);
             
             if (args.length > 1 && !args[1].isEmpty()) {
                 try{
@@ -32,18 +30,19 @@ public class CmdBiomeList extends PlotCommand {
             if (page <= pages) {
                 page = 1;
             }
-            
-            s.sendMessage(C("WordBiomes") + " (" + page + "/" + pages + ") : ");
-            
-            for (int ctr = 0; ctr < biomesperpage; ctr++) {
-                if (biomes.size() <= ctr + (page - 1) * biomesperpage) {
+
+            p.sendMessage(C("WordBiomes") + " (" + page + "/" + pages + ") : ");
+
+            for (int ctr = 0; ctr < 19; ctr++) {
+                if (biomes.size() <= ctr + (page - 1) * 19) {
                     return true;
                 } else {
-                    s.sendMessage("  " + AQUA + biomes.get(ctr + (page - 1) * biomesperpage));
+                    p.sendMessage("  " + AQUA + biomes.get(ctr + (page - 1) * 19));
                 }
             }
         } else {
-            s.sendMessage(RED + C("MsgPermissionDenied"));
+            p.sendMessage(RED + C("MsgPermissionDenied"));
+            return false;
         }
         return true;
     }

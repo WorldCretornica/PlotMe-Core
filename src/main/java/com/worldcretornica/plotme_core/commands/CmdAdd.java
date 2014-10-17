@@ -91,6 +91,7 @@ public class CmdAdd extends PlotCommand {
             }
         } else {
             p.sendMessage(RED + C("MsgPermissionDenied"));
+            return false;
         }
         return true;
     }

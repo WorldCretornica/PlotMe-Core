@@ -2,11 +2,13 @@ package com.worldcretornica.plotme_core.api;
 
 public interface IPlayer extends IOfflinePlayer, ICommandSender, IEntity {
 
-    public IWorld getWorld();
+    IWorld getWorld();
 
-    public ILocation getLocation();
+    @Override
+    ILocation getLocation();
 
-    public void teleport(ILocation location);
-    
-    public IItemStack getItemInHand();
+    @Override
+    void teleport(ILocation location);
+
+    IItemStack getItemInHand();
 }

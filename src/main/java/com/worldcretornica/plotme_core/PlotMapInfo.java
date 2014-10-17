@@ -12,14 +12,12 @@ public class PlotMapInfo {
     private final ConcurrentHashMap<String, Plot> plots;
     private final List<String> freedplots;
     private final String world;
-    private final String worldPath;
     private final IConfigSection config;
 
     public PlotMapInfo(PlotMe_Core instance, String world) {
         this.plugin = instance;
         this.world = world;
-        this.worldPath = "worlds." + world;
-        config = plugin.getServerBridge().loadDefaultConfig(worldPath);
+        config = plugin.getServerBridge().loadDefaultConfig("worlds." + world);
         this.plots = new ConcurrentHashMap<>(1000, 0.75f, 5);
         this.freedplots = plugin.getSqlManager().getFreed(world);
     }
@@ -80,27 +78,6 @@ public class PlotMapInfo {
         return config.getIntegerList("ProtectedBlocks");
     }
 
-    private void setProtectedBlocks(List<Integer> protectedBlocks) {
-        config.set("ProtectedBlocks", protectedBlocks);
-        config.saveConfig();
-    }
-
-    public void addProtectedBlock(Integer blockId) {
-        if (!isProtectedBlock(blockId)) {
-            final List<Integer> protectedBlocks = getProtectedBlocks();
-            protectedBlocks.add(blockId);
-            setProtectedBlocks(protectedBlocks);
-        }
-    }
-
-    public void removeProtectedBlock(Integer blockId) {
-        if (isProtectedBlock(blockId)) {
-            final List<Integer> protectedBlocks = getProtectedBlocks();
-            protectedBlocks.remove(blockId);
-            setProtectedBlocks(protectedBlocks);
-        }
-    }
-
     public boolean isProtectedBlock(Integer blockId) {
         return getProtectedBlocks().contains(blockId);
     }
@@ -109,36 +86,15 @@ public class PlotMapInfo {
         return config.getStringList("PreventedItems");
     }
 
-    private void setPreventedItems(List<String> preventedItems) {
-        config.set("PreventedItems", preventedItems);
-        config.saveConfig();
-    }
-
-    public void addPreventedItem(String itemId) {
-        if (!isPreventedItem(itemId)) {
-            final List<String> preventedItems = getPreventedItems();
-            preventedItems.add(itemId);
-            setPreventedItems(preventedItems);
-        }
-    }
-
-    public void removePreventedItems(String itemId) {
-        if (isPreventedItem(itemId)) {
-            final List<String> preventedItems = getPreventedItems();
-            preventedItems.remove(itemId);
-            setPreventedItems(preventedItems);
-        }
-    }
-
     public boolean isPreventedItem(String itemId) {
         return getPreventedItems().contains(itemId);
     }
 
     public String getNextFreed() {
-        if (!freedplots.isEmpty()) {
-            return freedplots.get(0);
-        } else {
+        if (freedplots.isEmpty()) {
             return config.getString("NextFreed");
+        } else {
+            return freedplots.get(0);
         }
     }
 

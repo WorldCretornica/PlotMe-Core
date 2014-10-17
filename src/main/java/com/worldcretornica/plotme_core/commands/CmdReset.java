@@ -4,9 +4,10 @@ import com.worldcretornica.plotme_core.ClearReason;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.*;
+import com.worldcretornica.plotme_core.api.IOfflinePlayer;
+import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotResetEvent;
-
 import net.milkbowl.vault.economy.EconomyResponse;
 
 public class CmdReset extends PlotCommand {
@@ -15,11 +16,9 @@ public class CmdReset extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(IPlayer p, String[] args) {
+    public boolean exec(IPlayer p) {
         if (plugin.cPerms(p, "PlotMe.admin.reset") || plugin.cPerms(p, "PlotMe.use.reset")) {
-            if (!plugin.getPlotMeCoreManager().isPlotWorld(p)) {
-                p.sendMessage(RED + C("MsgNotPlotWorld"));
-            } else {
+            if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
                 Plot plot = plugin.getPlotMeCoreManager().getPlotById(p.getLocation());
 
                 if (plot == null) {
@@ -46,32 +45,32 @@ public class CmdReset extends PlotCommand {
                                         IOfflinePlayer playercurrentbidder = sob.getOfflinePlayer(plot.getCurrentBidderId());
                                         EconomyResponse er = sob.depositPlayer(playercurrentbidder, plot.getCurrentBid());
 
-                                        if (!er.transactionSuccess()) {
-                                            p.sendMessage(er.errorMessage);
-                                            Util().warn(er.errorMessage);
-                                        } else {
+                                        if (er.transactionSuccess()) {
                                             IPlayer player = sob.getPlayer(playercurrentbidder.getUniqueId());
                                             if (player != null) {
                                                 player.sendMessage(C("WordPlot") + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner() + " " + C("MsgWasReset") + " " + Util().moneyFormat(plot.getCurrentBid()));
                                             }
+                                        } else {
+                                            p.sendMessage(er.errorMessage);
+                                            Util().warn(er.errorMessage);
                                         }
                                     }
                                 }
 
-                                if (pmi.isRefundClaimPriceOnReset() && plot.getOwnerId() != null) {                                    
+                                if (pmi.isRefundClaimPriceOnReset() && plot.getOwnerId() != null) {
                                     IOfflinePlayer playerowner = sob.getOfflinePlayer(plot.getOwnerId());
-                                    
+
                                     EconomyResponse er = sob.depositPlayer(playerowner, pmi.getClaimPrice());
 
-                                    if (!er.transactionSuccess()) {
-                                        p.sendMessage(RED + er.errorMessage);
-                                        Util().warn(er.errorMessage);
-                                        return true;
-                                    } else {
+                                    if (er.transactionSuccess()) {
                                         IPlayer player = sob.getPlayer(playerowner.getUniqueId());
                                         if (player.getName().equalsIgnoreCase(plot.getOwner())) {
                                             player.sendMessage(C("WordPlot") + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner() + " " + C("MsgWasReset") + " " + Util().moneyFormat(pmi.getClaimPrice()));
                                         }
+                                    } else {
+                                        p.sendMessage(RED + er.errorMessage);
+                                        Util().warn(er.errorMessage);
+                                        return true;
                                     }
                                 }
                             }
@@ -94,9 +93,12 @@ public class CmdReset extends PlotCommand {
                         p.sendMessage(RED + C("MsgThisPlot") + "(" + id + ") " + C("MsgNotYoursNotAllowedReset"));
                     }
                 }
+            } else {
+                p.sendMessage(RED + C("MsgNotPlotWorld"));
             }
         } else {
             p.sendMessage(RED + C("MsgPermissionDenied"));
+            return false;
         }
         return true;
     }

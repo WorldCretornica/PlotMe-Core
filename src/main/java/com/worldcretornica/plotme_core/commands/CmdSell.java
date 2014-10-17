@@ -145,27 +145,25 @@ public class CmdSell extends PlotCommand {
                                     } else {
                                         p.sendMessage(RED + C("MsgCannotSellToBank"));
                                     }
+                                } else if (price < 0) {
+                                    p.sendMessage(RED + C("MsgInvalidAmount"));
                                 } else {
-                                    if (price < 0) {
-                                        p.sendMessage(RED + C("MsgInvalidAmount"));
-                                    } else {
-                                        event = sob.getEventFactory().callPlotSellChangeEvent(plugin, w, plot, p, price, false, true);
+                                    event = sob.getEventFactory().callPlotSellChangeEvent(plugin, w, plot, p, price, false, true);
 
-                                        if (!event.isCancelled()) {
-                                            plot.setCustomPrice(price);
-                                            plot.setForSale(true);
+                                    if (!event.isCancelled()) {
+                                        plot.setCustomPrice(price);
+                                        plot.setForSale(true);
 
-                                            plot.updateField("customprice", price);
-                                            plot.updateField("forsale", true);
+                                        plot.updateField("customprice", price);
+                                        plot.updateField("forsale", true);
 
-                                            plugin.getPlotMeCoreManager().adjustWall(l);
-                                            plugin.getPlotMeCoreManager().setSellSign(w, plot);
+                                        plugin.getPlotMeCoreManager().adjustWall(l);
+                                        plugin.getPlotMeCoreManager().setSellSign(w, plot);
 
-                                            p.sendMessage(C("MsgPlotForSale"));
+                                        p.sendMessage(C("MsgPlotForSale"));
 
-                                            if (isAdvancedLogging()) {
-                                                plugin.getLogger().info(LOG + p.getName() + " " + C("MsgPutOnSalePlot") + " " + id + " " + C("WordFor") + " " + price);
-                                            }
+                                        if (isAdvancedLogging()) {
+                                            plugin.getLogger().info(LOG + p.getName() + " " + C("MsgPutOnSalePlot") + " " + id + " " + C("WordFor") + " " + price);
                                         }
                                     }
                                 }
@@ -178,6 +176,7 @@ public class CmdSell extends PlotCommand {
                     }
                 } else {
                     p.sendMessage(RED + C("MsgPermissionDenied"));
+                    return false;
                 }
             } else {
                 p.sendMessage(RED + C("MsgSellingPlotsIsDisabledWorld"));

@@ -143,5 +143,4 @@ public class BukkitConfigSection implements IConfigSection {
     public void save(File configFile) throws IOException {
         master.save(configFile);
     }
-
 }

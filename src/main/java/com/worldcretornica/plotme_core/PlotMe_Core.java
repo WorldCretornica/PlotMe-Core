@@ -55,11 +55,6 @@ public class PlotMe_Core {
         plotsToClear.clear();
         plotsToClear = null;
         initialized = null;
-
-        if (creationbuffer != null) {
-            creationbuffer.clear();
-            creationbuffer = null;
-        }
     }
 
     public void enable() {
@@ -95,10 +90,6 @@ public class PlotMe_Core {
     
     public Logger getLogger() {
         return getServerBridge().getLogger();
-    }
-    
-    public String getName() {
-        return "PlotMe-Core";
     }
 
     private void setupConfig() {
@@ -285,18 +276,15 @@ public class PlotMe_Core {
     }
 
     public int getPlotLimit(IPlayer p) {
-        int max = -2;
 
         if (p.hasPermission("plotme.limit.*")) {
             return -1;
-        } else {
-            int maxlimit = 255;
-            for (int ctr = 0; ctr < maxlimit; ctr++) {
-                if (p.hasPermission("plotme.limit." + ctr)) {
-                    max = ctr;
-                }
+        }
+        int max = -2;
+        for (int ctr = 0; ctr < 255; ctr++) {
+            if (p.hasPermission("plotme.limit." + ctr)) {
+                max = ctr;
             }
-
         }
 
         if (max == -2) {

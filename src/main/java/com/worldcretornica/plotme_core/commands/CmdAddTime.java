@@ -10,7 +10,7 @@ public class CmdAddTime extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(IPlayer p, String[] args) {
+    public boolean exec(IPlayer p) {
         if (plugin.cPerms(p, "PlotMe.admin.addtime")) {
             if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
                 String id = plugin.getPlotMeCoreManager().getPlotId(p.getLocation());
@@ -35,10 +35,10 @@ public class CmdAddTime extends PlotCommand {
                 }
             } else {
                 p.sendMessage(RED + C("MsgNotPlotWorld"));
-                return true;
             }
         } else {
             p.sendMessage(RED + C("MsgPermissionDenied"));
+            return false;
         }
         return true;
     }

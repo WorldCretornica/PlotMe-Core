@@ -1,6 +1,7 @@
 package com.worldcretornica.plotme_core.bukkit;
 
 import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitCommandSender;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
 import com.worldcretornica.plotme_core.commands.*;
@@ -95,7 +96,7 @@ public class BukkitCommand implements CommandExecutor {
     public boolean onCommand(CommandSender s, Command c, String l, String[] args) {
         if (l.equalsIgnoreCase("plotme") || l.equalsIgnoreCase("plot") || l.equalsIgnoreCase("p")) {
             if (!(s instanceof Player)) {
-                if (args.length == 0 || args[0].equalsIgnoreCase("1")) {
+                if (args.length == 0) {
                     s.sendMessage(C("ConsoleHelpMain"));
                     s.sendMessage(" - /plotme reload");
                     s.sendMessage(C("ConsoleHelpReload"));
@@ -103,7 +104,7 @@ public class BukkitCommand implements CommandExecutor {
                 } else {
                     String a0 = args[0];
                     if (a0.equalsIgnoreCase("reload")) {
-                        return reload.exec(new BukkitCommandSender(s), args);
+                        return reload.exec(new BukkitCommandSender(s));
                     }
                     if (a0.equalsIgnoreCase(C("CommandResetExpired"))) {
                         return resetexpired.exec(new BukkitCommandSender(s), args);
@@ -113,7 +114,7 @@ public class BukkitCommand implements CommandExecutor {
                     }
                 }
             } else {
-                BukkitPlayer p = new BukkitPlayer((Player) s);
+                IPlayer p = new BukkitPlayer((Player) s);
 
                 if (args.length == 0) {
                     return showhelp.exec(p, 1);
@@ -126,12 +127,8 @@ public class BukkitCommand implements CommandExecutor {
                     } catch (NumberFormatException ignored) {
                     }
 
-                    if (ipage != -1) {
-                        return showhelp.exec(p, ipage);
-                    } else {
+                    if (ipage == -1) {
                         if (a0.equalsIgnoreCase(C("CommandHelp"))) {
-                            ipage = -1;
-
                             if (args.length > 1) {
                                 String a1 = args[1];
                                 ipage = -1;
@@ -142,10 +139,10 @@ public class BukkitCommand implements CommandExecutor {
                                 }
                             }
 
-                            if (ipage != -1) {
-                                return showhelp.exec(p, ipage);
-                            } else {
+                            if (ipage == -1) {
                                 return showhelp.exec(p, 1);
+                            } else {
+                                return showhelp.exec(p, ipage);
                             }
                         }
                         if (a0.equalsIgnoreCase(C("CommandClaim"))) {
@@ -155,7 +152,7 @@ public class BukkitCommand implements CommandExecutor {
                             return auto.exec(p, args);
                         }
                         if (a0.equalsIgnoreCase(C("CommandInfo")) || a0.equalsIgnoreCase("i")) {
-                            return info.exec(p, args);
+                            return info.exec(p);
                         }
                         if (a0.equalsIgnoreCase(C("CommandComment"))) {
                             return comment.exec(p, args);
@@ -169,17 +166,17 @@ public class BukkitCommand implements CommandExecutor {
                         if (a0.equalsIgnoreCase(C("CommandBiomelist"))) {
                             return biomelist.exec(p, args);
                         }
-                        if (a0.equalsIgnoreCase(C("CommandId"))) {
-                            return id.exec(p, args);
+                        if (a0.equalsIgnoreCase("id")) {
+                            return id.exec(p);
                         }
                         if (a0.equalsIgnoreCase(C("CommandTp"))) {
                             return tp.exec(p, args);
                         }
                         if (a0.equalsIgnoreCase(C("CommandClear"))) {
-                            return clear.exec(p, args);
+                            return clear.exec(p);
                         }
                         if (a0.equalsIgnoreCase(C("CommandReset"))) {
-                            return reset.exec(p, args);
+                            return reset.exec(p);
                         }
                         if (a0.equalsIgnoreCase(C("CommandAdd")) || a0.equalsIgnoreCase("+")) {
                             return add.exec(p, args);
@@ -202,10 +199,10 @@ public class BukkitCommand implements CommandExecutor {
                             return move.exec(p, args);
                         }
                         if (a0.equalsIgnoreCase("reload")) {
-                            return reload.exec(new BukkitCommandSender(s), args);
+                            return reload.exec(new BukkitCommandSender(s));
                         }
                         if (a0.equalsIgnoreCase(C("CommandWEAnywhere"))) {
-                            return weanywhere.exec(p, args);
+                            return weanywhere.exec(p);
                         }
                         if (a0.equalsIgnoreCase(C("CommandList"))) {
                             return plotlist.exec(p, args);
@@ -214,28 +211,28 @@ public class BukkitCommand implements CommandExecutor {
                             return expired.exec(p, args);
                         }
                         if (a0.equalsIgnoreCase(C("CommandAddtime"))) {
-                            return addtime.exec(p, args);
+                            return addtime.exec(p);
                         }
                         if (a0.equalsIgnoreCase(C("CommandDone"))) {
-                            return done.exec(p, args);
+                            return done.exec(p);
                         }
                         if (a0.equalsIgnoreCase(C("CommandDoneList"))) {
                             return donelist.exec(p, args);
                         }
                         if (a0.equalsIgnoreCase(C("CommandProtect"))) {
-                            return protect.exec(p, args);
+                            return protect.exec(p);
                         }
                         if (a0.equalsIgnoreCase(C("CommandSell"))) {
                             return sell.exec(p, args);
                         }
                         if (a0.equalsIgnoreCase(C("CommandDispose"))) {
-                            return dispose.exec(p, args);
+                            return dispose.exec(p);
                         }
                         if (a0.equalsIgnoreCase(C("CommandAuction"))) {
                             return auction.exec(p, args);
                         }
                         if (a0.equalsIgnoreCase(C("CommandBuy"))) {
-                            return buy.exec(p, args);
+                            return buy.exec(p);
                         }
                         if (a0.equalsIgnoreCase(C("CommandBid"))) {
                             return bid.exec(p, args);
@@ -243,12 +240,8 @@ public class BukkitCommand implements CommandExecutor {
                         if (a0.startsWith(C("CommandHome")) || a0.startsWith("h")) {
                             return home.exec(p, args);
                         }
-                        if (a0.equalsIgnoreCase(C("CommandResetExpired"))) {
-                            return resetexpired.exec(p, args);
-                        }
-                        if (a0.equalsIgnoreCase(C("CommandCreateWorld"))) {
-                            return createworld.exec(p, args);
-                        }
+                    } else {
+                        return showhelp.exec(p, ipage);
                     }
                 }
             }

@@ -208,20 +208,21 @@ public class PlotMeCoreManager {
         return null;
     }
 
-    public IWorld getFirstWorld(String player) {
-        String world = plugin.getSqlManager().getFirstWorld(player);
-
-        if (!world.isEmpty()) {
-            return plugin.getServerBridge().getWorld(world);
-        } else {
-            return null;
-        }
+    /**
+     * Checks if world is a PlotWorld
+     *
+     * @param world world to be checked
+     * @return true if world is plotworld, false otherwise
+     */
+    public boolean isPlotWorld(IWorld world) {
+        return !(world == null || getGenMan(world) == null) && plotmaps.containsKey(world.getName().toLowerCase());
     }
 
-    public boolean isPlotWorld(IWorld w) {
-        return !(w == null || getGenMan(w) == null) && plotmaps.containsKey(w.getName().toLowerCase());
-    }
-
+    /**
+     * Checks if world is a PlotWorld
+     * @param name name of the world to be checked
+     * @return true if world is plotworld, false otherwise
+     */
     public boolean isPlotWorld(String name) {
         if (getGenMan(name) == null) {
             return false;
@@ -230,6 +231,11 @@ public class PlotMeCoreManager {
         }
     }
 
+    /**
+     * Checks if location is a PlotWorld
+     * @param l location to be checked
+     * @return true if world is plotworld, false otherwise
+     */
     public boolean isPlotWorld(ILocation l) {
         if (l == null || getGenMan(l) == null) {
             return false;
@@ -474,15 +480,11 @@ public class PlotMeCoreManager {
         String line2 = "";
         String id = plot.getId();
 
-        if ((Util().C("SignId") + id).length() > 16) {
-            line1 = (Util().C("SignId") + id).substring(0, 16);
-            if ((Util().C("SignId") + id).length() > 32) {
-                line2 = (Util().C("SignId") + id).substring(16, 32);
-            } else {
-                line2 = (Util().C("SignId") + id).substring(16);
-            }
+        if (("ID: " + id).length() > 16) {
+            line1 = ("ID: " + id).substring(0, 16);
+            line2 = ("ID: " + id).substring(16);
         } else {
-            line1 = Util().C("SignId") + id;
+            line1 = "ID: " + id;
         }
         String line3 = plot.getOwner();
         String line4 = "";
@@ -656,11 +658,7 @@ public class PlotMeCoreManager {
     public boolean isPlotAvailable(String id, String world) {
         PlotMapInfo pmi = getMap(world);
 
-        if (pmi != null) {
-            return pmi.getPlot(id) == null;
-        } else {
-            return false;
-        }
+        return pmi != null && pmi.getPlot(id) == null;
     }
 
     public String getPlotId(ILocation l) {
@@ -707,11 +705,6 @@ public class PlotMeCoreManager {
         } else {
             getGenMan(w).adjustPlotFor(w, id, true, plot.isProtect(), plot.isAuctionned(), plot.isForSale());
         }
-    }
-
-    public void adjustWall(IWorld w, Plot plot) {
-        String id = plot.getId();
-        getGenMan(w).adjustPlotFor(w, id, true, plot.isProtect(), plot.isAuctionned(), plot.isForSale());
     }
 
     public void removeOwnerSign(IWorld w, String id) {
@@ -775,12 +768,12 @@ public class PlotMeCoreManager {
         this.playersignoringwelimit = playersignoringwelimit;
     }
 
-    public boolean addPlayerIgnoringWELimit(UUID uuid) {
-        return this.playersignoringwelimit.add(uuid);
+    public void addPlayerIgnoringWELimit(UUID uuid) {
+        this.playersignoringwelimit.add(uuid);
     }
 
-    public boolean removePlayerIgnoringWELimit(UUID uuid) {
-        return this.playersignoringwelimit.remove(uuid);
+    public void removePlayerIgnoringWELimit(UUID uuid) {
+        this.playersignoringwelimit.remove(uuid);
     }
 
     public boolean isPlayerIgnoringWELimit(UUID uuid) {

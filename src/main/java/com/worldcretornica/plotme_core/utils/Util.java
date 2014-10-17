@@ -15,7 +15,7 @@ public class Util {
 
     public Util(PlotMe_Core instance) {
         plugin = instance;
-        LOG = "[" + plugin.getName() + " Event] ";
+        LOG = "[PlotMe-Core Event] ";
     }
 
     public String C(String s) {

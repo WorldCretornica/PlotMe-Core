@@ -11,7 +11,7 @@ public class CmdDone extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(IPlayer p, String[] args) {
+    public boolean exec(IPlayer p) {
         if (plugin.cPerms(p, "PlotMe.use.done") || plugin.cPerms(p, "PlotMe.admin.done")) {
             if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
                 String id = plugin.getPlotMeCoreManager().getPlotId(p.getLocation());
@@ -52,6 +52,7 @@ public class CmdDone extends PlotCommand {
             }
         } else {
             p.sendMessage(RED + C("MsgPermissionDenied"));
+            return false;
         }
         return true;
     }

@@ -10,7 +10,7 @@ public class CmdID extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(IPlayer p, String[] args) {
+    public boolean exec(IPlayer p) {
         if (plugin.cPerms(p, "PlotMe.admin.id")) {
             if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
                 String plotid = plugin.getPlotMeCoreManager().getPlotId(p.getLocation());
@@ -18,7 +18,7 @@ public class CmdID extends PlotCommand {
                 if (plotid.isEmpty()) {
                     p.sendMessage(RED + C("MsgNoPlotFound"));
                 } else {
-                    p.sendMessage(AQUA + C("WordPlot") + " " + C("WordId") + ": " + RESET + plotid);
+                    p.sendMessage(AQUA + C("WordPlot") + " ID: " + RESET + plotid);
 
                     ILocation bottom = plugin.getPlotMeCoreManager().getPlotBottomLoc(p.getWorld(), plotid);
                     ILocation top = plugin.getPlotMeCoreManager().getPlotTopLoc(p.getWorld(), plotid);
@@ -31,6 +31,7 @@ public class CmdID extends PlotCommand {
             }
         } else {
             p.sendMessage(RED + C("MsgPermissionDenied"));
+            return false;
         }
         return true;
     }

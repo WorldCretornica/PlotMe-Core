@@ -1,7 +1,8 @@
 package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.*;
+import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotMoveEvent;
 
 public class CmdMove extends PlotCommand {
@@ -42,6 +43,7 @@ public class CmdMove extends PlotCommand {
             }
         } else {
             p.sendMessage(RED + C("MsgPermissionDenied"));
+            return false;
         }
         return true;
     }

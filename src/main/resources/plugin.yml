@@ -58,12 +58,10 @@ permissions:
         plotme.admin.done: true
         plotme.admin.addtime: true
         plotme.admin.expired: true
-        plotme.admin.resetexpired: true
         plotme.admin.deny: true
         plotme.admin.undeny: true
         plotme.admin.bypassdeny: true
         plotme.admin.buildanywhere: true
-        plotme.admin.createworld: true
     plotme.use.buy:
       description: Gives the buy command
     plotme.use.sell:
@@ -160,9 +158,5 @@ permissions:
       description: Gives the addtime command for any plots
     plotme.admin.expired:
       description: Gives the expired command
-    plotme.admin.resetexpired:
-      description: Resets expired plots
     plotme.admin.buildanywhere:
       description: Allows to build anywhere in the plot world
-    plotme.admin.createworld:
-      description: Allows to create a new plot world

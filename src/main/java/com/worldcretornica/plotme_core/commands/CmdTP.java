@@ -43,9 +43,9 @@ public class CmdTP extends PlotCommand {
                         p.sendMessage(RED + C("MsgNoPlotworldFound"));
                     } else if (!plugin.getPlotMeCoreManager().isValidId(w, id)) {
                         if (sob.getConfig().getBoolean("allowWorldTeleport")) {
-                            p.sendMessage(C("WordUsage") + ": " + RED + "/plotme " + C("CommandTp") + " <" + C("WordId") + "> [" + C("WordWorld") + "] " + RESET + C("WordExample") + ": " + RED + "/plotme " + C("CommandTp") + " 5;-1 ");
+                            p.sendMessage(C("WordUsage") + ": " + RED + "/plotme " + C("CommandTp") + " <ID> [" + C("WordWorld") + "] " + RESET + C("WordExample") + ": " + RED + "/plotme " + C("CommandTp") + " 5;-1 ");
                         } else {
-                            p.sendMessage(C("WordUsage") + ": " + RED + "/plotme " + C("CommandTp") + " <" + C("WordId") + "> " + RESET + C("WordExample") + ": " + RED + "/plotme " + C("CommandTp") + " 5;-1 ");
+                            p.sendMessage(C("WordUsage") + ": " + RED + "/plotme " + C("CommandTp") + " <ID> " + RESET + C("WordExample") + ": " + RED + "/plotme " + C("CommandTp") + " 5;-1 ");
                         }
                         return true;
                     } else {
@@ -58,15 +58,16 @@ public class CmdTP extends PlotCommand {
                         }
                     }
                 } else if (sob.getConfig().getBoolean("allowWorldTeleport")) {
-                    p.sendMessage(C("WordUsage") + ": " + RED + "/plotme " + C("CommandTp") + " <" + C("WordId") + "> [" + C("WordWorld") + "] " + RESET + C("WordExample") + ": " + RED + "/plotme " + C("CommandTp") + " 5;-1 ");
+                    p.sendMessage(C("WordUsage") + ": " + RED + "/plotme " + C("CommandTp") + " <ID> [" + C("WordWorld") + "] " + RESET + C("WordExample") + ": " + RED + "/plotme " + C("CommandTp") + " 5;-1 ");
                 } else {
-                    p.sendMessage(C("WordUsage") + ": " + RED + "/plotme " + C("CommandTp") + " <" + C("WordId") + "> " + RESET + C("WordExample") + ": " + RED + "/plotme " + C("CommandTp") + " 5;-1 ");
+                    p.sendMessage(C("WordUsage") + ": " + RED + "/plotme " + C("CommandTp") + " <ID> " + RESET + C("WordExample") + ": " + RED + "/plotme " + C("CommandTp") + " 5;-1 ");
                 }
             } else {
                 p.sendMessage(RED + C("MsgNotPlotWorld"));
             }
         } else {
             p.sendMessage(RED + C("MsgPermissionDenied"));
+            return false;
         }
         return true;
     }
