@@ -19,8 +19,7 @@ public class PlotMapInfo {
         this.plugin = instance;
         this.world = world;
         this.worldPath = "worlds." + world;
-        config = plugin.getServerBridge().getConfig().getConfigurationSection(worldPath);
-        config.loadConfig(worldPath);
+        config = plugin.getServerBridge().loadDefaultConfig(worldPath);
         this.plots = new ConcurrentHashMap<>(1000, 0.75f, 5);
         this.freedplots = plugin.getSqlManager().getFreed(world);
     }

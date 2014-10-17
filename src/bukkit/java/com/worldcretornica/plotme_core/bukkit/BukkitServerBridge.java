@@ -19,6 +19,7 @@ import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.*;
 import org.bukkit.World.Environment;
 import org.bukkit.block.Biome;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
@@ -33,6 +34,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.*;
 import java.util.logging.Logger;
 
@@ -569,5 +572,33 @@ public class BukkitServerBridge implements IServerBridge {
     @Override
     public IConfigSection getConfig(InputStream defConfigStream) {
         return new BukkitConfigSection(plugin, YamlConfiguration.loadConfiguration(defConfigStream));
+    }
+    
+    @Override
+    public IConfigSection loadDefaultConfig(String worldPath) {
+        ConfigurationSection defaultCS = getDefaultWorld();
+        ConfigurationSection configCS;
+        if (plugin.getConfig().contains(worldPath)) {
+            configCS = plugin.getConfig().getConfigurationSection(worldPath);
+        } else {
+            plugin.getConfig().set(worldPath, defaultCS);
+            plugin.saveConfig();
+            configCS = plugin.getConfig().getConfigurationSection(worldPath);
+        }
+        for (String path : defaultCS.getKeys(true)) {
+            configCS.addDefault(path, defaultCS.get(path));
+        }
+        return new BukkitConfigSection(plugin, plugin.getConfig(), configCS);
+    }
+    
+    private ConfigurationSection getDefaultWorld() {
+        InputStream defConfigStream = plugin.getResource("default-world.yml");
+        InputStreamReader isr;
+        try {
+            isr = new InputStreamReader(defConfigStream, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            isr = new InputStreamReader(defConfigStream);
+        }
+        return YamlConfiguration.loadConfiguration(isr);
     }
 }

@@ -106,13 +106,14 @@ public class PlotMe_Core {
         final IConfigSection config = getServerBridge().getConfig();
 
         // Move old configs to new locations
-        config.set(LANG_PATH, config.getString("Language"));
-
-        // Delete old configs
-        config.set("Language", null);
-
+        if (config.contains("Language")) {
+            config.set(LANG_PATH, config.getString("Language"));
+            config.set("Language", null);
+        }
+        
         // If no world exists add config for a world
-        if (!config.contains("worlds") || config.getConfigurationSection("worlds").getKeys(false).isEmpty()) {
+        //if (!config.contains("worlds") || config.contains("worlds") && config.getConfigurationSection("worlds").getKeys(false).isEmpty()) {
+        if (!(config.contains("worlds") && !config.getConfigurationSection("worlds").getKeys(false).isEmpty())) {
             new PlotMapInfo(this, "plotworld");
         }
 

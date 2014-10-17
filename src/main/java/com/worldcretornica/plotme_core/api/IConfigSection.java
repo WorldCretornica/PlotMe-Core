@@ -8,9 +8,7 @@ import java.util.Set;
 public interface IConfigSection {
 
     public List<Integer> getIntegerList(String configpath);
-    
-    public void loadConfig(String worldPath);
-    
+        
     public void saveConfig();
 
     public void set(String string, Object value);

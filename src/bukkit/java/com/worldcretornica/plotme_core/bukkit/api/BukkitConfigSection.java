@@ -2,16 +2,11 @@ package com.worldcretornica.plotme_core.bukkit.api;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Set;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
-
 import com.worldcretornica.plotme_core.api.IConfigSection;
 import com.worldcretornica.plotme_core.bukkit.PlotMe_CorePlugin;
 
@@ -43,33 +38,6 @@ public class BukkitConfigSection implements IConfigSection {
     @Override
     public List<Integer> getIntegerList(String configpath) {
         return section.getIntegerList(configpath);
-    }
-
-    @Override
-    public void loadConfig(String worldPath) {
-        ConfigurationSection defaultCS = getDefaultWorld();
-        ConfigurationSection configCS;
-        if (plugin.getConfig().contains(worldPath)) {
-            configCS = plugin.getConfig().getConfigurationSection(worldPath);
-        } else {
-            plugin.getConfig().set(worldPath, defaultCS);
-            saveConfig();
-            configCS = plugin.getConfig().getConfigurationSection(worldPath);
-        }
-        for (String path : defaultCS.getKeys(true)) {
-            configCS.addDefault(path, defaultCS.get(path));
-        }
-    }
-    
-    private ConfigurationSection getDefaultWorld() {
-        InputStream defConfigStream = plugin.getResource("default-world.yml");
-        InputStreamReader isr;
-        try {
-            isr = new InputStreamReader(defConfigStream, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            isr = new InputStreamReader(defConfigStream);
-        }
-        return YamlConfiguration.loadConfiguration(isr);
     }
 
     @Override
