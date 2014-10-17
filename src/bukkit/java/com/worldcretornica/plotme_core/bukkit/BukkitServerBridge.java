@@ -420,8 +420,7 @@ public class BukkitServerBridge implements IServerBridge {
         if (bukkitplugin == null) {
             cs.sendMessage("[" + plugin.getName() + "] " + plugin.getAPI().getUtil().C("ErrCannotFindWorldGen") + " '" + generator + "'");
             return false;
-        }
-        if (!bukkitplugin.getManager().createConfig(worldname, args, cs)) {
+        } else if (!bukkitplugin.getManager().createConfig(worldname, args, cs)) { //Create the generator configurations
             cs.sendMessage("[" + plugin.getName() + "] " + plugin.getAPI().getUtil().C("ErrCannotCreateGen1") + " '" + generator + "' " + plugin.getAPI().getUtil().C("ErrCannotCreateGen2"));
             return false;
         }
