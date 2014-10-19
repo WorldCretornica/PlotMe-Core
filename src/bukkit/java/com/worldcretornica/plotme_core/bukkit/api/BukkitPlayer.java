@@ -1,12 +1,7 @@
 package com.worldcretornica.plotme_core.bukkit.api;
 
+import com.worldcretornica.plotme_core.api.*;
 import org.bukkit.entity.Player;
-
-import com.worldcretornica.plotme_core.api.IEntityType;
-import com.worldcretornica.plotme_core.api.IItemStack;
-import com.worldcretornica.plotme_core.api.ILocation;
-import com.worldcretornica.plotme_core.api.IPlayer;
-import com.worldcretornica.plotme_core.api.IWorld;
 
 public class BukkitPlayer extends BukkitOfflinePlayer implements IPlayer {
 

@@ -181,9 +181,9 @@ public class PlotMeCoreManager {
 
     public IWorld getFirstWorld() {
         if (plotmaps != null) {
-	        if (plotmaps.keySet().toArray().length > 0) {
-	            return plugin.getServerBridge().getWorld((String) plotmaps.keySet().toArray()[0]);
-	        }
+            if (plotmaps.keySet().toArray().length > 0) {
+                return plugin.getServerBridge().getWorld((String) plotmaps.keySet().toArray()[0]);
+            }
         }
         return null;
     }
@@ -195,11 +195,18 @@ public class PlotMeCoreManager {
      * @return true if world is plotworld, false otherwise
      */
     public boolean isPlotWorld(IWorld world) {
-        return !(world == null || getGenMan(world) == null) && plotmaps.containsKey(world.getName().toLowerCase());
+        if (!(world == null || getGenMan(world) == null)) {
+            if (!plotmaps.containsKey(world.getName().toLowerCase())) {
+                return false;
+            }
+            return true;
+        }
+        return false;
     }
 
     /**
      * Checks if location is a PlotWorld
+     *
      * @param l location to be checked
      * @return true if world is plotworld, false otherwise
      */
@@ -283,12 +290,12 @@ public class PlotMeCoreManager {
                     }
                     plugin.getSqlManager().addPlotComment(comments.get(i), i, idX, idZ, plot2.getWorld(), uuid);
                 }
-                
+
                 HashMap<String, UUID> allowed = plot2.allowed().getAllPlayers();
                 for (String player : allowed.keySet()) {
                     plugin.getSqlManager().addPlotAllowed(player, allowed.get(player), idX, idZ, plot2.getWorld());
                 }
-                
+
                 HashMap<String, UUID> denied = plot2.denied().getAllPlayers();
                 for (String player : denied.keySet()) {
                     plugin.getSqlManager().addPlotDenied(player, denied.get(player), idX, idZ, plot2.getWorld());
@@ -319,7 +326,7 @@ public class PlotMeCoreManager {
                 for (String player : allowed.keySet()) {
                     plugin.getSqlManager().addPlotAllowed(player, allowed.get(player), idX, idZ, plot1.getWorld());
                 }
-                
+
                 denied = plot1.denied().getAllPlayers();
                 for (String player : denied.keySet()) {
                     plugin.getSqlManager().addPlotDenied(player, denied.get(player), idX, idZ, plot1.getWorld());
@@ -354,12 +361,12 @@ public class PlotMeCoreManager {
                     }
                     plugin.getSqlManager().addPlotComment(comments.get(i), i, idX, idZ, plot1.getWorld(), uuid);
                 }
-                
+
                 HashMap<String, UUID> allowed = plot1.allowed().getAllPlayers();
                 for (String player : allowed.keySet()) {
                     plugin.getSqlManager().addPlotAllowed(player, allowed.get(player), idX, idZ, plot1.getWorld());
                 }
-                
+
                 HashMap<String, UUID> denied = plot1.denied().getAllPlayers();
                 for (String player : denied.keySet()) {
                     plugin.getSqlManager().addPlotDenied(player, denied.get(player), idX, idZ, plot1.getWorld());
@@ -544,30 +551,30 @@ public class PlotMeCoreManager {
             }
 
             if (p00 != null && p10 != null && p01 != null
-                    && p00.getOwner().equalsIgnoreCase(p11.getOwner())
-                    && p11.getOwner().equalsIgnoreCase(p10.getOwner())
-                    && p10.getOwner().equalsIgnoreCase(p01.getOwner())) {
+                        && p00.getOwner().equalsIgnoreCase(p11.getOwner())
+                        && p11.getOwner().equalsIgnoreCase(p10.getOwner())
+                        && p10.getOwner().equalsIgnoreCase(p01.getOwner())) {
                 gm.fillmiddleroad(p00.getId(), p11.getId(), world);
             }
 
             if (p10 != null && p20 != null && p21 != null
-                    && p10.getOwner().equalsIgnoreCase(p11.getOwner())
-                    && p11.getOwner().equalsIgnoreCase(p20.getOwner())
-                    && p20.getOwner().equalsIgnoreCase(p21.getOwner())) {
+                        && p10.getOwner().equalsIgnoreCase(p11.getOwner())
+                        && p11.getOwner().equalsIgnoreCase(p20.getOwner())
+                        && p20.getOwner().equalsIgnoreCase(p21.getOwner())) {
                 gm.fillmiddleroad(p20.getId(), p11.getId(), world);
             }
 
             if (p01 != null && p02 != null && p12 != null
-                    && p01.getOwner().equalsIgnoreCase(p11.getOwner())
-                    && p11.getOwner().equalsIgnoreCase(p02.getOwner())
-                    && p02.getOwner().equalsIgnoreCase(p12.getOwner())) {
+                        && p01.getOwner().equalsIgnoreCase(p11.getOwner())
+                        && p11.getOwner().equalsIgnoreCase(p02.getOwner())
+                        && p02.getOwner().equalsIgnoreCase(p12.getOwner())) {
                 gm.fillmiddleroad(p02.getId(), p11.getId(), world);
             }
 
             if (p12 != null && p21 != null && p22 != null
-                    && p12.getOwner().equalsIgnoreCase(p11.getOwner())
-                    && p11.getOwner().equalsIgnoreCase(p21.getOwner())
-                    && p21.getOwner().equalsIgnoreCase(p22.getOwner())) {
+                        && p12.getOwner().equalsIgnoreCase(p11.getOwner())
+                        && p11.getOwner().equalsIgnoreCase(p21.getOwner())
+                        && p21.getOwner().equalsIgnoreCase(p22.getOwner())) {
                 gm.fillmiddleroad(p22.getId(), p11.getId(), world);
             }
 

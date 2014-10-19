@@ -16,7 +16,7 @@ public class SqlManager {
 
     private PlotMe_Core plugin;
 
-    private final Boolean usemySQL;
+    private final boolean usemySQL;
     private final String mySQLuname;
     private final String mySQLpass;
     private final String mySQLconn;

@@ -2,10 +2,12 @@ package com.worldcretornica.plotme_core.bukkit.event;
 
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.*;
+import com.worldcretornica.plotme_core.api.IBiome;
+import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotBiomeChangeEvent;
-import com.worldcretornica.plotme_core.bukkit.api.*;
-
+import com.worldcretornica.plotme_core.bukkit.api.BukkitBiome;
+import com.worldcretornica.plotme_core.bukkit.api.BukkitWorld;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.entity.Player;

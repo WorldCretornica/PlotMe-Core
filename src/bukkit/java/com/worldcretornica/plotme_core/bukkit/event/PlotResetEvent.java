@@ -2,10 +2,11 @@ package com.worldcretornica.plotme_core.bukkit.event;
 
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.*;
+import com.worldcretornica.plotme_core.api.ICommandSender;
+import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotResetEvent;
-import com.worldcretornica.plotme_core.bukkit.api.*;
-
+import com.worldcretornica.plotme_core.bukkit.api.BukkitCommandSender;
+import com.worldcretornica.plotme_core.bukkit.api.BukkitWorld;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.Cancellable;

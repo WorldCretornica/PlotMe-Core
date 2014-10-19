@@ -5,7 +5,6 @@ import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.*;
 import com.worldcretornica.plotme_core.api.event.IEventFactory;
-import com.worldcretornica.plotme_core.bukkit.MultiWorldWrapper.WorldGeneratorWrapper;
 import com.worldcretornica.plotme_core.bukkit.api.*;
 import com.worldcretornica.plotme_core.bukkit.event.BukkitEventFactory;
 import com.worldcretornica.plotme_core.bukkit.listener.BukkitPlayerListener;
@@ -28,12 +27,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.util.*;
 import java.util.logging.Logger;
 
@@ -115,6 +109,8 @@ public class BukkitServerBridge implements IServerBridge {
 
         if (pm.getPlugin("LWC") != null) {
             setUsinglwc(true);
+        } else {
+            setUsinglwc(false);
         }
     }
 
@@ -144,7 +140,7 @@ public class BukkitServerBridge implements IServerBridge {
         return usinglwc;
     }
 
-    public void setUsinglwc(Boolean usinglwc) {
+    public void setUsinglwc(boolean usinglwc) {
         this.usinglwc = usinglwc;
     }
 

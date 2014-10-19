@@ -1,7 +1,6 @@
 package com.worldcretornica.plotme_core.api;
 
 import com.worldcretornica.plotme_core.api.event.IEventFactory;
-
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 

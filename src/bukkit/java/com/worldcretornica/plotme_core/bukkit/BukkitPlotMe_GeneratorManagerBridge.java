@@ -1,23 +1,12 @@
 package com.worldcretornica.plotme_core.bukkit;
 
+import com.worldcretornica.plotme_core.api.*;
+import com.worldcretornica.plotme_core.bukkit.api.*;
+import org.bukkit.entity.Player;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import org.bukkit.entity.Player;
-
-import com.worldcretornica.plotme_core.api.IBiome;
-import com.worldcretornica.plotme_core.api.ICommandSender;
-import com.worldcretornica.plotme_core.api.ILocation;
-import com.worldcretornica.plotme_core.api.IPlayer;
-import com.worldcretornica.plotme_core.api.IPlotMe_GeneratorManager;
-import com.worldcretornica.plotme_core.api.IWorld;
-import com.worldcretornica.plotme_core.bukkit.api.BukkitBiome;
-import com.worldcretornica.plotme_core.bukkit.api.BukkitCommandSender;
-import com.worldcretornica.plotme_core.bukkit.api.BukkitLocation;
-import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
-import com.worldcretornica.plotme_core.bukkit.api.BukkitWorld;
-import com.worldcretornica.plotme_core.bukkit.api.IBukkitPlotMe_GeneratorManager;
 
 public class BukkitPlotMe_GeneratorManagerBridge implements IPlotMe_GeneratorManager {
 

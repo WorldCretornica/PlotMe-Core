@@ -1,8 +1,7 @@
 package com.worldcretornica.plotme_core.bukkit.api;
 
-import org.bukkit.block.Biome;
-
 import com.worldcretornica.plotme_core.api.IBiome;
+import org.bukkit.block.Biome;
 
 public class BukkitBiome implements IBiome {
 

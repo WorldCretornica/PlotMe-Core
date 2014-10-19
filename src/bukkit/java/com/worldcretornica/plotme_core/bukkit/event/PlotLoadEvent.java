@@ -1,12 +1,11 @@
 package com.worldcretornica.plotme_core.bukkit.event;
 
-import org.bukkit.World;
-
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotLoadEvent;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitWorld;
+import org.bukkit.World;
 
 public class PlotLoadEvent extends PlotEvent {
 

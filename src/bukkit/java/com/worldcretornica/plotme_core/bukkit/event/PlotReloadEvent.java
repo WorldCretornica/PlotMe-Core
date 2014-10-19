@@ -1,9 +1,8 @@
 package com.worldcretornica.plotme_core.bukkit.event;
 
+import com.worldcretornica.plotme_core.api.event.InternalPlotReloadEvent;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-
-import com.worldcretornica.plotme_core.api.event.InternalPlotReloadEvent;
 
 public class PlotReloadEvent extends Event {
 

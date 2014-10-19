@@ -4,8 +4,8 @@ import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotEvent;
-import com.worldcretornica.plotme_core.bukkit.api.*;
-
+import com.worldcretornica.plotme_core.bukkit.api.BukkitLocation;
+import com.worldcretornica.plotme_core.bukkit.api.BukkitWorld;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.event.Event;

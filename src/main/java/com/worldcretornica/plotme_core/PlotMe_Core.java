@@ -3,7 +3,6 @@ package com.worldcretornica.plotme_core;
 import com.worldcretornica.plotme_core.api.*;
 import com.worldcretornica.plotme_core.utils.Util;
 
-import java.sql.Date;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Level;
@@ -24,8 +23,8 @@ public class PlotMe_Core {
 
     private IWorld worldcurrentlyprocessingexpired;
     private ICommandSender cscurrentlyprocessingexpired;
-    private Integer counterexpired;
-    private Integer nbperdeletionprocessingexpired;
+    private int counterexpired;
+    private int nbperdeletionprocessingexpired;
 
     public Map<String, Map<String, String>> creationbuffer;
 
@@ -36,7 +35,7 @@ public class PlotMe_Core {
     private PlotMeCoreManager plotmecoremanager;
     private SqlManager sqlmanager;
     private Util util;
-    private Boolean initialized = false;
+    private boolean initialized;
     
     //Bridge
     private IServerBridge serverBridge;
@@ -54,7 +53,7 @@ public class PlotMe_Core {
         creationbuffer = null;
         plotsToClear.clear();
         plotsToClear = null;
-        initialized = null;
+        initialized = false;
     }
 
     public void enable() {
@@ -300,45 +299,12 @@ public class PlotMe_Core {
         return max;
     }
 
-    public String getDate() {
-        return getDate(Calendar.getInstance());
-    }
-
-    private String getDate(Calendar cal) {
-        int imonth = cal.get(Calendar.MONTH) + 1;
-        int iday = cal.get(Calendar.DAY_OF_MONTH) + 1;
-        String month;
-
-        if (imonth < 10) {
-            month = "0" + imonth;
-        } else {
-            month = "" + imonth;
-        }
-
-        String day;
-        if (iday < 10) {
-            day = "0" + iday;
-        } else {
-            day = "" + iday;
-        }
-
-        return "" + cal.get(Calendar.YEAR) + "-" + month + "-" + day;
-    }
-
-    public String getDate(Date expireddate) {
-        return expireddate.toString();
-    }
-
     public void scheduleTask(Runnable task, int eachseconds, int howmanytimes) {
         getCommandSenderCurrentlyProcessingExpired().sendMessage(getUtil().C("MsgStartDeleteSession"));
 
         for (int ctr = 0; ctr < howmanytimes / getNbPerDeletionProcessingExpired(); ctr++) {
             serverBridge.scheduleSyncDelayedTask(task, ctr * eachseconds * 20);
         }
-    }
-
-    public String getVersion() {
-        return serverBridge.getVersion();
     }
 
     public Set<String> getBadWorlds() {
@@ -353,11 +319,11 @@ public class PlotMe_Core {
         this.worldcurrentlyprocessingexpired = worldcurrentlyprocessingexpired;
     }
 
-    public Integer getCounterExpired() {
+    public int getCounterExpired() {
         return counterexpired;
     }
 
-    public void setCounterExpired(Integer counterexpired) {
+    public void setCounterExpired(int counterexpired) {
         this.counterexpired = counterexpired;
     }
 
@@ -394,12 +360,11 @@ public class PlotMe_Core {
         return null;
     }
 
-    public Integer getNbPerDeletionProcessingExpired() {
+    public int getNbPerDeletionProcessingExpired() {
         return nbperdeletionprocessingexpired;
     }
 
-    public void setNbPerDeletionProcessingExpired(
-            Integer nbperdeletionprocessingexpired) {
+    public void setNbPerDeletionProcessingExpired(int nbperdeletionprocessingexpired) {
         this.nbperdeletionprocessingexpired = nbperdeletionprocessingexpired;
     }
 

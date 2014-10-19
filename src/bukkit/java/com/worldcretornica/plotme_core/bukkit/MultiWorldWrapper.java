@@ -1,13 +1,8 @@
 package com.worldcretornica.plotme_core.bukkit;
 
-import multiworld.ConfigException;
-import multiworld.InvalidWorldGenException;
-import multiworld.InvalidWorldNameException;
-import multiworld.MultiWorldPlugin;
-import multiworld.WorldGenException;
+import multiworld.*;
 import multiworld.data.DataHandler;
 import multiworld.worldgen.WorldGenerator;
-
 import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
 
