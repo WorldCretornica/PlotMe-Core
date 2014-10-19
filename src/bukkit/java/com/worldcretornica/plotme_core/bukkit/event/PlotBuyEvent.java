@@ -5,6 +5,7 @@ import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotBuyEvent;
+import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitWorld;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -18,7 +19,7 @@ public class PlotBuyEvent extends PlotEvent implements Cancellable {
         super(instance, plot, world);
         event = new InternalPlotBuyEvent(instance, new BukkitWorld(world), plot, new BukkitPlayer(buyer), price);
     }
-    
+
     public PlotBuyEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer buyer, double price) {
         super(instance, plot, world);
         event = new InternalPlotBuyEvent(instance, world, plot, buyer, price);
@@ -50,7 +51,7 @@ public class PlotBuyEvent extends PlotEvent implements Cancellable {
     public String getOwner() {
         return event.getOwner();
     }
-    
+
     public InternalPlotBuyEvent getInternal() {
         return event;
     }

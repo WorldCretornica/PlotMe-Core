@@ -18,8 +18,7 @@ public class CmdReset extends PlotCommand {
 
     public boolean exec(IPlayer p) {
         if (plugin.cPerms(p, "PlotMe.admin.reset") || plugin.cPerms(p, "PlotMe.use.reset")) {
-            IWorld world = p.getWorld();
-            if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
+            if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
                 Plot plot = plugin.getPlotMeCoreManager().getPlotById(p.getLocation());
 
                 if (plot == null) {
@@ -31,12 +30,13 @@ public class CmdReset extends PlotCommand {
                     String id = plot.getId();
 
                     if (plot.getOwner().equalsIgnoreCase(playername) || plugin.cPerms(p, "PlotMe.admin.reset")) {
+                        IWorld w = p.getWorld();
 
-                        InternalPlotResetEvent event = sob.getEventFactory().callPlotResetEvent(plugin, world, plot, p);
+                        InternalPlotResetEvent event = sob.getEventFactory().callPlotResetEvent(plugin, w, plot, p);
 
                         if (!event.isCancelled()) {
-                            plugin.getPlotMeCoreManager().setBiome(world, id, sob.getBiome("PLAINS"));
-                            plugin.getPlotMeCoreManager().clear(world, plot, p, ClearReason.Reset);
+                            plugin.getPlotMeCoreManager().setBiome(w, id, sob.getBiome("PLAINS"));
+                            plugin.getPlotMeCoreManager().clear(w, plot, p, ClearReason.Reset);
                             PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(p);
 
                             if (plugin.getPlotMeCoreManager().isEconomyEnabled(p)) {
@@ -76,12 +76,12 @@ public class CmdReset extends PlotCommand {
                             }
 
                             if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, p)) {
-                                plugin.getPlotMeCoreManager().removePlot(world, id);
+                                plugin.getPlotMeCoreManager().removePlot(w, id);
                             }
 
-                            plugin.getPlotMeCoreManager().removeOwnerSign(world, id);
-                            plugin.getPlotMeCoreManager().removeSellSign(world, id);
-                            plugin.getSqlManager().deletePlot(plugin.getPlotMeCoreManager().getIdX(id), plugin.getPlotMeCoreManager().getIdZ(id), world.getName().toLowerCase());
+                            plugin.getPlotMeCoreManager().removeOwnerSign(w, id);
+                            plugin.getPlotMeCoreManager().removeSellSign(w, id);
+                            plugin.getSqlManager().deletePlot(plugin.getPlotMeCoreManager().getIdX(id), plugin.getPlotMeCoreManager().getIdZ(id), w.getName().toLowerCase());
 
                             pmi.addFreed(id);
 

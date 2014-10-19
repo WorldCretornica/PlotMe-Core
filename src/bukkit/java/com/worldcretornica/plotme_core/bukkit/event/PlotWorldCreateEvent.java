@@ -53,7 +53,7 @@ public class PlotWorldCreateEvent extends Event implements Cancellable {
     public Map<String, String> getParameters() {
         return event.getParameters();
     }
-    
+
     public InternalPlotWorldCreateEvent getInternal() {
         return event;
     }

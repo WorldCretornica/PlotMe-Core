@@ -7,6 +7,7 @@ import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotBiomeChangeEvent;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitBiome;
+import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitWorld;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
@@ -21,7 +22,7 @@ public class PlotBiomeChangeEvent extends PlotEvent implements Cancellable {
         super(instance, plot, world);
         event = new InternalPlotBiomeChangeEvent(instance, new BukkitWorld(world), plot, new BukkitPlayer(player), new BukkitBiome(biome));
     }
-    
+
     public PlotBiomeChangeEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer player, IBiome biome) {
         super(instance, plot, world);
         event = new InternalPlotBiomeChangeEvent(instance, world, plot, player, biome);
@@ -44,11 +45,11 @@ public class PlotBiomeChangeEvent extends PlotEvent implements Cancellable {
     public Biome getBiome() {
         return ((BukkitBiome) event.getBiome()).getBiome();
     }
-    
+
     public void setBiome(Biome biome) {
         event.setBiome(new BukkitBiome(biome));
     }
-    
+
     public InternalPlotBiomeChangeEvent getInternal() {
         return event;
     }

@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 public class BukkitPlayer extends BukkitOfflinePlayer implements IPlayer {
 
     private Player player;
-    
+
     public BukkitPlayer(Player player) {
         super(player);
         this.player = player;
@@ -41,7 +41,7 @@ public class BukkitPlayer extends BukkitOfflinePlayer implements IPlayer {
     public void teleport(ILocation location) {
         player.teleport(((BukkitLocation) location).getLocation());
     }
-    
+
     public Player getPlayer() {
         return player;
     }

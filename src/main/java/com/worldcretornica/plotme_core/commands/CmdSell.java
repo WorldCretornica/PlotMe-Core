@@ -19,23 +19,24 @@ public class CmdSell extends PlotCommand {
     public boolean exec(IPlayer p, String[] args) {
         if (plugin.getPlotMeCoreManager().isEconomyEnabled(p)) {
             PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(p);
+
             if (pmi.isCanSellToBank() || pmi.isCanPutOnSale()) {
                 if (plugin.cPerms(p, "PlotMe.use.sell") || plugin.cPerms(p, "PlotMe.admin.sell")) {
-                    IWorld world = p.getWorld();
-                    ILocation location = p.getLocation();
-                    String id = plugin.getPlotMeCoreManager().getPlotId(location);
+                    ILocation l = p.getLocation();
+                    String id = plugin.getPlotMeCoreManager().getPlotId(l);
 
                     if (id.isEmpty()) {
                         p.sendMessage(RED + C("MsgNoPlotFound"));
-                    } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, world)) {
-                        Plot plot = plugin.getPlotMeCoreManager().getPlotById(world, id);
+                    } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, p)) {
+                        Plot plot = plugin.getPlotMeCoreManager().getPlotById(p, id);
 
                         if (plot.getOwnerId().equals(p.getUniqueId()) || plugin.cPerms(p, "PlotMe.admin.sell")) {
+                            IWorld w = p.getWorld();
 
                             InternalPlotSellChangeEvent event;
 
                             if (plot.isForSale()) {
-                                event = sob.getEventFactory().callPlotSellChangeEvent(plugin, world, plot, p, plot.getCustomPrice(), false, false);
+                                event = sob.getEventFactory().callPlotSellChangeEvent(plugin, w, plot, p, plot.getCustomPrice(), false, false);
 
                                 if (!event.isCancelled()) {
                                     plot.setCustomPrice(0);
@@ -44,8 +45,8 @@ public class CmdSell extends PlotCommand {
                                     plot.updateField("customprice", 0);
                                     plot.updateField("forsale", false);
 
-                                    plugin.getPlotMeCoreManager().adjustWall(location);
-                                    plugin.getPlotMeCoreManager().setSellSign(world, plot);
+                                    plugin.getPlotMeCoreManager().adjustWall(l);
+                                    plugin.getPlotMeCoreManager().setSellSign(w, plot);
 
                                     p.sendMessage(C("MsgPlotNoLongerSale"));
 
@@ -104,7 +105,7 @@ public class CmdSell extends PlotCommand {
 
                                         double sellprice = pmi.getSellToBankPrice();
 
-                                        event = sob.getEventFactory().callPlotSellChangeEvent(plugin, world, plot, p, pmi.getBuyFromBankPrice(), true, true);
+                                        event = sob.getEventFactory().callPlotSellChangeEvent(plugin, w, plot, p, pmi.getBuyFromBankPrice(), true, true);
 
                                         if (!event.isCancelled()) {
                                             EconomyResponse er = sob.depositPlayer(p, sellprice);
@@ -120,8 +121,8 @@ public class CmdSell extends PlotCommand {
 
                                                 plot.removeAllAllowed();
 
-                                                plugin.getPlotMeCoreManager().setOwnerSign(world, plot);
-                                                plugin.getPlotMeCoreManager().setSellSign(world, plot);
+                                                plugin.getPlotMeCoreManager().setOwnerSign(w, plot);
+                                                plugin.getPlotMeCoreManager().setSellSign(w, plot);
 
                                                 plot.updateField("owner", plot.getOwner());
                                                 plot.updateField("forsale", true);
@@ -147,7 +148,7 @@ public class CmdSell extends PlotCommand {
                                 } else if (price < 0) {
                                     p.sendMessage(RED + C("MsgInvalidAmount"));
                                 } else {
-                                    event = sob.getEventFactory().callPlotSellChangeEvent(plugin, world, plot, p, price, false, true);
+                                    event = sob.getEventFactory().callPlotSellChangeEvent(plugin, w, plot, p, price, false, true);
 
                                     if (!event.isCancelled()) {
                                         plot.setCustomPrice(price);
@@ -156,8 +157,8 @@ public class CmdSell extends PlotCommand {
                                         plot.updateField("customprice", price);
                                         plot.updateField("forsale", true);
 
-                                        plugin.getPlotMeCoreManager().adjustWall(location);
-                                        plugin.getPlotMeCoreManager().setSellSign(world, plot);
+                                        plugin.getPlotMeCoreManager().adjustWall(l);
+                                        plugin.getPlotMeCoreManager().setSellSign(w, plot);
 
                                         p.sendMessage(C("MsgPlotForSale"));
 

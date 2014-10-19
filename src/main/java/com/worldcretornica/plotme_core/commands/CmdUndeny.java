@@ -16,12 +16,11 @@ public class CmdUndeny extends PlotCommand {
 
     public boolean exec(IPlayer p, String[] args) {
         if (plugin.cPerms(p, "PlotMe.admin.undeny") || plugin.cPerms(p, "PlotMe.use.undeny")) {
-            IWorld world = p.getWorld();
             if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
                 String id = plugin.getPlotMeCoreManager().getPlotId(p.getLocation());
                 if (id.isEmpty()) {
                     p.sendMessage(RED + C("MsgNoPlotFound"));
-                } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, world)) {
+                } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, p)) {
                     if (args.length < 2 || args[1].isEmpty()) {
                         p.sendMessage(C("WordUsage") + ": " + RED + "/plotme " + C("CommandUndeny") + " <" + C("WordPlayer") + ">");
                     } else {
@@ -32,19 +31,20 @@ public class CmdUndeny extends PlotCommand {
                         if (plot.getOwner().equalsIgnoreCase(playername) || plugin.cPerms(p, "PlotMe.admin.undeny")) {
                             if (plot.isDeniedConsulting(denied) || plot.isGroupDenied(denied)) {
 
+                                IWorld w = p.getWorld();
 
-                                PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
+                                PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(w);
 
                                 double price = 0;
 
                                 InternalPlotRemoveDeniedEvent event;
 
-                                if (plugin.getPlotMeCoreManager().isEconomyEnabled(world)) {
+                                if (plugin.getPlotMeCoreManager().isEconomyEnabled(w)) {
                                     price = pmi.getUndenyPlayerPrice();
                                     double balance = sob.getBalance(p);
 
                                     if (balance >= price) {
-                                        event = sob.getEventFactory().callPlotRemoveDeniedEvent(plugin, world, plot, p, denied);
+                                        event = sob.getEventFactory().callPlotRemoveDeniedEvent(plugin, w, plot, p, denied);
 
                                         if (event.isCancelled()) {
                                             return true;
@@ -62,7 +62,7 @@ public class CmdUndeny extends PlotCommand {
                                         return true;
                                     }
                                 } else {
-                                    event = sob.getEventFactory().callPlotRemoveDeniedEvent(plugin, world, plot, p, denied);
+                                    event = sob.getEventFactory().callPlotRemoveDeniedEvent(plugin, w, plot, p, denied);
                                 }
 
                                 if (!event.isCancelled()) {

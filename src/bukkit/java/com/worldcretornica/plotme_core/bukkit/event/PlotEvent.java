@@ -26,12 +26,12 @@ public abstract class PlotEvent extends Event {
         this.event = new InternalPlotEvent(instance, p, new BukkitWorld(world));
         this.plugin = instance;
     }
-    
+
     public PlotEvent(PlotMe_Core instance, Plot p, IWorld world) {
         this.event = new InternalPlotEvent(instance, p, world);
         this.plugin = instance;
     }
-    
+
     public PlotEvent(PlotMe_Core instance, InternalPlotEvent event) {
         this.event = event;
         this.plugin = instance;
@@ -41,7 +41,6 @@ public abstract class PlotEvent extends Event {
      * Returns the plot used in the event
      *
      * @return plot used in the event
-     *
      */
     public Plot getPlot() {
         return event.getPlot();
@@ -51,7 +50,6 @@ public abstract class PlotEvent extends Event {
      * Returns the world used in the event
      *
      * @return world
-     *
      */
     public World getWorld() {
         return ((BukkitWorld) event.getWorld()).getWorld();
@@ -61,7 +59,6 @@ public abstract class PlotEvent extends Event {
      * Returns the owner of the plot used in the event
      *
      * @return owner of the plot
-     *
      */
     public String getOwner() {
         if (event.getPlot() != null) {
@@ -75,7 +72,6 @@ public abstract class PlotEvent extends Event {
      * Returns the location of the upper corner of the plot used in the event
      *
      * @return location of the upper corner
-     *
      */
     public Location getUpperBound() {
         if (event.getPlot() != null && event.getWorld() != null) {
@@ -89,7 +85,6 @@ public abstract class PlotEvent extends Event {
      * Returns the location of the lower corner of the plot used in the event
      *
      * @return location of the lower corner
-     *
      */
     public Location getLowerBound() {
         if (event.getPlot() != null && event.getWorld() != null) {
@@ -104,7 +99,6 @@ public abstract class PlotEvent extends Event {
      * returns an empty Set if the plot is null.
      *
      * @return list of people allowed
-     *
      */
     public Set<String> getAllAllowed() {
         if (event.getPlot() != null) {
@@ -119,7 +113,6 @@ public abstract class PlotEvent extends Event {
      * returns an empty Collection if the plot is null.
      *
      * @return list of people allowed
-     *
      */
     public Collection<UUID> getAllAllowedUUID() {
         if (event.getPlot() != null) {
@@ -134,7 +127,6 @@ public abstract class PlotEvent extends Event {
      * function returns an empty Set if the plot is null.
      *
      * @return list of people denied
-     *
      */
     public Set<String> getAllDenied() {
         if (event.getPlot() != null) {
@@ -149,7 +141,6 @@ public abstract class PlotEvent extends Event {
      * function returns an empty Set if the plot is null.
      *
      * @return list of people denied
-     *
      */
     public Collection<UUID> getAllDeniedUUID() {
         if (event.getPlot() != null) {
@@ -164,7 +155,6 @@ public abstract class PlotEvent extends Event {
      * if the plot or world is null.
      *
      * @return home location
-     *
      */
     public Location getHomeLocation() {
         if (event.getPlot() != null && event.getWorld() != null) {

@@ -5,7 +5,6 @@ import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import com.worldcretornica.plotme_core.api.IPlayer;
-import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotOwnerChangeEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
 
@@ -17,8 +16,7 @@ public class CmdSetOwner extends PlotCommand {
 
     public boolean exec(IPlayer p, String[] args) {
         if (plugin.cPerms(p, "PlotMe.admin.setowner")) {
-            IWorld world = p.getWorld();
-            if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
+            if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
                 String id = plugin.getPlotMeCoreManager().getPlotId(p.getLocation());
                 if (id.isEmpty()) {
                     p.sendMessage(RED + C("MsgNoPlotFound"));
@@ -29,8 +27,8 @@ public class CmdSetOwner extends PlotCommand {
                     String oldowner = "<" + C("WordNotApplicable") + ">";
                     String playername = p.getName();
 
-                    if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, world)) {
-                        Plot plot = plugin.getPlotMeCoreManager().getPlotById(world, id);
+                    if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, p)) {
+                        Plot plot = plugin.getPlotMeCoreManager().getPlotById(p, id);
 
                         PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(p);
                         oldowner = plot.getOwner();

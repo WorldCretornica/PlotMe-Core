@@ -16,7 +16,7 @@ public class SqlManager {
 
     private PlotMe_Core plugin;
 
-    private final boolean usemySQL;
+    private final Boolean usemySQL;
     private final String mySQLuname;
     private final String mySQLpass;
     private final String mySQLconn;
@@ -980,7 +980,8 @@ public class SqlManager {
         //Plots
         try {
             Connection conn = getConnection();
-            ps = conn.prepareStatement("UPDATE plotmePlots SET " + field + " = ? " + "WHERE idX = ? AND idZ = ? AND world = ?");
+            ps = conn.prepareStatement("UPDATE plotmePlots SET " + field + " = ? "
+                                               + "WHERE idX = ? AND idZ = ? AND world = ?");
 
             ps.setObject(1, value);
             ps.setInt(2, idX);
@@ -1017,7 +1018,8 @@ public class SqlManager {
         //Allowed
         try {
             Connection conn = getConnection();
-            ps = conn.prepareStatement("INSERT INTO plotmeAllowed (idX, idZ, player, world, playerid) " + "VALUES (?,?,?,?,?)");
+            ps = conn.prepareStatement("INSERT INTO plotmeAllowed (idX, idZ, player, world, playerid) "
+                                               + "VALUES (?,?,?,?,?)");
 
             ps.setInt(1, idX);
             ps.setInt(2, idZ);
@@ -1054,7 +1056,8 @@ public class SqlManager {
         //Denied
         try {
             Connection conn = getConnection();
-            ps = conn.prepareStatement("INSERT INTO plotmeDenied (idX, idZ, player, world, playerid) " + "VALUES (?,?,?,?,?)");
+            ps = conn.prepareStatement("INSERT INTO plotmeDenied (idX, idZ, player, world, playerid) "
+                                               + "VALUES (?,?,?,?,?)");
 
             ps.setInt(1, idX);
             ps.setInt(2, idZ);

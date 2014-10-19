@@ -15,26 +15,26 @@ public class BukkitConfigSection implements IConfigSection {
     private FileConfiguration master;
     private ConfigurationSection section;
     private PlotMe_CorePlugin plugin;
-    
+
     public BukkitConfigSection(PlotMe_CorePlugin instance) {
         plugin = instance;
         master = plugin.getConfig();
         section = master;
     }
-    
+
     public BukkitConfigSection(PlotMe_CorePlugin instance, FileConfiguration master) {
         plugin = instance;
         this.section = master;
         this.master = master;
     }
-    
+
     public BukkitConfigSection(PlotMe_CorePlugin instance, FileConfiguration master, ConfigurationSection configurationSection) {
         plugin = instance;
         this.section = configurationSection;
         this.master = master;
     }
-    
-    
+
+
     @Override
     public List<Integer> getIntegerList(String configpath) {
         return section.getIntegerList(configpath);

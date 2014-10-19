@@ -19,7 +19,7 @@ public class PlotResetEvent extends PlotEvent implements Cancellable {
         super(instance, plot, world);
         event = new InternalPlotResetEvent(instance, new BukkitWorld(world), plot, new BukkitCommandSender(reseter));
     }
-    
+
     public PlotResetEvent(PlotMe_Core instance, IWorld world, Plot plot, ICommandSender reseter) {
         super(instance, plot, world);
         event = new InternalPlotResetEvent(instance, world, plot, reseter);
@@ -38,7 +38,7 @@ public class PlotResetEvent extends PlotEvent implements Cancellable {
     public CommandSender getReseter() {
         return ((BukkitCommandSender) event.getReseter()).getCommandSender();
     }
-    
+
     public InternalPlotResetEvent getInternal() {
         return event;
     }

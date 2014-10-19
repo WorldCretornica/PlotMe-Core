@@ -6,18 +6,18 @@ import org.bukkit.Material;
 public class BukkitMaterial implements IMaterial {
 
     Material material;
-    
+
     public BukkitMaterial(Material mat) {
         this.material = mat;
     }
-    
+
     public Material getMaterial() {
         return material;
     }
 
     @SuppressWarnings("deprecation")
     @Override
-    public int getId() {
+    public Integer getId() {
         return material.getId();
     }
 }

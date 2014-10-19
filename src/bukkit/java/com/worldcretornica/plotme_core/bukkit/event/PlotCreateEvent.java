@@ -22,7 +22,7 @@ public class PlotCreateEvent extends PlotEvent implements Cancellable {
         plugin = instance;
         event = new InternalPlotCreateEvent(instance, new BukkitWorld(world), plotId, new BukkitPlayer(creator));
     }
-    
+
     public PlotCreateEvent(PlotMe_Core instance, IWorld world, String plotId, IPlayer creator) {
         super(instance, null, world);
         event = new InternalPlotCreateEvent(instance, world, plotId, creator);
@@ -55,7 +55,7 @@ public class PlotCreateEvent extends PlotEvent implements Cancellable {
     public Location getLowerBound() {
         return ((BukkitLocation) plugin.getPlotMeCoreManager().getGenMan(event.getWorld()).getPlotBottomLoc(event.getWorld(), event.getPlotId())).getLocation();
     }
-    
+
     public InternalPlotCreateEvent getInternal() {
         return event;
     }

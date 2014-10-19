@@ -5,6 +5,7 @@ import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.*;
 import com.worldcretornica.plotme_core.api.event.IEventFactory;
+import com.worldcretornica.plotme_core.bukkit.MultiWorldWrapper.WorldGeneratorWrapper;
 import com.worldcretornica.plotme_core.bukkit.api.*;
 import com.worldcretornica.plotme_core.bukkit.event.BukkitEventFactory;
 import com.worldcretornica.plotme_core.bukkit.listener.BukkitPlayerListener;
@@ -41,12 +42,12 @@ public class BukkitServerBridge implements IServerBridge {
 
     private MultiWorldWrapper multiworld;
     private MultiverseWrapper multiverse;
-    
+
     public BukkitServerBridge(PlotMe_CorePlugin instance) {
         plugin = instance;
         eventfactory = new BukkitEventFactory();
     }
-    
+
     @Override
     public IOfflinePlayer getOfflinePlayer(UUID uuid) {
         return new BukkitOfflinePlayer(Bukkit.getOfflinePlayer(uuid));
@@ -86,7 +87,7 @@ public class BukkitServerBridge implements IServerBridge {
         }
 
         if (pm.getPlugin("WorldEdit") != null) {
-            
+
             PlotMe_Core plotme_core = plugin.getAPI();
             WorldEditPlugin worldeditplugin = (WorldEditPlugin) pm.getPlugin("WorldEdit");
 
@@ -103,7 +104,7 @@ public class BukkitServerBridge implements IServerBridge {
                     setPlotWorldEdit(null);
                 }
             }
-            
+
             pm.registerEvents(new BukkitPlotWorldEditListener(plugin), plugin);
         }
 
@@ -140,7 +141,7 @@ public class BukkitServerBridge implements IServerBridge {
         return usinglwc;
     }
 
-    public void setUsinglwc(boolean usinglwc) {
+    public void setUsinglwc(Boolean usinglwc) {
         this.usinglwc = usinglwc;
     }
 
@@ -190,13 +191,13 @@ public class BukkitServerBridge implements IServerBridge {
     @Override
     public IBiome getBiome(String name) {
         Biome biome = null;
-        
+
         for (Biome bio : Biome.values()) {
             if (bio.name().equalsIgnoreCase(name)) {
                 biome = bio;
             }
         }
-        
+
         if (biome == null) {
             return null;
         } else {
@@ -210,7 +211,7 @@ public class BukkitServerBridge implements IServerBridge {
         if (p == null) {
             return null;
         } else {
-            return new BukkitPlayer(p); 
+            return new BukkitPlayer(p);
         }
     }
 
@@ -221,7 +222,7 @@ public class BukkitServerBridge implements IServerBridge {
         if (p == null) {
             return null;
         } else {
-            return new BukkitPlayer(p); 
+            return new BukkitPlayer(p);
         }
     }
 
@@ -263,26 +264,21 @@ public class BukkitServerBridge implements IServerBridge {
 
     @Override
     public IConfigSection getConfig(String file) {
-        
+
         File configfile = new File(plugin.getDataFolder().getAbsolutePath(), file);
         YamlConfiguration config = new YamlConfiguration();
-        
-        try 
-        {
+
+        try {
             config.load(configfile);
         } catch (FileNotFoundException ignored) {
-        }
-        catch (IOException e) 
-        {
+        } catch (IOException e) {
             plugin.getLogger().severe("Can't read configuration file");
             e.printStackTrace();
-        } 
-        catch (InvalidConfigurationException e) 
-        {
+        } catch (InvalidConfigurationException e) {
             plugin.getLogger().severe("Invalid configuration format");
             e.printStackTrace();
         }
-        
+
         return new BukkitConfigSection(plugin, config);
     }
 
@@ -328,11 +324,11 @@ public class BukkitServerBridge implements IServerBridge {
     @Override
     public List<IPlayer> getOnlinePlayers() {
         List<IPlayer> players = new ArrayList<>();
-        
-        for(Player p : Bukkit.getOnlinePlayers()) {
+
+        for (Player p : Bukkit.getOnlinePlayers()) {
             players.add(new BukkitPlayer(p));
         }
-        
+
         return players;
     }
 
@@ -380,11 +376,11 @@ public class BukkitServerBridge implements IServerBridge {
     @Override
     public List<IWorld> getWorlds() {
         List<IWorld> worlds = new ArrayList<>();
-        
-        for(World w : Bukkit.getWorlds()) {
+
+        for (World w : Bukkit.getWorlds()) {
             worlds.add(new BukkitWorld(w));
         }
-        
+
         return worlds;
     }
 
@@ -514,19 +510,19 @@ public class BukkitServerBridge implements IServerBridge {
     private MultiWorldWrapper getMultiWorld() {
         return multiworld;
     }
-    
+
     private MultiverseWrapper getMultiverse() {
         return multiverse;
     }
-    
+
     private void setMultiverse(JavaPlugin multiverse) {
         this.multiverse = new MultiverseWrapper(multiverse);
     }
-    
+
     private void setMultiworld(JavaPlugin multiworld) {
         this.multiworld = new MultiWorldWrapper(multiworld);
     }
-    
+
     private MultiWorldWrapper getMultiWorldWrapper() {
         if (Bukkit.getPluginManager().isPluginEnabled("MultiWorld")) {
             return new MultiWorldWrapper((JavaPlugin) Bukkit.getPluginManager().getPlugin("MultiWorld"));
@@ -563,7 +559,7 @@ public class BukkitServerBridge implements IServerBridge {
     public IConfigSection getConfig(InputStream defConfigStream) {
         return new BukkitConfigSection(plugin, YamlConfiguration.loadConfiguration(defConfigStream));
     }
-    
+
     @Override
     public IConfigSection loadDefaultConfig(String worldPath) {
         ConfigurationSection defaultCS = getDefaultWorld();
@@ -580,7 +576,7 @@ public class BukkitServerBridge implements IServerBridge {
         }
         return new BukkitConfigSection(plugin, plugin.getConfig(), configCS);
     }
-    
+
     private ConfigurationSection getDefaultWorld() {
         InputStream defConfigStream = plugin.getResource("default-world.yml");
         InputStreamReader isr;

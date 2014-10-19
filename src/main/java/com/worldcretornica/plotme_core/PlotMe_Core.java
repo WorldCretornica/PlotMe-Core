@@ -13,7 +13,7 @@ public class PlotMe_Core {
     public static final String LANG_PATH = "language";
     public static final String DEFAULT_LANG = "english";
     public static final String CAPTIONS_PATTERN = "caption-%s.yml";
-    private static final String DEFAULT_GENERATOR_URL = "http://dev.bukkit.org/bukkit-plugins/plotme/";
+    public static final String DEFAULT_GENERATOR_URL = "http://dev.bukkit.org/bukkit-plugins/plotme/";
 
     //Config accessors for language <lang, accessor>
     private final Map<String, IConfigSection> captionsCA = new HashMap<>();
@@ -23,8 +23,8 @@ public class PlotMe_Core {
 
     private IWorld worldcurrentlyprocessingexpired;
     private ICommandSender cscurrentlyprocessingexpired;
-    private int counterexpired;
-    private int nbperdeletionprocessingexpired;
+    private Integer counterexpired;
+    private Integer nbperdeletionprocessingexpired;
 
     public Map<String, Map<String, String>> creationbuffer;
 
@@ -35,10 +35,10 @@ public class PlotMe_Core {
     private PlotMeCoreManager plotmecoremanager;
     private SqlManager sqlmanager;
     private Util util;
-    private boolean initialized;
-
+    private Boolean initialized = false;
+    
     //Bridge
-    private final IServerBridge serverBridge;
+    private IServerBridge serverBridge;
 
     public PlotMe_Core(IServerBridge serverObjectBuilder) {
         this.serverBridge = serverObjectBuilder;
@@ -53,7 +53,7 @@ public class PlotMe_Core {
         creationbuffer = null;
         plotsToClear.clear();
         plotsToClear = null;
-        initialized = false;
+        initialized = null;
     }
 
     public void enable() {
@@ -257,9 +257,9 @@ public class PlotMe_Core {
         return sender.hasPermission(node);
     }
 
-    public IPlotMe_GeneratorManager getGenManager(IWorld w) {
-        if (w.isPlotMeGenerator()) {
-            return w.getGenerator().getManager();
+    public IPlotMe_GeneratorManager getGenManager(IWorld world) {
+        if (world.isPlotMeGenerator()) {
+            return world.getGenerator().getManager();
         } else {
             return null;
         }
@@ -274,22 +274,22 @@ public class PlotMe_Core {
         }
     }
 
-    public int getPlotLimit(IPlayer p) {
+    public int getPlotLimit(IPlayer player) {
 
-        if (p.hasPermission("plotme.limit.*")) {
+        if (player.hasPermission("plotme.limit.*")) {
             return -1;
         }
         int max = -2;
         for (int ctr = 0; ctr < 255; ctr++) {
-            if (p.hasPermission("plotme.limit." + ctr)) {
+            if (player.hasPermission("plotme.limit." + ctr)) {
                 max = ctr;
             }
         }
 
         if (max == -2) {
-            if (cPerms(p, "plotme.admin")) {
+            if (cPerms(player, "plotme.admin")) {
                 return -1;
-            } else if (cPerms(p, "plotme.use")) {
+            } else if (cPerms(player, "plotme.use")) {
                 return 1;
             } else {
                 return 0;
@@ -319,11 +319,11 @@ public class PlotMe_Core {
         this.worldcurrentlyprocessingexpired = worldcurrentlyprocessingexpired;
     }
 
-    public int getCounterExpired() {
+    public Integer getCounterExpired() {
         return counterexpired;
     }
 
-    public void setCounterExpired(int counterexpired) {
+    public void setCounterExpired(Integer counterexpired) {
         this.counterexpired = counterexpired;
     }
 
@@ -360,11 +360,12 @@ public class PlotMe_Core {
         return null;
     }
 
-    public int getNbPerDeletionProcessingExpired() {
+    public Integer getNbPerDeletionProcessingExpired() {
         return nbperdeletionprocessingexpired;
     }
 
-    public void setNbPerDeletionProcessingExpired(int nbperdeletionprocessingexpired) {
+    public void setNbPerDeletionProcessingExpired(
+                                                         Integer nbperdeletionprocessingexpired) {
         this.nbperdeletionprocessingexpired = nbperdeletionprocessingexpired;
     }
 

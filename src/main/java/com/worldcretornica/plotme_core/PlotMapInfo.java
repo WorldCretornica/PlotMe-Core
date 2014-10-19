@@ -78,7 +78,7 @@ public class PlotMapInfo {
         return config.getIntegerList("ProtectedBlocks");
     }
 
-    public boolean isProtectedBlock(int blockId) {
+    public boolean isProtectedBlock(Integer blockId) {
         return getProtectedBlocks().contains(blockId);
     }
 

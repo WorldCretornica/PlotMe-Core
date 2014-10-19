@@ -11,11 +11,11 @@ import java.util.Map;
 public class BukkitPlotMe_GeneratorManagerBridge implements IPlotMe_GeneratorManager {
 
     private IBukkitPlotMe_GeneratorManager gm;
-    
+
     public BukkitPlotMe_GeneratorManagerBridge(IBukkitPlotMe_GeneratorManager gm) {
         this.gm = gm;
     }
-    
+
     @Override
     public String getPlotId(ILocation loc) {
         return gm.getPlotId(((BukkitLocation) loc).getLocation());
@@ -30,11 +30,11 @@ public class BukkitPlotMe_GeneratorManagerBridge implements IPlotMe_GeneratorMan
     public List<IPlayer> getPlayersInPlot(IWorld w, String id) {
         List<IPlayer> players = new ArrayList<>();
         BukkitWorld bw = (BukkitWorld) w;
-        
-        for(Player p : gm.getPlayersInPlot(bw.getWorld(), id)) {
+
+        for (Player p : gm.getPlayersInPlot(bw.getWorld(), id)) {
             players.add(new BukkitPlayer(p));
         }
-        
+
         return players;
     }
 

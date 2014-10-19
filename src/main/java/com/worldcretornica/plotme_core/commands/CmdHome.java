@@ -21,17 +21,17 @@ public class CmdHome extends PlotCommand {
             if (plugin.getPlotMeCoreManager().isPlotWorld(p) || sob.getConfig().getBoolean("allowWorldTeleport")) {
                 String playername = p.getName();
                 UUID uuid = p.getUniqueId();
-                IWorld w;
+                IWorld world;
 
                 if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
-                    w = p.getWorld();
+                    world = p.getWorld();
                 } else {
-                    w = plugin.getPlotMeCoreManager().getFirstWorld();
+                    world = plugin.getPlotMeCoreManager().getFirstWorld();
                 }
 
                 String worldname = "";
-                if (w != null) {
-                    worldname = w.getName();
+                if (world != null) {
+                    worldname = world.getName();
                 }
 
                 int nb = 1;
@@ -56,7 +56,7 @@ public class CmdHome extends PlotCommand {
                             uuid = null;
                         }
                     } else {
-                        w = sob.getWorld(args[1]);
+                        world = sob.getWorld(args[1]);
                     }
                 }
 
@@ -65,29 +65,29 @@ public class CmdHome extends PlotCommand {
                         p.sendMessage(RED + args[2] + C("MsgWorldNotPlot"));
                         return true;
                     } else {
-                        w = sob.getWorld(args[2]);
+                        world = sob.getWorld(args[2]);
                         worldname = args[2];
                     }
                 }
 
-                if (plugin.getPlotMeCoreManager().isPlotWorld(w)) {
+                if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
                     int i = nb - 1;
 
-                    for (Plot plot : plugin.getSqlManager().getOwnedPlots(w.getName(), uuid, playername)) {
+                    for (Plot plot : plugin.getSqlManager().getOwnedPlots(world.getName(), uuid, playername)) {
                         if (uuid == null && plot.getOwner().equalsIgnoreCase(playername) || uuid != null && plot.getOwnerId() != null && plot.getOwnerId().equals(uuid)) {
                             if (i == 0) {
-                                PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(w);
+                                PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
 
                                 double price = 0;
 
                                 InternalPlotTeleportHomeEvent event;
 
-                                if (plugin.getPlotMeCoreManager().isEconomyEnabled(w)) {
+                                if (plugin.getPlotMeCoreManager().isEconomyEnabled(world)) {
                                     price = pmi.getPlotHomePrice();
                                     double balance = sob.getBalance(p);
 
                                     if (balance >= price) {
-                                        event = sob.getEventFactory().callPlotTeleportHomeEvent(plugin, w, plot, p);
+                                        event = sob.getEventFactory().callPlotTeleportHomeEvent(plugin, world, plot, p);
 
                                         if (event.isCancelled()) {
                                             return true;
@@ -104,7 +104,7 @@ public class CmdHome extends PlotCommand {
                                         return true;
                                     }
                                 } else {
-                                    event = sob.getEventFactory().callPlotTeleportHomeEvent(plugin, w, plot, p);
+                                    event = sob.getEventFactory().callPlotTeleportHomeEvent(plugin, world, plot, p);
                                 }
 
                                 if (!event.isCancelled()) {

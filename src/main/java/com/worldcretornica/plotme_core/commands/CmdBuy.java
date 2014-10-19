@@ -39,7 +39,7 @@ public class CmdBuy extends PlotCommand {
                                                       + plugin.getPlotMeCoreManager().getNbOwnedPlot(p) + "/" + plugin.getPlotLimit(p) + "). "
                                                       + C("WordUse") + " " + RED + "/plotme " + C("CommandHome") + RESET + " " + C("MsgToGetToIt"));
                             } else {
-                                IWorld w = p.getWorld();
+                                IWorld world = p.getWorld();
 
                                 double cost = plot.getCustomPrice();
 
@@ -47,7 +47,7 @@ public class CmdBuy extends PlotCommand {
                                     p.sendMessage(RED + C("MsgNotEnoughBuy"));
                                 } else {
 
-                                    InternalPlotBuyEvent event = sob.getEventFactory().callPlotBuyEvent(plugin, w, plot, p, cost);
+                                    InternalPlotBuyEvent event = sob.getEventFactory().callPlotBuyEvent(plugin, world, plot, p, cost);
 
                                     if (!event.isCancelled()) {
                                         EconomyResponse er = sob.withdrawPlayer(p, cost);
@@ -86,8 +86,8 @@ public class CmdBuy extends PlotCommand {
                                             plot.updateField("forsale", false);
 
                                             plugin.getPlotMeCoreManager().adjustWall(l);
-                                            plugin.getPlotMeCoreManager().setSellSign(w, plot);
-                                            plugin.getPlotMeCoreManager().setOwnerSign(w, plot);
+                                            plugin.getPlotMeCoreManager().setSellSign(world, plot);
+                                            plugin.getPlotMeCoreManager().setOwnerSign(world, plot);
 
                                             p.sendMessage(C("MsgPlotBought") + " " + Util().moneyFormat(-cost));
 

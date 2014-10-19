@@ -127,7 +127,7 @@ public class PlotMeCoreManager {
     }
 
     public Plot getPlotById(IPlayer player, String id) {
-        PlotMapInfo pmi = getMap(player);
+        PlotMapInfo pmi = getMap(player.getWorld());
 
         if (pmi == null) {
             return null;
@@ -195,18 +195,11 @@ public class PlotMeCoreManager {
      * @return true if world is plotworld, false otherwise
      */
     public boolean isPlotWorld(IWorld world) {
-        if (!(world == null || getGenMan(world) == null)) {
-            if (!plotmaps.containsKey(world.getName().toLowerCase())) {
-                return false;
-            }
-            return true;
-        }
-        return false;
+        return !(world == null || getGenMan(world) == null) && plotmaps.containsKey(world.getName().toLowerCase());
     }
 
     /**
      * Checks if location is a PlotWorld
-     *
      * @param l location to be checked
      * @return true if world is plotworld, false otherwise
      */
@@ -621,7 +614,7 @@ public class PlotMeCoreManager {
         return isPlotAvailable(id, player.getWorld());
     }
 
-    private boolean isPlotAvailable(String id, String world) {
+    public boolean isPlotAvailable(String id, String world) {
         PlotMapInfo pmi = getMap(world);
 
         return pmi != null && pmi.getPlot(id) == null;

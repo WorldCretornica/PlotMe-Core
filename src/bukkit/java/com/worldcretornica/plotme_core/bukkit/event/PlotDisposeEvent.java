@@ -5,6 +5,7 @@ import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotDisposeEvent;
+import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitWorld;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -18,7 +19,7 @@ public class PlotDisposeEvent extends PlotEvent implements Cancellable {
         super(instance, plot, world);
         event = new InternalPlotDisposeEvent(instance, new BukkitWorld(world), plot, new BukkitPlayer(disposer));
     }
-    
+
     public PlotDisposeEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer disposer) {
         super(instance, plot, world);
         event = new InternalPlotDisposeEvent(instance, world, plot, disposer);
@@ -37,7 +38,7 @@ public class PlotDisposeEvent extends PlotEvent implements Cancellable {
     public Player getPlayer() {
         return ((BukkitPlayer) event.getPlayer()).getPlayer();
     }
-    
+
     public InternalPlotDisposeEvent getInternal() {
         return event;
     }

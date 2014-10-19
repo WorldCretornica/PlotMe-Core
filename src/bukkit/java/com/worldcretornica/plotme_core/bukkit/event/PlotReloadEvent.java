@@ -8,7 +8,7 @@ public class PlotReloadEvent extends Event {
 
     private static final HandlerList handlers = new HandlerList();
     private InternalPlotReloadEvent event;
-    
+
     public PlotReloadEvent() {
         event = new InternalPlotReloadEvent();
     }
@@ -21,7 +21,7 @@ public class PlotReloadEvent extends Event {
     public static HandlerList getHandlerList() {
         return handlers;
     }
-    
+
     public InternalPlotReloadEvent getInternal() {
         return event;
     }
