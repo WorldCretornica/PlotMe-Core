@@ -13,7 +13,7 @@ public class PlotMe_Core {
     public static final String LANG_PATH = "language";
     public static final String DEFAULT_LANG = "english";
     public static final String CAPTIONS_PATTERN = "caption-%s.yml";
-    public static final String DEFAULT_GENERATOR_URL = "http://dev.bukkit.org/bukkit-plugins/plotme/";
+    private static final String DEFAULT_GENERATOR_URL = "http://dev.bukkit.org/bukkit-plugins/plotme/";
 
     //Config accessors for language <lang, accessor>
     private final Map<String, IConfigSection> captionsCA = new HashMap<>();
@@ -36,14 +36,14 @@ public class PlotMe_Core {
     private SqlManager sqlmanager;
     private Util util;
     private boolean initialized;
-    
+
     //Bridge
-    private IServerBridge serverBridge;
+    private final IServerBridge serverBridge;
 
     public PlotMe_Core(IServerBridge serverObjectBuilder) {
         this.serverBridge = serverObjectBuilder;
     }
-    
+
     public void disable() {
         getSqlManager().closeConnection();
         serverBridge.unHook();
@@ -82,11 +82,11 @@ public class PlotMe_Core {
         setupDefaultCaptions();
         setupMySQL();
     }
-    
+
     public IServerBridge getServerBridge() {
         return serverBridge;
     }
-    
+
     public Logger getLogger() {
         return getServerBridge().getLogger();
     }
@@ -100,7 +100,7 @@ public class PlotMe_Core {
             config.set(LANG_PATH, config.getString("Language"));
             config.set("Language", null);
         }
-        
+
         // If no world exists add config for a world
         //if (!config.contains("worlds") || config.contains("worlds") && config.getConfigurationSection("worlds").getKeys(false).isEmpty()) {
         if (!(config.contains("worlds") && !config.getConfigurationSection("worlds").getKeys(false).isEmpty())) {
@@ -134,7 +134,7 @@ public class PlotMe_Core {
             oldWorldConfigs.add("ProtectedWallBlockId");
             oldWorldConfigs.add("ForSaleWallBlockId");
             oldWorldConfigs.add("AuctionWallBlockId");
-    
+
             // Copy defaults for all worlds
             IConfigSection worldsCS = config.getConfigurationSection("worlds");
             IConfigSection oldWorldsCS = oldConfig.getConfigurationSection("worlds");
@@ -144,7 +144,7 @@ public class PlotMe_Core {
             for (String worldname : worldsCS.getKeys(false)) {
                 // Get the current config section
                 final IConfigSection worldCS = worldsCS.getConfigurationSection(worldname);
-    
+
                 // Find old world data an move it to oldConfig
                 IConfigSection oldWorldCS = oldWorldsCS.getConfigurationSection(worldname);
                 for (String path : oldWorldConfigs) {
@@ -157,7 +157,7 @@ public class PlotMe_Core {
                     }
                 }
             }
-            
+
             // Copy new values over
             config.copyDefaults(true);
 
@@ -329,11 +329,11 @@ public class PlotMe_Core {
 
     public void addPlotToClear(PlotToClear plotToClear) {
         this.plotsToClear.offer(plotToClear);
-        
+
         PlotMeSpool pms = new PlotMeSpool(this, plotToClear);
         serverBridge.scheduleSyncRepeatingTask(pms, 0L, 200L);
     }
-    
+
     public void removePlotToClear(PlotToClear plotToClear, int taskid) {
         this.plotsToClear.remove(plotToClear);
 
@@ -399,7 +399,7 @@ public class PlotMe_Core {
     private void setUtil(Util util) {
         this.util = util;
     }
-    
+
     public boolean getInitialized() {
         return this.initialized;
     }

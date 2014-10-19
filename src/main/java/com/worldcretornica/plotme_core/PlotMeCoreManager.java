@@ -621,7 +621,7 @@ public class PlotMeCoreManager {
         return isPlotAvailable(id, player.getWorld());
     }
 
-    public boolean isPlotAvailable(String id, String world) {
+    private boolean isPlotAvailable(String id, String world) {
         PlotMapInfo pmi = getMap(world);
 
         return pmi != null && pmi.getPlot(id) == null;

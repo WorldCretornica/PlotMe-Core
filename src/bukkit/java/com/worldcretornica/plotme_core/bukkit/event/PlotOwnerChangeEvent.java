@@ -5,6 +5,7 @@ import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotOwnerChangeEvent;
+import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitWorld;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -41,7 +42,7 @@ public class PlotOwnerChangeEvent extends PlotEvent implements Cancellable {
     public String getNewOwner() {
         return event.getNewOwner();
     }
-    
+
     public InternalPlotOwnerChangeEvent getInternal() {
         return event;
     }

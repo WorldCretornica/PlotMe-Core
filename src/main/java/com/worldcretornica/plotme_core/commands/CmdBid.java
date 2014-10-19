@@ -96,7 +96,7 @@ public class CmdBid extends PlotCommand {
                                                   + RESET + C("WordExample") + ": " + RED + "/plotme " + C("CommandBid") + " 100");
                         }
                     } else {
-                        p.sendMessage(RED + C("MsgPlotNotAuctionned"));
+                        p.sendMessage(RED + C("MsgPlotNotAuctioned"));
                     }
                 } else {
                     p.sendMessage(RED + C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));

@@ -5,6 +5,7 @@ import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotRemoveDeniedEvent;
+import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitWorld;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -41,7 +42,7 @@ public class PlotRemoveDeniedEvent extends PlotEvent implements Cancellable {
     public String getRemovedDenied() {
         return event.getRemovedDenied();
     }
-    
+
     public InternalPlotRemoveDeniedEvent getInternal() {
         return event;
     }

@@ -20,7 +20,7 @@ public class CmdAdd extends PlotCommand {
                 String id = plugin.getPlotMeCoreManager().getPlotId(p.getLocation());
                 if (id.isEmpty()) {
                     p.sendMessage(RED + C("MsgNoPlotFound"));
-                } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, p)) {
+                } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, p.getWorld())) {
                     if (args.length < 2 || args[1].isEmpty()) {
                         p.sendMessage(C("WordUsage") + " " + RED + "/plotme " + C("CommandAdd") + " <" + C("WordPlayer") + ">");
                     } else {

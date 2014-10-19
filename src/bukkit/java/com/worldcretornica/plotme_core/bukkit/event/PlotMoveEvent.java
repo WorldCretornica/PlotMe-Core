@@ -6,6 +6,7 @@ import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotMoveEvent;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitLocation;
+import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitWorld;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -87,7 +88,7 @@ public class PlotMoveEvent extends PlotEvent implements Cancellable {
             return "";
         }
     }
-    
+
     public InternalPlotMoveEvent getInternal() {
         return event;
     }

@@ -7,6 +7,7 @@ import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotTeleportEvent;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitLocation;
+import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitWorld;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -21,7 +22,7 @@ public class PlotTeleportEvent extends PlotEvent implements Cancellable {
         super(instance, plot, world);
         event = new InternalPlotTeleportEvent(instance, new BukkitWorld(world), plot, new BukkitPlayer(player), new BukkitLocation(loc), plotId);
     }
-    
+
     public PlotTeleportEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer player, ILocation loc, String plotId) {
         super(instance, plot, world);
         event = new InternalPlotTeleportEvent(instance, world, plot, player, loc, plotId);
@@ -52,7 +53,7 @@ public class PlotTeleportEvent extends PlotEvent implements Cancellable {
     public boolean getIsPlotClaimed() {
         return (event.getPlot() != null);
     }
-    
+
     public InternalPlotTeleportEvent getInternal() {
         return event;
     }

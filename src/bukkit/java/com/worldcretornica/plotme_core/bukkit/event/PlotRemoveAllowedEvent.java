@@ -5,6 +5,7 @@ import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotRemoveAllowedEvent;
+import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitWorld;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -18,7 +19,7 @@ public class PlotRemoveAllowedEvent extends PlotEvent implements Cancellable {
         super(instance, plot, world);
         event = new InternalPlotRemoveAllowedEvent(instance, new BukkitWorld(world), plot, new BukkitPlayer(player), removed);
     }
-    
+
     public PlotRemoveAllowedEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer player, String removed) {
         super(instance, plot, world);
         event = new InternalPlotRemoveAllowedEvent(instance, world, plot, player, removed);
@@ -41,7 +42,7 @@ public class PlotRemoveAllowedEvent extends PlotEvent implements Cancellable {
     public String getRemovedAllowed() {
         return event.getRemovedAllowed();
     }
-    
+
     public InternalPlotRemoveAllowedEvent getInternal() {
         return event;
     }
