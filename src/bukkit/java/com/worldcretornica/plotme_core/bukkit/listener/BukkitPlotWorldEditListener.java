@@ -35,16 +35,14 @@ public class BukkitPlotWorldEditListener implements Listener {
             String idTo = "";
 
             boolean changemask = false;
-            if (from != null) {
-                if (!from.getWorld().getName().equalsIgnoreCase(to.getWorld().getName())) {
-                    changemask = true;
-                } else if (from.getBlockX() != to.getBlockX() || from.getBlockZ() != to.getBlockZ()) {
-                    String idFrom = api.getPlotMeCoreManager().getPlotId(from);
-                    idTo = api.getPlotMeCoreManager().getPlotId(to);
+            if (!from.getWorld().getName().equalsIgnoreCase(to.getWorld().getName())) {
+                changemask = true;
+            } else if (from.getBlockX() != to.getBlockX() || from.getBlockZ() != to.getBlockZ()) {
+                String idFrom = api.getPlotMeCoreManager().getPlotId(from);
+                idTo = api.getPlotMeCoreManager().getPlotId(to);
 
-                    if (!idFrom.equalsIgnoreCase(idTo)) {
-                        changemask = true;
-                    }
+                if (!idFrom.equalsIgnoreCase(idTo)) {
+                    changemask = true;
                 }
             }
 

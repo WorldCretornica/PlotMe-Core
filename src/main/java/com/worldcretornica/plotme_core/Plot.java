@@ -5,7 +5,6 @@ import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 
 import java.sql.Date;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -28,182 +27,135 @@ public class Plot implements Comparable<Plot> {
     private boolean forsale;
     private String finisheddate;
     private boolean protect;
-    private boolean auctionned;
+    private boolean auctioned;
     private String currentbidder;
     private double currentbid;
     private UUID currentbidderId;
-    private String auctionneddate;
+    private String auctioneddate;
 
     public Plot(PlotMe_Core instance) {
         this.plugin = instance;
-        this.setOwner("");
-        this.setOwnerId(null);
-        this.setWorld("");
-        this.setId("");
-        this.allowed = new PlayerList();
-        this.denied = new PlayerList();
-        this.setBiome(plugin.getServerBridge().getBiome("PLAINS"));
+        setOwner("");
+        setOwnerId(null);
+        setWorld("");
+        setId("");
+        allowed = new PlayerList();
+        denied = new PlayerList();
+        setBiome(plugin.getServerBridge().getBiome("PLAINS"));
 
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DAY_OF_YEAR, 7);
         java.util.Date utlDate = cal.getTime();
-        this.setExpiredDate(new java.sql.Date(utlDate.getTime()));
+        setExpiredDate(new java.sql.Date(utlDate.getTime()));
 
-        this.comments = new ArrayList<>();
-        this.setCustomPrice(0);
-        this.setForSale(false);
-        this.setFinishedDate("");
-        this.setProtect(false);
-        this.setAuctionned(false);
-        this.setCurrentBidder("");
-        this.setCurrentBidderId(null);
-        this.setCurrentBid(0);
+        comments = new ArrayList<>();
+        setCustomPrice(0);
+        setForSale(false);
+        setFinishedDate("");
+        setProtect(false);
+        setAuctioned(false);
+        setCurrentBidder("");
+        setCurrentBidderId(null);
+        setCurrentBid(0);
     }
 
-    public Plot(PlotMe_Core instance, String owner, UUID uuid, IWorld w, String plotid, int days) {
+    public Plot(PlotMe_Core instance, String owner, UUID uuid, IWorld world, String plotid, int days) {
         this.plugin = instance;
-        this.setOwner(owner);
-        this.setOwnerId(uuid);
-        this.setWorld(w.getName());
-        this.allowed = new PlayerList();
-        this.denied = new PlayerList();
-        this.setBiome(plugin.getServerBridge().getBiome("PLAINS"));
-        this.setId(plotid);
+        setOwner(owner);
+        setOwnerId(uuid);
+        setWorld(world.getName().toLowerCase());
+        allowed = new PlayerList();
+        denied = new PlayerList();
+        setBiome(plugin.getServerBridge().getBiome("PLAINS"));
+        setId(plotid);
 
         if (days == 0) {
-            this.setExpiredDate(null);
+            setExpiredDate(null);
         } else {
             Calendar cal = Calendar.getInstance();
             cal.add(Calendar.DAY_OF_YEAR, days);
             java.util.Date utlDate = cal.getTime();
-            this.setExpiredDate(new java.sql.Date(utlDate.getTime()));
+            setExpiredDate(new java.sql.Date(utlDate.getTime()));
         }
 
-        this.comments = new ArrayList<>();
-        this.setCustomPrice(0);
-        this.setForSale(false);
-        this.setFinishedDate("");
-        this.setProtect(false);
-        this.setAuctionned(false);
-        this.setCurrentBidder("");
-        this.setCurrentBidderId(null);
-        this.setCurrentBid(0);
+        comments = new ArrayList<>();
+        setCustomPrice(0);
+        setForSale(false);
+        setFinishedDate("");
+        setProtect(false);
+        setAuctioned(false);
+        setCurrentBidder("");
+        setCurrentBidderId(null);
+        setCurrentBid(0);
     }
 
-    public Plot(PlotMe_Core instance, UUID uuid, IWorld world, String plotid, int days) {
+    public Plot(PlotMe_Core instance, String owner, UUID ownerId, String world, String bio, Date exp, boolean fini,
+                PlayerList al, List<String[]> comm, String id, double custprice, boolean sale, String finishdt,
+                boolean prot, String bidder, UUID bidderId, double bid, boolean isauctioned, PlayerList den, String auctdate) {
         this.plugin = instance;
-        this.setOwnerId(uuid);
-        
-        IPlayer p = plugin.getServerBridge().getPlayer(uuid);
-        if (p != null) {
-            this.setOwner(p.getName());
-        } else {
-            this.setOwner("");
-        }
-        this.setWorld(world.getName());
-        this.allowed = new PlayerList();
-        this.denied = new PlayerList();
-        this.setBiome(plugin.getServerBridge().getBiome("PLAINS"));
-        this.setId(plotid);
-
-        if (days == 0) {
-            this.setExpiredDate(null);
-        } else {
-            Calendar cal = Calendar.getInstance();
-            cal.add(Calendar.DAY_OF_YEAR, days);
-            java.util.Date utlDate = cal.getTime();
-            this.setExpiredDate(new java.sql.Date(utlDate.getTime()));
-        }
-
-        this.comments = new ArrayList<>();
-        this.setCustomPrice(0);
-        this.setForSale(false);
-        this.setFinishedDate("");
-        this.setProtect(false);
-        this.setAuctionned(false);
-        this.setCurrentBidder("");
-        this.setCurrentBidderId(null);
-        this.setCurrentBid(0);
-    }
-
-    public Plot(PlotMe_Core instance, String owner, UUID ownerId, String world, String bio, Date exp, boolean fini, 
-            PlayerList al, List<String[]> comm, String tid, double custprice, boolean sale, String finishdt, 
-            boolean prot, String bidder, UUID bidderId, Double bid, boolean isauctionned, PlayerList den, String auctdate) {
-        this.plugin = instance;
-        this.setOwner(owner);
-        this.setOwnerId(ownerId);
-        this.setWorld(world);
-        this.setBiome(plugin.getServerBridge().getBiome(bio));
-        this.setExpiredDate(exp);
-        this.setFinished(fini);
-        this.allowed = al;
-        this.comments = comm;
-        this.setId(tid);
-        this.setCustomPrice(custprice);
-        this.setForSale(sale);
-        this.setFinishedDate(finishdt);
-        this.setProtect(prot);
-        this.setAuctionned(isauctionned);
-        this.setCurrentBidder(bidder);
-        this.setCurrentBidderId(bidderId);
-        this.setCurrentBid(bid);
-        this.denied = den;
-        this.setAuctionnedDate(auctdate);
-    }
-
-    public void setExpire(Date date) {
-        if (!this.getExpiredDate().equals(date)) {
-            this.setExpiredDate(date);
-            updateField("expireddate", this.getExpiredDate());
-        }
+        setOwner(owner);
+        setOwnerId(ownerId);
+        setWorld(world);
+        setBiome(plugin.getServerBridge().getBiome(bio));
+        setExpiredDate(exp);
+        setFinished(fini);
+        allowed = al;
+        comments = comm;
+        setId(id);
+        setCustomPrice(custprice);
+        setForSale(sale);
+        setFinishedDate(finishdt);
+        setProtect(prot);
+        setAuctioned(isauctioned);
+        setCurrentBidder(bidder);
+        setCurrentBidderId(bidderId);
+        setCurrentBid(bid);
+        denied = den;
+        setAuctionedDate(auctdate);
     }
 
     public void resetExpire(int days) {
         if (days == 0) {
-            if (this.getExpiredDate() != null) {
-                this.setExpiredDate(null);
-                updateField("expireddate", this.getExpiredDate());
+            if (getExpiredDate() != null) {
+                setExpiredDate(null);
+                updateField("expireddate", getExpiredDate());
             }
         } else {
             Calendar cal = Calendar.getInstance();
             cal.add(Calendar.DAY_OF_YEAR, days);
             java.util.Date utlDate = cal.getTime();
             java.sql.Date temp = new java.sql.Date(utlDate.getTime());
-            if (this.getExpiredDate() == null || !temp.toString().equalsIgnoreCase(this.getExpiredDate().toString())) {
-                this.setExpiredDate(temp);
-                updateField("expireddate", this.getExpiredDate());
+            if (getExpiredDate() == null || !temp.toString().equalsIgnoreCase(getExpiredDate().toString())) {
+                setExpiredDate(temp);
+                updateField("expireddate", getExpiredDate());
             }
         }
     }
 
-    public String getExpire() {
-        return DateFormat.getDateInstance().format(this.getExpiredDate());
-    }
-
     public void setFinished() {
-        this.setFinishedDate(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(Calendar.getInstance().getTime()));
-        this.finished = true;
+        setFinishedDate(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(Calendar.getInstance().getTime()));
+        finished = true;
 
-        updateFinished(this.getFinishedDate(), true);
+        updateFinished(getFinishedDate(), true);
     }
 
     public void setUnfinished() {
-        this.setFinishedDate("");
-        this.setFinished(false);
+        setFinishedDate("");
+        setFinished(false);
 
-        updateFinished(this.getFinishedDate(), this.isFinished());
+        updateFinished(getFinishedDate(), isFinished());
     }
 
     public IBiome getBiome() {
-        return this.biome;
+        return biome;
     }
 
     public final String getOwner() {
-        return this.owner;
+        return owner;
     }
     
     public final UUID getOwnerId() {
-        return this.ownerId;
+        return ownerId;
     }
 
     public final void setOwner(String owner) {
@@ -211,7 +163,7 @@ public class Plot implements Comparable<Plot> {
     }
     
     public final void setOwnerId(UUID uuid) {
-        this.ownerId = uuid;
+        ownerId = uuid;
     }
 
     public String getAllowed() {
@@ -223,19 +175,19 @@ public class Plot implements Comparable<Plot> {
     }
 
     public int getCommentsCount() {
-        return this.comments.size();
+        return comments.size();
     }
 
     public String[] getComment(int i) {
-        return this.comments.get(i);
+        return comments.get(i);
     }
 
     public List<String[]> getComments() {
-        return this.comments;
+        return comments;
     }
 
     public void addComment(String[] comment) {
-        this.comments.add(comment);
+        comments.add(comment);
     }
 
     public void addAllowed(String name) {
@@ -477,10 +429,10 @@ public class Plot implements Comparable<Plot> {
 
     @Override
     public int compareTo(Plot plot) {
-        if (this.getExpiredDate().compareTo(plot.getExpiredDate()) == 0) {
-            return this.owner.compareTo(plot.owner);
+        if (getExpiredDate().compareTo(plot.getExpiredDate()) == 0) {
+            return owner.compareTo(plot.owner);
         } else {
-            return this.getExpiredDate().compareTo(plot.getExpiredDate());
+            return getExpiredDate().compareTo(plot.getExpiredDate());
         }
     }
 
@@ -490,7 +442,7 @@ public class Plot implements Comparable<Plot> {
     }
 
     public void updateField(String field, Object value) {
-        this.plugin.getSqlManager().updatePlot(this.plugin.getPlotMeCoreManager().getIdX(this.getId()), this.plugin.getPlotMeCoreManager().getIdZ(this.getId()), this.getWorld(), field, value);
+        plugin.getSqlManager().updatePlot(plugin.getPlotMeCoreManager().getIdX(getId()), plugin.getPlotMeCoreManager().getIdZ(getId()), getWorld(), field, value);
     }
 
     public final String getWorld() {
@@ -561,12 +513,12 @@ public class Plot implements Comparable<Plot> {
         this.protect = protect;
     }
 
-    public final boolean isAuctionned() {
-        return auctionned;
+    public final boolean isAuctioned() {
+        return auctioned;
     }
 
-    public final void setAuctionned(boolean auctionned) {
-        this.auctionned = auctionned;
+    public final void setAuctioned(boolean auctioned) {
+        this.auctioned = auctioned;
     }
 
     public final String getCurrentBidder() {
@@ -582,7 +534,7 @@ public class Plot implements Comparable<Plot> {
     }
     
     public final void setCurrentBidderId(UUID uuid) {
-        this.currentbidderId = uuid;
+        currentbidderId = uuid;
     }
 
     public final double getCurrentBid() {
@@ -593,11 +545,11 @@ public class Plot implements Comparable<Plot> {
         this.currentbid = currentbid;
     }
 
-    public final String getAuctionnedDate() {
-        return auctionneddate;
+    public final String getAuctionedDate() {
+        return auctioneddate;
     }
 
-    public final void setAuctionnedDate(String auctionneddate) {
-        this.auctionneddate = auctionneddate;
+    public final void setAuctionedDate(String auctioneddate) {
+        this.auctioneddate = auctioneddate;
     }
 }

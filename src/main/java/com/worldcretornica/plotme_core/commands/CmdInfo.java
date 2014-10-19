@@ -2,6 +2,7 @@ package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
 
 public class CmdInfo extends PlotCommand {
@@ -38,16 +39,22 @@ public class CmdInfo extends PlotCommand {
 
                     if (plugin.getPlotMeCoreManager().isEconomyEnabled(p)) {
                         if (plot.getCurrentBidder().isEmpty()) {
-                            p.sendMessage(GREEN + C("InfoAuctionned") + ": " + AQUA + (plot.isAuctionned() ? C("WordYes")
+                            p.sendMessage(GREEN + C("InfoAuctionned") + ": " + AQUA + (plot.isAuctioned() ? C("WordYes")
                                                                                                                      + GREEN + " " + C("InfoMinimumBid") + ": " + AQUA + Util().round(plot.getCurrentBid()) : C("WordNo"))
                                                   + GREEN + " " + C("InfoForSale") + ": " + AQUA + (plot.isForSale() ? AQUA + Util().round(plot.getCustomPrice()) : C("WordNo")));
                         } else {
-                            p.sendMessage(GREEN + C("InfoAuctionned") + ": " + AQUA + (plot.isAuctionned() ? C("WordYes")
+                            p.sendMessage(GREEN + C("InfoAuctionned") + ": " + AQUA + (plot.isAuctioned() ? C("WordYes")
                                                                                                                      + GREEN + " " + C("InfoBidder") + ": " + AQUA + plot.getCurrentBidder()
                                                                                                                      + GREEN + " " + C("InfoBid") + ": " + AQUA + Util().round(plot.getCurrentBid()) : C("WordNo"))
                                                   + GREEN + " " + C("InfoForSale") + ": " + AQUA + (plot.isForSale() ? AQUA + Util().round(plot.getCustomPrice()) : C("WordNo")));
                         }
                     }
+                    ILocation bottom = plugin.getPlotMeCoreManager().getPlotBottomLoc(p.getWorld(), id);
+                    ILocation top = plugin.getPlotMeCoreManager().getPlotTopLoc(p.getWorld(), id);
+
+                    p.sendMessage(AQUA + C("WordBottom") + ": " + RESET + bottom.getBlockX() + BLUE + "," + RESET + bottom.getBlockZ());
+                    p.sendMessage(AQUA + C("WordTop") + ": " + RESET + top.getBlockX() + BLUE + "," + RESET + top.getBlockZ());
+
                 } else {
                     p.sendMessage(RED + C("MsgThisPlot") + " (" + id + ") " + C("MsgHasNoOwner"));
                 }

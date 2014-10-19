@@ -901,7 +901,7 @@ public class SqlManager {
             ps.setBoolean(13, plot.isForSale());
             ps.setString(14, plot.getFinishedDate());
             ps.setBoolean(15, plot.isProtect());
-            ps.setBoolean(16, plot.isAuctionned());
+            ps.setBoolean(16, plot.isAuctioned());
             ps.setDate(17, null); //not implemented
             ps.setDouble(18, plot.getCurrentBid());
             ps.setString(19, plot.getCurrentBidder());

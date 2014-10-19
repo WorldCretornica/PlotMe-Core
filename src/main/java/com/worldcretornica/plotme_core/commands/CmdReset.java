@@ -40,7 +40,7 @@ public class CmdReset extends PlotCommand {
                             PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(p);
 
                             if (plugin.getPlotMeCoreManager().isEconomyEnabled(p)) {
-                                if (plot.isAuctionned()) {
+                                if (plot.isAuctioned()) {
                                     if (plot.getCurrentBidderId() != null) {
                                         IOfflinePlayer playercurrentbidder = sob.getOfflinePlayer(plot.getCurrentBidderId());
                                         EconomyResponse er = sob.depositPlayer(playercurrentbidder, plot.getCurrentBid());

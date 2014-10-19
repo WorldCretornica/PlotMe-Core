@@ -42,19 +42,19 @@ public class CmdClaim extends PlotCommand {
                         p.sendMessage(RED + C("MsgAlreadyReachedMaxPlots") + " ("
                                               + plugin.getPlotMeCoreManager().getNbOwnedPlot(p) + "/" + plugin.getPlotLimit(p) + "). " + C("WordUse") + " " + RED + "/plotme " + C("CommandHome") + RESET + " " + C("MsgToGetToIt"));
                     } else {
-                        IWorld w = p.getWorld();
-                        PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(w);
+                        IWorld world = p.getWorld();
+                        PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
 
                         double price = 0;
 
                         InternalPlotCreateEvent event;
 
-                        if (plugin.getPlotMeCoreManager().isEconomyEnabled(w)) {
+                        if (plugin.getPlotMeCoreManager().isEconomyEnabled(world)) {
                             price = pmi.getClaimPrice();
                             double balance = sob.getBalance(p);
 
                             if (balance >= price) {
-                                event = sob.getEventFactory().callPlotCreatedEvent(plugin, w, id, p);
+                                event = sob.getEventFactory().callPlotCreatedEvent(plugin, world, id, p);
 
                                 if (event.isCancelled()) {
                                     return true;
@@ -72,13 +72,13 @@ public class CmdClaim extends PlotCommand {
                                 return true;
                             }
                         } else {
-                            event = sob.getEventFactory().callPlotCreatedEvent(plugin, w, id, p);
+                            event = sob.getEventFactory().callPlotCreatedEvent(plugin, world, id, p);
                         }
 
                         if (!event.isCancelled()) {
-                            Plot plot = plugin.getPlotMeCoreManager().createPlot(w, id, playername, uuid);
+                            Plot plot = plugin.getPlotMeCoreManager().createPlot(world, id, playername, uuid);
 
-                            //plugin.getPlotMeCoreManager().adjustLinkedPlots(id, w);
+                            //plugin.getPlotMeCoreManager().adjustLinkedPlots(id, world);
                             if (plot == null) {
                                 p.sendMessage(RED + C("ErrCreatingPlotAt") + " " + id);
                             } else {

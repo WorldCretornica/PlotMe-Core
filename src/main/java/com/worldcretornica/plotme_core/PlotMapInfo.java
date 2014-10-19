@@ -18,8 +18,8 @@ public class PlotMapInfo {
         this.plugin = instance;
         this.world = world;
         config = plugin.getServerBridge().loadDefaultConfig("worlds." + world);
-        this.plots = new ConcurrentHashMap<>(1000, 0.75f, 5);
-        this.freedplots = plugin.getSqlManager().getFreed(world);
+        plots = new ConcurrentHashMap<>(1000, 0.75f, 5);
+        freedplots = plugin.getSqlManager().getFreed(world);
     }
 
     public int getNbPlots() {

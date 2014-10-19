@@ -57,7 +57,7 @@ public class CmdDispose extends PlotCommand {
                                         return true;
                                     }
 
-                                    if (plot.isAuctionned()) {
+                                    if (plot.isAuctioned()) {
                                         String currentbidder = plot.getCurrentBidder();
 
                                         if (!currentbidder.isEmpty()) {

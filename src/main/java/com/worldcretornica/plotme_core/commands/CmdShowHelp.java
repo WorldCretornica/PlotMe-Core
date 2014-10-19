@@ -61,9 +61,6 @@ public class CmdShowHelp extends PlotCommand {
         if (plugin.cPerms(p, "PlotMe.admin.tp")) {
             allowed_commands.add("tp");
         }
-        if (plugin.cPerms(p, "PlotMe.admin.id")) {
-            allowed_commands.add("id");
-        }
         if (plugin.cPerms(p, "PlotMe.use.clear") || plugin.cPerms(p, "PlotMe.admin.clear")) {
             allowed_commands.add("clear");
         }
@@ -162,14 +159,14 @@ public class CmdShowHelp extends PlotCommand {
                     p.sendMessage(GREEN + C("HelpYourPlotLimitWorld") + " : " + AQUA + C("MsgNotPlotWorld"));
                 }
             } else if (allowedcmd.equalsIgnoreCase("claim")) {
-                p.sendMessage(GREEN + " /plotme " + C("CommandClaim"));
+                p.sendMessage(GREEN + " /plotme claim");
                 if (ecoon && pmi != null && pmi.getClaimPrice() != 0) {
                     p.sendMessage(AQUA + " " + C("HelpClaim") + " " + C("WordPrice") + " : " + RESET + Util().round(pmi.getClaimPrice()));
                 } else {
                     p.sendMessage(AQUA + " " + C("HelpClaim"));
                 }
             } else if (allowedcmd.equalsIgnoreCase("claim.other")) {
-                p.sendMessage(GREEN + " /plotme " + C("CommandClaim") + " <" + C("WordPlayer") + ">");
+                p.sendMessage(GREEN + " /plotme claim" + " <" + C("WordPlayer") + ">");
                 if (ecoon && pmi != null && pmi.getClaimPrice() != 0) {
                     p.sendMessage(AQUA + " " + C("HelpClaimOther") + " " + C("WordPrice") + " : " + RESET + Util().round(pmi.getClaimPrice()));
                 } else {
@@ -254,9 +251,6 @@ public class CmdShowHelp extends PlotCommand {
                 }
 
                 p.sendMessage(AQUA + " " + C("HelpTp"));
-            } else if (allowedcmd.equalsIgnoreCase("id")) {
-                p.sendMessage(GREEN + " /plotme id");
-                p.sendMessage(AQUA + " " + C("HelpId"));
             } else if (allowedcmd.equalsIgnoreCase("clear")) {
                 p.sendMessage(GREEN + " /plotme " + C("CommandClear"));
                 if (ecoon && pmi != null && pmi.getClearPrice() != 0) {

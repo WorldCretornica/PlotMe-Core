@@ -1,17 +1,16 @@
 package com.worldcretornica.plotme_core.bukkit.api;
 
-import java.util.UUID;
-
+import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import org.bukkit.OfflinePlayer;
 
-import com.worldcretornica.plotme_core.api.IOfflinePlayer;
+import java.util.UUID;
 
 public class BukkitOfflinePlayer implements IOfflinePlayer {
 
     private OfflinePlayer offlineplayer;
 
-    public BukkitOfflinePlayer(OfflinePlayer op) {
-        this.offlineplayer = op;
+    public BukkitOfflinePlayer(OfflinePlayer player) {
+        offlineplayer = player;
     }
     
     @Override

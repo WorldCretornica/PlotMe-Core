@@ -57,7 +57,7 @@ public interface IBukkitPlotMe_GeneratorManager {
 
     Long[] clear(World w, String id, long maxBlocks, boolean clearEntities, Long[] start);
 
-    void adjustPlotFor(World w, String id, boolean Claimed, boolean Protect, boolean Auctionned, boolean ForSale);
+    void adjustPlotFor(World w, String id, boolean Claimed, boolean Protect, boolean Auctioned, boolean ForSale);
 
     boolean isBlockInPlot(String id, Location blocklocation);
 

@@ -114,7 +114,7 @@ public class CmdSell extends PlotCommand {
                                                 plot.setOwner("$Bank$");
                                                 plot.setForSale(true);
                                                 plot.setCustomPrice(pmi.getBuyFromBankPrice());
-                                                plot.setAuctionned(false);
+                                                plot.setAuctioned(false);
                                                 plot.setCurrentBidder("");
                                                 plot.setCurrentBidderId(null);
                                                 plot.setCurrentBid(0);

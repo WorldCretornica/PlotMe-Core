@@ -23,7 +23,7 @@ public class CmdBid extends PlotCommand {
                 } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, p)) {
                     Plot plot = plugin.getPlotMeCoreManager().getPlotById(p, id);
 
-                    if (plot.isAuctionned()) {
+                    if (plot.isAuctioned()) {
                         String bidder = p.getName();
 
                         if (plot.getOwner().equalsIgnoreCase(bidder)) {

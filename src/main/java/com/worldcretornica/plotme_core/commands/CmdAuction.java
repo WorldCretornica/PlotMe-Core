@@ -33,7 +33,7 @@ public class CmdAuction extends PlotCommand {
                         if (plot.getOwner().equalsIgnoreCase(name) || plugin.cPerms(p, "PlotMe.admin.auction")) {
                             IWorld w = p.getWorld();
 
-                            if (plot.isAuctionned()) {
+                            if (plot.isAuctioned()) {
                                 if (plot.getCurrentBidderId() != null) {
                                     if (plugin.cPerms(p, "PlotMe.admin.auction")) {
                                         IOfflinePlayer playercurrentbidder = sob.getOfflinePlayer(plot.getCurrentBidderId());
@@ -52,7 +52,7 @@ public class CmdAuction extends PlotCommand {
                                             plugin.getUtil().warn(er.errorMessage);
                                         }
 
-                                        plot.setAuctionned(false);
+                                        plot.setAuctioned(false);
                                         plugin.getPlotMeCoreManager().adjustWall(p.getLocation());
                                         plugin.getPlotMeCoreManager().setSellSign(w, plot);
                                         plot.setCurrentBid(0);
@@ -72,7 +72,7 @@ public class CmdAuction extends PlotCommand {
                                         p.sendMessage(RED + C("MsgPlotHasBidsAskAdmin"));
                                     }
                                 } else {
-                                    plot.setAuctionned(false);
+                                    plot.setAuctioned(false);
                                     plugin.getPlotMeCoreManager().adjustWall(p.getLocation());
                                     plugin.getPlotMeCoreManager().setSellSign(w, plot);
                                     plot.setCurrentBid(0);
@@ -107,7 +107,7 @@ public class CmdAuction extends PlotCommand {
 
                                     if (!event.isCancelled()) {
                                         plot.setCurrentBid(bid);
-                                        plot.setAuctionned(true);
+                                        plot.setAuctioned(true);
                                         plugin.getPlotMeCoreManager().adjustWall(p.getLocation());
                                         plugin.getPlotMeCoreManager().setSellSign(w, plot);
 

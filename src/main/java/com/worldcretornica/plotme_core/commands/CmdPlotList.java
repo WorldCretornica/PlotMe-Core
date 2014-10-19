@@ -66,7 +66,7 @@ public class CmdPlotList extends PlotCommand {
                     }
 
                     // Is it auctionned?
-                    if (plot.isAuctionned()) {
+                    if (plot.isAuctioned()) {
                         addition.append(" " + C("WordAuction") + ": " + GREEN + Util().round(plot.getCurrentBid()) + RESET + (!plot.getCurrentBidder().isEmpty() ? " " + plot.getCurrentBidder() : ""));
                     }
 

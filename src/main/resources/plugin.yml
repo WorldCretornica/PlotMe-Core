@@ -41,7 +41,6 @@ permissions:
         plotme.admin.claim.other: true
         plotme.admin.home.other: true
         plotme.admin.tp: true
-        plotme.admin.id: true
         plotme.admin.clear: true
         plotme.admin.reset: true
         plotme.admin.add: true
@@ -118,8 +117,6 @@ permissions:
       description: Gives the home command for any players
     plotme.admin.tp:
       description: Gives the tp command
-    plotme.admin.id:
-      description: Gives the id command
     plotme.admin.clear:
       description: Gives the clear command for any plots
     plotme.admin.reset:

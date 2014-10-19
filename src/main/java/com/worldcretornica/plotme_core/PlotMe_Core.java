@@ -267,11 +267,11 @@ public class PlotMe_Core {
     }
 
     public IPlotMe_GeneratorManager getGenManager(String name) {
-        IWorld w = serverBridge.getWorld(name);
-        if (w == null) {
+        IWorld world = serverBridge.getWorld(name);
+        if (world == null) {
             return null;
         } else {
-            return getGenManager(w);
+            return getGenManager(world);
         }
     }
 

@@ -32,7 +32,6 @@ public class BukkitCommand implements CommandExecutor {
     private final CmdDoneList donelist;
     private final CmdExpired expired;
     private final CmdHome home;
-    private final CmdID id;
     private final CmdInfo info;
     private final CmdMove move;
     private final CmdPlotList plotlist;
@@ -70,7 +69,6 @@ public class BukkitCommand implements CommandExecutor {
         donelist = new CmdDoneList(api);
         expired = new CmdExpired(api);
         home = new CmdHome(api);
-        id = new CmdID(api);
         info = new CmdInfo(api);
         move = new CmdMove(api);
         plotlist = new CmdPlotList(api);
@@ -128,7 +126,7 @@ public class BukkitCommand implements CommandExecutor {
                     }
 
                     if (ipage == -1) {
-                        if (a0.equalsIgnoreCase(C("CommandHelp"))) {
+                        if (a0.equalsIgnoreCase("help")) {
                             if (args.length > 1) {
                                 String a1 = args[1];
                                 ipage = -1;
@@ -145,7 +143,7 @@ public class BukkitCommand implements CommandExecutor {
                                 return showhelp.exec(p, ipage);
                             }
                         }
-                        if (a0.equalsIgnoreCase(C("CommandClaim"))) {
+                        if (a0.equalsIgnoreCase("claim")) {
                             return claim.exec(p, args);
                         }
                         if (a0.equalsIgnoreCase(C("CommandAuto"))) {
@@ -165,9 +163,6 @@ public class BukkitCommand implements CommandExecutor {
                         }
                         if (a0.equalsIgnoreCase(C("CommandBiomelist"))) {
                             return biomelist.exec(p, args);
-                        }
-                        if (a0.equalsIgnoreCase("id")) {
-                            return id.exec(p);
                         }
                         if (a0.equalsIgnoreCase(C("CommandTp"))) {
                             return tp.exec(p, args);

@@ -82,7 +82,7 @@ public class CmdSetOwner extends PlotCommand {
                             plot.setCurrentBidder("");
                             plot.setCurrentBidderId(null);
                             plot.setCurrentBid(0);
-                            plot.setAuctionned(false);
+                            plot.setAuctioned(false);
                             plot.setForSale(false);
 
                             plugin.getPlotMeCoreManager().setSellSign(p.getWorld(), plot);
