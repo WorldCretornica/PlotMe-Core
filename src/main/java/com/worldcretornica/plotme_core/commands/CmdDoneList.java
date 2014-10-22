@@ -15,7 +15,7 @@ public class CmdDoneList extends PlotCommand {
     }
 
     public boolean exec(IPlayer p, String[] args) {
-        if (plugin.cPerms(p, "PlotMe.admin.done")) {
+        if (PlotMe_Core.cPerms(p, "PlotMe.admin.done")) {
             PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(p);
 
             if (pmi == null) {

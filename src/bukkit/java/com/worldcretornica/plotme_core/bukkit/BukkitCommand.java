@@ -102,7 +102,7 @@ public class BukkitCommand implements CommandExecutor {
                 } else {
                     String a0 = args[0];
                     if (a0.equalsIgnoreCase("reload")) {
-                        return reload.exec(new BukkitCommandSender(s));
+                        return reload.exec();
                     }
                     if (a0.equalsIgnoreCase(C("CommandResetExpired"))) {
                         return resetexpired.exec(new BukkitCommandSender(s), args);
@@ -194,7 +194,7 @@ public class BukkitCommand implements CommandExecutor {
                             return move.exec(p, args);
                         }
                         if (a0.equalsIgnoreCase("reload")) {
-                            return reload.exec(new BukkitCommandSender(s));
+                            return reload.exec();
                         }
                         if (a0.equalsIgnoreCase(C("CommandWEAnywhere"))) {
                             return weanywhere.exec(p);

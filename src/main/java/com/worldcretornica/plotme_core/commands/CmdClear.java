@@ -16,7 +16,7 @@ public class CmdClear extends PlotCommand {
     }
 
     public boolean exec(IPlayer p) {
-        if (plugin.cPerms(p, "PlotMe.admin.clear") || plugin.cPerms(p, "PlotMe.use.clear")) {
+        if (PlotMe_Core.cPerms(p, "PlotMe.admin.clear") || PlotMe_Core.cPerms(p, "PlotMe.use.clear")) {
             if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
                 String id = plugin.getPlotMeCoreManager().getPlotId(p.getLocation());
                 if (id.isEmpty()) {
@@ -29,7 +29,7 @@ public class CmdClear extends PlotCommand {
                     } else {
                         String playername = p.getName();
 
-                        if (plot.getOwner().equalsIgnoreCase(playername) || plugin.cPerms(p, "PlotMe.admin.clear")) {
+                        if (plot.getOwner().equalsIgnoreCase(playername) || PlotMe_Core.cPerms(p, "PlotMe.admin.clear")) {
                             IWorld w = p.getWorld();
 
                             PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(w);

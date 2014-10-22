@@ -11,23 +11,23 @@ public class CmdResetExpired extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(ICommandSender s, String[] args) {
+    public boolean exec(ICommandSender sender, String[] args) {
         if (args.length <= 1) {
-            s.sendMessage(C("WordUsage") + ": " + RED + "/plotme " + C("CommandResetExpired") + " <" + C("WordWorld") + "> " + RESET + "Example: " + RED + "/plotme " + C("CommandResetExpired") + " plotworld ");
+            sender.sendMessage(C("WordUsage") + ": " + RED + "/plotme " + C("CommandResetExpired") + " <" + C("WordWorld") + "> " + RESET + "Example: " + RED + "/plotme " + C("CommandResetExpired") + " plotworld ");
         } else if (plugin.getWorldCurrentlyProcessingExpired() != null) {
-            s.sendMessage(plugin.getCommandSenderCurrentlyProcessingExpired().getName() + " " + C("MsgAlreadyProcessingPlots"));
+            sender.sendMessage(plugin.getCommandSenderCurrentlyProcessingExpired().getName() + " " + C("MsgAlreadyProcessingPlots"));
         } else {
-            IWorld w = sob.getWorld(args[1]);
+            IWorld world = sob.getWorld(args[1]);
 
-            if (w == null) {
-                s.sendMessage(RED + C("WordWorld") + " '" + args[1] + "' " + C("MsgDoesNotExistOrNotLoaded"));
+            if (world == null) {
+                sender.sendMessage(RED + C("WordWorld") + " '" + args[1] + "' " + C("MsgDoesNotExistOrNotLoaded"));
                 return true;
-            } else if (!plugin.getPlotMeCoreManager().isPlotWorld(w)) {
-                s.sendMessage(RED + C("MsgNotPlotWorld"));
+            } else if (!plugin.getPlotMeCoreManager().isPlotWorld(world)) {
+                sender.sendMessage(RED + C("MsgNotPlotWorld"));
                 return true;
             } else {
-                plugin.setWorldCurrentlyProcessingExpired(w);
-                plugin.setCommandSenderCurrentlyProcessingExpired(s);
+                plugin.setWorldCurrentlyProcessingExpired(world);
+                plugin.setCommandSenderCurrentlyProcessingExpired(sender);
                 plugin.setCounterExpired(50);
                 plugin.setNbPerDeletionProcessingExpired(5);
 

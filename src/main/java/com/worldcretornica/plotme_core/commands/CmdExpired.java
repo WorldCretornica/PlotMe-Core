@@ -15,7 +15,7 @@ public class CmdExpired extends PlotCommand {
     }
 
     public boolean exec(IPlayer p, String[] args) {
-        if (plugin.cPerms(p, "PlotMe.admin.expired")) {
+        if (PlotMe_Core.cPerms(p, "PlotMe.admin.expired")) {
             if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
                 int page = 1;
                 IWorld w = p.getWorld();

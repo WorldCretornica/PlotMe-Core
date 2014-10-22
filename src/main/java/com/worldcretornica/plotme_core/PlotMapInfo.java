@@ -59,8 +59,8 @@ public class PlotMapInfo {
     public void addFreed(String id) {
         if (!freedplots.contains(id)) {
             freedplots.add(id);
-            int x = plugin.getPlotMeCoreManager().getIdX(id);
-            int z = plugin.getPlotMeCoreManager().getIdZ(id);
+            int x = PlotMeCoreManager.getIdX(id);
+            int z = PlotMeCoreManager.getIdZ(id);
             plugin.getSqlManager().addFreed(x, z, world);
         }
     }
@@ -68,8 +68,8 @@ public class PlotMapInfo {
     public void removeFreed(String id) {
         if (freedplots.contains(id)) {
             freedplots.remove(id);
-            int x = plugin.getPlotMeCoreManager().getIdX(id);
-            int z = plugin.getPlotMeCoreManager().getIdZ(id);
+            int x = PlotMeCoreManager.getIdX(id);
+            int z = PlotMeCoreManager.getIdZ(id);
             plugin.getSqlManager().deleteFreed(x, z, world);
         }
     }

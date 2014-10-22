@@ -9,11 +9,11 @@ public class PlotToClear {
     private ICommandSender commandsender; //TODO Make it work if player relogs
     private ClearReason reason;
 
-    public PlotToClear(String w, String id, ICommandSender cs, ClearReason r) {
-        setWorld(w);
+    public PlotToClear(String world, String id, ICommandSender sender, ClearReason reason) {
+        setWorld(world);
         setPlotId(id);
-        setCommandSender(cs);
-        setReason(r);
+        setCommandSender(sender);
+        setReason(reason);
     }
 
     public final String getWorld() {

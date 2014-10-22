@@ -14,7 +14,7 @@ import java.util.logging.Level;
 
 public class SqlManager {
 
-    private PlotMe_Core plugin;
+    private final PlotMe_Core plugin;
 
     private final Boolean usemySQL;
     private final String mySQLuname;
@@ -23,8 +23,8 @@ public class SqlManager {
 
     private static Connection conn;
 
-    public SqlManager(PlotMe_Core instance, boolean usemysql, String sqlusername, String sqlpassword, String sqlconnection) {
-        plugin = instance;
+    public SqlManager(PlotMe_Core plugin, boolean usemysql, String sqlusername, String sqlpassword, String sqlconnection) {
+        this.plugin = plugin;
         this.mySQLconn = sqlconnection;
         this.mySQLpass = sqlpassword;
         this.mySQLuname = sqlusername;
@@ -1304,8 +1304,8 @@ public class SqlManager {
         ResultSet setDenied = null;
         ResultSet setComments = null;
 
-        int idX = plugin.getPlotMeCoreManager().getIdX(id);
-        int idZ = plugin.getPlotMeCoreManager().getIdZ(id);
+        int idX = PlotMeCoreManager.getIdX(id);
+        int idZ = PlotMeCoreManager.getIdZ(id);
 
         try {
             Connection conn = getConnection();
@@ -2563,13 +2563,13 @@ public class SqlManager {
                     try {
                         Connection conn = getConnection();
 
-                        IPlayer p = plugin.getServerBridge().getPlayerExact(name);
+                        IPlayer player = plugin.getServerBridge().getPlayerExact(name);
                         UUID uuid = null;
                         String newname = name;
 
-                        if (p != null) {
-                            uuid = p.getUniqueId();
-                            newname = p.getName();
+                        if (player != null) {
+                            uuid = player.getUniqueId();
+                            newname = player.getName();
                         } else if (name.isEmpty()) {
                             uuid = null;
                             newname = "";

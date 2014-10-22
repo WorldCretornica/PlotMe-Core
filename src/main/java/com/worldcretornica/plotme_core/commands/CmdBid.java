@@ -15,7 +15,7 @@ public class CmdBid extends PlotCommand {
 
     public boolean exec(IPlayer p, String[] args) {
         if (plugin.getPlotMeCoreManager().isEconomyEnabled(p)) {
-            if (plugin.cPerms(p, "PlotMe.use.bid")) {
+            if (PlotMe_Core.cPerms(p, "PlotMe.use.bid")) {
                 String id = plugin.getPlotMeCoreManager().getPlotId(p.getLocation());
 
                 if (id.isEmpty()) {

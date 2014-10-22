@@ -15,62 +15,62 @@ public class CmdBiome extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(IPlayer p, String[] args) {
-        if (plugin.cPerms(p, "PlotMe.use.biome")) {
-            if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
-                String id = plugin.getPlotMeCoreManager().getPlotId(p.getLocation());
+    public boolean exec(IPlayer player, String[] args) {
+        if (PlotMe_Core.cPerms(player, "PlotMe.use.biome")) {
+            if (plugin.getPlotMeCoreManager().isPlotWorld(player)) {
+                String id = plugin.getPlotMeCoreManager().getPlotId(player.getLocation());
                 if (id.isEmpty()) {
-                    p.sendMessage(RED + C("MsgNoPlotFound"));
-                } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, p)) {
-                    IWorld w = p.getWorld();
+                    player.sendMessage(RED + C("MsgNoPlotFound"));
+                } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, player)) {
+                    IWorld world = player.getWorld();
 
                     if (args.length == 2) {
 
                         IBiome biome = sob.getBiome(args[1]);
 
                         if (biome == null) {
-                            p.sendMessage(RED + args[1] + RESET + " " + C("MsgIsInvalidBiome"));
+                            player.sendMessage(RED + args[1] + RESET + " " + C("MsgIsInvalidBiome"));
                         } else {
-                            Plot plot = plugin.getPlotMeCoreManager().getPlotById(p, id);
-                            String playername = p.getName();
+                            Plot plot = plugin.getPlotMeCoreManager().getPlotById(player, id);
+                            String playername = player.getName();
 
-                            if (plot.getOwner().equalsIgnoreCase(playername) || plugin.cPerms(p, "PlotMe.admin")) {
-                                PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(w);
+                            if (plot.getOwner().equalsIgnoreCase(playername) || PlotMe_Core.cPerms(player, "PlotMe.admin")) {
+                                PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
 
                                 double price = 0;
 
                                 InternalPlotBiomeChangeEvent event;
 
-                                if (plugin.getPlotMeCoreManager().isEconomyEnabled(w)) {
+                                if (plugin.getPlotMeCoreManager().isEconomyEnabled(world)) {
                                     price = pmi.getBiomeChangePrice();
-                                    double balance = sob.getBalance(p);
+                                    double balance = sob.getBalance(player);
 
                                     if (balance >= price) {
-                                        event = sob.getEventFactory().callPlotBiomeChangeEvent(plugin, w, plot, p, biome);
+                                        event = sob.getEventFactory().callPlotBiomeChangeEvent(plugin, world, plot, player, biome);
                                         if (event.isCancelled()) {
                                             return true;
                                         } else {
-                                            EconomyResponse er = sob.withdrawPlayer(p, price);
+                                            EconomyResponse er = sob.withdrawPlayer(player, price);
 
                                             if (!er.transactionSuccess()) {
-                                                p.sendMessage(RED + er.errorMessage);
+                                                player.sendMessage(RED + er.errorMessage);
                                                 Util().warn(er.errorMessage);
                                                 return true;
                                             }
                                         }
                                     } else {
-                                        p.sendMessage(RED + C("MsgNotEnoughBiome") + " " + C("WordMissing") + " " + RESET + Util().moneyFormat(price - balance, false));
+                                        player.sendMessage(RED + C("MsgNotEnoughBiome") + " " + C("WordMissing") + " " + RESET + Util().moneyFormat(price - balance, false));
                                         return true;
                                     }
                                 } else {
-                                    event = sob.getEventFactory().callPlotBiomeChangeEvent(plugin, w, plot, p, biome);
+                                    event = sob.getEventFactory().callPlotBiomeChangeEvent(plugin, world, plot, player, biome);
                                 }
 
                                 if (!event.isCancelled()) {
-                                    plugin.getPlotMeCoreManager().setBiome(w, id, biome);
+                                    plugin.getPlotMeCoreManager().setBiome(world, id, biome);
                                     plot.setBiome(biome);
 
-                                    p.sendMessage(C("MsgBiomeSet") + " " + BLUE + Util().FormatBiome(biome.name()) + " " + Util().moneyFormat(-price));
+                                    player.sendMessage(C("MsgBiomeSet") + " " + BLUE + Util().FormatBiome(biome.name()) + " " + Util().moneyFormat(-price));
 
                                     if (isAdvancedLogging()) {
                                         plugin.getLogger().info(LOG + playername + " " + C("MsgChangedBiome") + " " + id + " " + C("WordTo") + " "
@@ -78,22 +78,22 @@ public class CmdBiome extends PlotCommand {
                                     }
                                 }
                             } else {
-                                p.sendMessage(RED + C("MsgThisPlot") + "(" + id + ") " + C("MsgNotYoursNotAllowedBiome"));
+                                player.sendMessage(RED + C("MsgThisPlot") + "(" + id + ") " + C("MsgNotYoursNotAllowedBiome"));
                             }
                         }
                     } else {
-                        Plot plot = plugin.getPlotMeCoreManager().getMap(w).getPlot(id);
+                        Plot plot = plugin.getPlotMeCoreManager().getMap(world).getPlot(id);
 
-                        p.sendMessage(C("MsgPlotUsingBiome") + " " + BLUE + Util().FormatBiome(plot.getBiome().name()));
+                        player.sendMessage(C("MsgPlotUsingBiome") + " " + BLUE + Util().FormatBiome(plot.getBiome().name()));
                     }
                 } else {
-                    p.sendMessage(RED + C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
+                    player.sendMessage(RED + C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
                 }
             } else {
-                p.sendMessage(RED + C("MsgNotPlotWorld"));
+                player.sendMessage(RED + C("MsgNotPlotWorld"));
             }
         } else {
-            p.sendMessage(RED + C("MsgPermissionDenied"));
+            player.sendMessage(RED + C("MsgPermissionDenied"));
             return false;
         }
         return true;

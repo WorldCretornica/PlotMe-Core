@@ -13,7 +13,7 @@ public class CmdBiomeList extends PlotCommand {
     }
 
     public boolean exec(IPlayer p, String[] args) {
-        if (plugin.cPerms(p, "PlotMe.use.biome")) {
+        if (PlotMe_Core.cPerms(p, "PlotMe.use.biome")) {
             List<String> biomes = sob.getBiomes();
             
             Collections.sort(biomes);

@@ -1,9 +1,6 @@
 package com.worldcretornica.plotme_core.commands;
 
-import com.worldcretornica.plotme_core.ClearReason;
-import com.worldcretornica.plotme_core.Plot;
-import com.worldcretornica.plotme_core.PlotMapInfo;
-import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.*;
 import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
@@ -17,7 +14,7 @@ public class CmdReset extends PlotCommand {
     }
 
     public boolean exec(IPlayer p) {
-        if (plugin.cPerms(p, "PlotMe.admin.reset") || plugin.cPerms(p, "PlotMe.use.reset")) {
+        if (PlotMe_Core.cPerms(p, "PlotMe.admin.reset") || PlotMe_Core.cPerms(p, "PlotMe.use.reset")) {
             if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
                 Plot plot = plugin.getPlotMeCoreManager().getPlotById(p.getLocation());
 
@@ -29,7 +26,7 @@ public class CmdReset extends PlotCommand {
                     String playername = p.getName();
                     String id = plot.getId();
 
-                    if (plot.getOwner().equalsIgnoreCase(playername) || plugin.cPerms(p, "PlotMe.admin.reset")) {
+                    if (plot.getOwner().equalsIgnoreCase(playername) || PlotMe_Core.cPerms(p, "PlotMe.admin.reset")) {
                         IWorld w = p.getWorld();
 
                         InternalPlotResetEvent event = sob.getEventFactory().callPlotResetEvent(plugin, w, plot, p);
@@ -81,7 +78,7 @@ public class CmdReset extends PlotCommand {
 
                             plugin.getPlotMeCoreManager().removeOwnerSign(w, id);
                             plugin.getPlotMeCoreManager().removeSellSign(w, id);
-                            plugin.getSqlManager().deletePlot(plugin.getPlotMeCoreManager().getIdX(id), plugin.getPlotMeCoreManager().getIdZ(id), w.getName().toLowerCase());
+                            plugin.getSqlManager().deletePlot(PlotMeCoreManager.getIdX(id), PlotMeCoreManager.getIdZ(id), w.getName().toLowerCase());
 
                             pmi.addFreed(id);
 

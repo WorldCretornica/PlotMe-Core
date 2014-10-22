@@ -40,7 +40,7 @@ public class PlotRunnableDeleteExpire implements Runnable {
                         coremanager.removeOwnerSign(w, id);
                         coremanager.removeSellSign(w, id);
 
-                        sqlmanager.deletePlot(coremanager.getIdX(id), coremanager.getIdZ(id), w.getName().toLowerCase());
+                        sqlmanager.deletePlot(PlotMeCoreManager.getIdX(id), PlotMeCoreManager.getIdZ(id), w.getName().toLowerCase());
 
                         plugin.setCounterExpired(plugin.getCounterExpired() - 1);
                     }

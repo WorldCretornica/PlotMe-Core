@@ -11,38 +11,38 @@ public class CmdMove extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(IPlayer p, String[] args) {
-        if (plugin.cPerms(p, "PlotMe.admin.move")) {
-            if (!plugin.getPlotMeCoreManager().isPlotWorld(p)) {
-                p.sendMessage(RED + C("MsgNotPlotWorld"));
+    public boolean exec(IPlayer player, String[] args) {
+        if (PlotMe_Core.cPerms(player, "PlotMe.admin.move")) {
+            if (!plugin.getPlotMeCoreManager().isPlotWorld(player)) {
+                player.sendMessage(RED + C("MsgNotPlotWorld"));
             } else if (args.length < 3 || args[1].isEmpty() || args[2].isEmpty()) {
-                p.sendMessage(C("WordUsage") + ": " + RED + "/plotme " + C("CommandMove") + " <" + C("WordIdFrom") + "> <" + C("WordIdTo") + "> "
+                player.sendMessage(C("WordUsage") + ": " + RED + "/plotme " + C("CommandMove") + " <" + C("WordIdFrom") + "> <" + C("WordIdTo") + "> "
                                       + RESET + C("WordExample") + ": " + RED + "/plotme " + C("CommandMove") + " 0;1 2;-1");
             } else {
                 String plot1 = args[1];
                 String plot2 = args[2];
-                IWorld w = p.getWorld();
+                IWorld w = player.getWorld();
 
                 if (!plugin.getPlotMeCoreManager().isValidId(w, plot1) || !plugin.getPlotMeCoreManager().isValidId(w, plot2)) {
-                    p.sendMessage(C("WordUsage") + ": " + RED + "/plotme " + C("CommandMove") + " <" + C("WordIdFrom") + "> <" + C("WordIdTo") + "> "
+                    player.sendMessage(C("WordUsage") + ": " + RED + "/plotme " + C("CommandMove") + " <" + C("WordIdFrom") + "> <" + C("WordIdTo") + "> "
                                           + RESET + C("WordExample") + ": " + RED + "/plotme " + C("CommandMove") + " 0;1 2;-1");
                     return true;
                 } else {
-                    InternalPlotMoveEvent event = sob.getEventFactory().callPlotMoveEvent(plugin, w, w, plot1, plot2, p);
+                    InternalPlotMoveEvent event = sob.getEventFactory().callPlotMoveEvent(plugin, w, w, plot1, plot2, player);
 
                     if (!event.isCancelled()) {
-                        if (plugin.getPlotMeCoreManager().movePlot(p.getWorld(), plot1, plot2)) {
-                            p.sendMessage(C("MsgPlotMovedSuccess"));
+                        if (plugin.getPlotMeCoreManager().movePlot(player.getWorld(), plot1, plot2)) {
+                            player.sendMessage(C("MsgPlotMovedSuccess"));
 
-                            plugin.getLogger().info(LOG + p.getName() + " " + C("MsgExchangedPlot") + " " + plot1 + " " + C("MsgAndPlot") + " " + plot2);
+                            plugin.getLogger().info(LOG + player.getName() + " " + C("MsgExchangedPlot") + " " + plot1 + " " + C("MsgAndPlot") + " " + plot2);
                         } else {
-                            p.sendMessage(RED + C("ErrMovingPlot"));
+                            player.sendMessage(RED + C("ErrMovingPlot"));
                         }
                     }
                 }
             }
         } else {
-            p.sendMessage(RED + C("MsgPermissionDenied"));
+            player.sendMessage(RED + C("MsgPermissionDenied"));
             return false;
         }
         return true;

@@ -11,7 +11,7 @@ public class CmdComments extends PlotCommand {
     }
 
     public boolean exec(IPlayer p, String[] args) {
-        if (plugin.cPerms(p, "PlotMe.use.comments")) {
+        if (PlotMe_Core.cPerms(p, "PlotMe.use.comments")) {
             if (!plugin.getPlotMeCoreManager().isPlotWorld(p)) {
                 p.sendMessage(RED + C("MsgNotPlotWorld"));
             } else if (args.length < 2) {
@@ -22,7 +22,7 @@ public class CmdComments extends PlotCommand {
                 } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, p)) {
                     Plot plot = plugin.getPlotMeCoreManager().getPlotById(p, id);
 
-                    if (plot.getOwnerId().equals(p.getUniqueId()) || plot.isAllowed(p.getUniqueId()) || plugin.cPerms(p, "PlotMe.admin")) {
+                    if (plot.getOwnerId().equals(p.getUniqueId()) || plot.isAllowed(p.getUniqueId()) || PlotMe_Core.cPerms(p, "PlotMe.admin")) {
                         if (plot.getCommentsCount() == 0) {
                             p.sendMessage(C("MsgNoComments"));
                         } else {

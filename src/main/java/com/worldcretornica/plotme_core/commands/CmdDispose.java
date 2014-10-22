@@ -2,6 +2,7 @@ package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
+import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import com.worldcretornica.plotme_core.api.IPlayer;
@@ -16,7 +17,7 @@ public class CmdDispose extends PlotCommand {
     }
 
     public boolean exec(IPlayer p) {
-        if (plugin.cPerms(p, "PlotMe.admin.dispose") || plugin.cPerms(p, "PlotMe.use.dispose")) {
+        if (PlotMe_Core.cPerms(p, "PlotMe.admin.dispose") || PlotMe_Core.cPerms(p, "PlotMe.use.dispose")) {
             if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
                 String id = plugin.getPlotMeCoreManager().getPlotId(p.getLocation());
                 if (id.isEmpty()) {
@@ -29,7 +30,7 @@ public class CmdDispose extends PlotCommand {
                     } else {
                         String name = p.getName();
 
-                        if (plot.getOwner().equalsIgnoreCase(name) || plugin.cPerms(p, "PlotMe.admin.dispose")) {
+                        if (plot.getOwner().equalsIgnoreCase(name) || PlotMe_Core.cPerms(p, "PlotMe.admin.dispose")) {
                             PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(p);
 
                             double cost = pmi.getDisposePrice();
@@ -89,7 +90,7 @@ public class CmdDispose extends PlotCommand {
                                 plugin.getPlotMeCoreManager().removeSellSign(w, id);
                                 plugin.getPlotMeCoreManager().removeAuctionSign(w, id);
 
-                                plugin.getSqlManager().deletePlot(plugin.getPlotMeCoreManager().getIdX(id), plugin.getPlotMeCoreManager().getIdZ(id), w.getName().toLowerCase());
+                                plugin.getSqlManager().deletePlot(PlotMeCoreManager.getIdX(id), PlotMeCoreManager.getIdZ(id), w.getName().toLowerCase());
 
                                 p.sendMessage(C("MsgPlotDisposedAnyoneClaim"));
 

@@ -11,37 +11,37 @@ public class CmdWEAnywhere extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(IPlayer p) {
-        if (plugin.cPerms(p, "PlotMe.admin.weanywhere")) {
-            String name = p.getName();
-            UUID uuid = p.getUniqueId();
+    public boolean exec(IPlayer player) {
+        if (PlotMe_Core.cPerms(player, "PlotMe.admin.weanywhere")) {
+            String name = player.getName();
+            UUID uuid = player.getUniqueId();
 
             if (plugin.getPlotMeCoreManager().isPlayerIgnoringWELimit(uuid) && !sob.getConfig().getBoolean("defaultWEAnywhere")
                     || !plugin.getPlotMeCoreManager().isPlayerIgnoringWELimit(uuid) && sob.getConfig().getBoolean("defaultWEAnywhere")) {
                 plugin.getPlotMeCoreManager().removePlayerIgnoringWELimit(uuid);
-                if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
-                    sob.getPlotWorldEdit().setMask(p);
+                if (plugin.getPlotMeCoreManager().isPlotWorld(player)) {
+                    sob.getPlotWorldEdit().setMask(player);
                 }
             } else {
                 plugin.getPlotMeCoreManager().addPlayerIgnoringWELimit(uuid);
-                sob.getPlotWorldEdit().removeMask(p);
+                sob.getPlotWorldEdit().removeMask(player);
             }
 
             if (plugin.getPlotMeCoreManager().isPlayerIgnoringWELimit(uuid)) {
-                p.sendMessage(C("MsgWorldEditAnywhere"));
+                player.sendMessage(C("MsgWorldEditAnywhere"));
 
                 if (isAdvancedLogging()) {
                     plugin.getLogger().info(LOG + name + " enabled WorldEdit anywhere");
                 }
             } else {
-                p.sendMessage(C("MsgWorldEditInYourPlots"));
+                player.sendMessage(C("MsgWorldEditInYourPlots"));
 
                 if (isAdvancedLogging()) {
                     plugin.getLogger().info(LOG + name + " disabled WorldEdit anywhere");
                 }
             }
         } else {
-            p.sendMessage(RED + C("MsgPermissionDenied"));
+            player.sendMessage(RED + C("MsgPermissionDenied"));
             return false;
         }
         return true;

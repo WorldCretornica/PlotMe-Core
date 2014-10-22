@@ -20,7 +20,7 @@ public class CmdAuction extends PlotCommand {
             PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(p);
 
             if (pmi.isCanPutOnSale()) {
-                if (plugin.cPerms(p, "PlotMe.use.auction") || plugin.cPerms(p, "PlotMe.admin.auction")) {
+                if (PlotMe_Core.cPerms(p, "PlotMe.use.auction") || PlotMe_Core.cPerms(p, "PlotMe.admin.auction")) {
                     String id = plugin.getPlotMeCoreManager().getPlotId(p.getLocation());
 
                     if (id.isEmpty()) {
@@ -30,12 +30,12 @@ public class CmdAuction extends PlotCommand {
 
                         String name = p.getName();
 
-                        if (plot.getOwner().equalsIgnoreCase(name) || plugin.cPerms(p, "PlotMe.admin.auction")) {
+                        if (plot.getOwner().equalsIgnoreCase(name) || PlotMe_Core.cPerms(p, "PlotMe.admin.auction")) {
                             IWorld w = p.getWorld();
 
                             if (plot.isAuctioned()) {
                                 if (plot.getCurrentBidderId() != null) {
-                                    if (plugin.cPerms(p, "PlotMe.admin.auction")) {
+                                    if (PlotMe_Core.cPerms(p, "PlotMe.admin.auction")) {
                                         IOfflinePlayer playercurrentbidder = sob.getOfflinePlayer(plot.getCurrentBidderId());
                                         EconomyResponse er = sob.depositPlayer(playercurrentbidder, plot.getCurrentBid());
 
@@ -43,13 +43,13 @@ public class CmdAuction extends PlotCommand {
                                             for (IPlayer player : sob.getOnlinePlayers()) {
                                                 if (player.getName().equalsIgnoreCase(plot.getCurrentBidder())) {
                                                     player.sendMessage(C("MsgAuctionCancelledOnPlot")
-                                                                               + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner() + ". " + plugin.getUtil().moneyFormat(plot.getCurrentBid()));
+                                                                               + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner() + ". " + Util().moneyFormat(plot.getCurrentBid()));
                                                     break;
                                                 }
                                             }
                                         } else {
                                             p.sendMessage(RED + er.errorMessage);
-                                            plugin.getUtil().warn(er.errorMessage);
+                                            Util().warn(er.errorMessage);
                                         }
 
                                         plot.setAuctioned(false);

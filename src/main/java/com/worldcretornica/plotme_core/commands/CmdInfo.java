@@ -12,7 +12,7 @@ public class CmdInfo extends PlotCommand {
     }
 
     public boolean exec(IPlayer p) {
-        if (plugin.cPerms(p, "PlotMe.use.info")) {
+        if (PlotMe_Core.cPerms(p, "PlotMe.use.info")) {
             if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
                 String id = plugin.getPlotMeCoreManager().getPlotId(p.getLocation());
 

@@ -17,7 +17,7 @@ public class CmdHome extends PlotCommand {
     }
 
     public boolean exec(IPlayer p, String[] args) {
-        if (plugin.cPerms(p, "PlotMe.use.home") || plugin.cPerms(p, "PlotMe.admin.home.other")) {
+        if (PlotMe_Core.cPerms(p, "PlotMe.use.home") || PlotMe_Core.cPerms(p, "PlotMe.admin.home.other")) {
             if (plugin.getPlotMeCoreManager().isPlotWorld(p) || sob.getConfig().getBoolean("allowWorldTeleport")) {
                 String playername = p.getName();
                 UUID uuid = p.getUniqueId();
@@ -51,7 +51,7 @@ public class CmdHome extends PlotCommand {
 
                 if (args.length >= 2) {
                     if (sob.getWorld(args[1]) == null) {
-                        if (plugin.cPerms(p, "PlotMe.admin.home.other")) {
+                        if (PlotMe_Core.cPerms(p, "PlotMe.admin.home.other")) {
                             playername = args[1];
                             uuid = null;
                         }

@@ -15,7 +15,7 @@ public class CmdSetOwner extends PlotCommand {
     }
 
     public boolean exec(IPlayer p, String[] args) {
-        if (plugin.cPerms(p, "PlotMe.admin.setowner")) {
+        if (PlotMe_Core.cPerms(p, "PlotMe.admin.setowner")) {
             if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
                 String id = plugin.getPlotMeCoreManager().getPlotId(p.getLocation());
                 if (id.isEmpty()) {

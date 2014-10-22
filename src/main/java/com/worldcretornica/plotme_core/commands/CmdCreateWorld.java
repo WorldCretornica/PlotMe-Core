@@ -15,23 +15,23 @@ public class CmdCreateWorld extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(ICommandSender cs, String[] args) {
-        if (plugin.creationbuffer.containsKey(cs.getName())) {
+    public boolean exec(ICommandSender sender, String[] args) {
+        if (plugin.creationbuffer.containsKey(sender.getName())) {
             if (args.length == 1) {
                 //try to create world
-                Map<String, String> parameters = plugin.creationbuffer.get(cs.getName());
+                Map<String, String> parameters = plugin.creationbuffer.get(sender.getName());
 
-                InternalPlotWorldCreateEvent event = sob.getEventFactory().callPlotWorldCreateEvent(parameters.get("worldname"), cs, parameters);
+                InternalPlotWorldCreateEvent event = sob.getEventFactory().callPlotWorldCreateEvent(parameters.get("worldname"), sender, parameters);
 
                 if (!event.isCancelled()) {
-                    if (sob.CreatePlotWorld(cs, parameters.get("worldname"), parameters.get("generator"), parameters)) {
-                        cs.sendMessage(C("MsgWorldCreationSuccess"));
+                    if (sob.CreatePlotWorld(sender, parameters.get("worldname"), parameters.get("generator"), parameters)) {
+                        sender.sendMessage(C("MsgWorldCreationSuccess"));
                     }
                 }
             } else if (args.length >= 2) {
                 //cancel
                 if (args[1].equalsIgnoreCase(C("CommandCreateWorld-Cancel"))) {
-                    plugin.creationbuffer.remove(cs.getName());
+                    plugin.creationbuffer.remove(sender.getName());
                     return true;
                 } //settings
                 if (args[1].equalsIgnoreCase(C("CommandCreateWorld-Setting"))) {
@@ -39,7 +39,7 @@ public class CmdCreateWorld extends PlotCommand {
                         String key = args[2];
                         String value = args[3];
 
-                        Map<String, String> parameters = plugin.creationbuffer.get(cs.getName());
+                        Map<String, String> parameters = plugin.creationbuffer.get(sender.getName());
 
                         if (parameters != null) {
                             for (String ckey : parameters.keySet()) {
@@ -47,30 +47,30 @@ public class CmdCreateWorld extends PlotCommand {
                                     parameters.remove(ckey);
                                     parameters.put(ckey, value);
 
-                                    cs.sendMessage(C("MsgSettingChanged") + " " + GREEN + ckey + RESET + "=" + AQUA + value);
+                                    sender.sendMessage(C("MsgSettingChanged") + " " + GREEN + ckey + RESET + "=" + AQUA + value);
 
                                     return true;
                                 }
                             }
 
-                            showCurrentSettings(cs, parameters);
+                            showCurrentSettings(sender, parameters);
                             return true;
                         }
                     }
                 }
 
-                cs.sendMessage(C("WordUsage") + ": ");
-                cs.sendMessage("/plotme " + C("CommandCreateWorld") + " " + C("CommandCreateWorld-Setting")
+                sender.sendMessage(C("WordUsage") + ": ");
+                sender.sendMessage("/plotme " + C("CommandCreateWorld") + " " + C("CommandCreateWorld-Setting")
                                        + "<" + C("WordConfig") + ">" + " " + "<" + C("WordValue") + "> "
                                        + C("MsgCreateWorldParameters4"));
-                cs.sendMessage("/plotme " + C("CommandCreateWorld") + " " + C("CommandCreateWorld-Cancel") + " "
+                sender.sendMessage("/plotme " + C("CommandCreateWorld") + " " + C("CommandCreateWorld-Cancel") + " "
                                        + C("MsgCreateWorldParameters5"));
             }
         } else {
             //Usage
             if (args.length == 1) {
-                cs.sendMessage(C("WordUsage") + ": " + RED + "/plotme " + C("CommandCreateWorld") + " <" + C("WordWorld") + "> [" + C("WordGenerator") + "]");
-                cs.sendMessage("  " + C("MsgCreateWorldHelp"));
+                sender.sendMessage(C("WordUsage") + ": " + RED + "/plotme " + C("CommandCreateWorld") + " <" + C("WordWorld") + "> [" + C("WordGenerator") + "]");
+                sender.sendMessage("  " + C("MsgCreateWorldHelp"));
             } else {
 
                 Map<String, String> parameters = new HashMap<>();
@@ -80,7 +80,7 @@ public class CmdCreateWorld extends PlotCommand {
                     parameters.put("worldname", args[1]);
 
                     if (!sob.checkWorldName(args[1])) {
-                        cs.sendMessage("[PlotMe-Core] " + C("ErrInvalidWorldName") + " '" + parameters.get("worldname") + "'");
+                        sender.sendMessage("[PlotMe-Core] " + C("ErrInvalidWorldName") + " '" + parameters.get("worldname") + "'");
                         return true;
                     }
                 }
@@ -93,7 +93,7 @@ public class CmdCreateWorld extends PlotCommand {
 
                 //Check if world exists
                 if (sob.worldExists(parameters.get("worldname"))) {
-                    cs.sendMessage("[PlotMe-Core] " + C("ErrWorldExists") + " '" + parameters.get("worldname") + "'");
+                    sender.sendMessage("[PlotMe-Core] " + C("ErrWorldExists") + " '" + parameters.get("worldname") + "'");
                     return false;
                 }
 
@@ -106,11 +106,11 @@ public class CmdCreateWorld extends PlotCommand {
                     genparameters = generator.getManager().getDefaultGenerationConfig();
 
                     if (genparameters == null) {
-                        cs.sendMessage("[PlotMe-Core] " + C("ErrCannotCreateGen1") + " '" + parameters.get("generator") + "' " + C("ErrCannotCreateGen2"));
+                        sender.sendMessage("[PlotMe-Core] " + C("ErrCannotCreateGen1") + " '" + parameters.get("generator") + "' " + C("ErrCannotCreateGen2"));
                         return false;
                     }
                 } else {
-                    cs.sendMessage("[PlotMe-Core] " + C("ErrCannotCreateGen1") + " '" + parameters.get("generator") + "' " + C("ErrCannotCreateGen3"));
+                    sender.sendMessage("[PlotMe-Core] " + C("ErrCannotCreateGen1") + " '" + parameters.get("generator") + "' " + C("ErrCannotCreateGen3"));
                     return false;
                 }
 
@@ -144,25 +144,25 @@ public class CmdCreateWorld extends PlotCommand {
                 parameters.put("DisposePrice", "0");
                 parameters.put("UseProgressiveClear", "false");
 
-                cs.sendMessage(C("MsgCreateWorldParameters1"));
-                cs.sendMessage(C("MsgCreateWorldParameters2"));
+                sender.sendMessage(C("MsgCreateWorldParameters1"));
+                sender.sendMessage(C("MsgCreateWorldParameters2"));
 
                 //Show default configurations
-                showCurrentSettings(cs, parameters);
-                cs.sendMessage(C("MsgCreateWorldParameters3"));
+                showCurrentSettings(sender, parameters);
+                sender.sendMessage(C("MsgCreateWorldParameters3"));
 
-                showCurrentSettings(cs, genparameters);
+                showCurrentSettings(sender, genparameters);
 
                 parameters.putAll(genparameters);
 
-                cs.sendMessage("/plotme " + C("CommandCreateWorld") + " " + C("CommandCreateWorld-Setting")
+                sender.sendMessage("/plotme " + C("CommandCreateWorld") + " " + C("CommandCreateWorld-Setting")
                                        + "<" + C("WordConfig") + ">" + " " + "<" + C("WordValue") + "> "
                                        + C("MsgCreateWorldParameters4"));
 
-                cs.sendMessage("/plotme " + C("CommandCreateWorld") + " " + C("CommandCreateWorld-Cancel") + " "
+                sender.sendMessage("/plotme " + C("CommandCreateWorld") + " " + C("CommandCreateWorld-Cancel") + " "
                                        + C("MsgCreateWorldParameters5"));
 
-                plugin.creationbuffer.put(cs.getName(), parameters);
+                plugin.creationbuffer.put(sender.getName(), parameters);
             }
         }
         return true;

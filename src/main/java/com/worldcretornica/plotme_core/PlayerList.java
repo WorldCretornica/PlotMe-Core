@@ -39,13 +39,12 @@ public class PlayerList {
 
     public UUID remove(String name) {
         String found = "";
-        UUID uuid = null;
         for (String key : playerlist.keySet()) {
             if (key.equalsIgnoreCase(name)) {
                 found = key;
-                continue;
             }
         }
+        UUID uuid = null;
         if (!found.isEmpty()) {
             uuid = playerlist.get(found);
             playerlist.remove(found);

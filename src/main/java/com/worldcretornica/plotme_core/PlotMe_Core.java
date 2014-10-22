@@ -13,7 +13,7 @@ public class PlotMe_Core {
     public static final String LANG_PATH = "language";
     public static final String DEFAULT_LANG = "english";
     public static final String CAPTIONS_PATTERN = "caption-%s.yml";
-    public static final String DEFAULT_GENERATOR_URL = "http://dev.bukkit.org/bukkit-plugins/plotme/";
+    private static final String DEFAULT_GENERATOR_URL = "http://dev.bukkit.org/bukkit-plugins/plotme/";
 
     //Config accessors for language <lang, accessor>
     private final Map<String, IConfigSection> captionsCA = new HashMap<>();
@@ -38,7 +38,7 @@ public class PlotMe_Core {
     private Boolean initialized = false;
     
     //Bridge
-    private IServerBridge serverBridge;
+    private final IServerBridge serverBridge;
 
     public PlotMe_Core(IServerBridge serverObjectBuilder) {
         this.serverBridge = serverObjectBuilder;
@@ -46,7 +46,7 @@ public class PlotMe_Core {
 
     public void disable() {
         getSqlManager().closeConnection();
-        serverBridge.unHook();
+        getServerBridge().unHook();
         getPlotMeCoreManager().setPlayersIgnoringWELimit(null);
         setWorldCurrentlyProcessingExpired(null);
         setCommandSenderCurrentlyProcessingExpired(null);
@@ -63,17 +63,17 @@ public class PlotMe_Core {
         setPlotMeCoreManager(new PlotMeCoreManager(this));
         setUtil(new Util(this));
         setupWorlds(); // TODO: Remove concept of pmi so this is not needed
-        serverBridge.setupListeners();
-        serverBridge.setupCommands();
-        serverBridge.setupHooks();
+        getServerBridge().setupListeners();
+        getServerBridge().setupCommands();
+        getServerBridge().setupHooks();
         setupClearSpools();
         initialized = true;
-        sqlmanager.plotConvertToUUIDAsynchronously();
+        getSqlManager().plotConvertToUUIDAsynchronously();
     }
 
     public void reload() {
         getSqlManager().closeConnection();
-        serverBridge.reloadConfig();
+        getServerBridge().reloadConfig();
         setupConfig();
         for (String lang : captionsCA.keySet()) {
             reloadCaptionConfig(lang);
@@ -93,7 +93,7 @@ public class PlotMe_Core {
 
     private void setupConfig() {
         // Get the config we will be working with
-        final IConfigSection config = getServerBridge().getConfig();
+        IConfigSection config = getServerBridge().getConfig();
 
         // Move old configs to new locations
         if (config.contains("Language")) {
@@ -115,11 +115,11 @@ public class PlotMe_Core {
 
         // Load config-old.yml
         // config-old.yml should be used to import settings from by DefaultGenerator
-        final IConfigSection oldConfig = getServerBridge().getConfig("config-old.yml");
+        IConfigSection oldConfig = getServerBridge().getConfig("config-old.yml");
 
         if (oldConfig != null) {
             // Create a list of old world configs that should be moved to config-old.yml
-            final Collection<String> oldWorldConfigs = new HashSet<>();
+            Collection<String> oldWorldConfigs = new HashSet<>();
             oldWorldConfigs.add("PathWidth");
             oldWorldConfigs.add("PlotSize");
             oldWorldConfigs.add("XTranslation");
@@ -143,7 +143,7 @@ public class PlotMe_Core {
             }
             for (String worldname : worldsCS.getKeys(false)) {
                 // Get the current config section
-                final IConfigSection worldCS = worldsCS.getConfigurationSection(worldname);
+                IConfigSection worldCS = worldsCS.getConfigurationSection(worldname);
 
                 // Find old world data an move it to oldConfig
                 IConfigSection oldWorldCS = oldWorldsCS.getConfigurationSection(worldname);
@@ -174,13 +174,13 @@ public class PlotMe_Core {
     }
 
     private void setupWorlds() {
-        final IConfigSection worldsCS = getServerBridge().getConfig().getConfigurationSection("worlds");
+        IConfigSection worldsCS = getServerBridge().getConfig().getConfigurationSection("worlds");
         for (String worldname : worldsCS.getKeys(false)) {
             getPlotMeCoreManager().addPlotMap(worldname.toLowerCase(), new PlotMapInfo(this, worldname));
             if (getGenManager(worldname) == null) {
-                serverBridge.getLogger().log(Level.SEVERE, "The world {0} either does not exist or not using a PlotMe generator", worldname);
-                serverBridge.getLogger().log(Level.SEVERE, "Please ensure that {0} is set up and that it is using a PlotMe generator", worldname);
-                serverBridge.getLogger().log(Level.SEVERE, "The default generator can be downloaded from " + DEFAULT_GENERATOR_URL);
+                getLogger().log(Level.SEVERE, "The world {0} either does not exist or not using a PlotMe generator", worldname);
+                getLogger().log(Level.SEVERE, "Please ensure that {0} is set up and that it is using a PlotMe generator", worldname);
+                getLogger().log(Level.SEVERE, "The default generator can be downloaded from " + DEFAULT_GENERATOR_URL);
                 badWorlds.add(worldname);
             }
         }
@@ -196,7 +196,7 @@ public class PlotMe_Core {
             if (lang.equals(DEFAULT_LANG)) {
                 setupDefaultCaptions();
             } else {
-                serverBridge.getLogger().log(Level.WARNING, "Could not load caption file for {0} or the language file was empty. Using " + DEFAULT_LANG, lang);
+                getLogger().log(Level.WARNING, "Could not load caption file for {0} or the language file was empty. Using " + DEFAULT_LANG, lang);
                 return loadCaptionConfig(DEFAULT_LANG);
             }
         }
@@ -253,8 +253,8 @@ public class PlotMe_Core {
         plotsToClear = new ConcurrentLinkedQueue<>();
     }
 
-    public boolean cPerms(ICommandSender sender, String node) {
-        return sender.hasPermission(node);
+    public static boolean cPerms(IPlayer player, String node) {
+        return player.hasPermission(node);
     }
 
     public IPlotMe_GeneratorManager getGenManager(IWorld world) {
@@ -266,7 +266,7 @@ public class PlotMe_Core {
     }
 
     public IPlotMe_GeneratorManager getGenManager(String name) {
-        IWorld world = serverBridge.getWorld(name);
+        IWorld world = getServerBridge().getWorld(name);
         if (world == null) {
             return null;
         } else {
@@ -303,7 +303,7 @@ public class PlotMe_Core {
         getCommandSenderCurrentlyProcessingExpired().sendMessage(getUtil().C("MsgStartDeleteSession"));
 
         for (int ctr = 0; ctr < howmanytimes / getNbPerDeletionProcessingExpired(); ctr++) {
-            serverBridge.scheduleSyncDelayedTask(task, ctr * eachseconds * 20);
+            getServerBridge().scheduleSyncDelayedTask(task, ctr * eachseconds * 20);
         }
     }
 
@@ -331,13 +331,13 @@ public class PlotMe_Core {
         this.plotsToClear.offer(plotToClear);
 
         PlotMeSpool pms = new PlotMeSpool(this, plotToClear);
-        serverBridge.scheduleSyncRepeatingTask(pms, 0L, 200L);
+        getServerBridge().scheduleSyncRepeatingTask(pms, 0L, 200L);
     }
 
     public void removePlotToClear(PlotToClear plotToClear, int taskid) {
         this.plotsToClear.remove(plotToClear);
 
-        serverBridge.cancelTask(taskid);
+        getServerBridge().cancelTask(taskid);
     }
 
     public boolean isPlotLocked(String world, String id) {
@@ -364,8 +364,7 @@ public class PlotMe_Core {
         return nbperdeletionprocessingexpired;
     }
 
-    public void setNbPerDeletionProcessingExpired(
-                                                         Integer nbperdeletionprocessingexpired) {
+    public void setNbPerDeletionProcessingExpired(Integer nbperdeletionprocessingexpired) {
         this.nbperdeletionprocessingexpired = nbperdeletionprocessingexpired;
     }
 

@@ -17,7 +17,7 @@ public class CmdBuy extends PlotCommand {
 
     public boolean exec(IPlayer p) {
         if (plugin.getPlotMeCoreManager().isEconomyEnabled(p)) {
-            if (plugin.cPerms(p, "PlotMe.use.buy") || plugin.cPerms(p, "PlotMe.admin.buy")) {
+            if (PlotMe_Core.cPerms(p, "PlotMe.use.buy") || PlotMe_Core.cPerms(p, "PlotMe.admin.buy")) {
                 ILocation l = p.getLocation();
                 String id = plugin.getPlotMeCoreManager().getPlotId(l);
 
@@ -34,12 +34,12 @@ public class CmdBuy extends PlotCommand {
                         } else {
                             int plotlimit = plugin.getPlotLimit(p);
 
-                            if (plotlimit != -1 && plugin.getPlotMeCoreManager().getNbOwnedPlot(p) >= plotlimit) {
+                            IWorld world = p.getWorld();
+                            if (plotlimit != -1 && plugin.getPlotMeCoreManager().getNbOwnedPlot(p, world) >= plotlimit) {
                                 p.sendMessage(C("MsgAlreadyReachedMaxPlots") + " ("
-                                                      + plugin.getPlotMeCoreManager().getNbOwnedPlot(p) + "/" + plugin.getPlotLimit(p) + "). "
+                                                      + plugin.getPlotMeCoreManager().getNbOwnedPlot(p, world) + "/" + plugin.getPlotLimit(p) + "). "
                                                       + C("WordUse") + " " + RED + "/plotme " + C("CommandHome") + RESET + " " + C("MsgToGetToIt"));
                             } else {
-                                IWorld world = p.getWorld();
 
                                 double cost = plot.getCustomPrice();
 

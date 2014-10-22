@@ -21,7 +21,7 @@ public class CmdSell extends PlotCommand {
             PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(p);
 
             if (pmi.isCanSellToBank() || pmi.isCanPutOnSale()) {
-                if (plugin.cPerms(p, "PlotMe.use.sell") || plugin.cPerms(p, "PlotMe.admin.sell")) {
+                if (PlotMe_Core.cPerms(p, "PlotMe.use.sell") || PlotMe_Core.cPerms(p, "PlotMe.admin.sell")) {
                     ILocation l = p.getLocation();
                     String id = plugin.getPlotMeCoreManager().getPlotId(l);
 
@@ -30,7 +30,7 @@ public class CmdSell extends PlotCommand {
                     } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, p)) {
                         Plot plot = plugin.getPlotMeCoreManager().getPlotById(p, id);
 
-                        if (plot.getOwnerId().equals(p.getUniqueId()) || plugin.cPerms(p, "PlotMe.admin.sell")) {
+                        if (plot.getOwnerId().equals(p.getUniqueId()) || PlotMe_Core.cPerms(p, "PlotMe.admin.sell")) {
                             IWorld w = p.getWorld();
 
                             InternalPlotSellChangeEvent event;

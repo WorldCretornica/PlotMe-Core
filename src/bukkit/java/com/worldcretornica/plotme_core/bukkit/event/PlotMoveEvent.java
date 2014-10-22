@@ -64,20 +64,20 @@ public class PlotMoveEvent extends PlotEvent implements Cancellable {
 
     @Override
     public Location getUpperBound() {
-        return ((BukkitLocation) plugin.getPlotMeCoreManager().getGenMan(event.getWorld()).getPlotTopLoc(event.getWorld(), event.getId())).getLocation();
+        return ((BukkitLocation) plugin.getPlotMeCoreManager().getPlotTopLoc(event.getWorld(), event.getId())).getLocation();
     }
 
     @Override
     public Location getLowerBound() {
-        return ((BukkitLocation) plugin.getPlotMeCoreManager().getGenMan(event.getWorld()).getPlotBottomLoc(event.getWorld(), event.getId())).getLocation();
+        return ((BukkitLocation) plugin.getPlotMeCoreManager().getPlotBottomLoc(event.getWorld(), event.getId())).getLocation();
     }
 
     public Location getUpperBoundTo() {
-        return ((BukkitLocation) plugin.getPlotMeCoreManager().getGenMan(event.getWorldTo()).getPlotTopLoc(event.getWorldTo(), event.getIdTo())).getLocation();
+        return ((BukkitLocation) plugin.getPlotMeCoreManager().getPlotTopLoc(event.getWorldTo(), event.getIdTo())).getLocation();
     }
 
     public Location getLowerBoundTo() {
-        return ((BukkitLocation) plugin.getPlotMeCoreManager().getGenMan(event.getWorldTo()).getPlotBottomLoc(event.getWorldTo(), event.getIdTo())).getLocation();
+        return ((BukkitLocation) plugin.getPlotMeCoreManager().getPlotBottomLoc(event.getWorldTo(), event.getIdTo())).getLocation();
     }
 
     public String getOwnerTo() {

@@ -17,7 +17,7 @@ public class CmdClaim extends PlotCommand {
     }
 
     public boolean exec(IPlayer p, String[] args) {
-        if (plugin.cPerms(p, "PlotMe.use.claim") || plugin.cPerms(p, "PlotMe.admin.claim.other")) {
+        if (PlotMe_Core.cPerms(p, "PlotMe.use.claim") || PlotMe_Core.cPerms(p, "PlotMe.admin.claim.other")) {
             if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
                 String id = plugin.getPlotMeCoreManager().getPlotId(p.getLocation());
 
@@ -30,19 +30,19 @@ public class CmdClaim extends PlotCommand {
                     UUID uuid = p.getUniqueId();
 
                     if (args.length == 2) {
-                        if (plugin.cPerms(p, "PlotMe.admin.claim.other")) {
+                        if (PlotMe_Core.cPerms(p, "PlotMe.admin.claim.other")) {
                             playername = args[1];
                             uuid = null;
                         }
                     }
 
+                    IWorld world = p.getWorld();
                     int plotlimit = plugin.getPlotLimit(p);
 
-                    if (playername.equals(p.getName()) && plotlimit != -1 && plugin.getPlotMeCoreManager().getNbOwnedPlot(p) >= plotlimit) {
+                    if (playername.equals(p.getName()) && plotlimit != -1 && plugin.getPlotMeCoreManager().getNbOwnedPlot(p, world) >= plotlimit) {
                         p.sendMessage(RED + C("MsgAlreadyReachedMaxPlots") + " ("
-                                              + plugin.getPlotMeCoreManager().getNbOwnedPlot(p) + "/" + plugin.getPlotLimit(p) + "). " + C("WordUse") + " " + RED + "/plotme " + C("CommandHome") + RESET + " " + C("MsgToGetToIt"));
+                                              + plugin.getPlotMeCoreManager().getNbOwnedPlot(p, world) + "/" + plugin.getPlotLimit(p) + "). " + C("WordUse") + " " + RED + "/plotme " + C("CommandHome") + RESET + " " + C("MsgToGetToIt"));
                     } else {
-                        IWorld world = p.getWorld();
                         PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
 
                         double price = 0;

@@ -11,7 +11,7 @@ import java.util.*;
 public class Plot implements Comparable<Plot> {
 
     //TODO look into removing reference to plugin
-    private PlotMe_Core plugin;
+    private final PlotMe_Core plugin;
 
     private String owner;
     private UUID ownerId;
@@ -33,15 +33,15 @@ public class Plot implements Comparable<Plot> {
     private UUID currentbidderId;
     private String auctioneddate;
 
-    public Plot(PlotMe_Core instance) {
-        this.plugin = instance;
+    public Plot(PlotMe_Core plugin) {
+        this.plugin = plugin;
         setOwner("");
         setOwnerId(null);
         setWorld("");
         setId("");
         allowed = new PlayerList();
         denied = new PlayerList();
-        setBiome(plugin.getServerBridge().getBiome("PLAINS"));
+        setBiome(this.plugin.getServerBridge().getBiome("PLAINS"));
 
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DAY_OF_YEAR, 7);
@@ -59,14 +59,14 @@ public class Plot implements Comparable<Plot> {
         setCurrentBid(0);
     }
 
-    public Plot(PlotMe_Core instance, String owner, UUID uuid, IWorld world, String plotid, int days) {
-        this.plugin = instance;
+    public Plot(PlotMe_Core plugin, String owner, UUID uuid, IWorld world, String plotid, int days) {
+        this.plugin = plugin;
         setOwner(owner);
         setOwnerId(uuid);
         setWorld(world.getName().toLowerCase());
         allowed = new PlayerList();
         denied = new PlayerList();
-        setBiome(plugin.getServerBridge().getBiome("PLAINS"));
+        setBiome(this.plugin.getServerBridge().getBiome("PLAINS"));
         setId(plotid);
 
         if (days == 0) {
@@ -89,14 +89,14 @@ public class Plot implements Comparable<Plot> {
         setCurrentBid(0);
     }
 
-    public Plot(PlotMe_Core instance, String owner, UUID ownerId, String world, String biome, Date expiredDate, boolean finished,
+    public Plot(PlotMe_Core plugin, String owner, UUID ownerId, String world, String biome, Date expiredDate, boolean finished,
                 PlayerList al, List<String[]> comm, String id, double customPrice, boolean sale, String finishedDate,
                 boolean protect, String bidder, UUID bidderId, double bid, boolean isAuctioned, PlayerList denied, String auctionedDate) {
-        this.plugin = instance;
+        this.plugin = plugin;
         setOwner(owner);
         setOwnerId(ownerId);
         setWorld(world);
-        setBiome(plugin.getServerBridge().getBiome(biome));
+        setBiome(this.plugin.getServerBridge().getBiome(biome));
         setExpiredDate(expiredDate);
         setFinished(finished);
         allowed = al;
@@ -193,35 +193,35 @@ public class Plot implements Comparable<Plot> {
     public void addAllowed(String name) {
         if (!isAllowedConsulting(name)) {
             allowed.put(name);
-            plugin.getSqlManager().addPlotAllowed(name, null, plugin.getPlotMeCoreManager().getIdX(id), plugin.getPlotMeCoreManager().getIdZ(id), world);
+            plugin.getSqlManager().addPlotAllowed(name, null, PlotMeCoreManager.getIdX(id), PlotMeCoreManager.getIdZ(id), world);
         }
     }
 
     public void addAllowed(UUID uuid) {
         if (!isAllowed(uuid)) {
             String name = allowed.put(uuid);
-            plugin.getSqlManager().addPlotAllowed(name, uuid, plugin.getPlotMeCoreManager().getIdX(id), plugin.getPlotMeCoreManager().getIdZ(id), world);
+            plugin.getSqlManager().addPlotAllowed(name, uuid, PlotMeCoreManager.getIdX(id), PlotMeCoreManager.getIdZ(id), world);
         }
     }
 
     public void addDenied(String name) {
         if (!isDeniedConsulting(name)) {
             denied.put(name);
-            plugin.getSqlManager().addPlotDenied(name, null, plugin.getPlotMeCoreManager().getIdX(id), plugin.getPlotMeCoreManager().getIdZ(id), world);
+            plugin.getSqlManager().addPlotDenied(name, null, PlotMeCoreManager.getIdX(id), PlotMeCoreManager.getIdZ(id), world);
         }
     }
 
     public void addDenied(UUID uuid) {
         if (!isDenied(uuid)) {
             String name = denied.put(uuid);
-            plugin.getSqlManager().addPlotDenied(name, uuid, plugin.getPlotMeCoreManager().getIdX(id), plugin.getPlotMeCoreManager().getIdZ(id), world);
+            plugin.getSqlManager().addPlotDenied(name, uuid, PlotMeCoreManager.getIdX(id), PlotMeCoreManager.getIdZ(id), world);
         }
     }
 
     public void removeAllowed(String name) {
         if (allowed.contains(name)) {
             UUID uuid = allowed.remove(name);
-            plugin.getSqlManager().deletePlotAllowed(plugin.getPlotMeCoreManager().getIdX(id), plugin.getPlotMeCoreManager().getIdZ(id), name, uuid, world);
+            plugin.getSqlManager().deletePlotAllowed(PlotMeCoreManager.getIdX(id), PlotMeCoreManager.getIdZ(id), name, uuid, world);
 
             if (plugin.getServerBridge().getPlotWorldEdit() != null) {
                 IPlayer p = plugin.getServerBridge().getPlayer(uuid);
@@ -241,14 +241,14 @@ public class Plot implements Comparable<Plot> {
     public void removeAllowedGroup(String name) {
         if (allowed.contains(name)) {
             allowed.remove(name);
-            plugin.getSqlManager().deletePlotAllowed(plugin.getPlotMeCoreManager().getIdX(id), plugin.getPlotMeCoreManager().getIdZ(id), name, null, world);
+            plugin.getSqlManager().deletePlotAllowed(PlotMeCoreManager.getIdX(id), PlotMeCoreManager.getIdZ(id), name, null, world);
         }
     }
 
     public void removeAllowed(UUID uuid) {
         if (allowed.contains(uuid)) {
             String name = allowed.remove(uuid);
-            plugin.getSqlManager().deletePlotAllowed(plugin.getPlotMeCoreManager().getIdX(id), plugin.getPlotMeCoreManager().getIdZ(id), name, uuid, world);
+            plugin.getSqlManager().deletePlotAllowed(PlotMeCoreManager.getIdX(id), PlotMeCoreManager.getIdZ(id), name, uuid, world);
 
             if (plugin.getServerBridge().getPlotWorldEdit() != null) {
                 IPlayer p = plugin.getServerBridge().getPlayer(uuid);
@@ -268,21 +268,21 @@ public class Plot implements Comparable<Plot> {
     public void removeDenied(String name) {
         if (denied.contains(name)) {
             UUID uuid = denied.remove(name);
-            plugin.getSqlManager().deletePlotDenied(plugin.getPlotMeCoreManager().getIdX(id), plugin.getPlotMeCoreManager().getIdZ(id), name, uuid, world);
+            plugin.getSqlManager().deletePlotDenied(PlotMeCoreManager.getIdX(id), PlotMeCoreManager.getIdZ(id), name, uuid, world);
         }
     }
 
     public void removeDeniedGroup(String name) {
         if (denied.contains(name)) {
             denied.remove(name);
-            plugin.getSqlManager().deletePlotDenied(plugin.getPlotMeCoreManager().getIdX(id), plugin.getPlotMeCoreManager().getIdZ(id), name, null, world);
+            plugin.getSqlManager().deletePlotDenied(PlotMeCoreManager.getIdX(id), PlotMeCoreManager.getIdZ(id), name, null, world);
         }
     }
 
     public void removeDenied(UUID uuid) {
         if (denied.contains(uuid)) {
             String name = denied.remove(uuid);
-            plugin.getSqlManager().deletePlotDenied(plugin.getPlotMeCoreManager().getIdX(id), plugin.getPlotMeCoreManager().getIdZ(id), name, uuid, world);
+            plugin.getSqlManager().deletePlotDenied(PlotMeCoreManager.getIdX(id), PlotMeCoreManager.getIdZ(id), name, uuid, world);
         }
     }
 
@@ -290,7 +290,7 @@ public class Plot implements Comparable<Plot> {
         HashMap<String, UUID> list = allowed.getAllPlayers();
         for (String n : list.keySet()) {
             UUID uuid = list.get(n);
-            plugin.getSqlManager().deletePlotAllowed(plugin.getPlotMeCoreManager().getIdX(id), plugin.getPlotMeCoreManager().getIdZ(id), n, uuid, world);
+            plugin.getSqlManager().deletePlotAllowed(PlotMeCoreManager.getIdX(id), PlotMeCoreManager.getIdZ(id), n, uuid, world);
         }
         allowed.clear();
     }
@@ -299,7 +299,7 @@ public class Plot implements Comparable<Plot> {
         HashMap<String, UUID> list = denied.getAllPlayers();
         for (String n : list.keySet()) {
             UUID uuid = list.get(n);
-            plugin.getSqlManager().deletePlotDenied(plugin.getPlotMeCoreManager().getIdX(id), plugin.getPlotMeCoreManager().getIdZ(id), n, uuid, world);
+            plugin.getSqlManager().deletePlotDenied(PlotMeCoreManager.getIdX(id), PlotMeCoreManager.getIdZ(id), n, uuid, world);
         }
         denied.clear();
     }
@@ -315,7 +315,7 @@ public class Plot implements Comparable<Plot> {
         if (p != null) {
             return isAllowedInternal(name, p.getUniqueId(), true, true);
         } else {
-            return isAllowedInternal(name, null, true, true);
+            return isGroupAllowed(name);
         }
     }
 
@@ -375,7 +375,7 @@ public class Plot implements Comparable<Plot> {
         if (p != null) {
             return isDeniedInternal(name, p.getUniqueId());
         } else {
-            return isDeniedInternal(name, null);
+            return isGroupDenied(name);
         }
     }
 
@@ -442,7 +442,7 @@ public class Plot implements Comparable<Plot> {
     }
 
     public void updateField(String field, Object value) {
-        plugin.getSqlManager().updatePlot(plugin.getPlotMeCoreManager().getIdX(getId()), plugin.getPlotMeCoreManager().getIdZ(getId()), getWorld(), field, value);
+        plugin.getSqlManager().updatePlot(PlotMeCoreManager.getIdX(getId()), PlotMeCoreManager.getIdZ(getId()), getWorld(), field, value);
     }
 
     public final String getWorld() {

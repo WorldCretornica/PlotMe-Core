@@ -64,7 +64,7 @@ public class InternalPlotEvent {
      */
     public ILocation getUpperBound() {
         if (plot != null && world != null) {
-            return plugin.getPlotMeCoreManager().getGenMan(world).getPlotTopLoc(world, plot.getId());
+            return plugin.getPlotMeCoreManager().getPlotTopLoc(world, plot.getId());
         } else {
             return null;
         }
@@ -78,7 +78,7 @@ public class InternalPlotEvent {
      */
     public ILocation getLowerBound() {
         if (plot != null && world != null) {
-            return plugin.getPlotMeCoreManager().getGenMan(world).getPlotBottomLoc(world, plot.getId());
+            return plugin.getPlotMeCoreManager().getPlotBottomLoc(world, plot.getId());
         } else {
             return null;
         }

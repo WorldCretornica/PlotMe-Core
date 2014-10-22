@@ -2,7 +2,9 @@ package com.worldcretornica.plotme_core.api.event;
 
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.*;
+import com.worldcretornica.plotme_core.api.ILocation;
+import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.api.IWorld;
 
 public class InternalPlotMoveEvent extends InternalPlotEvent implements ICancellable {
 
@@ -57,20 +59,20 @@ public class InternalPlotMoveEvent extends InternalPlotEvent implements ICancell
 
     @Override
     public ILocation getUpperBound() {
-        return plugin.getPlotMeCoreManager().getGenMan(world).getPlotTopLoc(world, _fromId);
+        return plugin.getPlotMeCoreManager().getPlotTopLoc(world, _fromId);
     }
 
     @Override
     public ILocation getLowerBound() {
-        return plugin.getPlotMeCoreManager().getGenMan(world).getPlotBottomLoc(world, _fromId);
+        return plugin.getPlotMeCoreManager().getPlotBottomLoc(world, _fromId);
     }
 
     public ILocation getUpperBoundTo() {
-        return plugin.getPlotMeCoreManager().getGenMan(_toworld).getPlotTopLoc(_toworld, _toId);
+        return plugin.getPlotMeCoreManager().getPlotTopLoc(_toworld, _toId);
     }
 
     public ILocation getLowerBoundTo() {
-        return plugin.getPlotMeCoreManager().getGenMan(_toworld).getPlotBottomLoc(_toworld, _toId);
+        return plugin.getPlotMeCoreManager().getPlotBottomLoc(_toworld, _toId);
     }
 
     public String getOwnerTo() {

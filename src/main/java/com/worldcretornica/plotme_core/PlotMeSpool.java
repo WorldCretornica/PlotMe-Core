@@ -5,7 +5,7 @@ import com.worldcretornica.plotme_core.api.IWorld;
 
 public class PlotMeSpool implements Runnable {
 
-    private PlotMe_Core plugin;
+    private final PlotMe_Core plugin;
     private Long[] currentClear;
     private PlotToClear plottoclear;
 
@@ -29,31 +29,31 @@ public class PlotMeSpool implements Runnable {
 
     @Override
     public void run() {
-        if (this.plottoclear != null) {
-            IWorld w = plugin.getServerBridge().getWorld(this.plottoclear.getWorld());
+        if (this.getPlotToClear() != null) {
+            IWorld w = plugin.getServerBridge().getWorld(this.getPlotToClear().getWorld());
 
             if (w != null) {
-                if (this.currentClear == null)
-                    this.currentClear = this.plugin.getGenManager(w).clear(w, getPlotToClear().getPlotId(), plugin.getServerBridge().getConfig().getInt("NbBlocksPerClearStep"), true, null);
+                if (currentClear == null)
+                    currentClear = plugin.getGenManager(w).clear(w, getPlotToClear().getPlotId(), plugin.getServerBridge().getConfig().getInt("NbBlocksPerClearStep"), true, null);
                 else {
-                    this.currentClear = this.plugin.getGenManager(w).clear(w, getPlotToClear().getPlotId(), plugin.getServerBridge().getConfig().getInt("NbBlocksPerClearStep"), false, this.currentClear);
+                    currentClear = plugin.getGenManager(w).clear(w, getPlotToClear().getPlotId(), plugin.getServerBridge().getConfig().getInt("NbBlocksPerClearStep"), false, currentClear);
                 }
 
                 ShowProgress();
 
-                if (this.currentClear == null) {
-                    this.plugin.getGenManager(getPlotToClear().getWorld()).adjustPlotFor(w, getPlotToClear().getPlotId(), true, false, false, false);
-                    this.plugin.getPlotMeCoreManager().RemoveLWC(w, getPlotToClear().getPlotId());
-                    this.plugin.getGenManager(getPlotToClear().getWorld()).refreshPlotChunks(w, getPlotToClear().getPlotId());
+                if (currentClear == null) {
+                    plugin.getGenManager(getPlotToClear().getWorld()).adjustPlotFor(w, getPlotToClear().getPlotId(), true, false, false, false);
+                    plugin.getPlotMeCoreManager().RemoveLWC(w, getPlotToClear().getPlotId());
+                    plugin.getGenManager(getPlotToClear().getWorld()).refreshPlotChunks(w, getPlotToClear().getPlotId());
 
-                    Msg(this.plugin.getUtil().C("WordPlot") + " " + getPlotToClear().getPlotId() + " " + this.plugin.getUtil().C("WordCleared"));
+                    Msg(plugin.getUtil().C("WordPlot") + " " + getPlotToClear().getPlotId() + " " + plugin.getUtil().C("WordCleared"));
 
-                    this.plugin.removePlotToClear(this.plottoclear, this.taskid);
-                    this.plottoclear = null;
+                    plugin.removePlotToClear(this.getPlotToClear(), this.taskid);
+                    plottoclear = null;
                 }
             } else {
-                this.plugin.removePlotToClear(this.plottoclear, this.taskid);
-                this.plottoclear = null;
+                plugin.removePlotToClear(this.getPlotToClear(), this.taskid);
+                plottoclear = null;
             }
         }
     }

@@ -2,6 +2,7 @@ package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
+import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
@@ -18,7 +19,7 @@ public class CmdComment extends PlotCommand {
     }
 
     public boolean exec(IPlayer p, String[] args) {
-        if (plugin.cPerms(p, "PlotMe.use.comment")) {
+        if (PlotMe_Core.cPerms(p, "PlotMe.use.comment")) {
             if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
                 if (args.length < 2) {
                     p.sendMessage(C("WordUsage") + ": " + RED + "/plotme " + C("CommandComment") + " <" + C("WordText") + ">");
@@ -76,7 +77,7 @@ public class CmdComment extends PlotCommand {
                             comment[2] = uuid.toString();
 
                             plot.addComment(comment);
-                            plugin.getSqlManager().addPlotComment(comment, plot.getCommentsCount(), plugin.getPlotMeCoreManager().getIdX(id), plugin.getPlotMeCoreManager().getIdZ(id), plot.getWorld(), uuid);
+                            plugin.getSqlManager().addPlotComment(comment, plot.getCommentsCount(), PlotMeCoreManager.getIdX(id), PlotMeCoreManager.getIdZ(id), plot.getWorld(), uuid);
 
                             p.sendMessage(C("MsgCommentAdded") + " " + Util().moneyFormat(-price));
 

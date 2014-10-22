@@ -12,9 +12,9 @@ public class CmdTP extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(IPlayer p, String[] args) {
-        if (plugin.cPerms(p, "PlotMe.admin.tp")) {
-            if (plugin.getPlotMeCoreManager().isPlotWorld(p) || sob.getConfig().getBoolean("allowWorldTeleport")) {
+    public boolean exec(IPlayer player, String[] args) {
+        if (PlotMe_Core.cPerms(player, "PlotMe.admin.tp")) {
+            if (plugin.getPlotMeCoreManager().isPlotWorld(player) || sob.getConfig().getBoolean("allowWorldTeleport")) {
                 if (args.length == 2 || args.length == 3) {
                     String id = args[1];
 
@@ -33,40 +33,40 @@ public class CmdTP extends PlotCommand {
                                 }
                             }
                         }
-                    } else if (!plugin.getPlotMeCoreManager().isPlotWorld(p)) {
+                    } else if (!plugin.getPlotMeCoreManager().isPlotWorld(player)) {
                         w = plugin.getPlotMeCoreManager().getFirstWorld();
                     } else {
-                        w = p.getWorld();
+                        w = player.getWorld();
                     }
 
                     if (!plugin.getPlotMeCoreManager().isPlotWorld(w)) {
-                        p.sendMessage(RED + C("MsgNoPlotworldFound"));
+                        player.sendMessage(RED + C("MsgNoPlotworldFound"));
                     } else if (!plugin.getPlotMeCoreManager().isValidId(w, id)) {
                         if (sob.getConfig().getBoolean("allowWorldTeleport")) {
-                            p.sendMessage(C("WordUsage") + ": " + RED + "/plotme " + C("CommandTp") + " <ID> [" + C("WordWorld") + "] " + RESET + C("WordExample") + ": " + RED + "/plotme " + C("CommandTp") + " 5;-1 ");
+                            player.sendMessage(C("WordUsage") + ": " + RED + "/plotme " + C("CommandTp") + " <ID> [" + C("WordWorld") + "] " + RESET + C("WordExample") + ": " + RED + "/plotme " + C("CommandTp") + " 5;-1 ");
                         } else {
-                            p.sendMessage(C("WordUsage") + ": " + RED + "/plotme " + C("CommandTp") + " <ID> " + RESET + C("WordExample") + ": " + RED + "/plotme " + C("CommandTp") + " 5;-1 ");
+                            player.sendMessage(C("WordUsage") + ": " + RED + "/plotme " + C("CommandTp") + " <ID> " + RESET + C("WordExample") + ": " + RED + "/plotme " + C("CommandTp") + " 5;-1 ");
                         }
                         return true;
                     } else {
                         ILocation loc = plugin.getPlotMeCoreManager().getPlotHome(w, id);
 
-                        InternalPlotTeleportEvent event = sob.getEventFactory().callPlotTeleportEvent(plugin, w, p, loc, id);
+                        InternalPlotTeleportEvent event = sob.getEventFactory().callPlotTeleportEvent(plugin, w, player, loc, id);
 
                         if (!event.isCancelled()) {
-                            p.teleport(loc);
+                            player.teleport(loc);
                         }
                     }
                 } else if (sob.getConfig().getBoolean("allowWorldTeleport")) {
-                    p.sendMessage(C("WordUsage") + ": " + RED + "/plotme " + C("CommandTp") + " <ID> [" + C("WordWorld") + "] " + RESET + C("WordExample") + ": " + RED + "/plotme " + C("CommandTp") + " 5;-1 ");
+                    player.sendMessage(C("WordUsage") + ": " + RED + "/plotme " + C("CommandTp") + " <ID> [" + C("WordWorld") + "] " + RESET + C("WordExample") + ": " + RED + "/plotme " + C("CommandTp") + " 5;-1 ");
                 } else {
-                    p.sendMessage(C("WordUsage") + ": " + RED + "/plotme " + C("CommandTp") + " <ID> " + RESET + C("WordExample") + ": " + RED + "/plotme " + C("CommandTp") + " 5;-1 ");
+                    player.sendMessage(C("WordUsage") + ": " + RED + "/plotme " + C("CommandTp") + " <ID> " + RESET + C("WordExample") + ": " + RED + "/plotme " + C("CommandTp") + " 5;-1 ");
                 }
             } else {
-                p.sendMessage(RED + C("MsgNotPlotWorld"));
+                player.sendMessage(RED + C("MsgNotPlotWorld"));
             }
         } else {
-            p.sendMessage(RED + C("MsgPermissionDenied"));
+            player.sendMessage(RED + C("MsgPermissionDenied"));
             return false;
         }
         return true;

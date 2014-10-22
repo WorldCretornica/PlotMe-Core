@@ -13,57 +13,57 @@ public class CmdProtect extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(IPlayer p) {
-        if (plugin.cPerms(p, "PlotMe.admin.protect") || plugin.cPerms(p, "PlotMe.use.protect")) {
-            if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
-                String id = plugin.getPlotMeCoreManager().getPlotId(p.getLocation());
+    public boolean exec(IPlayer player) {
+        if (PlotMe_Core.cPerms(player, "PlotMe.admin.protect") || PlotMe_Core.cPerms(player, "PlotMe.use.protect")) {
+            if (plugin.getPlotMeCoreManager().isPlotWorld(player)) {
+                String id = plugin.getPlotMeCoreManager().getPlotId(player.getLocation());
 
                 if (id.isEmpty()) {
-                    p.sendMessage(RED + C("MsgNoPlotFound"));
-                } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, p)) {
-                    Plot plot = plugin.getPlotMeCoreManager().getPlotById(p, id);
+                    player.sendMessage(RED + C("MsgNoPlotFound"));
+                } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, player)) {
+                    Plot plot = plugin.getPlotMeCoreManager().getPlotById(player, id);
 
-                    String name = p.getName();
+                    String name = player.getName();
 
-                    if (plot.getOwner().equalsIgnoreCase(name) || plugin.cPerms(p, "PlotMe.admin.protect")) {
+                    if (plot.getOwner().equalsIgnoreCase(name) || PlotMe_Core.cPerms(player, "PlotMe.admin.protect")) {
                         InternalPlotProtectChangeEvent event;
 
                         if (plot.isProtect()) {
-                            event = sob.getEventFactory().callPlotProtectChangeEvent(plugin, p.getWorld(), plot, p, false);
+                            event = sob.getEventFactory().callPlotProtectChangeEvent(plugin, player.getWorld(), plot, player, false);
 
                             if (!event.isCancelled()) {
                                 plot.setProtect(false);
-                                plugin.getPlotMeCoreManager().adjustWall(p.getLocation());
+                                plugin.getPlotMeCoreManager().adjustWall(player.getLocation());
 
                                 plot.updateField("protected", false);
 
-                                p.sendMessage(C("MsgPlotNoLongerProtected"));
+                                player.sendMessage(C("MsgPlotNoLongerProtected"));
 
                                 if (isAdvancedLogging()) {
                                     plugin.getLogger().info(LOG + name + " " + C("MsgUnprotectedPlot") + " " + id);
                                 }
                             }
                         } else {
-                            PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(p);
+                            PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(player);
 
                             double cost = 0;
 
-                            if (plugin.getPlotMeCoreManager().isEconomyEnabled(p)) {
+                            if (plugin.getPlotMeCoreManager().isEconomyEnabled(player)) {
                                 cost = pmi.getProtectPrice();
 
-                                if (sob.getBalance(p) < cost) {
-                                    p.sendMessage(RED + C("MsgNotEnoughProtectPlot"));
+                                if (sob.getBalance(player) < cost) {
+                                    player.sendMessage(RED + C("MsgNotEnoughProtectPlot"));
                                     return true;
                                 } else {
-                                    event = sob.getEventFactory().callPlotProtectChangeEvent(plugin, p.getWorld(), plot, p, true);
+                                    event = sob.getEventFactory().callPlotProtectChangeEvent(plugin, player.getWorld(), plot, player, true);
 
                                     if (event.isCancelled()) {
                                         return true;
                                     } else {
-                                        EconomyResponse er = sob.withdrawPlayer(p, cost);
+                                        EconomyResponse er = sob.withdrawPlayer(player, cost);
 
                                         if (!er.transactionSuccess()) {
-                                            p.sendMessage(RED + er.errorMessage);
+                                            player.sendMessage(RED + er.errorMessage);
                                             Util().warn(er.errorMessage);
                                             return true;
                                         }
@@ -71,16 +71,16 @@ public class CmdProtect extends PlotCommand {
                                 }
 
                             } else {
-                                event = sob.getEventFactory().callPlotProtectChangeEvent(plugin, p.getWorld(), plot, p, true);
+                                event = sob.getEventFactory().callPlotProtectChangeEvent(plugin, player.getWorld(), plot, player, true);
                             }
 
                             if (!event.isCancelled()) {
                                 plot.setProtect(true);
-                                plugin.getPlotMeCoreManager().adjustWall(p.getLocation());
+                                plugin.getPlotMeCoreManager().adjustWall(player.getLocation());
 
                                 plot.updateField("protected", true);
 
-                                p.sendMessage(C("MsgPlotNowProtected") + " " + Util().moneyFormat(-cost));
+                                player.sendMessage(C("MsgPlotNowProtected") + " " + Util().moneyFormat(-cost));
 
                                 if (isAdvancedLogging()) {
                                     plugin.getLogger().info(LOG + name + " " + C("MsgProtectedPlot") + " " + id);
@@ -88,17 +88,17 @@ public class CmdProtect extends PlotCommand {
                             }
                         }
                     } else {
-                        p.sendMessage(RED + C("MsgDoNotOwnPlot"));
+                        player.sendMessage(RED + C("MsgDoNotOwnPlot"));
                     }
                 } else {
-                    p.sendMessage(RED + C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
+                    player.sendMessage(RED + C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
                 }
             } else {
-                p.sendMessage(RED + C("MsgNotPlotWorld"));
+                player.sendMessage(RED + C("MsgNotPlotWorld"));
                 return true;
             }
         } else {
-            p.sendMessage(RED + C("MsgPermissionDenied"));
+            player.sendMessage(RED + C("MsgPermissionDenied"));
             return false;
         }
         return true;

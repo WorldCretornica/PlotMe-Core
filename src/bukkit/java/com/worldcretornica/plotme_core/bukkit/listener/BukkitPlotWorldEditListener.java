@@ -23,7 +23,7 @@ public class BukkitPlotWorldEditListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-    public void onPlayerMove(final PlayerMoveEvent event) {
+    public void onPlayerMove(PlayerMoveEvent event) {
         BukkitLocation from = new BukkitLocation(event.getFrom());
         BukkitLocation to = new BukkitLocation(event.getTo());
 
@@ -57,7 +57,7 @@ public class BukkitPlotWorldEditListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-    public void onPlayerJoin(final PlayerJoinEvent event) {
+    public void onPlayerJoin(PlayerJoinEvent event) {
         BukkitPlayer p = new BukkitPlayer(event.getPlayer());
         if (api.getPlotMeCoreManager().isPlotWorld(p)) {
             if (!api.getPlotMeCoreManager().isPlayerIgnoringWELimit(p.getUniqueId())) {
@@ -71,7 +71,7 @@ public class BukkitPlotWorldEditListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-    public void onPlayerTeleport(final PlayerTeleportEvent event) {
+    public void onPlayerTeleport(PlayerTeleportEvent event) {
         BukkitPlayer p = new BukkitPlayer(event.getPlayer());
         BukkitLocation from = new BukkitLocation(event.getFrom());
         BukkitLocation to = new BukkitLocation(event.getTo());
@@ -84,7 +84,7 @@ public class BukkitPlotWorldEditListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-    public void onPlayerPortal(final PlayerPortalEvent event) {
+    public void onPlayerPortal(PlayerPortalEvent event) {
         BukkitPlayer p = new BukkitPlayer(event.getPlayer());
         BukkitLocation from = new BukkitLocation(event.getFrom());
         BukkitLocation to = new BukkitLocation(event.getTo());
@@ -97,7 +97,7 @@ public class BukkitPlotWorldEditListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-    public void onPlayerCommandPreprocess(final PlayerCommandPreprocessEvent event) {
+    public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
         BukkitPlayer p = new BukkitPlayer(event.getPlayer());
 
         if (api.getPlotMeCoreManager().isPlotWorld(p) && !api.getPlotMeCoreManager().isPlayerIgnoringWELimit(p.getUniqueId())) {
@@ -114,10 +114,10 @@ public class BukkitPlotWorldEditListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-    public void onPlayerInteract(final PlayerInteractEvent event) {
+    public void onPlayerInteract(PlayerInteractEvent event) {
         BukkitPlayer p = new BukkitPlayer(event.getPlayer());
 
-        if (api.getPlotMeCoreManager().isPlotWorld(p) && !api.cPerms(p, "plotme.admin.buildanywhere") && 
+        if (api.getPlotMeCoreManager().isPlotWorld(p) && !PlotMe_Core.cPerms(p, "plotme.admin.buildanywhere") &&
                 !api.getPlotMeCoreManager().isPlayerIgnoringWELimit(p.getUniqueId()) && 
                 (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK) && 
                 p.getItemInHand() != null && ((BukkitMaterial) p.getItemInHand().getType()).getMaterial() != Material.AIR) {

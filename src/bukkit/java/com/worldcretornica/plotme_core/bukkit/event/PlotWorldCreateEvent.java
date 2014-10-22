@@ -15,10 +15,6 @@ public class PlotWorldCreateEvent extends Event implements Cancellable {
     protected static final HandlerList handlers = new HandlerList();
     private InternalPlotWorldCreateEvent event;
 
-    public PlotWorldCreateEvent(String worldname, CommandSender cs, Map<String, String> parameters) {
-        event = new InternalPlotWorldCreateEvent(worldname, new BukkitCommandSender(cs), parameters);
-    }
-
     public PlotWorldCreateEvent(String worldname, ICommandSender cs, Map<String, String> parameters) {
         event = new InternalPlotWorldCreateEvent(worldname, cs, parameters);
     }

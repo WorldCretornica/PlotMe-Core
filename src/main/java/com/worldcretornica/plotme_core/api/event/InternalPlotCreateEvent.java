@@ -1,7 +1,9 @@
 package com.worldcretornica.plotme_core.api.event;
 
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.*;
+import com.worldcretornica.plotme_core.api.ILocation;
+import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.api.IWorld;
 
 public class InternalPlotCreateEvent extends InternalPlotEvent implements ICancellable {
 
@@ -35,11 +37,11 @@ public class InternalPlotCreateEvent extends InternalPlotEvent implements ICance
 
     @Override
     public ILocation getUpperBound() {
-        return plugin.getPlotMeCoreManager().getGenMan(world).getPlotTopLoc(world, _plotId);
+        return plugin.getPlotMeCoreManager().getPlotTopLoc(world, _plotId);
     }
 
     @Override
     public ILocation getLowerBound() {
-        return plugin.getPlotMeCoreManager().getGenMan(world).getPlotBottomLoc(world, _plotId);
+        return plugin.getPlotMeCoreManager().getPlotBottomLoc(world, _plotId);
     }
 }

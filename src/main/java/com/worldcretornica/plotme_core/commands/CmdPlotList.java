@@ -17,12 +17,12 @@ public class CmdPlotList extends PlotCommand {
     }
 
     public boolean exec(IPlayer p, String[] args) {
-        if (plugin.cPerms(p, "PlotMe.use.list")) {
+        if (PlotMe_Core.cPerms(p, "PlotMe.use.list")) {
             if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
                 String name;
                 UUID uuid = null;
 
-                if (plugin.cPerms(p, "PlotMe.admin.list") && args.length == 2) {
+                if (PlotMe_Core.cPerms(p, "PlotMe.admin.list") && args.length == 2) {
                     name = args[1];
                     IOfflinePlayer op = sob.getPlayerExact(name);
                     if (op != null) {

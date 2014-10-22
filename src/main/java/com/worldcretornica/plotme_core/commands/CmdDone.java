@@ -12,7 +12,7 @@ public class CmdDone extends PlotCommand {
     }
 
     public boolean exec(IPlayer p) {
-        if (plugin.cPerms(p, "PlotMe.use.done") || plugin.cPerms(p, "PlotMe.admin.done")) {
+        if (PlotMe_Core.cPerms(p, "PlotMe.use.done") || PlotMe_Core.cPerms(p, "PlotMe.admin.done")) {
             if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
                 String id = plugin.getPlotMeCoreManager().getPlotId(p.getLocation());
 
@@ -22,7 +22,7 @@ public class CmdDone extends PlotCommand {
                     Plot plot = plugin.getPlotMeCoreManager().getPlotById(p, id);
                     String name = p.getName();
 
-                    if (plot.getOwner().equalsIgnoreCase(name) || plugin.cPerms(p, "PlotMe.admin.done")) {
+                    if (plot.getOwner().equalsIgnoreCase(name) || PlotMe_Core.cPerms(p, "PlotMe.admin.done")) {
                         InternalPlotDoneChangeEvent event = sob.getEventFactory().callPlotDoneEvent(plugin, p.getWorld(), plot, p, plot.isFinished());
 
                         if (!event.isCancelled()) {
