@@ -37,15 +37,15 @@ public class BukkitPlayerListener implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        BukkitPlayer p = new BukkitPlayer(event.getPlayer());
-        if (!p.isOp()) {
+        BukkitPlayer player = new BukkitPlayer(event.getPlayer());
+        if (!player.isOp()) {
             return;
         }
         Set<String> badWorlds = plugin.getAPI().getBadWorlds();
         for (String world : badWorlds) {
             if (plugin.getAPI().getGenManager(world) == null) {
                 // TODO: Add as multilingual caption
-                plugin.getServerObjectBuilder().sendMessage(p, "The world " + ChatColor.GOLD + world + ChatColor.RESET + " is defined as a plotworld but does not exist or is not using a PlotMe generator.");
+                plugin.getServerObjectBuilder().sendMessage(player, "The world " + ChatColor.GOLD + world + ChatColor.RESET + " is defined as a plotworld but does not exist or is not using a PlotMe generator.");
             }
         }
     }
@@ -57,11 +57,11 @@ public class BukkitPlayerListener implements Listener {
             // Did not change world
             return;
         }
-        BukkitPlayer p = new BukkitPlayer(event.getPlayer());
-        if (p.isOp() && plugin.getAPI().getBadWorlds().contains(toWorld.getName())) {
+        BukkitPlayer player = new BukkitPlayer(event.getPlayer());
+        if (player.isOp() && plugin.getAPI().getBadWorlds().contains(toWorld.getName())) {
             if (plugin.getAPI().getGenManager(toWorld.getName()) == null) {
                 // TODO: Add as multilingual caption
-                plugin.getServerObjectBuilder().sendMessage(p, "This world is defined as a plotworld but is not using a PlotMe generator.");
+                plugin.getServerObjectBuilder().sendMessage(player, "This world is defined as a plotworld but is not using a PlotMe generator.");
             }
         }
     }

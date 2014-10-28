@@ -15,20 +15,20 @@ public class CmdUndeny extends PlotCommand {
     }
 
     public boolean exec(IPlayer player, String[] args) {
-        if (PlotMe_Core.cPerms(player, "PlotMe.admin.undeny") || PlotMe_Core.cPerms(player, "PlotMe.use.undeny")) {
+        if (player.hasPermission("PlotMe.admin.undeny") || player.hasPermission("PlotMe.use.undeny")) {
             if (plugin.getPlotMeCoreManager().isPlotWorld(player)) {
                 String id = plugin.getPlotMeCoreManager().getPlotId(player.getLocation());
                 if (id.isEmpty()) {
-                    player.sendMessage(RED + C("MsgNoPlotFound"));
+                    player.sendMessage("§c" + C("MsgNoPlotFound"));
                 } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, player)) {
                     if (args.length < 2 || args[1].isEmpty()) {
-                        player.sendMessage(C("WordUsage") + ": " + RED + "/plotme " + C("CommandUndeny") + " <" + C("WordPlayer") + ">");
+                        player.sendMessage(C("WordUsage") + ": §c/plotme " + C("CommandUndeny") + " <" + C("WordPlayer") + ">");
                     } else {
                         Plot plot = plugin.getPlotMeCoreManager().getPlotById(player, id);
                         String playername = player.getName();
                         String denied = args[1];
 
-                        if (plot.getOwner().equalsIgnoreCase(playername) || PlotMe_Core.cPerms(player, "PlotMe.admin.undeny")) {
+                        if (plot.getOwner().equalsIgnoreCase(playername) || player.hasPermission("PlotMe.admin.undeny")) {
                             if (plot.isDeniedConsulting(denied) || plot.isGroupDenied(denied)) {
 
                                 IWorld world = player.getWorld();
@@ -52,13 +52,13 @@ public class CmdUndeny extends PlotCommand {
                                             EconomyResponse er = sob.withdrawPlayer(player, price);
 
                                             if (!er.transactionSuccess()) {
-                                                player.sendMessage(RED + er.errorMessage);
+                                                player.sendMessage("§c" + er.errorMessage);
                                                 Util().warn(er.errorMessage);
                                                 return true;
                                             }
                                         }
                                     } else {
-                                        player.sendMessage(RED + C("MsgNotEnoughUndeny") + " " + C("WordMissing") + " " + RESET + Util().moneyFormat(price - balance, false));
+                                        player.sendMessage("§c" + C("MsgNotEnoughUndeny") + " " + C("WordMissing") + " §r" + Util().moneyFormat(price - balance, false));
                                         return true;
                                     }
                                 } else {
@@ -68,27 +68,27 @@ public class CmdUndeny extends PlotCommand {
                                 if (!event.isCancelled()) {
                                     plot.removeDenied(denied);
 
-                                    player.sendMessage(C("WordPlayer") + " " + RED + denied + RESET + " " + C("MsgNowUndenied") + " " + Util().moneyFormat(-price));
+                                    player.sendMessage(C("WordPlayer") + " §c" + denied + "§r " + C("MsgNowUndenied") + " " + Util().moneyFormat(-price));
 
                                     if (isAdvancedLogging()) {
                                         plugin.getLogger().info(LOG + playername + " " + C("MsgUndeniedPlayer") + " " + denied + " " + C("MsgFromPlot") + " " + id + (price != 0 ? " " + C("WordFor") + " " + price : ""));
                                     }
                                 }
                             } else {
-                                player.sendMessage(C("WordPlayer") + " " + RED + args[1] + RESET + " " + C("MsgWasNotDenied"));
+                                player.sendMessage(C("WordPlayer") + " §c" + args[1] + "§r " + C("MsgWasNotDenied"));
                             }
                         } else {
-                            player.sendMessage(RED + C("MsgThisPlot") + " (" + id + ") " + C("MsgNotYoursNotAllowedUndeny"));
+                            player.sendMessage("§c" + C("MsgThisPlot") + " (" + id + ") " + C("MsgNotYoursNotAllowedUndeny"));
                         }
                     }
                 } else {
-                    player.sendMessage(RED + C("MsgThisPlot") + " (" + id + ") " + C("MsgHasNoOwner"));
+                    player.sendMessage("§c" + C("MsgThisPlot") + " (" + id + ") " + C("MsgHasNoOwner"));
                 }
             } else {
-                player.sendMessage(RED + C("MsgNotPlotWorld"));
+                player.sendMessage("§c" + C("MsgNotPlotWorld"));
             }
         } else {
-            player.sendMessage(RED + C("MsgPermissionDenied"));
+            player.sendMessage("§c" + C("MsgPermissionDenied"));
             return false;
         }
         return true;

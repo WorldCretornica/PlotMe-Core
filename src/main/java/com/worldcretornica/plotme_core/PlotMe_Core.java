@@ -23,8 +23,8 @@ public class PlotMe_Core {
 
     private IWorld worldcurrentlyprocessingexpired;
     private ICommandSender cscurrentlyprocessingexpired;
-    private Integer counterexpired;
-    private Integer nbperdeletionprocessingexpired;
+    private int counterexpired;
+    private int nbperdeletionprocessingexpired;
 
     public Map<String, Map<String, String>> creationbuffer;
 
@@ -35,7 +35,7 @@ public class PlotMe_Core {
     private PlotMeCoreManager plotmecoremanager;
     private SqlManager sqlmanager;
     private Util util;
-    private Boolean initialized = false;
+    public boolean initialized;
     
     //Bridge
     private final IServerBridge serverBridge;
@@ -53,7 +53,7 @@ public class PlotMe_Core {
         creationbuffer = null;
         plotsToClear.clear();
         plotsToClear = null;
-        initialized = null;
+        initialized = false;
     }
 
     public void enable() {
@@ -253,10 +253,6 @@ public class PlotMe_Core {
         plotsToClear = new ConcurrentLinkedQueue<>();
     }
 
-    public static boolean cPerms(IPlayer player, String node) {
-        return player.hasPermission(node);
-    }
-
     public IPlotMe_GeneratorManager getGenManager(IWorld world) {
         if (world.isPlotMeGenerator()) {
             return world.getGenerator().getManager();
@@ -287,9 +283,9 @@ public class PlotMe_Core {
         }
 
         if (max == -2) {
-            if (cPerms(player, "plotme.admin")) {
+            if (player.hasPermission("plotme.admin")) {
                 return -1;
-            } else if (cPerms(player, "plotme.use")) {
+            } else if (player.hasPermission("plotme.use")) {
                 return 1;
             } else {
                 return 0;
@@ -299,11 +295,11 @@ public class PlotMe_Core {
         return max;
     }
 
-    public void scheduleTask(Runnable task, int eachseconds, int howmanytimes) {
+    public void scheduleTask(Runnable task) {
         getCommandSenderCurrentlyProcessingExpired().sendMessage(getUtil().C("MsgStartDeleteSession"));
 
-        for (int ctr = 0; ctr < howmanytimes / getNbPerDeletionProcessingExpired(); ctr++) {
-            getServerBridge().scheduleSyncDelayedTask(task, ctr * eachseconds * 20);
+        for (int ctr = 0; ctr < 50 / getNbPerDeletionProcessingExpired(); ctr++) {
+            getServerBridge().scheduleSyncDelayedTask(task, ctr * 100);
         }
     }
 
@@ -319,11 +315,11 @@ public class PlotMe_Core {
         this.worldcurrentlyprocessingexpired = worldcurrentlyprocessingexpired;
     }
 
-    public Integer getCounterExpired() {
+    public int getCounterExpired() {
         return counterexpired;
     }
 
-    public void setCounterExpired(Integer counterexpired) {
+    public void setCounterExpired(int counterexpired) {
         this.counterexpired = counterexpired;
     }
 
@@ -360,12 +356,12 @@ public class PlotMe_Core {
         return null;
     }
 
-    public Integer getNbPerDeletionProcessingExpired() {
+    public int getNbPerDeletionProcessingExpired() {
         return nbperdeletionprocessingexpired;
     }
 
-    public void setNbPerDeletionProcessingExpired(Integer nbperdeletionprocessingexpired) {
-        this.nbperdeletionprocessingexpired = nbperdeletionprocessingexpired;
+    public void setNbPerDeletionProcessingExpired() {
+        this.nbperdeletionprocessingexpired = 5;
     }
 
     public ICommandSender getCommandSenderCurrentlyProcessingExpired() {
@@ -400,7 +396,4 @@ public class PlotMe_Core {
         this.util = util;
     }
 
-    public boolean getInitialized() {
-        return this.initialized;
-    }
 }

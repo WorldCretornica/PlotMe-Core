@@ -11,39 +11,38 @@ public class CmdComments extends PlotCommand {
     }
 
     public boolean exec(IPlayer p, String[] args) {
-        if (PlotMe_Core.cPerms(p, "PlotMe.use.comments")) {
+        if (p.hasPermission("PlotMe.use.comments")) {
             if (!plugin.getPlotMeCoreManager().isPlotWorld(p)) {
-                p.sendMessage(RED + C("MsgNotPlotWorld"));
+                p.sendMessage("§c" + C("MsgNotPlotWorld"));
             } else if (args.length < 2) {
                 String id = plugin.getPlotMeCoreManager().getPlotId(p.getLocation());
 
                 if (id.isEmpty()) {
-                    p.sendMessage(RED + C("MsgNoPlotFound"));
+                    p.sendMessage("§c" + C("MsgNoPlotFound"));
                 } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, p)) {
                     Plot plot = plugin.getPlotMeCoreManager().getPlotById(p, id);
 
-                    if (plot.getOwnerId().equals(p.getUniqueId()) || plot.isAllowed(p.getUniqueId()) || PlotMe_Core.cPerms(p, "PlotMe.admin")) {
+                    if (plot.getOwnerId().equals(p.getUniqueId()) || plot.isAllowed(p.getUniqueId()) || p.hasPermission("PlotMe.admin")) {
                         if (plot.getCommentsCount() == 0) {
                             p.sendMessage(C("MsgNoComments"));
                         } else {
-                            p.sendMessage(C("MsgYouHave") + " "
-                                                  + AQUA + plot.getCommentsCount() + RESET + " " + C("MsgComments"));
+                            p.sendMessage(C("MsgYouHave") + " §b" + plot.getCommentsCount() + "§r " + C("MsgComments"));
 
                             for (String[] comment : plot.getComments()) {
-                                p.sendMessage(AQUA + C("WordFrom") + " : " + RED + comment[0]);
-                                p.sendMessage(ITALIC + comment[1]);
+                                p.sendMessage("§b" + C("WordFrom") + " : §c" + comment[0]);
+                                p.sendMessage("§o" + comment[1]);
                             }
 
                         }
                     } else {
-                        p.sendMessage(RED + C("MsgThisPlot") + "(" + id + ") " + C("MsgNotYoursNotAllowedViewComments"));
+                        p.sendMessage("§c" + C("MsgThisPlot") + "(" + id + ") " + C("MsgNotYoursNotAllowedViewComments"));
                     }
                 } else {
-                    p.sendMessage(RED + C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
+                    p.sendMessage("§c" + C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
                 }
             }
         } else {
-            p.sendMessage(RED + C("MsgPermissionDenied"));
+            p.sendMessage("§c" + C("MsgPermissionDenied"));
             return false;
         }
         return true;

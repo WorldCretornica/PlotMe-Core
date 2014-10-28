@@ -21,16 +21,16 @@ public class CmdSell extends PlotCommand {
             PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(p);
 
             if (pmi.isCanSellToBank() || pmi.isCanPutOnSale()) {
-                if (PlotMe_Core.cPerms(p, "PlotMe.use.sell") || PlotMe_Core.cPerms(p, "PlotMe.admin.sell")) {
-                    ILocation l = p.getLocation();
-                    String id = plugin.getPlotMeCoreManager().getPlotId(l);
+                if (p.hasPermission("PlotMe.use.sell") || p.hasPermission("PlotMe.admin.sell")) {
+                    ILocation location = p.getLocation();
+                    String id = plugin.getPlotMeCoreManager().getPlotId(location);
 
                     if (id.isEmpty()) {
-                        p.sendMessage(RED + C("MsgNoPlotFound"));
+                        p.sendMessage("§c" + C("MsgNoPlotFound"));
                     } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, p)) {
                         Plot plot = plugin.getPlotMeCoreManager().getPlotById(p, id);
 
-                        if (plot.getOwnerId().equals(p.getUniqueId()) || PlotMe_Core.cPerms(p, "PlotMe.admin.sell")) {
+                        if (plot.getOwnerId().equals(p.getUniqueId()) || p.hasPermission("PlotMe.admin.sell")) {
                             IWorld w = p.getWorld();
 
                             InternalPlotSellChangeEvent event;
@@ -45,7 +45,7 @@ public class CmdSell extends PlotCommand {
                                     plot.updateField("customprice", 0);
                                     plot.updateField("forsale", false);
 
-                                    plugin.getPlotMeCoreManager().adjustWall(l);
+                                    plugin.getPlotMeCoreManager().adjustWall(location);
                                     plugin.getPlotMeCoreManager().setSellSign(w, plot);
 
                                     p.sendMessage(C("MsgPlotNoLongerSale"));
@@ -66,16 +66,16 @@ public class CmdSell extends PlotCommand {
                                             price = Double.parseDouble(args[1]);
                                         } catch (Exception e) {
                                             if (pmi.isCanSellToBank()) {
-                                                p.sendMessage(C("WordUsage") + ": " + RED + " /plotme " + C("CommandSellBank") + "|<" + C("WordAmount") + ">");
-                                                p.sendMessage("  " + C("WordExample") + ": " + RED + "/plotme " + C("CommandSellBank") + " " + RESET + " or " + RED + " /plotme " + C("CommandSell") + " 200");
+                                                p.sendMessage(C("WordUsage") + ": §c /plotme " + C("CommandSellBank") + "|<" + C("WordAmount") + ">");
+                                                p.sendMessage("  " + C("WordExample") + ": §c/plotme " + C("CommandSellBank") + " §r or §c /plotme " + C("CommandSell") + " 200");
                                             } else {
-                                                p.sendMessage(C("WordUsage") + ": " + RED
-                                                                      + " /plotme " + C("CommandSell") + " <" + C("WordAmount") + ">" + RESET
-                                                                      + " " + C("WordExample") + ": " + RED + "/plotme " + C("CommandSell") + " 200");
+                                                p.sendMessage(C("WordUsage") + ": §c"
+                                                                      + " /plotme " + C("CommandSell") + " <" + C("WordAmount") + ">§r"
+                                                                      + " " + C("WordExample") + ": §c/plotme " + C("CommandSell") + " 200");
                                             }
                                         }
                                     } else {
-                                        p.sendMessage(RED + C("MsgCannotCustomPriceDefault") + " " + price);
+                                        p.sendMessage("§c" + C("MsgCannotCustomPriceDefault") + " " + price);
                                         return true;
                                     }
                                 }
@@ -98,7 +98,7 @@ public class CmdSell extends PlotCommand {
                                                     }
                                                 }
                                             } else {
-                                                p.sendMessage(RED + er.errorMessage);
+                                                p.sendMessage("§c" + er.errorMessage);
                                                 Util().warn(er.errorMessage);
                                             }
                                         }
@@ -143,10 +143,10 @@ public class CmdSell extends PlotCommand {
                                             }
                                         }
                                     } else {
-                                        p.sendMessage(RED + C("MsgCannotSellToBank"));
+                                        p.sendMessage("§c" + C("MsgCannotSellToBank"));
                                     }
                                 } else if (price < 0) {
-                                    p.sendMessage(RED + C("MsgInvalidAmount"));
+                                    p.sendMessage("§c" + C("MsgInvalidAmount"));
                                 } else {
                                     event = sob.getEventFactory().callPlotSellChangeEvent(plugin, w, plot, p, price, false, true);
 
@@ -157,7 +157,7 @@ public class CmdSell extends PlotCommand {
                                         plot.updateField("customprice", price);
                                         plot.updateField("forsale", true);
 
-                                        plugin.getPlotMeCoreManager().adjustWall(l);
+                                        plugin.getPlotMeCoreManager().adjustWall(location);
                                         plugin.getPlotMeCoreManager().setSellSign(w, plot);
 
                                         p.sendMessage(C("MsgPlotForSale"));
@@ -169,20 +169,20 @@ public class CmdSell extends PlotCommand {
                                 }
                             }
                         } else {
-                            p.sendMessage(RED + C("MsgDoNotOwnPlot"));
+                            p.sendMessage("§c" + C("MsgDoNotOwnPlot"));
                         }
                     } else {
-                        p.sendMessage(RED + C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
+                        p.sendMessage("§c" + C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
                     }
                 } else {
-                    p.sendMessage(RED + C("MsgPermissionDenied"));
+                    p.sendMessage("§c" + C("MsgPermissionDenied"));
                     return false;
                 }
             } else {
-                p.sendMessage(RED + C("MsgSellingPlotsIsDisabledWorld"));
+                p.sendMessage("§c" + C("MsgSellingPlotsIsDisabledWorld"));
             }
         } else {
-            p.sendMessage(RED + C("MsgEconomyDisabledWorld"));
+            p.sendMessage("§c" + C("MsgEconomyDisabledWorld"));
         }
         return true;
     }

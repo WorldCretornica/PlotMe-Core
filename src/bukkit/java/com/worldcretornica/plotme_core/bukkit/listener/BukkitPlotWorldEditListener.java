@@ -117,7 +117,7 @@ public class BukkitPlotWorldEditListener implements Listener {
     public void onPlayerInteract(PlayerInteractEvent event) {
         BukkitPlayer p = new BukkitPlayer(event.getPlayer());
 
-        if (api.getPlotMeCoreManager().isPlotWorld(p) && !PlotMe_Core.cPerms(p, "plotme.admin.buildanywhere") &&
+        if (api.getPlotMeCoreManager().isPlotWorld(p) && !p.hasPermission("plotme.admin.buildanywhere") &&
                 !api.getPlotMeCoreManager().isPlayerIgnoringWELimit(p.getUniqueId()) && 
                 (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK) && 
                 p.getItemInHand() != null && ((BukkitMaterial) p.getItemInHand().getType()).getMaterial() != Material.AIR) {

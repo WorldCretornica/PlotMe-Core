@@ -17,18 +17,18 @@ public class CmdPlotList extends PlotCommand {
     }
 
     public boolean exec(IPlayer p, String[] args) {
-        if (PlotMe_Core.cPerms(p, "PlotMe.use.list")) {
+        if (p.hasPermission("PlotMe.use.list")) {
             if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
                 String name;
                 UUID uuid = null;
 
-                if (PlotMe_Core.cPerms(p, "PlotMe.admin.list") && args.length == 2) {
+                if (p.hasPermission("PlotMe.admin.list") && args.length == 2) {
                     name = args[1];
                     IOfflinePlayer op = sob.getPlayerExact(name);
                     if (op != null) {
                         uuid = op.getUniqueId();
                     }
-                    p.sendMessage(C("MsgListOfPlotsWhere") + " " + AQUA + name + RESET + " " + C("MsgCanBuild"));
+                    p.sendMessage(C("MsgListOfPlotsWhere") + " §b" + name + "§r " + C("MsgCanBuild"));
                 } else {
                     name = p.getName();
                     uuid = p.getUniqueId();
@@ -59,7 +59,7 @@ public class CmdPlotList extends PlotCommand {
                         Date tempdate = plot.getExpiredDate();
 
                         if (tempdate.compareTo(Calendar.getInstance().getTime()) < 0) {
-                            addition.append(RED + " @" + plot.getExpiredDate() + RESET);
+                            addition.append("§c @" + plot.getExpiredDate() + "§r");
                         } else {
                             addition.append(" @" + plot.getExpiredDate());
                         }
@@ -67,12 +67,12 @@ public class CmdPlotList extends PlotCommand {
 
                     // Is it auctionned?
                     if (plot.isAuctioned()) {
-                        addition.append(" " + C("WordAuction") + ": " + GREEN + Util().round(plot.getCurrentBid()) + RESET + (!plot.getCurrentBidder().isEmpty() ? " " + plot.getCurrentBidder() : ""));
+                        addition.append(" " + C("WordAuction") + ": §a" + Util().round(plot.getCurrentBid()) + "§r" + (!plot.getCurrentBidder().isEmpty() ? " " + plot.getCurrentBidder() : ""));
                     }
 
                     // Is it for sale?
                     if (plot.isForSale()) {
-                        addition.append(" " + C("WordSell") + ": " + GREEN + Util().round(plot.getCustomPrice()) + RESET);
+                        addition.append(" " + C("WordSell") + ": §a" + Util().round(plot.getCustomPrice()) + "§r");
                     }
 
                     // Is the plot owner the name?
@@ -80,16 +80,16 @@ public class CmdPlotList extends PlotCommand {
                         if (plot.allowedcount() == 0) {
                             // Is the name the current player too?
                             if (name.equalsIgnoreCase(p.getName())) {
-                                p.sendMessage("  " + plot.getId() + " -> " + AQUA + ITALIC + C("WordYours") + RESET + addition);
+                                p.sendMessage("  " + plot.getId() + " -> §b§o" + C("WordYours") + "§r" + addition);
                             } else {
-                                p.sendMessage("  " + plot.getId() + " -> " + AQUA + ITALIC + plot.getOwner() + RESET + addition);
+                                p.sendMessage("  " + plot.getId() + " -> §b§o" + plot.getOwner() + "§r" + addition);
                             }
                         } else {
                             // Is the owner the current player?
                             if (plot.getOwner().equalsIgnoreCase(p.getName())) {
-                                p.sendMessage("  " + plot.getId() + " -> " + AQUA + ITALIC + C("WordYours") + RESET + addition + ", " + C("WordHelpers") + ": " + AQUA + plot.getAllowed().replace(",", "" + RESET + "," + AQUA));
+                                p.sendMessage("  " + plot.getId() + " -> §b§o" + C("WordYours") + "§r" + addition + ", " + C("WordHelpers") + ": §b" + plot.getAllowed().replace(",", "§r,§b"));
                             } else {
-                                p.sendMessage("  " + plot.getId() + " -> " + AQUA + ITALIC + plot.getOwner() + RESET + addition + ", " + C("WordHelpers") + ": " + AQUA + plot.getAllowed().replace(",", "" + RESET + "," + AQUA));
+                                p.sendMessage("  " + plot.getId() + " -> §b§o" + plot.getOwner() + "§r" + addition + ", " + C("WordHelpers") + ": §b" + plot.getAllowed().replace(",", "§r,§b"));
                             }
                         }
 
@@ -99,12 +99,12 @@ public class CmdPlotList extends PlotCommand {
                         for (String allowed : plot.allowed().getPlayers()) {
                             if (p.getName().equalsIgnoreCase(allowed)) {
                                 if (name.equalsIgnoreCase(p.getName())) {
-                                    helpers.append(AQUA).append(ITALIC).append("You").append(RESET).append(", ");
+                                    helpers.append("§b").append("§o").append("You").append("§r").append(", ");
                                 } else {
-                                    helpers.append(AQUA).append(ITALIC).append(args[1]).append(RESET).append(", ");
+                                    helpers.append("§b").append("§o").append(args[1]).append("§r").append(", ");
                                 }
                             } else {
-                                helpers.append(AQUA).append(allowed).append(RESET).append(", ");
+                                helpers.append("§b").append(allowed).append("§r").append(", ");
                             }
                         }
                         if (helpers.length() > 2) {
@@ -112,17 +112,17 @@ public class CmdPlotList extends PlotCommand {
                         }
 
                         if (plot.getOwner().equalsIgnoreCase(p.getName())) {
-                            p.sendMessage("  " + plot.getId() + " -> " + AQUA + C("WordYours") + RESET + addition + ", " + C("WordHelpers") + ": " + helpers);
+                            p.sendMessage("  " + plot.getId() + " -> §b" + C("WordYours") + "§r" + addition + ", " + C("WordHelpers") + ": " + helpers);
                         } else {
-                            p.sendMessage("  " + plot.getId() + " -> " + AQUA + plot.getOwner() + C("WordPossessive") + RESET + addition + ", " + C("WordHelpers") + ": " + helpers);
+                            p.sendMessage("  " + plot.getId() + " -> §b" + plot.getOwner() + C("WordPossessive") + "§r" + addition + ", " + C("WordHelpers") + ": " + helpers);
                         }
                     }
                 }
             } else {
-                p.sendMessage(RED + C("MsgNotPlotWorld"));
+                p.sendMessage("§c" + C("MsgNotPlotWorld"));
             }
         } else {
-            p.sendMessage(RED + C("MsgPermissionDenied"));
+            p.sendMessage("§c" + C("MsgPermissionDenied"));
             return false;
         }
         return true;

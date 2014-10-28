@@ -16,7 +16,7 @@ public class SqlManager {
 
     private final PlotMe_Core plugin;
 
-    private final Boolean usemySQL;
+    private final boolean usemySQL;
     private final String mySQLuname;
     private final String mySQLpass;
     private final String mySQLconn;
@@ -2553,7 +2553,7 @@ public class SqlManager {
     }
 
     private void _fetchUUIDAsync(final int idX, final int idZ, final String world, final String Property, final String name) {
-        if (plugin.getInitialized()) {
+        if (plugin.initialized) {
             plugin.getServerBridge().runTaskAsynchronously(new Runnable() {
                 @Override
                 public void run() {

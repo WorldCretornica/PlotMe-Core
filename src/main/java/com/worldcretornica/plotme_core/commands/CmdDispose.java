@@ -17,20 +17,20 @@ public class CmdDispose extends PlotCommand {
     }
 
     public boolean exec(IPlayer p) {
-        if (PlotMe_Core.cPerms(p, "PlotMe.admin.dispose") || PlotMe_Core.cPerms(p, "PlotMe.use.dispose")) {
+        if (p.hasPermission("PlotMe.admin.dispose") || p.hasPermission("PlotMe.use.dispose")) {
             if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
                 String id = plugin.getPlotMeCoreManager().getPlotId(p.getLocation());
                 if (id.isEmpty()) {
-                    p.sendMessage(RED + C("MsgNoPlotFound"));
+                    p.sendMessage("§c" + C("MsgNoPlotFound"));
                 } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, p)) {
                     Plot plot = plugin.getPlotMeCoreManager().getPlotById(p, id);
 
                     if (plot.isProtect()) {
-                        p.sendMessage(RED + C("MsgPlotProtectedNotDisposed"));
+                        p.sendMessage("§c" + C("MsgPlotProtectedNotDisposed"));
                     } else {
                         String name = p.getName();
 
-                        if (plot.getOwner().equalsIgnoreCase(name) || PlotMe_Core.cPerms(p, "PlotMe.admin.dispose")) {
+                        if (plot.getOwner().equalsIgnoreCase(name) || p.hasPermission("PlotMe.admin.dispose")) {
                             PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(p);
 
                             double cost = pmi.getDisposePrice();
@@ -41,7 +41,7 @@ public class CmdDispose extends PlotCommand {
 
                             if (plugin.getPlotMeCoreManager().isEconomyEnabled(p)) {
                                 if (cost != 0 && sob.getBalance(p) < cost) {
-                                    p.sendMessage(RED + C("MsgNotEnoughDispose"));
+                                    p.sendMessage("§c" + C("MsgNotEnoughDispose"));
                                     return true;
                                 }
 
@@ -53,7 +53,7 @@ public class CmdDispose extends PlotCommand {
                                     EconomyResponse er = sob.withdrawPlayer(p, cost);
 
                                     if (!er.transactionSuccess()) {
-                                        p.sendMessage(RED + er.errorMessage);
+                                        p.sendMessage("§c" + er.errorMessage);
                                         Util().warn(er.errorMessage);
                                         return true;
                                     }
@@ -71,7 +71,7 @@ public class CmdDispose extends PlotCommand {
                                                     player.sendMessage(C("WordPlot") + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner() + " " + C("MsgWasDisposed") + " " + Util().moneyFormat(cost));
                                                 }
                                             } else {
-                                                p.sendMessage(RED + er2.errorMessage);
+                                                p.sendMessage("§c" + er2.errorMessage);
                                                 Util().warn(er2.errorMessage);
                                             }
                                         }
@@ -99,17 +99,17 @@ public class CmdDispose extends PlotCommand {
                                 }
                             }
                         } else {
-                            p.sendMessage(RED + C("MsgThisPlot") + "(" + id + ") " + C("MsgNotYoursCannotDispose"));
+                            p.sendMessage("§c" + C("MsgThisPlot") + "(" + id + ") " + C("MsgNotYoursCannotDispose"));
                         }
                     }
                 } else {
-                    p.sendMessage(RED + C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
+                    p.sendMessage("§c" + C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
                 }
             } else {
-                p.sendMessage(RED + C("MsgNotPlotWorld"));
+                p.sendMessage("§c" + C("MsgNotPlotWorld"));
             }
         } else {
-            p.sendMessage(RED + C("MsgPermissionDenied"));
+            p.sendMessage("§c" + C("MsgPermissionDenied"));
             return false;
         }
         return true;

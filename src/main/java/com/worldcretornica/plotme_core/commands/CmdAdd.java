@@ -15,23 +15,23 @@ public class CmdAdd extends PlotCommand {
     }
 
     public boolean exec(IPlayer player, String[] args) {
-        if (PlotMe_Core.cPerms(player, "PlotMe.admin.add") || PlotMe_Core.cPerms(player, "PlotMe.use.add")) {
+        if (player.hasPermission("PlotMe.admin.add") || player.hasPermission("PlotMe.use.add")) {
             if (plugin.getPlotMeCoreManager().isPlotWorld(player)) {
                 String id = plugin.getPlotMeCoreManager().getPlotId(player.getLocation());
                 if (id.isEmpty()) {
-                    player.sendMessage(RED + C("MsgNoPlotFound"));
+                    player.sendMessage("§c" + C("MsgNoPlotFound"));
                 } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, player)) {
                     if (args.length < 2 || args[1].isEmpty()) {
-                        player.sendMessage(C("WordUsage") + " " + RED + "/plotme " + C("CommandAdd") + " <" + C("WordPlayer") + ">");
+                        player.sendMessage(C("WordUsage") + " §c/plotme " + C("CommandAdd") + " <" + C("WordPlayer") + ">");
                     } else {
 
                         Plot plot = plugin.getPlotMeCoreManager().getPlotById(player, id);
                         String playername = player.getName();
                         String allowed = args[1];
 
-                        if (plot.getOwner().equalsIgnoreCase(playername) || PlotMe_Core.cPerms(player, "PlotMe.admin.add")) {
+                        if (plot.getOwner().equalsIgnoreCase(playername) || player.hasPermission("PlotMe.admin.add")) {
                             if (plot.isAllowedConsulting(allowed) || plot.isGroupAllowed(allowed)) {
-                                player.sendMessage(C("WordPlayer") + " " + RED + args[1] + RESET + " " + C("MsgAlreadyAllowed"));
+                                player.sendMessage(C("WordPlayer") + " §c" + args[1] + "§r " + C("MsgAlreadyAllowed"));
                             } else {
                                 IWorld w = player.getWorld();
 
@@ -54,13 +54,13 @@ public class CmdAdd extends PlotCommand {
                                             EconomyResponse er = sob.withdrawPlayer(player, price);
 
                                             if (!er.transactionSuccess()) {
-                                                player.sendMessage(RED + er.errorMessage);
+                                                player.sendMessage("§c" + er.errorMessage);
                                                 Util().warn(er.errorMessage);
                                                 return true;
                                             }
                                         }
                                     } else {
-                                        player.sendMessage(RED + C("MsgNotEnoughAdd") + " " + C("WordMissing") + " " + RESET + Util().moneyFormat(price - balance, false));
+                                        player.sendMessage("§c" + C("MsgNotEnoughAdd") + " " + C("WordMissing") + " §r" + Util().moneyFormat(price - balance, false));
                                         return true;
                                     }
                                 } else {
@@ -71,7 +71,7 @@ public class CmdAdd extends PlotCommand {
                                     plot.addAllowed(allowed);
                                     plot.removeDenied(allowed);
 
-                                    player.sendMessage(C("WordPlayer") + " " + RED + allowed + RESET + " " + C("MsgNowAllowed") + " " + Util().moneyFormat(-price));
+                                    player.sendMessage(C("WordPlayer") + " §c" + allowed + "§r " + C("MsgNowAllowed") + " " + Util().moneyFormat(-price));
 
                                     if (isAdvancedLogging()) {
                                         plugin.getLogger().info(LOG + playername + " " + C("MsgAddedPlayer") + " " + allowed + " " + C("MsgToPlot") + " "
@@ -80,17 +80,17 @@ public class CmdAdd extends PlotCommand {
                                 }
                             }
                         } else {
-                            player.sendMessage(RED + C("MsgThisPlot") + "(" + id + ") " + C("MsgNotYoursNotAllowedAdd"));
+                            player.sendMessage("§c" + C("MsgThisPlot") + "(" + id + ") " + C("MsgNotYoursNotAllowedAdd"));
                         }
                     }
                 } else {
-                    player.sendMessage(RED + C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
+                    player.sendMessage("§c" + C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
                 }
             } else {
-                player.sendMessage(RED + C("MsgNotPlotWorld"));
+                player.sendMessage("§c" + C("MsgNotPlotWorld"));
             }
         } else {
-            player.sendMessage(RED + C("MsgPermissionDenied"));
+            player.sendMessage("§c" + C("MsgPermissionDenied"));
             return false;
         }
         return true;

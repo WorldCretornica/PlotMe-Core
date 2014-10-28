@@ -14,11 +14,11 @@ public class CmdExpired extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(IPlayer p, String[] args) {
-        if (PlotMe_Core.cPerms(p, "PlotMe.admin.expired")) {
-            if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
+    public boolean exec(IPlayer player, String[] args) {
+        if (player.hasPermission("PlotMe.admin.expired")) {
+            if (plugin.getPlotMeCoreManager().isPlotWorld(player)) {
                 int page = 1;
-                IWorld w = p.getWorld();
+                IWorld w = player.getWorld();
 
                 if (args.length == 2) {
                     try {
@@ -27,33 +27,33 @@ public class CmdExpired extends PlotCommand {
                     }
                 }
 
-                int maxpage = (int) Math.ceil((double) plugin.getSqlManager().getExpiredPlotCount(p.getWorld().getName()) / (double) 8);
+                int maxpage = (int) Math.ceil((double) plugin.getSqlManager().getExpiredPlotCount(player.getWorld().getName()) / (double) 8);
 
                 List<Plot> expiredplots = plugin.getSqlManager().getExpiredPlots(w.getName(), page, 8);
 
                 if (expiredplots.isEmpty()) {
-                    p.sendMessage(C("MsgNoPlotExpired"));
+                    player.sendMessage(C("MsgNoPlotExpired"));
                 } else {
-                    p.sendMessage(C("MsgExpiredPlotsPage") + " " + page + "/" + maxpage);
+                    player.sendMessage(C("MsgExpiredPlotsPage") + " " + page + "/" + maxpage);
 
                     for (int i = (page - 1) * 8; i < expiredplots.size() && i < page * 8; i++) {
                         Plot plot = expiredplots.get(i);
 
-                        String starttext = "  " + AQUA + plot.getId() + RESET + " -> " + plot.getOwner();
+                        String starttext = "  §b" + plot.getId() + "§r -> " + plot.getOwner();
 
                         int textLength = MinecraftFontWidthCalculator.getStringWidth(starttext);
 
                         String line = starttext + Util().whitespace(550 - textLength) + "@" + plot.getExpiredDate();
 
-                        p.sendMessage(line);
+                        player.sendMessage(line);
                     }
                 }
             } else {
-                p.sendMessage(RED + C("MsgNotPlotWorld"));
+                player.sendMessage("§c" + C("MsgNotPlotWorld"));
                 return true;
             }
         } else {
-            p.sendMessage(RED + C("MsgPermissionDenied"));
+            player.sendMessage("§c" + C("MsgPermissionDenied"));
             return false;
         }
         return true;

@@ -15,13 +15,13 @@ public class CmdSetOwner extends PlotCommand {
     }
 
     public boolean exec(IPlayer p, String[] args) {
-        if (PlotMe_Core.cPerms(p, "PlotMe.admin.setowner")) {
+        if (p.hasPermission("PlotMe.admin.setowner")) {
             if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
                 String id = plugin.getPlotMeCoreManager().getPlotId(p.getLocation());
                 if (id.isEmpty()) {
-                    p.sendMessage(RED + C("MsgNoPlotFound"));
+                    p.sendMessage("§c" + C("MsgNoPlotFound"));
                 } else if (args.length < 2 || args[1].isEmpty()) {
-                    p.sendMessage(C("WordUsage") + ": " + RED + "/plotme " + C("CommandSetowner") + " <" + C("WordPlayer") + ">");
+                    p.sendMessage(C("WordUsage") + ": §c/plotme " + C("CommandSetowner") + " <" + C("WordPlayer") + ">");
                 } else {
                     String newowner = args[1];
                     String oldowner = "<" + C("WordNotApplicable") + ">";
@@ -51,7 +51,7 @@ public class CmdSetOwner extends PlotCommand {
                                             player.sendMessage(C("MsgYourPlot") + " " + id + " " + C("MsgNowOwnedBy") + " " + newowner + ". " + Util().moneyFormat(pmi.getClaimPrice()));
                                         }
                                     } else {
-                                        p.sendMessage(RED + er.errorMessage);
+                                        p.sendMessage("§c" + er.errorMessage);
                                         Util().warn(er.errorMessage);
                                         return true;
                                     }
@@ -103,17 +103,17 @@ public class CmdSetOwner extends PlotCommand {
                         plugin.getPlotMeCoreManager().createPlot(p.getWorld(), id, newowner, null);
                     }
 
-                    p.sendMessage(C("MsgOwnerChangedTo") + " " + RED + newowner);
+                    p.sendMessage(C("MsgOwnerChangedTo") + " §c" + newowner);
 
                     if (isAdvancedLogging()) {
                         plugin.getLogger().info(LOG + playername + " " + C("MsgChangedOwnerOf") + " " + id + " " + C("WordFrom") + " " + oldowner + " " + C("WordTo") + " " + newowner);
                     }
                 }
             } else {
-                p.sendMessage(RED + C("MsgNotPlotWorld"));
+                p.sendMessage("§c" + C("MsgNotPlotWorld"));
             }
         } else {
-            p.sendMessage(RED + C("MsgPermissionDenied"));
+            p.sendMessage("§c" + C("MsgPermissionDenied"));
             return false;
         }
         return true;

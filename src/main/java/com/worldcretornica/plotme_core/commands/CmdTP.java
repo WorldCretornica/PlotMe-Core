@@ -13,7 +13,7 @@ public class CmdTP extends PlotCommand {
     }
 
     public boolean exec(IPlayer player, String[] args) {
-        if (PlotMe_Core.cPerms(player, "PlotMe.admin.tp")) {
+        if (player.hasPermission("PlotMe.admin.tp")) {
             if (plugin.getPlotMeCoreManager().isPlotWorld(player) || sob.getConfig().getBoolean("allowWorldTeleport")) {
                 if (args.length == 2 || args.length == 3) {
                     String id = args[1];
@@ -40,12 +40,12 @@ public class CmdTP extends PlotCommand {
                     }
 
                     if (!plugin.getPlotMeCoreManager().isPlotWorld(w)) {
-                        player.sendMessage(RED + C("MsgNoPlotworldFound"));
+                        player.sendMessage("§c" + C("MsgNoPlotworldFound"));
                     } else if (!plugin.getPlotMeCoreManager().isValidId(w, id)) {
                         if (sob.getConfig().getBoolean("allowWorldTeleport")) {
-                            player.sendMessage(C("WordUsage") + ": " + RED + "/plotme " + C("CommandTp") + " <ID> [" + C("WordWorld") + "] " + RESET + C("WordExample") + ": " + RED + "/plotme " + C("CommandTp") + " 5;-1 ");
+                            player.sendMessage(C("WordUsage") + ": §c/plotme " + C("CommandTp") + " <ID> [" + C("WordWorld") + "] §r" + C("WordExample") + ": §c/plotme " + C("CommandTp") + " 5;-1 ");
                         } else {
-                            player.sendMessage(C("WordUsage") + ": " + RED + "/plotme " + C("CommandTp") + " <ID> " + RESET + C("WordExample") + ": " + RED + "/plotme " + C("CommandTp") + " 5;-1 ");
+                            player.sendMessage(C("WordUsage") + ": §c/plotme " + C("CommandTp") + " <ID> §r" + C("WordExample") + ": §c/plotme " + C("CommandTp") + " 5;-1 ");
                         }
                         return true;
                     } else {
@@ -58,15 +58,15 @@ public class CmdTP extends PlotCommand {
                         }
                     }
                 } else if (sob.getConfig().getBoolean("allowWorldTeleport")) {
-                    player.sendMessage(C("WordUsage") + ": " + RED + "/plotme " + C("CommandTp") + " <ID> [" + C("WordWorld") + "] " + RESET + C("WordExample") + ": " + RED + "/plotme " + C("CommandTp") + " 5;-1 ");
+                    player.sendMessage(C("WordUsage") + ": §c/plotme " + C("CommandTp") + " <ID> [" + C("WordWorld") + "] §r" + C("WordExample") + ": §c/plotme " + C("CommandTp") + " 5;-1 ");
                 } else {
-                    player.sendMessage(C("WordUsage") + ": " + RED + "/plotme " + C("CommandTp") + " <ID> " + RESET + C("WordExample") + ": " + RED + "/plotme " + C("CommandTp") + " 5;-1 ");
+                    player.sendMessage(C("WordUsage") + ": §c/plotme " + C("CommandTp") + " <ID> §r" + C("WordExample") + ": §c/plotme " + C("CommandTp") + " 5;-1 ");
                 }
             } else {
-                player.sendMessage(RED + C("MsgNotPlotWorld"));
+                player.sendMessage("§c" + C("MsgNotPlotWorld"));
             }
         } else {
-            player.sendMessage(RED + C("MsgPermissionDenied"));
+            player.sendMessage("§c" + C("MsgPermissionDenied"));
             return false;
         }
         return true;

@@ -17,7 +17,7 @@ public class BukkitMaterial implements IMaterial {
 
     @SuppressWarnings("deprecation")
     @Override
-    public Integer getId() {
+    public int getId() {
         return material.getId();
     }
 }

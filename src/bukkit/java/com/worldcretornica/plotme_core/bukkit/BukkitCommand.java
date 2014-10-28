@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 public class BukkitCommand implements CommandExecutor {
 
     private PlotMe_Core api;
-    private PlotMe_CorePlugin plugin;
+    private final PlotMe_CorePlugin plugin;
     private final CmdAdd add;
     private final CmdAddTime addtime;
     private final CmdAuction auction;

@@ -47,7 +47,7 @@ public class CmdCreateWorld extends PlotCommand {
                                     parameters.remove(ckey);
                                     parameters.put(ckey, value);
 
-                                    sender.sendMessage(C("MsgSettingChanged") + " " + GREEN + ckey + RESET + "=" + AQUA + value);
+                                    sender.sendMessage(C("MsgSettingChanged") + " §a" + ckey + "§r=§b" + value);
 
                                     return true;
                                 }
@@ -61,7 +61,7 @@ public class CmdCreateWorld extends PlotCommand {
 
                 sender.sendMessage(C("WordUsage") + ": ");
                 sender.sendMessage("/plotme " + C("CommandCreateWorld") + " " + C("CommandCreateWorld-Setting")
-                                       + "<" + C("WordConfig") + ">" + " " + "<" + C("WordValue") + "> "
+                                           + "<" + C("WordConfig") + "> <" + C("WordValue") + "> "
                                        + C("MsgCreateWorldParameters4"));
                 sender.sendMessage("/plotme " + C("CommandCreateWorld") + " " + C("CommandCreateWorld-Cancel") + " "
                                        + C("MsgCreateWorldParameters5"));
@@ -69,7 +69,7 @@ public class CmdCreateWorld extends PlotCommand {
         } else {
             //Usage
             if (args.length == 1) {
-                sender.sendMessage(C("WordUsage") + ": " + RED + "/plotme " + C("CommandCreateWorld") + " <" + C("WordWorld") + "> [" + C("WordGenerator") + "]");
+                sender.sendMessage(C("WordUsage") + ": §c/plotme " + C("CommandCreateWorld") + " <" + C("WordWorld") + "> [" + C("WordGenerator") + "]");
                 sender.sendMessage("  " + C("MsgCreateWorldHelp"));
             } else {
 
@@ -156,7 +156,7 @@ public class CmdCreateWorld extends PlotCommand {
                 parameters.putAll(genparameters);
 
                 sender.sendMessage("/plotme " + C("CommandCreateWorld") + " " + C("CommandCreateWorld-Setting")
-                                       + "<" + C("WordConfig") + ">" + " " + "<" + C("WordValue") + "> "
+                                           + "<" + C("WordConfig") + "> <" + C("WordValue") + "> "
                                        + C("MsgCreateWorldParameters4"));
 
                 sender.sendMessage("/plotme " + C("CommandCreateWorld") + " " + C("CommandCreateWorld-Cancel") + " "
@@ -177,7 +177,7 @@ public class CmdCreateWorld extends PlotCommand {
                 buffer = " ";
             }
 
-            buffer += GREEN + key + RESET + "=" + AQUA + parameters.get(key) + "  ";
+            buffer += "§a" + key + "§r=§b" + parameters.get(key) + "  ";
         }
         cs.sendMessage(buffer);
     }

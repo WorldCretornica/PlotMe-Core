@@ -564,7 +564,7 @@ public class PlotMeCoreManager {
         }
     }
 
-    public void clear(IWorld w, Plot plot, ICommandSender cs, ClearReason reason) {
+    public void clear(IWorld iWorld, Plot plot, ICommandSender cs, ClearReason reason) {
         String id = plot.getId();
 
         plot.setForSale(false);
@@ -574,7 +574,7 @@ public class PlotMeCoreManager {
         plot.setCurrentBid(0);
         plot.setCurrentBidder("");
 
-        String world = w.getName();
+        String world = iWorld.getName();
         int idX = getIdX(id);
         int idZ = getIdZ(id);
 
@@ -587,11 +587,11 @@ public class PlotMeCoreManager {
         sm.updatePlot(idX, idZ, world, "currentbid", 0);
         sm.updatePlot(idX, idZ, world, "currentbidder", "");
 
-        if (getMap(w).isUseProgressiveClear()) {
+        if (getMap(iWorld).isUseProgressiveClear()) {
             plugin.addPlotToClear(new PlotToClear(world, id, cs, reason));
         } else {
-            getGenMan(w).clear(w, id);
-            RemoveLWC(w, id);
+            getGenMan(iWorld).clear(iWorld, id);
+            RemoveLWC(iWorld, id);
             cs.sendMessage(Util().C("MsgPlotCleared"));
         }
     }

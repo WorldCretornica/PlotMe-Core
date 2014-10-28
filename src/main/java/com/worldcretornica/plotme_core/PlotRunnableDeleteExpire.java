@@ -19,8 +19,8 @@ public class PlotRunnableDeleteExpire implements Runnable {
         PlotMeCoreManager coremanager = plugin.getPlotMeCoreManager();
 
         if (plugin.getWorldCurrentlyProcessingExpired() != null) {
-            IWorld w = plugin.getWorldCurrentlyProcessingExpired();
-            List<Plot> expiredplots = sqlmanager.getExpiredPlots(w.getName(), 0, plugin.getNbPerDeletionProcessingExpired());
+            IWorld world = plugin.getWorldCurrentlyProcessingExpired();
+            List<Plot> expiredplots = sqlmanager.getExpiredPlots(world.getName(), 0, plugin.getNbPerDeletionProcessingExpired());
 
             if (expiredplots.isEmpty()) {
                 plugin.setCounterExpired(0);
@@ -28,19 +28,19 @@ public class PlotRunnableDeleteExpire implements Runnable {
                 String ids = "";
 
                 for (Plot expiredplot : expiredplots) {
-                    InternalPlotResetEvent event = plugin.getServerBridge().getEventFactory().callPlotResetEvent(plugin, w, expiredplot, plugin.getCommandSenderCurrentlyProcessingExpired());
+                    InternalPlotResetEvent event = plugin.getServerBridge().getEventFactory().callPlotResetEvent(plugin, world, expiredplot, plugin.getCommandSenderCurrentlyProcessingExpired());
 
                     if (!event.isCancelled()) {
-                        coremanager.clear(w, expiredplot, plugin.getCommandSenderCurrentlyProcessingExpired(), ClearReason.Expired);
+                        coremanager.clear(world, expiredplot, plugin.getCommandSenderCurrentlyProcessingExpired(), ClearReason.Expired);
 
                         String id = expiredplot.getId();
                         ids += plugin.getServerBridge().getColor("RED") + id + plugin.getServerBridge().getColor("RESET") + ", ";
 
-                        coremanager.removePlot(w, id);
-                        coremanager.removeOwnerSign(w, id);
-                        coremanager.removeSellSign(w, id);
+                        coremanager.removePlot(world, id);
+                        coremanager.removeOwnerSign(world, id);
+                        coremanager.removeSellSign(world, id);
 
-                        sqlmanager.deletePlot(PlotMeCoreManager.getIdX(id), PlotMeCoreManager.getIdZ(id), w.getName().toLowerCase());
+                        sqlmanager.deletePlot(PlotMeCoreManager.getIdX(id), PlotMeCoreManager.getIdZ(id), world.getName().toLowerCase());
 
                         plugin.setCounterExpired(plugin.getCounterExpired() - 1);
                     }

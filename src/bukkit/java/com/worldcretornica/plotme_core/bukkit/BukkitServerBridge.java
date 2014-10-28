@@ -34,7 +34,7 @@ import java.util.logging.Logger;
 
 public class BukkitServerBridge implements IServerBridge {
 
-    private PlotMe_CorePlugin plugin;
+    private final PlotMe_CorePlugin plugin;
     private Economy economy;
     private PlotWorldEdit plotworldedit;
     private boolean usinglwc;
@@ -141,7 +141,7 @@ public class BukkitServerBridge implements IServerBridge {
         return usinglwc;
     }
 
-    public void setUsinglwc(Boolean usinglwc) {
+    public void setUsinglwc(boolean usinglwc) {
         this.usinglwc = usinglwc;
     }
 
@@ -404,7 +404,7 @@ public class BukkitServerBridge implements IServerBridge {
 
         //Do we have one of them
         if (getMultiWorld() == null && getMultiverse() == null) {
-            cs.sendMessage("[" + plugin.getName() + "] " + plugin.getAPI().getUtil().C("ErrWorldPluginNotFound"));
+            getLogger().info(plugin.getAPI().getUtil().C("ErrWorldPluginNotFound"));
             return false;
         }
 
@@ -413,10 +413,10 @@ public class BukkitServerBridge implements IServerBridge {
 
         //Make generator create settings
         if (bukkitplugin == null) {
-            cs.sendMessage("[" + plugin.getName() + "] " + plugin.getAPI().getUtil().C("ErrCannotFindWorldGen") + " '" + generator + "'");
+            getLogger().info(plugin.getAPI().getUtil().C("ErrCannotFindWorldGen") + " '" + generator + "'");
             return false;
         } else if (!bukkitplugin.getManager().createConfig(worldname, args, cs)) { //Create the generator configurations
-            cs.sendMessage("[" + plugin.getName() + "] " + plugin.getAPI().getUtil().C("ErrCannotCreateGen1") + " '" + generator + "' " + plugin.getAPI().getUtil().C("ErrCannotCreateGen2"));
+            getLogger().info(plugin.getAPI().getUtil().C("ErrCannotCreateGen1") + " '" + generator + "' " + plugin.getAPI().getUtil().C("ErrCannotCreateGen2"));
             return false;
         }
 
@@ -496,10 +496,10 @@ public class BukkitServerBridge implements IServerBridge {
                 success = plugin.getServerObjectBuilder().addMultiverseWorld(worldname, "NORMAL", seed.toString(), "NORMAL", true, generator);
 
                 if (!success) {
-                    cs.sendMessage("[" + plugin.getName() + "] " + plugin.getAPI().getUtil().C("ErrCannotCreateMV"));
+                    getLogger().info(plugin.getAPI().getUtil().C("ErrCannotCreateMV"));
                 }
             } else {
-                cs.sendMessage("[" + plugin.getName() + "] " + plugin.getAPI().getUtil().C("ErrMVDisabled"));
+                getLogger().info(plugin.getAPI().getUtil().C("ErrMVDisabled"));
             }
             return success;
         }

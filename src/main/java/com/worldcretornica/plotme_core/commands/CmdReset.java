@@ -14,42 +14,42 @@ public class CmdReset extends PlotCommand {
     }
 
     public boolean exec(IPlayer p) {
-        if (PlotMe_Core.cPerms(p, "PlotMe.admin.reset") || PlotMe_Core.cPerms(p, "PlotMe.use.reset")) {
+        if (p.hasPermission("PlotMe.admin.reset") || p.hasPermission("PlotMe.use.reset")) {
             if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
                 Plot plot = plugin.getPlotMeCoreManager().getPlotById(p.getLocation());
 
                 if (plot == null) {
-                    p.sendMessage(RED + C("MsgNoPlotFound"));
+                    p.sendMessage("§c" + C("MsgNoPlotFound"));
                 } else if (plot.isProtect()) {
-                    p.sendMessage(RED + C("MsgPlotProtectedCannotReset"));
+                    p.sendMessage("§c" + C("MsgPlotProtectedCannotReset"));
                 } else {
                     String playername = p.getName();
                     String id = plot.getId();
 
-                    if (plot.getOwner().equalsIgnoreCase(playername) || PlotMe_Core.cPerms(p, "PlotMe.admin.reset")) {
-                        IWorld w = p.getWorld();
+                    if (plot.getOwner().equalsIgnoreCase(playername) || p.hasPermission("PlotMe.admin.reset")) {
+                        IWorld world = p.getWorld();
 
-                        InternalPlotResetEvent event = sob.getEventFactory().callPlotResetEvent(plugin, w, plot, p);
+                        InternalPlotResetEvent event = sob.getEventFactory().callPlotResetEvent(plugin, world, plot, p);
 
                         if (!event.isCancelled()) {
-                            plugin.getPlotMeCoreManager().setBiome(w, id, sob.getBiome("PLAINS"));
-                            plugin.getPlotMeCoreManager().clear(w, plot, p, ClearReason.Reset);
+                            plugin.getPlotMeCoreManager().setBiome(world, id, sob.getBiome("PLAINS"));
+                            plugin.getPlotMeCoreManager().clear(world, plot, p, ClearReason.Reset);
                             PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(p);
 
                             if (plugin.getPlotMeCoreManager().isEconomyEnabled(p)) {
                                 if (plot.isAuctioned()) {
                                     if (plot.getCurrentBidderId() != null) {
-                                        IOfflinePlayer playercurrentbidder = sob.getOfflinePlayer(plot.getCurrentBidderId());
-                                        EconomyResponse er = sob.depositPlayer(playercurrentbidder, plot.getCurrentBid());
+                                        IOfflinePlayer offlinePlayer = sob.getOfflinePlayer(plot.getCurrentBidderId());
+                                        EconomyResponse economyResponse = sob.depositPlayer(offlinePlayer, plot.getCurrentBid());
 
-                                        if (er.transactionSuccess()) {
-                                            IPlayer player = sob.getPlayer(playercurrentbidder.getUniqueId());
+                                        if (economyResponse.transactionSuccess()) {
+                                            IPlayer player = sob.getPlayer(offlinePlayer.getUniqueId());
                                             if (player != null) {
                                                 player.sendMessage(C("WordPlot") + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner() + " " + C("MsgWasReset") + " " + Util().moneyFormat(plot.getCurrentBid()));
                                             }
                                         } else {
-                                            p.sendMessage(er.errorMessage);
-                                            Util().warn(er.errorMessage);
+                                            p.sendMessage(economyResponse.errorMessage);
+                                            Util().warn(economyResponse.errorMessage);
                                         }
                                     }
                                 }
@@ -65,7 +65,7 @@ public class CmdReset extends PlotCommand {
                                             player.sendMessage(C("WordPlot") + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner() + " " + C("MsgWasReset") + " " + Util().moneyFormat(pmi.getClaimPrice()));
                                         }
                                     } else {
-                                        p.sendMessage(RED + er.errorMessage);
+                                        p.sendMessage("§c" + er.errorMessage);
                                         Util().warn(er.errorMessage);
                                         return true;
                                     }
@@ -73,12 +73,12 @@ public class CmdReset extends PlotCommand {
                             }
 
                             if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, p)) {
-                                plugin.getPlotMeCoreManager().removePlot(w, id);
+                                plugin.getPlotMeCoreManager().removePlot(world, id);
                             }
 
-                            plugin.getPlotMeCoreManager().removeOwnerSign(w, id);
-                            plugin.getPlotMeCoreManager().removeSellSign(w, id);
-                            plugin.getSqlManager().deletePlot(PlotMeCoreManager.getIdX(id), PlotMeCoreManager.getIdZ(id), w.getName().toLowerCase());
+                            plugin.getPlotMeCoreManager().removeOwnerSign(world, id);
+                            plugin.getPlotMeCoreManager().removeSellSign(world, id);
+                            plugin.getSqlManager().deletePlot(PlotMeCoreManager.getIdX(id), PlotMeCoreManager.getIdZ(id), world.getName().toLowerCase());
 
                             pmi.addFreed(id);
 
@@ -87,14 +87,14 @@ public class CmdReset extends PlotCommand {
                             }
                         }
                     } else {
-                        p.sendMessage(RED + C("MsgThisPlot") + "(" + id + ") " + C("MsgNotYoursNotAllowedReset"));
+                        p.sendMessage("§c" + C("MsgThisPlot") + "(" + id + ") " + C("MsgNotYoursNotAllowedReset"));
                     }
                 }
             } else {
-                p.sendMessage(RED + C("MsgNotPlotWorld"));
+                p.sendMessage("§c" + C("MsgNotPlotWorld"));
             }
         } else {
-            p.sendMessage(RED + C("MsgPermissionDenied"));
+            p.sendMessage("§c" + C("MsgPermissionDenied"));
             return false;
         }
         return true;

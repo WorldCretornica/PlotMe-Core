@@ -16,32 +16,32 @@ public class CmdClaim extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(IPlayer p, String[] args) {
-        if (PlotMe_Core.cPerms(p, "PlotMe.use.claim") || PlotMe_Core.cPerms(p, "PlotMe.admin.claim.other")) {
-            if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
-                String id = plugin.getPlotMeCoreManager().getPlotId(p.getLocation());
+    public boolean exec(IPlayer player, String[] args) {
+        if (player.hasPermission("PlotMe.use.claim") || player.hasPermission("PlotMe.admin.claim.other")) {
+            if (plugin.getPlotMeCoreManager().isPlotWorld(player)) {
+                String id = plugin.getPlotMeCoreManager().getPlotId(player.getLocation());
 
                 if (id.isEmpty()) {
-                    p.sendMessage(RED + C("MsgCannotClaimRoad"));
-                } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, p)) {
-                    p.sendMessage(RED + C("MsgThisPlotOwned"));
+                    player.sendMessage("§c" + C("MsgCannotClaimRoad"));
+                } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, player)) {
+                    player.sendMessage("§c" + C("MsgThisPlotOwned"));
                 } else {
-                    String playername = p.getName();
-                    UUID uuid = p.getUniqueId();
+                    String playername = player.getName();
+                    UUID uuid = player.getUniqueId();
 
                     if (args.length == 2) {
-                        if (PlotMe_Core.cPerms(p, "PlotMe.admin.claim.other")) {
+                        if (player.hasPermission("PlotMe.admin.claim.other")) {
                             playername = args[1];
                             uuid = null;
                         }
                     }
 
-                    IWorld world = p.getWorld();
-                    int plotlimit = plugin.getPlotLimit(p);
+                    IWorld world = player.getWorld();
+                    int plotlimit = plugin.getPlotLimit(player);
 
-                    if (playername.equals(p.getName()) && plotlimit != -1 && plugin.getPlotMeCoreManager().getNbOwnedPlot(p, world) >= plotlimit) {
-                        p.sendMessage(RED + C("MsgAlreadyReachedMaxPlots") + " ("
-                                              + plugin.getPlotMeCoreManager().getNbOwnedPlot(p, world) + "/" + plugin.getPlotLimit(p) + "). " + C("WordUse") + " " + RED + "/plotme " + C("CommandHome") + RESET + " " + C("MsgToGetToIt"));
+                    if (playername.equals(player.getName()) && plotlimit != -1 && plugin.getPlotMeCoreManager().getNbOwnedPlot(player, world) >= plotlimit) {
+                        player.sendMessage("§c" + C("MsgAlreadyReachedMaxPlots") + " ("
+                                                   + plugin.getPlotMeCoreManager().getNbOwnedPlot(player, world) + "/" + plugin.getPlotLimit(player) + "). " + C("WordUse") + " §c/plotme " + C("CommandHome") + "§r " + C("MsgToGetToIt"));
                     } else {
                         PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
 
@@ -51,28 +51,28 @@ public class CmdClaim extends PlotCommand {
 
                         if (plugin.getPlotMeCoreManager().isEconomyEnabled(world)) {
                             price = pmi.getClaimPrice();
-                            double balance = sob.getBalance(p);
+                            double balance = sob.getBalance(player);
 
                             if (balance >= price) {
-                                event = sob.getEventFactory().callPlotCreatedEvent(plugin, world, id, p);
+                                event = sob.getEventFactory().callPlotCreatedEvent(plugin, world, id, player);
 
                                 if (event.isCancelled()) {
                                     return true;
                                 } else {
-                                    EconomyResponse er = sob.withdrawPlayer(p, price);
+                                    EconomyResponse er = sob.withdrawPlayer(player, price);
 
                                     if (!er.transactionSuccess()) {
-                                        p.sendMessage(RED + er.errorMessage);
+                                        player.sendMessage("§c" + er.errorMessage);
                                         Util().warn(er.errorMessage);
                                         return true;
                                     }
                                 }
                             } else {
-                                p.sendMessage(RED + C("MsgNotEnoughBuy") + " " + C("WordMissing") + " " + RESET + (price - balance) + RED + " " + sob.getEconomy().currencyNamePlural());
+                                player.sendMessage("§c" + C("MsgNotEnoughBuy") + " " + C("WordMissing") + " §r" + (price - balance) + "§c " + sob.getEconomy().currencyNamePlural());
                                 return true;
                             }
                         } else {
-                            event = sob.getEventFactory().callPlotCreatedEvent(plugin, world, id, p);
+                            event = sob.getEventFactory().callPlotCreatedEvent(plugin, world, id, player);
                         }
 
                         if (!event.isCancelled()) {
@@ -80,12 +80,12 @@ public class CmdClaim extends PlotCommand {
 
                             //plugin.getPlotMeCoreManager().adjustLinkedPlots(id, world);
                             if (plot == null) {
-                                p.sendMessage(RED + C("ErrCreatingPlotAt") + " " + id);
+                                player.sendMessage("§c" + C("ErrCreatingPlotAt") + " " + id);
                             } else {
-                                if (playername.equalsIgnoreCase(p.getName())) {
-                                    p.sendMessage(C("MsgThisPlotYours") + " " + C("WordUse") + " " + RED + "/plotme " + C("CommandHome") + RESET + " " + C("MsgToGetToIt") + " " + Util().moneyFormat(-price));
+                                if (playername.equalsIgnoreCase(player.getName())) {
+                                    player.sendMessage(C("MsgThisPlotYours") + " " + C("WordUse") + " §c/plotme " + C("CommandHome") + "§r " + C("MsgToGetToIt") + " " + Util().moneyFormat(-price));
                                 } else {
-                                    p.sendMessage(C("MsgThisPlotIsNow") + " " + playername + C("WordPossessive") + ". " + C("WordUse") + " " + RED + "/plotme " + C("CommandHome") + RESET + " " + C("MsgToGetToIt") + " " + Util().moneyFormat(-price));
+                                    player.sendMessage(C("MsgThisPlotIsNow") + " " + playername + C("WordPossessive") + ". " + C("WordUse") + " §c/plotme " + C("CommandHome") + "§r " + C("MsgToGetToIt") + " " + Util().moneyFormat(-price));
                                 }
 
                                 if (isAdvancedLogging()) {
@@ -96,10 +96,10 @@ public class CmdClaim extends PlotCommand {
                     }
                 }
             } else {
-                p.sendMessage(RED + C("MsgNotPlotWorld"));
+                player.sendMessage("§c" + C("MsgNotPlotWorld"));
             }
         } else {
-            p.sendMessage(RED + C("MsgPermissionDenied"));
+            player.sendMessage("§c" + C("MsgPermissionDenied"));
             return false;
         }
         return true;

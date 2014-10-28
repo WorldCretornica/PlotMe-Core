@@ -10,33 +10,33 @@ public class CmdAddTime extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(IPlayer p) {
-        if (PlotMe_Core.cPerms(p, "PlotMe.admin.addtime")) {
-            if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
-                String id = plugin.getPlotMeCoreManager().getPlotId(p.getLocation());
+    public boolean exec(IPlayer player) {
+        if (player.hasPermission("PlotMe.admin.addtime")) {
+            if (plugin.getPlotMeCoreManager().isPlotWorld(player)) {
+                String id = plugin.getPlotMeCoreManager().getPlotId(player.getLocation());
 
                 if (id.isEmpty()) {
-                    p.sendMessage(RED + C("MsgNoPlotFound"));
-                } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, p)) {
-                    Plot plot = plugin.getPlotMeCoreManager().getPlotById(p, id);
+                    player.sendMessage("§c" + C("MsgNoPlotFound"));
+                } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, player)) {
+                    Plot plot = plugin.getPlotMeCoreManager().getPlotById(player, id);
                     if (plot != null) {
-                        String name = p.getName();
+                        String name = player.getName();
 
-                        plot.resetExpire(plugin.getPlotMeCoreManager().getMap(p).getDaysToExpiration());
-                        p.sendMessage(C("MsgPlotExpirationReset"));
+                        plot.resetExpire(plugin.getPlotMeCoreManager().getMap(player).getDaysToExpiration());
+                        player.sendMessage(C("MsgPlotExpirationReset"));
 
                         if (isAdvancedLogging()) {
                             plugin.getLogger().info(LOG + name + " reset expiration on plot " + id);
                         }
                     }
                 } else {
-                    p.sendMessage(RED + C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
+                    player.sendMessage("§c" + C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
                 }
             } else {
-                p.sendMessage(RED + C("MsgNotPlotWorld"));
+                player.sendMessage("§c" + C("MsgNotPlotWorld"));
             }
         } else {
-            p.sendMessage(RED + C("MsgPermissionDenied"));
+            player.sendMessage("§c" + C("MsgPermissionDenied"));
             return false;
         }
         return true;

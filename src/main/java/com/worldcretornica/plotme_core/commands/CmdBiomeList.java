@@ -12,8 +12,8 @@ public class CmdBiomeList extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(IPlayer p, String[] args) {
-        if (PlotMe_Core.cPerms(p, "PlotMe.use.biome")) {
+    public boolean exec(IPlayer player, String[] args) {
+        if (player.hasPermission("PlotMe.use.biome")) {
             List<String> biomes = sob.getBiomes();
             
             Collections.sort(biomes);
@@ -31,17 +31,17 @@ public class CmdBiomeList extends PlotCommand {
                 page = 1;
             }
 
-            p.sendMessage(C("WordBiomes") + " (" + page + "/" + pages + ") : ");
+            player.sendMessage(C("WordBiomes") + " (" + page + "/" + pages + ") : ");
 
             for (int ctr = 0; ctr < 19; ctr++) {
                 if (biomes.size() <= ctr + (page - 1) * 19) {
                     return true;
                 } else {
-                    p.sendMessage("  " + AQUA + biomes.get(ctr + (page - 1) * 19));
+                    player.sendMessage("  §b" + biomes.get(ctr + (page - 1) * 19));
                 }
             }
         } else {
-            p.sendMessage(RED + C("MsgPermissionDenied"));
+            player.sendMessage("§c" + C("MsgPermissionDenied"));
             return false;
         }
         return true;

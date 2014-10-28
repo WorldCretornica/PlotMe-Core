@@ -15,74 +15,74 @@ public class CmdClear extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(IPlayer p) {
-        if (PlotMe_Core.cPerms(p, "PlotMe.admin.clear") || PlotMe_Core.cPerms(p, "PlotMe.use.clear")) {
-            if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
-                String id = plugin.getPlotMeCoreManager().getPlotId(p.getLocation());
+    public boolean exec(IPlayer player) {
+        if (player.hasPermission("PlotMe.admin.clear") || player.hasPermission("PlotMe.use.clear")) {
+            if (plugin.getPlotMeCoreManager().isPlotWorld(player)) {
+                String id = plugin.getPlotMeCoreManager().getPlotId(player.getLocation());
                 if (id.isEmpty()) {
-                    p.sendMessage(RED + C("MsgNoPlotFound"));
-                } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, p)) {
-                    Plot plot = plugin.getPlotMeCoreManager().getPlotById(p, id);
+                    player.sendMessage("§c" + C("MsgNoPlotFound"));
+                } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, player)) {
+                    Plot plot = plugin.getPlotMeCoreManager().getPlotById(player, id);
 
                     if (plot.isProtect()) {
-                        p.sendMessage(RED + C("MsgPlotProtectedCannotClear"));
+                        player.sendMessage("§c" + C("MsgPlotProtectedCannotClear"));
                     } else {
-                        String playername = p.getName();
+                        String playername = player.getName();
 
-                        if (plot.getOwner().equalsIgnoreCase(playername) || PlotMe_Core.cPerms(p, "PlotMe.admin.clear")) {
-                            IWorld w = p.getWorld();
+                        if (plot.getOwner().equalsIgnoreCase(playername) || player.hasPermission("PlotMe.admin.clear")) {
+                            IWorld world = player.getWorld();
 
-                            PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(w);
+                            PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
 
                             double price = 0;
 
                             InternalPlotClearEvent event;
 
-                            if (plugin.getPlotMeCoreManager().isEconomyEnabled(w)) {
+                            if (plugin.getPlotMeCoreManager().isEconomyEnabled(world)) {
                                 price = pmi.getClearPrice();
-                                double balance = sob.getBalance(p);
+                                double balance = sob.getBalance(player);
 
                                 if (balance >= price) {
-                                    event = sob.getEventFactory().callPlotClearEvent(plugin, w, plot, p);
+                                    event = sob.getEventFactory().callPlotClearEvent(plugin, world, plot, player);
 
                                     if (event.isCancelled()) {
                                         return true;
                                     } else {
-                                        EconomyResponse er = sob.withdrawPlayer(p, price);
+                                        EconomyResponse er = sob.withdrawPlayer(player, price);
 
                                         if (!er.transactionSuccess()) {
-                                            p.sendMessage(RED + er.errorMessage);
+                                            player.sendMessage("§c" + er.errorMessage);
                                             Util().warn(er.errorMessage);
                                             return true;
                                         }
                                     }
                                 } else {
-                                    p.sendMessage(RED + C("MsgNotEnoughClear") + " " + C("WordMissing") + " " + RESET + (price - balance) + RED + " " + sob.getEconomy().currencyNamePlural());
+                                    player.sendMessage("§c" + C("MsgNotEnoughClear") + " " + C("WordMissing") + " §r" + (price - balance) + "§c " + sob.getEconomy().currencyNamePlural());
                                     return true;
                                 }
                             } else {
-                                event = sob.getEventFactory().callPlotClearEvent(plugin, w, plot, p);
+                                event = sob.getEventFactory().callPlotClearEvent(plugin, world, plot, player);
                             }
 
                             if (!event.isCancelled()) {
-                                plugin.getPlotMeCoreManager().clear(w, plot, p, ClearReason.Clear);
+                                plugin.getPlotMeCoreManager().clear(world, plot, player, ClearReason.Clear);
 
                                 if (isAdvancedLogging()) {
                                     plugin.getLogger().info(LOG + playername + " " + C("MsgClearedPlot") + " " + id + (price != 0 ? " " + C("WordFor") + " " + price : ""));
                                 }
                             }
                         } else {
-                            p.sendMessage(RED + C("MsgThisPlot") + "(" + id + ") " + C("MsgNotYoursNotAllowedClear"));
+                            player.sendMessage("§c" + C("MsgThisPlot") + "(" + id + ") " + C("MsgNotYoursNotAllowedClear"));
                         }
                     }
                 } else {
-                    p.sendMessage(RED + C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
+                    player.sendMessage("§c" + C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
                 }
             } else {
-                p.sendMessage(RED + C("MsgNotPlotWorld"));
+                player.sendMessage("§c" + C("MsgNotPlotWorld"));
             }
         } else {
-            p.sendMessage(RED + C("MsgPermissionDenied"));
+            player.sendMessage("§c" + C("MsgPermissionDenied"));
             return false;
         }
         return true;

@@ -12,7 +12,7 @@ public class CmdWEAnywhere extends PlotCommand {
     }
 
     public boolean exec(IPlayer player) {
-        if (PlotMe_Core.cPerms(player, "PlotMe.admin.weanywhere")) {
+        if (player.hasPermission("PlotMe.admin.weanywhere")) {
             String name = player.getName();
             UUID uuid = player.getUniqueId();
 
@@ -41,7 +41,7 @@ public class CmdWEAnywhere extends PlotCommand {
                 }
             }
         } else {
-            player.sendMessage(RED + C("MsgPermissionDenied"));
+            player.sendMessage("§c" + C("MsgPermissionDenied"));
             return false;
         }
         return true;

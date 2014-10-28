@@ -20,7 +20,7 @@ public abstract class PlotEvent extends Event {
 
     protected static final HandlerList handlers = new HandlerList();
     private InternalPlotEvent event;
-    protected PlotMe_Core plugin;
+    protected final PlotMe_Core plugin;
 
     public PlotEvent(PlotMe_Core instance, Plot p, World world) {
         this.event = new InternalPlotEvent(instance, p, new BukkitWorld(world));

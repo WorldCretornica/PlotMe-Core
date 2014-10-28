@@ -20,22 +20,22 @@ public class CmdAuction extends PlotCommand {
             PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(p);
 
             if (pmi.isCanPutOnSale()) {
-                if (PlotMe_Core.cPerms(p, "PlotMe.use.auction") || PlotMe_Core.cPerms(p, "PlotMe.admin.auction")) {
+                if (p.hasPermission("PlotMe.use.auction") || p.hasPermission("PlotMe.admin.auction")) {
                     String id = plugin.getPlotMeCoreManager().getPlotId(p.getLocation());
 
                     if (id.isEmpty()) {
-                        p.sendMessage(RED + C("MsgNoPlotFound"));
+                        p.sendMessage("§c" + C("MsgNoPlotFound"));
                     } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, p)) {
                         Plot plot = plugin.getPlotMeCoreManager().getPlotById(p, id);
 
                         String name = p.getName();
 
-                        if (plot.getOwner().equalsIgnoreCase(name) || PlotMe_Core.cPerms(p, "PlotMe.admin.auction")) {
+                        if (plot.getOwner().equalsIgnoreCase(name) || p.hasPermission("PlotMe.admin.auction")) {
                             IWorld w = p.getWorld();
 
                             if (plot.isAuctioned()) {
                                 if (plot.getCurrentBidderId() != null) {
-                                    if (PlotMe_Core.cPerms(p, "PlotMe.admin.auction")) {
+                                    if (p.hasPermission("PlotMe.admin.auction")) {
                                         IOfflinePlayer playercurrentbidder = sob.getOfflinePlayer(plot.getCurrentBidderId());
                                         EconomyResponse er = sob.depositPlayer(playercurrentbidder, plot.getCurrentBid());
 
@@ -48,7 +48,7 @@ public class CmdAuction extends PlotCommand {
                                                 }
                                             }
                                         } else {
-                                            p.sendMessage(RED + er.errorMessage);
+                                            p.sendMessage("§c" + er.errorMessage);
                                             Util().warn(er.errorMessage);
                                         }
 
@@ -69,7 +69,7 @@ public class CmdAuction extends PlotCommand {
                                             plugin.getLogger().info(LOG + name + " " + C("MsgStoppedTheAuctionOnPlot") + " " + id);
                                         }
                                     } else {
-                                        p.sendMessage(RED + C("MsgPlotHasBidsAskAdmin"));
+                                        p.sendMessage("§c" + C("MsgPlotHasBidsAskAdmin"));
                                     }
                                 } else {
                                     plot.setAuctioned(false);
@@ -100,7 +100,7 @@ public class CmdAuction extends PlotCommand {
                                 }
 
                                 if (bid < 0) {
-                                    p.sendMessage(RED + C("MsgInvalidAmount"));
+                                    p.sendMessage("§c" + C("MsgInvalidAmount"));
                                 } else {
 
                                     InternalPlotAuctionEvent event = sob.getEventFactory().callPlotAuctionEvent(plugin, w, plot, p, bid);
@@ -123,20 +123,20 @@ public class CmdAuction extends PlotCommand {
                                 }
                             }
                         } else {
-                            p.sendMessage(RED + C("MsgDoNotOwnPlot"));
+                            p.sendMessage("§c" + C("MsgDoNotOwnPlot"));
                         }
                     } else {
-                        p.sendMessage(RED + C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
+                        p.sendMessage("§c" + C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
                     }
                 } else {
-                    p.sendMessage(RED + C("MsgPermissionDenied"));
+                    p.sendMessage("§c" + C("MsgPermissionDenied"));
                     return false;
                 }
             } else {
-                p.sendMessage(RED + C("MsgSellingPlotsIsDisabledWorld"));
+                p.sendMessage("§c" + C("MsgSellingPlotsIsDisabledWorld"));
             }
         } else {
-            p.sendMessage(RED + C("MsgEconomyDisabledWorld"));
+            p.sendMessage("§c" + C("MsgEconomyDisabledWorld"));
         }
         return true;
     }

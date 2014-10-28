@@ -1,9 +1,10 @@
 package com.worldcretornica.plotme_core.api;
 
-public interface ICommandSender {
+public interface ICommandSender extends IActor {
 
-    void sendMessage(String c);
+    void sendMessage(String msg);
 
+    @Override
     boolean hasPermission(String node);
 
     String getName();

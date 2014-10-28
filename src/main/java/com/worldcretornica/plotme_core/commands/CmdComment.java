@@ -19,15 +19,15 @@ public class CmdComment extends PlotCommand {
     }
 
     public boolean exec(IPlayer p, String[] args) {
-        if (PlotMe_Core.cPerms(p, "PlotMe.use.comment")) {
+        if (p.hasPermission("PlotMe.use.comment")) {
             if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
                 if (args.length < 2) {
-                    p.sendMessage(C("WordUsage") + ": " + RED + "/plotme " + C("CommandComment") + " <" + C("WordText") + ">");
+                    p.sendMessage(C("WordUsage") + ": §c/plotme " + C("CommandComment") + " <" + C("WordText") + ">");
                 } else {
                     String id = plugin.getPlotMeCoreManager().getPlotId(p.getLocation());
 
                     if (id.isEmpty()) {
-                        p.sendMessage(RED + C("MsgNoPlotFound"));
+                        p.sendMessage("§c" + C("MsgNoPlotFound"));
                     } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, p)) {
                         IWorld w = p.getWorld();
                         PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(w);
@@ -54,13 +54,13 @@ public class CmdComment extends PlotCommand {
                                     EconomyResponse er = sob.withdrawPlayer(p, price);
 
                                     if (!er.transactionSuccess()) {
-                                        p.sendMessage(RED + er.errorMessage);
+                                        p.sendMessage("§c" + er.errorMessage);
                                         Util().warn(er.errorMessage);
                                         return true;
                                     }
                                 }
                             } else {
-                                p.sendMessage(RED + C("MsgNotEnoughComment") + " " + C("WordMissing") + " " + RESET + Util().moneyFormat(price - balance, false));
+                                p.sendMessage("§c" + C("MsgNotEnoughComment") + " " + C("WordMissing") + " §r" + Util().moneyFormat(price - balance, false));
                                 return true;
                             }
                         } else {
@@ -86,14 +86,14 @@ public class CmdComment extends PlotCommand {
                             }
                         }
                     } else {
-                        p.sendMessage(RED + C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
+                        p.sendMessage("§c" + C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
                     }
                 }
             } else {
-                p.sendMessage(RED + C("MsgNotPlotWorld"));
+                p.sendMessage("§c" + C("MsgNotPlotWorld"));
             }
         } else {
-            p.sendMessage(RED + C("MsgPermissionDenied"));
+            p.sendMessage("§c" + C("MsgPermissionDenied"));
             return false;
         }
         return true;

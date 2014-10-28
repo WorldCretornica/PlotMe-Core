@@ -13,8 +13,8 @@ public class BukkitPlayer extends BukkitOfflinePlayer implements IPlayer {
     }
 
     @Override
-    public void sendMessage(String c) {
-        player.sendMessage(c);
+    public void sendMessage(String msg) {
+        player.sendMessage(msg);
     }
 
     @Override

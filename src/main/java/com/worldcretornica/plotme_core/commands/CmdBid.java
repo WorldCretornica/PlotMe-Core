@@ -15,11 +15,11 @@ public class CmdBid extends PlotCommand {
 
     public boolean exec(IPlayer p, String[] args) {
         if (plugin.getPlotMeCoreManager().isEconomyEnabled(p)) {
-            if (PlotMe_Core.cPerms(p, "PlotMe.use.bid")) {
+            if (p.hasPermission("PlotMe.use.bid")) {
                 String id = plugin.getPlotMeCoreManager().getPlotId(p.getLocation());
 
                 if (id.isEmpty()) {
-                    p.sendMessage(RED + C("MsgNoPlotFound"));
+                    p.sendMessage("§c" + C("MsgNoPlotFound"));
                 } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, p)) {
                     Plot plot = plugin.getPlotMeCoreManager().getPlotById(p, id);
 
@@ -27,7 +27,7 @@ public class CmdBid extends PlotCommand {
                         String bidder = p.getName();
 
                         if (plot.getOwner().equalsIgnoreCase(bidder)) {
-                            p.sendMessage(RED + C("MsgCannotBidOwnPlot"));
+                            p.sendMessage("§c" + C("MsgCannotBidOwnPlot"));
                         } else if (args.length == 2) {
                             double bid = 0;
                             double currentbid = plot.getCurrentBid();
@@ -40,13 +40,13 @@ public class CmdBid extends PlotCommand {
                             }
 
                             if (bid < currentbid || bid == currentbid && !currentbidder.isEmpty()) {
-                                p.sendMessage(RED + C("MsgInvalidBidMustBeAbove") + " " + RESET + Util().moneyFormat(plot.getCurrentBid(), false));
+                                p.sendMessage("§c" + C("MsgInvalidBidMustBeAbove") + " §r" + Util().moneyFormat(plot.getCurrentBid(), false));
                             } else {
                                 double balance = sob.getBalance(p);
 
                                 if (bid >= balance && !currentbidder.equals(bidder)
                                             || currentbidder.equals(bidder) && bid > balance + currentbid) {
-                                    p.sendMessage(RED + C("MsgNotEnoughBid"));
+                                    p.sendMessage("§c" + C("MsgNotEnoughBid"));
                                 } else {
                                     InternalPlotBidEvent event = sob.getEventFactory().callPlotBidEvent(plugin, p.getWorld(), plot, p, bid);
 
@@ -91,22 +91,22 @@ public class CmdBid extends PlotCommand {
                                 }
                             }
                         } else {
-                            p.sendMessage(C("WordUsage") + ": " + RED + "/plotme "
+                            p.sendMessage(C("WordUsage") + ": §c/plotme "
                                                   + C("CommandBid") + " <" + C("WordAmount") + "> "
-                                                  + RESET + C("WordExample") + ": " + RED + "/plotme " + C("CommandBid") + " 100");
+                                                  + "§r" + C("WordExample") + ": §c/plotme " + C("CommandBid") + " 100");
                         }
                     } else {
-                        p.sendMessage(RED + C("MsgPlotNotAuctionned"));
+                        p.sendMessage("§c" + C("MsgPlotNotAuctionned"));
                     }
                 } else {
-                    p.sendMessage(RED + C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
+                    p.sendMessage("§c" + C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
                 }
             } else {
-                p.sendMessage(RED + C("MsgPermissionDenied"));
+                p.sendMessage("§c" + C("MsgPermissionDenied"));
                 return false;
             }
         } else {
-            p.sendMessage(RED + C("MsgEconomyDisabledWorld"));
+            p.sendMessage("§c" + C("MsgEconomyDisabledWorld"));
         }
         return true;
     }

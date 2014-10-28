@@ -8,6 +8,8 @@ import com.worldcretornica.plotme_core.utils.MinecraftFontWidthCalculator;
 
 import java.util.List;
 
+import static com.worldcretornica.plotme_core.utils.Util.whitespace;
+
 public class CmdDoneList extends PlotCommand {
 
     public CmdDoneList(PlotMe_Core instance) {
@@ -15,11 +17,11 @@ public class CmdDoneList extends PlotCommand {
     }
 
     public boolean exec(IPlayer p, String[] args) {
-        if (PlotMe_Core.cPerms(p, "PlotMe.admin.done")) {
+        if (p.hasPermission("PlotMe.admin.done")) {
             PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(p);
 
             if (pmi == null) {
-                p.sendMessage(RED + C("MsgNotPlotWorld"));
+                p.sendMessage("§c" + C("MsgNotPlotWorld"));
                 return true;
             } else {
                 int page = 1;
@@ -50,18 +52,18 @@ public class CmdDoneList extends PlotCommand {
                     for (int i = (page - 1) * pagesize; i < finishedplots.size() && i < page * pagesize; i++) {
                         Plot plot = finishedplots.get(i);
 
-                        String starttext = "  " + AQUA + plot.getId() + RESET + " -> " + plot.getOwner();
+                        String starttext = "  §b" + plot.getId() + "§r -> " + plot.getOwner();
 
                         int textLength = MinecraftFontWidthCalculator.getStringWidth(starttext);
 
-                        String line = starttext + Util().whitespace(550 - textLength) + "@" + plot.getFinishedDate();
+                        String line = starttext + whitespace(550 - textLength) + "@" + plot.getFinishedDate();
 
                         p.sendMessage(line);
                     }
                 }
             }
         } else {
-            p.sendMessage(RED + C("MsgPermissionDenied"));
+            p.sendMessage("§c" + C("MsgPermissionDenied"));
             return false;
         }
         return true;

@@ -10,12 +10,10 @@ public class Util {
 
     private final PlotMe_Core plugin;
 
-    private final String LOG;
-    private final ChatColor GREEN = ChatColor.GREEN;
+    private final String LOG = "[PlotMe-Core Event] ";
 
     public Util(PlotMe_Core instance) {
         plugin = instance;
-        LOG = "[PlotMe-Core Event] ";
     }
 
     public String C(String s) {
@@ -27,11 +25,11 @@ public class Util {
         }
     }
 
-    public String addColor(String string) {
+    public static String addColor(String string) {
         return ChatColor.translateAlternateColorCodes('&', string);
     }
 
-    public StringBuilder whitespace(int length) {
+    public static StringBuilder whitespace(int length) {
         int spaceWidth = MinecraftFontWidthCalculator.getStringWidth(" ");
 
         StringBuilder ret = new StringBuilder();
@@ -43,7 +41,7 @@ public class Util {
         return ret;
     }
 
-    public String round(double money) {
+    public static String round(double money) {
         return money % 1 == 0 ? "" + Math.round(money) : "" + money;
     }
 
@@ -69,13 +67,13 @@ public class Util {
         }
 
         if (showsign) {
-            return GREEN + (price > 0 ? "+" + format : "-" + format);
+            return "§a" + (price > 0 ? "+" + format : "-" + format);
         } else {
-            return GREEN + format;
+            return "§a" + format;
         }
     }
 
-    public String FormatBiome(String biome) {
+    public static String FormatBiome(String biome) {
         biome = biome.toLowerCase();
 
         String[] tokens = biome.split("_");
