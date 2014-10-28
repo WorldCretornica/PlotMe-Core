@@ -176,13 +176,11 @@ public class BukkitCommand implements CommandExecutor {
                         if (a0.equalsIgnoreCase(C("CommandAdd")) || a0.equalsIgnoreCase("+")) {
                             return add.exec(p, args);
                         }
-                        if (plugin.getConfig().getBoolean("allowToDeny")) {
-                            if (a0.equalsIgnoreCase(C("CommandDeny"))) {
-                                return deny.exec(p, args);
-                            }
-                            if (a0.equalsIgnoreCase(C("CommandUndeny"))) {
-                                return undeny.exec(p, args);
-                            }
+                        if (a0.equalsIgnoreCase(C("CommandDeny"))) {
+                            return deny.exec(p, args);
+                        }
+                        if (a0.equalsIgnoreCase(C("CommandUndeny"))) {
+                            return undeny.exec(p, args);
                         }
                         if (a0.equalsIgnoreCase(C("CommandRemove")) || a0.equalsIgnoreCase("-")) {
                             return remove.exec(p, args);

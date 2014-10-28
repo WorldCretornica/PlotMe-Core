@@ -76,13 +76,11 @@ public class CmdShowHelp extends PlotCommand {
         if (player.hasPermission("PlotMe.use.remove") || player.hasPermission("PlotMe.admin.remove")) {
             allowed_commands.add("remove");
         }
-        if (sob.getConfig().getBoolean("allowToDeny")) {
-            if (player.hasPermission("PlotMe.use.deny") || player.hasPermission("PlotMe.admin.deny")) {
-                allowed_commands.add("deny");
-            }
-            if (player.hasPermission("PlotMe.use.undeny") || player.hasPermission("PlotMe.admin.undeny")) {
-                allowed_commands.add("undeny");
-            }
+        if (player.hasPermission("PlotMe.use.deny") || player.hasPermission("PlotMe.admin.deny")) {
+            allowed_commands.add("deny");
+        }
+        if (player.hasPermission("PlotMe.use.undeny") || player.hasPermission("PlotMe.admin.undeny")) {
+            allowed_commands.add("undeny");
         }
         if (player.hasPermission("PlotMe.admin.setowner")) {
             allowed_commands.add("setowner");

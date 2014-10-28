@@ -133,7 +133,7 @@ public class Plot implements Comparable<Plot> {
     }
 
     public void setFinished() {
-        setFinishedDate(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(Calendar.getInstance().getTime()));
+        setFinishedDate(new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()));
         finished = true;
 
         updateFinished(getFinishedDate(), true);

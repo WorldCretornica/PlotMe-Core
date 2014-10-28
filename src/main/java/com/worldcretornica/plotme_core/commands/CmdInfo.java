@@ -34,7 +34,7 @@ public class CmdInfo extends PlotCommand {
                         p.sendMessage("§a" + C("InfoHelpers") + ": §b" + plot.getAllowed());
                     }
 
-                    if (sob.getConfig().getBoolean("allowToDeny") && plot.deniedcount() > 0) {
+                    if (plot.deniedcount() > 0) {
                         p.sendMessage("§a" + C("InfoDenied") + ": §b" + plot.getDenied());
                     }
 

@@ -19,7 +19,7 @@ public class CmdBiomeList extends PlotCommand {
             Collections.sort(biomes);
 
             int page = 1;
-            int pages = (int) Math.ceil((double) biomes.size() / 19);
+            int pages = (int) Math.ceil(biomes.size() / 19);
             
             if (args.length > 1 && !args[1].isEmpty()) {
                 try{

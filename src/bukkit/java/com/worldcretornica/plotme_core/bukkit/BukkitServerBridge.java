@@ -178,9 +178,7 @@ public class BukkitServerBridge implements IServerBridge {
 
         pm.registerEvents(new BukkitPlotListener(plugin), plugin);
 
-        if (plugin.getConfig().getBoolean("allowToDeny")) {
-            pm.registerEvents(new BukkitPlotDenyListener(plugin), plugin);
-        }
+        pm.registerEvents(new BukkitPlotDenyListener(plugin), plugin);
     }
 
     @Override

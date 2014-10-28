@@ -18,7 +18,7 @@ public class CmdExpired extends PlotCommand {
         if (player.hasPermission("PlotMe.admin.expired")) {
             if (plugin.getPlotMeCoreManager().isPlotWorld(player)) {
                 int page = 1;
-                IWorld w = player.getWorld();
+                IWorld world = player.getWorld();
 
                 if (args.length == 2) {
                     try {
@@ -29,7 +29,7 @@ public class CmdExpired extends PlotCommand {
 
                 int maxpage = (int) Math.ceil((double) plugin.getSqlManager().getExpiredPlotCount(player.getWorld().getName()) / (double) 8);
 
-                List<Plot> expiredplots = plugin.getSqlManager().getExpiredPlots(w.getName(), page, 8);
+                List<Plot> expiredplots = plugin.getSqlManager().getExpiredPlots(world.getName(), page, 8);
 
                 if (expiredplots.isEmpty()) {
                     player.sendMessage(C("MsgNoPlotExpired"));

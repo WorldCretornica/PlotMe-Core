@@ -21,14 +21,14 @@ public class CmdMove extends PlotCommand {
             } else {
                 String plot1 = args[1];
                 String plot2 = args[2];
-                IWorld w = player.getWorld();
+                IWorld world = player.getWorld();
 
-                if (!plugin.getPlotMeCoreManager().isValidId(w, plot1) || !plugin.getPlotMeCoreManager().isValidId(w, plot2)) {
+                if (!plugin.getPlotMeCoreManager().isValidId(world, plot1) || !plugin.getPlotMeCoreManager().isValidId(world, plot2)) {
                     player.sendMessage(C("WordUsage") + ": §c/plotme " + C("CommandMove") + " <" + C("WordIdFrom") + "> <" + C("WordIdTo") + "> "
                                                + "§r" + C("WordExample") + ": §c/plotme " + C("CommandMove") + " 0;1 2;-1");
                     return true;
                 } else {
-                    InternalPlotMoveEvent event = sob.getEventFactory().callPlotMoveEvent(plugin, w, w, plot1, plot2, player);
+                    InternalPlotMoveEvent event = sob.getEventFactory().callPlotMoveEvent(plugin, world, world, plot1, plot2, player);
 
                     if (!event.isCancelled()) {
                         if (plugin.getPlotMeCoreManager().movePlot(player.getWorld(), plot1, plot2)) {

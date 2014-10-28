@@ -35,7 +35,7 @@ public class CmdDispose extends PlotCommand {
 
                             double cost = pmi.getDisposePrice();
 
-                            IWorld w = p.getWorld();
+                            IWorld world = p.getWorld();
 
                             InternalPlotDisposeEvent event;
 
@@ -45,7 +45,7 @@ public class CmdDispose extends PlotCommand {
                                     return true;
                                 }
 
-                                event = sob.getEventFactory().callPlotDisposeEvent(plugin, w, plot, p);
+                                event = sob.getEventFactory().callPlotDisposeEvent(plugin, world, plot, p);
 
                                 if (event.isCancelled()) {
                                     return true;
@@ -78,19 +78,19 @@ public class CmdDispose extends PlotCommand {
                                     }
                                 }
                             } else {
-                                event = sob.getEventFactory().callPlotDisposeEvent(plugin, w, plot, p);
+                                event = sob.getEventFactory().callPlotDisposeEvent(plugin, world, plot, p);
                             }
 
                             if (!event.isCancelled()) {
                                 if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, p)) {
-                                    plugin.getPlotMeCoreManager().removePlot(w, id);
+                                    plugin.getPlotMeCoreManager().removePlot(world, id);
                                 }
 
-                                plugin.getPlotMeCoreManager().removeOwnerSign(w, id);
-                                plugin.getPlotMeCoreManager().removeSellSign(w, id);
-                                plugin.getPlotMeCoreManager().removeAuctionSign(w, id);
+                                plugin.getPlotMeCoreManager().removeOwnerSign(world, id);
+                                plugin.getPlotMeCoreManager().removeSellSign(world, id);
+                                plugin.getPlotMeCoreManager().removeAuctionSign(world, id);
 
-                                plugin.getSqlManager().deletePlot(PlotMeCoreManager.getIdX(id), PlotMeCoreManager.getIdZ(id), w.getName().toLowerCase());
+                                plugin.getSqlManager().deletePlot(PlotMeCoreManager.getIdX(id), PlotMeCoreManager.getIdZ(id), world.getName().toLowerCase());
 
                                 p.sendMessage(C("MsgPlotDisposedAnyoneClaim"));
 
