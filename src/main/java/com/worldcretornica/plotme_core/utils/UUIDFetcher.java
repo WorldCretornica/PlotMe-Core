@@ -14,7 +14,7 @@ import java.util.*;
 import java.util.concurrent.Callable;
  
 public class UUIDFetcher implements Callable<Map<String, UUID>> {
-    private static final double PROFILES_PER_REQUEST = 100;
+    private static final double PROFILES_PER_REQUEST = 500;
     private static final String PROFILE_URL = "https://api.mojang.com/profiles/minecraft";
     private final JSONParser jsonParser = new JSONParser();
     private final List<String> names;
@@ -45,7 +45,7 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
                 uuidMap.put(name, uuid);
             }
             if (rateLimiting && i != requests - 1) {
-                Thread.sleep(100L);
+                Thread.sleep(1100L);
             }
         }
         return uuidMap;
