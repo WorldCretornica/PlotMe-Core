@@ -19,22 +19,22 @@ import java.util.UUID;
 public abstract class PlotEvent extends Event {
 
     protected static final HandlerList handlers = new HandlerList();
-    private InternalPlotEvent event;
+    private final InternalPlotEvent event;
     protected final PlotMe_Core plugin;
 
-    public PlotEvent(PlotMe_Core instance, Plot p, World world) {
-        this.event = new InternalPlotEvent(instance, p, new BukkitWorld(world));
-        this.plugin = instance;
+    public PlotEvent(PlotMe_Core instance, Plot plot, World world) {
+        event = new InternalPlotEvent(instance, plot, new BukkitWorld(world));
+        plugin = instance;
     }
 
-    public PlotEvent(PlotMe_Core instance, Plot p, IWorld world) {
-        this.event = new InternalPlotEvent(instance, p, world);
-        this.plugin = instance;
+    public PlotEvent(PlotMe_Core instance, Plot plot, IWorld world) {
+        event = new InternalPlotEvent(instance, plot, world);
+        plugin = instance;
     }
 
     public PlotEvent(PlotMe_Core instance, InternalPlotEvent event) {
         this.event = event;
-        this.plugin = instance;
+        plugin = instance;
     }
 
     /**

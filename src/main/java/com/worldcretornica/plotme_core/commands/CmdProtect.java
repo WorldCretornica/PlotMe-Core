@@ -16,7 +16,7 @@ public class CmdProtect extends PlotCommand {
     public boolean exec(IPlayer player) {
         if (player.hasPermission("PlotMe.admin.protect") || player.hasPermission("PlotMe.use.protect")) {
             if (plugin.getPlotMeCoreManager().isPlotWorld(player)) {
-                String id = plugin.getPlotMeCoreManager().getPlotId(player.getLocation());
+                String id = plugin.getPlotMeCoreManager().getPlotId(player);
 
                 if (id.isEmpty()) {
                     player.sendMessage("§c" + C("MsgNoPlotFound"));
@@ -33,7 +33,7 @@ public class CmdProtect extends PlotCommand {
 
                             if (!event.isCancelled()) {
                                 plot.setProtect(false);
-                                plugin.getPlotMeCoreManager().adjustWall(player.getLocation());
+                                plugin.getPlotMeCoreManager().adjustWall(player);
 
                                 plot.updateField("protected", false);
 
@@ -64,7 +64,7 @@ public class CmdProtect extends PlotCommand {
 
                                         if (!er.transactionSuccess()) {
                                             player.sendMessage("§c" + er.errorMessage);
-                                            Util().warn(er.errorMessage);
+                                            warn(er.errorMessage);
                                             return true;
                                         }
                                     }
@@ -76,7 +76,7 @@ public class CmdProtect extends PlotCommand {
 
                             if (!event.isCancelled()) {
                                 plot.setProtect(true);
-                                plugin.getPlotMeCoreManager().adjustWall(player.getLocation());
+                                plugin.getPlotMeCoreManager().adjustWall(player);
 
                                 plot.updateField("protected", true);
 

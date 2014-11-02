@@ -5,6 +5,7 @@ import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.utils.Util;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -67,12 +68,12 @@ public class CmdPlotList extends PlotCommand {
 
                     // Is it auctionned?
                     if (plot.isAuctioned()) {
-                        addition.append(" " + C("WordAuction") + ": §a" + Util().round(plot.getCurrentBid()) + "§r" + (!plot.getCurrentBidder().isEmpty() ? " " + plot.getCurrentBidder() : ""));
+                        addition.append(" " + C("WordAuction") + ": §a" + Util.round(plot.getCurrentBid()) + "§r" + (!plot.getCurrentBidder().isEmpty() ? " " + plot.getCurrentBidder() : ""));
                     }
 
                     // Is it for sale?
                     if (plot.isForSale()) {
-                        addition.append(" " + C("WordSell") + ": §a" + Util().round(plot.getCustomPrice()) + "§r");
+                        addition.append(" " + C("WordSell") + ": §a" + Util.round(plot.getCustomPrice()) + "§r");
                     }
 
                     // Is the plot owner the name?

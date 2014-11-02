@@ -43,9 +43,9 @@ public class CmdTP extends PlotCommand {
                         player.sendMessage("§c" + C("MsgNoPlotworldFound"));
                     } else if (!plugin.getPlotMeCoreManager().isValidId(w, id)) {
                         if (sob.getConfig().getBoolean("allowWorldTeleport")) {
-                            player.sendMessage(C("WordUsage") + ": §c/plotme " + C("CommandTp") + " <ID> [" + C("WordWorld") + "] §r" + C("WordExample") + ": §c/plotme " + C("CommandTp") + " 5;-1 ");
+                            player.sendMessage(C("WordUsage") + ": §c/plotme tp <ID> [" + C("WordWorld") + "] §r" + C("WordExample") + ": §c/plotme tp 5;-1 ");
                         } else {
-                            player.sendMessage(C("WordUsage") + ": §c/plotme " + C("CommandTp") + " <ID> §r" + C("WordExample") + ": §c/plotme " + C("CommandTp") + " 5;-1 ");
+                            player.sendMessage(C("WordUsage") + ": §c/plotme tp <ID> §r" + C("WordExample") + ": §c/plotme tp 5;-1 ");
                         }
                         return true;
                     } else {
@@ -58,9 +58,9 @@ public class CmdTP extends PlotCommand {
                         }
                     }
                 } else if (sob.getConfig().getBoolean("allowWorldTeleport")) {
-                    player.sendMessage(C("WordUsage") + ": §c/plotme " + C("CommandTp") + " <ID> [" + C("WordWorld") + "] §r" + C("WordExample") + ": §c/plotme " + C("CommandTp") + " 5;-1 ");
+                    player.sendMessage(C("WordUsage") + ": §c/plotme tp <ID> [" + C("WordWorld") + "] §r" + C("WordExample") + ": §c/plotme tp 5;-1 ");
                 } else {
-                    player.sendMessage(C("WordUsage") + ": §c/plotme " + C("CommandTp") + " <ID> §r" + C("WordExample") + ": §c/plotme " + C("CommandTp") + " 5;-1 ");
+                    player.sendMessage(C("WordUsage") + ": §c/plotme tp <ID> §r" + C("WordExample") + ": §c/plotme tp 5;-1 ");
                 }
             } else {
                 player.sendMessage("§c" + C("MsgNotPlotWorld"));

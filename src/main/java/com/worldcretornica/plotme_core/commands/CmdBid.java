@@ -66,7 +66,7 @@ public class CmdBid extends PlotCommand {
                                                     }
                                                 } else {
                                                     p.sendMessage(er2.errorMessage);
-                                                    Util().warn(er2.errorMessage);
+                                                    warn(er2.errorMessage);
                                                 }
                                             }
 
@@ -85,15 +85,13 @@ public class CmdBid extends PlotCommand {
                                             }
                                         } else {
                                             p.sendMessage(er.errorMessage);
-                                            Util().warn(er.errorMessage);
+                                            warn(er.errorMessage);
                                         }
                                     }
                                 }
                             }
                         } else {
-                            p.sendMessage(C("WordUsage") + ": §c/plotme "
-                                                  + C("CommandBid") + " <" + C("WordAmount") + "> "
-                                                  + "§r" + C("WordExample") + ": §c/plotme " + C("CommandBid") + " 100");
+                            p.sendMessage(C("WordUsage") + ": §c/plotme bid <" + C("WordAmount") + "> §r" + C("WordExample") + ": §c/plotme bid 100");
                         }
                     } else {
                         p.sendMessage("§c" + C("MsgPlotNotAuctionned"));

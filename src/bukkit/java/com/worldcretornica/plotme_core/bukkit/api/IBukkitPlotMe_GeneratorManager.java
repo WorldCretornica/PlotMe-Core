@@ -15,11 +15,11 @@ public interface IBukkitPlotMe_GeneratorManager {
 
     String getPlotId(Player player);
 
-    List<Player> getPlayersInPlot(World w, String id);
+    List<Player> getPlayersInPlot(World world, String id);
 
-    void fillroad(String id1, String id2, World w);
+    void fillroad(String id1, String id2, World world);
 
-    void fillmiddleroad(String id1, String id2, World w);
+    void fillmiddleroad(String id1, String id2, World world);
 
     void setOwnerDisplay(World world, String id, String Line1, String Line2, String Line3, String Line4);
 
@@ -41,43 +41,43 @@ public interface IBukkitPlotMe_GeneratorManager {
 
     Location getPlotTopLoc(World world, String id);
 
-    void setBiome(World w, String id, Biome biome);
+    void setBiome(World world, String id, Biome biome);
 
-    void refreshPlotChunks(World w, String id);
+    void refreshPlotChunks(World world, String id);
 
-    Location getTop(World w, String id);
+    Location getTop(World world, String id);
 
-    Location getBottom(World w, String id);
+    Location getBottom(World world, String id);
 
-    void clear(World w, String id);
+    void clear(World world, String id);
 
     void clear(Location bottom, Location top);
 
     Long[] clear(Location bottom, Location top, long maxBlocks, boolean clearEntities, Long[] start);
 
-    Long[] clear(World w, String id, long maxBlocks, boolean clearEntities, Long[] start);
+    Long[] clear(World world, String id, long maxBlocks, boolean clearEntities, Long[] start);
 
-    void adjustPlotFor(World w, String id, boolean Claimed, boolean Protect, boolean Auctioned, boolean ForSale);
+    void adjustPlotFor(World world, String id, boolean claimed, boolean protect, boolean auctioned, boolean forSale);
 
     boolean isBlockInPlot(String id, Location blocklocation);
 
     boolean movePlot(World wFrom, World wTo, String idFrom, String idTo);
 
-    int bottomX(String id, World w);
+    int bottomX(String id, World world);
 
-    int bottomZ(String id, World w);
+    int bottomZ(String id, World world);
 
-    int topX(String id, World w);
+    int topX(String id, World world);
 
-    int topZ(String id, World w);
+    int topZ(String id, World world);
 
-    void regen(World w, String id, CommandSender sender);
+    void regen(World world, String id, CommandSender sender);
 
-    Location getPlotHome(World w, String id);
+    Location getPlotHome(World world, String id);
 
     boolean isValidId(String id);
 
-    boolean createConfig(String worldname, Map<String, String> args, CommandSender cs);
+    boolean createConfig(String worldname, Map<String, String> args, CommandSender sender);
 
     Map<String, String> getDefaultGenerationConfig();
 

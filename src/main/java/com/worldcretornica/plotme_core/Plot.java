@@ -224,14 +224,14 @@ public class Plot implements Comparable<Plot> {
             plugin.getSqlManager().deletePlotAllowed(PlotMeCoreManager.getIdX(id), PlotMeCoreManager.getIdZ(id), name, uuid, world);
 
             if (plugin.getServerBridge().getPlotWorldEdit() != null) {
-                IPlayer p = plugin.getServerBridge().getPlayer(uuid);
+                IPlayer player = plugin.getServerBridge().getPlayer(uuid);
 
-                if (p != null) {
-                    if (plugin.getPlotMeCoreManager().isPlotWorld(p.getWorld())) {
-                        if (!plugin.getPlotMeCoreManager().isPlayerIgnoringWELimit(p.getUniqueId()))
-                            plugin.getServerBridge().getPlotWorldEdit().setMask(p);
+                if (player != null) {
+                    if (plugin.getPlotMeCoreManager().isPlotWorld(player.getWorld())) {
+                        if (!plugin.getPlotMeCoreManager().isPlayerIgnoringWELimit(player.getUniqueId()))
+                            plugin.getServerBridge().getPlotWorldEdit().setMask(player);
                         else
-                            plugin.getServerBridge().getPlotWorldEdit().removeMask(p);
+                            plugin.getServerBridge().getPlotWorldEdit().removeMask(player);
                     }
                 }
             }
@@ -251,14 +251,14 @@ public class Plot implements Comparable<Plot> {
             plugin.getSqlManager().deletePlotAllowed(PlotMeCoreManager.getIdX(id), PlotMeCoreManager.getIdZ(id), name, uuid, world);
 
             if (plugin.getServerBridge().getPlotWorldEdit() != null) {
-                IPlayer p = plugin.getServerBridge().getPlayer(uuid);
+                IPlayer player = plugin.getServerBridge().getPlayer(uuid);
 
-                if (p != null) {
-                    if (plugin.getPlotMeCoreManager().isPlotWorld(p.getWorld())) {
-                        if (!plugin.getPlotMeCoreManager().isPlayerIgnoringWELimit(p.getUniqueId()))
-                            plugin.getServerBridge().getPlotWorldEdit().setMask(p);
+                if (player != null) {
+                    if (plugin.getPlotMeCoreManager().isPlotWorld(player.getWorld())) {
+                        if (!plugin.getPlotMeCoreManager().isPlayerIgnoringWELimit(player.getUniqueId()))
+                            plugin.getServerBridge().getPlotWorldEdit().setMask(player);
                         else
-                            plugin.getServerBridge().getPlotWorldEdit().removeMask(p);
+                            plugin.getServerBridge().getPlotWorldEdit().removeMask(player);
                     }
                 }
             }
@@ -306,14 +306,19 @@ public class Plot implements Comparable<Plot> {
 
     @Deprecated
     public boolean isAllowed(String name) {
-        IPlayer p = plugin.getServerBridge().getPlayerExact(name);
-        return p != null && isAllowedInternal(p.getName(), p.getUniqueId(), true, true);
+        IPlayer player = plugin.getServerBridge().getPlayerExact(name);
+        if (player != null) {
+            if (isAllowedInternal(player.getName(), player.getUniqueId(), true, true)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean isAllowedConsulting(String name) {
-        IPlayer p = plugin.getServerBridge().getPlayerExact(name);
-        if (p != null) {
-            return isAllowedInternal(name, p.getUniqueId(), true, true);
+        IPlayer player = plugin.getServerBridge().getPlayerExact(name);
+        if (player != null) {
+            return isAllowedInternal(name, player.getUniqueId(), true, true);
         } else {
             return isGroupAllowed(name);
         }
@@ -333,7 +338,7 @@ public class Plot implements Comparable<Plot> {
 
     private boolean isAllowedInternal(String name, UUID uuid, boolean IncludeStar, boolean IncludeGroup) {
 
-        if (IncludeStar && owner.equals("*")) {
+        if (IncludeStar && "*".equals(owner)) {
             return true;
         }
 
@@ -355,7 +360,7 @@ public class Plot implements Comparable<Plot> {
 
         HashMap<String, UUID> list = allowed.getAllPlayers();
         for (String str : list.keySet()) {
-            if (IncludeStar && str.equals("*")) {
+            if (IncludeStar && "*".equals(str)) {
                 return true;
             }
 
@@ -399,7 +404,7 @@ public class Plot implements Comparable<Plot> {
 
         HashMap<String, UUID> list = denied.getAllPlayers();
         for (String str : list.keySet()) {
-            if (str.equals("*")) {
+            if ("*".equals(str)) {
                 return true;
             }
 

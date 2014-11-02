@@ -12,8 +12,7 @@ import org.bukkit.entity.Player;
 
 public class BukkitCommand implements CommandExecutor {
 
-    private PlotMe_Core api;
-    private final PlotMe_CorePlugin plugin;
+    private final PlotMe_Core api;
     private final CmdAdd add;
     private final CmdAddTime addtime;
     private final CmdAuction auction;
@@ -49,8 +48,7 @@ public class BukkitCommand implements CommandExecutor {
     private final CmdCreateWorld createworld;
 
     public BukkitCommand(PlotMe_CorePlugin instance) {
-        plugin = instance;
-        api = plugin.getAPI();
+        api = instance.getAPI();
         add = new CmdAdd(api);
         addtime = new CmdAddTime(api);
         auction = new CmdAuction(api);
@@ -91,31 +89,31 @@ public class BukkitCommand implements CommandExecutor {
     }
 
     @Override
-    public boolean onCommand(CommandSender s, Command c, String l, String[] args) {
-        if (l.equalsIgnoreCase("plotme") || l.equalsIgnoreCase("plot") || l.equalsIgnoreCase("p")) {
-            if (!(s instanceof Player)) {
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if ("plotme".equalsIgnoreCase(label)) {
+            if (!(sender instanceof Player)) {
                 if (args.length == 0) {
-                    s.sendMessage(C("ConsoleHelpMain"));
-                    s.sendMessage(" - /plotme reload");
-                    s.sendMessage(C("ConsoleHelpReload"));
+                    sender.sendMessage(C("ConsoleHelpMain"));
+                    sender.sendMessage("- /plotme reload");
+                    sender.sendMessage(C("ConsoleHelpReload"));
                     return true;
                 } else {
                     String a0 = args[0];
-                    if (a0.equalsIgnoreCase("reload")) {
+                    if ("reload".equalsIgnoreCase(a0)) {
                         return reload.exec();
                     }
-                    if (a0.equalsIgnoreCase(C("CommandResetExpired"))) {
-                        return resetexpired.exec(new BukkitCommandSender(s), args);
+                    if ("resetexpired".equalsIgnoreCase(a0)) {
+                        return resetexpired.exec(new BukkitCommandSender(sender), args);
                     }
-                    if (a0.equalsIgnoreCase(C("CommandCreateWorld"))) {
-                        return createworld.exec(new BukkitCommandSender(s), args);
+                    if ("createworld".equalsIgnoreCase(a0)) {
+                        return createworld.exec(new BukkitCommandSender(sender), args);
                     }
                 }
             } else {
-                IPlayer p = new BukkitPlayer((Player) s);
+                IPlayer player = new BukkitPlayer((Player) sender);
 
                 if (args.length == 0) {
-                    return showhelp.exec(p, 1);
+                    return showhelp.exec(player, 1);
                 } else {
                     String a0 = args[0];
                     int ipage = -1;
@@ -126,7 +124,7 @@ public class BukkitCommand implements CommandExecutor {
                     }
 
                     if (ipage == -1) {
-                        if (a0.equalsIgnoreCase("help")) {
+                        if ("help".equalsIgnoreCase(a0)) {
                             if (args.length > 1) {
                                 String a1 = args[1];
                                 ipage = -1;
@@ -138,103 +136,103 @@ public class BukkitCommand implements CommandExecutor {
                             }
 
                             if (ipage == -1) {
-                                return showhelp.exec(p, 1);
+                                return showhelp.exec(player, 1);
                             } else {
-                                return showhelp.exec(p, ipage);
+                                return showhelp.exec(player, ipage);
                             }
                         }
-                        if (a0.equalsIgnoreCase("claim")) {
-                            return claim.exec(p, args);
+                        if ("claim".equalsIgnoreCase(a0)) {
+                            return claim.exec(player, args);
                         }
-                        if (a0.equalsIgnoreCase(C("CommandAuto"))) {
-                            return auto.exec(p, args);
+                        if ("auto".equalsIgnoreCase(a0)) {
+                            return auto.exec(player, args);
                         }
-                        if (a0.equalsIgnoreCase(C("CommandInfo")) || a0.equalsIgnoreCase("i")) {
-                            return info.exec(p);
+                        if ("info".equalsIgnoreCase(a0) || "i".equalsIgnoreCase(a0)) {
+                            return info.exec(player);
                         }
-                        if (a0.equalsIgnoreCase(C("CommandComment"))) {
-                            return comment.exec(p, args);
+                        if ("comment".equalsIgnoreCase(a0)) {
+                            return comment.exec(player, args);
                         }
-                        if (a0.equalsIgnoreCase(C("CommandComments")) || a0.equalsIgnoreCase("c")) {
-                            return comments.exec(p, args);
+                        if ("comments".equalsIgnoreCase(a0)) {
+                            return comments.exec(player, args);
                         }
-                        if (a0.equalsIgnoreCase(C("CommandBiome")) || a0.equalsIgnoreCase("b")) {
-                            return biome.exec(p, args);
+                        if ("biome".equalsIgnoreCase(a0)) {
+                            return biome.exec(player, args);
                         }
-                        if (a0.equalsIgnoreCase(C("CommandBiomelist"))) {
-                            return biomelist.exec(p, args);
+                        if ("biomelist".equalsIgnoreCase(a0)) {
+                            return biomelist.exec(player, args);
                         }
-                        if (a0.equalsIgnoreCase(C("CommandTp"))) {
-                            return tp.exec(p, args);
+                        if ("tp".equalsIgnoreCase(a0)) {
+                            return tp.exec(player, args);
                         }
-                        if (a0.equalsIgnoreCase(C("CommandClear"))) {
-                            return clear.exec(p);
+                        if ("clear".equalsIgnoreCase(a0)) {
+                            return clear.exec(player);
                         }
-                        if (a0.equalsIgnoreCase(C("CommandReset"))) {
-                            return reset.exec(p);
+                        if ("reset".equalsIgnoreCase(a0)) {
+                            return reset.exec(player);
                         }
-                        if (a0.equalsIgnoreCase(C("CommandAdd")) || a0.equalsIgnoreCase("+")) {
-                            return add.exec(p, args);
+                        if ("add".equalsIgnoreCase(a0) || "+".equalsIgnoreCase(a0)) {
+                            return add.exec(player, args);
                         }
-                        if (a0.equalsIgnoreCase(C("CommandDeny"))) {
-                            return deny.exec(p, args);
+                        if ("deny".equalsIgnoreCase(a0)) {
+                            return deny.exec(player, args);
                         }
-                        if (a0.equalsIgnoreCase(C("CommandUndeny"))) {
-                            return undeny.exec(p, args);
+                        if ("undeny".equalsIgnoreCase(a0)) {
+                            return undeny.exec(player, args);
                         }
-                        if (a0.equalsIgnoreCase(C("CommandRemove")) || a0.equalsIgnoreCase("-")) {
-                            return remove.exec(p, args);
+                        if ("remove".equalsIgnoreCase(a0) || "-".equalsIgnoreCase(a0)) {
+                            return remove.exec(player, args);
                         }
-                        if (a0.equalsIgnoreCase(C("CommandSetowner")) || a0.equalsIgnoreCase("o")) {
-                            return setowner.exec(p, args);
+                        if ("setowner".equalsIgnoreCase(a0)) {
+                            return setowner.exec(player, args);
                         }
-                        if (a0.equalsIgnoreCase(C("CommandMove")) || a0.equalsIgnoreCase("m")) {
-                            return move.exec(p, args);
+                        if ("move".equalsIgnoreCase(a0)) {
+                            return move.exec(player, args);
                         }
-                        if (a0.equalsIgnoreCase("reload")) {
+                        if ("reload".equalsIgnoreCase(a0)) {
                             return reload.exec();
                         }
-                        if (a0.equalsIgnoreCase(C("CommandWEAnywhere"))) {
-                            return weanywhere.exec(p);
+                        if ("weanywhere".equalsIgnoreCase(a0)) {
+                            return weanywhere.exec(player);
                         }
-                        if (a0.equalsIgnoreCase(C("CommandList"))) {
-                            return plotlist.exec(p, args);
+                        if ("list".equalsIgnoreCase(a0)) {
+                            return plotlist.exec(player, args);
                         }
-                        if (a0.equalsIgnoreCase(C("CommandExpired"))) {
-                            return expired.exec(p, args);
+                        if ("expired".equalsIgnoreCase(a0)) {
+                            return expired.exec(player, args);
                         }
-                        if (a0.equalsIgnoreCase(C("CommandAddtime"))) {
-                            return addtime.exec(p);
+                        if ("addtime".equalsIgnoreCase(a0)) {
+                            return addtime.exec(player);
                         }
-                        if (a0.equalsIgnoreCase(C("CommandDone"))) {
-                            return done.exec(p);
+                        if ("done".equalsIgnoreCase(a0)) {
+                            return done.exec(player);
                         }
-                        if (a0.equalsIgnoreCase(C("CommandDoneList"))) {
-                            return donelist.exec(p, args);
+                        if ("donelist".equalsIgnoreCase(a0)) {
+                            return donelist.exec(player, args);
                         }
-                        if (a0.equalsIgnoreCase(C("CommandProtect"))) {
-                            return protect.exec(p);
+                        if ("protect".equalsIgnoreCase(a0)) {
+                            return protect.exec(player);
                         }
-                        if (a0.equalsIgnoreCase(C("CommandSell"))) {
-                            return sell.exec(p, args);
+                        if ("sell".equalsIgnoreCase(a0)) {
+                            return sell.exec(player, args);
                         }
-                        if (a0.equalsIgnoreCase(C("CommandDispose"))) {
-                            return dispose.exec(p);
+                        if ("dispose".equalsIgnoreCase(a0)) {
+                            return dispose.exec(player);
                         }
-                        if (a0.equalsIgnoreCase(C("CommandAuction"))) {
-                            return auction.exec(p, args);
+                        if ("auction".equalsIgnoreCase(a0)) {
+                            return auction.exec(player, args);
                         }
-                        if (a0.equalsIgnoreCase(C("CommandBuy"))) {
-                            return buy.exec(p);
+                        if ("buy".equalsIgnoreCase(a0)) {
+                            return buy.exec(player);
                         }
-                        if (a0.equalsIgnoreCase(C("CommandBid"))) {
-                            return bid.exec(p, args);
+                        if ("bid".equalsIgnoreCase(a0)) {
+                            return bid.exec(player, args);
                         }
-                        if (a0.startsWith(C("CommandHome")) || a0.startsWith("h")) {
-                            return home.exec(p, args);
+                        if (a0.startsWith("home") || a0.startsWith("h")) {
+                            return home.exec(player, args);
                         }
                     } else {
-                        return showhelp.exec(p, ipage);
+                        return showhelp.exec(player, ipage);
                     }
                 }
             }

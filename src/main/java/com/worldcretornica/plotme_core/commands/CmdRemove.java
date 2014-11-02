@@ -19,12 +19,12 @@ public class CmdRemove extends PlotCommand {
     public boolean exec(IPlayer player, String[] args) {
         if (player.hasPermission("PlotMe.admin.remove") || player.hasPermission("PlotMe.use.remove")) {
             if (plugin.getPlotMeCoreManager().isPlotWorld(player)) {
-                String id = plugin.getPlotMeCoreManager().getPlotId(player.getLocation());
+                String id = plugin.getPlotMeCoreManager().getPlotId(player);
                 if (id.isEmpty()) {
                     player.sendMessage("§c" + C("MsgNoPlotFound"));
                 } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, player)) {
                     if (args.length < 2 || args[1].isEmpty()) {
-                        player.sendMessage(C("WordUsage") + ": §c/plotme " + C("CommandRemove") + " <" + C("WordPlayer") + ">");
+                        player.sendMessage(C("WordUsage") + ": §c/plotme remove <" + C("WordPlayer") + ">");
                     } else {
                         Plot plot = plugin.getPlotMeCoreManager().getPlotById(player, id);
                         UUID playeruuid = player.getUniqueId();
@@ -41,7 +41,7 @@ public class CmdRemove extends PlotCommand {
 
                                 InternalPlotRemoveAllowedEvent event;
 
-                                if (plugin.getPlotMeCoreManager().isEconomyEnabled(world)) {
+                                if (plugin.getPlotMeCoreManager().isEconomyEnabled(player)) {
                                     price = pmi.getRemovePlayerPrice();
                                     double balance = sob.getBalance(player);
 
@@ -55,7 +55,7 @@ public class CmdRemove extends PlotCommand {
 
                                             if (!er.transactionSuccess()) {
                                                 player.sendMessage("§c" + er.errorMessage);
-                                                Util().warn(er.errorMessage);
+                                                warn(er.errorMessage);
                                                 return true;
                                             }
                                         }

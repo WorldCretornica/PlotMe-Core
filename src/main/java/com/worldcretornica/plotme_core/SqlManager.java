@@ -25,10 +25,10 @@ public class SqlManager {
 
     public SqlManager(PlotMe_Core plugin, boolean usemysql, String sqlusername, String sqlpassword, String sqlconnection) {
         this.plugin = plugin;
-        this.mySQLconn = sqlconnection;
-        this.mySQLpass = sqlpassword;
-        this.mySQLuname = sqlusername;
-        this.usemySQL = usemysql;
+        mySQLconn = sqlconnection;
+        mySQLpass = sqlpassword;
+        mySQLuname = sqlusername;
+        usemySQL = usemysql;
     }
 
     public Connection initialize() {
@@ -226,7 +226,7 @@ public class SqlManager {
                 boolean found = false;
                 while (set.next() && !found) {
                     column = set.getString(2);
-                    if (column.equalsIgnoreCase("customprice")) {
+                    if ("customprice".equalsIgnoreCase(column)) {
                         found = true;
                     }
                 }
@@ -243,7 +243,7 @@ public class SqlManager {
 
                 while (set.next() && !found) {
                     column = set.getString(2);
-                    if (column.equalsIgnoreCase("forsale")) {
+                    if ("forsale".equalsIgnoreCase(column)) {
                         found = true;
                     }
                 }
@@ -260,7 +260,7 @@ public class SqlManager {
 
                 while (set.next() && !found) {
                     column = set.getString(2);
-                    if (column.equalsIgnoreCase("finisheddate")) {
+                    if ("finisheddate".equalsIgnoreCase(column)) {
                         found = true;
                     }
                 }
@@ -277,7 +277,7 @@ public class SqlManager {
 
                 while (set.next() && !found) {
                     column = set.getString(2);
-                    if (column.equalsIgnoreCase("protected")) {
+                    if ("protected".equalsIgnoreCase(column)) {
                         found = true;
                     }
                 }
@@ -294,7 +294,7 @@ public class SqlManager {
 
                 while (set.next() && !found) {
                     column = set.getString(2);
-                    if (column.equalsIgnoreCase("auctionned")) {
+                    if ("auctionned".equalsIgnoreCase(column)) {
                         found = true;
                     }
                 }
@@ -311,7 +311,7 @@ public class SqlManager {
 
                 while (set.next() && !found) {
                     column = set.getString(2);
-                    if (column.equalsIgnoreCase("auctionenddate") || column.equalsIgnoreCase("auctionneddate")) {
+                    if ("auctionenddate".equalsIgnoreCase(column) || "auctionneddate".equalsIgnoreCase(column)) {
                         found = true;
                     }
                 }
@@ -328,7 +328,7 @@ public class SqlManager {
 
                 while (set.next() && !found) {
                     column = set.getString(2);
-                    if (column.equalsIgnoreCase("currentbidder")) {
+                    if ("currentbidder".equalsIgnoreCase(column)) {
                         found = true;
                     }
                 }
@@ -345,7 +345,7 @@ public class SqlManager {
 
                 while (set.next() && !found) {
                     column = set.getString(2);
-                    if (column.equalsIgnoreCase("currentbid")) {
+                    if ("currentbid".equalsIgnoreCase(column)) {
                         found = true;
                     }
                 }
@@ -367,7 +367,7 @@ public class SqlManager {
 
                 while (set.next() && !found) {
                     column = set.getString(2);
-                    if (column.equalsIgnoreCase("ownerid"))
+                    if ("ownerid".equalsIgnoreCase(column))
                         found = true;
                 }
 
@@ -383,7 +383,7 @@ public class SqlManager {
 
                 while (set.next() && !found) {
                     column = set.getString(2);
-                    if (column.equalsIgnoreCase("playerid"))
+                    if ("playerid".equalsIgnoreCase(column))
                         found = true;
                 }
 
@@ -399,7 +399,7 @@ public class SqlManager {
 
                 while (set.next() && !found) {
                     column = set.getString(2);
-                    if (column.equalsIgnoreCase("playerid"))
+                    if ("playerid".equalsIgnoreCase(column))
                         found = true;
                 }
 
@@ -415,7 +415,7 @@ public class SqlManager {
 
                 while (set.next() && !found) {
                     column = set.getString(2);
-                    if (column.equalsIgnoreCase("playerid"))
+                    if ("playerid".equalsIgnoreCase(column))
                         found = true;
                 }
 
@@ -431,7 +431,7 @@ public class SqlManager {
 
                 while (set.next() && !found) {
                     column = set.getString(2);
-                    if (column.equalsIgnoreCase("currentbidderId"))
+                    if ("currentbidderId".equalsIgnoreCase(column))
                         found = true;
                 }
 
@@ -452,7 +452,7 @@ public class SqlManager {
 
                 while (set.next() && !found) {
                     column = set.getString(2);
-                    if (column.equalsIgnoreCase("auctionenddate")) {
+                    if ("auctionenddate".equalsIgnoreCase(column)) {
                         found = true;
                     }
                 }
@@ -991,9 +991,9 @@ public class SqlManager {
             ps.executeUpdate();
             conn.commit();
 
-            if (field.equalsIgnoreCase("owner")) {
+            if ("owner".equalsIgnoreCase(field)) {
                 fetchOwnerUUIDAsync(idX, idZ, world, value.toString());
-            } else if (field.equalsIgnoreCase("currentbidder")) {
+            } else if ("currentbidder".equalsIgnoreCase(field)) {
                 fetchBidderUUIDAsync(idX, idZ, world, value.toString());
             }
 

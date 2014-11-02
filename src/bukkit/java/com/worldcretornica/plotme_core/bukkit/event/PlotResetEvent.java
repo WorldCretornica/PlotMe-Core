@@ -32,7 +32,7 @@ public class PlotResetEvent extends PlotEvent implements Cancellable {
 
     @Override
     public void setCancelled(boolean cancel) {
-        event.setCancelled(cancel);
+        event.setCanceled(cancel);
     }
 
     public CommandSender getReseter() {

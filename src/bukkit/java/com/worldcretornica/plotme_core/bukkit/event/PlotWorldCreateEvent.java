@@ -26,7 +26,7 @@ public class PlotWorldCreateEvent extends Event implements Cancellable {
 
     @Override
     public void setCancelled(boolean canceled) {
-        event.setCancelled(canceled);
+        event.setCanceled(canceled);
     }
 
     @Override

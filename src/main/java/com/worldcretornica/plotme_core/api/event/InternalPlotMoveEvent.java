@@ -28,7 +28,7 @@ public class InternalPlotMoveEvent extends InternalPlotEvent implements ICancell
     }
 
     @Override
-    public void setCancelled(boolean cancel) {
+    public void setCanceled(boolean cancel) {
         _canceled = cancel;
     }
 

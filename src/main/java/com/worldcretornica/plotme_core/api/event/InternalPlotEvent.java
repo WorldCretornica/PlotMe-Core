@@ -12,13 +12,13 @@ import java.util.UUID;
 
 public class InternalPlotEvent {
 
-    protected PlotMe_Core plugin;
+    final PlotMe_Core plugin;
     protected Plot plot;
     protected IWorld world;
 
-    public InternalPlotEvent(PlotMe_Core instance, Plot p, IWorld world) {
-        this.plugin = instance;
-        this.plot = p;
+    public InternalPlotEvent(PlotMe_Core instance, Plot plot, IWorld world) {
+        plugin = instance;
+        this.plot = plot;
         this.world = world;
     }
 

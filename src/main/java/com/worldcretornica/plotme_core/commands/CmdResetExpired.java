@@ -14,7 +14,7 @@ public class CmdResetExpired extends PlotCommand {
 
     public boolean exec(ICommandSender sender, String[] args) {
         if (args.length <= 1) {
-            sender.sendMessage(C("WordUsage") + ": §c/plotme " + C("CommandResetExpired") + " <" + C("WordWorld") + "> §rExample: §c/plotme " + C("CommandResetExpired") + " plotworld ");
+            sender.sendMessage(C("WordUsage") + ": §c/plotme resetexpired <" + C("WordWorld") + "> §rExample: §c/plotme resetexpired plotworld ");
         } else if (plugin.getWorldCurrentlyProcessingExpired() != null) {
             sender.sendMessage(plugin.getCommandSenderCurrentlyProcessingExpired().getName() + " " + C("MsgAlreadyProcessingPlots"));
         } else {

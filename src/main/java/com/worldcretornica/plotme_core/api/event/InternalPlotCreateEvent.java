@@ -23,7 +23,7 @@ public class InternalPlotCreateEvent extends InternalPlotEvent implements ICance
     }
 
     @Override
-    public void setCancelled(boolean cancel) {
+    public void setCanceled(boolean cancel) {
         _canceled = cancel;
     }
 

@@ -16,7 +16,7 @@ public class CmdReset extends PlotCommand {
     public boolean exec(IPlayer p) {
         if (p.hasPermission("PlotMe.admin.reset") || p.hasPermission("PlotMe.use.reset")) {
             if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
-                Plot plot = plugin.getPlotMeCoreManager().getPlotById(p.getLocation());
+                Plot plot = plugin.getPlotMeCoreManager().getPlotById(p);
 
                 if (plot == null) {
                     p.sendMessage("§c" + C("MsgNoPlotFound"));
@@ -49,7 +49,7 @@ public class CmdReset extends PlotCommand {
                                             }
                                         } else {
                                             p.sendMessage(economyResponse.errorMessage);
-                                            Util().warn(economyResponse.errorMessage);
+                                            warn(economyResponse.errorMessage);
                                         }
                                     }
                                 }
@@ -66,7 +66,7 @@ public class CmdReset extends PlotCommand {
                                         }
                                     } else {
                                         p.sendMessage("§c" + er.errorMessage);
-                                        Util().warn(er.errorMessage);
+                                        warn(er.errorMessage);
                                         return true;
                                     }
                                 }

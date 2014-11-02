@@ -3,6 +3,8 @@ package com.worldcretornica.plotme_core.bukkit.api;
 import com.worldcretornica.plotme_core.api.*;
 import org.bukkit.entity.Player;
 
+import java.util.UUID;
+
 public class BukkitPlayer extends BukkitOfflinePlayer implements IPlayer {
 
     private Player player;
@@ -10,6 +12,11 @@ public class BukkitPlayer extends BukkitOfflinePlayer implements IPlayer {
     public BukkitPlayer(Player player) {
         super(player);
         this.player = player;
+    }
+
+    @Override
+    public UUID getUniqueId() {
+        return player.getUniqueId();
     }
 
     @Override

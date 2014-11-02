@@ -4,5 +4,5 @@ public interface ICancellable {
 
     boolean isCancelled();
 
-    void setCancelled(boolean cancel);
+    void setCanceled(boolean cancel);
 }

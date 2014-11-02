@@ -2,7 +2,8 @@ package com.worldcretornica.plotme_core.api.event;
 
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.*;
+import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.api.IWorld;
 
 public class InternalPlotSellChangeEvent extends InternalPlotEvent implements ICancellable {
 
@@ -16,6 +17,7 @@ public class InternalPlotSellChangeEvent extends InternalPlotEvent implements IC
         super(instance, plot, world);
         _seller = seller;
         _price = price;
+        _soldToBank = soldToBank;
         _isForSale = isForSale;
     }
 
@@ -25,7 +27,7 @@ public class InternalPlotSellChangeEvent extends InternalPlotEvent implements IC
     }
 
     @Override
-    public void setCancelled(boolean cancel) {
+    public void setCanceled(boolean cancel) {
         _canceled = cancel;
     }
 

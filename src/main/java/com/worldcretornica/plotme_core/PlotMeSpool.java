@@ -23,36 +23,36 @@ public class PlotMeSpool implements Runnable {
         G = plugin.getUtil().C("Unit_1000000000");
         M = plugin.getUtil().C("Unit_1000000");
         k = plugin.getUtil().C("Unit_1000");
-        
-        this.plottoclear = plotToClear;
+
+        plottoclear = plotToClear;
     }
 
     @Override
     public void run() {
-        if (this.getPlotToClear() != null) {
-            IWorld w = plugin.getServerBridge().getWorld(this.getPlotToClear().getWorld());
+        if (getPlotToClear() != null) {
+            IWorld world = plugin.getServerBridge().getWorld(getPlotToClear().getWorld());
 
-            if (w != null) {
+            if (world != null) {
                 if (currentClear == null)
-                    currentClear = plugin.getGenManager(w).clear(w, getPlotToClear().getPlotId(), plugin.getServerBridge().getConfig().getInt("NbBlocksPerClearStep"), true, null);
+                    currentClear = plugin.getGenManager(world).clear(world, getPlotToClear().getPlotId(), plugin.getServerBridge().getConfig().getInt("NbBlocksPerClearStep"), true, null);
                 else {
-                    currentClear = plugin.getGenManager(w).clear(w, getPlotToClear().getPlotId(), plugin.getServerBridge().getConfig().getInt("NbBlocksPerClearStep"), false, currentClear);
+                    currentClear = plugin.getGenManager(world).clear(world, getPlotToClear().getPlotId(), plugin.getServerBridge().getConfig().getInt("NbBlocksPerClearStep"), false, currentClear);
                 }
 
                 ShowProgress();
 
                 if (currentClear == null) {
-                    plugin.getGenManager(getPlotToClear().getWorld()).adjustPlotFor(w, getPlotToClear().getPlotId(), true, false, false, false);
-                    plugin.getPlotMeCoreManager().RemoveLWC(w, getPlotToClear().getPlotId());
-                    plugin.getGenManager(getPlotToClear().getWorld()).refreshPlotChunks(w, getPlotToClear().getPlotId());
+                    plugin.getGenManager(world).adjustPlotFor(world, getPlotToClear().getPlotId(), true, false, false, false);
+                    plugin.getPlotMeCoreManager().RemoveLWC(world, getPlotToClear().getPlotId());
+                    plugin.getGenManager(world).refreshPlotChunks(world, getPlotToClear().getPlotId());
 
                     Msg(plugin.getUtil().C("WordPlot") + " " + getPlotToClear().getPlotId() + " " + plugin.getUtil().C("WordCleared"));
 
-                    plugin.removePlotToClear(this.getPlotToClear(), this.taskid);
+                    plugin.removePlotToClear(getPlotToClear(), taskid);
                     plottoclear = null;
                 }
             } else {
-                plugin.removePlotToClear(this.getPlotToClear(), this.taskid);
+                plugin.removePlotToClear(getPlotToClear(), taskid);
                 plottoclear = null;
             }
         }
@@ -65,7 +65,7 @@ public class PlotMeSpool implements Runnable {
     private void ShowProgress() {
         long done = getDoneBlocks();
         long total = getTotalPlotBlocks();
-        double percent = (double) done / (double) total * 100;
+        double percent = done / total * 100;
 
         String green = plugin.getServerBridge().getColor("GREEN");
         String reset = plugin.getServerBridge().getColor("RESET");
@@ -77,9 +77,9 @@ public class PlotMeSpool implements Runnable {
     }
 
     private long getTotalPlotBlocks() {
-        IWorld w = plugin.getServerBridge().getWorld(getPlotToClear().getWorld());
-        ILocation bottom = plugin.getGenManager(w).getPlotBottomLoc(w, getPlotToClear().getPlotId());
-        ILocation top = plugin.getGenManager(w).getPlotTopLoc(w, getPlotToClear().getPlotId());
+        IWorld world = plugin.getServerBridge().getWorld(getPlotToClear().getWorld());
+        ILocation bottom = plugin.getGenManager(world).getPlotBottomLoc(world, getPlotToClear().getPlotId());
+        ILocation top = plugin.getGenManager(world).getPlotTopLoc(world, getPlotToClear().getPlotId());
 
         return (top.getBlockX() - bottom.getBlockX() + 1) * (top.getBlockY() - bottom.getBlockY() + 1) * (top.getBlockZ() - bottom.getBlockZ() + 1);
     }
@@ -100,11 +100,13 @@ public class PlotMeSpool implements Runnable {
             buffer = (double) count / 1000000000;
             buffer = (double) Math.round(buffer * 10) / 10;
             return buffer + G;
-        } else if (count > 1000000) {
+        }
+        if (count > 1000000) {
             buffer = (double) count / 1000000;
             buffer = (double) Math.round(buffer * 10) / 10;
             return buffer + M;
-        } else if (count > 1000) {
+        }
+        if (count > 1000) {
             buffer = (double) count / 1000;
             buffer = (double) Math.round(buffer * 10) / 10;
             return buffer + k;

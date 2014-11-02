@@ -7,7 +7,7 @@ import org.bukkit.World;
 
 public class BukkitWorld implements IWorld {
 
-    private World world;
+    private final World world;
     
     public BukkitWorld(World world) {
         this.world = world;
@@ -15,7 +15,7 @@ public class BukkitWorld implements IWorld {
 
     @Override
     public boolean isPlotMeGenerator() {
-        return this.world.getGenerator() instanceof IBukkitPlotMe_ChunkGenerator;
+        return world.getGenerator() instanceof IBukkitPlotMe_ChunkGenerator;
     }
 
     @Override

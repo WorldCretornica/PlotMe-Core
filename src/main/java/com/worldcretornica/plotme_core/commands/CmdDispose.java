@@ -19,7 +19,7 @@ public class CmdDispose extends PlotCommand {
     public boolean exec(IPlayer p) {
         if (p.hasPermission("PlotMe.admin.dispose") || p.hasPermission("PlotMe.use.dispose")) {
             if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
-                String id = plugin.getPlotMeCoreManager().getPlotId(p.getLocation());
+                String id = plugin.getPlotMeCoreManager().getPlotId(p);
                 if (id.isEmpty()) {
                     p.sendMessage("§c" + C("MsgNoPlotFound"));
                 } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, p)) {
@@ -54,7 +54,7 @@ public class CmdDispose extends PlotCommand {
 
                                     if (!er.transactionSuccess()) {
                                         p.sendMessage("§c" + er.errorMessage);
-                                        Util().warn(er.errorMessage);
+                                        warn(er.errorMessage);
                                         return true;
                                     }
 
@@ -72,7 +72,7 @@ public class CmdDispose extends PlotCommand {
                                                 }
                                             } else {
                                                 p.sendMessage("§c" + er2.errorMessage);
-                                                Util().warn(er2.errorMessage);
+                                                warn(er2.errorMessage);
                                             }
                                         }
                                     }

@@ -14,7 +14,7 @@ public class CmdDone extends PlotCommand {
     public boolean exec(IPlayer player) {
         if (player.hasPermission("PlotMe.use.done") || player.hasPermission("PlotMe.admin.done")) {
             if (plugin.getPlotMeCoreManager().isPlotWorld(player)) {
-                String id = plugin.getPlotMeCoreManager().getPlotId(player.getLocation());
+                String id = plugin.getPlotMeCoreManager().getPlotId(player);
 
                 if (id.isEmpty()) {
                     player.sendMessage("§c" + C("MsgNoPlotFound"));

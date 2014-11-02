@@ -1,22 +1,18 @@
 package com.worldcretornica.plotme_core.api.event;
 
-import com.worldcretornica.plotme_core.PlotMe_Core;
-
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 public class InternalPlotWorldLoadEvent extends Event
 {	
     protected String world;
-    protected PlotMe_Core plugin;
     protected int NbPlots;
     protected static final HandlerList handlers = new HandlerList();
-    
-    public InternalPlotWorldLoadEvent(PlotMe_Core instance, String world, int nbplots)
+
+    public InternalPlotWorldLoadEvent(String world, int nbplots)
     {
         this.world = world;
-        this.plugin = instance;
-        this.NbPlots = nbplots;
+        NbPlots = nbplots;
     }
     
     /**

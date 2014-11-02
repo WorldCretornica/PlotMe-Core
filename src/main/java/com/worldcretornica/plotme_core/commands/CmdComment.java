@@ -18,18 +18,18 @@ public class CmdComment extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(IPlayer p, String[] args) {
-        if (p.hasPermission("PlotMe.use.comment")) {
-            if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
+    public boolean exec(IPlayer player, String[] args) {
+        if (player.hasPermission("PlotMe.use.comment")) {
+            if (plugin.getPlotMeCoreManager().isPlotWorld(player)) {
                 if (args.length < 2) {
-                    p.sendMessage(C("WordUsage") + ": §c/plotme " + C("CommandComment") + " <" + C("WordText") + ">");
+                    player.sendMessage(C("WordUsage") + ": §c/plotme comment <" + C("WordText") + ">");
                 } else {
-                    String id = plugin.getPlotMeCoreManager().getPlotId(p.getLocation());
+                    String id = plugin.getPlotMeCoreManager().getPlotId(player);
 
                     if (id.isEmpty()) {
-                        p.sendMessage("§c" + C("MsgNoPlotFound"));
-                    } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, p)) {
-                        IWorld w = p.getWorld();
+                        player.sendMessage("§c" + C("MsgNoPlotFound"));
+                    } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, player)) {
+                        IWorld w = player.getWorld();
                         PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(w);
 
                         String text = StringUtils.join(args, " ");
@@ -37,39 +37,39 @@ public class CmdComment extends PlotCommand {
 
                         double price = 0;
 
-                        Plot plot = plugin.getPlotMeCoreManager().getPlotById(p, id);
+                        Plot plot = plugin.getPlotMeCoreManager().getPlotById(player, id);
 
                         InternalPlotCommentEvent event;
 
-                        if (plugin.getPlotMeCoreManager().isEconomyEnabled(w)) {
+                        if (plugin.getPlotMeCoreManager().isEconomyEnabled(player)) {
                             price = pmi.getAddCommentPrice();
-                            double balance = sob.getBalance(p);
+                            double balance = sob.getBalance(player);
 
                             if (balance >= price) {
-                                event = sob.getEventFactory().callPlotCommentEvent(plugin, p.getWorld(), plot, p, text);
+                                event = sob.getEventFactory().callPlotCommentEvent(plugin, player.getWorld(), plot, player, text);
 
                                 if (event.isCancelled()) {
                                     return true;
                                 } else {
-                                    EconomyResponse er = sob.withdrawPlayer(p, price);
+                                    EconomyResponse er = sob.withdrawPlayer(player, price);
 
                                     if (!er.transactionSuccess()) {
-                                        p.sendMessage("§c" + er.errorMessage);
-                                        Util().warn(er.errorMessage);
+                                        player.sendMessage("§c" + er.errorMessage);
+                                        warn(er.errorMessage);
                                         return true;
                                     }
                                 }
                             } else {
-                                p.sendMessage("§c" + C("MsgNotEnoughComment") + " " + C("WordMissing") + " §r" + Util().moneyFormat(price - balance, false));
+                                player.sendMessage("§c" + C("MsgNotEnoughComment") + " " + C("WordMissing") + " §r" + Util().moneyFormat(price - balance, false));
                                 return true;
                             }
                         } else {
-                            event = sob.getEventFactory().callPlotCommentEvent(plugin, p.getWorld(), plot, p, text);
+                            event = sob.getEventFactory().callPlotCommentEvent(plugin, player.getWorld(), plot, player, text);
                         }
 
                         if (!event.isCancelled()) {
-                            String playername = p.getName();
-                            UUID uuid = p.getUniqueId();
+                            String playername = player.getName();
+                            UUID uuid = player.getUniqueId();
 
                             String[] comment = new String[3];
                             comment[0] = playername;
@@ -79,21 +79,21 @@ public class CmdComment extends PlotCommand {
                             plot.addComment(comment);
                             plugin.getSqlManager().addPlotComment(comment, plot.getCommentsCount(), PlotMeCoreManager.getIdX(id), PlotMeCoreManager.getIdZ(id), plot.getWorld(), uuid);
 
-                            p.sendMessage(C("MsgCommentAdded") + " " + Util().moneyFormat(-price));
+                            player.sendMessage(C("MsgCommentAdded") + " " + Util().moneyFormat(-price));
 
                             if (isAdvancedLogging()) {
                                 plugin.getLogger().info(LOG + playername + " " + C("MsgCommentedPlot") + " " + id + (price != 0 ? " " + C("WordFor") + " " + price : ""));
                             }
                         }
                     } else {
-                        p.sendMessage("§c" + C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
+                        player.sendMessage("§c" + C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
                     }
                 }
             } else {
-                p.sendMessage("§c" + C("MsgNotPlotWorld"));
+                player.sendMessage("§c" + C("MsgNotPlotWorld"));
             }
         } else {
-            p.sendMessage("§c" + C("MsgPermissionDenied"));
+            player.sendMessage("§c" + C("MsgPermissionDenied"));
             return false;
         }
         return true;

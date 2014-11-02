@@ -12,7 +12,7 @@ public class BukkitBiome implements IBiome {
     }
 
     public BukkitBiome(String name) {
-        this.biome = Biome.valueOf(name);
+        biome = Biome.valueOf(name);
     }
 
     @Override
@@ -23,4 +23,5 @@ public class BukkitBiome implements IBiome {
     public Biome getBiome() {
         return biome;
     }
+
 }

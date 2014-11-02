@@ -1,6 +1,9 @@
 package com.worldcretornica.plotme_core.bukkit;
 
-import multiworld.*;
+import multiworld.ConfigException;
+import multiworld.InvalidWorldGenException;
+import multiworld.MultiWorldPlugin;
+import multiworld.WorldGenException;
 import multiworld.data.DataHandler;
 import multiworld.worldgen.WorldGenerator;
 import org.bukkit.World;
@@ -14,7 +17,7 @@ public class MultiWorldWrapper implements Delegate<MultiWorldPlugin> {
         if (!(multiworld instanceof MultiWorldPlugin)) {
             throw new IllegalArgumentException("JavaPlugin must be castable to MultiWorldPlugin");
         }
-        this.multiWorldPlugin = (MultiWorldPlugin) multiworld;
+        multiWorldPlugin = (MultiWorldPlugin) multiworld;
     }
 
     @Override
@@ -90,17 +93,6 @@ public class MultiWorldWrapper implements Delegate<MultiWorldPlugin> {
             }
         }
 
-    }
-
-    public static class Utils {
-
-        public static void checkWorldName(String name) throws DelegateClassException {
-            try {
-                multiworld.Utils.checkWorldName(name);
-            } catch (InvalidWorldNameException ex) {
-                throw new DelegateClassException(ex);
-            }
-        }
     }
 
 }

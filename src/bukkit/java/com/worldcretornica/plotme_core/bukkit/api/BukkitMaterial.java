@@ -8,7 +8,7 @@ public class BukkitMaterial implements IMaterial {
     Material material;
 
     public BukkitMaterial(Material mat) {
-        this.material = mat;
+        material = mat;
     }
 
     public Material getMaterial() {

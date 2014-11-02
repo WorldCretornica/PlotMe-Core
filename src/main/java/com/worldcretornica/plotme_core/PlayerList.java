@@ -109,7 +109,7 @@ public class PlayerList {
 
     public void replace(UUID uuid, String newname) {
         if (uuid != null && playerlist != null) {
-            if (this.contains(uuid)) {
+            if (contains(uuid)) {
                 Iterator<String> it = playerlist.keySet().iterator();
                 while (it.hasNext()) {
                     String name = it.next();
@@ -126,7 +126,7 @@ public class PlayerList {
 
     public void replace(String name, UUID newuuid) {
         if (newuuid != null && playerlist != null) {
-            if (this.contains(name)) {
+            if (contains(name)) {
                 Iterator<String> it = playerlist.keySet().iterator();
                 while (it.hasNext()) {
                     String key = it.next();

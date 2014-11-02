@@ -5,6 +5,7 @@ import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.utils.MinecraftFontWidthCalculator;
+import com.worldcretornica.plotme_core.utils.Util;
 
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class CmdExpired extends PlotCommand {
                     }
                 }
 
-                int maxpage = (int) Math.ceil((double) plugin.getSqlManager().getExpiredPlotCount(player.getWorld().getName()) / (double) 8);
+                int maxpage = (int) Math.ceil(plugin.getSqlManager().getExpiredPlotCount(player.getWorld().getName()) / (double) 8);
 
                 List<Plot> expiredplots = plugin.getSqlManager().getExpiredPlots(world.getName(), page, 8);
 
@@ -43,7 +44,8 @@ public class CmdExpired extends PlotCommand {
 
                         int textLength = MinecraftFontWidthCalculator.getStringWidth(starttext);
 
-                        String line = starttext + Util().whitespace(550 - textLength) + "@" + plot.getExpiredDate();
+                        Util();
+                        String line = starttext + Util.whitespace(550 - textLength) + "@" + plot.getExpiredDate();
 
                         player.sendMessage(line);
                     }

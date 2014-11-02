@@ -17,12 +17,12 @@ public class PlotAddDeniedEvent extends PlotEvent implements Cancellable {
 
     public PlotAddDeniedEvent(PlotMe_Core instance, World world, Plot plot, Player player, String denied) {
         super(instance, plot, world);
-        this.event = new InternalPlotAddDeniedEvent(instance, new BukkitWorld(world), plot, new BukkitPlayer(player), denied);
+        event = new InternalPlotAddDeniedEvent(instance, new BukkitWorld(world), plot, new BukkitPlayer(player), denied);
     }
 
     public PlotAddDeniedEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer player, String denied) {
         super(instance, plot, world);
-        this.event = new InternalPlotAddDeniedEvent(instance, world, plot, player, denied);
+        event = new InternalPlotAddDeniedEvent(instance, world, plot, player, denied);
     }
 
     @Override
@@ -32,7 +32,7 @@ public class PlotAddDeniedEvent extends PlotEvent implements Cancellable {
 
     @Override
     public void setCancelled(boolean cancel) {
-        event.setCancelled(cancel);
+        event.setCanceled(cancel);
     }
 
     public Player getPlayer() {

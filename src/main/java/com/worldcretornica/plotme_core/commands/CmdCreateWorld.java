@@ -24,16 +24,12 @@ public class CmdCreateWorld extends PlotCommand {
                 InternalPlotWorldCreateEvent event = sob.getEventFactory().callPlotWorldCreateEvent(parameters.get("worldname"), sender, parameters);
 
                 if (!event.isCancelled()) {
-                    if (sob.CreatePlotWorld(sender, parameters.get("worldname"), parameters.get("generator"), parameters)) {
+                    if (sob.createPlotWorld(sender, parameters.get("worldname"), parameters.get("generator"), parameters)) {
                         sender.sendMessage(C("MsgWorldCreationSuccess"));
                     }
                 }
             } else if (args.length >= 2) {
-                //cancel
-                if (args[1].equalsIgnoreCase(C("CommandCreateWorld-Cancel"))) {
-                    plugin.creationbuffer.remove(sender.getName());
-                    return true;
-                } //settings
+                //settings
                 if (args[1].equalsIgnoreCase(C("CommandCreateWorld-Setting"))) {
                     if (args.length == 4) {
                         String key = args[2];
@@ -60,16 +56,13 @@ public class CmdCreateWorld extends PlotCommand {
                 }
 
                 sender.sendMessage(C("WordUsage") + ": ");
-                sender.sendMessage("/plotme " + C("CommandCreateWorld") + " " + C("CommandCreateWorld-Setting")
-                                           + "<" + C("WordConfig") + "> <" + C("WordValue") + "> "
-                                       + C("MsgCreateWorldParameters4"));
-                sender.sendMessage("/plotme " + C("CommandCreateWorld") + " " + C("CommandCreateWorld-Cancel") + " "
-                                       + C("MsgCreateWorldParameters5"));
+                sender.sendMessage("/plotme createworld " + C("CommandCreateWorld-Setting") + "<" + C("WordConfig") + "> <" + C("WordValue") + "> " + C("MsgCreateWorldParameters4"));
+                sender.sendMessage("/plotme createworld " + C("CommandCreateWorld-Cancel") + " " + C("MsgCreateWorldParameters5"));
             }
         } else {
             //Usage
             if (args.length == 1) {
-                sender.sendMessage(C("WordUsage") + ": §c/plotme " + C("CommandCreateWorld") + " <" + C("WordWorld") + "> [" + C("WordGenerator") + "]");
+                sender.sendMessage(C("WordUsage") + ": §c/plotme createworld <" + C("WordWorld") + "> [" + C("WordGenerator") + "]");
                 sender.sendMessage("  " + C("MsgCreateWorldHelp"));
             } else {
 
@@ -78,11 +71,6 @@ public class CmdCreateWorld extends PlotCommand {
                 //Prepare creation
                 if (args.length >= 2) {
                     parameters.put("worldname", args[1]);
-
-                    if (!sob.checkWorldName(args[1])) {
-                        sender.sendMessage("[PlotMe-Core] " + C("ErrInvalidWorldName") + " '" + parameters.get("worldname") + "'");
-                        return true;
-                    }
                 }
 
                 if (args.length >= 3) {
@@ -155,12 +143,9 @@ public class CmdCreateWorld extends PlotCommand {
 
                 parameters.putAll(genparameters);
 
-                sender.sendMessage("/plotme " + C("CommandCreateWorld") + " " + C("CommandCreateWorld-Setting")
-                                           + "<" + C("WordConfig") + "> <" + C("WordValue") + "> "
-                                       + C("MsgCreateWorldParameters4"));
+                sender.sendMessage("/plotme createworld " + C("CommandCreateWorld-Setting") + "<" + C("WordConfig") + "> <" + C("WordValue") + "> " + C("MsgCreateWorldParameters4"));
 
-                sender.sendMessage("/plotme " + C("CommandCreateWorld") + " " + C("CommandCreateWorld-Cancel") + " "
-                                       + C("MsgCreateWorldParameters5"));
+                sender.sendMessage("/plotme createworld " + C("CommandCreateWorld-Cancel") + " " + C("MsgCreateWorldParameters5"));
 
                 plugin.creationbuffer.put(sender.getName(), parameters);
             }

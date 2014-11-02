@@ -1,5 +1,7 @@
 package com.worldcretornica.plotme_core.api;
 
+import java.util.UUID;
+
 public interface IEntity {
 
     /**
@@ -12,6 +14,8 @@ public interface IEntity {
     void remove();
 
     IEntityType getType();
+
+    UUID getUniqueId();
 
     void teleport(ILocation newl);
 }

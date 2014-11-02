@@ -19,7 +19,7 @@ public class CmdClaim extends PlotCommand {
     public boolean exec(IPlayer player, String[] args) {
         if (player.hasPermission("PlotMe.use.claim") || player.hasPermission("PlotMe.admin.claim.other")) {
             if (plugin.getPlotMeCoreManager().isPlotWorld(player)) {
-                String id = plugin.getPlotMeCoreManager().getPlotId(player.getLocation());
+                String id = plugin.getPlotMeCoreManager().getPlotId(player);
 
                 if (id.isEmpty()) {
                     player.sendMessage("§c" + C("MsgCannotClaimRoad"));
@@ -37,11 +37,11 @@ public class CmdClaim extends PlotCommand {
                     }
 
                     IWorld world = player.getWorld();
-                    int plotlimit = plugin.getPlotLimit(player);
+                    int plotlimit = getPlotLimit(player);
 
                     if (playername.equals(player.getName()) && plotlimit != -1 && plugin.getPlotMeCoreManager().getNbOwnedPlot(player, world) >= plotlimit) {
                         player.sendMessage("§c" + C("MsgAlreadyReachedMaxPlots") + " ("
-                                                   + plugin.getPlotMeCoreManager().getNbOwnedPlot(player, world) + "/" + plugin.getPlotLimit(player) + "). " + C("WordUse") + " §c/plotme " + C("CommandHome") + "§r " + C("MsgToGetToIt"));
+                                                   + plugin.getPlotMeCoreManager().getNbOwnedPlot(player, world) + "/" + getPlotLimit(player) + "). " + C("WordUse") + " §c/plotme home§r " + C("MsgToGetToIt"));
                     } else {
                         PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
 
@@ -49,7 +49,7 @@ public class CmdClaim extends PlotCommand {
 
                         InternalPlotCreateEvent event;
 
-                        if (plugin.getPlotMeCoreManager().isEconomyEnabled(world)) {
+                        if (plugin.getPlotMeCoreManager().isEconomyEnabled(player)) {
                             price = pmi.getClaimPrice();
                             double balance = sob.getBalance(player);
 
@@ -63,7 +63,7 @@ public class CmdClaim extends PlotCommand {
 
                                     if (!er.transactionSuccess()) {
                                         player.sendMessage("§c" + er.errorMessage);
-                                        Util().warn(er.errorMessage);
+                                        warn(er.errorMessage);
                                         return true;
                                     }
                                 }
@@ -83,9 +83,9 @@ public class CmdClaim extends PlotCommand {
                                 player.sendMessage("§c" + C("ErrCreatingPlotAt") + " " + id);
                             } else {
                                 if (playername.equalsIgnoreCase(player.getName())) {
-                                    player.sendMessage(C("MsgThisPlotYours") + " " + C("WordUse") + " §c/plotme " + C("CommandHome") + "§r " + C("MsgToGetToIt") + " " + Util().moneyFormat(-price));
+                                    player.sendMessage(C("MsgThisPlotYours") + " " + C("WordUse") + " §c/plotme home§r " + C("MsgToGetToIt") + " " + Util().moneyFormat(-price));
                                 } else {
-                                    player.sendMessage(C("MsgThisPlotIsNow") + " " + playername + C("WordPossessive") + ". " + C("WordUse") + " §c/plotme " + C("CommandHome") + "§r " + C("MsgToGetToIt") + " " + Util().moneyFormat(-price));
+                                    player.sendMessage(C("MsgThisPlotIsNow") + " " + playername + C("WordPossessive") + ". " + C("WordUse") + " §c/plotme home§r " + C("MsgToGetToIt") + " " + Util().moneyFormat(-price));
                                 }
 
                                 if (isAdvancedLogging()) {

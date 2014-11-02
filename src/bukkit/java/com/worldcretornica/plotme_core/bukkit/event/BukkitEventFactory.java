@@ -180,7 +180,7 @@ public class BukkitEventFactory implements IEventFactory {
 
     @Override
     public InternalPlotWorldLoadEvent callPlotWorldLoadEvent(PlotMe_Core plugin, String worldname, int NbPlots) {
-        PlotWorldLoadEvent event = new PlotWorldLoadEvent(plugin, worldname, NbPlots);
+        PlotWorldLoadEvent event = new PlotWorldLoadEvent(worldname, NbPlots);
         Bukkit.getPluginManager().callEvent(event);
         return event.getInternal();
     }

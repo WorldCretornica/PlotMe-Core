@@ -34,7 +34,7 @@ public class PlotMoveEvent extends PlotEvent implements Cancellable {
 
     @Override
     public void setCancelled(boolean cancel) {
-        event.setCancelled(cancel);
+        event.setCanceled(cancel);
     }
 
     @Override

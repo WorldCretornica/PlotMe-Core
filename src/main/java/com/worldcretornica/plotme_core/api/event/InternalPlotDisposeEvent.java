@@ -2,7 +2,8 @@ package com.worldcretornica.plotme_core.api.event;
 
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.*;
+import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.api.IWorld;
 
 public class InternalPlotDisposeEvent extends InternalPlotEvent implements ICancellable {
 
@@ -20,7 +21,7 @@ public class InternalPlotDisposeEvent extends InternalPlotEvent implements ICanc
     }
 
     @Override
-    public void setCancelled(boolean cancel) {
+    public void setCanceled(boolean cancel) {
         _canceled = cancel;
     }
 

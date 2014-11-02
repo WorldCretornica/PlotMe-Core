@@ -57,8 +57,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.1</version>
 				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
+					<source>1.8</source>
+					<target>1.8</target>
 					<showDeprecation>true</showDeprecation>
 					<showWarnings>true</showWarnings>
 				</configuration>
@@ -67,7 +67,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>
-				<version>1.7</version>
+				<version>1.8</version>
 				<executions>
 					<execution>
 						<id>add-bukkit-sources</id>
@@ -152,6 +152,8 @@
 			<groupId>com.onarandombox.multiversecore</groupId>
 			<artifactId>Multiverse-Core</artifactId>
 			<version>2.5</version>
+			<type>jar</type>
+			<scope>provided</scope>
 			<exclusions>
 				<exclusion>
 					<artifactId>craftbukkit</artifactId>
@@ -167,6 +169,8 @@
 			<groupId>com.sk89q</groupId>
 			<artifactId>worldedit</artifactId>
 			<version>6.0.0-SNAPSHOT</version>
+			<scope>provided</scope>
+			<type>jar</type>
 		</dependency>
 		<dependency>
 			<groupId>net.milkbowl.vault</groupId>
@@ -178,17 +182,20 @@
 			<groupId>org.getlwc</groupId>
 			<artifactId>lwc</artifactId>
 			<version>4.4.0-SNAPSHOT</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.mcstats.bukkit</groupId>
 			<artifactId>metrics</artifactId>
 			<version>R8-SNAPSHOT</version>
+			<type>jar</type>
 		</dependency>
 		<dependency>
 			<groupId>multiworld</groupId>
 			<artifactId>multiworld</artifactId>
 			<version>4.7.3</version>
 			<scope>system</scope>
+			<type>jar</type>
 			<systemPath>${project.basedir}/lib/multiworld.jar</systemPath>
 		</dependency>
 	</dependencies>

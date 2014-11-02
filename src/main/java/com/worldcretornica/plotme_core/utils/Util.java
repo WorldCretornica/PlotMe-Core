@@ -10,8 +10,6 @@ public class Util {
 
     private final PlotMe_Core plugin;
 
-    private final String LOG = "[PlotMe-Core Event] ";
-
     public Util(PlotMe_Core instance) {
         plugin = instance;
     }
@@ -25,7 +23,7 @@ public class Util {
         }
     }
 
-    public static String addColor(String string) {
+    private static String addColor(String string) {
         return ChatColor.translateAlternateColorCodes('&', string);
     }
 
@@ -43,10 +41,6 @@ public class Util {
 
     public static String round(double money) {
         return money % 1 == 0 ? "" + Math.round(money) : "" + money;
-    }
-
-    public void warn(String msg) {
-        plugin.getLogger().warning(LOG + msg);
     }
 
     public String moneyFormat(double price) {
@@ -73,23 +67,4 @@ public class Util {
         }
     }
 
-    public static String FormatBiome(String biome) {
-        biome = biome.toLowerCase();
-
-        String[] tokens = biome.split("_");
-
-        biome = "";
-
-        for (String token : tokens) {
-            token = token.substring(0, 1).toUpperCase() + token.substring(1);
-
-            if (biome.isEmpty()) {
-                biome = token;
-            } else {
-                biome = biome + "_" + token;
-            }
-        }
-
-        return biome;
-    }
 }

@@ -17,12 +17,12 @@ public class CmdAdd extends PlotCommand {
     public boolean exec(IPlayer player, String[] args) {
         if (player.hasPermission("PlotMe.admin.add") || player.hasPermission("PlotMe.use.add")) {
             if (plugin.getPlotMeCoreManager().isPlotWorld(player)) {
-                String id = plugin.getPlotMeCoreManager().getPlotId(player.getLocation());
+                String id = plugin.getPlotMeCoreManager().getPlotId(player);
                 if (id.isEmpty()) {
                     player.sendMessage("§c" + C("MsgNoPlotFound"));
                 } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, player)) {
                     if (args.length < 2 || args[1].isEmpty()) {
-                        player.sendMessage(C("WordUsage") + " §c/plotme " + C("CommandAdd") + " <" + C("WordPlayer") + ">");
+                        player.sendMessage(C("WordUsage") + " §c/plotme add <" + C("WordPlayer") + ">");
                     } else {
 
                         Plot plot = plugin.getPlotMeCoreManager().getPlotById(player, id);
@@ -33,20 +33,18 @@ public class CmdAdd extends PlotCommand {
                             if (plot.isAllowedConsulting(allowed) || plot.isGroupAllowed(allowed)) {
                                 player.sendMessage(C("WordPlayer") + " §c" + args[1] + "§r " + C("MsgAlreadyAllowed"));
                             } else {
-                                IWorld w = player.getWorld();
+                                IWorld world = player.getWorld();
 
                                 PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(player);
-
-                                double price = 0;
 
                                 InternalPlotAddAllowedEvent event;
 
                                 if (plugin.getPlotMeCoreManager().isEconomyEnabled(player)) {
-                                    price = pmi.getAddPlayerPrice();
+                                    double price = pmi.getAddPlayerPrice();
                                     double balance = sob.getBalance(player);
 
                                     if (balance >= price) {
-                                        event = sob.getEventFactory().callPlotAddAllowedEvent(plugin, w, plot, player, allowed);
+                                        event = sob.getEventFactory().callPlotAddAllowedEvent(plugin, world, plot, player, allowed);
 
                                         if (event.isCancelled()) {
                                             return true;
@@ -55,7 +53,7 @@ public class CmdAdd extends PlotCommand {
 
                                             if (!er.transactionSuccess()) {
                                                 player.sendMessage("§c" + er.errorMessage);
-                                                Util().warn(er.errorMessage);
+                                                warn(er.errorMessage);
                                                 return true;
                                             }
                                         }
@@ -64,13 +62,14 @@ public class CmdAdd extends PlotCommand {
                                         return true;
                                     }
                                 } else {
-                                    event = sob.getEventFactory().callPlotAddAllowedEvent(plugin, w, plot, player, allowed);
+                                    event = sob.getEventFactory().callPlotAddAllowedEvent(plugin, world, plot, player, allowed);
                                 }
 
                                 if (!event.isCancelled()) {
                                     plot.addAllowed(allowed);
                                     plot.removeDenied(allowed);
 
+                                    double price = 0;
                                     player.sendMessage(C("WordPlayer") + " §c" + allowed + "§r " + C("MsgNowAllowed") + " " + Util().moneyFormat(-price));
 
                                     if (isAdvancedLogging()) {

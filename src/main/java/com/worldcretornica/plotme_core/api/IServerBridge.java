@@ -86,13 +86,11 @@ public interface IServerBridge {
 
     String stripColor(String string);
 
-    boolean checkWorldName(String string);
-
     boolean worldExists(String string);
 
     List<IWorld> getWorlds();
 
-    boolean CreatePlotWorld(ICommandSender cs, String worldname, String generator, Map<String, String> args);
+    boolean createPlotWorld(ICommandSender cs, String worldname, String generator, Map<String, String> args);
 
     IMaterial getMaterial(String string);
 

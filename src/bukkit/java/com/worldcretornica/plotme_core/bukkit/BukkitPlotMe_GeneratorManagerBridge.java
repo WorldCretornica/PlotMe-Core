@@ -31,21 +31,21 @@ public class BukkitPlotMe_GeneratorManagerBridge implements IPlotMe_GeneratorMan
         List<IPlayer> players = new ArrayList<>();
         BukkitWorld bw = (BukkitWorld) w;
 
-        for (Player p : gm.getPlayersInPlot(bw.getWorld(), id)) {
-            players.add(new BukkitPlayer(p));
+        for (Player player : gm.getPlayersInPlot(bw.getWorld(), id)) {
+            players.add(new BukkitPlayer(player));
         }
 
         return players;
     }
 
     @Override
-    public void fillroad(String id1, String id2, IWorld w) {
-        gm.fillroad(id1, id2, ((BukkitWorld) w).getWorld());
+    public void fillroad(String id1, String id2, IWorld world) {
+        gm.fillroad(id1, id2, ((BukkitWorld) world).getWorld());
     }
 
     @Override
-    public void fillmiddleroad(String id1, String id2, IWorld w) {
-        gm.fillmiddleroad(id1, id2, ((BukkitWorld) w).getWorld());
+    public void fillmiddleroad(String id1, String id2, IWorld world) {
+        gm.fillmiddleroad(id1, id2, ((BukkitWorld) world).getWorld());
     }
 
     @Override
@@ -99,8 +99,8 @@ public class BukkitPlotMe_GeneratorManagerBridge implements IPlotMe_GeneratorMan
     }
 
     @Override
-    public void setBiome(IWorld w, String id, IBiome biome) {
-        gm.setBiome(((BukkitWorld) w).getWorld(), id, ((BukkitBiome) biome).getBiome());
+    public void setBiome(IWorld world, String id, IBiome biome) {
+        gm.setBiome(((BukkitWorld) world).getWorld(), id, ((BukkitBiome) biome).getBiome());
     }
 
     @Override
@@ -109,13 +109,13 @@ public class BukkitPlotMe_GeneratorManagerBridge implements IPlotMe_GeneratorMan
     }
 
     @Override
-    public ILocation getTop(IWorld w, String id) {
-        return new BukkitLocation(gm.getTop(((BukkitWorld) w).getWorld(), id));
+    public ILocation getTop(IWorld world, String id) {
+        return new BukkitLocation(gm.getTop(((BukkitWorld) world).getWorld(), id));
     }
 
     @Override
-    public ILocation getBottom(IWorld w, String id) {
-        return new BukkitLocation(gm.getBottom(((BukkitWorld) w).getWorld(), id));
+    public ILocation getBottom(IWorld world, String id) {
+        return new BukkitLocation(gm.getBottom(((BukkitWorld) world).getWorld(), id));
     }
 
     @Override
@@ -139,8 +139,8 @@ public class BukkitPlotMe_GeneratorManagerBridge implements IPlotMe_GeneratorMan
     }
 
     @Override
-    public void adjustPlotFor(IWorld world, String id, boolean Claimed, boolean Protect, boolean Auctionned, boolean ForSale) {
-        gm.adjustPlotFor(((BukkitWorld) world).getWorld(), id, Claimed, Protect, Auctionned, ForSale);
+    public void adjustPlotFor(IWorld world, String id, boolean claimed, boolean protect, boolean auctioned, boolean forSale) {
+        gm.adjustPlotFor(((BukkitWorld) world).getWorld(), id, claimed, protect, auctioned, forSale);
     }
 
     @Override

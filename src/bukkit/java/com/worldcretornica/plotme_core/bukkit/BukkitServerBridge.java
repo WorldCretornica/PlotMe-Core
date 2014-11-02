@@ -205,33 +205,33 @@ public class BukkitServerBridge implements IServerBridge {
 
     @Override
     public IPlayer getPlayer(UUID uuid) {
-        Player p = Bukkit.getPlayer(uuid);
-        if (p == null) {
+        Player player = Bukkit.getPlayer(uuid);
+        if (player == null) {
             return null;
         } else {
-            return new BukkitPlayer(p);
+            return new BukkitPlayer(player);
         }
     }
 
     @Override
     public IPlayer getPlayerExact(String name) {
         @SuppressWarnings("deprecation")
-        Player p = Bukkit.getPlayerExact(name);
-        if (p == null) {
+        Player player = Bukkit.getPlayerExact(name);
+        if (player == null) {
             return null;
         } else {
-            return new BukkitPlayer(p);
+            return new BukkitPlayer(player);
         }
     }
 
     @Override
     public IOfflinePlayer getOfflinePlayer(String player) {
         @SuppressWarnings("deprecation")
-        OfflinePlayer op = Bukkit.getOfflinePlayer(player);
-        if (op != null) {
-            return new BukkitOfflinePlayer(op);
-        } else {
+        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(player);
+        if (offlinePlayer == null) {
             return null;
+        } else {
+            return new BukkitOfflinePlayer(offlinePlayer);
         }
     }
 
@@ -345,16 +345,6 @@ public class BukkitServerBridge implements IServerBridge {
     }
 
     @Override
-    public boolean checkWorldName(String name) {
-        try {
-            MultiWorldWrapper.Utils.checkWorldName(name);
-        } catch (DelegateClassException e) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
     public IPlotMe_ChunkGenerator getPlotMeGenerator(String worldname) {
         World w = Bukkit.getWorld(worldname);
         if (w != null) {
@@ -383,7 +373,7 @@ public class BukkitServerBridge implements IServerBridge {
     }
 
     @Override
-    public boolean CreatePlotWorld(ICommandSender cs, String worldname, String generator, Map<String, String> args) {
+    public boolean createPlotWorld(ICommandSender cs, String worldname, String generator, Map<String, String> args) {
         //Get a seed
         Long seed = new Random().nextLong();
 
@@ -413,7 +403,8 @@ public class BukkitServerBridge implements IServerBridge {
         if (bukkitplugin == null) {
             getLogger().info(plugin.getAPI().getUtil().C("ErrCannotFindWorldGen") + " '" + generator + "'");
             return false;
-        } else if (!bukkitplugin.getManager().createConfig(worldname, args, cs)) { //Create the generator configurations
+        }
+        if (!bukkitplugin.getManager().createConfig(worldname, args, cs)) { //Create the generator configurations
             getLogger().info(plugin.getAPI().getUtil().C("ErrCannotCreateGen1") + " '" + generator + "' " + plugin.getAPI().getUtil().C("ErrCannotCreateGen2"));
             return false;
         }

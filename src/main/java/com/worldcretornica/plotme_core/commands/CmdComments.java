@@ -10,39 +10,39 @@ public class CmdComments extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(IPlayer p, String[] args) {
-        if (p.hasPermission("PlotMe.use.comments")) {
-            if (!plugin.getPlotMeCoreManager().isPlotWorld(p)) {
-                p.sendMessage("§c" + C("MsgNotPlotWorld"));
+    public boolean exec(IPlayer player, String[] args) {
+        if (player.hasPermission("PlotMe.use.comments")) {
+            if (!plugin.getPlotMeCoreManager().isPlotWorld(player)) {
+                player.sendMessage("§c" + C("MsgNotPlotWorld"));
             } else if (args.length < 2) {
-                String id = plugin.getPlotMeCoreManager().getPlotId(p.getLocation());
+                String id = plugin.getPlotMeCoreManager().getPlotId(player);
 
                 if (id.isEmpty()) {
-                    p.sendMessage("§c" + C("MsgNoPlotFound"));
-                } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, p)) {
-                    Plot plot = plugin.getPlotMeCoreManager().getPlotById(p, id);
+                    player.sendMessage("§c" + C("MsgNoPlotFound"));
+                } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, player)) {
+                    Plot plot = plugin.getPlotMeCoreManager().getPlotById(player, id);
 
-                    if (plot.getOwnerId().equals(p.getUniqueId()) || plot.isAllowed(p.getUniqueId()) || p.hasPermission("PlotMe.admin")) {
+                    if (plot.getOwnerId().equals(player.getUniqueId()) || plot.isAllowed(player.getUniqueId()) || player.hasPermission("PlotMe.admin")) {
                         if (plot.getCommentsCount() == 0) {
-                            p.sendMessage(C("MsgNoComments"));
+                            player.sendMessage(C("MsgNoComments"));
                         } else {
-                            p.sendMessage(C("MsgYouHave") + " §b" + plot.getCommentsCount() + "§r " + C("MsgComments"));
+                            player.sendMessage(C("MsgYouHave") + " §b" + plot.getCommentsCount() + "§r " + C("MsgComments"));
 
                             for (String[] comment : plot.getComments()) {
-                                p.sendMessage("§b" + C("WordFrom") + " : §c" + comment[0]);
-                                p.sendMessage("§o" + comment[1]);
+                                player.sendMessage("§b" + C("WordFrom") + " : §c" + comment[0]);
+                                player.sendMessage("§o" + comment[1]);
                             }
 
                         }
                     } else {
-                        p.sendMessage("§c" + C("MsgThisPlot") + "(" + id + ") " + C("MsgNotYoursNotAllowedViewComments"));
+                        player.sendMessage("§c" + C("MsgThisPlot") + "(" + id + ") " + C("MsgNotYoursNotAllowedViewComments"));
                     }
                 } else {
-                    p.sendMessage("§c" + C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
+                    player.sendMessage("§c" + C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
                 }
             }
         } else {
-            p.sendMessage("§c" + C("MsgPermissionDenied"));
+            player.sendMessage("§c" + C("MsgPermissionDenied"));
             return false;
         }
         return true;

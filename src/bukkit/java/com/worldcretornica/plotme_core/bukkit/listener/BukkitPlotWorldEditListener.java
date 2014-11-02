@@ -3,7 +3,6 @@ package com.worldcretornica.plotme_core.bukkit.listener;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.bukkit.PlotMe_CorePlugin;
-import com.worldcretornica.plotme_core.bukkit.api.BukkitBlock;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitLocation;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitMaterial;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
@@ -16,10 +15,10 @@ import org.bukkit.event.player.*;
 
 public class BukkitPlotWorldEditListener implements Listener {
 
-    private PlotMe_Core api;
+    private final PlotMe_Core api;
 
     public BukkitPlotWorldEditListener(PlotMe_CorePlugin plugin) {
-        this.api = plugin.getAPI();
+        api = plugin.getAPI();
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
@@ -27,10 +26,10 @@ public class BukkitPlotWorldEditListener implements Listener {
         BukkitLocation from = new BukkitLocation(event.getFrom());
         BukkitLocation to = new BukkitLocation(event.getTo());
 
-        BukkitPlayer p = new BukkitPlayer(event.getPlayer());
+        BukkitPlayer player = new BukkitPlayer(event.getPlayer());
 
         if (event.getTo() == null) {
-            api.getServerBridge().getPlotWorldEdit().removeMask(p);
+            api.getServerBridge().getPlotWorldEdit().removeMask(player);
         } else {
             String idTo = "";
 
@@ -47,10 +46,10 @@ public class BukkitPlotWorldEditListener implements Listener {
             }
 
             if (changemask && api.getPlotMeCoreManager().isPlotWorld(to.getWorld())) {
-                if (!api.getPlotMeCoreManager().isPlayerIgnoringWELimit(p.getUniqueId())) {
-                    api.getServerBridge().getPlotWorldEdit().setMask(p, idTo);
+                if (!api.getPlotMeCoreManager().isPlayerIgnoringWELimit(player.getUniqueId())) {
+                    api.getServerBridge().getPlotWorldEdit().setMask(player, idTo);
                 } else {
-                    api.getServerBridge().getPlotWorldEdit().removeMask(p);
+                    api.getServerBridge().getPlotWorldEdit().removeMask(player);
                 }
             }
         }
@@ -58,55 +57,55 @@ public class BukkitPlotWorldEditListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onPlayerJoin(PlayerJoinEvent event) {
-        BukkitPlayer p = new BukkitPlayer(event.getPlayer());
-        if (api.getPlotMeCoreManager().isPlotWorld(p)) {
-            if (!api.getPlotMeCoreManager().isPlayerIgnoringWELimit(p.getUniqueId())) {
-                api.getServerBridge().getPlotWorldEdit().setMask(p);
+        BukkitPlayer player = new BukkitPlayer(event.getPlayer());
+        if (api.getPlotMeCoreManager().isPlotWorld(player)) {
+            if (!api.getPlotMeCoreManager().isPlayerIgnoringWELimit(player.getUniqueId())) {
+                api.getServerBridge().getPlotWorldEdit().setMask(player);
             } else {
-                api.getServerBridge().getPlotWorldEdit().removeMask(p);
+                api.getServerBridge().getPlotWorldEdit().removeMask(player);
             }
         } else {
-            api.getServerBridge().getPlotWorldEdit().removeMask(p);
+            api.getServerBridge().getPlotWorldEdit().removeMask(player);
         }
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onPlayerTeleport(PlayerTeleportEvent event) {
-        BukkitPlayer p = new BukkitPlayer(event.getPlayer());
+        BukkitPlayer player = new BukkitPlayer(event.getPlayer());
         BukkitLocation from = new BukkitLocation(event.getFrom());
         BukkitLocation to = new BukkitLocation(event.getTo());
 
         if (event.getTo() == null || event.getFrom() != null && api.getPlotMeCoreManager().isPlotWorld(from) && !api.getPlotMeCoreManager().isPlotWorld(to)) {
-            api.getServerBridge().getPlotWorldEdit().removeMask(p);
+            api.getServerBridge().getPlotWorldEdit().removeMask(player);
         } else if (api.getPlotMeCoreManager().isPlotWorld(to)) {
-            api.getServerBridge().getPlotWorldEdit().setMask(p);
+            api.getServerBridge().getPlotWorldEdit().setMask(player);
         }
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onPlayerPortal(PlayerPortalEvent event) {
-        BukkitPlayer p = new BukkitPlayer(event.getPlayer());
+        BukkitPlayer player = new BukkitPlayer(event.getPlayer());
         BukkitLocation from = new BukkitLocation(event.getFrom());
         BukkitLocation to = new BukkitLocation(event.getTo());
 
         if (event.getTo() == null || event.getFrom() != null && api.getPlotMeCoreManager().isPlotWorld(from) && !api.getPlotMeCoreManager().isPlotWorld(to)) {
-            api.getServerBridge().getPlotWorldEdit().removeMask(p);
+            api.getServerBridge().getPlotWorldEdit().removeMask(player);
         } else if (api.getPlotMeCoreManager().isPlotWorld(to)) {
-            api.getServerBridge().getPlotWorldEdit().setMask(p);
+            api.getServerBridge().getPlotWorldEdit().setMask(player);
         }
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
-        BukkitPlayer p = new BukkitPlayer(event.getPlayer());
+        BukkitPlayer player = new BukkitPlayer(event.getPlayer());
 
-        if (api.getPlotMeCoreManager().isPlotWorld(p) && !api.getPlotMeCoreManager().isPlayerIgnoringWELimit(p.getUniqueId())) {
+        if (api.getPlotMeCoreManager().isPlotWorld(player) && !api.getPlotMeCoreManager().isPlayerIgnoringWELimit(player.getUniqueId())) {
             if (event.getMessage().startsWith("//gmask")) {
                 event.setCancelled(true);
             } else if (event.getMessage().startsWith("//up")) {
-                Plot plot = api.getPlotMeCoreManager().getPlotById(p.getLocation());
+                Plot plot = api.getPlotMeCoreManager().getPlotById(player);
 
-                if (plot == null || !plot.isAllowed(p.getUniqueId())) {
+                if (plot == null || !plot.isAllowed(player.getUniqueId())) {
                     event.setCancelled(true);
                 }
             }
@@ -115,17 +114,16 @@ public class BukkitPlotWorldEditListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onPlayerInteract(PlayerInteractEvent event) {
-        BukkitPlayer p = new BukkitPlayer(event.getPlayer());
+        BukkitPlayer player = new BukkitPlayer(event.getPlayer());
 
-        if (api.getPlotMeCoreManager().isPlotWorld(p) && !p.hasPermission("plotme.admin.buildanywhere") &&
-                !api.getPlotMeCoreManager().isPlayerIgnoringWELimit(p.getUniqueId()) && 
-                (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK) && 
-                p.getItemInHand() != null && ((BukkitMaterial) p.getItemInHand().getType()).getMaterial() != Material.AIR) {
-            BukkitBlock b = new BukkitBlock(event.getClickedBlock());
-            Plot plot = api.getPlotMeCoreManager().getPlotById(b.getLocation());
+        if (api.getPlotMeCoreManager().isPlotWorld(player) && !player.hasPermission("plotme.admin.buildanywhere") &&
+                    !api.getPlotMeCoreManager().isPlayerIgnoringWELimit(player.getUniqueId()) &&
+                    (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK) &&
+                    player.getItemInHand() != null && ((BukkitMaterial) player.getItemInHand().getType()).getMaterial() != Material.AIR) {
+            Plot plot = api.getPlotMeCoreManager().getPlotById(player);
 
-            if (plot != null && plot.isAllowed(p.getUniqueId())) {
-                api.getServerBridge().getPlotWorldEdit().setMask(p, b.getLocation());
+            if (plot != null && plot.isAllowed(player.getUniqueId())) {
+                api.getServerBridge().getPlotWorldEdit().setMask(player);
             } else {
                 event.setCancelled(true);
             }

@@ -16,14 +16,14 @@ public class PlotMe_CorePlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        plotme.disable();
+        getAPI().disable();
     }
 
     @Override
     public void onEnable() {
         serverObjectBuilder = new BukkitServerBridge(this);
         plotme = new PlotMe_Core(serverObjectBuilder);
-        plotme.enable();
+        getAPI().enable();
         doMetric();
     }
     
@@ -47,7 +47,7 @@ public class PlotMe_CorePlugin extends JavaPlugin {
             graphNbWorlds.addPlotter(new Metrics.Plotter("Number of plot worlds") {
                 @Override
                 public int getValue() {
-                    return plotme.getPlotMeCoreManager().getPlotMaps().size();
+                    return getAPI().getPlotMeCoreManager().getPlotMaps().size();
                 }
             });
 
@@ -55,18 +55,18 @@ public class PlotMe_CorePlugin extends JavaPlugin {
                 @Override
                 public int getValue() {
 
-                    if (!plotme.getPlotMeCoreManager().getPlotMaps().isEmpty()) {
+                    if (!getAPI().getPlotMeCoreManager().getPlotMaps().isEmpty()) {
                         int totalplotsize = 0;
 
-                        for (String s : plotme.getPlotMeCoreManager().getPlotMaps().keySet()) {
-                            if (plotme.getPlotMeCoreManager().getGenMan(s) != null) {
-                                if (plotme.getPlotMeCoreManager().getGenMan(s).getPlotSize(s) != 0) {
-                                    totalplotsize += plotme.getPlotMeCoreManager().getGenMan(s).getPlotSize(s);
+                        for (String s : getAPI().getPlotMeCoreManager().getPlotMaps().keySet()) {
+                            if (getAPI().getPlotMeCoreManager().getGenMan(s) != null) {
+                                if (getAPI().getPlotMeCoreManager().getGenMan(s).getPlotSize(s) != 0) {
+                                    totalplotsize += getAPI().getPlotMeCoreManager().getGenMan(s).getPlotSize(s);
                                 }
                             }
                         }
 
-                        return totalplotsize / plotme.getPlotMeCoreManager().getPlotMaps().size();
+                        return totalplotsize / getAPI().getPlotMeCoreManager().getPlotMaps().size();
                     } else {
                         return 0;
                     }
@@ -78,8 +78,8 @@ public class PlotMe_CorePlugin extends JavaPlugin {
                 public int getValue() {
                     int nbplot = 0;
 
-                    for (String map : plotme.getPlotMeCoreManager().getPlotMaps().keySet()) {
-                        nbplot += plotme.getSqlManager().getPlotCount(map);
+                    for (String map : getAPI().getPlotMeCoreManager().getPlotMaps().keySet()) {
+                        nbplot += getAPI().getSqlManager().getPlotCount(map);
                     }
 
                     return nbplot;

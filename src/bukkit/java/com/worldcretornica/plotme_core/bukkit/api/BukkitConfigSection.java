@@ -14,7 +14,7 @@ public class BukkitConfigSection implements IConfigSection {
 
     private FileConfiguration master;
     private ConfigurationSection section;
-    private PlotMe_CorePlugin plugin;
+    private final PlotMe_CorePlugin plugin;
 
     public BukkitConfigSection(PlotMe_CorePlugin instance) {
         plugin = instance;
@@ -24,13 +24,13 @@ public class BukkitConfigSection implements IConfigSection {
 
     public BukkitConfigSection(PlotMe_CorePlugin instance, FileConfiguration master) {
         plugin = instance;
-        this.section = master;
+        section = master;
         this.master = master;
     }
 
     public BukkitConfigSection(PlotMe_CorePlugin instance, FileConfiguration master, ConfigurationSection configurationSection) {
         plugin = instance;
-        this.section = configurationSection;
+        section = configurationSection;
         this.master = master;
     }
 

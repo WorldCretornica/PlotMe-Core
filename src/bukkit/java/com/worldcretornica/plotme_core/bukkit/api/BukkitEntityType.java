@@ -1,15 +1,14 @@
 package com.worldcretornica.plotme_core.bukkit.api;
 
-import org.bukkit.entity.EntityType;
-
 import com.worldcretornica.plotme_core.api.IEntityType;
+import org.bukkit.entity.EntityType;
 
 public class BukkitEntityType implements IEntityType {
 
     private EntityType entitytype;
     
     public BukkitEntityType(EntityType type) {
-        this.entitytype = type;
+        entitytype = type;
     }
 
     public EntityType getEntityType() {

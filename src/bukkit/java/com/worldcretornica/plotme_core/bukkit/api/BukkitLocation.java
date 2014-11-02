@@ -8,9 +8,9 @@ import org.bukkit.Location;
 public class BukkitLocation implements ILocation {
 
     private Location location;
-    
-    public BukkitLocation(Location loc) {
-        this.location = loc;
+
+    public BukkitLocation(Location location) {
+        this.location = location;
     }
 
     @Override

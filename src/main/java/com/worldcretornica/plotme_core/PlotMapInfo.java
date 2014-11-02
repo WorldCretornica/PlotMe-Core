@@ -15,7 +15,7 @@ public class PlotMapInfo {
     private final IConfigSection config;
 
     public PlotMapInfo(PlotMe_Core instance, String world) {
-        this.plugin = instance;
+        plugin = instance;
         this.world = world;
         config = plugin.getServerBridge().loadDefaultConfig("worlds." + world);
         plots = new ConcurrentHashMap<>(1000, 0.75f, 5);

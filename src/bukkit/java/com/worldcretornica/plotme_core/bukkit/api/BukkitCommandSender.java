@@ -5,20 +5,15 @@ import org.bukkit.command.CommandSender;
 
 public class BukkitCommandSender implements ICommandSender {
 
-    private CommandSender commandsender;
+    private final CommandSender commandsender;
     
     public BukkitCommandSender(CommandSender cs) {
-        this.commandsender = cs;
+        commandsender = cs;
     }
 
     @Override
     public void sendMessage(String msg) {
         commandsender.sendMessage(msg);
-    }
-
-    @Override
-    public boolean hasPermission(String node) {
-        return true;
     }
 
     public CommandSender getCommandSender() {

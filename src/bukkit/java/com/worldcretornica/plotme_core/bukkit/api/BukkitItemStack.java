@@ -1,16 +1,15 @@
 package com.worldcretornica.plotme_core.bukkit.api;
 
-import org.bukkit.inventory.ItemStack;
-
 import com.worldcretornica.plotme_core.api.IItemStack;
 import com.worldcretornica.plotme_core.api.IMaterial;
+import org.bukkit.inventory.ItemStack;
 
 public class BukkitItemStack implements IItemStack {
 
     ItemStack itemstack;
     
     public BukkitItemStack(ItemStack is) {
-        this.itemstack = is;
+        itemstack = is;
     }
 
     @Override

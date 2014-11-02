@@ -16,10 +16,10 @@
  */
 package com.worldcretornica.plotme_core.bukkit.listener;
 
+import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.bukkit.PlotMe_CorePlugin;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
 import org.bukkit.ChatColor;
-import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -52,14 +52,14 @@ public class BukkitPlayerListener implements Listener {
 
     @EventHandler
     public void onWorldChange(PlayerTeleportEvent event) {
-        World toWorld = event.getTo().getWorld();
+        IWorld toWorld = (IWorld) event.getTo().getWorld();
         if (toWorld.equals(event.getFrom().getWorld())) {
             // Did not change world
             return;
         }
         BukkitPlayer player = new BukkitPlayer(event.getPlayer());
         if (player.isOp() && plugin.getAPI().getBadWorlds().contains(toWorld.getName())) {
-            if (plugin.getAPI().getGenManager(toWorld.getName()) == null) {
+            if (plugin.getAPI().getGenManager(toWorld) == null) {
                 // TODO: Add as multilingual caption
                 plugin.getServerObjectBuilder().sendMessage(player, "This world is defined as a plotworld but is not using a PlotMe generator.");
             }

@@ -9,7 +9,6 @@ import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.world.World;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.PlotWorldEdit;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitLocation;
@@ -23,19 +22,14 @@ public class PlotWorldEdit6_0_0 implements PlotWorldEdit {
     private final WorldEditPlugin we;
 
     public PlotWorldEdit6_0_0(PlotMe_Core instance, WorldEditPlugin wep) {
-        this.plugin = instance;
-        this.we = wep;
+        plugin = instance;
+        we = wep;
     }
 
     @Override
-    public void setMask(IPlayer p) {
-        setMask(p, p.getLocation());
-    }
-
-    @Override
-    public void setMask(IPlayer p, ILocation l) {
-        String id = plugin.getPlotMeCoreManager().getPlotId(l);
-        setMask(p, id);
+    public void setMask(IPlayer player) {
+        String id = plugin.getPlotMeCoreManager().getPlotId(player);
+        setMask(player, id);
     }
 
     @Override
@@ -43,12 +37,12 @@ public class PlotWorldEdit6_0_0 implements PlotWorldEdit {
         BukkitWorld w = (BukkitWorld) p.getWorld();
         BukkitPlayer bp = (BukkitPlayer) p;
 
-        BukkitLocation bottom = null;
-        BukkitLocation top = null;
+        BukkitLocation bottom;
+        BukkitLocation top;
 
         LocalSession session = we.getSession(bp.getPlayer());
 
-        if (!id.equalsIgnoreCase("")) {
+        if (!"".equalsIgnoreCase(id)) {
             Plot plot = plugin.getPlotMeCoreManager().getPlotById(p, id);
 
             if (plot != null && plot.isAllowed(p.getUniqueId())) {
@@ -70,10 +64,8 @@ public class PlotWorldEdit6_0_0 implements PlotWorldEdit {
             }
         }
 
-        if (bottom == null || top == null) {
-            bottom = new BukkitLocation(new Location(w.getWorld(), 0, 0, 0));
-            top = new BukkitLocation(new Location(w.getWorld(), 0, 0, 0));
-        }
+        bottom = new BukkitLocation(new Location(w.getWorld(), 0, 0, 0));
+        top = new BukkitLocation(new Location(w.getWorld(), 0, 0, 0));
 
         if (session.getMask() == null) {
             LocalSession localsession = we.getSession(bp.getPlayer());

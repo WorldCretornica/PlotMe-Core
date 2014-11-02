@@ -10,9 +10,9 @@ import java.util.logging.Logger;
 
 public class PlotMe_Core {
 
-    public static final String LANG_PATH = "language";
-    public static final String DEFAULT_LANG = "english";
-    public static final String CAPTIONS_PATTERN = "caption-%s.yml";
+    private static final String LANG_PATH = "language";
+    private static final String DEFAULT_LANG = "english";
+    private static final String CAPTIONS_PATTERN = "caption-%s.yml";
     private static final String DEFAULT_GENERATOR_URL = "http://dev.bukkit.org/bukkit-plugins/plotme/";
 
     //Config accessors for language <lang, accessor>
@@ -41,7 +41,7 @@ public class PlotMe_Core {
     private final IServerBridge serverBridge;
 
     public PlotMe_Core(IServerBridge serverObjectBuilder) {
-        this.serverBridge = serverObjectBuilder;
+        serverBridge = serverObjectBuilder;
     }
 
     public void disable() {
@@ -181,7 +181,7 @@ public class PlotMe_Core {
                 getLogger().log(Level.SEVERE, "The world {0} either does not exist or not using a PlotMe generator", worldname);
                 getLogger().log(Level.SEVERE, "Please ensure that {0} is set up and that it is using a PlotMe generator", worldname);
                 getLogger().log(Level.SEVERE, "The default generator can be downloaded from " + DEFAULT_GENERATOR_URL);
-                badWorlds.add(worldname);
+                getBadWorlds().add(worldname);
             }
         }
     }
@@ -224,14 +224,6 @@ public class PlotMe_Core {
         getCaptionConfigCA(lang).reloadConfig();
     }
 
-    public void saveCaptionConfig() {
-        saveCaptionConfig(getServerBridge().getConfig().getString(LANG_PATH));
-    }
-
-    public void saveCaptionConfig(String lang) {
-        getCaptionConfigCA(lang).saveConfig();
-    }
-
     private void setupDefaultCaptions() {
         String fileName = String.format(CAPTIONS_PATTERN, DEFAULT_LANG);
         getServerBridge().saveResource(fileName, true);
@@ -270,30 +262,6 @@ public class PlotMe_Core {
         }
     }
 
-    public int getPlotLimit(IPlayer player) {
-
-        if (player.hasPermission("plotme.limit.*")) {
-            return -1;
-        }
-        int max = -2;
-        for (int ctr = 0; ctr < 255; ctr++) {
-            if (player.hasPermission("plotme.limit." + ctr)) {
-                max = ctr;
-            }
-        }
-
-        if (max == -2) {
-            if (player.hasPermission("plotme.admin")) {
-                return -1;
-            } else if (player.hasPermission("plotme.use")) {
-                return 1;
-            } else {
-                return 0;
-            }
-        }
-
-        return max;
-    }
 
     public void scheduleTask(Runnable task) {
         getCommandSenderCurrentlyProcessingExpired().sendMessage(getUtil().C("MsgStartDeleteSession"));
@@ -324,26 +292,16 @@ public class PlotMe_Core {
     }
 
     public void addPlotToClear(PlotToClear plotToClear) {
-        this.plotsToClear.offer(plotToClear);
+        plotsToClear.offer(plotToClear);
 
         PlotMeSpool pms = new PlotMeSpool(this, plotToClear);
         getServerBridge().scheduleSyncRepeatingTask(pms, 0L, 200L);
     }
 
     public void removePlotToClear(PlotToClear plotToClear, int taskid) {
-        this.plotsToClear.remove(plotToClear);
+        plotsToClear.remove(plotToClear);
 
         getServerBridge().cancelTask(taskid);
-    }
-
-    public boolean isPlotLocked(String world, String id) {
-        for (PlotToClear ptc : plotsToClear.toArray(new PlotToClear[0])) {
-            if (ptc.getWorld().equalsIgnoreCase(world) && ptc.getPlotId().equalsIgnoreCase(id)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     public PlotToClear getPlotLocked(String world, String id) {
@@ -361,7 +319,7 @@ public class PlotMe_Core {
     }
 
     public void setNbPerDeletionProcessingExpired() {
-        this.nbperdeletionprocessingexpired = 5;
+        nbperdeletionprocessingexpired = 5;
     }
 
     public ICommandSender getCommandSenderCurrentlyProcessingExpired() {

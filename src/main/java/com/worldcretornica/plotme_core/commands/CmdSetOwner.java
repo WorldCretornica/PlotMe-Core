@@ -17,11 +17,11 @@ public class CmdSetOwner extends PlotCommand {
     public boolean exec(IPlayer p, String[] args) {
         if (p.hasPermission("PlotMe.admin.setowner")) {
             if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
-                String id = plugin.getPlotMeCoreManager().getPlotId(p.getLocation());
+                String id = plugin.getPlotMeCoreManager().getPlotId(p);
                 if (id.isEmpty()) {
                     p.sendMessage("§c" + C("MsgNoPlotFound"));
                 } else if (args.length < 2 || args[1].isEmpty()) {
-                    p.sendMessage(C("WordUsage") + ": §c/plotme " + C("CommandSetowner") + " <" + C("WordPlayer") + ">");
+                    p.sendMessage(C("WordUsage") + ": §c/plotme setowner <" + C("WordPlayer") + ">");
                 } else {
                     String newowner = args[1];
                     String oldowner = "<" + C("WordNotApplicable") + ">";
@@ -52,7 +52,7 @@ public class CmdSetOwner extends PlotCommand {
                                         }
                                     } else {
                                         p.sendMessage("§c" + er.errorMessage);
-                                        Util().warn(er.errorMessage);
+                                        warn(er.errorMessage);
                                         return true;
                                     }
                                 }
@@ -71,7 +71,7 @@ public class CmdSetOwner extends PlotCommand {
                                     }
                                 } else {
                                     p.sendMessage(er.errorMessage);
-                                    Util().warn(er.errorMessage);
+                                    warn(er.errorMessage);
                                 }
                             }
                         } else {

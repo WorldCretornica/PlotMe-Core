@@ -12,58 +12,58 @@ public class CmdInfo extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(IPlayer p) {
-        if (p.hasPermission("PlotMe.use.info")) {
-            if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
-                String id = plugin.getPlotMeCoreManager().getPlotId(p.getLocation());
+    public boolean exec(IPlayer player) {
+        if (player.hasPermission("PlotMe.use.info")) {
+            if (plugin.getPlotMeCoreManager().isPlotWorld(player)) {
+                String id = plugin.getPlotMeCoreManager().getPlotId(player);
 
                 if (id.isEmpty()) {
-                    p.sendMessage("§c" + C("MsgNoPlotFound"));
-                } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, p)) {
-                    Plot plot = plugin.getPlotMeCoreManager().getPlotById(p, id);
+                    player.sendMessage("§c" + C("MsgNoPlotFound"));
+                } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, player)) {
+                    Plot plot = plugin.getPlotMeCoreManager().getPlotById(player, id);
 
-                    p.sendMessage("§aID: §b" + id
+                    player.sendMessage("§aID: §b" + id
                                           + "§a " + C("InfoOwner") + ": §b" + plot.getOwner()
-                                          + "§a " + C("InfoBiome") + ": §b" + Util.FormatBiome(plot.getBiome().name()));
+                                               + "§a " + C("InfoBiome") + ": §b" + plot.getBiome().name());
 
-                    p.sendMessage("§a" + C("InfoExpire") + ": §b" + (plot.getExpiredDate() == null ? C("WordNever") : plot.getExpiredDate().toString())
+                    player.sendMessage("§a" + C("InfoExpire") + ": §b" + (plot.getExpiredDate() == null ? C("WordNever") : plot.getExpiredDate().toString())
                                           + "§a " + C("InfoFinished") + ": §b" + (plot.isFinished() ? C("WordYes") : C("WordNo"))
                                           + "§a " + C("InfoProtected") + ": §b" + (plot.isProtect() ? C("WordYes") : C("WordNo")));
 
                     if (plot.allowedcount() > 0) {
-                        p.sendMessage("§a" + C("InfoHelpers") + ": §b" + plot.getAllowed());
+                        player.sendMessage("§a" + C("InfoHelpers") + ": §b" + plot.getAllowed());
                     }
 
                     if (plot.deniedcount() > 0) {
-                        p.sendMessage("§a" + C("InfoDenied") + ": §b" + plot.getDenied());
+                        player.sendMessage("§a" + C("InfoDenied") + ": §b" + plot.getDenied());
                     }
 
-                    if (plugin.getPlotMeCoreManager().isEconomyEnabled(p)) {
+                    if (plugin.getPlotMeCoreManager().isEconomyEnabled(player)) {
                         if (plot.getCurrentBidder().isEmpty()) {
-                            p.sendMessage("§a" + C("InfoAuctionned") + ": §b" + (plot.isAuctioned() ? C("WordYes")
-                                                                                                              + "§a " + C("InfoMinimumBid") + ": §b" + Util().round(plot.getCurrentBid()) : C("WordNo"))
-                                                  + "§a " + C("InfoForSale") + ": §b" + (plot.isForSale() ? "§b" + Util().round(plot.getCustomPrice()) : C("WordNo")));
+                            player.sendMessage("§a" + C("InfoAuctionned") + ": §b" + (plot.isAuctioned() ? C("WordYes")
+                                                                                                                   + "§a " + C("InfoMinimumBid") + ": §b" + Util.round(plot.getCurrentBid()) : C("WordNo"))
+                                                       + "§a " + C("InfoForSale") + ": §b" + (plot.isForSale() ? "§b" + Util.round(plot.getCustomPrice()) : C("WordNo")));
                         } else {
-                            p.sendMessage("§a" + C("InfoAuctionned") + ": §b" + (plot.isAuctioned() ? C("WordYes")
+                            player.sendMessage("§a" + C("InfoAuctionned") + ": §b" + (plot.isAuctioned() ? C("WordYes")
                                                                                                               + "§a " + C("InfoBidder") + ": §b" + plot.getCurrentBidder()
-                                                                                                              + "§a " + C("InfoBid") + ": §b" + Util().round(plot.getCurrentBid()) : C("WordNo"))
-                                                  + "§a " + C("InfoForSale") + ": §b" + (plot.isForSale() ? "§b" + Util().round(plot.getCustomPrice()) : C("WordNo")));
+                                                                                                                   + "§a " + C("InfoBid") + ": §b" + Util.round(plot.getCurrentBid()) : C("WordNo"))
+                                                       + "§a " + C("InfoForSale") + ": §b" + (plot.isForSale() ? "§b" + Util.round(plot.getCustomPrice()) : C("WordNo")));
                         }
                     }
-                    ILocation bottom = plugin.getPlotMeCoreManager().getPlotBottomLoc(p.getWorld(), id);
-                    ILocation top = plugin.getPlotMeCoreManager().getPlotTopLoc(p.getWorld(), id);
+                    ILocation bottom = plugin.getPlotMeCoreManager().getPlotBottomLoc(player.getWorld(), id);
+                    ILocation top = plugin.getPlotMeCoreManager().getPlotTopLoc(player.getWorld(), id);
 
-                    p.sendMessage("§b" + C("WordBottom") + ": §r" + bottom.getBlockX() + "§9,§r" + bottom.getBlockZ());
-                    p.sendMessage("§b" + C("WordTop") + ": §r" + top.getBlockX() + "§9,§r" + top.getBlockZ());
+                    player.sendMessage("§b" + C("WordBottom") + ": §r" + bottom.getBlockX() + "§9,§r" + bottom.getBlockZ());
+                    player.sendMessage("§b" + C("WordTop") + ": §r" + top.getBlockX() + "§9,§r" + top.getBlockZ());
 
                 } else {
-                    p.sendMessage("§c" + C("MsgThisPlot") + " (" + id + ") " + C("MsgHasNoOwner"));
+                    player.sendMessage("§c" + C("MsgThisPlot") + " (" + id + ") " + C("MsgHasNoOwner"));
                 }
             } else {
-                p.sendMessage("§c" + C("MsgNotPlotWorld"));
+                player.sendMessage("§c" + C("MsgNotPlotWorld"));
             }
         } else {
-            p.sendMessage("§c" + C("MsgPermissionDenied"));
+            player.sendMessage("§c" + C("MsgPermissionDenied"));
             return false;
         }
         return true;

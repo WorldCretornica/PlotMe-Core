@@ -38,13 +38,13 @@ public class CmdHome extends PlotCommand {
                 if (args[0].contains(":")) {
                     try {
                         if (args[0].split(":").length == 1 || args[0].split(":")[1].isEmpty()) {
-                            p.sendMessage(C("WordUsage") + ": §c/plotme " + C("CommandHome") + ":# §r" + C("WordExample") + ": §c/plotme " + C("CommandHome") + ":1");
+                            p.sendMessage(C("WordUsage") + ": §c/plotme home:# §r" + C("WordExample") + ": §c/plotme home:1");
                             return true;
                         } else {
                             nb = Integer.parseInt(args[0].split(":")[1]);
                         }
                     } catch (Exception ex) {
-                        p.sendMessage(C("WordUsage") + ": §c/plotme " + C("CommandHome") + ":# §r" + C("WordExample") + ": §c/plotme " + C("CommandHome") + ":1");
+                        p.sendMessage(C("WordUsage") + ": §c/plotme home:# §r" + C("WordExample") + ": §c/plotme home:1");
                         return true;
                     }
                 }
@@ -82,7 +82,7 @@ public class CmdHome extends PlotCommand {
 
                                 InternalPlotTeleportHomeEvent event;
 
-                                if (plugin.getPlotMeCoreManager().isEconomyEnabled(world)) {
+                                if (plugin.getPlotMeCoreManager().isEconomyEnabled(p)) {
                                     price = pmi.getPlotHomePrice();
                                     double balance = sob.getBalance(p);
 

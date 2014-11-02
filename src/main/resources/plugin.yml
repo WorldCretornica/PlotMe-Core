@@ -49,7 +49,6 @@ permissions:
         plotme.admin.move: true
         plotme.admin.weanywhere: true
         plotme.admin.list: true
-        plotme.admin.reload: true
         plotme.admin.buy: true
         plotme.admin.sell: true
         plotme.admin.auction: true
@@ -139,8 +138,6 @@ permissions:
       description: Gives the weanywhere command
     plotme.admin.list:
       description: Gives the list command for any players
-    plotme.admin.reload:
-      description: Gives the reload command
     plotme.admin.buy:
       description: Gives the buy command
     plotme.admin.sell:

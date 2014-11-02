@@ -18,7 +18,7 @@ public class CmdClear extends PlotCommand {
     public boolean exec(IPlayer player) {
         if (player.hasPermission("PlotMe.admin.clear") || player.hasPermission("PlotMe.use.clear")) {
             if (plugin.getPlotMeCoreManager().isPlotWorld(player)) {
-                String id = plugin.getPlotMeCoreManager().getPlotId(player.getLocation());
+                String id = plugin.getPlotMeCoreManager().getPlotId(player);
                 if (id.isEmpty()) {
                     player.sendMessage("§c" + C("MsgNoPlotFound"));
                 } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, player)) {
@@ -38,7 +38,7 @@ public class CmdClear extends PlotCommand {
 
                             InternalPlotClearEvent event;
 
-                            if (plugin.getPlotMeCoreManager().isEconomyEnabled(world)) {
+                            if (plugin.getPlotMeCoreManager().isEconomyEnabled(player)) {
                                 price = pmi.getClearPrice();
                                 double balance = sob.getBalance(player);
 
@@ -52,7 +52,7 @@ public class CmdClear extends PlotCommand {
 
                                         if (!er.transactionSuccess()) {
                                             player.sendMessage("§c" + er.errorMessage);
-                                            Util().warn(er.errorMessage);
+                                            warn(er.errorMessage);
                                             return true;
                                         }
                                     }
