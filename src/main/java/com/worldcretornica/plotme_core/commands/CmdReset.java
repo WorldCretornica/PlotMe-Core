@@ -76,8 +76,8 @@ public class CmdReset extends PlotCommand {
                                 plugin.getPlotMeCoreManager().removePlot(world, id);
                             }
 
-                            plugin.getPlotMeCoreManager().removeOwnerSign(world, id);
-                            plugin.getPlotMeCoreManager().removeSellSign(world, id);
+                            PlotMeCoreManager.removeOwnerSign(world, id);
+                            PlotMeCoreManager.removeSellSign(world, id);
                             plugin.getSqlManager().deletePlot(PlotMeCoreManager.getIdX(id), PlotMeCoreManager.getIdZ(id), world.getName().toLowerCase());
 
                             pmi.addFreed(id);

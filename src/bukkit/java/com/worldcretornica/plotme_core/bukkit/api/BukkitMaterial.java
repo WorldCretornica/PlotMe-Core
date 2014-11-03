@@ -5,7 +5,7 @@ import org.bukkit.Material;
 
 public class BukkitMaterial implements IMaterial {
 
-    Material material;
+    final Material material;
 
     public BukkitMaterial(Material mat) {
         material = mat;

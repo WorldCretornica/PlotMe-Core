@@ -14,7 +14,7 @@ public interface IBlock {
 
     int getTypeId();
 
-    void setBiome(IBiome b);
+    void setBiome(IBiome biome);
 
     IBiome getBiome();
 

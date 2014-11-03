@@ -19,7 +19,7 @@ public class CmdDispose extends PlotCommand {
     public boolean exec(IPlayer p) {
         if (p.hasPermission("PlotMe.admin.dispose") || p.hasPermission("PlotMe.use.dispose")) {
             if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
-                String id = plugin.getPlotMeCoreManager().getPlotId(p);
+                String id = PlotMeCoreManager.getPlotId(p);
                 if (id.isEmpty()) {
                     p.sendMessage("§c" + C("MsgNoPlotFound"));
                 } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, p)) {
@@ -86,9 +86,9 @@ public class CmdDispose extends PlotCommand {
                                     plugin.getPlotMeCoreManager().removePlot(world, id);
                                 }
 
-                                plugin.getPlotMeCoreManager().removeOwnerSign(world, id);
-                                plugin.getPlotMeCoreManager().removeSellSign(world, id);
-                                plugin.getPlotMeCoreManager().removeAuctionSign(world, id);
+                                PlotMeCoreManager.removeOwnerSign(world, id);
+                                PlotMeCoreManager.removeSellSign(world, id);
+                                PlotMeCoreManager.removeAuctionSign(world, id);
 
                                 plugin.getSqlManager().deletePlot(PlotMeCoreManager.getIdX(id), PlotMeCoreManager.getIdZ(id), world.getName().toLowerCase());
 

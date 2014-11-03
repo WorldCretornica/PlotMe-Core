@@ -40,7 +40,7 @@ public interface IServerBridge {
 
     double getBalance(IOfflinePlayer playerbidder);
 
-    EconomyResponse withdrawPlayer(IOfflinePlayer p, double price);
+    EconomyResponse withdrawPlayer(IOfflinePlayer player, double price);
 
     EconomyResponse depositPlayer(IOfflinePlayer playercurrentbidder, double currentBid);
 
@@ -52,7 +52,7 @@ public interface IServerBridge {
 
     IWorld getWorld(String name);
 
-    void sendMessage(ICommandSender cs, String message);
+    void sendMessage(ICommandSender sender, String message);
 
     void setupCommands();
 
@@ -90,11 +90,11 @@ public interface IServerBridge {
 
     List<IWorld> getWorlds();
 
-    boolean createPlotWorld(ICommandSender cs, String worldname, String generator, Map<String, String> args);
+    boolean createPlotWorld(ICommandSender sender, String worldname, String generator, Map<String, String> args);
 
     IMaterial getMaterial(String string);
 
-    ILocation createLocation(IWorld w, int x, int y, int z);
+    ILocation createLocation(IWorld world, int x, int y, int z);
 
     IEntityType getEntityType(String string);
 

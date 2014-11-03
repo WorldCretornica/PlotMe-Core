@@ -1,6 +1,7 @@
 package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.Plot;
+import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import com.worldcretornica.plotme_core.api.IPlayer;
@@ -15,15 +16,16 @@ public class CmdBuy extends PlotCommand {
     }
 
     public boolean exec(IPlayer p) {
-        if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
-            if (plugin.getPlotMeCoreManager().isEconomyEnabled(p)) {
+        IWorld world = p.getWorld();
+        if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
+            if (plugin.getPlotMeCoreManager().isEconomyEnabled(world)) {
                 if (p.hasPermission("PlotMe.use.buy") || p.hasPermission("PlotMe.admin.buy")) {
-                    String id = plugin.getPlotMeCoreManager().getPlotId(p);
+                    String id = PlotMeCoreManager.getPlotId(p);
 
                     if (id.isEmpty()) {
                         p.sendMessage("§c" + C("MsgNoPlotFound"));
-                    } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, p)) {
-                        Plot plot = plugin.getPlotMeCoreManager().getPlotById(p, id);
+                    } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, world)) {
+                        Plot plot = plugin.getPlotMeCoreManager().getPlotById(world, id);
 
                         if (plot.isForSale()) {
                             String buyer = p.getName();
@@ -33,7 +35,6 @@ public class CmdBuy extends PlotCommand {
                             } else {
                                 int plotlimit = getPlotLimit(p);
 
-                                IWorld world = p.getWorld();
                                 if (plotlimit != -1 && plugin.getPlotMeCoreManager().getNbOwnedPlot(p, world) >= plotlimit) {
                                     p.sendMessage(C("MsgAlreadyReachedMaxPlots") + " ("
                                                           + plugin.getPlotMeCoreManager().getNbOwnedPlot(p, world) + "/" + getPlotLimit(p) + "). "
@@ -86,7 +87,7 @@ public class CmdBuy extends PlotCommand {
 
                                                 plugin.getPlotMeCoreManager().adjustWall(p);
                                                 plugin.getPlotMeCoreManager().setSellSign(world, plot);
-                                                plugin.getPlotMeCoreManager().setOwnerSign(world, plot);
+                                                PlotMeCoreManager.setOwnerSign(world, plot);
 
                                                 p.sendMessage(C("MsgPlotBought") + " " + Util().moneyFormat(-cost));
 

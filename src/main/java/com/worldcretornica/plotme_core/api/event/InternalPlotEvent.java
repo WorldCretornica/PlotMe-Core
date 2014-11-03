@@ -1,6 +1,7 @@
 package com.worldcretornica.plotme_core.api.event;
 
 import com.worldcretornica.plotme_core.Plot;
+import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IWorld;
@@ -64,7 +65,7 @@ public class InternalPlotEvent {
      */
     public ILocation getUpperBound() {
         if (plot != null && world != null) {
-            return plugin.getPlotMeCoreManager().getPlotTopLoc(world, plot.getId());
+            return PlotMeCoreManager.getPlotTopLoc(world, plot.getId());
         } else {
             return null;
         }
@@ -78,7 +79,7 @@ public class InternalPlotEvent {
      */
     public ILocation getLowerBound() {
         if (plot != null && world != null) {
-            return plugin.getPlotMeCoreManager().getPlotBottomLoc(world, plot.getId());
+            return PlotMeCoreManager.getPlotBottomLoc(world, plot.getId());
         } else {
             return null;
         }
@@ -153,7 +154,7 @@ public class InternalPlotEvent {
      */
     public ILocation getHomeLocation() {
         if (plot != null && world != null) {
-            return plugin.getPlotMeCoreManager().getPlotHome(world, plot.getId());
+            return PlotMeCoreManager.getPlotHome(world, plot.getId());
         } else {
             return null;
         }

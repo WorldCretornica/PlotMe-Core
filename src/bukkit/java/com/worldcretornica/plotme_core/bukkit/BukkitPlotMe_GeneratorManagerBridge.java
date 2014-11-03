@@ -10,15 +10,15 @@ import java.util.Map;
 
 public class BukkitPlotMe_GeneratorManagerBridge implements IPlotMe_GeneratorManager {
 
-    private IBukkitPlotMe_GeneratorManager gm;
+    private final IBukkitPlotMe_GeneratorManager gm;
 
     public BukkitPlotMe_GeneratorManagerBridge(IBukkitPlotMe_GeneratorManager gm) {
         this.gm = gm;
     }
 
     @Override
-    public String getPlotId(ILocation loc) {
-        return gm.getPlotId(((BukkitLocation) loc).getLocation());
+    public String getPlotId(ILocation location) {
+        return gm.getPlotId(((BukkitLocation) location).getLocation());
     }
 
     @Override
@@ -27,9 +27,9 @@ public class BukkitPlotMe_GeneratorManagerBridge implements IPlotMe_GeneratorMan
     }
 
     @Override
-    public List<IPlayer> getPlayersInPlot(IWorld w, String id) {
+    public List<IPlayer> getPlayersInPlot(IWorld world, String id) {
         List<IPlayer> players = new ArrayList<>();
-        BukkitWorld bw = (BukkitWorld) w;
+        BukkitWorld bw = (BukkitWorld) world;
 
         for (Player player : gm.getPlayersInPlot(bw.getWorld(), id)) {
             players.add(new BukkitPlayer(player));
@@ -129,18 +129,18 @@ public class BukkitPlotMe_GeneratorManagerBridge implements IPlotMe_GeneratorMan
     }
 
     @Override
-    public Long[] clear(ILocation bottom, ILocation top, long maxBlocks, boolean clearEntities, Long[] start) {
-        return gm.clear(((BukkitLocation) bottom).getLocation(), ((BukkitLocation) top).getLocation(), maxBlocks, clearEntities, start);
+    public Long[] clear(ILocation bottom, ILocation top, long maxBlocks, Long[] start) {
+        return gm.clear(((BukkitLocation) bottom).getLocation(), ((BukkitLocation) top).getLocation(), maxBlocks, start);
     }
 
     @Override
-    public Long[] clear(IWorld world, String id, long maxBlocks, boolean clearEntities, Long[] start) {
-        return gm.clear(((BukkitWorld) world).getWorld(), id, maxBlocks, clearEntities, start);
+    public Long[] clear(IWorld world, String id, long maxBlocks, Long[] start) {
+        return gm.clear(((BukkitWorld) world).getWorld(), id, maxBlocks, start);
     }
 
     @Override
-    public void adjustPlotFor(IWorld world, String id, boolean claimed, boolean protect, boolean auctioned, boolean forSale) {
-        gm.adjustPlotFor(((BukkitWorld) world).getWorld(), id, claimed, protect, auctioned, forSale);
+    public void adjustPlotFor(IWorld world, String id, boolean claimed, boolean protect, boolean auctionned, boolean forSale) {
+        gm.adjustPlotFor(((BukkitWorld) world).getWorld(), id, claimed, protect, auctionned, forSale);
     }
 
     @Override

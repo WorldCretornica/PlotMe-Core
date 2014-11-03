@@ -1,9 +1,6 @@
 package com.worldcretornica.plotme_core.bukkit.event;
 
-import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.event.InternalPlotWorldCreateEvent;
-import com.worldcretornica.plotme_core.bukkit.api.BukkitCommandSender;
-import org.bukkit.command.CommandSender;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -15,8 +12,8 @@ public class PlotWorldCreateEvent extends Event implements Cancellable {
     protected static final HandlerList handlers = new HandlerList();
     private InternalPlotWorldCreateEvent event;
 
-    public PlotWorldCreateEvent(String worldname, ICommandSender cs, Map<String, String> parameters) {
-        event = new InternalPlotWorldCreateEvent(worldname, cs, parameters);
+    public PlotWorldCreateEvent(String worldname, Map<String, String> parameters) {
+        event = new InternalPlotWorldCreateEvent(worldname, parameters);
     }
 
     @Override
@@ -40,10 +37,6 @@ public class PlotWorldCreateEvent extends Event implements Cancellable {
 
     public String getWorldName() {
         return event.getWorldName();
-    }
-
-    public CommandSender getCreator() {
-        return ((BukkitCommandSender) event.getCreator()).getCommandSender();
     }
 
     public Map<String, String> getParameters() {

@@ -6,7 +6,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class BukkitItemStack implements IItemStack {
 
-    ItemStack itemstack;
+    final ItemStack itemstack;
     
     public BukkitItemStack(ItemStack is) {
         itemstack = is;

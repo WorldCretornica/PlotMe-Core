@@ -150,16 +150,20 @@ public class Plot implements Comparable<Plot> {
         return biome;
     }
 
+    public final void setBiome(IBiome biome) {
+        this.biome = biome;
+    }
+
     public final String getOwner() {
         return owner;
     }
 
-    public final UUID getOwnerId() {
-        return ownerId;
-    }
-
     public final void setOwner(String owner) {
         this.owner = owner;
+    }
+
+    public final UUID getOwnerId() {
+        return ownerId;
     }
 
     public final void setOwnerId(UUID uuid) {
@@ -342,18 +346,18 @@ public class Plot implements Comparable<Plot> {
             return true;
         }
 
-        IPlayer p = null;
+        IPlayer player = null;
 
         if (uuid != null) {
-            p = plugin.getServerBridge().getPlayer(uuid);
+            player = plugin.getServerBridge().getPlayer(uuid);
         }
 
         if (uuid != null && ownerId != null && ownerId.equals(uuid)) {
             return true;
         }
 
-        if (IncludeGroup && owner.toLowerCase().startsWith("group:") && p != null) {
-            if (p.hasPermission("plotme.group." + owner.replace("Group:", ""))) {
+        if (IncludeGroup && owner.toLowerCase().startsWith("group:") && player != null) {
+            if (player.hasPermission("plotme.group." + owner.replace("Group:", ""))) {
                 return true;
             }
         }
@@ -368,17 +372,17 @@ public class Plot implements Comparable<Plot> {
             if (u != null && u.equals(uuid) || uuid == null && str.equalsIgnoreCase(name)) {
                 return true;
             }
-            if (IncludeGroup && str.toLowerCase().startsWith("group:") && p != null)
-                if (p.hasPermission("plotme.group." + str.replace("Group:", "")))
+            if (IncludeGroup && str.toLowerCase().startsWith("group:") && player != null)
+                if (player.hasPermission("plotme.group." + str.replace("Group:", "")))
                     return true;
         }
         return false;
     }
 
     public boolean isDeniedConsulting(String name) {
-        IPlayer p = plugin.getServerBridge().getPlayerExact(name);
-        if (p != null) {
-            return isDeniedInternal(name, p.getUniqueId());
+        IPlayer player = plugin.getServerBridge().getPlayerExact(name);
+        if (player != null) {
+            return isDeniedInternal(name, player.getUniqueId());
         } else {
             return isGroupDenied(name);
         }
@@ -397,9 +401,9 @@ public class Plot implements Comparable<Plot> {
         if (isAllowedInternal(name, uuid, false, false))
             return false;
 
-        IPlayer p = null;
+        IPlayer player = null;
         if (uuid != null) {
-            p = plugin.getServerBridge().getPlayer(uuid);
+            player = plugin.getServerBridge().getPlayer(uuid);
         }
 
         HashMap<String, UUID> list = denied.getAllPlayers();
@@ -409,7 +413,7 @@ public class Plot implements Comparable<Plot> {
             }
 
             UUID u = list.get(str);
-            if (str.equalsIgnoreCase(name) || uuid != null && (u != null && u.equals(uuid) || str.toLowerCase().startsWith("group:") && p != null && p.hasPermission("plotme.group." + str.replace("Group:", "")))) {
+            if (str.equalsIgnoreCase(name) || uuid != null && (u != null && u.equals(uuid) || str.toLowerCase().startsWith("group:") && player != null && player.hasPermission("plotme.group." + str.replace("Group:", "")))) {
                 return true;
             }
         }
@@ -456,10 +460,6 @@ public class Plot implements Comparable<Plot> {
 
     public final void setWorld(String world) {
         this.world = world;
-    }
-
-    public final void setBiome(IBiome biome) {
-        this.biome = biome;
     }
 
     public final Date getExpiredDate() {
@@ -530,12 +530,12 @@ public class Plot implements Comparable<Plot> {
         return currentbidder;
     }
 
-    public final UUID getCurrentBidderId() {
-        return currentbidderId;
-    }
-
     public final void setCurrentBidder(String currentbidder) {
         this.currentbidder = currentbidder;
+    }
+
+    public final UUID getCurrentBidderId() {
+        return currentbidderId;
     }
 
     public final void setCurrentBidderId(UUID uuid) {

@@ -16,6 +16,7 @@
  */
 package com.worldcretornica.plotme_core.bukkit.listener;
 
+import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.bukkit.PlotMe_CorePlugin;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
@@ -59,7 +60,7 @@ public class BukkitPlayerListener implements Listener {
         }
         BukkitPlayer player = new BukkitPlayer(event.getPlayer());
         if (player.isOp() && plugin.getAPI().getBadWorlds().contains(toWorld.getName())) {
-            if (plugin.getAPI().getGenManager(toWorld) == null) {
+            if (PlotMe_Core.getGenManager(toWorld) == null) {
                 // TODO: Add as multilingual caption
                 plugin.getServerObjectBuilder().sendMessage(player, "This world is defined as a plotworld but is not using a PlotMe generator.");
             }

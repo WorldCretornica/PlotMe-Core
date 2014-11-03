@@ -7,7 +7,7 @@ import org.bukkit.Location;
 
 public class BukkitLocation implements ILocation {
 
-    private Location location;
+    private final Location location;
 
     public BukkitLocation(Location location) {
         this.location = location;

@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public class BukkitOfflinePlayer implements IOfflinePlayer {
 
-    private OfflinePlayer offlineplayer;
+    private final OfflinePlayer offlineplayer;
 
     public BukkitOfflinePlayer(OfflinePlayer player) {
         offlineplayer = player;

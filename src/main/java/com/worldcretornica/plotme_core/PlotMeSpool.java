@@ -34,17 +34,17 @@ public class PlotMeSpool implements Runnable {
 
             if (world != null) {
                 if (currentClear == null)
-                    currentClear = plugin.getGenManager(world).clear(world, getPlotToClear().getPlotId(), plugin.getServerBridge().getConfig().getInt("NbBlocksPerClearStep"), true, null);
+                    currentClear = PlotMe_Core.getGenManager(world).clear(world, getPlotToClear().getPlotId(), plugin.getServerBridge().getConfig().getInt("NbBlocksPerClearStep"), null);
                 else {
-                    currentClear = plugin.getGenManager(world).clear(world, getPlotToClear().getPlotId(), plugin.getServerBridge().getConfig().getInt("NbBlocksPerClearStep"), false, currentClear);
+                    currentClear = PlotMe_Core.getGenManager(world).clear(world, getPlotToClear().getPlotId(), plugin.getServerBridge().getConfig().getInt("NbBlocksPerClearStep"), currentClear);
                 }
 
                 ShowProgress();
 
                 if (currentClear == null) {
-                    plugin.getGenManager(world).adjustPlotFor(world, getPlotToClear().getPlotId(), true, false, false, false);
+                    PlotMe_Core.getGenManager(world).adjustPlotFor(world, getPlotToClear().getPlotId(), true, false, false, false);
                     plugin.getPlotMeCoreManager().RemoveLWC(world, getPlotToClear().getPlotId());
-                    plugin.getGenManager(world).refreshPlotChunks(world, getPlotToClear().getPlotId());
+                    PlotMe_Core.getGenManager(world).refreshPlotChunks(world, getPlotToClear().getPlotId());
 
                     Msg(plugin.getUtil().C("WordPlot") + " " + getPlotToClear().getPlotId() + " " + plugin.getUtil().C("WordCleared"));
 
@@ -78,8 +78,8 @@ public class PlotMeSpool implements Runnable {
 
     private long getTotalPlotBlocks() {
         IWorld world = plugin.getServerBridge().getWorld(getPlotToClear().getWorld());
-        ILocation bottom = plugin.getGenManager(world).getPlotBottomLoc(world, getPlotToClear().getPlotId());
-        ILocation top = plugin.getGenManager(world).getPlotTopLoc(world, getPlotToClear().getPlotId());
+        ILocation bottom = PlotMe_Core.getGenManager(world).getPlotBottomLoc(world, getPlotToClear().getPlotId());
+        ILocation top = PlotMe_Core.getGenManager(world).getPlotTopLoc(world, getPlotToClear().getPlotId());
 
         return (top.getBlockX() - bottom.getBlockX() + 1) * (top.getBlockY() - bottom.getBlockY() + 1) * (top.getBlockZ() - bottom.getBlockZ() + 1);
     }
@@ -88,7 +88,7 @@ public class PlotMeSpool implements Runnable {
         return currentClear[3];
     }
 
-    private String format(Long count) {
+    private static String format(Long count) {
         double buffer;
 
         if (count > 1000000000000L) {

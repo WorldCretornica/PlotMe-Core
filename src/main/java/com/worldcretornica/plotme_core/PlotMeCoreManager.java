@@ -39,7 +39,7 @@ public class PlotMeCoreManager {
         if (plugin.getServerBridge().getConfig().getBoolean("globalUseEconomy") || plugin.getServerBridge().getEconomy() != null) {
             return false;
         }
-        PlotMapInfo pmi = getMap(worldname);
+        PlotMapInfo pmi = getMap(worldname.toLowerCase());
 
         if (pmi == null) {
             return false;
@@ -49,27 +49,25 @@ public class PlotMeCoreManager {
     }
 
     public boolean isEconomyEnabled(IWorld world) {
-        return isEconomyEnabled(world.getName());
+        return isEconomyEnabled(world.getName().toLowerCase());
     }
 
     public boolean isEconomyEnabled(IPlayer player) {
-        return isEconomyEnabled(player.getWorld());
+        return isEconomyEnabled(player.getWorld().getName().toLowerCase());
     }
 
     public PlotMapInfo getMap(IWorld world) {
         if (world == null) {
             return null;
         } else {
-            String worldname = world.getName();
+            String worldname = world.getName().toLowerCase();
             return getMap(worldname);
         }
     }
 
-    public PlotMapInfo getMap(String name) {
-        String worldname = name.toLowerCase();
-
-        if (plotmaps.containsKey(worldname)) {
-            return plotmaps.get(worldname);
+    public PlotMapInfo getMap(String world) {
+        if (plotmaps.containsKey(world)) {
+            return plotmaps.get(world);
         } else {
             return null;
         }
@@ -79,7 +77,7 @@ public class PlotMeCoreManager {
         if (location == null) {
             return null;
         } else {
-            String worldname = location.getWorld().getName();
+            String worldname = location.getWorld().getName().toLowerCase();
             return getMap(worldname);
         }
     }
@@ -88,7 +86,7 @@ public class PlotMeCoreManager {
         if (player == null) {
             return null;
         } else {
-            String worldname = player.getWorld().getName();
+            String worldname = player.getWorld().getName().toLowerCase();
             return getMap(worldname);
         }
     }
@@ -97,7 +95,7 @@ public class PlotMeCoreManager {
         if (block == null) {
             return null;
         } else {
-            String worldname = block.getWorld().getName();
+            String worldname = block.getWorld().getName().toLowerCase();
             return getMap(worldname);
         }
     }
@@ -107,7 +105,7 @@ public class PlotMeCoreManager {
     }
 
     public Plot getPlotById(String name, String id) {
-        PlotMapInfo pmi = getMap(name);
+        PlotMapInfo pmi = getMap(name.toLowerCase());
 
         if (pmi == null) {
             return null;
@@ -424,20 +422,12 @@ public class PlotMeCoreManager {
         }
     }
 
-    public void setOwnerSign(IWorld world, Plot plot) {
-        String line1;
-        String line2 = "";
+    public static void setOwnerSign(IWorld world, Plot plot) {
         String id = plot.getId();
-
-        if (("ID: " + id).length() > 16) {
-            line1 = ("ID: " + id).substring(0, 16);
-            line2 = ("ID: " + id).substring(16);
-        } else {
-            line1 = "ID: " + id;
-        }
+        String line1 = "ID: " + id;
+        String line2 = "";
         String line3 = plot.getOwner();
         String line4 = "";
-
         getGenMan(world).setOwnerDisplay(world, plot.getId(), line1, line2, line3, line4);
     }
 
@@ -488,7 +478,7 @@ public class PlotMeCoreManager {
         }
     }
 
-    public void adjustLinkedPlots(String id, IWorld world) {
+    public static void adjustLinkedPlots(String id, IWorld world) {
         //TODO
         Map<String, Plot> plots = new HashMap<>(); //getPlots(world);
 
@@ -556,7 +546,7 @@ public class PlotMeCoreManager {
         }
     }
 
-    public void clear(IWorld iWorld, Plot plot, ICommandSender cs, ClearReason reason) {
+    public void clear(IWorld iWorld, Plot plot, ICommandSender sender, ClearReason reason) {
         String id = plot.getId();
 
         plot.setForSale(false);
@@ -580,11 +570,11 @@ public class PlotMeCoreManager {
         sm.updatePlot(idX, idZ, world, "currentbidder", "");
 
         if (getMap(iWorld).isUseProgressiveClear()) {
-            plugin.addPlotToClear(new PlotToClear(world, id, cs, reason));
+            plugin.addPlotToClear(new PlotToClear(world, id, sender, reason));
         } else {
             getGenMan(iWorld).clear(iWorld, id);
             RemoveLWC(iWorld, id);
-            cs.sendMessage(Util().C("MsgPlotCleared"));
+            sender.sendMessage(Util().C("MsgPlotCleared"));
         }
     }
 
@@ -602,7 +592,7 @@ public class PlotMeCoreManager {
         return pmi != null && pmi.getPlot(id) == null;
     }
 
-    public String getPlotId(ILocation location) {
+    public static String getPlotId(ILocation location) {
         if (getGenMan(location) == null) {
             return "";
         }
@@ -616,7 +606,7 @@ public class PlotMeCoreManager {
         }
     }
 
-    public String getPlotId(IPlayer player) {
+    public static String getPlotId(IPlayer player) {
         if (getGenMan(player.getWorld()) == null) {
             return "";
         }
@@ -630,11 +620,11 @@ public class PlotMeCoreManager {
         }
     }
 
-    public IPlotMe_GeneratorManager getGenMan(IWorld world) {
-        return plugin.getGenManager(world);
+    public static IPlotMe_GeneratorManager getGenMan(IWorld world) {
+        return PlotMe_Core.getGenManager(world);
     }
 
-    public IPlotMe_GeneratorManager getGenMan(ILocation location) {
+    public static IPlotMe_GeneratorManager getGenMan(ILocation location) {
         return getGenMan(location.getWorld());
     }
 
@@ -642,11 +632,11 @@ public class PlotMeCoreManager {
         return plugin.getGenManager(name);
     }
 
-    public ILocation getPlotBottomLoc(IWorld world, String id) {
+    public static ILocation getPlotBottomLoc(IWorld world, String id) {
         return getGenMan(world).getPlotBottomLoc(world, id);
     }
 
-    public ILocation getPlotTopLoc(IWorld world, String id) {
+    public static ILocation getPlotTopLoc(IWorld world, String id) {
         return getGenMan(world).getPlotTopLoc(world, id);
     }
 
@@ -655,42 +645,38 @@ public class PlotMeCoreManager {
         String id = getPlotId(player);
         IWorld world = player.getWorld();
 
-        if (plot == null) {
-            getGenMan(world).adjustPlotFor(world, id, false, false, false, false);
-        } else {
-            getGenMan(world).adjustPlotFor(world, id, true, plot.isProtect(), plot.isAuctioned(), plot.isForSale());
-        }
+        getGenMan(world).adjustPlotFor(world, id, true, plot.isProtect(), plot.isAuctioned(), plot.isForSale());
     }
 
-    public void removeOwnerSign(IWorld world, String id) {
+    public static void removeOwnerSign(IWorld world, String id) {
         getGenMan(world).removeOwnerDisplay(world, id);
     }
 
-    public void removeSellSign(IWorld world, String id) {
+    public static void removeSellSign(IWorld world, String id) {
         getGenMan(world).removeSellerDisplay(world, id);
     }
 
-    public void removeAuctionSign(IWorld world, String id) {
+    public static void removeAuctionSign(IWorld world, String id) {
         getGenMan(world).removeAuctionDisplay(world, id);
     }
 
-    public boolean isValidId(IWorld world, String id) {
+    public static boolean isValidId(IWorld world, String id) {
         return getGenMan(world).isValidId(id);
     }
 
-    public int bottomX(String id, IWorld world) {
+    public static int bottomX(String id, IWorld world) {
         return getGenMan(world).bottomX(id, world);
     }
 
-    public int topX(String id, IWorld world) {
+    public static int topX(String id, IWorld world) {
         return getGenMan(world).topX(id, world);
     }
 
-    public int bottomZ(String id, IWorld world) {
+    public static int bottomZ(String id, IWorld world) {
         return getGenMan(world).bottomZ(id, world);
     }
 
-    public int topZ(String id, IWorld world) {
+    public static int topZ(String id, IWorld world) {
         return getGenMan(world).topZ(id, world);
     }
 
@@ -699,11 +685,11 @@ public class PlotMeCoreManager {
         plugin.getSqlManager().updatePlot(getIdX(id), getIdZ(id), world.getName(), "biome", biome.name());
     }
 
-    public ILocation getPlotHome(IWorld world, String id) {
+    public static ILocation getPlotHome(IWorld world, String id) {
         return getGenMan(world).getPlotHome(world, id);
     }
 
-    public List<IPlayer> getPlayersInPlot(IWorld world, String id) {
+    public static List<IPlayer> getPlayersInPlot(IWorld world, String id) {
         return getGenMan(world).getPlayersInPlot(world, id);
     }
 

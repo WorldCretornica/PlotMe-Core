@@ -1,6 +1,7 @@
 package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.Plot;
+import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IPlayer;
 
@@ -15,7 +16,7 @@ public class CmdComments extends PlotCommand {
             if (!plugin.getPlotMeCoreManager().isPlotWorld(player)) {
                 player.sendMessage("§c" + C("MsgNotPlotWorld"));
             } else if (args.length < 2) {
-                String id = plugin.getPlotMeCoreManager().getPlotId(player);
+                String id = PlotMeCoreManager.getPlotId(player);
 
                 if (id.isEmpty()) {
                     player.sendMessage("§c" + C("MsgNoPlotFound"));

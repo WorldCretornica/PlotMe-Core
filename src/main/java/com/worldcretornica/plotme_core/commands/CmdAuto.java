@@ -45,7 +45,7 @@ public class CmdAuto extends PlotCommand {
                     String next = pmi.getNextFreed();
                     String id = "";
 
-                    if (plugin.getPlotMeCoreManager().isPlotAvailable(next, world)) {
+                    if (plugin.getPlotMeCoreManager().isPlotAvailable(next, player)) {
                         id = next;
                     } else {
                         int x = PlotMeCoreManager.getIdX(next);
@@ -57,7 +57,7 @@ public class CmdAuto extends PlotCommand {
                                 for (; z <= i; z++) {
                                     id = x + ";" + z;
 
-                                    if (plugin.getPlotMeCoreManager().isPlotAvailable(id, world)) {
+                                    if (plugin.getPlotMeCoreManager().isPlotAvailable(id, player)) {
                                         pmi.setNextFreed(id);
                                         break toploop;
                                     }
@@ -79,7 +79,7 @@ public class CmdAuto extends PlotCommand {
 
                     InternalPlotCreateEvent event;
 
-                    if (plugin.getPlotMeCoreManager().isEconomyEnabled(player)) {
+                    if (plugin.getPlotMeCoreManager().isEconomyEnabled(world)) {
                         price = pmi.getClaimPrice();
                         double balance = sob.getBalance(player);
 
@@ -110,7 +110,7 @@ public class CmdAuto extends PlotCommand {
                         pmi.removeFreed(id);
 
                         //plugin.getPlotMeCoreManager().adjustLinkedPlots(id, world);
-                        player.teleport(plugin.getPlotMeCoreManager().getPlotHome(world, id));
+                        player.teleport(PlotMeCoreManager.getPlotHome(world, id));
 
                         player.sendMessage(C("MsgThisPlotYours") + " " + C("WordUse") + " §c/plotme home§r " + C("MsgToGetToIt") + " " + Util().moneyFormat(-price));
 

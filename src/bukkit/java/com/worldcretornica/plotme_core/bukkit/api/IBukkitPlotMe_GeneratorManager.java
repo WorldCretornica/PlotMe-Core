@@ -53,9 +53,9 @@ public interface IBukkitPlotMe_GeneratorManager {
 
     void clear(Location bottom, Location top);
 
-    Long[] clear(Location bottom, Location top, long maxBlocks, boolean clearEntities, Long[] start);
+    Long[] clear(Location bottom, Location top, long maxBlocks, Long[] start);
 
-    Long[] clear(World world, String id, long maxBlocks, boolean clearEntities, Long[] start);
+    Long[] clear(World world, String id, long maxBlocks, Long[] start);
 
     void adjustPlotFor(World world, String id, boolean claimed, boolean protect, boolean auctioned, boolean forSale);
 

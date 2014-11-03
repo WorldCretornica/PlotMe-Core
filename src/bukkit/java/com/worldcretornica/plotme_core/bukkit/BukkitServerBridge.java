@@ -38,7 +38,7 @@ public class BukkitServerBridge implements IServerBridge {
     private Economy economy;
     private PlotWorldEdit plotworldedit;
     private boolean usinglwc;
-    private IEventFactory eventfactory;
+    private final IEventFactory eventfactory;
 
     private MultiWorldWrapper multiworld;
     private MultiverseWrapper multiverse;
@@ -156,8 +156,8 @@ public class BukkitServerBridge implements IServerBridge {
     }
 
     @Override
-    public void sendMessage(ICommandSender cs, String message) {
-        cs.sendMessage(ChatColor.AQUA + "[" + message + "] " + ChatColor.RESET + message);
+    public void sendMessage(ICommandSender sender, String message) {
+        sender.sendMessage(ChatColor.AQUA + "[" + message + "] " + ChatColor.RESET + message);
     }
 
     @Override
@@ -310,21 +310,21 @@ public class BukkitServerBridge implements IServerBridge {
     }
 
     @Override
-    public EconomyResponse withdrawPlayer(IOfflinePlayer p, double price) {
-        return getEconomy().withdrawPlayer(((BukkitOfflinePlayer) p).getOfflinePlayer(), price);
+    public EconomyResponse withdrawPlayer(IOfflinePlayer player, double price) {
+        return getEconomy().withdrawPlayer(((BukkitOfflinePlayer) player).getOfflinePlayer(), price);
     }
 
     @Override
-    public EconomyResponse depositPlayer(IOfflinePlayer playercurrentbidder, double currentBid) {
-        return getEconomy().depositPlayer(((BukkitOfflinePlayer) playercurrentbidder).getOfflinePlayer(), currentBid);
+    public EconomyResponse depositPlayer(IOfflinePlayer player, double currentBid) {
+        return getEconomy().depositPlayer(((BukkitOfflinePlayer) player).getOfflinePlayer(), currentBid);
     }
 
     @Override
     public List<IPlayer> getOnlinePlayers() {
         List<IPlayer> players = new ArrayList<>();
 
-        for (Player p : Bukkit.getOnlinePlayers()) {
-            players.add(new BukkitPlayer(p));
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            players.add(new BukkitPlayer(player));
         }
 
         return players;
@@ -333,8 +333,8 @@ public class BukkitServerBridge implements IServerBridge {
     @Override
     public List<String> getBiomes() {
         List<String> biomes = new ArrayList<>();
-        for (Biome b : Biome.values()) {
-            biomes.add(b.name());
+        for (Biome biome : Biome.values()) {
+            biomes.add(biome.name());
         }
         return biomes;
     }
@@ -346,9 +346,9 @@ public class BukkitServerBridge implements IServerBridge {
 
     @Override
     public IPlotMe_ChunkGenerator getPlotMeGenerator(String worldname) {
-        World w = Bukkit.getWorld(worldname);
-        if (w != null) {
-            ChunkGenerator cg = w.getGenerator();
+        World world = Bukkit.getWorld(worldname);
+        if (world != null) {
+            ChunkGenerator cg = world.getGenerator();
             if (cg instanceof IPlotMe_ChunkGenerator) {
                 return (IPlotMe_ChunkGenerator) cg;
             }
@@ -365,15 +365,15 @@ public class BukkitServerBridge implements IServerBridge {
     public List<IWorld> getWorlds() {
         List<IWorld> worlds = new ArrayList<>();
 
-        for (World w : Bukkit.getWorlds()) {
-            worlds.add(new BukkitWorld(w));
+        for (World world : Bukkit.getWorlds()) {
+            worlds.add(new BukkitWorld(world));
         }
 
         return worlds;
     }
 
     @Override
-    public boolean createPlotWorld(ICommandSender cs, String worldname, String generator, Map<String, String> args) {
+    public boolean createPlotWorld(ICommandSender sender, String worldname, String generator, Map<String, String> args) {
         //Get a seed
         Long seed = new Random().nextLong();
 
@@ -404,7 +404,7 @@ public class BukkitServerBridge implements IServerBridge {
             getLogger().info(plugin.getAPI().getUtil().C("ErrCannotFindWorldGen") + " '" + generator + "'");
             return false;
         }
-        if (!bukkitplugin.getManager().createConfig(worldname, args, cs)) { //Create the generator configurations
+        if (!bukkitplugin.getManager().createConfig(worldname, args, sender)) { //Create the generator configurations
             getLogger().info(plugin.getAPI().getUtil().C("ErrCannotCreateGen1") + " '" + generator + "' " + plugin.getAPI().getUtil().C("ErrCannotCreateGen2"));
             return false;
         }
@@ -470,10 +470,10 @@ public class BukkitServerBridge implements IServerBridge {
                         return false;
                     }
                 } else {
-                    cs.sendMessage("[" + plugin.getName() + "] " + plugin.getAPI().getUtil().C("ErrCannotCreateMW"));
+                    sender.sendMessage("[" + plugin.getName() + "] " + plugin.getAPI().getUtil().C("ErrCannotCreateMW"));
                 }
             } else {
-                cs.sendMessage("[" + plugin.getName() + "] " + plugin.getAPI().getUtil().C("ErrMWDisabled"));
+                sender.sendMessage("[" + plugin.getName() + "] " + plugin.getAPI().getUtil().C("ErrMWDisabled"));
             }
             return success;
         }
@@ -534,8 +534,8 @@ public class BukkitServerBridge implements IServerBridge {
     }
 
     @Override
-    public ILocation createLocation(IWorld w, int x, int y, int z) {
-        return w.createLocation(x, y, z);
+    public ILocation createLocation(IWorld world, int x, int y, int z) {
+        return world.createLocation(x, y, z);
     }
 
     @Override
@@ -550,15 +550,15 @@ public class BukkitServerBridge implements IServerBridge {
     }
 
     @Override
-    public IConfigSection loadDefaultConfig(String worldPath) {
+    public IConfigSection loadDefaultConfig(String world) {
         ConfigurationSection defaultCS = getDefaultWorld();
         ConfigurationSection configCS;
-        if (plugin.getConfig().contains(worldPath)) {
-            configCS = plugin.getConfig().getConfigurationSection(worldPath);
+        if (plugin.getConfig().contains(world)) {
+            configCS = plugin.getConfig().getConfigurationSection(world);
         } else {
-            plugin.getConfig().set(worldPath, defaultCS);
+            plugin.getConfig().set(world, defaultCS);
             plugin.saveConfig();
-            configCS = plugin.getConfig().getConfigurationSection(worldPath);
+            configCS = plugin.getConfig().getConfigurationSection(world);
         }
         for (String path : defaultCS.getKeys(true)) {
             configCS.addDefault(path, defaultCS.get(path));

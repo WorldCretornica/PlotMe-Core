@@ -1,5 +1,6 @@
 package com.worldcretornica.plotme_core.commands;
 
+import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
@@ -16,16 +17,14 @@ public class CmdMove extends PlotCommand {
             if (!plugin.getPlotMeCoreManager().isPlotWorld(player)) {
                 player.sendMessage("§c" + C("MsgNotPlotWorld"));
             } else if (args.length < 3 || args[1].isEmpty() || args[2].isEmpty()) {
-                player.sendMessage(C("WordUsage") + ": §c/plotme move <" + C("WordIdFrom") + "> <" + C("WordIdTo") + "> "
-                                           + "§r" + C("WordExample") + ": §c/plotme move 0;1 2;-1");
+                player.sendMessage(C("WordUsage") + ": §c/plotme move <" + C("WordIdFrom") + "> <" + C("WordIdTo") + "> §r" + C("WordExample") + ": §c/plotme move 0;1 2;-1");
             } else {
                 String plot1 = args[1];
                 String plot2 = args[2];
                 IWorld world = player.getWorld();
 
-                if (!plugin.getPlotMeCoreManager().isValidId(world, plot1) || !plugin.getPlotMeCoreManager().isValidId(world, plot2)) {
-                    player.sendMessage(C("WordUsage") + ": §c/plotme move <" + C("WordIdFrom") + "> <" + C("WordIdTo") + "> "
-                                               + "§r" + C("WordExample") + ": §c/plotme move 0;1 2;-1");
+                if (!PlotMeCoreManager.isValidId(world, plot1) || !PlotMeCoreManager.isValidId(world, plot2)) {
+                    player.sendMessage(C("WordUsage") + ": §c/plotme move <" + C("WordIdFrom") + "> <" + C("WordIdTo") + "> §r" + C("WordExample") + ": §c/plotme move 0;1 2;-1");
                     return true;
                 } else {
                     InternalPlotMoveEvent event = sob.getEventFactory().callPlotMoveEvent(plugin, world, world, plot1, plot2, player);

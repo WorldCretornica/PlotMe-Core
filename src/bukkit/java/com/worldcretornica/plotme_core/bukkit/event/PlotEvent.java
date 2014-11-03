@@ -1,6 +1,7 @@
 package com.worldcretornica.plotme_core.bukkit.event;
 
 import com.worldcretornica.plotme_core.Plot;
+import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotEvent;
@@ -75,7 +76,7 @@ public abstract class PlotEvent extends Event {
      */
     public Location getUpperBound() {
         if (event.getPlot() != null && event.getWorld() != null) {
-            return ((BukkitLocation) plugin.getPlotMeCoreManager().getPlotTopLoc(event.getWorld(), event.getPlot().getId())).getLocation();
+            return ((BukkitLocation) PlotMeCoreManager.getPlotTopLoc(event.getWorld(), event.getPlot().getId())).getLocation();
         } else {
             return null;
         }
@@ -88,7 +89,7 @@ public abstract class PlotEvent extends Event {
      */
     public Location getLowerBound() {
         if (event.getPlot() != null && event.getWorld() != null) {
-            return ((BukkitLocation) plugin.getPlotMeCoreManager().getPlotBottomLoc(event.getWorld(), event.getPlot().getId())).getLocation();
+            return ((BukkitLocation) PlotMeCoreManager.getPlotBottomLoc(event.getWorld(), event.getPlot().getId())).getLocation();
         } else {
             return null;
         }
@@ -158,7 +159,7 @@ public abstract class PlotEvent extends Event {
      */
     public Location getHomeLocation() {
         if (event.getPlot() != null && event.getWorld() != null) {
-            return ((BukkitLocation) plugin.getPlotMeCoreManager().getPlotHome(event.getWorld(), event.getPlot().getId())).getLocation();
+            return ((BukkitLocation) PlotMeCoreManager.getPlotHome(event.getWorld(), event.getPlot().getId())).getLocation();
         } else {
             return null;
         }

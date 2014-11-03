@@ -24,7 +24,7 @@ public class CmdComment extends PlotCommand {
                 if (args.length < 2) {
                     player.sendMessage(C("WordUsage") + ": §c/plotme comment <" + C("WordText") + ">");
                 } else {
-                    String id = plugin.getPlotMeCoreManager().getPlotId(player);
+                    String id = PlotMeCoreManager.getPlotId(player);
 
                     if (id.isEmpty()) {
                         player.sendMessage("§c" + C("MsgNoPlotFound"));

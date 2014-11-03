@@ -1,6 +1,7 @@
 package com.worldcretornica.plotme_core.api.event;
 
 import com.worldcretornica.plotme_core.Plot;
+import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
@@ -59,20 +60,20 @@ public class InternalPlotMoveEvent extends InternalPlotEvent implements ICancell
 
     @Override
     public ILocation getUpperBound() {
-        return plugin.getPlotMeCoreManager().getPlotTopLoc(world, _fromId);
+        return PlotMeCoreManager.getPlotTopLoc(world, _fromId);
     }
 
     @Override
     public ILocation getLowerBound() {
-        return plugin.getPlotMeCoreManager().getPlotBottomLoc(world, _fromId);
+        return PlotMeCoreManager.getPlotBottomLoc(world, _fromId);
     }
 
     public ILocation getUpperBoundTo() {
-        return plugin.getPlotMeCoreManager().getPlotTopLoc(_toworld, _toId);
+        return PlotMeCoreManager.getPlotTopLoc(_toworld, _toId);
     }
 
     public ILocation getLowerBoundTo() {
-        return plugin.getPlotMeCoreManager().getPlotBottomLoc(_toworld, _toId);
+        return PlotMeCoreManager.getPlotBottomLoc(_toworld, _toId);
     }
 
     public String getOwnerTo() {

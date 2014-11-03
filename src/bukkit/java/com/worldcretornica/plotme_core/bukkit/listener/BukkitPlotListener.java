@@ -1,9 +1,6 @@
 package com.worldcretornica.plotme_core.bukkit.listener;
 
-import com.worldcretornica.plotme_core.Plot;
-import com.worldcretornica.plotme_core.PlotMapInfo;
-import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.PlotToClear;
+import com.worldcretornica.plotme_core.*;
 import com.worldcretornica.plotme_core.bukkit.PlotMe_CorePlugin;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitBlock;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitLocation;
@@ -45,7 +42,7 @@ public class BukkitPlotListener implements Listener {
 
         if (api.getPlotMeCoreManager().isPlotWorld(player)) {
             boolean canbuild = player.hasPermission("plotme.admin.buildanywhere");
-            String id = api.getPlotMeCoreManager().getPlotId(player);
+            String id = PlotMeCoreManager.getPlotId(player);
 
             if (id.isEmpty()) {
                 if (!canbuild) {
@@ -90,7 +87,7 @@ public class BukkitPlotListener implements Listener {
 
         if (api.getPlotMeCoreManager().isPlotWorld(player)) {
             boolean canbuild = player.hasPermission("plotme.admin.buildanywhere");
-            String id = api.getPlotMeCoreManager().getPlotId(player);
+            String id = PlotMeCoreManager.getPlotId(player);
 
             if (id.isEmpty()) {
                 if (!canbuild) {
@@ -135,7 +132,7 @@ public class BukkitPlotListener implements Listener {
 
         if (!player.hasPermission("plotme.admin.buildanywhere")) {
             if (api.getPlotMeCoreManager().isPlotWorld(player)) {
-                String id = api.getPlotMeCoreManager().getPlotId(player);
+                String id = PlotMeCoreManager.getPlotId(player);
 
                 if (id.isEmpty()) {
                     player.sendMessage(api.getUtil().C("ErrCannotBuild"));
@@ -175,7 +172,7 @@ public class BukkitPlotListener implements Listener {
 
         if (!player.hasPermission("plotme.admin.buildanywhere")) {
             if (api.getPlotMeCoreManager().isPlotWorld(player)) {
-                String id = api.getPlotMeCoreManager().getPlotId(player);
+                String id = PlotMeCoreManager.getPlotId(player);
 
                 if (id.isEmpty()) {
                     player.sendMessage(api.getUtil().C("ErrCannotBuild"));
@@ -217,7 +214,7 @@ public class BukkitPlotListener implements Listener {
 
         if (api.getPlotMeCoreManager().isPlotWorld(player)) {
 
-            String id = api.getPlotMeCoreManager().getPlotId(player);
+            String id = PlotMeCoreManager.getPlotId(player);
 
             PlotToClear ptc = api.getPlotLocked(player.getWorld().getName(), id);
 
@@ -240,7 +237,7 @@ public class BukkitPlotListener implements Listener {
 
                 if (event.isBlockInHand() && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
 
-                    id = api.getPlotMeCoreManager().getPlotId(player);
+                    id = PlotMeCoreManager.getPlotId(player);
 
                     if (id.isEmpty()) {
                         if (!canbuild) {
@@ -281,7 +278,7 @@ public class BukkitPlotListener implements Listener {
                     }
 
                     if (blocked) {
-                        id = api.getPlotMeCoreManager().getPlotId(player);
+                        id = PlotMeCoreManager.getPlotId(player);
 
                         if (id.isEmpty()) {
                             if (!canbuild) {
@@ -311,7 +308,7 @@ public class BukkitPlotListener implements Listener {
         BukkitBlock block = new BukkitBlock(event.getBlock());
 
         if (api.getPlotMeCoreManager().isPlotWorld(block)) {
-            String id = api.getPlotMeCoreManager().getPlotId(block.getLocation());
+            String id = PlotMeCoreManager.getPlotId(block.getLocation());
 
             if (id.isEmpty()) {
                 event.setCancelled(true);
@@ -330,7 +327,7 @@ public class BukkitPlotListener implements Listener {
         BukkitBlock block = new BukkitBlock(event.getBlock());
 
         if (api.getPlotMeCoreManager().isPlotWorld(block)) {
-            String id = api.getPlotMeCoreManager().getPlotId(block.getLocation());
+            String id = PlotMeCoreManager.getPlotId(block.getLocation());
 
             if (id.isEmpty()) {
                 event.setCancelled(true);
@@ -349,7 +346,7 @@ public class BukkitPlotListener implements Listener {
         BukkitBlock block = new BukkitBlock(event.getBlock());
 
         if (api.getPlotMeCoreManager().isPlotWorld(block)) {
-            String id = api.getPlotMeCoreManager().getPlotId(block.getLocation());
+            String id = PlotMeCoreManager.getPlotId(block.getLocation());
 
             if (id.isEmpty()) {
                 event.setCancelled(true);
@@ -368,7 +365,7 @@ public class BukkitPlotListener implements Listener {
         BukkitBlock block = new BukkitBlock(event.getBlock());
 
         if (api.getPlotMeCoreManager().isPlotWorld(block)) {
-            String id = api.getPlotMeCoreManager().getPlotId(block.getLocation());
+            String id = PlotMeCoreManager.getPlotId(block.getLocation());
 
             if (id.isEmpty()) {
                 event.setCancelled(true);
@@ -387,7 +384,7 @@ public class BukkitPlotListener implements Listener {
         BukkitBlock block = new BukkitBlock(event.getBlock());
 
         if (api.getPlotMeCoreManager().isPlotWorld(block)) {
-            String id = api.getPlotMeCoreManager().getPlotId(block.getLocation());
+            String id = PlotMeCoreManager.getPlotId(block.getLocation());
 
             if (id.isEmpty()) {
                 event.setCancelled(true);
@@ -406,7 +403,7 @@ public class BukkitPlotListener implements Listener {
         BukkitBlock block = new BukkitBlock(event.getBlock());
 
         if (api.getPlotMeCoreManager().isPlotWorld(block)) {
-            String id = api.getPlotMeCoreManager().getPlotId(block.getLocation());
+            String id = PlotMeCoreManager.getPlotId(block.getLocation());
 
             if (id.isEmpty()) {
                 event.setCancelled(true);
@@ -426,7 +423,7 @@ public class BukkitPlotListener implements Listener {
             BlockFace face = event.getDirection();
 
             for (Block block : event.getBlocks()) {
-                String id = api.getPlotMeCoreManager().getPlotId(new BukkitLocation(block.getLocation().add(face.getModX(), face.getModY(), face.getModZ())));
+                String id = PlotMeCoreManager.getPlotId(new BukkitLocation(block.getLocation().add(face.getModX(), face.getModY(), face.getModZ())));
 
                 if (id.isEmpty()) {
                     event.setCancelled(true);
@@ -446,7 +443,7 @@ public class BukkitPlotListener implements Listener {
         BukkitBlock block = new BukkitBlock(event.getRetractLocation().getBlock());
 
         if (api.getPlotMeCoreManager().isPlotWorld(block) && event.getBlock().getType() == Material.PISTON_STICKY_BASE) {
-            String id = api.getPlotMeCoreManager().getPlotId(block.getLocation());
+            String id = PlotMeCoreManager.getPlotId(block.getLocation());
 
             if (id.isEmpty()) {
                 event.setCancelled(true);
@@ -469,7 +466,7 @@ public class BukkitPlotListener implements Listener {
         for (int i = 0; i < blocks.size(); i++) {
             if (found || api.getPlotMeCoreManager().isPlotWorld(player)) {
                 found = true;
-                String id = api.getPlotMeCoreManager().getPlotId(player);
+                String id = PlotMeCoreManager.getPlotId(player);
 
                 if (id.isEmpty()) {
                     event.getBlocks().remove(i);
@@ -494,7 +491,7 @@ public class BukkitPlotListener implements Listener {
         if (pmi != null && pmi.isDisableExplosion()) {
             event.setCancelled(true);
         } else {
-            String id = api.getPlotMeCoreManager().getPlotId(location);
+            String id = PlotMeCoreManager.getPlotId(location);
             PlotToClear ptc = api.getPlotLocked(location.getWorld().getName(), id);
 
             if (ptc != null) {
@@ -513,7 +510,7 @@ public class BukkitPlotListener implements Listener {
             if (pmi.isDisableIgnition()) {
                 event.setCancelled(true);
             } else {
-                String id = api.getPlotMeCoreManager().getPlotId(block.getLocation());
+                String id = PlotMeCoreManager.getPlotId(block.getLocation());
                 Player player = event.getPlayer();
 
                 if (id.isEmpty()) {
@@ -551,7 +548,7 @@ public class BukkitPlotListener implements Listener {
         BukkitPlayer player = new BukkitPlayer(event.getPlayer());
 
         if (api.getPlotMeCoreManager().isPlotWorld(player)) {
-            String id = api.getPlotMeCoreManager().getPlotId(player);
+            String id = PlotMeCoreManager.getPlotId(player);
             boolean canbuild = player.hasPermission("plotme.admin.buildanywhere");
 
             if (id.isEmpty()) {
@@ -601,7 +598,7 @@ public class BukkitPlotListener implements Listener {
             boolean canbuild = player.hasPermission("plotme.admin.buildanywhere");
 
             if (api.getPlotMeCoreManager().isPlotWorld(player)) {
-                String id = api.getPlotMeCoreManager().getPlotId(player);
+                String id = PlotMeCoreManager.getPlotId(player);
 
                 if (id.isEmpty()) {
                     if (!canbuild) {
@@ -647,7 +644,7 @@ public class BukkitPlotListener implements Listener {
 
         if (api.getPlotMeCoreManager().isPlotWorld(player)) {
             boolean canbuild = player.hasPermission("plotme.admin.buildanywhere");
-            String id = api.getPlotMeCoreManager().getPlotId(player);
+            String id = PlotMeCoreManager.getPlotId(player);
 
             if (id.isEmpty()) {
                 if (!canbuild) {
@@ -692,7 +689,7 @@ public class BukkitPlotListener implements Listener {
 
         if (api.getPlotMeCoreManager().isPlotWorld(player)) {
             boolean canbuild = player.hasPermission("plotme.admin.buildanywhere");
-            String id = api.getPlotMeCoreManager().getPlotId(player);
+            String id = PlotMeCoreManager.getPlotId(player);
 
             if (id.isEmpty()) {
                 if (!canbuild) {
@@ -717,7 +714,7 @@ public class BukkitPlotListener implements Listener {
         BukkitLocation location = new BukkitLocation(event.getLocation());
 
         if (api.getPlotMeCoreManager().isPlotWorld(location)) {
-            String id = api.getPlotMeCoreManager().getPlotId(location);
+            String id = PlotMeCoreManager.getPlotId(location);
 
             if (!id.isEmpty()) {
                 PlotToClear ptc = api.getPlotLocked(location.getWorld().getName(), id);

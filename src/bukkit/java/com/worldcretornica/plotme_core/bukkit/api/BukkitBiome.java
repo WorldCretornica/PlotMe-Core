@@ -5,7 +5,7 @@ import org.bukkit.block.Biome;
 
 public class BukkitBiome implements IBiome {
 
-    private Biome biome;
+    private final Biome biome;
 
     public BukkitBiome(Biome biome) {
         this.biome = biome;

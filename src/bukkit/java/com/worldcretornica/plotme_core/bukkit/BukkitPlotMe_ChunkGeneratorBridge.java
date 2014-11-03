@@ -6,7 +6,7 @@ import com.worldcretornica.plotme_core.bukkit.api.IBukkitPlotMe_ChunkGenerator;
 
 public class BukkitPlotMe_ChunkGeneratorBridge implements IPlotMe_ChunkGenerator {
 
-    private IBukkitPlotMe_ChunkGenerator cg;
+    private final IBukkitPlotMe_ChunkGenerator cg;
     
     public BukkitPlotMe_ChunkGeneratorBridge(IBukkitPlotMe_ChunkGenerator cg) {
         this.cg = cg;

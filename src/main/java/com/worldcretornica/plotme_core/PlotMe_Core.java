@@ -53,7 +53,6 @@ public class PlotMe_Core {
         creationbuffer = null;
         plotsToClear.clear();
         plotsToClear = null;
-        initialized = false;
     }
 
     public void enable() {
@@ -245,7 +244,7 @@ public class PlotMe_Core {
         plotsToClear = new ConcurrentLinkedQueue<>();
     }
 
-    public IPlotMe_GeneratorManager getGenManager(IWorld world) {
+    public static IPlotMe_GeneratorManager getGenManager(IWorld world) {
         if (world.isPlotMeGenerator()) {
             return world.getGenerator().getManager();
         } else {

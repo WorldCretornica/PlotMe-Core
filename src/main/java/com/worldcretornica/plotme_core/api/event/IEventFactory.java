@@ -12,7 +12,7 @@ public interface IEventFactory {
 
     InternalPlotClearEvent callPlotClearEvent(PlotMe_Core plugin, IWorld world, Plot plot, IPlayer clearer);
 
-    InternalPlotLoadEvent callPlotLoadedEvent(PlotMe_Core plugin, IWorld iWorld, Plot plot);
+    InternalPlotLoadEvent callPlotLoadedEvent(PlotMe_Core plugin, IWorld world, Plot plot);
 
     InternalPlotMoveEvent callPlotMoveEvent(PlotMe_Core plugin, IWorld worldFrom, IWorld worldTo, String idFrom, String idTo, IPlayer mover);
 
@@ -28,7 +28,7 @@ public interface IEventFactory {
 
     InternalPlotCommentEvent callPlotCommentEvent(PlotMe_Core plugin, IWorld world, Plot plot, IPlayer commenter, String comment);
 
-    InternalPlotWorldCreateEvent callPlotWorldCreateEvent(String worldname, ICommandSender cs, Map<String, String> parameters);
+    InternalPlotWorldCreateEvent callPlotWorldCreateEvent(String worldname, Map<String, String> parameters);
 
     InternalPlotDisposeEvent callPlotDisposeEvent(PlotMe_Core plugin, IWorld world, Plot plot, IPlayer disposer);
 

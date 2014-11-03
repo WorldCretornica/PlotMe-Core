@@ -7,14 +7,13 @@ import java.util.Map;
 public class InternalPlotWorldCreateEvent implements ICancellable {
 
     private boolean _canceled;
-    private String _worldname;
+    private String worldname;
     private ICommandSender _creator;
-    private Map<String, String> _parameters;
+    private Map<String, String> parameters;
 
-    public InternalPlotWorldCreateEvent(String worldname, ICommandSender cs, Map<String, String> parameters) {
-        _worldname = worldname;
-        _creator = cs;
-        _parameters = parameters;
+    public InternalPlotWorldCreateEvent(String worldname, Map<String, String> parameters) {
+        this.worldname = worldname;
+        this.parameters = parameters;
     }
 
     @Override
@@ -28,15 +27,12 @@ public class InternalPlotWorldCreateEvent implements ICancellable {
     }
 
     public String getWorldName() {
-        return _worldname;
+        return worldname;
     }
 
-    public ICommandSender getCreator() {
-        return _creator;
-    }
 
     public Map<String, String> getParameters() {
-        return _parameters;
+        return parameters;
     }
 
 }

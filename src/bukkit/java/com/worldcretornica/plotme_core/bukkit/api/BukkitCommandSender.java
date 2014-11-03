@@ -6,9 +6,9 @@ import org.bukkit.command.CommandSender;
 public class BukkitCommandSender implements ICommandSender {
 
     private final CommandSender commandsender;
-    
-    public BukkitCommandSender(CommandSender cs) {
-        commandsender = cs;
+
+    public BukkitCommandSender(CommandSender sender) {
+        commandsender = sender;
     }
 
     @Override

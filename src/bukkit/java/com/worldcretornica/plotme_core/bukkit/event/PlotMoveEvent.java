@@ -1,6 +1,7 @@
 package com.worldcretornica.plotme_core.bukkit.event;
 
 import com.worldcretornica.plotme_core.Plot;
+import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
@@ -64,20 +65,20 @@ public class PlotMoveEvent extends PlotEvent implements Cancellable {
 
     @Override
     public Location getUpperBound() {
-        return ((BukkitLocation) plugin.getPlotMeCoreManager().getPlotTopLoc(event.getWorld(), event.getId())).getLocation();
+        return ((BukkitLocation) PlotMeCoreManager.getPlotTopLoc(event.getWorld(), event.getId())).getLocation();
     }
 
     @Override
     public Location getLowerBound() {
-        return ((BukkitLocation) plugin.getPlotMeCoreManager().getPlotBottomLoc(event.getWorld(), event.getId())).getLocation();
+        return ((BukkitLocation) PlotMeCoreManager.getPlotBottomLoc(event.getWorld(), event.getId())).getLocation();
     }
 
     public Location getUpperBoundTo() {
-        return ((BukkitLocation) plugin.getPlotMeCoreManager().getPlotTopLoc(event.getWorldTo(), event.getIdTo())).getLocation();
+        return ((BukkitLocation) PlotMeCoreManager.getPlotTopLoc(event.getWorldTo(), event.getIdTo())).getLocation();
     }
 
     public Location getLowerBoundTo() {
-        return ((BukkitLocation) plugin.getPlotMeCoreManager().getPlotBottomLoc(event.getWorldTo(), event.getIdTo())).getLocation();
+        return ((BukkitLocation) PlotMeCoreManager.getPlotBottomLoc(event.getWorldTo(), event.getIdTo())).getLocation();
     }
 
     public String getOwnerTo() {

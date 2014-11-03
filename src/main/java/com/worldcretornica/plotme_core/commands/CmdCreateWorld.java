@@ -21,7 +21,7 @@ public class CmdCreateWorld extends PlotCommand {
                 //try to create world
                 Map<String, String> parameters = plugin.creationbuffer.get(sender.getName());
 
-                InternalPlotWorldCreateEvent event = sob.getEventFactory().callPlotWorldCreateEvent(parameters.get("worldname"), sender, parameters);
+                InternalPlotWorldCreateEvent event = sob.getEventFactory().callPlotWorldCreateEvent(parameters.get("worldname"), parameters);
 
                 if (!event.isCancelled()) {
                     if (sob.createPlotWorld(sender, parameters.get("worldname"), parameters.get("generator"), parameters)) {

@@ -2,6 +2,7 @@ package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
+import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
@@ -16,16 +17,17 @@ public class CmdAdd extends PlotCommand {
 
     public boolean exec(IPlayer player, String[] args) {
         if (player.hasPermission("PlotMe.admin.add") || player.hasPermission("PlotMe.use.add")) {
-            if (plugin.getPlotMeCoreManager().isPlotWorld(player)) {
-                String id = plugin.getPlotMeCoreManager().getPlotId(player);
+            IWorld world = player.getWorld();
+            if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
+                String id = PlotMeCoreManager.getPlotId(player);
                 if (id.isEmpty()) {
                     player.sendMessage("§c" + C("MsgNoPlotFound"));
-                } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, player)) {
+                } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, world)) {
                     if (args.length < 2 || args[1].isEmpty()) {
                         player.sendMessage(C("WordUsage") + " §c/plotme add <" + C("WordPlayer") + ">");
                     } else {
 
-                        Plot plot = plugin.getPlotMeCoreManager().getPlotById(player, id);
+                        Plot plot = plugin.getPlotMeCoreManager().getPlotById(world, id);
                         String playername = player.getName();
                         String allowed = args[1];
 
@@ -33,13 +35,12 @@ public class CmdAdd extends PlotCommand {
                             if (plot.isAllowedConsulting(allowed) || plot.isGroupAllowed(allowed)) {
                                 player.sendMessage(C("WordPlayer") + " §c" + args[1] + "§r " + C("MsgAlreadyAllowed"));
                             } else {
-                                IWorld world = player.getWorld();
 
-                                PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(player);
+                                PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
 
                                 InternalPlotAddAllowedEvent event;
 
-                                if (plugin.getPlotMeCoreManager().isEconomyEnabled(player)) {
+                                if (plugin.getPlotMeCoreManager().isEconomyEnabled(world)) {
                                     double price = pmi.getAddPlayerPrice();
                                     double balance = sob.getBalance(player);
 

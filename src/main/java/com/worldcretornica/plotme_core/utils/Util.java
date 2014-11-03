@@ -40,7 +40,8 @@ public class Util {
     }
 
     public static String round(double money) {
-        return money % 1 == 0 ? "" + Math.round(money) : "" + money;
+        if (money % 1 == 0) return String.valueOf(Math.round(money));
+        else return "" + money;
     }
 
     public String moneyFormat(double price) {

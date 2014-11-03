@@ -1,6 +1,7 @@
 package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.Plot;
+import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
@@ -15,15 +16,14 @@ public class CmdInfo extends PlotCommand {
     public boolean exec(IPlayer player) {
         if (player.hasPermission("PlotMe.use.info")) {
             if (plugin.getPlotMeCoreManager().isPlotWorld(player)) {
-                String id = plugin.getPlotMeCoreManager().getPlotId(player);
+                String id = PlotMeCoreManager.getPlotId(player);
 
                 if (id.isEmpty()) {
                     player.sendMessage("§c" + C("MsgNoPlotFound"));
                 } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, player)) {
                     Plot plot = plugin.getPlotMeCoreManager().getPlotById(player, id);
 
-                    player.sendMessage("§aID: §b" + id
-                                          + "§a " + C("InfoOwner") + ": §b" + plot.getOwner()
+                    player.sendMessage("§aID: §b" + id + "§a " + C("InfoOwner") + ": §b" + plot.getOwner()
                                                + "§a " + C("InfoBiome") + ": §b" + plot.getBiome().name());
 
                     player.sendMessage("§a" + C("InfoExpire") + ": §b" + (plot.getExpiredDate() == null ? C("WordNever") : plot.getExpiredDate().toString())
@@ -50,8 +50,8 @@ public class CmdInfo extends PlotCommand {
                                                        + "§a " + C("InfoForSale") + ": §b" + (plot.isForSale() ? "§b" + Util.round(plot.getCustomPrice()) : C("WordNo")));
                         }
                     }
-                    ILocation bottom = plugin.getPlotMeCoreManager().getPlotBottomLoc(player.getWorld(), id);
-                    ILocation top = plugin.getPlotMeCoreManager().getPlotTopLoc(player.getWorld(), id);
+                    ILocation bottom = PlotMeCoreManager.getPlotBottomLoc(player.getWorld(), id);
+                    ILocation top = PlotMeCoreManager.getPlotTopLoc(player.getWorld(), id);
 
                     player.sendMessage("§b" + C("WordBottom") + ": §r" + bottom.getBlockX() + "§9,§r" + bottom.getBlockZ());
                     player.sendMessage("§b" + C("WordTop") + ": §r" + top.getBlockX() + "§9,§r" + top.getBlockZ());

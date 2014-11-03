@@ -1,5 +1,6 @@
 package com.worldcretornica.plotme_core.bukkit.event;
 
+import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
@@ -14,12 +15,10 @@ import org.bukkit.event.Cancellable;
 
 public class PlotCreateEvent extends PlotEvent implements Cancellable {
 
-    private InternalPlotCreateEvent event;
-    private PlotMe_Core plugin;
+    private final InternalPlotCreateEvent event;
 
     public PlotCreateEvent(PlotMe_Core instance, World world, String plotId, Player creator) {
         super(instance, null, world);
-        plugin = instance;
         event = new InternalPlotCreateEvent(instance, new BukkitWorld(world), plotId, new BukkitPlayer(creator));
     }
 
@@ -48,12 +47,12 @@ public class PlotCreateEvent extends PlotEvent implements Cancellable {
 
     @Override
     public Location getUpperBound() {
-        return ((BukkitLocation) plugin.getPlotMeCoreManager().getPlotTopLoc(event.getWorld(), event.getPlotId())).getLocation();
+        return ((BukkitLocation) PlotMeCoreManager.getPlotTopLoc(event.getWorld(), event.getPlotId())).getLocation();
     }
 
     @Override
     public Location getLowerBound() {
-        return ((BukkitLocation) plugin.getPlotMeCoreManager().getPlotBottomLoc(event.getWorld(), event.getPlotId())).getLocation();
+        return ((BukkitLocation) PlotMeCoreManager.getPlotBottomLoc(event.getWorld(), event.getPlotId())).getLocation();
     }
 
     public InternalPlotCreateEvent getInternal() {

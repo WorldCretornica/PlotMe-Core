@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public class BukkitPlayer extends BukkitOfflinePlayer implements IPlayer {
 
-    private Player player;
+    private final Player player;
 
     public BukkitPlayer(Player player) {
         super(player);

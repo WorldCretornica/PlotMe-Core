@@ -1,6 +1,7 @@
 package com.worldcretornica.plotme_core.bukkit.listener;
 
 import com.worldcretornica.plotme_core.Plot;
+import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.bukkit.PlotMe_CorePlugin;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitLocation;
@@ -37,8 +38,8 @@ public class BukkitPlotWorldEditListener implements Listener {
             if (!from.getWorld().getName().equalsIgnoreCase(to.getWorld().getName())) {
                 changemask = true;
             } else if (from.getBlockX() != to.getBlockX() || from.getBlockZ() != to.getBlockZ()) {
-                String idFrom = api.getPlotMeCoreManager().getPlotId(from);
-                idTo = api.getPlotMeCoreManager().getPlotId(to);
+                String idFrom = PlotMeCoreManager.getPlotId(from);
+                idTo = PlotMeCoreManager.getPlotId(to);
 
                 if (!idFrom.equalsIgnoreCase(idTo)) {
                     changemask = true;
@@ -99,14 +100,16 @@ public class BukkitPlotWorldEditListener implements Listener {
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
         BukkitPlayer player = new BukkitPlayer(event.getPlayer());
 
-        if (api.getPlotMeCoreManager().isPlotWorld(player) && !api.getPlotMeCoreManager().isPlayerIgnoringWELimit(player.getUniqueId())) {
-            if (event.getMessage().startsWith("//gmask")) {
-                event.setCancelled(true);
-            } else if (event.getMessage().startsWith("//up")) {
-                Plot plot = api.getPlotMeCoreManager().getPlotById(player);
-
-                if (plot == null || !plot.isAllowed(player.getUniqueId())) {
+        if (api.getPlotMeCoreManager().isPlotWorld(player)) {
+            if (!api.getPlotMeCoreManager().isPlayerIgnoringWELimit(player.getUniqueId())) {
+                if (event.getMessage().startsWith("//gmask")) {
                     event.setCancelled(true);
+                } else if (event.getMessage().startsWith("//up")) {
+                    Plot plot = api.getPlotMeCoreManager().getPlotById(player);
+
+                    if (plot == null || !plot.isAllowed(player.getUniqueId())) {
+                        event.setCancelled(true);
+                    }
                 }
             }
         }
@@ -116,16 +119,18 @@ public class BukkitPlotWorldEditListener implements Listener {
     public void onPlayerInteract(PlayerInteractEvent event) {
         BukkitPlayer player = new BukkitPlayer(event.getPlayer());
 
-        if (api.getPlotMeCoreManager().isPlotWorld(player) && !player.hasPermission("plotme.admin.buildanywhere") &&
-                    !api.getPlotMeCoreManager().isPlayerIgnoringWELimit(player.getUniqueId()) &&
-                    (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK) &&
-                    player.getItemInHand() != null && ((BukkitMaterial) player.getItemInHand().getType()).getMaterial() != Material.AIR) {
-            Plot plot = api.getPlotMeCoreManager().getPlotById(player);
+        if (api.getPlotMeCoreManager().isPlotWorld(player)) {
+            if (!player.hasPermission("plotme.admin.buildanywhere") &&
+                        !api.getPlotMeCoreManager().isPlayerIgnoringWELimit(player.getUniqueId()) &&
+                        (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK) &&
+                        player.getItemInHand() != null && ((BukkitMaterial) player.getItemInHand().getType()).getMaterial() != Material.AIR) {
+                Plot plot = api.getPlotMeCoreManager().getPlotById(player);
 
-            if (plot != null && plot.isAllowed(player.getUniqueId())) {
-                api.getServerBridge().getPlotWorldEdit().setMask(player);
-            } else {
-                event.setCancelled(true);
+                if (plot != null && plot.isAllowed(player.getUniqueId())) {
+                    api.getServerBridge().getPlotWorldEdit().setMask(player);
+                } else {
+                    event.setCancelled(true);
+                }
             }
         }
     }

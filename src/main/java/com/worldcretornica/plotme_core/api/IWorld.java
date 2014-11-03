@@ -15,8 +15,6 @@ public interface IWorld {
 
     IChunk getChunkAt(int cx, int cz);
 
-    int getMaxHeight();
-
     ILocation createLocation(double x, double y, double z);
 
 }

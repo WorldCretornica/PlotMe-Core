@@ -2,6 +2,7 @@ package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
+import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import com.worldcretornica.plotme_core.api.IPlayer;
@@ -17,7 +18,7 @@ public class CmdSetOwner extends PlotCommand {
     public boolean exec(IPlayer p, String[] args) {
         if (p.hasPermission("PlotMe.admin.setowner")) {
             if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
-                String id = plugin.getPlotMeCoreManager().getPlotId(p);
+                String id = PlotMeCoreManager.getPlotId(p);
                 if (id.isEmpty()) {
                     p.sendMessage("§c" + C("MsgNoPlotFound"));
                 } else if (args.length < 2 || args[1].isEmpty()) {
@@ -95,7 +96,7 @@ public class CmdSetOwner extends PlotCommand {
 
                             plot.setOwner(newowner);
 
-                            plugin.getPlotMeCoreManager().setOwnerSign(p.getWorld(), plot);
+                            PlotMeCoreManager.setOwnerSign(p.getWorld(), plot);
 
                             plot.updateField("owner", newowner);
                         }

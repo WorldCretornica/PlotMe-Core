@@ -1,17 +1,16 @@
 package com.worldcretornica.plotme_core.bukkit.api;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.worldcretornica.plotme_core.api.IChunk;
+import com.worldcretornica.plotme_core.api.IEntity;
 import org.bukkit.Chunk;
 import org.bukkit.entity.Entity;
 
-import com.worldcretornica.plotme_core.api.IChunk;
-import com.worldcretornica.plotme_core.api.IEntity;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BukkitChunk implements IChunk {
 
-    private Chunk chunk;
+    private final Chunk chunk;
     
     public BukkitChunk(Chunk chunk) {
         this.chunk = chunk;

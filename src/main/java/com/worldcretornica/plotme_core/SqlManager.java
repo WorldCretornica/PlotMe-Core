@@ -660,9 +660,7 @@ public class SqlManager {
 
                 String sqlitedb = "plots.db";
                 File sqlitefile = new File(plugin.getServerBridge().getDataFolder(), sqlitedb);
-                if (!sqlitefile.exists()) {
-                    //plotmecore.getLogger().info("Could not find old " + sqlitedb);
-                } else {
+                if (sqlitefile.exists()) {
                     plugin.getLogger().info("Trying to import plots from plots.db");
                     Class.forName("org.sqlite.JDBC");
                     Connection sqliteconn = DriverManager.getConnection("jdbc:sqlite:" + plugin.getServerBridge().getDataFolder() + "\\" + sqlitedb);
@@ -689,7 +687,7 @@ public class SqlManager {
                         int topZ = setPlots.getInt("topZ");
                         int bottomZ = setPlots.getInt("bottomZ");
                         String biome = setPlots.getString("biome");
-                        java.sql.Date expireddate = null;
+                        Date expireddate = null;
                         try {
                             expireddate = setPlots.getDate("expireddate");
                         } catch (SQLException ignored) {
@@ -768,7 +766,7 @@ public class SqlManager {
                         }
 
                         Plot plot = new Plot(plugin, owner, ownerId, world, biome,
-                                                    expireddate, finished, allowed, comments, "" + idX + ";" + idZ, customprice,
+                                                    expireddate, finished, allowed, comments, idX + ";" + idZ, customprice,
                                                     forsale, finisheddate, protect, currentbidder, currentbidderid, currentbid,
                                                     auctionned, denied, auctionneddate);
                         addPlot(plot, idX, idZ, topX, bottomX, topZ, bottomZ);
@@ -851,7 +849,7 @@ public class SqlManager {
             conn.commit();
         } catch (SQLException ex) {
             plugin.getLogger().severe("Insert Exception :");
-            plugin.getLogger().severe("  " + ex.getMessage());
+            plugin.getLogger().severe(ex.getMessage());
         } finally {
             try {
                 if (ps != null) {
@@ -859,17 +857,17 @@ public class SqlManager {
                 }
             } catch (SQLException ex) {
                 plugin.getLogger().severe("Insert Exception (on close) :");
-                plugin.getLogger().severe("  " + ex.getMessage());
+                plugin.getLogger().severe(ex.getMessage());
             }
         }
     }
 
     public void addPlot(Plot plot, int idX, int idZ, IWorld w) {
         addPlot(plot, idX, idZ,
-                       plugin.getPlotMeCoreManager().topX(plot.getId(), w),
-                       plugin.getPlotMeCoreManager().bottomX(plot.getId(), w),
-                       plugin.getPlotMeCoreManager().topZ(plot.getId(), w),
-                       plugin.getPlotMeCoreManager().bottomZ(plot.getId(), w));
+                       PlotMeCoreManager.topX(plot.getId(), w),
+                       PlotMeCoreManager.bottomX(plot.getId(), w),
+                       PlotMeCoreManager.topZ(plot.getId(), w),
+                       PlotMeCoreManager.bottomZ(plot.getId(), w));
     }
 
     public void addPlot(Plot plot, int idX, int idZ, int topX, int bottomX, int topZ, int bottomZ) {
@@ -1018,8 +1016,7 @@ public class SqlManager {
         //Allowed
         try {
             Connection conn = getConnection();
-            ps = conn.prepareStatement("INSERT INTO plotmeAllowed (idX, idZ, player, world, playerid) "
-                                               + "VALUES (?,?,?,?,?)");
+            ps = conn.prepareStatement("INSERT INTO plotmeAllowed (idX, idZ, player, world, playerid) VALUES (?,?,?,?,?)");
 
             ps.setInt(1, idX);
             ps.setInt(2, idZ);
@@ -1095,7 +1092,7 @@ public class SqlManager {
         try {
             Connection conn = getConnection();
 
-            ps = conn.prepareStatement("INSERT INTO plotmeComments (idX, idZ, commentid, player, comment, world, playerid) " + "VALUES (?,?,?,?,?,?,?)");
+            ps = conn.prepareStatement("INSERT INTO plotmeComments (idX, idZ, commentid, player, comment, world, playerid) VALUES (?,?,?,?,?,?,?)");
 
             ps.setInt(1, idX);
             ps.setInt(2, idZ);
@@ -2553,126 +2550,124 @@ public class SqlManager {
     }
 
     private void _fetchUUIDAsync(final int idX, final int idZ, final String world, final String Property, final String name) {
-        if (plugin.initialized) {
-            plugin.getServerBridge().runTaskAsynchronously(new Runnable() {
-                @Override
-                public void run() {
+        plugin.getServerBridge().runTaskAsynchronously(new Runnable() {
+            @Override
+            public void run() {
 
-                    PreparedStatement ps = null;
+                PreparedStatement ps = null;
 
+                try {
+                    Connection conn = getConnection();
+
+                    IPlayer player = plugin.getServerBridge().getPlayerExact(name);
+                    UUID uuid = null;
+                    String newname = name;
+
+                    if (player != null) {
+                        uuid = player.getUniqueId();
+                        newname = player.getName();
+                    } else if (name.isEmpty()) {
+                        uuid = null;
+                        newname = "";
+                    } else {
+                        List<String> names = new ArrayList<>();
+
+                        names.add(name);
+
+                        UUIDFetcher fetcher = new UUIDFetcher(names);
+
+                        try {
+                            //plugin.getLogger().info("Fetching " + names.size() + " UUIDs from Mojang servers...");
+                            Map<String, UUID> response = fetcher.call();
+                            //plugin.getLogger().info("Received " + response.size() + " UUIDs. Starting database update...");
+
+                            if (!response.isEmpty()) {
+                                uuid = response.values().toArray(new UUID[0])[0];
+                                newname = response.keySet().toArray(new String[0])[0];
+                            }
+                        } catch (IOException e) {
+                            plugin.getLogger().warning("Unable to connect to Mojang server!");
+                        } catch (Exception e) {
+                            plugin.getLogger().warning("Exception while running UUIDFetcher");
+                            e.printStackTrace();
+                        }
+                    }
+
+                    switch (Property) {
+                        case "owner":
+                            ps = conn.prepareStatement("UPDATE plotmePlots SET ownerid = ?, owner = ? WHERE LOWER(owner) = ? AND idX = '" + idX + "' AND idZ = '" + idZ + "' AND LOWER(world) = '" + world + "'");
+                            break;
+                        case "bidder":
+                            ps = conn.prepareStatement("UPDATE plotmePlots SET currentbidderid = ?, currentbidder = ? WHERE LOWER(currentbidder) = ? AND idX = '" + idX + "' AND idZ = '" + idZ + "' AND LOWER(world) = '" + world + "'");
+                            break;
+                        case "allowed":
+                            ps = conn.prepareStatement("UPDATE plotmeAllowed SET playerid = ?, player = ? WHERE LOWER(player) = ? AND idX = '" + idX + "' AND idZ = '" + idZ + "' AND LOWER(world) = '" + world + "'");
+                            break;
+                        case "denied":
+                            ps = conn.prepareStatement("UPDATE plotmeDenied SET playerid = ?, player = ? WHERE LOWER(player) = ? AND idX = '" + idX + "' AND idZ = '" + idZ + "' AND LOWER(world) = '" + world + "'");
+                            break;
+                        default:
+                            return;
+                    }
+
+                    if (uuid != null) {
+                        ps.setBytes(1, UUIDFetcher.toBytes(uuid));
+                    } else {
+                        ps.setBytes(1, null);
+                    }
+                    ps.setString(2, newname);
+                    ps.setString(3, name.toLowerCase());
+                    ps.executeUpdate();
+                    conn.commit();
+
+                    ps.close();
+
+                    if (uuid != null) {
+                        Plot plot = plugin.getPlotMeCoreManager().getPlotById(world, idX + ";" + idZ);
+
+                        if (plot != null) {
+                            switch (Property) {
+                                case "owner":
+                                    plot.setOwner(newname);
+                                    plot.setOwnerId(uuid);
+                                    break;
+                                case "bidder":
+                                    plot.setCurrentBidder(newname);
+                                    plot.setCurrentBidderId(uuid);
+                                    break;
+                                case "allowed":
+                                    plot.allowed().remove(name);
+                                    plot.allowed().put(newname, uuid);
+                                    break;
+                                case "denied":
+                                    plot.denied().remove(name);
+                                    plot.denied().put(newname, uuid);
+                                    break;
+                                default:
+                            }
+                        }
+                    }
+                } catch (SQLException ex) {
+                    plugin.getLogger().severe("Conversion to UUID failed :");
+                    plugin.getLogger().severe("  " + ex.getMessage());
+                    for (StackTraceElement e : ex.getStackTrace()) {
+                        plugin.getLogger().severe("  " + e);
+                    }
+                } finally {
                     try {
-                        Connection conn = getConnection();
-
-                        IPlayer player = plugin.getServerBridge().getPlayerExact(name);
-                        UUID uuid = null;
-                        String newname = name;
-
-                        if (player != null) {
-                            uuid = player.getUniqueId();
-                            newname = player.getName();
-                        } else if (name.isEmpty()) {
-                            uuid = null;
-                            newname = "";
-                        } else {
-                            List<String> names = new ArrayList<>();
-
-                            names.add(name);
-
-                            UUIDFetcher fetcher = new UUIDFetcher(names);
-
-                            try {
-                                //plugin.getLogger().info("Fetching " + names.size() + " UUIDs from Mojang servers...");
-                                Map<String, UUID> response = fetcher.call();
-                                //plugin.getLogger().info("Received " + response.size() + " UUIDs. Starting database update...");
-
-                                if (!response.isEmpty()) {
-                                    uuid = response.values().toArray(new UUID[0])[0];
-                                    newname = response.keySet().toArray(new String[0])[0];
-                                }
-                            } catch (IOException e) {
-                                plugin.getLogger().warning("Unable to connect to Mojang server!");
-                            } catch (Exception e) {
-                                plugin.getLogger().warning("Exception while running UUIDFetcher");
-                                e.printStackTrace();
-                            }
-                        }
-
-                        switch (Property) {
-                            case "owner":
-                                ps = conn.prepareStatement("UPDATE plotmePlots SET ownerid = ?, owner = ? WHERE LOWER(owner) = ? AND idX = '" + idX + "' AND idZ = '" + idZ + "' AND LOWER(world) = '" + world + "'");
-                                break;
-                            case "bidder":
-                                ps = conn.prepareStatement("UPDATE plotmePlots SET currentbidderid = ?, currentbidder = ? WHERE LOWER(currentbidder) = ? AND idX = '" + idX + "' AND idZ = '" + idZ + "' AND LOWER(world) = '" + world + "'");
-                                break;
-                            case "allowed":
-                                ps = conn.prepareStatement("UPDATE plotmeAllowed SET playerid = ?, player = ? WHERE LOWER(player) = ? AND idX = '" + idX + "' AND idZ = '" + idZ + "' AND LOWER(world) = '" + world + "'");
-                                break;
-                            case "denied":
-                                ps = conn.prepareStatement("UPDATE plotmeDenied SET playerid = ?, player = ? WHERE LOWER(player) = ? AND idX = '" + idX + "' AND idZ = '" + idZ + "' AND LOWER(world) = '" + world + "'");
-                                break;
-                            default:
-                                return;
-                        }
-
-                        if (uuid != null) {
-                            ps.setBytes(1, UUIDFetcher.toBytes(uuid));
-                        } else {
-                            ps.setBytes(1, null);
-                        }
-                        ps.setString(2, newname);
-                        ps.setString(3, name.toLowerCase());
-                        ps.executeUpdate();
-                        conn.commit();
-
-                        ps.close();
-
-                        if (uuid != null) {
-                            Plot plot = plugin.getPlotMeCoreManager().getPlotById(world, "" + idX + ";" + idZ);
-
-                            if (plot != null) {
-                                switch (Property) {
-                                    case "owner":
-                                        plot.setOwner(newname);
-                                        plot.setOwnerId(uuid);
-                                        break;
-                                    case "bidder":
-                                        plot.setCurrentBidder(newname);
-                                        plot.setCurrentBidderId(uuid);
-                                        break;
-                                    case "allowed":
-                                        plot.allowed().remove(name);
-                                        plot.allowed().put(newname, uuid);
-                                        break;
-                                    case "denied":
-                                        plot.denied().remove(name);
-                                        plot.denied().put(newname, uuid);
-                                        break;
-                                    default:
-                                }
-                            }
+                        if (ps != null) {
+                            ps.close();
                         }
                     } catch (SQLException ex) {
-                        plugin.getLogger().severe("Conversion to UUID failed :");
+                        plugin.getLogger().severe("Conversion to UUID failed (on close) :");
                         plugin.getLogger().severe("  " + ex.getMessage());
                         for (StackTraceElement e : ex.getStackTrace()) {
                             plugin.getLogger().severe("  " + e);
                         }
-                    } finally {
-                        try {
-                            if (ps != null) {
-                                ps.close();
-                            }
-                        } catch (SQLException ex) {
-                            plugin.getLogger().severe("Conversion to UUID failed (on close) :");
-                            plugin.getLogger().severe("  " + ex.getMessage());
-                            for (StackTraceElement e : ex.getStackTrace()) {
-                                plugin.getLogger().severe("  " + e);
-                            }
-                        }
                     }
                 }
-            });
-        }
+            }
+        });
     }
 
     public void updatePlotsNewUUID(final UUID uuid, final String newname) {

@@ -8,13 +8,13 @@ import com.worldcretornica.plotme_core.api.IWorld;
 public class InternalPlotDoneChangeEvent extends InternalPlotEvent implements ICancellable {
 
     private boolean _canceled;
-    private IPlayer _player;
-    private boolean _done;
+    private IPlayer player;
+    private boolean done;
 
     public InternalPlotDoneChangeEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer player, boolean done) {
         super(instance, plot, world);
-        _player = player;
-        _done = done;
+        this.player = player;
+        this.done = done;
     }
 
     @Override
@@ -28,10 +28,10 @@ public class InternalPlotDoneChangeEvent extends InternalPlotEvent implements IC
     }
 
     public IPlayer getPlayer() {
-        return _player;
+        return player;
     }
 
     public boolean getDone() {
-        return _done;
+        return done;
     }
 }

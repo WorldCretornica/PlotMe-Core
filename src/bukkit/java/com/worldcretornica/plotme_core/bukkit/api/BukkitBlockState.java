@@ -1,13 +1,12 @@
 package com.worldcretornica.plotme_core.bukkit.api;
 
-import org.bukkit.block.BlockState;
-
 import com.worldcretornica.plotme_core.api.IBlockState;
 import com.worldcretornica.plotme_core.api.IWorld;
+import org.bukkit.block.BlockState;
 
 public class BukkitBlockState implements IBlockState {
 
-    BlockState blockstate;
+    final BlockState blockstate;
 
     public BukkitBlockState(BlockState blockstate) {
         this.blockstate = blockstate;

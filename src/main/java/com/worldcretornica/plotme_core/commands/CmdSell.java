@@ -2,6 +2,7 @@ package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
+import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import com.worldcretornica.plotme_core.api.IPlayer;
@@ -22,7 +23,7 @@ public class CmdSell extends PlotCommand {
 
                 if (pmi.isCanSellToBank() || pmi.isCanPutOnSale()) {
                     if (p.hasPermission("PlotMe.use.sell") || p.hasPermission("PlotMe.admin.sell")) {
-                        String id = plugin.getPlotMeCoreManager().getPlotId(p);
+                        String id = PlotMeCoreManager.getPlotId(p);
 
                         if (id.isEmpty()) {
                             p.sendMessage("§c" + C("MsgNoPlotFound"));
@@ -118,7 +119,7 @@ public class CmdSell extends PlotCommand {
 
                                                     plot.removeAllAllowed();
 
-                                                    plugin.getPlotMeCoreManager().setOwnerSign(w, plot);
+                                                    PlotMeCoreManager.setOwnerSign(w, plot);
                                                     plugin.getPlotMeCoreManager().setSellSign(w, plot);
 
                                                     plot.updateField("owner", plot.getOwner());

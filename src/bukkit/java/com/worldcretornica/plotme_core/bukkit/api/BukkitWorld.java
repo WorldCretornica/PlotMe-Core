@@ -48,11 +48,6 @@ public class BukkitWorld implements IWorld {
     }
 
     @Override
-    public int getMaxHeight() {
-        return world.getMaxHeight();
-    }
-
-    @Override
     public ILocation createLocation(double x, double y, double z) {
         return new BukkitLocation(new Location(world, x, y, z));
     }

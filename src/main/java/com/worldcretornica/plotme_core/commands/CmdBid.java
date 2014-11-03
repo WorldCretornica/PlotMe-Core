@@ -1,6 +1,7 @@
 package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.Plot;
+import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import com.worldcretornica.plotme_core.api.IPlayer;
@@ -14,9 +15,9 @@ public class CmdBid extends PlotCommand {
     }
 
     public boolean exec(IPlayer p, String[] args) {
-        if (plugin.getPlotMeCoreManager().isEconomyEnabled(p)) {
+        if (plugin.getPlotMeCoreManager().isEconomyEnabled(p.getWorld())) {
             if (p.hasPermission("PlotMe.use.bid")) {
-                String id = plugin.getPlotMeCoreManager().getPlotId(p.getLocation());
+                String id = PlotMeCoreManager.getPlotId(p.getLocation());
 
                 if (id.isEmpty()) {
                     p.sendMessage("§c" + C("MsgNoPlotFound"));
@@ -44,8 +45,7 @@ public class CmdBid extends PlotCommand {
                             } else {
                                 double balance = sob.getBalance(p);
 
-                                if (bid >= balance && !currentbidder.equals(bidder)
-                                            || currentbidder.equals(bidder) && bid > balance + currentbid) {
+                                if (bid >= balance && !currentbidder.equals(bidder) || currentbidder.equals(bidder) && bid > balance + currentbid) {
                                     p.sendMessage("§c" + C("MsgNotEnoughBid"));
                                 } else {
                                     InternalPlotBidEvent event = sob.getEventFactory().callPlotBidEvent(plugin, p.getWorld(), plot, p, bid);

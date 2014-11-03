@@ -1,5 +1,6 @@
 package com.worldcretornica.plotme_core.commands;
 
+import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
@@ -41,7 +42,7 @@ public class CmdTP extends PlotCommand {
 
                     if (!plugin.getPlotMeCoreManager().isPlotWorld(w)) {
                         player.sendMessage("§c" + C("MsgNoPlotworldFound"));
-                    } else if (!plugin.getPlotMeCoreManager().isValidId(w, id)) {
+                    } else if (!PlotMeCoreManager.isValidId(w, id)) {
                         if (sob.getConfig().getBoolean("allowWorldTeleport")) {
                             player.sendMessage(C("WordUsage") + ": §c/plotme tp <ID> [" + C("WordWorld") + "] §r" + C("WordExample") + ": §c/plotme tp 5;-1 ");
                         } else {
@@ -49,7 +50,7 @@ public class CmdTP extends PlotCommand {
                         }
                         return true;
                     } else {
-                        ILocation loc = plugin.getPlotMeCoreManager().getPlotHome(w, id);
+                        ILocation loc = PlotMeCoreManager.getPlotHome(w, id);
 
                         InternalPlotTeleportEvent event = sob.getEventFactory().callPlotTeleportEvent(plugin, w, player, loc, id);
 

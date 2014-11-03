@@ -2,6 +2,7 @@ package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
+import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import com.worldcretornica.plotme_core.api.IPlayer;
@@ -15,46 +16,46 @@ public class CmdAuction extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(IPlayer p, String[] args) {
-        if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
-            if (plugin.getPlotMeCoreManager().isEconomyEnabled(p)) {
-                PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(p);
+    public boolean exec(IPlayer player, String[] args) {
+        IWorld world = player.getWorld();
+        if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
+            if (plugin.getPlotMeCoreManager().isEconomyEnabled(world)) {
+                PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
 
                 if (pmi.isCanPutOnSale()) {
-                    if (p.hasPermission("PlotMe.use.auction") || p.hasPermission("PlotMe.admin.auction")) {
-                        String id = plugin.getPlotMeCoreManager().getPlotId(p);
+                    if (player.hasPermission("PlotMe.use.auction") || player.hasPermission("PlotMe.admin.auction")) {
+                        String id = PlotMeCoreManager.getPlotId(player);
 
                         if (id.isEmpty()) {
-                            p.sendMessage("§c" + C("MsgNoPlotFound"));
-                        } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, p)) {
-                            Plot plot = plugin.getPlotMeCoreManager().getPlotById(p, id);
+                            player.sendMessage("§c" + C("MsgNoPlotFound"));
+                        } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, world)) {
+                            Plot plot = plugin.getPlotMeCoreManager().getPlotById(world, id);
 
-                            String name = p.getName();
+                            String name = player.getName();
 
-                            if (plot.getOwner().equalsIgnoreCase(name) || p.hasPermission("PlotMe.admin.auction")) {
-                                IWorld world = p.getWorld();
+                            if (plot.getOwner().equalsIgnoreCase(name) || player.hasPermission("PlotMe.admin.auction")) {
 
                                 if (plot.isAuctioned()) {
                                     if (plot.getCurrentBidderId() != null) {
-                                        if (p.hasPermission("PlotMe.admin.auction")) {
+                                        if (player.hasPermission("PlotMe.admin.auction")) {
                                             IOfflinePlayer playercurrentbidder = sob.getOfflinePlayer(plot.getCurrentBidderId());
                                             EconomyResponse er = sob.depositPlayer(playercurrentbidder, plot.getCurrentBid());
 
                                             if (er.transactionSuccess()) {
-                                                for (IPlayer player : sob.getOnlinePlayers()) {
-                                                    if (player.getName().equalsIgnoreCase(plot.getCurrentBidder())) {
-                                                        player.sendMessage(C("MsgAuctionCancelledOnPlot")
-                                                                                   + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner() + ". " + Util().moneyFormat(plot.getCurrentBid()));
+                                                for (IPlayer onlinePlayers : sob.getOnlinePlayers()) {
+                                                    if (onlinePlayers.getName().equalsIgnoreCase(plot.getCurrentBidder())) {
+                                                        onlinePlayers.sendMessage(C("MsgAuctionCancelledOnPlot")
+                                                                                          + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner() + ". " + Util().moneyFormat(plot.getCurrentBid()));
                                                         break;
                                                     }
                                                 }
                                             } else {
-                                                p.sendMessage("§c" + er.errorMessage);
+                                                player.sendMessage("§c" + er.errorMessage);
                                                 warn(er.errorMessage);
                                             }
 
                                             plot.setAuctioned(false);
-                                            plugin.getPlotMeCoreManager().adjustWall(p);
+                                            plugin.getPlotMeCoreManager().adjustWall(player);
                                             plugin.getPlotMeCoreManager().setSellSign(world, plot);
                                             plot.setCurrentBid(0);
                                             plot.setCurrentBidder("");
@@ -64,17 +65,17 @@ public class CmdAuction extends PlotCommand {
                                             plot.updateField("currentbidderid", null);
                                             plot.updateField("auctionned", false);
 
-                                            p.sendMessage(C("MsgAuctionCancelled"));
+                                            player.sendMessage(C("MsgAuctionCancelled"));
 
                                             if (isAdvancedLogging()) {
                                                 plugin.getLogger().info(LOG + name + " " + C("MsgStoppedTheAuctionOnPlot") + " " + id);
                                             }
                                         } else {
-                                            p.sendMessage("§c" + C("MsgPlotHasBidsAskAdmin"));
+                                            player.sendMessage("§c" + C("MsgPlotHasBidsAskAdmin"));
                                         }
                                     } else {
                                         plot.setAuctioned(false);
-                                        plugin.getPlotMeCoreManager().adjustWall(p);
+                                        plugin.getPlotMeCoreManager().adjustWall(player);
                                         plugin.getPlotMeCoreManager().setSellSign(world, plot);
                                         plot.setCurrentBid(0);
                                         plot.setCurrentBidder("");
@@ -84,7 +85,7 @@ public class CmdAuction extends PlotCommand {
                                         plot.updateField("currentbidderid", null);
                                         plot.updateField("auctionned", false);
 
-                                        p.sendMessage(C("MsgAuctionCancelled"));
+                                        player.sendMessage(C("MsgAuctionCancelled"));
 
                                         if (isAdvancedLogging()) {
                                             plugin.getLogger().info(LOG + name + " " + C("MsgStoppedTheAuctionOnPlot") + " " + id);
@@ -101,21 +102,21 @@ public class CmdAuction extends PlotCommand {
                                     }
 
                                     if (bid < 0) {
-                                        p.sendMessage("§c" + C("MsgInvalidAmount"));
+                                        player.sendMessage("§c" + C("MsgInvalidAmount"));
                                     } else {
 
-                                        InternalPlotAuctionEvent event = sob.getEventFactory().callPlotAuctionEvent(plugin, world, plot, p, bid);
+                                        InternalPlotAuctionEvent event = sob.getEventFactory().callPlotAuctionEvent(plugin, world, plot, player, bid);
 
                                         if (!event.isCancelled()) {
                                             plot.setCurrentBid(bid);
                                             plot.setAuctioned(true);
-                                            plugin.getPlotMeCoreManager().adjustWall(p);
+                                            plugin.getPlotMeCoreManager().adjustWall(player);
                                             plugin.getPlotMeCoreManager().setSellSign(world, plot);
 
                                             plot.updateField("currentbid", bid);
                                             plot.updateField("auctionned", true);
 
-                                            p.sendMessage(C("MsgAuctionStarted"));
+                                            player.sendMessage(C("MsgAuctionStarted"));
 
                                             if (isAdvancedLogging()) {
                                                 plugin.getLogger().info(LOG + name + " " + C("MsgStartedAuctionOnPlot") + " " + id + " " + C("WordAt") + " " + bid);
@@ -124,20 +125,20 @@ public class CmdAuction extends PlotCommand {
                                     }
                                 }
                             } else {
-                                p.sendMessage("§c" + C("MsgDoNotOwnPlot"));
+                                player.sendMessage("§c" + C("MsgDoNotOwnPlot"));
                             }
                         } else {
-                            p.sendMessage("§c" + C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
+                            player.sendMessage("§c" + C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
                         }
                     } else {
-                        p.sendMessage("§c" + C("MsgPermissionDenied"));
+                        player.sendMessage("§c" + C("MsgPermissionDenied"));
                         return false;
                     }
                 } else {
-                    p.sendMessage("§c" + C("MsgSellingPlotsIsDisabledWorld"));
+                    player.sendMessage("§c" + C("MsgSellingPlotsIsDisabledWorld"));
                 }
             } else {
-                p.sendMessage("§c" + C("MsgEconomyDisabledWorld"));
+                player.sendMessage("§c" + C("MsgEconomyDisabledWorld"));
             }
         }
         return true;

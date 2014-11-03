@@ -8,6 +8,7 @@ import com.sk89q.worldedit.function.mask.RegionMask;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.world.World;
 import com.worldcretornica.plotme_core.Plot;
+import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.PlotWorldEdit;
@@ -28,14 +29,14 @@ public class PlotWorldEdit6_0_0 implements PlotWorldEdit {
 
     @Override
     public void setMask(IPlayer player) {
-        String id = plugin.getPlotMeCoreManager().getPlotId(player);
+        String id = PlotMeCoreManager.getPlotId(player);
         setMask(player, id);
     }
 
     @Override
-    public void setMask(IPlayer p, String id) {
-        BukkitWorld w = (BukkitWorld) p.getWorld();
-        BukkitPlayer bp = (BukkitPlayer) p;
+    public void setMask(IPlayer player, String id) {
+        BukkitWorld w = (BukkitWorld) player.getWorld();
+        BukkitPlayer bp = (BukkitPlayer) player;
 
         BukkitLocation bottom;
         BukkitLocation top;
@@ -43,11 +44,11 @@ public class PlotWorldEdit6_0_0 implements PlotWorldEdit {
         LocalSession session = we.getSession(bp.getPlayer());
 
         if (!"".equalsIgnoreCase(id)) {
-            Plot plot = plugin.getPlotMeCoreManager().getPlotById(p, id);
+            Plot plot = plugin.getPlotMeCoreManager().getPlotById(player, id);
 
-            if (plot != null && plot.isAllowed(p.getUniqueId())) {
-                bottom = (BukkitLocation) plugin.getPlotMeCoreManager().getPlotBottomLoc(w, id);
-                top = (BukkitLocation) plugin.getPlotMeCoreManager().getPlotTopLoc(w, id);
+            if (plot != null && plot.isAllowed(player.getUniqueId())) {
+                bottom = (BukkitLocation) PlotMeCoreManager.getPlotBottomLoc(w, id);
+                top = (BukkitLocation) PlotMeCoreManager.getPlotTopLoc(w, id);
 
                 LocalSession localsession = we.getSession(bp.getPlayer());
                 World world = localsession.getSelectionWorld();
@@ -83,8 +84,8 @@ public class PlotWorldEdit6_0_0 implements PlotWorldEdit {
     }
 
     @Override
-    public void removeMask(IPlayer p) {
-        BukkitPlayer bp = (BukkitPlayer) p;
+    public void removeMask(IPlayer player) {
+        BukkitPlayer bp = (BukkitPlayer) player;
         LocalSession session = we.getSession(bp.getPlayer());
         session.setMask((Mask) null);
     }

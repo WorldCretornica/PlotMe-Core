@@ -37,8 +37,8 @@ public class PlotRunnableDeleteExpire implements Runnable {
                         ids += plugin.getServerBridge().getColor("RED") + id + plugin.getServerBridge().getColor("RESET") + ", ";
 
                         coremanager.removePlot(world, id);
-                        coremanager.removeOwnerSign(world, id);
-                        coremanager.removeSellSign(world, id);
+                        PlotMeCoreManager.removeOwnerSign(world, id);
+                        PlotMeCoreManager.removeSellSign(world, id);
 
                         sqlmanager.deletePlot(PlotMeCoreManager.getIdX(id), PlotMeCoreManager.getIdZ(id), world.getName().toLowerCase());
 

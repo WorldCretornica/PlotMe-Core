@@ -25,8 +25,8 @@ public class BukkitEventFactory implements IEventFactory {
     }
 
     @Override
-    public InternalPlotLoadEvent callPlotLoadedEvent(PlotMe_Core plugin, IWorld iWorld, Plot plot) {
-        PlotLoadEvent event = new PlotLoadEvent(plugin, iWorld, plot);
+    public InternalPlotLoadEvent callPlotLoadedEvent(PlotMe_Core plugin, IWorld world, Plot plot) {
+        PlotLoadEvent event = new PlotLoadEvent(plugin, world, plot);
         Bukkit.getPluginManager().callEvent(event);
         return event.getInternal();
     }
@@ -81,8 +81,8 @@ public class BukkitEventFactory implements IEventFactory {
     }
 
     @Override
-    public InternalPlotWorldCreateEvent callPlotWorldCreateEvent(String worldname, ICommandSender cs, Map<String, String> parameters) {
-        PlotWorldCreateEvent event = new PlotWorldCreateEvent(worldname, cs, parameters);
+    public InternalPlotWorldCreateEvent callPlotWorldCreateEvent(String worldname, Map<String, String> parameters) {
+        PlotWorldCreateEvent event = new PlotWorldCreateEvent(worldname, parameters);
         Bukkit.getPluginManager().callEvent(event);
         return event.getInternal();
     }
