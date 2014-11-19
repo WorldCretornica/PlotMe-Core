@@ -8,35 +8,35 @@ import com.worldcretornica.plotme_core.api.IWorld;
 
 public class InternalPlotBiomeChangeEvent extends InternalPlotEvent implements ICancellable {
 
-    private boolean _canceled;
-    private IPlayer _player;
-    private IBiome _biome;
+    private boolean canceled;
+    private final IPlayer player;
+    private IBiome biome;
 
     public InternalPlotBiomeChangeEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer player, IBiome biome) {
         super(instance, plot, world);
-        _player = player;
-        _biome = biome;
+        this.player = player;
+        this.biome = biome;
     }
 
     @Override
     public boolean isCancelled() {
-        return _canceled;
+        return canceled;
     }
 
     @Override
     public void setCanceled(boolean cancel) {
-        _canceled = cancel;
+        canceled = cancel;
     }
 
     public IPlayer getPlayer() {
-        return _player;
+        return player;
     }
 
     public IBiome getBiome() {
-        return _biome;
+        return biome;
     }
     
     public void setBiome(IBiome biome) {
-        _biome = biome;
+        this.biome = biome;
     }
 }

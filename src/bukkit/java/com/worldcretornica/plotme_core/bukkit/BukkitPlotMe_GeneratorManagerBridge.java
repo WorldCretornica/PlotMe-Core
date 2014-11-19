@@ -29,9 +29,8 @@ public class BukkitPlotMe_GeneratorManagerBridge implements IPlotMe_GeneratorMan
     @Override
     public List<IPlayer> getPlayersInPlot(IWorld world, String id) {
         List<IPlayer> players = new ArrayList<>();
-        BukkitWorld bw = (BukkitWorld) world;
 
-        for (Player player : gm.getPlayersInPlot(bw.getWorld(), id)) {
+        for (Player player : gm.getPlayersInPlot(id)) {
             players.add(new BukkitPlayer(player));
         }
 
@@ -149,8 +148,8 @@ public class BukkitPlotMe_GeneratorManagerBridge implements IPlotMe_GeneratorMan
     }
 
     @Override
-    public boolean movePlot(IWorld wFrom, IWorld wTo, String idFrom, String idTo) {
-        return gm.movePlot(((BukkitWorld) wFrom).getWorld(), ((BukkitWorld) wTo).getWorld(), idFrom, idTo);
+    public boolean movePlot(IWorld world, String idFrom, String idTo) {
+        return gm.movePlot(((BukkitWorld) world).getWorld(), idFrom, idTo);
     }
 
     @Override
@@ -174,11 +173,6 @@ public class BukkitPlotMe_GeneratorManagerBridge implements IPlotMe_GeneratorMan
     }
 
     @Override
-    public void regen(IWorld world, String id, ICommandSender sender) {
-        gm.regen(((BukkitWorld) world).getWorld(), id, ((BukkitCommandSender) sender).getCommandSender());
-    }
-
-    @Override
     public ILocation getPlotHome(IWorld world, String id) {
         return new BukkitLocation(gm.getPlotHome(((BukkitWorld) world).getWorld(), id));
     }
@@ -189,8 +183,8 @@ public class BukkitPlotMe_GeneratorManagerBridge implements IPlotMe_GeneratorMan
     }
 
     @Override
-    public boolean createConfig(String worldname, Map<String, String> args, ICommandSender sender) {
-        return gm.createConfig(worldname, args, ((BukkitCommandSender) sender).getCommandSender());
+    public boolean createConfig(String worldname, Map<String, String> args) {
+        return gm.createConfig(worldname, args);
     }
 
     @Override

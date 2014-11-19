@@ -9,7 +9,7 @@ import java.util.UUID;
 
 public class BukkitEntity implements IEntity {
 
-    Entity entity;
+    private final Entity entity;
     
     public BukkitEntity(Entity entity) {
         this.entity = entity;

@@ -23,8 +23,6 @@ public class BukkitCommand implements CommandExecutor {
     private final CmdBuy buy;
     private final CmdClaim claim;
     private final CmdClear clear;
-    private final CmdComment comment;
-    private final CmdComments comments;
     private final CmdDeny deny;
     private final CmdDispose dispose;
     private final CmdDone done;
@@ -59,8 +57,6 @@ public class BukkitCommand implements CommandExecutor {
         buy = new CmdBuy(api);
         claim = new CmdClaim(api);
         clear = new CmdClear(api);
-        comment = new CmdComment(api);
-        comments = new CmdComments(api);
         deny = new CmdDeny(api);
         dispose = new CmdDispose(api);
         done = new CmdDone(api);
@@ -149,12 +145,6 @@ public class BukkitCommand implements CommandExecutor {
                         }
                         if ("info".equalsIgnoreCase(a0) || "i".equalsIgnoreCase(a0)) {
                             return info.exec(player);
-                        }
-                        if ("comment".equalsIgnoreCase(a0)) {
-                            return comment.exec(player, args);
-                        }
-                        if ("comments".equalsIgnoreCase(a0)) {
-                            return comments.exec(player, args);
                         }
                         if ("biome".equalsIgnoreCase(a0)) {
                             return biome.exec(player, args);

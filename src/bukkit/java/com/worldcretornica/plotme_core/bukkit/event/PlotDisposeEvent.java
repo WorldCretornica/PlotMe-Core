@@ -13,7 +13,7 @@ import org.bukkit.event.Cancellable;
 
 public class PlotDisposeEvent extends PlotEvent implements Cancellable {
 
-    private InternalPlotDisposeEvent event;
+    private final InternalPlotDisposeEvent event;
 
     public PlotDisposeEvent(PlotMe_Core instance, World world, Plot plot, Player disposer) {
         super(instance, plot, world);

@@ -13,7 +13,7 @@ import org.bukkit.event.Cancellable;
 
 public class PlotRemoveDeniedEvent extends PlotEvent implements Cancellable {
 
-    private InternalPlotRemoveDeniedEvent event;
+    private final InternalPlotRemoveDeniedEvent event;
 
     public PlotRemoveDeniedEvent(PlotMe_Core instance, World world, Plot plot, Player player, String denied) {
         super(instance, plot, world);

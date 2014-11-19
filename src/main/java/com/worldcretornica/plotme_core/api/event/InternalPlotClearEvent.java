@@ -8,7 +8,7 @@ import com.worldcretornica.plotme_core.api.IWorld;
 public class InternalPlotClearEvent extends InternalPlotEvent implements ICancellable {
 
     private boolean _canceled;
-    private IPlayer _clearer;
+    private final IPlayer _clearer;
 
     public InternalPlotClearEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer clearer) {
         super(instance, plot, world);

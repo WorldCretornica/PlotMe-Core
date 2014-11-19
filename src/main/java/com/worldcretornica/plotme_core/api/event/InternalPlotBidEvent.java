@@ -7,32 +7,32 @@ import com.worldcretornica.plotme_core.api.IWorld;
 
 public class InternalPlotBidEvent extends InternalPlotEvent implements ICancellable {
 
-    private boolean _canceled;
-    private IPlayer _bidder;
-    private double _bid;
+    private boolean canceled;
+    private final IPlayer player;
+    private final double bid;
 
     public InternalPlotBidEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer bidder, double bid) {
         super(instance, plot, world);
-        _bidder = bidder;
-        _bid = bid;
+        player = bidder;
+        this.bid = bid;
     }
 
     @Override
     public boolean isCancelled() {
-        return _canceled;
+        return canceled;
     }
 
     @Override
     public void setCanceled(boolean cancel) {
-        _canceled = cancel;
+        canceled = cancel;
     }
 
     public IPlayer getPlayer() {
-        return _bidder;
+        return player;
     }
 
     public double getBid() {
-        return _bid;
+        return bid;
     }
 
     public double getPreviousBid() {

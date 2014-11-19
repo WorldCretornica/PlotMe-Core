@@ -9,71 +9,71 @@ import com.worldcretornica.plotme_core.api.IWorld;
 
 public class InternalPlotMoveEvent extends InternalPlotEvent implements ICancellable {
 
-    private boolean _canceled;
-    private String _fromId;
-    private String _toId;
-    private IWorld _toworld;
-    private IPlayer _mover;
+    private boolean canceled;
+    private final String fromId;
+    private final String toId;
+    private final IWorld toworld;
+    private final IPlayer mover;
 
     public InternalPlotMoveEvent(PlotMe_Core instance, IWorld fromworld, IWorld toworld, String fromId, String toId, IPlayer mover) {
         super(instance, null, fromworld);
-        _fromId = fromId;
-        _toId = toId;
-        _toworld = toworld;
-        _mover = mover;
+        this.fromId = fromId;
+        this.toId = toId;
+        this.toworld = toworld;
+        this.mover = mover;
     }
 
     @Override
     public boolean isCancelled() {
-        return _canceled;
+        return canceled;
     }
 
     @Override
     public void setCanceled(boolean cancel) {
-        _canceled = cancel;
+        canceled = cancel;
     }
 
     @Override
     public Plot getPlot() {
-        return plugin.getPlotMeCoreManager().getPlotById(world, _fromId);
+        return plugin.getPlotMeCoreManager().getPlotById(fromId, world);
     }
 
     public Plot getPlotTo() {
-        return plugin.getPlotMeCoreManager().getPlotById(_toworld, _toId);
+        return plugin.getPlotMeCoreManager().getPlotById(toId, toworld);
     }
 
     public IWorld getWorldTo() {
-        return _toworld;
+        return toworld;
     }
 
     public IPlayer getPlayer() {
-        return _mover;
+        return mover;
     }
 
     public String getId() {
-        return _fromId;
+        return fromId;
     }
 
     public String getIdTo() {
-        return _toId;
+        return toId;
     }
 
     @Override
     public ILocation getUpperBound() {
-        return PlotMeCoreManager.getPlotTopLoc(world, _fromId);
+        return PlotMeCoreManager.getPlotTopLoc(world, fromId);
     }
 
     @Override
     public ILocation getLowerBound() {
-        return PlotMeCoreManager.getPlotBottomLoc(world, _fromId);
+        return PlotMeCoreManager.getPlotBottomLoc(world, fromId);
     }
 
     public ILocation getUpperBoundTo() {
-        return PlotMeCoreManager.getPlotTopLoc(_toworld, _toId);
+        return PlotMeCoreManager.getPlotTopLoc(toworld, toId);
     }
 
     public ILocation getLowerBoundTo() {
-        return PlotMeCoreManager.getPlotBottomLoc(_toworld, _toId);
+        return PlotMeCoreManager.getPlotBottomLoc(toworld, toId);
     }
 
     public String getOwnerTo() {

@@ -8,13 +8,13 @@ import com.worldcretornica.plotme_core.api.IWorld;
 public class InternalPlotOwnerChangeEvent extends InternalPlotEvent implements ICancellable {
 
     private boolean _canceled;
-    private IPlayer _player;
-    private String _newowner;
+    private final IPlayer player;
+    private final String newowner;
 
     public InternalPlotOwnerChangeEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer player, String newowner) {
         super(instance, plot, world);
-        _player = player;
-        _newowner = newowner;
+        this.player = player;
+        this.newowner = newowner;
     }
 
     @Override
@@ -28,10 +28,10 @@ public class InternalPlotOwnerChangeEvent extends InternalPlotEvent implements I
     }
 
     public IPlayer getPlayer() {
-        return _player;
+        return player;
     }
 
     public String getNewOwner() {
-        return _newowner;
+        return newowner;
     }
 }

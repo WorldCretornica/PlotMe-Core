@@ -31,4 +31,9 @@ public class BukkitOfflinePlayer implements IOfflinePlayer {
     public OfflinePlayer getOfflinePlayer() {
         return offlineplayer;
     }
+
+    @Override
+    public boolean isOnline() {
+        return offlineplayer.isOnline();
+    }
 }

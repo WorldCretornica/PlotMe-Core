@@ -29,8 +29,8 @@ public class BukkitWorld implements IWorld {
     }
 
     @Override
-    public IBlock getBlockAt(int i, int j, int k) {
-        return new BukkitBlock(world.getBlockAt(i, j, k));
+    public IBlock getBlockAt(int x, int y, int z) {
+        return new BukkitBlock(world.getBlockAt(x, y, z));
     }
     
     public World getWorld() {

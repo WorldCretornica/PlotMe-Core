@@ -15,42 +15,42 @@ public class CmdBuy extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(IPlayer p) {
-        IWorld world = p.getWorld();
+    public boolean exec(IPlayer player) {
+        IWorld world = player.getWorld();
         if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
             if (plugin.getPlotMeCoreManager().isEconomyEnabled(world)) {
-                if (p.hasPermission("PlotMe.use.buy") || p.hasPermission("PlotMe.admin.buy")) {
-                    String id = PlotMeCoreManager.getPlotId(p);
+                if (player.hasPermission("PlotMe.use.buy") || player.hasPermission("PlotMe.admin.buy")) {
+                    String id = PlotMeCoreManager.getPlotId(player);
 
                     if (id.isEmpty()) {
-                        p.sendMessage("§c" + C("MsgNoPlotFound"));
+                        player.sendMessage("§c" + C("MsgNoPlotFound"));
                     } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, world)) {
-                        Plot plot = plugin.getPlotMeCoreManager().getPlotById(world, id);
+                        Plot plot = plugin.getPlotMeCoreManager().getPlotById(id, world);
 
                         if (plot.isForSale()) {
-                            String buyer = p.getName();
+                            String buyer = player.getName();
 
                             if (plot.getOwner().equalsIgnoreCase(buyer)) {
-                                p.sendMessage("§c" + C("MsgCannotBuyOwnPlot"));
+                                player.sendMessage("§c" + C("MsgCannotBuyOwnPlot"));
                             } else {
-                                int plotlimit = getPlotLimit(p);
+                                int plotlimit = getPlotLimit(player);
 
-                                if (plotlimit != -1 && plugin.getPlotMeCoreManager().getNbOwnedPlot(p, world) >= plotlimit) {
-                                    p.sendMessage(C("MsgAlreadyReachedMaxPlots") + " ("
-                                                          + plugin.getPlotMeCoreManager().getNbOwnedPlot(p, world) + "/" + getPlotLimit(p) + "). "
+                                if (plotlimit != -1 && plugin.getPlotMeCoreManager().getNbOwnedPlot(player, world) >= plotlimit) {
+                                    player.sendMessage(C("MsgAlreadyReachedMaxPlots") + " ("
+                                                               + plugin.getPlotMeCoreManager().getNbOwnedPlot(player, world) + "/" + getPlotLimit(player) + "). "
                                                           + C("WordUse") + " §c/plotme home§r " + C("MsgToGetToIt"));
                                 } else {
 
                                     double cost = plot.getCustomPrice();
 
-                                    if (sob.getBalance(p) < cost) {
-                                        p.sendMessage("§c" + C("MsgNotEnoughBuy"));
+                                    if (sob.getBalance(player) < cost) {
+                                        player.sendMessage("§c" + C("MsgNotEnoughBuy"));
                                     } else {
 
-                                        InternalPlotBuyEvent event = sob.getEventFactory().callPlotBuyEvent(plugin, world, plot, p, cost);
+                                        InternalPlotBuyEvent event = sob.getEventFactory().callPlotBuyEvent(plugin, world, plot, player, cost);
 
                                         if (!event.isCancelled()) {
-                                            EconomyResponse er = sob.withdrawPlayer(p, cost);
+                                            EconomyResponse er = sob.withdrawPlayer(player, cost);
 
                                             if (er.transactionSuccess()) {
                                                 String oldowner = plot.getOwner();
@@ -64,15 +64,15 @@ public class CmdBuy extends PlotCommand {
                                                     EconomyResponse er2 = sob.depositPlayer(playercurrentbidder, cost);
 
                                                     if (er2.transactionSuccess()) {
-                                                        for (IPlayer player : sob.getOnlinePlayers()) {
-                                                            if (player.getName().equalsIgnoreCase(oldowner)) {
-                                                                player.sendMessage(C("WordPlot") + " " + id + " "
+                                                        for (IPlayer onlinePlayers : sob.getOnlinePlayers()) {
+                                                            if (onlinePlayers.getName().equalsIgnoreCase(oldowner)) {
+                                                                onlinePlayers.sendMessage(C("WordPlot") + " " + id + " "
                                                                                            + C("MsgSoldTo") + " " + buyer + ". " + Util().moneyFormat(cost));
                                                                 break;
                                                             }
                                                         }
                                                     } else {
-                                                        p.sendMessage("§c" + er2.errorMessage);
+                                                        player.sendMessage("§c" + er2.errorMessage);
                                                         warn(er2.errorMessage);
                                                     }
                                                 }
@@ -85,17 +85,17 @@ public class CmdBuy extends PlotCommand {
                                                 plot.updateField("customprice", 0);
                                                 plot.updateField("forsale", false);
 
-                                                plugin.getPlotMeCoreManager().adjustWall(p);
+                                                plugin.getPlotMeCoreManager().adjustWall(player);
                                                 plugin.getPlotMeCoreManager().setSellSign(world, plot);
                                                 PlotMeCoreManager.setOwnerSign(world, plot);
 
-                                                p.sendMessage(C("MsgPlotBought") + " " + Util().moneyFormat(-cost));
+                                                player.sendMessage(C("MsgPlotBought") + " " + Util().moneyFormat(-cost));
 
                                                 if (isAdvancedLogging()) {
                                                     plugin.getLogger().info(LOG + buyer + " " + C("MsgBoughtPlot") + " " + id + " " + C("WordFor") + " " + cost);
                                                 }
                                             } else {
-                                                p.sendMessage("§c" + er.errorMessage);
+                                                player.sendMessage("§c" + er.errorMessage);
                                                 warn(er.errorMessage);
                                             }
                                         }
@@ -103,17 +103,17 @@ public class CmdBuy extends PlotCommand {
                                 }
                             }
                         } else {
-                            p.sendMessage("§c" + C("MsgPlotNotForSale"));
+                            player.sendMessage("§c" + C("MsgPlotNotForSale"));
                         }
                     } else {
-                        p.sendMessage("§c" + C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
+                        player.sendMessage("§c" + C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
                     }
                 } else {
-                    p.sendMessage("§c" + C("MsgPermissionDenied"));
+                    player.sendMessage("§c" + C("MsgPermissionDenied"));
                     return false;
                 }
             } else {
-                p.sendMessage("§c" + C("MsgEconomyDisabledWorld"));
+                player.sendMessage("§c" + C("MsgEconomyDisabledWorld"));
             }
         }
         return true;

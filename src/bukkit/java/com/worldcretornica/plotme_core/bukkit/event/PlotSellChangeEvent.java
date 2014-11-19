@@ -13,7 +13,7 @@ import org.bukkit.event.Cancellable;
 
 public class PlotSellChangeEvent extends PlotEvent implements Cancellable {
 
-    private InternalPlotSellChangeEvent event;
+    private final InternalPlotSellChangeEvent event;
 
     public PlotSellChangeEvent(PlotMe_Core instance, World world, Plot plot, Player seller, double price, boolean soldToBank, boolean isForSale) {
         super(instance, plot, world);

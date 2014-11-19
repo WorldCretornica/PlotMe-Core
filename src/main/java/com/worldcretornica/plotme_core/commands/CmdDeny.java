@@ -18,17 +18,18 @@ public class CmdDeny extends PlotCommand {
     }
 
     public boolean exec(IPlayer player, String[] args) {
-        IWorld world = player.getWorld();
         if (player.hasPermission("PlotMe.admin.deny") || player.hasPermission("PlotMe.use.deny")) {
+            IWorld world = player.getWorld();
+            PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
             if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
                 String id = PlotMeCoreManager.getPlotId(player);
                 if (id.isEmpty()) {
                     player.sendMessage("§c" + C("MsgNoPlotFound"));
-                } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, world)) {
+                } else if (!PlotMeCoreManager.isPlotAvailable(id, pmi)) {
                     if (args.length < 2 || args[1].isEmpty()) {
                         player.sendMessage(C("WordUsage") + " §c/plotme deny <" + C("WordPlayer") + ">");
                     } else {
-                        Plot plot = plugin.getPlotMeCoreManager().getPlotById(world, id);
+                        Plot plot = PlotMeCoreManager.getPlotById(id, pmi);
                         String playername = player.getName();
                         String denied = args[1];
 
@@ -42,13 +43,12 @@ public class CmdDeny extends PlotCommand {
                                 player.sendMessage(C("WordPlayer") + " §c" + args[1] + "§r " + C("MsgAlreadyDenied"));
                             } else {
 
-                                PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
 
                                 double price = 0;
 
                                 InternalPlotAddDeniedEvent event;
 
-                                if (plugin.getPlotMeCoreManager().isEconomyEnabled(world)) {
+                                if (plugin.getPlotMeCoreManager().isEconomyEnabled(pmi)) {
                                     price = pmi.getDenyPlayerPrice();
                                     double balance = sob.getBalance(player);
 
@@ -103,7 +103,7 @@ public class CmdDeny extends PlotCommand {
                                     player.sendMessage(C("WordPlayer") + " §c" + denied + "§r " + C("MsgNowDenied") + " " + Util().moneyFormat(-price));
 
                                     if (isAdvancedLogging()) {
-                                        plugin.getLogger().info(LOG + playername + " " + C("MsgDeniedPlayer") + " " + denied + " " + C("MsgToPlot") + " " + id + (price != 0 ? " " + C("WordFor") + " " + price : ""));
+                                        sob.getLogger().info(LOG + playername + " " + C("MsgDeniedPlayer") + " " + denied + " " + C("MsgToPlot") + " " + id + (price != 0 ? " " + C("WordFor") + " " + price : ""));
                                     }
                                 }
                             }

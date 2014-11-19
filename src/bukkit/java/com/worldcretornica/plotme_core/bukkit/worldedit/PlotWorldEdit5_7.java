@@ -48,7 +48,7 @@ public class PlotWorldEdit5_7 implements PlotWorldEdit {
         LocalSession session = we.getSession(bp.getPlayer());
 
         if (!"".equalsIgnoreCase(id)) {
-            Plot plot = plugin.getPlotMeCoreManager().getPlotById(p, id);
+            Plot plot = plugin.getPlotMeCoreManager().getPlotById(id, p);
 
             if (plot != null && plot.isAllowed(p.getUniqueId())) {
                 bottom = (BukkitLocation) PlotMeCoreManager.getPlotBottomLoc(w, id);
@@ -78,15 +78,7 @@ public class PlotWorldEdit5_7 implements PlotWorldEdit {
             Class<? extends LocalSession> csession = session.getClass();
             Method method = csession.getMethod("getMask", (Class<?>[]) null);
             result = method.invoke(session, (Object[]) null);
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (SecurityException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
+        } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
             e.printStackTrace();
         }
 

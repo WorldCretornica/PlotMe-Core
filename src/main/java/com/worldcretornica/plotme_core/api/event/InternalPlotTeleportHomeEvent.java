@@ -9,7 +9,7 @@ import com.worldcretornica.plotme_core.api.IWorld;
 public class InternalPlotTeleportHomeEvent extends InternalPlotEvent implements ICancellable {
 
     private boolean _canceled;
-    private IPlayer _player;
+    private final IPlayer _player;
     private ILocation loc;
 
     public InternalPlotTeleportHomeEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer player) {

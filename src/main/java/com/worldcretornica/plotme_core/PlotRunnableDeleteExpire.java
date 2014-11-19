@@ -1,5 +1,6 @@
 package com.worldcretornica.plotme_core;
 
+import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotResetEvent;
 
@@ -8,15 +9,17 @@ import java.util.List;
 public class PlotRunnableDeleteExpire implements Runnable {
 
     private final PlotMe_Core plugin;
+    private final ICommandSender sender;
 
-    public PlotRunnableDeleteExpire(PlotMe_Core instance) {
+    public PlotRunnableDeleteExpire(PlotMe_Core instance, ICommandSender sender) {
         plugin = instance;
+        this.sender = sender;
     }
 
     @Override
     public void run() {
         SqlManager sqlmanager = plugin.getSqlManager();
-        PlotMeCoreManager coremanager = plugin.getPlotMeCoreManager();
+        PlotMeCoreManager plotMeCoreManager = plugin.getPlotMeCoreManager();
 
         if (plugin.getWorldCurrentlyProcessingExpired() != null) {
             IWorld world = plugin.getWorldCurrentlyProcessingExpired();
@@ -28,15 +31,15 @@ public class PlotRunnableDeleteExpire implements Runnable {
                 String ids = "";
 
                 for (Plot expiredplot : expiredplots) {
-                    InternalPlotResetEvent event = plugin.getServerBridge().getEventFactory().callPlotResetEvent(plugin, world, expiredplot, plugin.getCommandSenderCurrentlyProcessingExpired());
+                    InternalPlotResetEvent event = plugin.getServerBridge().getEventFactory().callPlotResetEvent(plugin, world, expiredplot, sender);
 
                     if (!event.isCancelled()) {
-                        coremanager.clear(world, expiredplot, plugin.getCommandSenderCurrentlyProcessingExpired(), ClearReason.Expired);
+                        plotMeCoreManager.clear(world, expiredplot, sender, ClearReason.Expired);
 
                         String id = expiredplot.getId();
-                        ids += plugin.getServerBridge().getColor("RED") + id + plugin.getServerBridge().getColor("RESET") + ", ";
+                        ids += "§c" + id + "§r, ";
 
-                        coremanager.removePlot(world, id);
+                        plotMeCoreManager.removePlot(world, id);
                         PlotMeCoreManager.removeOwnerSign(world, id);
                         PlotMeCoreManager.removeSellSign(world, id);
 
@@ -50,13 +53,12 @@ public class PlotRunnableDeleteExpire implements Runnable {
                     ids = ids.substring(0, ids.length() - 2);
                 }
 
-                plugin.getCommandSenderCurrentlyProcessingExpired().sendMessage(plugin.getUtil().C("MsgDeletedExpiredPlots") + " " + ids);
+                plugin.getLogger().info(plugin.getUtil().C("MsgDeletedExpiredPlots") + " " + ids);
             }
 
             if (plugin.getCounterExpired() == 0) {
-                plugin.getCommandSenderCurrentlyProcessingExpired().sendMessage(plugin.getUtil().C("MsgDeleteSessionFinished"));
+                plugin.getLogger().info(plugin.getUtil().C("MsgDeleteSessionFinished"));
                 plugin.setWorldCurrentlyProcessingExpired(null);
-                plugin.setCommandSenderCurrentlyProcessingExpired(null);
             }
         }
     }

@@ -16,7 +16,7 @@ import org.bukkit.event.Cancellable;
 
 public class PlotMoveEvent extends PlotEvent implements Cancellable {
 
-    private InternalPlotMoveEvent event;
+    private final InternalPlotMoveEvent event;
 
     public PlotMoveEvent(PlotMe_Core instance, World fromworld, World toworld, String fromId, String toId, Player mover) {
         super(instance, null, fromworld);
@@ -40,11 +40,11 @@ public class PlotMoveEvent extends PlotEvent implements Cancellable {
 
     @Override
     public Plot getPlot() {
-        return plugin.getPlotMeCoreManager().getPlotById(event.getWorld(), event.getId());
+        return plugin.getPlotMeCoreManager().getPlotById(event.getId(), event.getWorld());
     }
 
     public Plot getPlotTo() {
-        return plugin.getPlotMeCoreManager().getPlotById(event.getWorldTo(), event.getIdTo());
+        return plugin.getPlotMeCoreManager().getPlotById(event.getIdTo(), event.getWorldTo());
     }
 
     public World getWorldTo() {

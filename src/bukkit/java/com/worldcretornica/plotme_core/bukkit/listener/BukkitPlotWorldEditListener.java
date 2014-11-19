@@ -47,10 +47,10 @@ public class BukkitPlotWorldEditListener implements Listener {
             }
 
             if (changemask && api.getPlotMeCoreManager().isPlotWorld(to.getWorld())) {
-                if (!api.getPlotMeCoreManager().isPlayerIgnoringWELimit(player.getUniqueId())) {
-                    api.getServerBridge().getPlotWorldEdit().setMask(player, idTo);
-                } else {
+                if (api.getPlotMeCoreManager().isPlayerIgnoringWELimit(player.getUniqueId())) {
                     api.getServerBridge().getPlotWorldEdit().removeMask(player);
+                } else {
+                    api.getServerBridge().getPlotWorldEdit().setMask(player, idTo);
                 }
             }
         }
@@ -60,10 +60,10 @@ public class BukkitPlotWorldEditListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         BukkitPlayer player = new BukkitPlayer(event.getPlayer());
         if (api.getPlotMeCoreManager().isPlotWorld(player)) {
-            if (!api.getPlotMeCoreManager().isPlayerIgnoringWELimit(player.getUniqueId())) {
-                api.getServerBridge().getPlotWorldEdit().setMask(player);
-            } else {
+            if (api.getPlotMeCoreManager().isPlayerIgnoringWELimit(player.getUniqueId())) {
                 api.getServerBridge().getPlotWorldEdit().removeMask(player);
+            } else {
+                api.getServerBridge().getPlotWorldEdit().setMask(player);
             }
         } else {
             api.getServerBridge().getPlotWorldEdit().removeMask(player);
@@ -76,7 +76,7 @@ public class BukkitPlotWorldEditListener implements Listener {
         BukkitLocation from = new BukkitLocation(event.getFrom());
         BukkitLocation to = new BukkitLocation(event.getTo());
 
-        if (event.getTo() == null || event.getFrom() != null && api.getPlotMeCoreManager().isPlotWorld(from) && !api.getPlotMeCoreManager().isPlotWorld(to)) {
+        if (api.getPlotMeCoreManager().isPlotWorld(from) && !api.getPlotMeCoreManager().isPlotWorld(to)) {
             api.getServerBridge().getPlotWorldEdit().removeMask(player);
         } else if (api.getPlotMeCoreManager().isPlotWorld(to)) {
             api.getServerBridge().getPlotWorldEdit().setMask(player);
@@ -89,7 +89,7 @@ public class BukkitPlotWorldEditListener implements Listener {
         BukkitLocation from = new BukkitLocation(event.getFrom());
         BukkitLocation to = new BukkitLocation(event.getTo());
 
-        if (event.getTo() == null || event.getFrom() != null && api.getPlotMeCoreManager().isPlotWorld(from) && !api.getPlotMeCoreManager().isPlotWorld(to)) {
+        if (api.getPlotMeCoreManager().isPlotWorld(from) && !api.getPlotMeCoreManager().isPlotWorld(to)) {
             api.getServerBridge().getPlotWorldEdit().removeMask(player);
         } else if (api.getPlotMeCoreManager().isPlotWorld(to)) {
             api.getServerBridge().getPlotWorldEdit().setMask(player);
@@ -122,8 +122,7 @@ public class BukkitPlotWorldEditListener implements Listener {
         if (api.getPlotMeCoreManager().isPlotWorld(player)) {
             if (!player.hasPermission("plotme.admin.buildanywhere") &&
                         !api.getPlotMeCoreManager().isPlayerIgnoringWELimit(player.getUniqueId()) &&
-                        (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK) &&
-                        player.getItemInHand() != null && ((BukkitMaterial) player.getItemInHand().getType()).getMaterial() != Material.AIR) {
+                        (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK) && ((BukkitMaterial) player.getItemInHand().getType()).getMaterial() != Material.AIR) {
                 Plot plot = api.getPlotMeCoreManager().getPlotById(player);
 
                 if (plot != null && plot.isAllowed(player.getUniqueId())) {

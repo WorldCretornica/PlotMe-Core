@@ -22,7 +22,6 @@ public class PlotMe_Core {
     private final Set<String> badWorlds = new HashSet<>();
 
     private IWorld worldcurrentlyprocessingexpired;
-    private ICommandSender cscurrentlyprocessingexpired;
     private int counterexpired;
     private int nbperdeletionprocessingexpired;
 
@@ -35,8 +34,7 @@ public class PlotMe_Core {
     private PlotMeCoreManager plotmecoremanager;
     private SqlManager sqlmanager;
     private Util util;
-    public boolean initialized;
-    
+
     //Bridge
     private final IServerBridge serverBridge;
 
@@ -49,7 +47,6 @@ public class PlotMe_Core {
         getServerBridge().unHook();
         getPlotMeCoreManager().setPlayersIgnoringWELimit(null);
         setWorldCurrentlyProcessingExpired(null);
-        setCommandSenderCurrentlyProcessingExpired(null);
         creationbuffer = null;
         plotsToClear.clear();
         plotsToClear = null;
@@ -66,7 +63,6 @@ public class PlotMe_Core {
         getServerBridge().setupCommands();
         getServerBridge().setupHooks();
         setupClearSpools();
-        initialized = true;
         getSqlManager().plotConvertToUUIDAsynchronously();
     }
 
@@ -112,62 +108,8 @@ public class PlotMe_Core {
             config.set("NbClearSpools", 100);
         }
 
-        // Load config-old.yml
-        // config-old.yml should be used to import settings from by DefaultGenerator
-        IConfigSection oldConfig = getServerBridge().getConfig("config-old.yml");
-
-        if (oldConfig != null) {
-            // Create a list of old world configs that should be moved to config-old.yml
-            Collection<String> oldWorldConfigs = new HashSet<>();
-            oldWorldConfigs.add("PathWidth");
-            oldWorldConfigs.add("PlotSize");
-            oldWorldConfigs.add("XTranslation");
-            oldWorldConfigs.add("ZTranslation");
-            oldWorldConfigs.add("BottomBlockId");
-            oldWorldConfigs.add("WallBlockId");
-            oldWorldConfigs.add("PlotFloorBlockId");
-            oldWorldConfigs.add("PlotFillingBlockId");
-            oldWorldConfigs.add("RoadMainBlockId");
-            oldWorldConfigs.add("RoadStripeBlockId");
-            oldWorldConfigs.add("RoadHeight");
-            oldWorldConfigs.add("ProtectedWallBlockId");
-            oldWorldConfigs.add("ForSaleWallBlockId");
-            oldWorldConfigs.add("AuctionWallBlockId");
-
-            // Copy defaults for all worlds
-            IConfigSection worldsCS = config.getConfigurationSection("worlds");
-            IConfigSection oldWorldsCS = oldConfig.getConfigurationSection("worlds");
-            if (oldWorldsCS == null) {
-                oldWorldsCS = oldConfig.createSection("worlds");
-            }
-            for (String worldname : worldsCS.getKeys(false)) {
-                // Get the current config section
-                IConfigSection worldCS = worldsCS.getConfigurationSection(worldname);
-
-                // Find old world data an move it to oldConfig
-                IConfigSection oldWorldCS = oldWorldsCS.getConfigurationSection(worldname);
-                for (String path : oldWorldConfigs) {
-                    if (worldCS.contains(path)) {
-                        if (oldWorldCS == null) {
-                            oldWorldCS = oldWorldsCS.createSection(worldname);
-                        }
-                        oldWorldCS.set(path, worldCS.get(path));
-                        worldCS.set(path, null);
-                    }
-                }
-            }
-
-            // Copy new values over
-            config.copyDefaults(true);
-
-            // Save the config file back to disk
-            if (!oldWorldsCS.getKeys(false).isEmpty()) {
-                oldConfig.saveConfig();
-            }
-        } else {
-            // Copy new values over
-            config.copyDefaults(true);
-        }
+        // Copy new values over
+        config.copyDefaults(true);
 
         config.saveConfig();
     }
@@ -263,7 +205,7 @@ public class PlotMe_Core {
 
 
     public void scheduleTask(Runnable task) {
-        getCommandSenderCurrentlyProcessingExpired().sendMessage(getUtil().C("MsgStartDeleteSession"));
+        getLogger().info(getUtil().C("MsgStartDeleteSession"));
 
         for (int ctr = 0; ctr < 50 / getNbPerDeletionProcessingExpired(); ctr++) {
             getServerBridge().scheduleSyncDelayedTask(task, ctr * 100);
@@ -293,7 +235,7 @@ public class PlotMe_Core {
     public void addPlotToClear(PlotToClear plotToClear) {
         plotsToClear.offer(plotToClear);
 
-        PlotMeSpool pms = new PlotMeSpool(this, plotToClear);
+        Runnable pms = new PlotMeSpool(this, plotToClear);
         getServerBridge().scheduleSyncRepeatingTask(pms, 0L, 200L);
     }
 
@@ -319,14 +261,6 @@ public class PlotMe_Core {
 
     public void setNbPerDeletionProcessingExpired() {
         nbperdeletionprocessingexpired = 5;
-    }
-
-    public ICommandSender getCommandSenderCurrentlyProcessingExpired() {
-        return cscurrentlyprocessingexpired;
-    }
-
-    public void setCommandSenderCurrentlyProcessingExpired(ICommandSender cscurrentlyprocessingexpired) {
-        this.cscurrentlyprocessingexpired = cscurrentlyprocessingexpired;
     }
 
     public PlotMeCoreManager getPlotMeCoreManager() {

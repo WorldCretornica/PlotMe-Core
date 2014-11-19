@@ -19,30 +19,28 @@ public class CmdRemove extends PlotCommand {
 
     public boolean exec(IPlayer player, String[] args) {
         if (player.hasPermission("PlotMe.admin.remove") || player.hasPermission("PlotMe.use.remove")) {
-            if (plugin.getPlotMeCoreManager().isPlotWorld(player)) {
+            IWorld world = player.getWorld();
+            PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
+            if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
                 String id = PlotMeCoreManager.getPlotId(player);
                 if (id.isEmpty()) {
                     player.sendMessage("§c" + C("MsgNoPlotFound"));
-                } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, player)) {
+                } else if (!PlotMeCoreManager.isPlotAvailable(id, pmi)) {
                     if (args.length < 2 || args[1].isEmpty()) {
                         player.sendMessage(C("WordUsage") + ": §c/plotme remove <" + C("WordPlayer") + ">");
                     } else {
-                        Plot plot = plugin.getPlotMeCoreManager().getPlotById(player, id);
+                        Plot plot = PlotMeCoreManager.getPlotById(id, pmi);
                         UUID playeruuid = player.getUniqueId();
                         String allowed = args[1];
 
                         if (plot.getOwnerId().equals(playeruuid) || player.hasPermission("PlotMe.admin.remove")) {
                             if (plot.isAllowedConsulting(allowed) || plot.isGroupAllowed(allowed)) {
 
-                                IWorld world = player.getWorld();
-
-                                PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
-
                                 double price = 0;
 
                                 InternalPlotRemoveAllowedEvent event;
 
-                                if (plugin.getPlotMeCoreManager().isEconomyEnabled(player)) {
+                                if (plugin.getPlotMeCoreManager().isEconomyEnabled(pmi)) {
                                     price = pmi.getRemovePlayerPrice();
                                     double balance = sob.getBalance(player);
 
@@ -74,7 +72,7 @@ public class CmdRemove extends PlotCommand {
                                     player.sendMessage(C("WordPlayer") + " §c" + allowed + "§r " + C("WordRemoved") + ". " + Util().moneyFormat(-price));
 
                                     if (isAdvancedLogging()) {
-                                        plugin.getLogger().info(LOG + allowed + " " + C("MsgRemovedPlayer") + " " + allowed + " " + C("MsgFromPlot") + " " + id + (price != 0 ? " " + C("WordFor") + " " + price : ""));
+                                        sob.getLogger().info(LOG + allowed + " " + C("MsgRemovedPlayer") + " " + allowed + " " + C("MsgFromPlot") + " " + id + (price != 0 ? " " + C("WordFor") + " " + price : ""));
                                     }
                                 }
                             } else {

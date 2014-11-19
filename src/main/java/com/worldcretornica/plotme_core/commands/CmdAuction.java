@@ -18,18 +18,17 @@ public class CmdAuction extends PlotCommand {
 
     public boolean exec(IPlayer player, String[] args) {
         IWorld world = player.getWorld();
+        PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
         if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
-            if (plugin.getPlotMeCoreManager().isEconomyEnabled(world)) {
-                PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
-
+            if (plugin.getPlotMeCoreManager().isEconomyEnabled(pmi)) {
                 if (pmi.isCanPutOnSale()) {
                     if (player.hasPermission("PlotMe.use.auction") || player.hasPermission("PlotMe.admin.auction")) {
                         String id = PlotMeCoreManager.getPlotId(player);
 
                         if (id.isEmpty()) {
                             player.sendMessage("§c" + C("MsgNoPlotFound"));
-                        } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, world)) {
-                            Plot plot = plugin.getPlotMeCoreManager().getPlotById(world, id);
+                        } else if (!PlotMeCoreManager.isPlotAvailable(id, pmi)) {
+                            Plot plot = PlotMeCoreManager.getPlotById(id, pmi);
 
                             String name = player.getName();
 
@@ -68,7 +67,7 @@ public class CmdAuction extends PlotCommand {
                                             player.sendMessage(C("MsgAuctionCancelled"));
 
                                             if (isAdvancedLogging()) {
-                                                plugin.getLogger().info(LOG + name + " " + C("MsgStoppedTheAuctionOnPlot") + " " + id);
+                                                sob.getLogger().info(LOG + name + " " + C("MsgStoppedTheAuctionOnPlot") + " " + id);
                                             }
                                         } else {
                                             player.sendMessage("§c" + C("MsgPlotHasBidsAskAdmin"));
@@ -88,7 +87,7 @@ public class CmdAuction extends PlotCommand {
                                         player.sendMessage(C("MsgAuctionCancelled"));
 
                                         if (isAdvancedLogging()) {
-                                            plugin.getLogger().info(LOG + name + " " + C("MsgStoppedTheAuctionOnPlot") + " " + id);
+                                            sob.getLogger().info(LOG + name + " " + C("MsgStoppedTheAuctionOnPlot") + " " + id);
                                         }
                                     }
                                 } else {
@@ -119,7 +118,7 @@ public class CmdAuction extends PlotCommand {
                                             player.sendMessage(C("MsgAuctionStarted"));
 
                                             if (isAdvancedLogging()) {
-                                                plugin.getLogger().info(LOG + name + " " + C("MsgStartedAuctionOnPlot") + " " + id + " " + C("WordAt") + " " + bid);
+                                                sob.getLogger().info(LOG + name + " " + C("MsgStartedAuctionOnPlot") + " " + id + " " + C("WordAt") + " " + bid);
                                             }
                                         }
                                     }

@@ -233,15 +233,6 @@ public class PlotMapInfo {
         config.saveConfig();
     }
 
-    public boolean isCanCustomizeSellPrice() {
-        return getEconomySection().getBoolean("CanCustomizeSellPrice");
-    }
-
-    public void setCanCustomizeSellPrice(boolean canCustomizeSellPrice) {
-        getEconomySection().set("CanCustomizeSellPrice", canCustomizeSellPrice);
-        config.saveConfig();
-    }
-
     public double getSellToPlayerPrice() {
         return getEconomySection().getDouble("SellToPlayerPrice");
     }
@@ -266,15 +257,6 @@ public class PlotMapInfo {
 
     public void setBuyFromBankPrice(double buyFromBankPrice) {
         getEconomySection().set("BuyFromBankPrice", buyFromBankPrice);
-        config.saveConfig();
-    }
-
-    public double getAddCommentPrice() {
-        return getEconomySection().getDouble("AddCommentPrice");
-    }
-
-    public void setAddCommentPrice(double addCommentPrice) {
-        getEconomySection().set("AddCommentPrice", addCommentPrice);
         config.saveConfig();
     }
 

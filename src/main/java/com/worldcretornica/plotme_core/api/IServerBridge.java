@@ -20,6 +20,12 @@ public interface IServerBridge {
 
     IOfflinePlayer getOfflinePlayer(String player);
 
+    /**
+     * Gets the player from the given UUID.
+     *
+     * @param uuid UUID of the player to retrieve
+     * @return a player if one was found, null otherwise
+     */
     IPlayer getPlayer(UUID uuid);
 
     IPlayer getPlayerExact(String name);
@@ -38,9 +44,9 @@ public interface IServerBridge {
 
     Economy getEconomy();
 
-    double getBalance(IOfflinePlayer playerbidder);
+    double getBalance(IPlayer playerbidder);
 
-    EconomyResponse withdrawPlayer(IOfflinePlayer player, double price);
+    EconomyResponse withdrawPlayer(IPlayer player, double price);
 
     EconomyResponse depositPlayer(IOfflinePlayer playercurrentbidder, double currentBid);
 
@@ -48,11 +54,7 @@ public interface IServerBridge {
 
     boolean getUsinglwc();
 
-    String getVersion();
-
     IWorld getWorld(String name);
-
-    void sendMessage(ICommandSender sender, String message);
 
     void setupCommands();
 
@@ -70,15 +72,13 @@ public interface IServerBridge {
 
     String getDataFolder();
 
-    String getColor(String color);
-
     void reloadConfig();
 
     IConfigSection getConfig();
 
     IConfigSection getConfig(String file);
 
-    void saveResource(String fileName, boolean b);
+    void saveResource(String fileName, boolean replace);
 
     boolean addMultiverseWorld(String worldname, String environment, String seed, String worldtype, boolean bool, String generator);
 
@@ -97,8 +97,6 @@ public interface IServerBridge {
     ILocation createLocation(IWorld world, int x, int y, int z);
 
     IEntityType getEntityType(String string);
-
-    IConfigSection getConfig(InputStream defConfigStream);
 
     IConfigSection loadDefaultConfig(String string);
 }

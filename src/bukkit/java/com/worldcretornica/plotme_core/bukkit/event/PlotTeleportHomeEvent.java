@@ -15,7 +15,7 @@ import org.bukkit.event.Cancellable;
 
 public class PlotTeleportHomeEvent extends PlotEvent implements Cancellable {
 
-    private InternalPlotTeleportHomeEvent event;
+    private final InternalPlotTeleportHomeEvent event;
 
     public PlotTeleportHomeEvent(PlotMe_Core instance, World world, Plot plot, Player player) {
         super(instance, plot, world);

@@ -13,7 +13,7 @@ import org.bukkit.event.Cancellable;
 
 public class PlotOwnerChangeEvent extends PlotEvent implements Cancellable {
 
-    private InternalPlotOwnerChangeEvent event;
+    private final InternalPlotOwnerChangeEvent event;
 
     public PlotOwnerChangeEvent(PlotMe_Core instance, World world, Plot plot, Player player, String newowner) {
         super(instance, plot, world);

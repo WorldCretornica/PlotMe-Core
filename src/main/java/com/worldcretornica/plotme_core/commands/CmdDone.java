@@ -20,7 +20,7 @@ public class CmdDone extends PlotCommand {
                 if (id.isEmpty()) {
                     player.sendMessage("§c" + C("MsgNoPlotFound"));
                 } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, player)) {
-                    Plot plot = plugin.getPlotMeCoreManager().getPlotById(player, id);
+                    Plot plot = plugin.getPlotMeCoreManager().getPlotById(id, player);
                     String name = player.getName();
 
                     if (plot.getOwner().equalsIgnoreCase(name) || player.hasPermission("PlotMe.admin.done")) {
@@ -32,14 +32,14 @@ public class CmdDone extends PlotCommand {
                                 player.sendMessage(C("MsgUnmarkFinished"));
 
                                 if (isAdvancedLogging()) {
-                                    plugin.getLogger().info(LOG + name + " " + C("WordMarked") + " " + id + " " + C("WordFinished"));
+                                    sob.getLogger().info(LOG + name + " " + C("WordMarked") + " " + id + " " + C("WordFinished"));
                                 }
                             } else {
                                 plot.setFinished();
                                 player.sendMessage(C("MsgMarkFinished"));
 
                                 if (isAdvancedLogging()) {
-                                    plugin.getLogger().info(LOG + name + " " + C("WordMarked") + " " + id + " " + C("WordUnfinished"));
+                                    sob.getLogger().info(LOG + name + " " + C("WordMarked") + " " + id + " " + C("WordUnfinished"));
                                 }
                             }
                         }
@@ -48,6 +48,7 @@ public class CmdDone extends PlotCommand {
                     player.sendMessage("§c" + C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
                 }
             } else {
+
                 player.sendMessage("§c" + C("MsgNotPlotWorld"));
                 return true;
             }

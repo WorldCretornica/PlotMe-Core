@@ -6,7 +6,7 @@ import org.bukkit.block.BlockState;
 
 public class BukkitBlockState implements IBlockState {
 
-    final BlockState blockstate;
+    private final BlockState blockstate;
 
     public BukkitBlockState(BlockState blockstate) {
         this.blockstate = blockstate;

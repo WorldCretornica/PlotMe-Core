@@ -8,11 +8,11 @@ import com.worldcretornica.plotme_core.api.IWorld;
 public class InternalPlotDisposeEvent extends InternalPlotEvent implements ICancellable {
 
     private boolean _canceled;
-    private IPlayer _disposer;
+    private final IPlayer disposer;
 
     public InternalPlotDisposeEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer disposer) {
         super(instance, plot, world);
-        _disposer = disposer;
+        this.disposer = disposer;
     }
 
     @Override
@@ -26,6 +26,6 @@ public class InternalPlotDisposeEvent extends InternalPlotEvent implements ICanc
     }
 
     public IPlayer getPlayer() {
-        return _disposer;
+        return disposer;
     }
 }

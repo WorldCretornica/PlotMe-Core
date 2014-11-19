@@ -30,10 +30,10 @@ public class CmdMove extends PlotCommand {
                     InternalPlotMoveEvent event = sob.getEventFactory().callPlotMoveEvent(plugin, world, world, plot1, plot2, player);
 
                     if (!event.isCancelled()) {
-                        if (plugin.getPlotMeCoreManager().movePlot(player.getWorld(), plot1, plot2)) {
+                        if (plugin.getPlotMeCoreManager().movePlot(world, plot1, plot2)) {
                             player.sendMessage(C("MsgPlotMovedSuccess"));
 
-                            plugin.getLogger().info(LOG + player.getName() + " " + C("MsgExchangedPlot") + " " + plot1 + " " + C("MsgAndPlot") + " " + plot2);
+                            sob.getLogger().info(LOG + player.getName() + " " + C("MsgExchangedPlot") + " " + plot1 + " " + C("MsgAndPlot") + " " + plot2);
                         } else {
                             player.sendMessage("§c" + C("ErrMovingPlot"));
                         }

@@ -8,11 +8,11 @@ import com.worldcretornica.plotme_core.api.IWorld;
 public class InternalPlotResetEvent extends InternalPlotEvent implements ICancellable {
 
     private boolean _canceled;
-    private ICommandSender _reseter;
+    private final ICommandSender reseter;
 
     public InternalPlotResetEvent(PlotMe_Core instance, IWorld world, Plot plot, ICommandSender reseter) {
         super(instance, plot, world);
-        _reseter = reseter;
+        this.reseter = reseter;
     }
 
     @Override
@@ -26,6 +26,6 @@ public class InternalPlotResetEvent extends InternalPlotEvent implements ICancel
     }
 
     public ICommandSender getReseter() {
-        return _reseter;
+        return reseter;
     }
 }

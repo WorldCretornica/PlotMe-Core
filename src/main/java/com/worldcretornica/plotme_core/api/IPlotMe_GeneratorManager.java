@@ -55,7 +55,7 @@ public interface IPlotMe_GeneratorManager {
 
     boolean isBlockInPlot(String id, ILocation blocklocation);
 
-    boolean movePlot(IWorld wFrom, IWorld wTo, String idFrom, String idTo);
+    boolean movePlot(IWorld world, String idFrom, String idTo);
 
     int bottomX(String id, IWorld world);
 
@@ -65,13 +65,11 @@ public interface IPlotMe_GeneratorManager {
 
     int topZ(String id, IWorld world);
 
-    void regen(IWorld world, String id, ICommandSender sender);
-
     ILocation getPlotHome(IWorld world, String id);
 
     boolean isValidId(String id);
 
-    boolean createConfig(String worldname, Map<String, String> args, ICommandSender sender);
+    boolean createConfig(String worldname, Map<String, String> args);
 
     Map<String, String> getDefaultGenerationConfig();
 

@@ -74,13 +74,6 @@ public class BukkitEventFactory implements IEventFactory {
     }
 
     @Override
-    public InternalPlotCommentEvent callPlotCommentEvent(PlotMe_Core plugin, IWorld world, Plot plot, IPlayer commenter, String comment) {
-        PlotCommentEvent event = new PlotCommentEvent(plugin, world, plot, commenter, comment);
-        Bukkit.getPluginManager().callEvent(event);
-        return event.getInternal();
-    }
-
-    @Override
     public InternalPlotWorldCreateEvent callPlotWorldCreateEvent(String worldname, Map<String, String> parameters) {
         PlotWorldCreateEvent event = new PlotWorldCreateEvent(worldname, parameters);
         Bukkit.getPluginManager().callEvent(event);
@@ -165,22 +158,22 @@ public class BukkitEventFactory implements IEventFactory {
     }
 
     @Override
-    public InternalPlotTeleportEvent callPlotTeleportEvent(PlotMe_Core plugin, IWorld world, Plot plot, IPlayer player, ILocation location, String PlotId) {
-        PlotTeleportEvent event = new PlotTeleportEvent(plugin, world, plot, player, location, PlotId);
+    public InternalPlotTeleportEvent callPlotTeleportEvent(PlotMe_Core plugin, IWorld world, Plot plot, IPlayer player, ILocation location, String plotId) {
+        PlotTeleportEvent event = new PlotTeleportEvent(plugin, world, plot, player, location, plotId);
         Bukkit.getPluginManager().callEvent(event);
         return event.getInternal();
     }
 
     @Override
-    public InternalPlotTeleportEvent callPlotTeleportEvent(PlotMe_Core plugin, IWorld world, IPlayer player, ILocation location, String PlotId) {
-        PlotTeleportEvent event = new PlotTeleportEvent(plugin, world, null, player, location, PlotId);
+    public InternalPlotTeleportEvent callPlotTeleportEvent(PlotMe_Core plugin, IWorld world, IPlayer player, ILocation location, String plotId) {
+        PlotTeleportEvent event = new PlotTeleportEvent(plugin, world, null, player, location, plotId);
         Bukkit.getPluginManager().callEvent(event);
         return event.getInternal();
     }
 
     @Override
-    public InternalPlotWorldLoadEvent callPlotWorldLoadEvent(PlotMe_Core plugin, String worldname, int NbPlots) {
-        PlotWorldLoadEvent event = new PlotWorldLoadEvent(worldname, NbPlots);
+    public InternalPlotWorldLoadEvent callPlotWorldLoadEvent(String worldname, int nbPlots) {
+        PlotWorldLoadEvent event = new PlotWorldLoadEvent(worldname, nbPlots);
         Bukkit.getPluginManager().callEvent(event);
         return event.getInternal();
     }

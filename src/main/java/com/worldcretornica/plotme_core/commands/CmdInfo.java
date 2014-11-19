@@ -5,6 +5,7 @@ import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.utils.Util;
 
 public class CmdInfo extends PlotCommand {
@@ -15,13 +16,14 @@ public class CmdInfo extends PlotCommand {
 
     public boolean exec(IPlayer player) {
         if (player.hasPermission("PlotMe.use.info")) {
-            if (plugin.getPlotMeCoreManager().isPlotWorld(player)) {
+            IWorld world = player.getWorld();
+            if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
                 String id = PlotMeCoreManager.getPlotId(player);
 
                 if (id.isEmpty()) {
                     player.sendMessage("§c" + C("MsgNoPlotFound"));
-                } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, player)) {
-                    Plot plot = plugin.getPlotMeCoreManager().getPlotById(player, id);
+                } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, world)) {
+                    Plot plot = plugin.getPlotMeCoreManager().getPlotById(id, world);
 
                     player.sendMessage("§aID: §b" + id + "§a " + C("InfoOwner") + ": §b" + plot.getOwner()
                                                + "§a " + C("InfoBiome") + ": §b" + plot.getBiome().name());
@@ -38,7 +40,7 @@ public class CmdInfo extends PlotCommand {
                         player.sendMessage("§a" + C("InfoDenied") + ": §b" + plot.getDenied());
                     }
 
-                    if (plugin.getPlotMeCoreManager().isEconomyEnabled(player)) {
+                    if (plugin.getPlotMeCoreManager().isEconomyEnabled(world)) {
                         if (plot.getCurrentBidder().isEmpty()) {
                             player.sendMessage("§a" + C("InfoAuctionned") + ": §b" + (plot.isAuctioned() ? C("WordYes")
                                                                                                                    + "§a " + C("InfoMinimumBid") + ": §b" + Util.round(plot.getCurrentBid()) : C("WordNo"))

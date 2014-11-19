@@ -19,30 +19,29 @@ public class CmdTP extends PlotCommand {
                 if (args.length == 2 || args.length == 3) {
                     String id = args[1];
 
-                    IWorld w;
+                    IWorld world;
 
                     if (args.length == 3) {
-                        String world = args[2];
 
-                        w = sob.getWorld(world);
+                        world = sob.getWorld(args[2]);
 
-                        if (w == null) {
+                        if (world == null) {
                             for (IWorld bworld : sob.getWorlds()) {
-                                if (bworld.getName().startsWith(world)) {
-                                    w = bworld;
+                                if (bworld.getName().startsWith(args[2])) {
+                                    world = bworld;
                                     break;
                                 }
                             }
                         }
                     } else if (!plugin.getPlotMeCoreManager().isPlotWorld(player)) {
-                        w = plugin.getPlotMeCoreManager().getFirstWorld();
+                        world = plugin.getPlotMeCoreManager().getFirstWorld();
                     } else {
-                        w = player.getWorld();
+                        world = player.getWorld();
                     }
 
-                    if (!plugin.getPlotMeCoreManager().isPlotWorld(w)) {
+                    if (!plugin.getPlotMeCoreManager().isPlotWorld(world)) {
                         player.sendMessage("§c" + C("MsgNoPlotworldFound"));
-                    } else if (!PlotMeCoreManager.isValidId(w, id)) {
+                    } else if (!PlotMeCoreManager.isValidId(world, id)) {
                         if (sob.getConfig().getBoolean("allowWorldTeleport")) {
                             player.sendMessage(C("WordUsage") + ": §c/plotme tp <ID> [" + C("WordWorld") + "] §r" + C("WordExample") + ": §c/plotme tp 5;-1 ");
                         } else {
@@ -50,9 +49,9 @@ public class CmdTP extends PlotCommand {
                         }
                         return true;
                     } else {
-                        ILocation loc = PlotMeCoreManager.getPlotHome(w, id);
+                        ILocation loc = PlotMeCoreManager.getPlotHome(world, id);
 
-                        InternalPlotTeleportEvent event = sob.getEventFactory().callPlotTeleportEvent(plugin, w, player, loc, id);
+                        InternalPlotTeleportEvent event = sob.getEventFactory().callPlotTeleportEvent(plugin, world, player, loc, id);
 
                         if (!event.isCancelled()) {
                             player.teleport(loc);

@@ -20,8 +20,6 @@ permissions:
         plotme.use.auto: true
         plotme.use.home: true
         plotme.use.info: true
-        plotme.use.comment: true
-        plotme.use.comments: true
         plotme.use.biome: true
         plotme.use.clear: true
         plotme.use.list: true
@@ -82,10 +80,6 @@ permissions:
       description: Gives the home command
     plotme.use.info:
       description: Gives the info command
-    plotme.use.comment:
-      description: Gives the comment command
-    plotme.use.comments:
-      description: Gives the comments command
     plotme.use.biome:
       description: Gives the biome and biomelist command
     plotme.use.clear:

@@ -35,22 +35,22 @@ public class PlotWorldEdit6_0_0 implements PlotWorldEdit {
 
     @Override
     public void setMask(IPlayer player, String id) {
-        BukkitWorld w = (BukkitWorld) player.getWorld();
-        BukkitPlayer bp = (BukkitPlayer) player;
+        BukkitWorld bukkitWorld = (BukkitWorld) player.getWorld();
+        BukkitPlayer bukkitPlayer = (BukkitPlayer) player;
 
         BukkitLocation bottom;
         BukkitLocation top;
 
-        LocalSession session = we.getSession(bp.getPlayer());
+        LocalSession session = we.getSession(bukkitPlayer.getPlayer());
 
         if (!"".equalsIgnoreCase(id)) {
-            Plot plot = plugin.getPlotMeCoreManager().getPlotById(player, id);
+            Plot plot = plugin.getPlotMeCoreManager().getPlotById(id, player);
 
             if (plot != null && plot.isAllowed(player.getUniqueId())) {
-                bottom = (BukkitLocation) PlotMeCoreManager.getPlotBottomLoc(w, id);
-                top = (BukkitLocation) PlotMeCoreManager.getPlotTopLoc(w, id);
+                bottom = (BukkitLocation) PlotMeCoreManager.getPlotBottomLoc(bukkitWorld, id);
+                top = (BukkitLocation) PlotMeCoreManager.getPlotTopLoc(bukkitWorld, id);
 
-                LocalSession localsession = we.getSession(bp.getPlayer());
+                LocalSession localsession = we.getSession(bukkitPlayer.getPlayer());
                 World world = localsession.getSelectionWorld();
 
                 Vector pos1 = new Vector(bottom.getBlockX(), bottom.getBlockY(), bottom.getBlockZ());
@@ -65,11 +65,11 @@ public class PlotWorldEdit6_0_0 implements PlotWorldEdit {
             }
         }
 
-        bottom = new BukkitLocation(new Location(w.getWorld(), 0, 0, 0));
-        top = new BukkitLocation(new Location(w.getWorld(), 0, 0, 0));
+        bottom = new BukkitLocation(new Location(bukkitWorld.getWorld(), 0, 0, 0));
+        top = new BukkitLocation(new Location(bukkitWorld.getWorld(), 0, 0, 0));
 
         if (session.getMask() == null) {
-            LocalSession localsession = we.getSession(bp.getPlayer());
+            LocalSession localsession = we.getSession(bukkitPlayer.getPlayer());
             World world = localsession.getSelectionWorld();
 
             Vector pos1 = new Vector(bottom.getBlockX(), bottom.getBlockY(), bottom.getBlockZ());

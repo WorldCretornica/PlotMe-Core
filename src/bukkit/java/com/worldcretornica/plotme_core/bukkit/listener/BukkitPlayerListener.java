@@ -20,6 +20,7 @@ import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.bukkit.PlotMe_CorePlugin;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
+import com.worldcretornica.plotme_core.bukkit.api.BukkitWorld;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -46,23 +47,22 @@ public class BukkitPlayerListener implements Listener {
         for (String world : badWorlds) {
             if (plugin.getAPI().getGenManager(world) == null) {
                 // TODO: Add as multilingual caption
-                plugin.getServerObjectBuilder().sendMessage(player, "The world " + ChatColor.GOLD + world + ChatColor.RESET + " is defined as a plotworld but does not exist or is not using a PlotMe generator.");
+                player.sendMessage("The world " + ChatColor.GOLD + world + ChatColor.RESET + " is defined as a plotworld but does not exist or is not using a PlotMe generator.");
             }
         }
     }
 
     @EventHandler
     public void onWorldChange(PlayerTeleportEvent event) {
-        IWorld toWorld = (IWorld) event.getTo().getWorld();
+        IWorld toWorld = new BukkitWorld(event.getTo().getWorld());
         if (toWorld.equals(event.getFrom().getWorld())) {
-            // Did not change world
             return;
         }
         BukkitPlayer player = new BukkitPlayer(event.getPlayer());
         if (player.isOp() && plugin.getAPI().getBadWorlds().contains(toWorld.getName())) {
             if (PlotMe_Core.getGenManager(toWorld) == null) {
                 // TODO: Add as multilingual caption
-                plugin.getServerObjectBuilder().sendMessage(player, "This world is defined as a plotworld but is not using a PlotMe generator.");
+                player.sendMessage("This world is defined as a plotworld but is not using a PlotMe generator.");
             }
         }
     }

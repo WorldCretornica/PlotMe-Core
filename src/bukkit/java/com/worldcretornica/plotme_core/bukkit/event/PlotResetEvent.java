@@ -13,7 +13,7 @@ import org.bukkit.event.Cancellable;
 
 public class PlotResetEvent extends PlotEvent implements Cancellable {
 
-    private InternalPlotResetEvent event;
+    private final InternalPlotResetEvent event;
 
     public PlotResetEvent(PlotMe_Core instance, World world, Plot plot, CommandSender reseter) {
         super(instance, plot, world);

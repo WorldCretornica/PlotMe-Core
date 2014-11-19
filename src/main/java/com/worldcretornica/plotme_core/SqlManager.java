@@ -44,10 +44,10 @@ public class SqlManager {
             }
         } catch (SQLException ex) {
             plugin.getLogger().severe("SQL exception on initialize :");
-            plugin.getLogger().severe("  " + ex.getMessage());
+            plugin.getLogger().severe(ex.getMessage());
         } catch (ClassNotFoundException ex) {
             plugin.getLogger().severe("You need the SQLite/MySQL library. :");
-            plugin.getLogger().severe("  " + ex.getMessage());
+            plugin.getLogger().severe(ex.getMessage());
         }
 
         createTable();
@@ -182,13 +182,6 @@ public class SqlManager {
                 }
                 set.close();
 
-                // Commenter playerid
-                set = statement.executeQuery("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '" + schema + "' AND " + "TABLE_NAME='plotmeComments' AND column_name='playerid'");
-                if (!set.next()) {
-                    statement.execute("ALTER TABLE plotmeComments ADD playerid blob(16) NULL;");
-                    conn.commit();
-                }
-                set.close();
 
                 // CurrentBidderId
                 set = statement.executeQuery("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '" + schema + "' AND " + "TABLE_NAME='plotmePlots' AND column_name='currentbidderId'");
@@ -410,22 +403,6 @@ public class SqlManager {
                 set.close();
                 found = false;
 
-                // Commenter id
-                set = statement.executeQuery("PRAGMA table_info(`plotmeComments`)");
-
-                while (set.next() && !found) {
-                    column = set.getString(2);
-                    if ("playerid".equalsIgnoreCase(column))
-                        found = true;
-                }
-
-                if (!found) {
-                    statement.execute("ALTER TABLE plotmeComments ADD playerid blob(16) NULL;");
-                    conn.commit();
-                }
-                set.close();
-                found = false;
-
                 // CurrentBidderId
                 set = statement.executeQuery("PRAGMA table_info(`plotmePlots`)");
 
@@ -489,7 +466,7 @@ public class SqlManager {
             }
         } catch (SQLException ex) {
             plugin.getLogger().severe("Update table exception :");
-            plugin.getLogger().severe("  " + ex.getMessage());
+            plugin.getLogger().severe(ex.getMessage());
         } finally {
             try {
                 if (statement != null) {
@@ -500,7 +477,7 @@ public class SqlManager {
                 }
             } catch (SQLException ex) {
                 plugin.getLogger().severe("Update table exception (on close) :");
-                plugin.getLogger().severe("  " + ex.getMessage());
+                plugin.getLogger().severe(ex.getMessage());
             }
         }
     }
@@ -516,7 +493,7 @@ public class SqlManager {
                 }
             } catch (SQLException ex) {
                 plugin.getLogger().severe("Failed to check SQL status :");
-                plugin.getLogger().severe("  " + ex.getMessage());
+                plugin.getLogger().severe(ex.getMessage());
             }
         }
         return conn;
@@ -536,7 +513,7 @@ public class SqlManager {
                 }
             } catch (SQLException ex) {
                 plugin.getLogger().severe("Error on Connection close :");
-                plugin.getLogger().severe("  " + ex.getMessage());
+                plugin.getLogger().severe(ex.getMessage());
             }
         }
     }
@@ -551,7 +528,7 @@ public class SqlManager {
             return rs.next();
         } catch (SQLException ex) {
             plugin.getLogger().severe("Table Check Exception :");
-            plugin.getLogger().severe("  " + ex.getMessage());
+            plugin.getLogger().severe(ex.getMessage());
             return false;
         } finally {
             try {
@@ -560,7 +537,7 @@ public class SqlManager {
                 }
             } catch (SQLException ex) {
                 plugin.getLogger().severe("Table Check SQL Exception (on closing) :");
-                plugin.getLogger().severe("  " + ex.getMessage());
+                plugin.getLogger().severe(ex.getMessage());
             }
         }
     }
@@ -598,21 +575,6 @@ public class SqlManager {
                                             + "PRIMARY KEY (idX, idZ, world) "
                                             + ");";
                 st.executeUpdate(PLOT_TABLE);
-                conn.commit();
-            }
-
-            if (!tableExists("plotmeComments")) {
-                String COMMENT_TABLE = "CREATE TABLE `plotmeComments` ("
-                                               + "`idX` INTEGER,"
-                                               + "`idZ` INTEGER,"
-                                               + "`world` varchar(32) NOT NULL,"
-                                               + "`commentid` INTEGER,"
-                                               + "`player` varchar(32) NOT NULL,"
-                                               + "`comment` text,"
-                                               + "`playerid` blob(16),"
-                                               + "PRIMARY KEY (idX, idZ, world, commentid) "
-                                               + ");";
-                st.executeUpdate(COMMENT_TABLE);
                 conn.commit();
             }
 
@@ -672,8 +634,6 @@ public class SqlManager {
                     ResultSet setAllowed = null;
                     Statement slDenied = sqliteconn.createStatement();
                     ResultSet setDenied = null;
-                    Statement slComments = sqliteconn.createStatement();
-                    ResultSet setComments = null;
                     Statement slFreed = sqliteconn.createStatement();
 
                     int size = 0;
@@ -695,7 +655,6 @@ public class SqlManager {
                         boolean finished = setPlots.getBoolean("finished");
                         PlayerList allowed = new PlayerList();
                         PlayerList denied = new PlayerList();
-                        List<String[]> comments = new ArrayList<>();
                         double customprice = setPlots.getDouble("customprice");
                         boolean forsale = setPlots.getBoolean("forsale");
                         String finisheddate = setPlots.getString("finisheddate");
@@ -748,25 +707,8 @@ public class SqlManager {
 
                         setDenied.close();
 
-                        setComments = slComments.executeQuery("SELECT * FROM plotmeComments WHERE idX = '" + idX + "' AND idZ = '" + idZ + "' AND world = '" + world + "'");
-
-                        while (setComments.next()) {
-                            String[] comment = new String[3];
-
-                            byte[] byPlayerId = setComments.getBytes("playerid");
-                            if (byPlayerId != null) {
-                                comment[2] = UUIDFetcher.fromBytes(byPlayerId).toString();
-                            } else {
-                                comment[2] = null;
-                            }
-
-                            comment[0] = setComments.getString("player");
-                            comment[1] = setComments.getString("comment");
-                            comments.add(comment);
-                        }
-
                         Plot plot = new Plot(plugin, owner, ownerId, world, biome,
-                                                    expireddate, finished, allowed, comments, idX + ";" + idZ, customprice,
+                                                    expireddate, finished, allowed, idX + ";" + idZ, customprice,
                                                     forsale, finisheddate, protect, currentbidder, currentbidderid, currentbid,
                                                     auctionned, denied, auctionneddate);
                         addPlot(plot, idX, idZ, topX, bottomX, topZ, bottomZ);
@@ -788,9 +730,6 @@ public class SqlManager {
                     if (slAllowed != null) {
                         slAllowed.close();
                     }
-                    if (slComments != null) {
-                        slComments.close();
-                    }
                     if (slDenied != null) {
                         slDenied.close();
                     }
@@ -798,9 +737,6 @@ public class SqlManager {
                         slFreed.close();
                     }
                     setPlots.close();
-                    if (setComments != null) {
-                        setComments.close();
-                    }
                     if (setDenied != null) {
                         setDenied.close();
                     }
@@ -821,7 +757,7 @@ public class SqlManager {
             ex.printStackTrace();
         } catch (ClassNotFoundException ex) {
             plugin.getLogger().severe("You need the SQLite library :");
-            plugin.getLogger().severe("  " + ex.getMessage());
+            plugin.getLogger().severe(ex.getMessage());
         } finally {
             try {
                 if (st != null) {
@@ -829,7 +765,7 @@ public class SqlManager {
                 }
             } catch (SQLException ex) {
                 plugin.getLogger().severe("Could not create the table (on close) :");
-                plugin.getLogger().severe("  " + ex.getMessage());
+                plugin.getLogger().severe(ex.getMessage());
             }
         }
     }
@@ -862,12 +798,12 @@ public class SqlManager {
         }
     }
 
-    public void addPlot(Plot plot, int idX, int idZ, IWorld w) {
+    public void addPlot(Plot plot, int idX, int idZ, IWorld world) {
         addPlot(plot, idX, idZ,
-                       PlotMeCoreManager.topX(plot.getId(), w),
-                       PlotMeCoreManager.bottomX(plot.getId(), w),
-                       PlotMeCoreManager.topZ(plot.getId(), w),
-                       PlotMeCoreManager.bottomZ(plot.getId(), w));
+                       PlotMeCoreManager.topX(plot.getId(), world),
+                       PlotMeCoreManager.bottomX(plot.getId(), world),
+                       PlotMeCoreManager.topZ(plot.getId(), world),
+                       PlotMeCoreManager.bottomZ(plot.getId(), world));
     }
 
     public void addPlot(Plot plot, int idX, int idZ, int topX, int bottomX, int topZ, int bottomZ) {
@@ -931,24 +867,6 @@ public class SqlManager {
                 }
             }
 
-            if (plot.getComments() != null && !plot.getComments().isEmpty()) {
-                int commentid = 1;
-                for (String[] comments : plot.getComments()) {
-                    UUID uuid = null;
-
-                    if (comments.length >= 3) {
-                        String strUUID = comments[2];
-                        try {
-                            uuid = UUID.fromString(strUUID);
-                        } catch (Exception ignored) {
-                        }
-                    }
-
-                    addPlotComment(comments, commentid, idX, idZ, plot.getWorld(), uuid);
-                    commentid++;
-                }
-            }
-
             if (plot.getOwner() != null && !plot.getOwner().isEmpty() && plot.getOwnerId() == null) {
                 fetchOwnerUUIDAsync(idX, idZ, plot.getWorld().toLowerCase(), plot.getOwner());
             }
@@ -959,7 +877,7 @@ public class SqlManager {
 
         } catch (SQLException ex) {
             plugin.getLogger().severe("Insert Exception :");
-            plugin.getLogger().severe("  " + ex.getMessage());
+            plugin.getLogger().severe(ex.getMessage());
         } finally {
             try {
                 if (ps != null) {
@@ -967,7 +885,7 @@ public class SqlManager {
                 }
             } catch (SQLException ex) {
                 plugin.getLogger().severe("Insert Exception (on close) :");
-                plugin.getLogger().severe("  " + ex.getMessage());
+                plugin.getLogger().severe(ex.getMessage());
             }
         }
     }
@@ -997,7 +915,7 @@ public class SqlManager {
 
         } catch (SQLException ex) {
             plugin.getLogger().severe("Insert Exception :");
-            plugin.getLogger().severe("  " + ex.getMessage());
+            plugin.getLogger().severe(ex.getMessage());
         } finally {
             try {
                 if (ps != null) {
@@ -1005,7 +923,7 @@ public class SqlManager {
                 }
             } catch (SQLException ex) {
                 plugin.getLogger().severe("Insert Exception (on close) :");
-                plugin.getLogger().severe("  " + ex.getMessage());
+                plugin.getLogger().severe(ex.getMessage());
             }
         }
     }
@@ -1034,7 +952,7 @@ public class SqlManager {
 
         } catch (SQLException ex) {
             plugin.getLogger().severe("Insert Exception :");
-            plugin.getLogger().severe("  " + ex.getMessage());
+            plugin.getLogger().severe(ex.getMessage());
         } finally {
             try {
                 if (ps != null) {
@@ -1042,7 +960,7 @@ public class SqlManager {
                 }
             } catch (SQLException ex) {
                 plugin.getLogger().severe("Insert Exception (on close) :");
-                plugin.getLogger().severe("  " + ex.getMessage());
+                plugin.getLogger().severe(ex.getMessage());
             }
         }
     }
@@ -1072,7 +990,7 @@ public class SqlManager {
 
         } catch (SQLException ex) {
             plugin.getLogger().severe("Insert Exception :");
-            plugin.getLogger().severe("  " + ex.getMessage());
+            plugin.getLogger().severe(ex.getMessage());
         } finally {
             try {
                 if (ps != null) {
@@ -1080,46 +998,7 @@ public class SqlManager {
                 }
             } catch (SQLException ex) {
                 plugin.getLogger().severe("Insert Exception (on close) :");
-                plugin.getLogger().severe("  " + ex.getMessage());
-            }
-        }
-    }
-
-    public void addPlotComment(String[] comment, int commentid, int idX, int idZ, String world, UUID uuid) {
-        PreparedStatement ps = null;
-
-        // Comments
-        try {
-            Connection conn = getConnection();
-
-            ps = conn.prepareStatement("INSERT INTO plotmeComments (idX, idZ, commentid, player, comment, world, playerid) VALUES (?,?,?,?,?,?,?)");
-
-            ps.setInt(1, idX);
-            ps.setInt(2, idZ);
-            ps.setInt(3, commentid);
-            ps.setString(4, comment[0]);
-            ps.setString(5, comment[1]);
-            ps.setString(6, world.toLowerCase());
-            if (uuid != null) {
-                ps.setBytes(7, UUIDFetcher.toBytes(uuid));
-            } else {
-                ps.setBytes(7, null);
-            }
-
-            ps.executeUpdate();
-            conn.commit();
-
-        } catch (SQLException ex) {
-            plugin.getLogger().severe("Insert Exception :");
-            plugin.getLogger().severe("  " + ex.getMessage());
-        } finally {
-            try {
-                if (ps != null) {
-                    ps.close();
-                }
-            } catch (SQLException ex) {
-                plugin.getLogger().severe("Insert Exception (on close) :");
-                plugin.getLogger().severe("  " + ex.getMessage());
+                plugin.getLogger().severe(ex.getMessage());
             }
         }
     }
@@ -1128,14 +1007,6 @@ public class SqlManager {
         PreparedStatement ps = null;
         try {
             Connection conn = getConnection();
-
-            ps = conn.prepareStatement("DELETE FROM plotmeComments WHERE idX = ? and idZ = ? and LOWER(world) = ?");
-            ps.setInt(1, idX);
-            ps.setInt(2, idZ);
-            ps.setString(3, world);
-            ps.executeUpdate();
-            ps.close();
-            conn.commit();
 
             ps = conn.prepareStatement("DELETE FROM plotmeAllowed WHERE idX = ? and idZ = ? and LOWER(world) = ?");
             ps.setInt(1, idX);
@@ -1155,7 +1026,7 @@ public class SqlManager {
 
         } catch (SQLException ex) {
             plugin.getLogger().severe("Delete Exception :");
-            plugin.getLogger().severe("  " + ex.getMessage());
+            plugin.getLogger().severe(ex.getMessage());
         } finally {
             try {
                 if (ps != null) {
@@ -1163,7 +1034,7 @@ public class SqlManager {
                 }
             } catch (SQLException ex) {
                 plugin.getLogger().severe("Delete Exception (on close) :");
-                plugin.getLogger().severe("  " + ex.getMessage());
+                plugin.getLogger().severe(ex.getMessage());
             }
         }
     }
@@ -1181,7 +1052,7 @@ public class SqlManager {
             conn.commit();
         } catch (SQLException ex) {
             plugin.getLogger().severe("Delete Exception :");
-            plugin.getLogger().severe("  " + ex.getMessage());
+            plugin.getLogger().severe(ex.getMessage());
         } finally {
             try {
                 if (ps != null) {
@@ -1189,35 +1060,7 @@ public class SqlManager {
                 }
             } catch (SQLException ex) {
                 plugin.getLogger().severe("Delete Exception (on close) :");
-                plugin.getLogger().severe("  " + ex.getMessage());
-            }
-        }
-    }
-
-    public void deletePlotComment(int idX, int idZ, int commentid, String world) {
-        PreparedStatement ps = null;
-        try {
-            Connection conn = getConnection();
-
-            ps = conn.prepareStatement("DELETE FROM plotmeComments WHERE idX = ? and idZ = ? and commentid = ? and LOWER(world) = ?");
-            ps.setInt(1, idX);
-            ps.setInt(2, idZ);
-            ps.setInt(3, commentid);
-            ps.setString(4, world);
-            ps.executeUpdate();
-            conn.commit();
-
-        } catch (SQLException ex) {
-            plugin.getLogger().severe("Delete Exception :");
-            plugin.getLogger().severe("  " + ex.getMessage());
-        } finally {
-            try {
-                if (ps != null) {
-                    ps.close();
-                }
-            } catch (SQLException ex) {
-                plugin.getLogger().severe("Delete Exception (on close) :");
-                plugin.getLogger().severe("  " + ex.getMessage());
+                plugin.getLogger().severe(ex.getMessage());
             }
         }
     }
@@ -1243,7 +1086,7 @@ public class SqlManager {
 
         } catch (SQLException ex) {
             plugin.getLogger().severe("Delete Exception :");
-            plugin.getLogger().severe("  " + ex.getMessage());
+            plugin.getLogger().severe(ex.getMessage());
         } finally {
             try {
                 if (ps != null) {
@@ -1251,7 +1094,7 @@ public class SqlManager {
                 }
             } catch (SQLException ex) {
                 plugin.getLogger().severe("Delete Exception (on close) :");
-                plugin.getLogger().severe("  " + ex.getMessage());
+                plugin.getLogger().severe(ex.getMessage());
             }
         }
     }
@@ -1277,7 +1120,7 @@ public class SqlManager {
 
         } catch (SQLException ex) {
             plugin.getLogger().severe("Delete Exception :");
-            plugin.getLogger().severe("  " + ex.getMessage());
+            plugin.getLogger().severe(ex.getMessage());
         } finally {
             try {
                 if (ps != null) {
@@ -1285,7 +1128,7 @@ public class SqlManager {
                 }
             } catch (SQLException ex) {
                 plugin.getLogger().severe("Delete Exception (on close) :");
-                plugin.getLogger().severe("  " + ex.getMessage());
+                plugin.getLogger().severe(ex.getMessage());
             }
         }
     }
@@ -1295,11 +1138,9 @@ public class SqlManager {
         PreparedStatement statementPlot = null;
         PreparedStatement statementAllowed = null;
         PreparedStatement statementDenied = null;
-        PreparedStatement statementComment = null;
         ResultSet setPlots = null;
         ResultSet setAllowed = null;
         ResultSet setDenied = null;
-        ResultSet setComments = null;
 
         int idX = PlotMeCoreManager.getIdX(id);
         int idZ = PlotMeCoreManager.getIdZ(id);
@@ -1325,7 +1166,6 @@ public class SqlManager {
                 boolean finished = setPlots.getBoolean("finished");
                 PlayerList allowed = new PlayerList();
                 PlayerList denied = new PlayerList();
-                List<String[]> comments = new ArrayList<>();
                 double customprice = setPlots.getDouble("customprice");
                 boolean forsale = setPlots.getBoolean("forsale");
                 String finisheddate = setPlots.getString("finisheddate");
@@ -1386,32 +1226,13 @@ public class SqlManager {
                 if (setDenied != null)
                     setDenied.close();
 
-                statementComment = conn.prepareStatement("SELECT * FROM plotmeComments WHERE LOWER(world) = ? AND idX = ? AND idZ = ?");
-                statementComment.setString(1, world);
-                statementComment.setInt(2, idX);
-                statementComment.setInt(3, idZ);
-                setComments = statementComment.executeQuery();
-
-                while (setComments.next()) {
-                    String[] comment = new String[3];
-                    comment[0] = setComments.getString("player");
-                    comment[1] = setComments.getString("comment");
-
-                    byte[] byPlayerId = setComments.getBytes("playerid");
-                    if (byPlayerId != null) {
-                        comment[2] = UUIDFetcher.fromBytes(byPlayerId).toString();
-                    }
-
-                    comments.add(comment);
-                }
-
                 plot = new Plot(plugin, owner, ownerId, world, biome, expireddate, finished, allowed,
-                                       comments, "" + idX + ";" + idZ, customprice, forsale, finisheddate, protect,
+                                       idX + ";" + idZ, customprice, forsale, finisheddate, protect,
                                        currentbidder, currentbidderid, currentbid, auctionned, denied, auctionneddate);
             }
         } catch (SQLException ex) {
             plugin.getLogger().severe("Plot load Exception :");
-            plugin.getLogger().severe("  " + ex.getMessage());
+            plugin.getLogger().severe(ex.getMessage());
         } finally {
             try {
                 if (statementPlot != null) {
@@ -1420,17 +1241,11 @@ public class SqlManager {
                 if (statementAllowed != null) {
                     statementAllowed.close();
                 }
-                if (statementComment != null) {
-                    statementComment.close();
-                }
                 if (statementDenied != null) {
                     statementDenied.close();
                 }
                 if (setPlots != null) {
                     setPlots.close();
-                }
-                if (setComments != null) {
-                    setComments.close();
                 }
                 if (setDenied != null) {
                     setDenied.close();
@@ -1440,7 +1255,7 @@ public class SqlManager {
                 }
             } catch (SQLException ex) {
                 plugin.getLogger().severe("Plot load Exception (on close) :");
-                plugin.getLogger().severe("  " + ex.getMessage());
+                plugin.getLogger().severe(ex.getMessage());
             }
         }
         return plot;
@@ -1465,7 +1280,7 @@ public class SqlManager {
 
                 // plugin.getLogger().info("Done loading " + pmi.getNbPlots() +
                 // " plots for world " + worldname);
-                plugin.getServerBridge().getEventFactory().callPlotWorldLoadEvent(plugin, worldname, pmi.getNbPlots());
+                plugin.getServerBridge().getEventFactory().callPlotWorldLoadEvent(worldname, pmi.getNbPlots());
             }
         });
     }
@@ -1476,11 +1291,9 @@ public class SqlManager {
         Statement statementPlot = null;
         Statement statementAllowed = null;
         Statement statementDenied = null;
-        Statement statementComment = null;
         ResultSet setPlots = null;
         ResultSet setAllowed = null;
         ResultSet setDenied = null;
-        ResultSet setComments = null;
 
         try {
             Connection conn = getConnection();
@@ -1501,7 +1314,6 @@ public class SqlManager {
                 boolean finished = setPlots.getBoolean("finished");
                 PlayerList allowed = new PlayerList();
                 PlayerList denied = new PlayerList();
-                List<String[]> comments = new ArrayList<>();
                 double customprice = setPlots.getDouble("customprice");
                 boolean forsale = setPlots.getBoolean("forsale");
                 String finisheddate = setPlots.getString("finisheddate");
@@ -1554,29 +1366,13 @@ public class SqlManager {
                 if (setDenied != null)
                     setDenied.close();
 
-                statementComment = conn.createStatement();
-                setComments = statementComment.executeQuery("SELECT * FROM plotmeComments WHERE idX = '" + idX + "' AND idZ = '" + idZ + "' AND LOWER(world) = '" + world + "'");
-
-                while (setComments.next()) {
-                    String[] comment = new String[3];
-                    comment[0] = setComments.getString("player");
-                    comment[1] = setComments.getString("comment");
-
-                    byte[] byPlayerId = setComments.getBytes("playerid");
-                    if (byPlayerId != null) {
-                        comment[2] = UUIDFetcher.fromBytes(byPlayerId).toString();
-                    }
-
-                    comments.add(comment);
-                }
-
-                Plot plot = new Plot(plugin, owner, ownerId, world, biome, expireddate, finished, allowed, comments, "" + idX + ";" + idZ,
+                Plot plot = new Plot(plugin, owner, ownerId, world, biome, expireddate, finished, allowed, idX + ";" + idZ,
                                             customprice, forsale, finisheddate, protect, currentbidder, currentbidderid, currentbid, auctionned, denied, auctionneddate);
-                ret.put("" + idX + ";" + idZ, plot);
+                ret.put(idX + ";" + idZ, plot);
             }
         } catch (SQLException ex) {
             plugin.getLogger().severe("Load Exception :");
-            plugin.getLogger().severe("  " + ex.getMessage());
+            plugin.getLogger().severe(ex.getMessage());
         } finally {
             try {
                 if (statementPlot != null) {
@@ -1585,17 +1381,11 @@ public class SqlManager {
                 if (statementAllowed != null) {
                     statementAllowed.close();
                 }
-                if (statementComment != null) {
-                    statementComment.close();
-                }
                 if (statementDenied != null) {
                     statementDenied.close();
                 }
                 if (setPlots != null) {
                     setPlots.close();
-                }
-                if (setComments != null) {
-                    setComments.close();
                 }
                 if (setDenied != null) {
                     setDenied.close();
@@ -1605,7 +1395,7 @@ public class SqlManager {
                 }
             } catch (SQLException ex) {
                 plugin.getLogger().severe("Load Exception (on close) :");
-                plugin.getLogger().severe("  " + ex.getMessage());
+                plugin.getLogger().severe(ex.getMessage());
             }
         }
         return ret;
@@ -1634,7 +1424,7 @@ public class SqlManager {
             }
         } catch (SQLException ex) {
             plugin.getLogger().severe("GetFreed Exception :");
-            plugin.getLogger().severe("  " + ex.getMessage());
+            plugin.getLogger().severe(ex.getMessage());
         } finally {
             try {
                 if (statementPlot != null) {
@@ -1645,7 +1435,7 @@ public class SqlManager {
                 }
             } catch (SQLException ex) {
                 plugin.getLogger().severe("GetFreed Exception (on close) :");
-                plugin.getLogger().severe("  " + ex.getMessage());
+                plugin.getLogger().severe(ex.getMessage());
             }
         }
         return ret;
@@ -1669,7 +1459,7 @@ public class SqlManager {
             }
         } catch (SQLException ex) {
             plugin.getLogger().severe("PlotCount Exception :");
-            plugin.getLogger().severe("  " + ex.getMessage());
+            plugin.getLogger().severe(ex.getMessage());
         } finally {
             try {
                 if (ps != null) {
@@ -1680,7 +1470,7 @@ public class SqlManager {
                 }
             } catch (SQLException ex) {
                 plugin.getLogger().severe("PlotCount Exception (on close) :");
-                plugin.getLogger().severe("  " + ex.getMessage());
+                plugin.getLogger().severe(ex.getMessage());
             }
         }
         return nbplots;
@@ -1711,7 +1501,7 @@ public class SqlManager {
             }
         } catch (SQLException ex) {
             plugin.getLogger().severe("PlotCount Exception :");
-            plugin.getLogger().severe("  " + ex.getMessage());
+            plugin.getLogger().severe(ex.getMessage());
         } finally {
             try {
                 if (ps != null) {
@@ -1722,7 +1512,7 @@ public class SqlManager {
                 }
             } catch (SQLException ex) {
                 plugin.getLogger().severe("PlotCount Exception (on close) :");
-                plugin.getLogger().severe("  " + ex.getMessage());
+                plugin.getLogger().severe(ex.getMessage());
             }
         }
         return nbplots;
@@ -1746,7 +1536,7 @@ public class SqlManager {
             }
         } catch (SQLException ex) {
             plugin.getLogger().severe("FinishedPlotCount Exception :");
-            plugin.getLogger().severe("  " + ex.getMessage());
+            plugin.getLogger().severe(ex.getMessage());
         } finally {
             try {
                 if (ps != null) {
@@ -1757,7 +1547,7 @@ public class SqlManager {
                 }
             } catch (SQLException ex) {
                 plugin.getLogger().severe("FinishedPlotCount Exception (on close) :");
-                plugin.getLogger().severe("  " + ex.getMessage());
+                plugin.getLogger().severe(ex.getMessage());
             }
         }
         return nbplots;
@@ -1786,7 +1576,7 @@ public class SqlManager {
             }
         } catch (SQLException ex) {
             plugin.getLogger().severe("ExpiredPlotCount Exception :");
-            plugin.getLogger().severe("  " + ex.getMessage());
+            plugin.getLogger().severe(ex.getMessage());
         } finally {
             try {
                 if (ps != null) {
@@ -1797,13 +1587,13 @@ public class SqlManager {
                 }
             } catch (SQLException ex) {
                 plugin.getLogger().severe("ExpiredPlotCount Exception (on close) :");
-                plugin.getLogger().severe("  " + ex.getMessage());
+                plugin.getLogger().severe(ex.getMessage());
             }
         }
         return nbplots;
     }
 
-    public List<Plot> getDonePlots(String world, int Page, int NbPerPage) {
+    public List<Plot> getDonePlots(String world, int page, int nbPerPage) {
         List<Plot> ret = new ArrayList<>();
         PreparedStatement statementPlot = null;
         ResultSet setPlots = null;
@@ -1813,8 +1603,8 @@ public class SqlManager {
 
             statementPlot = conn.prepareStatement("SELECT idX, idZ, owner, finisheddate FROM plotmePlots WHERE LOWER(world) = ? AND finished <> 0 ORDER BY finisheddate LIMIT ?, ?");
             statementPlot.setString(1, world);
-            statementPlot.setInt(2, NbPerPage * (Page - 1));
-            statementPlot.setInt(3, NbPerPage);
+            statementPlot.setInt(2, nbPerPage * (page - 1));
+            statementPlot.setInt(3, nbPerPage);
 
             setPlots = statementPlot.executeQuery();
 
@@ -1834,7 +1624,7 @@ public class SqlManager {
             }
         } catch (SQLException ex) {
             plugin.getLogger().severe("DonePlots Exception :");
-            plugin.getLogger().severe("  " + ex.getMessage());
+            plugin.getLogger().severe(ex.getMessage());
         } finally {
             try {
                 if (statementPlot != null) {
@@ -1845,7 +1635,7 @@ public class SqlManager {
                 }
             } catch (SQLException ex) {
                 plugin.getLogger().severe("DonePlots Exception (on close) :");
-                plugin.getLogger().severe("  " + ex.getMessage());
+                plugin.getLogger().severe(ex.getMessage());
             }
         }
         return ret;
@@ -1891,7 +1681,7 @@ public class SqlManager {
             }
         } catch (SQLException ex) {
             plugin.getLogger().severe("ExpiredPlots Exception :");
-            plugin.getLogger().severe("  " + ex.getMessage());
+            plugin.getLogger().severe(ex.getMessage());
         } finally {
             try {
                 if (statementPlot != null) {
@@ -1902,7 +1692,7 @@ public class SqlManager {
                 }
             } catch (SQLException ex) {
                 plugin.getLogger().severe("ExpiredPlots Exception (on close) :");
-                plugin.getLogger().severe("  " + ex.getMessage());
+                plugin.getLogger().severe(ex.getMessage());
             }
         }
         return ret;
@@ -1945,7 +1735,7 @@ public class SqlManager {
             }
         } catch (SQLException ex) {
             plugin.getLogger().severe("ExpiredPlots Exception :");
-            plugin.getLogger().severe("  " + ex.getMessage());
+            plugin.getLogger().severe(ex.getMessage());
         } finally {
             try {
                 if (statementPlot != null) {
@@ -1956,7 +1746,7 @@ public class SqlManager {
                 }
             } catch (SQLException ex) {
                 plugin.getLogger().severe("ExpiredPlots Exception (on close) :");
-                plugin.getLogger().severe("  " + ex.getMessage());
+                plugin.getLogger().severe(ex.getMessage());
             }
         }
         return null;
@@ -2015,7 +1805,6 @@ public class SqlManager {
                 boolean finished = setPlots.getBoolean("finished");
                 PlayerList allowed = new PlayerList();
                 PlayerList denied = new PlayerList();
-                List<String[]> comments = new ArrayList<>();
                 double customprice = setPlots.getDouble("customprice");
                 boolean forsale = setPlots.getBoolean("forsale");
                 String finisheddate = setPlots.getString("finisheddate");
@@ -2077,34 +1866,15 @@ public class SqlManager {
 
                 setDenied.close();
 
-                PreparedStatement statementComment = conn.prepareStatement("SELECT * FROM plotmeComments WHERE LOWER(world) = ? AND idX = ? AND idZ = ?");
-                statementComment.setString(1, world);
-                statementComment.setInt(2, idX);
-                statementComment.setInt(3, idZ);
-                ResultSet setComments = statementComment.executeQuery();
-
-                while (setComments.next()) {
-                    String[] comment = new String[3];
-                    comment[0] = setComments.getString("player");
-                    comment[1] = setComments.getString("comment");
-
-                    byte[] byPlayerId = setComments.getBytes("playerid");
-                    if (byPlayerId != null) {
-                        comment[2] = UUIDFetcher.fromBytes(byPlayerId).toString();
-                    }
-
-                    comments.add(comment);
-                }
-
                 Plot plot = new Plot(plugin, owner, ownerId, world, biome, expireddate, finished, allowed,
-                                            comments, "" + idX + ";" + idZ, customprice, forsale, finisheddate, protect,
+                                            idX + ";" + idZ, customprice, forsale, finisheddate, protect,
                                             currentbidder, currentbidderid, currentbid, auctionned, denied, auctionneddate);
 
                 ret.add(plot);
             }
         } catch (SQLException ex) {
             plugin.getLogger().severe("DonePlots Exception :");
-            plugin.getLogger().severe("  " + ex.getMessage());
+            plugin.getLogger().severe(ex.getMessage());
         } finally {
             try {
                 if (statementPlot != null) {
@@ -2115,7 +1885,7 @@ public class SqlManager {
                 }
             } catch (SQLException ex) {
                 plugin.getLogger().severe("DonePlots Exception (on close) :");
-                plugin.getLogger().severe("  " + ex.getMessage());
+                plugin.getLogger().severe(ex.getMessage());
             }
         }
         return ret;
@@ -2153,7 +1923,6 @@ public class SqlManager {
                 boolean finished = setPlots.getBoolean("finished");
                 PlayerList allowed = new PlayerList();
                 PlayerList denied = new PlayerList();
-                List<String[]> comments = new ArrayList<>();
                 double customprice = setPlots.getDouble("customprice");
                 boolean forsale = setPlots.getBoolean("forsale");
                 String finisheddate = setPlots.getString("finisheddate");
@@ -2213,34 +1982,15 @@ public class SqlManager {
 
                 setDenied.close();
 
-                PreparedStatement statementComment = conn.prepareStatement("SELECT * FROM plotmeComments WHERE LOWER(world) = ? AND idX = ? AND idZ = ?");
-                statementComment.setString(1, world);
-                statementComment.setInt(2, idX);
-                statementComment.setInt(3, idZ);
-                ResultSet setComments = statementComment.executeQuery();
-
-                while (setComments.next()) {
-                    String[] comment = new String[3];
-                    comment[0] = setComments.getString("player");
-                    comment[1] = setComments.getString("comment");
-
-                    byte[] byPlayerId = setComments.getBytes("playerid");
-                    if (byPlayerId != null) {
-                        comment[2] = UUIDFetcher.fromBytes(byPlayerId).toString();
-                    }
-
-                    comments.add(comment);
-                }
-
                 Plot plot = new Plot(plugin, owner, ownerId, world, biome, expireddate, finished, allowed,
-                                            comments, "" + idX + ";" + idZ, customprice, forsale, finisheddate, protect,
+                                            idX + ";" + idZ, customprice, forsale, finisheddate, protect,
                                             currentbidder, currentbidderid, currentbid, auctionned, denied, auctionneddate);
 
                 ret.add(plot);
             }
         } catch (SQLException ex) {
             plugin.getLogger().severe("DonePlots Exception :");
-            plugin.getLogger().severe("  " + ex.getMessage());
+            plugin.getLogger().severe(ex.getMessage());
         } finally {
             try {
                 if (statementPlot != null) {
@@ -2251,7 +2001,7 @@ public class SqlManager {
                 }
             } catch (SQLException ex) {
                 plugin.getLogger().severe("DonePlots Exception (on close) :");
-                plugin.getLogger().severe("  " + ex.getMessage());
+                plugin.getLogger().severe(ex.getMessage());
             }
         }
         return ret;
@@ -2274,7 +2024,7 @@ public class SqlManager {
             }
         } catch (SQLException ex) {
             plugin.getLogger().severe("DonePlots Exception :");
-            plugin.getLogger().severe("  " + ex.getMessage());
+            plugin.getLogger().severe(ex.getMessage());
         } finally {
             try {
                 if (statementPlot != null) {
@@ -2285,31 +2035,27 @@ public class SqlManager {
                 }
             } catch (SQLException ex) {
                 plugin.getLogger().severe("DonePlots Exception (on close) :");
-                plugin.getLogger().severe("  " + ex.getMessage());
+                plugin.getLogger().severe(ex.getMessage());
             }
         }
         return "";
     }
-
 
     public void plotConvertToUUIDAsynchronously() {
         plugin.getServerBridge().runTaskAsynchronously(new Runnable() {
             @Override
             public void run() {
                 plugin.getLogger().info("Checking if conversion to UUID needed...");
-
                 Statement statementPlayers = null;
                 PreparedStatement psOwnerId = null;
                 PreparedStatement psCurrentBidderId = null;
                 PreparedStatement psAllowedPlayerId = null;
                 PreparedStatement psDeniedPlayerId = null;
-                PreparedStatement psCommentsPlayerId = null;
 
                 PreparedStatement psDeleteOwner = null;
                 PreparedStatement psDeleteCurrentBidder = null;
                 PreparedStatement psDeleteAllowed = null;
                 PreparedStatement psDeleteDenied = null;
-                PreparedStatement psDeleteComments = null;
 
                 ResultSet setPlayers = null;
 
@@ -2323,10 +2069,8 @@ public class SqlManager {
                     sql = sql + "UNION SELECT LOWER(currentbidder) as Name FROM plotmePlots WHERE NOT currentbidder IS NULL AND currentbidderid IS NULL GROUP BY LOWER(currentbidder) ";
                     sql = sql + "UNION SELECT LOWER(player) as Name FROM plotmeAllowed WHERE NOT player IS NULL AND Not player LIKE 'group:%' AND Not player LIKE '%*%' AND playerid IS NULL GROUP BY LOWER(player) ";
                     sql = sql + "UNION SELECT LOWER(player) as Name FROM plotmeDenied WHERE NOT player IS NULL AND Not player LIKE 'group:%' AND Not player LIKE '%*%' AND playerid IS NULL GROUP BY LOWER(player) ";
-                    sql = sql + "UNION SELECT LOWER(player) as Name FROM plotmeComments WHERE NOT player IS NULL AND Not player LIKE 'group:%' AND Not player LIKE '%*%' AND playerid IS NULL GROUP BY LOWER(player)";
 
                     setPlayers = statementPlayers.executeQuery(sql);
-
                     boolean boConversion = false;
                     if (setPlayers.next()) {
                         List<String> names = new ArrayList<>();
@@ -2336,7 +2080,6 @@ public class SqlManager {
                         psDeleteCurrentBidder = conn.prepareStatement("UPDATE plotmePlots SET currentbidder = null WHERE currentbidder = ? ");
                         psDeleteAllowed = conn.prepareStatement("DELETE FROM plotmeAllowed WHERE player = ? ");
                         psDeleteDenied = conn.prepareStatement("DELETE FROM plotmeDenied WHERE player = ? ");
-                        psDeleteComments = conn.prepareStatement("DELETE FROM plotmeComments WHERE player = ? ");
 
                         do {
                             String name = setPlayers.getString("Name");
@@ -2353,8 +2096,6 @@ public class SqlManager {
                                     psDeleteAllowed.executeUpdate();
                                     psDeleteDenied.setString(1, name);
                                     psDeleteDenied.executeUpdate();
-                                    psDeleteComments.setString(1, name);
-                                    psDeleteComments.executeUpdate();
                                     conn.commit();
                                 }
                             }
@@ -2364,7 +2105,6 @@ public class SqlManager {
                         psDeleteCurrentBidder.close();
                         psDeleteAllowed.close();
                         psDeleteDenied.close();
-                        psDeleteComments.close();
 
                         if (!names.isEmpty()) {
                             UUIDFetcher fetcher = new UUIDFetcher(names);
@@ -2385,7 +2125,6 @@ public class SqlManager {
                                 psCurrentBidderId = conn.prepareStatement("UPDATE plotmePlots SET currentbidderid = ? WHERE LOWER(currentbidder) = ? AND currentbidderid IS NULL");
                                 psAllowedPlayerId = conn.prepareStatement("UPDATE plotmeAllowed SET playerid = ? WHERE LOWER(player) = ? AND playerid IS NULL");
                                 psDeniedPlayerId = conn.prepareStatement("UPDATE plotmeDenied SET playerid = ? WHERE LOWER(player) = ? AND playerid IS NULL");
-                                psCommentsPlayerId = conn.prepareStatement("UPDATE plotmeComments SET playerid = ? WHERE LOWER(player) = ? AND playerid IS NULL");
 
                                 int nbConverted = 0;
                                 for (String key : response.keySet()) {
@@ -2406,10 +2145,6 @@ public class SqlManager {
                                     psDeniedPlayerId.setBytes(1, UUIDFetcher.toBytes(response.get(key)));
                                     psDeniedPlayerId.setString(2, key.toLowerCase());
                                     count += psDeniedPlayerId.executeUpdate();
-                                    // Commenter
-                                    psCommentsPlayerId.setBytes(1, UUIDFetcher.toBytes(response.get(key)));
-                                    psCommentsPlayerId.setString(2, key.toLowerCase());
-                                    psCommentsPlayerId.executeUpdate();
                                     conn.commit();
                                     if (count > 0) {
                                         nbConverted++;
@@ -2422,8 +2157,6 @@ public class SqlManager {
                                 psCurrentBidderId.close();
                                 psAllowedPlayerId.close();
                                 psDeniedPlayerId.close();
-                                psCommentsPlayerId.close();
-
 
                                 //Update plot information
                                 for (PlotMapInfo pmi : plugin.getPlotMeCoreManager().getPlotMaps().values()) {
@@ -2446,20 +2179,6 @@ public class SqlManager {
 
                                             //Denied
                                             plot.denied().replace(player.getKey(), player.getValue());
-
-                                            //Comments
-                                            for (String[] comment : plot.getComments()) {
-                                                if (comment.length > 2) {
-                                                    if (comment[2] == null) {
-                                                        if (null != null) {
-                                                            if (comment[0].equalsIgnoreCase(player.getKey())) {
-                                                                comment[0] = player.getKey();
-                                                                comment[2] = player.getValue().toString();
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
                                         }
                                     }
                                 }
@@ -2479,7 +2198,7 @@ public class SqlManager {
                     }
                 } catch (SQLException ex) {
                     plugin.getLogger().severe("Conversion to UUID failed :");
-                    plugin.getLogger().severe("  " + ex.getMessage());
+                    plugin.getLogger().severe(ex.getMessage());
                     for (StackTraceElement e : ex.getStackTrace()) {
                         plugin.getLogger().severe("  " + e);
                     }
@@ -2500,9 +2219,6 @@ public class SqlManager {
                         if (psDeniedPlayerId != null) {
                             psDeniedPlayerId.close();
                         }
-                        if (psCommentsPlayerId != null) {
-                            psCommentsPlayerId.close();
-                        }
                         if (setPlayers != null) {
                             setPlayers.close();
                         }
@@ -2518,12 +2234,9 @@ public class SqlManager {
                         if (psDeleteDenied != null) {
                             psDeleteDenied.close();
                         }
-                        if (psDeleteComments != null) {
-                            psDeleteComments.close();
-                        }
                     } catch (SQLException ex) {
                         plugin.getLogger().severe("Conversion to UUID failed (on close) :");
-                        plugin.getLogger().severe("  " + ex.getMessage());
+                        plugin.getLogger().severe(ex.getMessage());
                         for (StackTraceElement e : ex.getStackTrace()) {
                             plugin.getLogger().severe("  " + e);
                         }
@@ -2649,7 +2362,7 @@ public class SqlManager {
                     }
                 } catch (SQLException ex) {
                     plugin.getLogger().severe("Conversion to UUID failed :");
-                    plugin.getLogger().severe("  " + ex.getMessage());
+                    plugin.getLogger().severe(ex.getMessage());
                     for (StackTraceElement e : ex.getStackTrace()) {
                         plugin.getLogger().severe("  " + e);
                     }
@@ -2660,7 +2373,7 @@ public class SqlManager {
                         }
                     } catch (SQLException ex) {
                         plugin.getLogger().severe("Conversion to UUID failed (on close) :");
-                        plugin.getLogger().severe("  " + ex.getMessage());
+                        plugin.getLogger().severe(ex.getMessage());
                         for (StackTraceElement e : ex.getStackTrace()) {
                             plugin.getLogger().severe("  " + e);
                         }
@@ -2674,7 +2387,7 @@ public class SqlManager {
         plugin.getServerBridge().runTaskAsynchronously(new Runnable() {
             @Override
             public void run() {
-                PreparedStatement[] pss = new PreparedStatement[5];
+                PreparedStatement[] pss = new PreparedStatement[4];
 
                 try {
                     Connection conn = getConnection();
@@ -2683,7 +2396,6 @@ public class SqlManager {
                     pss[1] = conn.prepareStatement("UPDATE plotmePlots SET currentbidder = ? WHERE currentbidderid = ?");
                     pss[2] = conn.prepareStatement("UPDATE plotmeAllowed SET player = ? WHERE playerid = ?");
                     pss[3] = conn.prepareStatement("UPDATE plotmeDenied SET player = ? WHERE playerid = ?");
-                    pss[4] = conn.prepareStatement("UPDATE plotmeComments SET player = ? WHERE playerid = ?");
 
                     for (PreparedStatement ps : pss) {
                         ps.setString(1, newname);
@@ -2699,7 +2411,7 @@ public class SqlManager {
 
                 } catch (SQLException ex) {
                     plugin.getLogger().severe("Update player in database from uuid failed :");
-                    plugin.getLogger().severe("  " + ex.getMessage());
+                    plugin.getLogger().severe(ex.getMessage());
                     for (StackTraceElement e : ex.getStackTrace()) {
                         plugin.getLogger().severe("  " + e);
                     }
@@ -2712,7 +2424,7 @@ public class SqlManager {
                         }
                     } catch (SQLException ex) {
                         plugin.getLogger().severe("Update player in database from uuid failed (on close) :");
-                        plugin.getLogger().severe("  " + ex.getMessage());
+                        plugin.getLogger().severe(ex.getMessage());
                         for (StackTraceElement e : ex.getStackTrace()) {
                             plugin.getLogger().severe("  " + e);
                         }

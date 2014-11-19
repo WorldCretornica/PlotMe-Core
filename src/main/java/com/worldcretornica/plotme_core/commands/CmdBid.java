@@ -5,6 +5,7 @@ import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotBidEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
 
@@ -14,21 +15,22 @@ public class CmdBid extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(IPlayer p, String[] args) {
-        if (plugin.getPlotMeCoreManager().isEconomyEnabled(p.getWorld())) {
-            if (p.hasPermission("PlotMe.use.bid")) {
-                String id = PlotMeCoreManager.getPlotId(p.getLocation());
+    public boolean exec(IPlayer player, String[] args) {
+        IWorld world = player.getWorld();
+        if (plugin.getPlotMeCoreManager().isEconomyEnabled(world)) {
+            if (player.hasPermission("PlotMe.use.bid")) {
+                String id = PlotMeCoreManager.getPlotId(player);
 
                 if (id.isEmpty()) {
-                    p.sendMessage("§c" + C("MsgNoPlotFound"));
-                } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, p)) {
-                    Plot plot = plugin.getPlotMeCoreManager().getPlotById(p, id);
+                    player.sendMessage("§c" + C("MsgNoPlotFound"));
+                } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, world)) {
+                    Plot plot = plugin.getPlotMeCoreManager().getPlotById(id, world);
 
                     if (plot.isAuctioned()) {
-                        String bidder = p.getName();
+                        String bidder = player.getName();
 
                         if (plot.getOwner().equalsIgnoreCase(bidder)) {
-                            p.sendMessage("§c" + C("MsgCannotBidOwnPlot"));
+                            player.sendMessage("§c" + C("MsgCannotBidOwnPlot"));
                         } else if (args.length == 2) {
                             double bid = 0;
                             double currentbid = plot.getCurrentBid();
@@ -41,31 +43,31 @@ public class CmdBid extends PlotCommand {
                             }
 
                             if (bid < currentbid || bid == currentbid && !currentbidder.isEmpty()) {
-                                p.sendMessage("§c" + C("MsgInvalidBidMustBeAbove") + " §r" + Util().moneyFormat(plot.getCurrentBid(), false));
+                                player.sendMessage("§c" + C("MsgInvalidBidMustBeAbove") + " §r" + Util().moneyFormat(plot.getCurrentBid(), false));
                             } else {
-                                double balance = sob.getBalance(p);
+                                double balance = sob.getBalance(player);
 
                                 if (bid >= balance && !currentbidder.equals(bidder) || currentbidder.equals(bidder) && bid > balance + currentbid) {
-                                    p.sendMessage("§c" + C("MsgNotEnoughBid"));
+                                    player.sendMessage("§c" + C("MsgNotEnoughBid"));
                                 } else {
-                                    InternalPlotBidEvent event = sob.getEventFactory().callPlotBidEvent(plugin, p.getWorld(), plot, p, bid);
+                                    InternalPlotBidEvent event = sob.getEventFactory().callPlotBidEvent(plugin, player.getWorld(), plot, player, bid);
 
                                     if (!event.isCancelled()) {
-                                        EconomyResponse er = sob.withdrawPlayer(p, bid);
+                                        EconomyResponse er = sob.withdrawPlayer(player, bid);
 
                                         if (er.transactionSuccess()) {
                                             if (playercurrentbidder != null) {
                                                 EconomyResponse er2 = sob.depositPlayer(playercurrentbidder, currentbid);
 
                                                 if (er2.transactionSuccess()) {
-                                                    for (IPlayer player : sob.getOnlinePlayers()) {
-                                                        if (player.getName().equalsIgnoreCase(currentbidder)) {
-                                                            player.sendMessage(C("MsgOutbidOnPlot") + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner() + ". " + Util().moneyFormat(bid));
+                                                    for (IPlayer onlinePlayers : sob.getOnlinePlayers()) {
+                                                        if (onlinePlayers.getName().equalsIgnoreCase(currentbidder)) {
+                                                            onlinePlayers.sendMessage(C("MsgOutbidOnPlot") + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner() + ". " + Util().moneyFormat(bid));
                                                             break;
                                                         }
                                                     }
                                                 } else {
-                                                    p.sendMessage(er2.errorMessage);
+                                                    player.sendMessage(er2.errorMessage);
                                                     warn(er2.errorMessage);
                                                 }
                                             }
@@ -76,35 +78,35 @@ public class CmdBid extends PlotCommand {
                                             plot.updateField("currentbidder", bidder);
                                             plot.updateField("currentbid", bid);
 
-                                            plugin.getPlotMeCoreManager().setSellSign(p.getWorld(), plot);
+                                            plugin.getPlotMeCoreManager().setSellSign(player.getWorld(), plot);
 
-                                            p.sendMessage(C("MsgBidAccepted") + " " + Util().moneyFormat(-bid));
+                                            player.sendMessage(C("MsgBidAccepted") + " " + Util().moneyFormat(-bid));
 
                                             if (isAdvancedLogging()) {
-                                                plugin.getLogger().info(LOG + bidder + " bid " + bid + " on plot " + id);
+                                                sob.getLogger().info(LOG + bidder + " bid " + bid + " on plot " + id);
                                             }
                                         } else {
-                                            p.sendMessage(er.errorMessage);
+                                            player.sendMessage(er.errorMessage);
                                             warn(er.errorMessage);
                                         }
                                     }
                                 }
                             }
                         } else {
-                            p.sendMessage(C("WordUsage") + ": §c/plotme bid <" + C("WordAmount") + "> §r" + C("WordExample") + ": §c/plotme bid 100");
+                            player.sendMessage(C("WordUsage") + ": §c/plotme bid <" + C("WordAmount") + "> §r" + C("WordExample") + ": §c/plotme bid 100");
                         }
                     } else {
-                        p.sendMessage("§c" + C("MsgPlotNotAuctionned"));
+                        player.sendMessage("§c" + C("MsgPlotNotAuctionned"));
                     }
                 } else {
-                    p.sendMessage("§c" + C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
+                    player.sendMessage("§c" + C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
                 }
             } else {
-                p.sendMessage("§c" + C("MsgPermissionDenied"));
+                player.sendMessage("§c" + C("MsgPermissionDenied"));
                 return false;
             }
         } else {
-            p.sendMessage("§c" + C("MsgEconomyDisabledWorld"));
+            player.sendMessage("§c" + C("MsgEconomyDisabledWorld"));
         }
         return true;
     }

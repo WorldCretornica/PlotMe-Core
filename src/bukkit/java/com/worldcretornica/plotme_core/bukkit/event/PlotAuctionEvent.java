@@ -13,7 +13,7 @@ import org.bukkit.event.Cancellable;
 
 public class PlotAuctionEvent extends PlotEvent implements Cancellable {
 
-    private InternalPlotAuctionEvent event;
+    private final InternalPlotAuctionEvent event;
 
     public PlotAuctionEvent(PlotMe_Core instance, World world, Plot plot, Player player, double minimumbid) {
         super(instance, plot, world);

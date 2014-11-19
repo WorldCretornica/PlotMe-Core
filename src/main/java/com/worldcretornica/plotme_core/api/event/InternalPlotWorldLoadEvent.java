@@ -4,15 +4,15 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 public class InternalPlotWorldLoadEvent extends Event
-{	
-    protected String world;
-    protected int NbPlots;
+{
+    private final String world;
+    protected int nbPlots;
     protected static final HandlerList handlers = new HandlerList();
 
     public InternalPlotWorldLoadEvent(String world, int nbplots)
     {
         this.world = world;
-        NbPlots = nbplots;
+        nbPlots = nbplots;
     }
     
     /**
@@ -33,7 +33,7 @@ public class InternalPlotWorldLoadEvent extends Event
      */
     public int getNbPlots()
     {
-        return NbPlots;
+        return nbPlots;
     }
 
     @Override

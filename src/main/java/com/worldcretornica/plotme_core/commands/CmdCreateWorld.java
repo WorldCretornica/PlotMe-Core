@@ -63,7 +63,7 @@ public class CmdCreateWorld extends PlotCommand {
             //Usage
             if (args.length == 1) {
                 sender.sendMessage(C("WordUsage") + ": §c/plotme createworld <" + C("WordWorld") + "> [" + C("WordGenerator") + "]");
-                sender.sendMessage("  " + C("MsgCreateWorldHelp"));
+                sender.sendMessage(C("MsgCreateWorldHelp"));
             } else {
 
                 Map<String, String> parameters = new HashMap<>();
@@ -122,11 +122,9 @@ public class CmdCreateWorld extends PlotCommand {
                 parameters.put("RemovePlayerPrice", "0");
                 parameters.put("UndenyPlayerPrice", "0");
                 parameters.put("PlotHomePrice", "0");
-                parameters.put("CanCustomizeSellPrice", "false");
                 parameters.put("SellToPlayerPrice", "0");
                 parameters.put("SellToBankPrice", "0");
                 parameters.put("BuyFromBankPrice", "0");
-                parameters.put("AddCommentPrice", "0");
                 parameters.put("BiomeChangePrice", "0");
                 parameters.put("ProtectPrice", "0");
                 parameters.put("DisposePrice", "0");

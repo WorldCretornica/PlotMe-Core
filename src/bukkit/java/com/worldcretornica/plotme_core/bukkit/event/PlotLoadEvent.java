@@ -9,7 +9,7 @@ import org.bukkit.World;
 
 public class PlotLoadEvent extends PlotEvent {
 
-    private InternalPlotLoadEvent event;
+    private final InternalPlotLoadEvent event;
 
     public PlotLoadEvent(PlotMe_Core instance, World world, Plot plot) {
         super(instance, plot, world);

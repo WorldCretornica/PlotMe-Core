@@ -14,25 +14,24 @@ public class CmdResetExpired extends PlotCommand {
 
     public boolean exec(ICommandSender sender, String[] args) {
         if (args.length <= 1) {
-            sender.sendMessage(C("WordUsage") + ": §c/plotme resetexpired <" + C("WordWorld") + "> §rExample: §c/plotme resetexpired plotworld ");
+            sob.getLogger().info(C("WordUsage") + ": §c/plotme resetexpired <" + C("WordWorld") + "> §rExample: §c/plotme resetexpired plotworld ");
         } else if (plugin.getWorldCurrentlyProcessingExpired() != null) {
-            sender.sendMessage(plugin.getCommandSenderCurrentlyProcessingExpired().getName() + " " + C("MsgAlreadyProcessingPlots"));
+            sob.getLogger().info(C("MsgAlreadyProcessingPlots"));
         } else {
             IWorld world = sob.getWorld(args[1]);
 
             if (world == null) {
-                sender.sendMessage("§c" + C("WordWorld") + " '" + args[1] + "' " + C("MsgDoesNotExistOrNotLoaded"));
+                sob.getLogger().info("§c" + C("WordWorld") + " '" + args[1] + "' " + C("MsgDoesNotExistOrNotLoaded"));
                 return true;
             } else if (!plugin.getPlotMeCoreManager().isPlotWorld(world)) {
-                sender.sendMessage("§c" + C("MsgNotPlotWorld"));
+                sob.getLogger().info("§c" + C("MsgNotPlotWorld"));
                 return true;
             } else {
                 plugin.setWorldCurrentlyProcessingExpired(world);
-                plugin.setCommandSenderCurrentlyProcessingExpired(sender);
                 plugin.setCounterExpired(50);
                 plugin.setNbPerDeletionProcessingExpired();
 
-                plugin.scheduleTask(new PlotRunnableDeleteExpire(plugin));
+                plugin.scheduleTask(new PlotRunnableDeleteExpire(plugin, sender));
             }
         }
         return true;

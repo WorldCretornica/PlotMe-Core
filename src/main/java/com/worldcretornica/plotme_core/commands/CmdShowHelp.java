@@ -17,7 +17,7 @@ public class CmdShowHelp extends PlotCommand {
     }
 
     public boolean exec(IPlayer player, int page) {
-        boolean ecoon = plugin.getPlotMeCoreManager().isEconomyEnabled(player);
+        boolean ecoon = plugin.getPlotMeCoreManager().isEconomyEnabled(player.getWorld());
 
         List<String> allowed_commands = new ArrayList<>();
 
@@ -40,12 +40,6 @@ public class CmdShowHelp extends PlotCommand {
         if (player.hasPermission("PlotMe.use.info")) {
             allowed_commands.add("info");
             allowed_commands.add("biomeinfo");
-        }
-        if (player.hasPermission("PlotMe.use.comment")) {
-            allowed_commands.add("comment");
-        }
-        if (player.hasPermission("PlotMe.use.comments")) {
-            allowed_commands.add("comments");
         }
         if (player.hasPermission("PlotMe.use.list")) {
             allowed_commands.add("list");
@@ -136,16 +130,16 @@ public class CmdShowHelp extends PlotCommand {
 
             if ("limit".equalsIgnoreCase(allowedcmd)) {
                 if (plugin.getPlotMeCoreManager().isPlotWorld(player) || sob.getConfig().getBoolean("allowWorldTeleport")) {
-                    IWorld w = null;
+                    IWorld world = null;
 
                     if (plugin.getPlotMeCoreManager().isPlotWorld(player)) {
-                        w = player.getWorld();
+                        world = player.getWorld();
                     } else if (sob.getConfig().getBoolean("allowWorldTeleport")) {
-                        w = plugin.getPlotMeCoreManager().getFirstWorld();
+                        world = plugin.getPlotMeCoreManager().getFirstWorld();
                     }
 
                     int maxplots = getPlotLimit(player);
-                    int ownedplots = plugin.getPlotMeCoreManager().getNbOwnedPlot(player, w);
+                    int ownedplots = plugin.getPlotMeCoreManager().getNbOwnedPlot(player, world);
 
                     if (maxplots == -1) {
                         player.sendMessage("§a" + C("HelpYourPlotLimitWorld") + " : §b" + ownedplots + "§a " + C("HelpUsedOf") + " §b" + C("WordInfinite"));
@@ -189,7 +183,6 @@ public class CmdShowHelp extends PlotCommand {
                 }
 
                 if (ecoon && pmi != null && pmi.getPlotHomePrice() != 0) {
-                    Util();
                     player.sendMessage("§b " + C("HelpHome") + " " + C("WordPrice") + " : §r" + Util.round(pmi.getPlotHomePrice()));
                 } else {
                     player.sendMessage("§b " + C("HelpHome"));
@@ -209,16 +202,6 @@ public class CmdShowHelp extends PlotCommand {
             } else if ("info".equalsIgnoreCase(allowedcmd)) {
                 player.sendMessage("§a /plotme info");
                 player.sendMessage("§b " + C("HelpInfo"));
-            } else if ("comment".equalsIgnoreCase(allowedcmd)) {
-                player.sendMessage("§a /plotme comment <" + C("WordComment") + ">");
-                if (ecoon && pmi != null && pmi.getAddCommentPrice() != 0) {
-                    player.sendMessage("§b " + C("HelpComment") + " " + C("WordPrice") + " : §r" + Util.round(pmi.getAddCommentPrice()));
-                } else {
-                    player.sendMessage("§b " + C("HelpComment"));
-                }
-            } else if ("comments".equalsIgnoreCase(allowedcmd)) {
-                player.sendMessage("§a /plotme comments");
-                player.sendMessage("§b " + C("HelpComments"));
             } else if ("list".equalsIgnoreCase(allowedcmd)) {
                 player.sendMessage("§a /plotme list");
                 player.sendMessage("§b " + C("HelpList"));

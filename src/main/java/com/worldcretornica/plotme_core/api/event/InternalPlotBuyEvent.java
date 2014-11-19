@@ -8,8 +8,8 @@ import com.worldcretornica.plotme_core.api.IWorld;
 public class InternalPlotBuyEvent extends InternalPlotEvent implements ICancellable {
 
     private boolean _canceled;
-    private IPlayer _buyer;
-    private double _price;
+    private final IPlayer _buyer;
+    private final double _price;
 
     public InternalPlotBuyEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer buyer, double price) {
         super(instance, plot, world);

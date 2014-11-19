@@ -18,7 +18,7 @@ public interface IBlock {
 
     IBiome getBiome();
 
-    boolean setTypeIdAndData(Short id, byte data, boolean applyPhysics);
+    boolean setTypeIdAndData(short id, byte data, boolean applyPhysics);
 
     byte getData();
 

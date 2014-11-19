@@ -12,8 +12,8 @@ import java.util.Set;
 
 public class BukkitConfigSection implements IConfigSection {
 
-    private FileConfiguration master;
-    private ConfigurationSection section;
+    private final FileConfiguration master;
+    private final ConfigurationSection section;
     private final PlotMe_CorePlugin plugin;
 
     public BukkitConfigSection(PlotMe_CorePlugin instance) {
@@ -28,10 +28,10 @@ public class BukkitConfigSection implements IConfigSection {
         this.master = master;
     }
 
-    public BukkitConfigSection(PlotMe_CorePlugin instance, FileConfiguration master, ConfigurationSection configurationSection) {
+    public BukkitConfigSection(PlotMe_CorePlugin instance, FileConfiguration master, ConfigurationSection configSection) {
         plugin = instance;
-        section = configurationSection;
         this.master = master;
+        section = configSection;
     }
 
 

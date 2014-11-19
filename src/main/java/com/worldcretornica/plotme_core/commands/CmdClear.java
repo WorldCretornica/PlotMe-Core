@@ -14,12 +14,14 @@ public class CmdClear extends PlotCommand {
 
     public boolean exec(IPlayer player) {
         if (player.hasPermission("PlotMe.admin.clear") || player.hasPermission("PlotMe.use.clear")) {
-            if (plugin.getPlotMeCoreManager().isPlotWorld(player)) {
+            IWorld world = player.getWorld();
+            PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
+            if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
                 String id = PlotMeCoreManager.getPlotId(player);
                 if (id.isEmpty()) {
                     player.sendMessage("§c" + C("MsgNoPlotFound"));
-                } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, player)) {
-                    Plot plot = plugin.getPlotMeCoreManager().getPlotById(player, id);
+                } else if (!PlotMeCoreManager.isPlotAvailable(id, pmi)) {
+                    Plot plot = PlotMeCoreManager.getPlotById(id, pmi);
 
                     if (plot.isProtect()) {
                         player.sendMessage("§c" + C("MsgPlotProtectedCannotClear"));
@@ -27,15 +29,13 @@ public class CmdClear extends PlotCommand {
                         String playername = player.getName();
 
                         if (plot.getOwner().equalsIgnoreCase(playername) || player.hasPermission("PlotMe.admin.clear")) {
-                            IWorld world = player.getWorld();
 
-                            PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
 
                             double price = 0;
 
                             InternalPlotClearEvent event;
 
-                            if (plugin.getPlotMeCoreManager().isEconomyEnabled(world)) {
+                            if (plugin.getPlotMeCoreManager().isEconomyEnabled(pmi)) {
                                 price = pmi.getClearPrice();
                                 double balance = sob.getBalance(player);
 
@@ -65,7 +65,7 @@ public class CmdClear extends PlotCommand {
                                 plugin.getPlotMeCoreManager().clear(world, plot, player, ClearReason.Clear);
 
                                 if (isAdvancedLogging()) {
-                                    plugin.getLogger().info(LOG + playername + " " + C("MsgClearedPlot") + " " + id + (price != 0 ? " " + C("WordFor") + " " + price : ""));
+                                    sob.getLogger().info(LOG + playername + " " + C("MsgClearedPlot") + " " + id + (price != 0 ? " " + C("WordFor") + " " + price : ""));
                                 }
                             }
                         } else {

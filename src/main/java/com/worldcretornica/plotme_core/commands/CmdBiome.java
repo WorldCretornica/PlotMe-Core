@@ -18,12 +18,13 @@ public class CmdBiome extends PlotCommand {
 
     public boolean exec(IPlayer player, String[] args) {
         if (player.hasPermission("PlotMe.use.biome")) {
-            if (plugin.getPlotMeCoreManager().isPlotWorld(player)) {
+            IWorld world = player.getWorld();
+            PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
+            if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
                 String id = PlotMeCoreManager.getPlotId(player);
                 if (id.isEmpty()) {
                     player.sendMessage("§c" + C("MsgNoPlotFound"));
-                } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, player)) {
-                    IWorld world = player.getWorld();
+                } else if (!PlotMeCoreManager.isPlotAvailable(id, pmi)) {
 
                     if (args.length == 2) {
 
@@ -32,17 +33,16 @@ public class CmdBiome extends PlotCommand {
                         if (biome == null) {
                             player.sendMessage("§c" + args[1] + "§r " + C("MsgIsInvalidBiome"));
                         } else {
-                            Plot plot = plugin.getPlotMeCoreManager().getPlotById(player, id);
-                            String playername = player.getName();
+                            Plot plot = PlotMeCoreManager.getPlotById(id, pmi);
+                            String playerName = player.getName();
 
-                            if (plot.getOwner().equalsIgnoreCase(playername) || player.hasPermission("PlotMe.admin")) {
-                                PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
+                            if (plot.getOwner().equalsIgnoreCase(playerName) || player.hasPermission("PlotMe.admin")) {
 
                                 double price = 0;
 
                                 InternalPlotBiomeChangeEvent event;
 
-                                if (plugin.getPlotMeCoreManager().isEconomyEnabled(world)) {
+                                if (plugin.getPlotMeCoreManager().isEconomyEnabled(pmi)) {
                                     price = pmi.getBiomeChangePrice();
                                     double balance = sob.getBalance(player);
 
@@ -74,7 +74,7 @@ public class CmdBiome extends PlotCommand {
                                     player.sendMessage(C("MsgBiomeSet") + " §9" + biome.name() + " " + Util().moneyFormat(-price));
 
                                     if (isAdvancedLogging()) {
-                                        plugin.getLogger().info(LOG + playername + " " + C("MsgChangedBiome") + " " + id + " " + C("WordTo") + " "
+                                        sob.getLogger().info(LOG + playerName + " " + C("MsgChangedBiome") + " " + id + " " + C("WordTo") + " "
                                                                         + biome.name() + (price != 0 ? " " + C("WordFor") + " " + price : ""));
                                     }
                                 }
@@ -83,7 +83,7 @@ public class CmdBiome extends PlotCommand {
                             }
                         }
                     } else {
-                        Plot plot = plugin.getPlotMeCoreManager().getMap(world).getPlot(id);
+                        Plot plot = pmi.getPlot(id);
 
                         player.sendMessage(C("MsgPlotUsingBiome") + " §9" + plot.getBiome().name());
                     }

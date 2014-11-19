@@ -7,7 +7,7 @@ import org.bukkit.event.HandlerList;
 public class PlotWorldLoadEvent extends Event
 {	
     protected static final HandlerList handlers = new HandlerList();
-    private InternalPlotWorldLoadEvent event;
+    private final InternalPlotWorldLoadEvent event;
 
     public PlotWorldLoadEvent(String world, int nbplots) {
         event = new InternalPlotWorldLoadEvent(world, nbplots);

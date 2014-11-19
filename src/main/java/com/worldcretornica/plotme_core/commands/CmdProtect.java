@@ -5,6 +5,7 @@ import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotProtectChangeEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
 
@@ -16,13 +17,15 @@ public class CmdProtect extends PlotCommand {
 
     public boolean exec(IPlayer player) {
         if (player.hasPermission("PlotMe.admin.protect") || player.hasPermission("PlotMe.use.protect")) {
-            if (plugin.getPlotMeCoreManager().isPlotWorld(player)) {
+            IWorld world = player.getWorld();
+            PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
+            if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
                 String id = PlotMeCoreManager.getPlotId(player);
 
                 if (id.isEmpty()) {
                     player.sendMessage("§c" + C("MsgNoPlotFound"));
-                } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, player)) {
-                    Plot plot = plugin.getPlotMeCoreManager().getPlotById(player, id);
+                } else if (!PlotMeCoreManager.isPlotAvailable(id, pmi)) {
+                    Plot plot = PlotMeCoreManager.getPlotById(id, pmi);
 
                     String name = player.getName();
 
@@ -30,7 +33,7 @@ public class CmdProtect extends PlotCommand {
                         InternalPlotProtectChangeEvent event;
 
                         if (plot.isProtect()) {
-                            event = sob.getEventFactory().callPlotProtectChangeEvent(plugin, player.getWorld(), plot, player, false);
+                            event = sob.getEventFactory().callPlotProtectChangeEvent(plugin, world, plot, player, false);
 
                             if (!event.isCancelled()) {
                                 plot.setProtect(false);
@@ -41,22 +44,21 @@ public class CmdProtect extends PlotCommand {
                                 player.sendMessage(C("MsgPlotNoLongerProtected"));
 
                                 if (isAdvancedLogging()) {
-                                    plugin.getLogger().info(LOG + name + " " + C("MsgUnprotectedPlot") + " " + id);
+                                    sob.getLogger().info(LOG + name + " " + C("MsgUnprotectedPlot") + " " + id);
                                 }
                             }
                         } else {
-                            PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(player);
 
                             double cost = 0;
 
-                            if (plugin.getPlotMeCoreManager().isEconomyEnabled(player)) {
+                            if (plugin.getPlotMeCoreManager().isEconomyEnabled(pmi)) {
                                 cost = pmi.getProtectPrice();
 
                                 if (sob.getBalance(player) < cost) {
                                     player.sendMessage("§c" + C("MsgNotEnoughProtectPlot"));
                                     return true;
                                 } else {
-                                    event = sob.getEventFactory().callPlotProtectChangeEvent(plugin, player.getWorld(), plot, player, true);
+                                    event = sob.getEventFactory().callPlotProtectChangeEvent(plugin, world, plot, player, true);
 
                                     if (event.isCancelled()) {
                                         return true;
@@ -72,7 +74,7 @@ public class CmdProtect extends PlotCommand {
                                 }
 
                             } else {
-                                event = sob.getEventFactory().callPlotProtectChangeEvent(plugin, player.getWorld(), plot, player, true);
+                                event = sob.getEventFactory().callPlotProtectChangeEvent(plugin, world, plot, player, true);
                             }
 
                             if (!event.isCancelled()) {
@@ -84,7 +86,7 @@ public class CmdProtect extends PlotCommand {
                                 player.sendMessage(C("MsgPlotNowProtected") + " " + Util().moneyFormat(-cost));
 
                                 if (isAdvancedLogging()) {
-                                    plugin.getLogger().info(LOG + name + " " + C("MsgProtectedPlot") + " " + id);
+                                    sob.getLogger().info(LOG + name + " " + C("MsgProtectedPlot") + " " + id);
                                 }
                             }
                         }

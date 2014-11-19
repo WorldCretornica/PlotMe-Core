@@ -26,8 +26,6 @@ public interface IEventFactory {
 
     InternalPlotBuyEvent callPlotBuyEvent(PlotMe_Core plugin, IWorld world, Plot plot, IPlayer player, double price);
 
-    InternalPlotCommentEvent callPlotCommentEvent(PlotMe_Core plugin, IWorld world, Plot plot, IPlayer commenter, String comment);
-
     InternalPlotWorldCreateEvent callPlotWorldCreateEvent(String worldname, Map<String, String> parameters);
 
     InternalPlotDisposeEvent callPlotDisposeEvent(PlotMe_Core plugin, IWorld world, Plot plot, IPlayer disposer);
@@ -52,9 +50,9 @@ public interface IEventFactory {
 
     InternalPlotOwnerChangeEvent callPlotOwnerChangeEvent(PlotMe_Core plugin, IWorld world, Plot plot, IPlayer player, String newowner);
 
-    InternalPlotTeleportEvent callPlotTeleportEvent(PlotMe_Core plugin, IWorld world, Plot plot, IPlayer player, ILocation location, String PlotId);
+    InternalPlotTeleportEvent callPlotTeleportEvent(PlotMe_Core plugin, IWorld world, Plot plot, IPlayer player, ILocation location, String plotId);
 
     InternalPlotTeleportEvent callPlotTeleportEvent(PlotMe_Core plugin, IWorld world, IPlayer player, ILocation location, String PlotId);
 
-    InternalPlotWorldLoadEvent callPlotWorldLoadEvent(PlotMe_Core plugin, String worldname, int NbPlots);
+    InternalPlotWorldLoadEvent callPlotWorldLoadEvent(String worldname, int nbPlots);
 }

@@ -16,7 +16,7 @@ import org.bukkit.event.Cancellable;
 
 public class PlotBiomeChangeEvent extends PlotEvent implements Cancellable {
 
-    private InternalPlotBiomeChangeEvent event;
+    private final InternalPlotBiomeChangeEvent event;
 
     public PlotBiomeChangeEvent(PlotMe_Core instance, World world, Plot plot, Player player, Biome biome) {
         super(instance, plot, world);

@@ -2,7 +2,6 @@ package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.utils.Util;
@@ -17,23 +16,20 @@ public class CmdPlotList extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(IPlayer p, String[] args) {
-        if (p.hasPermission("PlotMe.use.list")) {
-            if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
+    public boolean exec(IPlayer player, String[] args) {
+        if (player.hasPermission("PlotMe.use.list")) {
+            if (plugin.getPlotMeCoreManager().isPlotWorld(player)) {
                 String name;
-                UUID uuid = null;
+                UUID uuid;
 
-                if (p.hasPermission("PlotMe.admin.list") && args.length == 2) {
+                if (player.hasPermission("PlotMe.admin.list") && args.length == 2) {
                     name = args[1];
-                    IOfflinePlayer op = sob.getPlayerExact(name);
-                    if (op != null) {
-                        uuid = op.getUniqueId();
-                    }
-                    p.sendMessage(C("MsgListOfPlotsWhere") + " §b" + name + "§r " + C("MsgCanBuild"));
+                    uuid = player.getUniqueId();
+                    player.sendMessage(C("MsgListOfPlotsWhere") + " §b" + name + "§r " + C("MsgCanBuild"));
                 } else {
-                    name = p.getName();
-                    uuid = p.getUniqueId();
-                    p.sendMessage(C("MsgListOfPlotsWhereYou"));
+                    name = player.getName();
+                    uuid = player.getUniqueId();
+                    player.sendMessage(C("MsgListOfPlotsWhereYou"));
                 }
 
                 String oldworld = "";
@@ -52,7 +48,7 @@ public class CmdPlotList extends PlotCommand {
                     // Display worlds
                     if (!oldworld.equalsIgnoreCase(plot.getWorld())) {
                         oldworld = plot.getWorld();
-                        p.sendMessage("  World: " + plot.getWorld());
+                        player.sendMessage("  World: " + plot.getWorld());
                     }
 
                     // Is it expired?
@@ -80,17 +76,17 @@ public class CmdPlotList extends PlotCommand {
                     if (plot.getOwner().equalsIgnoreCase(name)) {
                         if (plot.allowedcount() == 0) {
                             // Is the name the current player too?
-                            if (name.equalsIgnoreCase(p.getName())) {
-                                p.sendMessage("  " + plot.getId() + " -> §b§o" + C("WordYours") + "§r" + addition);
+                            if (name.equalsIgnoreCase(player.getName())) {
+                                player.sendMessage("  " + plot.getId() + " -> §b§o" + C("WordYours") + "§r" + addition);
                             } else {
-                                p.sendMessage("  " + plot.getId() + " -> §b§o" + plot.getOwner() + "§r" + addition);
+                                player.sendMessage("  " + plot.getId() + " -> §b§o" + plot.getOwner() + "§r" + addition);
                             }
                         } else {
                             // Is the owner the current player?
-                            if (plot.getOwner().equalsIgnoreCase(p.getName())) {
-                                p.sendMessage("  " + plot.getId() + " -> §b§o" + C("WordYours") + "§r" + addition + ", " + C("WordHelpers") + ": §b" + plot.getAllowed().replace(",", "§r,§b"));
+                            if (plot.getOwner().equalsIgnoreCase(player.getName())) {
+                                player.sendMessage("  " + plot.getId() + " -> §b§o" + C("WordYours") + "§r" + addition + ", " + C("WordHelpers") + ": §b" + plot.getAllowed().replace(",", "§r,§b"));
                             } else {
-                                p.sendMessage("  " + plot.getId() + " -> §b§o" + plot.getOwner() + "§r" + addition + ", " + C("WordHelpers") + ": §b" + plot.getAllowed().replace(",", "§r,§b"));
+                                player.sendMessage("  " + plot.getId() + " -> §b§o" + plot.getOwner() + "§r" + addition + ", " + C("WordHelpers") + ": §b" + plot.getAllowed().replace(",", "§r,§b"));
                             }
                         }
 
@@ -98,8 +94,8 @@ public class CmdPlotList extends PlotCommand {
                     } else if (plot.isAllowedConsulting(name)) {
                         StringBuilder helpers = new StringBuilder();
                         for (String allowed : plot.allowed().getPlayers()) {
-                            if (p.getName().equalsIgnoreCase(allowed)) {
-                                if (name.equalsIgnoreCase(p.getName())) {
+                            if (player.getName().equalsIgnoreCase(allowed)) {
+                                if (name.equalsIgnoreCase(player.getName())) {
                                     helpers.append("§b").append("§o").append("You").append("§r").append(", ");
                                 } else {
                                     helpers.append("§b").append("§o").append(args[1]).append("§r").append(", ");
@@ -112,18 +108,18 @@ public class CmdPlotList extends PlotCommand {
                             helpers.delete(helpers.length() - 2, helpers.length());
                         }
 
-                        if (plot.getOwner().equalsIgnoreCase(p.getName())) {
-                            p.sendMessage("  " + plot.getId() + " -> §b" + C("WordYours") + "§r" + addition + ", " + C("WordHelpers") + ": " + helpers);
+                        if (plot.getOwner().equalsIgnoreCase(player.getName())) {
+                            player.sendMessage("  " + plot.getId() + " -> §b" + C("WordYours") + "§r" + addition + ", " + C("WordHelpers") + ": " + helpers);
                         } else {
-                            p.sendMessage("  " + plot.getId() + " -> §b" + plot.getOwner() + C("WordPossessive") + "§r" + addition + ", " + C("WordHelpers") + ": " + helpers);
+                            player.sendMessage("  " + plot.getId() + " -> §b" + plot.getOwner() + C("WordPossessive") + "§r" + addition + ", " + C("WordHelpers") + ": " + helpers);
                         }
                     }
                 }
             } else {
-                p.sendMessage("§c" + C("MsgNotPlotWorld"));
+                player.sendMessage("§c" + C("MsgNotPlotWorld"));
             }
         } else {
-            p.sendMessage("§c" + C("MsgPermissionDenied"));
+            player.sendMessage("§c" + C("MsgPermissionDenied"));
             return false;
         }
         return true;

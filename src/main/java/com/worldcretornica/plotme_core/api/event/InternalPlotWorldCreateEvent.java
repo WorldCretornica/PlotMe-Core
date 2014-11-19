@@ -1,14 +1,11 @@
 package com.worldcretornica.plotme_core.api.event;
 
-import com.worldcretornica.plotme_core.api.ICommandSender;
-
 import java.util.Map;
 
 public class InternalPlotWorldCreateEvent implements ICancellable {
 
     private boolean _canceled;
-    private String worldname;
-    private ICommandSender _creator;
+    private final String worldname;
     private Map<String, String> parameters;
 
     public InternalPlotWorldCreateEvent(String worldname, Map<String, String> parameters) {

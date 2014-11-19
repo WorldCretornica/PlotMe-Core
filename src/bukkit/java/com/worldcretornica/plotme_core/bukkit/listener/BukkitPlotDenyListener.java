@@ -31,9 +31,9 @@ public class BukkitPlotDenyListener implements Listener {
             String idTo = PlotMeCoreManager.getPlotId(to);
 
             if (!idTo.isEmpty()) {
-                Plot plot = api.getPlotMeCoreManager().getPlotById(player, idTo);
+                Plot plot = api.getPlotMeCoreManager().getPlotById(idTo, player);
 
-                if (plot != null && plot.isDenied(player.getUniqueId())) {
+                if (plot != null && plot.isDeniedInternal(player.getName(), player.getUniqueId())) {
                     event.setCancelled(true);
                 }
             }
@@ -50,9 +50,9 @@ public class BukkitPlotDenyListener implements Listener {
             String idTo = PlotMeCoreManager.getPlotId(to);
 
             if (!idTo.isEmpty()) {
-                Plot plot = api.getPlotMeCoreManager().getPlotById(player, idTo);
+                Plot plot = api.getPlotMeCoreManager().getPlotById(idTo, player);
 
-                if (plot != null && plot.isDenied(player.getUniqueId())) {
+                if (plot != null && plot.isDeniedInternal(player.getName(), player.getUniqueId())) {
                     BukkitLocation location = (BukkitLocation) PlotMeCoreManager.getPlotHome(player.getWorld(), plot.getId());
                     event.setTo(location.getLocation());
                 }
@@ -68,9 +68,9 @@ public class BukkitPlotDenyListener implements Listener {
             String id = PlotMeCoreManager.getPlotId(player);
 
             if (!id.isEmpty()) {
-                Plot plot = api.getPlotMeCoreManager().getPlotById(player, id);
+                Plot plot = api.getPlotMeCoreManager().getPlotById(id, player);
 
-                if (plot != null && plot.isDenied(player.getUniqueId())) {
+                if (plot != null && plot.isDeniedInternal(player.getName(), player.getUniqueId())) {
                     player.teleport(PlotMeCoreManager.getPlotHome(player.getWorld(), plot.getId()));
                 }
             }

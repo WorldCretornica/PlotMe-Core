@@ -7,7 +7,7 @@ import org.bukkit.event.HandlerList;
 public class PlotReloadEvent extends Event {
 
     private static final HandlerList handlers = new HandlerList();
-    private InternalPlotReloadEvent event;
+    private final InternalPlotReloadEvent event;
 
     public PlotReloadEvent() {
         event = new InternalPlotReloadEvent();

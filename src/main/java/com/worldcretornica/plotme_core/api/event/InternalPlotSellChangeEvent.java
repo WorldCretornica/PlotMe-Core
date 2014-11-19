@@ -8,17 +8,17 @@ import com.worldcretornica.plotme_core.api.IWorld;
 public class InternalPlotSellChangeEvent extends InternalPlotEvent implements ICancellable {
 
     private boolean _canceled;
-    private IPlayer _seller;
-    private double _price;
-    private boolean _soldToBank;
-    private boolean _isForSale;
+    private final IPlayer seller;
+    private final double price;
+    private final boolean soldToBank;
+    private final boolean isForSale;
 
     public InternalPlotSellChangeEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer seller, double price, boolean soldToBank, boolean isForSale) {
         super(instance, plot, world);
-        _seller = seller;
-        _price = price;
-        _soldToBank = soldToBank;
-        _isForSale = isForSale;
+        this.seller = seller;
+        this.price = price;
+        this.soldToBank = soldToBank;
+        this.isForSale = isForSale;
     }
 
     @Override
@@ -32,18 +32,18 @@ public class InternalPlotSellChangeEvent extends InternalPlotEvent implements IC
     }
 
     public IPlayer getPlayer() {
-        return _seller;
+        return seller;
     }
 
     public double getPrice() {
-        return _price;
+        return price;
     }
 
     public boolean isSoldToBank() {
-        return _soldToBank;
+        return soldToBank;
     }
 
     public boolean isForSale() {
-        return _isForSale;
+        return isForSale;
     }
 }

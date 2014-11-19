@@ -8,20 +8,13 @@ import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotTeleportEvent;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitLocation;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
-import com.worldcretornica.plotme_core.bukkit.api.BukkitWorld;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 
 public class PlotTeleportEvent extends PlotEvent implements Cancellable {
 
-    private InternalPlotTeleportEvent event;
-
-    public PlotTeleportEvent(PlotMe_Core instance, World world, Plot plot, Player player, Location loc, String plotId) {
-        super(instance, plot, world);
-        event = new InternalPlotTeleportEvent(instance, new BukkitWorld(world), plot, new BukkitPlayer(player), new BukkitLocation(loc), plotId);
-    }
+    private final InternalPlotTeleportEvent event;
 
     public PlotTeleportEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer player, ILocation loc, String plotId) {
         super(instance, plot, world);

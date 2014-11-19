@@ -8,12 +8,12 @@ import com.worldcretornica.plotme_core.api.IWorld;
 public class InternalPlotProtectChangeEvent extends InternalPlotEvent implements ICancellable {
 
     private boolean _canceled;
-    private IPlayer _player;
-    private boolean _protected;
+    private final IPlayer player;
+    private final boolean _protected;
 
     public InternalPlotProtectChangeEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer player, boolean protect) {
         super(instance, plot, world);
-        _player = player;
+        this.player = player;
         _protected = protect;
     }
 
@@ -28,7 +28,7 @@ public class InternalPlotProtectChangeEvent extends InternalPlotEvent implements
     }
 
     public IPlayer getPlayer() {
-        return _player;
+        return player;
     }
 
     public boolean getProtected() {

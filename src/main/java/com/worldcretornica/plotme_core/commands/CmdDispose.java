@@ -16,45 +16,44 @@ public class CmdDispose extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(IPlayer p) {
-        if (p.hasPermission("PlotMe.admin.dispose") || p.hasPermission("PlotMe.use.dispose")) {
-            if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
-                String id = PlotMeCoreManager.getPlotId(p);
+    public boolean exec(IPlayer player) {
+        if (player.hasPermission("PlotMe.admin.dispose") || player.hasPermission("PlotMe.use.dispose")) {
+            IWorld world = player.getWorld();
+            PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
+            if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
+                String id = PlotMeCoreManager.getPlotId(player);
                 if (id.isEmpty()) {
-                    p.sendMessage("§c" + C("MsgNoPlotFound"));
-                } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, p)) {
-                    Plot plot = plugin.getPlotMeCoreManager().getPlotById(p, id);
+                    player.sendMessage("§c" + C("MsgNoPlotFound"));
+                } else if (!PlotMeCoreManager.isPlotAvailable(id, pmi)) {
+                    Plot plot = PlotMeCoreManager.getPlotById(id, pmi);
 
                     if (plot.isProtect()) {
-                        p.sendMessage("§c" + C("MsgPlotProtectedNotDisposed"));
+                        player.sendMessage("§c" + C("MsgPlotProtectedNotDisposed"));
                     } else {
-                        String name = p.getName();
+                        String name = player.getName();
 
-                        if (plot.getOwner().equalsIgnoreCase(name) || p.hasPermission("PlotMe.admin.dispose")) {
-                            PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(p);
+                        if (plot.getOwner().equalsIgnoreCase(name) || player.hasPermission("PlotMe.admin.dispose")) {
 
                             double cost = pmi.getDisposePrice();
 
-                            IWorld world = p.getWorld();
-
                             InternalPlotDisposeEvent event;
 
-                            if (plugin.getPlotMeCoreManager().isEconomyEnabled(p)) {
-                                if (cost != 0 && sob.getBalance(p) < cost) {
-                                    p.sendMessage("§c" + C("MsgNotEnoughDispose"));
+                            if (plugin.getPlotMeCoreManager().isEconomyEnabled(pmi)) {
+                                if (cost != 0 && sob.getBalance(player) < cost) {
+                                    player.sendMessage("§c" + C("MsgNotEnoughDispose"));
                                     return true;
                                 }
 
-                                event = sob.getEventFactory().callPlotDisposeEvent(plugin, world, plot, p);
+                                event = sob.getEventFactory().callPlotDisposeEvent(plugin, world, plot, player);
 
                                 if (event.isCancelled()) {
                                     return true;
                                 } else {
-                                    EconomyResponse er = sob.withdrawPlayer(p, cost);
+                                    EconomyResponse economyResponse = sob.withdrawPlayer(player, cost);
 
-                                    if (!er.transactionSuccess()) {
-                                        p.sendMessage("§c" + er.errorMessage);
-                                        warn(er.errorMessage);
+                                    if (!economyResponse.transactionSuccess()) {
+                                        player.sendMessage("§c" + economyResponse.errorMessage);
+                                        warn(economyResponse.errorMessage);
                                         return true;
                                     }
 
@@ -66,24 +65,24 @@ public class CmdDispose extends PlotCommand {
                                             EconomyResponse er2 = sob.depositPlayer(playercurrentbidder, plot.getCurrentBid());
 
                                             if (er2.transactionSuccess()) {
-                                                IPlayer player = sob.getPlayer(playercurrentbidder.getUniqueId());
-                                                if (player != null) {
-                                                    player.sendMessage(C("WordPlot") + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner() + " " + C("MsgWasDisposed") + " " + Util().moneyFormat(cost));
+                                                IPlayer currentBidder = sob.getPlayer(playercurrentbidder.getUniqueId());
+                                                if (currentBidder != null) {
+                                                    currentBidder.sendMessage(C("WordPlot") + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner() + " " + C("MsgWasDisposed") + " " + Util().moneyFormat(cost));
                                                 }
                                             } else {
-                                                p.sendMessage("§c" + er2.errorMessage);
+                                                player.sendMessage("§c" + er2.errorMessage);
                                                 warn(er2.errorMessage);
                                             }
                                         }
                                     }
                                 }
                             } else {
-                                event = sob.getEventFactory().callPlotDisposeEvent(plugin, world, plot, p);
+                                event = sob.getEventFactory().callPlotDisposeEvent(plugin, world, plot, player);
                             }
 
                             if (!event.isCancelled()) {
-                                if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, p)) {
-                                    plugin.getPlotMeCoreManager().removePlot(world, id);
+                                if (!PlotMeCoreManager.isPlotAvailable(id, pmi)) {
+                                    PlotMeCoreManager.removePlot(pmi, id);
                                 }
 
                                 PlotMeCoreManager.removeOwnerSign(world, id);
@@ -92,24 +91,24 @@ public class CmdDispose extends PlotCommand {
 
                                 plugin.getSqlManager().deletePlot(PlotMeCoreManager.getIdX(id), PlotMeCoreManager.getIdZ(id), world.getName().toLowerCase());
 
-                                p.sendMessage(C("MsgPlotDisposedAnyoneClaim"));
+                                player.sendMessage(C("MsgPlotDisposedAnyoneClaim"));
 
                                 if (isAdvancedLogging()) {
-                                    plugin.getLogger().info(LOG + name + " " + C("MsgDisposedPlot") + " " + id);
+                                    sob.getLogger().info(LOG + name + " " + C("MsgDisposedPlot") + " " + id);
                                 }
                             }
                         } else {
-                            p.sendMessage("§c" + C("MsgThisPlot") + "(" + id + ") " + C("MsgNotYoursCannotDispose"));
+                            player.sendMessage("§c" + C("MsgThisPlot") + "(" + id + ") " + C("MsgNotYoursCannotDispose"));
                         }
                     }
                 } else {
-                    p.sendMessage("§c" + C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
+                    player.sendMessage("§c" + C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
                 }
             } else {
-                p.sendMessage("§c" + C("MsgNotPlotWorld"));
+                player.sendMessage("§c" + C("MsgNotPlotWorld"));
             }
         } else {
-            p.sendMessage("§c" + C("MsgPermissionDenied"));
+            player.sendMessage("§c" + C("MsgPermissionDenied"));
             return false;
         }
         return true;

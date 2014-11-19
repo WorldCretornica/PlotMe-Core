@@ -13,7 +13,7 @@ public class CmdReload extends PlotCommand {
         sob.getEventFactory().callPlotReloadEvent();
 
         plugin.reload();
-        plugin.getLogger().info(C("MsgReloadedSuccess"));
+        sob.getLogger().info(C("MsgReloadedSuccess"));
 
         return true;
     }

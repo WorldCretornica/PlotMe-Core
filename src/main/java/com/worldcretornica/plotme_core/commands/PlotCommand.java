@@ -22,7 +22,7 @@ public abstract class PlotCommand {
     }
 
     void warn(String msg) {
-        plugin.getLogger().warning(msg);
+        sob.getLogger().warning(msg);
     }
 
     int getPlotLimit(IPlayer player) {

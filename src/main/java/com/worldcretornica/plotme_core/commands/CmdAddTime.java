@@ -19,7 +19,7 @@ public class CmdAddTime extends PlotCommand {
                 if (id.isEmpty()) {
                     player.sendMessage("§c" + C("MsgNoPlotFound"));
                 } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, player)) {
-                    Plot plot = plugin.getPlotMeCoreManager().getPlotById(player, id);
+                    Plot plot = plugin.getPlotMeCoreManager().getPlotById(id, player);
                     if (plot != null) {
                         String name = player.getName();
 
@@ -27,7 +27,7 @@ public class CmdAddTime extends PlotCommand {
                         player.sendMessage(C("MsgPlotExpirationReset"));
 
                         if (isAdvancedLogging()) {
-                            plugin.getLogger().info(LOG + name + " reset expiration on plot " + id);
+                            sob.getLogger().info(LOG + name + " reset expiration on plot " + id);
                         }
                     }
                 } else {

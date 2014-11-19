@@ -17,9 +17,9 @@ public class CmdExpired extends PlotCommand {
 
     public boolean exec(IPlayer player, String[] args) {
         if (player.hasPermission("PlotMe.admin.expired")) {
-            if (plugin.getPlotMeCoreManager().isPlotWorld(player)) {
+            IWorld world = player.getWorld();
+            if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
                 int page = 1;
-                IWorld world = player.getWorld();
 
                 if (args.length == 2) {
                     try {
@@ -28,7 +28,7 @@ public class CmdExpired extends PlotCommand {
                     }
                 }
 
-                int maxpage = (int) Math.ceil(plugin.getSqlManager().getExpiredPlotCount(player.getWorld().getName()) / (double) 8);
+                int maxpage = (int) Math.ceil(plugin.getSqlManager().getExpiredPlotCount(world.getName()) / 8);
 
                 List<Plot> expiredplots = plugin.getSqlManager().getExpiredPlots(world.getName(), page, 8);
 
@@ -44,7 +44,6 @@ public class CmdExpired extends PlotCommand {
 
                         int textLength = MinecraftFontWidthCalculator.getStringWidth(starttext);
 
-                        Util();
                         String line = starttext + Util.whitespace(550 - textLength) + "@" + plot.getExpiredDate();
 
                         player.sendMessage(line);

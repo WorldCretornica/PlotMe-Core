@@ -7,31 +7,31 @@ import com.worldcretornica.plotme_core.api.IWorld;
 
 public class InternalPlotAddDeniedEvent extends InternalPlotEvent implements ICancellable {
 
-    private boolean _canceled;
-    private IPlayer _player;
-    private String _denied;
+    private boolean canceled;
+    private final IPlayer player;
+    private final String denied;
 
     public InternalPlotAddDeniedEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer player, String denied) {
         super(instance, plot, world);
-        _player = player;
-        _denied = denied;
+        this.player = player;
+        this.denied = denied;
     }
 
     @Override
     public boolean isCancelled() {
-        return _canceled;
+        return canceled;
     }
 
     @Override
     public void setCanceled(boolean cancel) {
-        _canceled = cancel;
+        canceled = cancel;
     }
 
     public IPlayer getPlayer() {
-        return _player;
+        return player;
     }
 
     public String getNewDenied() {
-        return _denied;
+        return denied;
     }
 }

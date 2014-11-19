@@ -146,18 +146,8 @@ public class BukkitServerBridge implements IServerBridge {
     }
 
     @Override
-    public String getVersion() {
-        return plugin.getDescription().getVersion();
-    }
-
-    @Override
     public IWorld getWorld(String name) {
         return new BukkitWorld(Bukkit.getWorld(name));
-    }
-
-    @Override
-    public void sendMessage(ICommandSender sender, String message) {
-        sender.sendMessage(ChatColor.AQUA + "[" + message + "] " + ChatColor.RESET + message);
     }
 
     @Override
@@ -251,11 +241,6 @@ public class BukkitServerBridge implements IServerBridge {
     }
 
     @Override
-    public String getColor(String color) {
-        return ChatColor.valueOf(color).toString();
-    }
-
-    @Override
     public IConfigSection getConfig() {
         return new BukkitConfigSection(plugin);
     }
@@ -268,7 +253,7 @@ public class BukkitServerBridge implements IServerBridge {
 
         try {
             config.load(configfile);
-        } catch (FileNotFoundException ignored) {
+        } catch (FileNotFoundException i) {
         } catch (IOException e) {
             plugin.getLogger().severe("Can't read configuration file");
             e.printStackTrace();
@@ -281,8 +266,8 @@ public class BukkitServerBridge implements IServerBridge {
     }
 
     @Override
-    public void saveResource(String fileName, boolean b) {
-        plugin.saveResource(fileName, b);
+    public void saveResource(String fileName, boolean replace) {
+        plugin.saveResource(fileName, replace);
     }
 
     @Override
@@ -305,12 +290,12 @@ public class BukkitServerBridge implements IServerBridge {
     }
 
     @Override
-    public double getBalance(IOfflinePlayer playerbidder) {
+    public double getBalance(IPlayer playerbidder) {
         return getEconomy().getBalance(((BukkitOfflinePlayer) playerbidder).getOfflinePlayer());
     }
 
     @Override
-    public EconomyResponse withdrawPlayer(IOfflinePlayer player, double price) {
+    public EconomyResponse withdrawPlayer(IPlayer player, double price) {
         return getEconomy().withdrawPlayer(((BukkitOfflinePlayer) player).getOfflinePlayer(), price);
     }
 
@@ -404,7 +389,7 @@ public class BukkitServerBridge implements IServerBridge {
             getLogger().info(plugin.getAPI().getUtil().C("ErrCannotFindWorldGen") + " '" + generator + "'");
             return false;
         }
-        if (!bukkitplugin.getManager().createConfig(worldname, args, sender)) { //Create the generator configurations
+        if (!bukkitplugin.getManager().createConfig(worldname, args)) { //Create the generator configurations
             getLogger().info(plugin.getAPI().getUtil().C("ErrCannotCreateGen1") + " '" + generator + "' " + plugin.getAPI().getUtil().C("ErrCannotCreateGen2"));
             return false;
         }
@@ -429,11 +414,9 @@ public class BukkitServerBridge implements IServerBridge {
         tempPlotInfo.setRemovePlayerPrice(Double.parseDouble(args.get("RemovePlayerPrice")));
         tempPlotInfo.setUndenyPlayerPrice(Double.parseDouble(args.get("UndenyPlayerPrice")));
         tempPlotInfo.setPlotHomePrice(Double.parseDouble(args.get("PlotHomePrice")));
-        tempPlotInfo.setCanCustomizeSellPrice(Boolean.parseBoolean(args.get("CanCustomizeSellPrice")));
         tempPlotInfo.setSellToPlayerPrice(Double.parseDouble(args.get("SellToPlayerPrice")));
         tempPlotInfo.setSellToBankPrice(Double.parseDouble(args.get("SellToBankPrice")));
         tempPlotInfo.setBuyFromBankPrice(Double.parseDouble(args.get("BuyFromBankPrice")));
-        tempPlotInfo.setAddCommentPrice(Double.parseDouble(args.get("AddCommentPrice")));
         tempPlotInfo.setBiomeChangePrice(Double.parseDouble(args.get("BiomeChangePrice")));
         tempPlotInfo.setProtectPrice(Double.parseDouble(args.get("ProtectPrice")));
         tempPlotInfo.setDisposePrice(Double.parseDouble(args.get("DisposePrice")));
@@ -512,7 +495,7 @@ public class BukkitServerBridge implements IServerBridge {
         this.multiworld = new MultiWorldWrapper(multiworld);
     }
 
-    private MultiWorldWrapper getMultiWorldWrapper() {
+    private static MultiWorldWrapper getMultiWorldWrapper() {
         if (Bukkit.getPluginManager().isPluginEnabled("MultiWorld")) {
             return new MultiWorldWrapper((JavaPlugin) Bukkit.getPluginManager().getPlugin("MultiWorld"));
         } else {
@@ -520,7 +503,7 @@ public class BukkitServerBridge implements IServerBridge {
         }
     }
 
-    private MultiverseWrapper getMultiverseWrapper() {
+    private static MultiverseWrapper getMultiverseWrapper() {
         if (Bukkit.getPluginManager().isPluginEnabled("Multiverse-Core")) {
             return new MultiverseWrapper((JavaPlugin) Bukkit.getPluginManager().getPlugin("Multiverse-Core"));
         } else {
@@ -543,27 +526,21 @@ public class BukkitServerBridge implements IServerBridge {
         return new BukkitEntityType(EntityType.valueOf(string));
     }
 
-    @SuppressWarnings("deprecation")
-    @Override
-    public IConfigSection getConfig(InputStream defConfigStream) {
-        return new BukkitConfigSection(plugin, YamlConfiguration.loadConfiguration(defConfigStream));
-    }
-
     @Override
     public IConfigSection loadDefaultConfig(String world) {
         ConfigurationSection defaultCS = getDefaultWorld();
-        ConfigurationSection configCS;
+        ConfigurationSection configSection;
         if (plugin.getConfig().contains(world)) {
-            configCS = plugin.getConfig().getConfigurationSection(world);
+            configSection = plugin.getConfig().getConfigurationSection(world);
         } else {
             plugin.getConfig().set(world, defaultCS);
             plugin.saveConfig();
-            configCS = plugin.getConfig().getConfigurationSection(world);
+            configSection = plugin.getConfig().getConfigurationSection(world);
         }
         for (String path : defaultCS.getKeys(true)) {
-            configCS.addDefault(path, defaultCS.get(path));
+            configSection.addDefault(path, defaultCS.get(path));
         }
-        return new BukkitConfigSection(plugin, plugin.getConfig(), configCS);
+        return new BukkitConfigSection(plugin, plugin.getConfig(), configSection);
     }
 
     private ConfigurationSection getDefaultWorld() {

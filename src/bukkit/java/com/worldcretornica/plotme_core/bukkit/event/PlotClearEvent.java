@@ -13,7 +13,7 @@ import org.bukkit.event.Cancellable;
 
 public class PlotClearEvent extends PlotEvent implements Cancellable {
 
-    private InternalPlotClearEvent event;
+    private final InternalPlotClearEvent event;
 
     public PlotClearEvent(PlotMe_Core instance, World world, Plot plot, Player clearer) {
         super(instance, plot, world);

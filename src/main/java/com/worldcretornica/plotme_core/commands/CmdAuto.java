@@ -33,19 +33,19 @@ public class CmdAuto extends PlotCommand {
                     world = player.getWorld();
                 }
 
+                PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
                 int playerlimit = getPlotLimit(player);
 
                 if (playerlimit != -1 && plugin.getPlotMeCoreManager().getNbOwnedPlot(player, world) >= playerlimit && !player.hasPermission("PlotMe.admin")) {
                     player.sendMessage("§c" + C("MsgAlreadyReachedMaxPlots") + " ("
                                                + plugin.getPlotMeCoreManager().getNbOwnedPlot(player, world) + "/" + playerlimit + "). " + C("WordUse") + " §c/plotme home§r " + C("MsgToGetToIt"));
                 } else {
-                    PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
                     int limit = pmi.getPlotAutoLimit();
 
                     String next = pmi.getNextFreed();
                     String id = "";
 
-                    if (plugin.getPlotMeCoreManager().isPlotAvailable(next, player)) {
+                    if (PlotMeCoreManager.isPlotAvailable(next, pmi)) {
                         id = next;
                     } else {
                         int x = PlotMeCoreManager.getIdX(next);
@@ -57,7 +57,7 @@ public class CmdAuto extends PlotCommand {
                                 for (; z <= i; z++) {
                                     id = x + ";" + z;
 
-                                    if (plugin.getPlotMeCoreManager().isPlotAvailable(id, player)) {
+                                    if (PlotMeCoreManager.isPlotAvailable(id, pmi)) {
                                         pmi.setNextFreed(id);
                                         break toploop;
                                     }
@@ -79,7 +79,7 @@ public class CmdAuto extends PlotCommand {
 
                     InternalPlotCreateEvent event;
 
-                    if (plugin.getPlotMeCoreManager().isEconomyEnabled(world)) {
+                    if (plugin.getPlotMeCoreManager().isEconomyEnabled(pmi)) {
                         price = pmi.getClaimPrice();
                         double balance = sob.getBalance(player);
 
@@ -106,7 +106,7 @@ public class CmdAuto extends PlotCommand {
                     }
 
                     if (!event.isCancelled()) {
-                        plugin.getPlotMeCoreManager().createPlot(world, id, player.getName(), player.getUniqueId());
+                        plugin.getPlotMeCoreManager().createPlot(world, id, player.getName(), player.getUniqueId(), pmi);
                         pmi.removeFreed(id);
 
                         //plugin.getPlotMeCoreManager().adjustLinkedPlots(id, world);
@@ -115,7 +115,7 @@ public class CmdAuto extends PlotCommand {
                         player.sendMessage(C("MsgThisPlotYours") + " " + C("WordUse") + " §c/plotme home§r " + C("MsgToGetToIt") + " " + Util().moneyFormat(-price));
 
                         if (isAdvancedLogging()) {
-                            plugin.getLogger().info(LOG + player.getName() + " " + C("MsgClaimedPlot") + " " + id + (price != 0 ? " " + C("WordFor") + " " + price : ""));
+                            sob.getLogger().info(LOG + player.getName() + " " + C("MsgClaimedPlot") + " " + id + (price != 0 ? " " + C("WordFor") + " " + price : ""));
                         }
 
                     }

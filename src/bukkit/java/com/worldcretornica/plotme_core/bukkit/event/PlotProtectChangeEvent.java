@@ -13,7 +13,7 @@ import org.bukkit.event.Cancellable;
 
 public class PlotProtectChangeEvent extends PlotEvent implements Cancellable {
 
-    private InternalPlotProtectChangeEvent event;
+    private final InternalPlotProtectChangeEvent event;
 
     public PlotProtectChangeEvent(PlotMe_Core instance, World world, Plot plot, Player player, boolean protect) {
         super(instance, plot, world);

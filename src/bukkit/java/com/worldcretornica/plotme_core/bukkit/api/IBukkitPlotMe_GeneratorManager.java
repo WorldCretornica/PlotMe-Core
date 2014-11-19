@@ -3,7 +3,6 @@ package com.worldcretornica.plotme_core.bukkit.api;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -15,17 +14,17 @@ public interface IBukkitPlotMe_GeneratorManager {
 
     String getPlotId(Player player);
 
-    List<Player> getPlayersInPlot(World world, String id);
+    List<Player> getPlayersInPlot(String id);
 
     void fillroad(String id1, String id2, World world);
 
     void fillmiddleroad(String id1, String id2, World world);
 
-    void setOwnerDisplay(World world, String id, String Line1, String Line2, String Line3, String Line4);
+    void setOwnerDisplay(World world, String id, String line1, String line2, String line3, String line4);
 
-    void setSellerDisplay(World world, String id, String Line1, String Line2, String Line3, String Line4);
+    void setSellerDisplay(World world, String id, String line1, String line2, String Line3, String line4);
 
-    void setAuctionDisplay(World world, String id, String Line1, String Line2, String Line3, String Line4);
+    void setAuctionDisplay(World world, String id, String line1, String line2, String Line3, String line4);
 
     void removeOwnerDisplay(World world, String id);
 
@@ -61,7 +60,7 @@ public interface IBukkitPlotMe_GeneratorManager {
 
     boolean isBlockInPlot(String id, Location blocklocation);
 
-    boolean movePlot(World wFrom, World wTo, String idFrom, String idTo);
+    boolean movePlot(World world, String idFrom, String idTo);
 
     int bottomX(String id, World world);
 
@@ -71,13 +70,11 @@ public interface IBukkitPlotMe_GeneratorManager {
 
     int topZ(String id, World world);
 
-    void regen(World world, String id, CommandSender sender);
-
     Location getPlotHome(World world, String id);
 
     boolean isValidId(String id);
 
-    boolean createConfig(String worldname, Map<String, String> args, CommandSender sender);
+    boolean createConfig(String worldname, Map<String, String> args);
 
     Map<String, String> getDefaultGenerationConfig();
 

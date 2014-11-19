@@ -8,8 +8,8 @@ import com.worldcretornica.plotme_core.api.IWorld;
 public class InternalPlotRemoveAllowedEvent extends InternalPlotEvent implements ICancellable {
 
     private boolean _canceled;
-    private IPlayer _player;
-    private String _removed;
+    private final IPlayer _player;
+    private final String _removed;
 
     public InternalPlotRemoveAllowedEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer player, String removed) {
         super(instance, plot, world);
