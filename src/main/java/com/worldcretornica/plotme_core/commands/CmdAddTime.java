@@ -27,7 +27,7 @@ public class CmdAddTime extends PlotCommand {
                         player.sendMessage(C("MsgPlotExpirationReset"));
 
                         if (isAdvancedLogging()) {
-                            sob.getLogger().info(LOG + name + " reset expiration on plot " + id);
+                            serverBridge.getLogger().info(name + " reset expiration on plot " + id);
                         }
                     }
                 } else {

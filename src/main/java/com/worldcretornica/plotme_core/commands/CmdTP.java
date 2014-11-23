@@ -15,7 +15,7 @@ public class CmdTP extends PlotCommand {
 
     public boolean exec(IPlayer player, String[] args) {
         if (player.hasPermission("PlotMe.admin.tp")) {
-            if (plugin.getPlotMeCoreManager().isPlotWorld(player) || sob.getConfig().getBoolean("allowWorldTeleport")) {
+            if (plugin.getPlotMeCoreManager().isPlotWorld(player) || serverBridge.getConfig().getBoolean("allowWorldTeleport")) {
                 if (args.length == 2 || args.length == 3) {
                     String id = args[1];
 
@@ -23,10 +23,10 @@ public class CmdTP extends PlotCommand {
 
                     if (args.length == 3) {
 
-                        world = sob.getWorld(args[2]);
+                        world = serverBridge.getWorld(args[2]);
 
                         if (world == null) {
-                            for (IWorld bworld : sob.getWorlds()) {
+                            for (IWorld bworld : serverBridge.getWorlds()) {
                                 if (bworld.getName().startsWith(args[2])) {
                                     world = bworld;
                                     break;
@@ -42,7 +42,7 @@ public class CmdTP extends PlotCommand {
                     if (!plugin.getPlotMeCoreManager().isPlotWorld(world)) {
                         player.sendMessage("§c" + C("MsgNoPlotworldFound"));
                     } else if (!PlotMeCoreManager.isValidId(world, id)) {
-                        if (sob.getConfig().getBoolean("allowWorldTeleport")) {
+                        if (serverBridge.getConfig().getBoolean("allowWorldTeleport")) {
                             player.sendMessage(C("WordUsage") + ": §c/plotme tp <ID> [" + C("WordWorld") + "] §r" + C("WordExample") + ": §c/plotme tp 5;-1 ");
                         } else {
                             player.sendMessage(C("WordUsage") + ": §c/plotme tp <ID> §r" + C("WordExample") + ": §c/plotme tp 5;-1 ");
@@ -51,13 +51,13 @@ public class CmdTP extends PlotCommand {
                     } else {
                         ILocation loc = PlotMeCoreManager.getPlotHome(world, id);
 
-                        InternalPlotTeleportEvent event = sob.getEventFactory().callPlotTeleportEvent(plugin, world, player, loc, id);
+                        InternalPlotTeleportEvent event = serverBridge.getEventFactory().callPlotTeleportEvent(plugin, world, player, loc, id);
 
                         if (!event.isCancelled()) {
                             player.teleport(loc);
                         }
                     }
-                } else if (sob.getConfig().getBoolean("allowWorldTeleport")) {
+                } else if (serverBridge.getConfig().getBoolean("allowWorldTeleport")) {
                     player.sendMessage(C("WordUsage") + ": §c/plotme tp <ID> [" + C("WordWorld") + "] §r" + C("WordExample") + ": §c/plotme tp 5;-1 ");
                 } else {
                     player.sendMessage(C("WordUsage") + ": §c/plotme tp <ID> §r" + C("WordExample") + ": §c/plotme tp 5;-1 ");

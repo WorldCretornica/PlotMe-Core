@@ -28,7 +28,7 @@ public class CmdBiome extends PlotCommand {
 
                     if (args.length == 2) {
 
-                        IBiome biome = sob.getBiome(args[1]);
+                        IBiome biome = serverBridge.getBiome(args[1]);
 
                         if (biome == null) {
                             player.sendMessage("§c" + args[1] + "§r " + C("MsgIsInvalidBiome"));
@@ -44,14 +44,14 @@ public class CmdBiome extends PlotCommand {
 
                                 if (plugin.getPlotMeCoreManager().isEconomyEnabled(pmi)) {
                                     price = pmi.getBiomeChangePrice();
-                                    double balance = sob.getBalance(player);
+                                    double balance = serverBridge.getBalance(player);
 
                                     if (balance >= price) {
-                                        event = sob.getEventFactory().callPlotBiomeChangeEvent(plugin, world, plot, player, biome);
+                                        event = serverBridge.getEventFactory().callPlotBiomeChangeEvent(plugin, world, plot, player, biome);
                                         if (event.isCancelled()) {
                                             return true;
                                         } else {
-                                            EconomyResponse er = sob.withdrawPlayer(player, price);
+                                            EconomyResponse er = serverBridge.withdrawPlayer(player, price);
 
                                             if (!er.transactionSuccess()) {
                                                 player.sendMessage("§c" + er.errorMessage);
@@ -64,7 +64,7 @@ public class CmdBiome extends PlotCommand {
                                         return true;
                                     }
                                 } else {
-                                    event = sob.getEventFactory().callPlotBiomeChangeEvent(plugin, world, plot, player, biome);
+                                    event = serverBridge.getEventFactory().callPlotBiomeChangeEvent(plugin, world, plot, player, biome);
                                 }
 
                                 if (!event.isCancelled()) {
@@ -74,7 +74,7 @@ public class CmdBiome extends PlotCommand {
                                     player.sendMessage(C("MsgBiomeSet") + " §9" + biome.name() + " " + Util().moneyFormat(-price));
 
                                     if (isAdvancedLogging()) {
-                                        sob.getLogger().info(LOG + playerName + " " + C("MsgChangedBiome") + " " + id + " " + C("WordTo") + " "
+                                        serverBridge.getLogger().info(playerName + " " + C("MsgChangedBiome") + " " + id + " " + C("WordTo") + " "
                                                                         + biome.name() + (price != 0 ? " " + C("WordFor") + " " + price : ""));
                                     }
                                 }

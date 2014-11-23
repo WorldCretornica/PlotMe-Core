@@ -22,10 +22,7 @@ public class CmdDoneList extends PlotCommand {
                 int page = 1;
 
                 if (args.length == 2) {
-                    try {
-                        page = Integer.parseInt(args[1]);
-                    } catch (NumberFormatException ex) {
-                    }
+                    page = Integer.parseInt(args[1]);
                 }
 
                 int maxpage = (int) Math.ceil(plugin.getSqlManager().getFinishedPlotCount(player.getWorld().getName()) / 8);

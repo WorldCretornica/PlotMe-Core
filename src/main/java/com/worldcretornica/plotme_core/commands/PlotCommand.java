@@ -9,12 +9,11 @@ public abstract class PlotCommand {
 
     protected final PlotMe_Core plugin;
 
-    protected static final String LOG = "[Event] ";
-    protected final IServerBridge sob;
+    protected final IServerBridge serverBridge;
 
     public PlotCommand(PlotMe_Core instance) {
         plugin = instance;
-        sob = plugin.getServerBridge();
+        serverBridge = plugin.serverBridge;
     }
 
     Util Util() {
@@ -22,7 +21,7 @@ public abstract class PlotCommand {
     }
 
     void warn(String msg) {
-        sob.getLogger().warning(msg);
+        serverBridge.getLogger().warning(msg);
     }
 
     int getPlotLimit(IPlayer player) {
@@ -56,6 +55,6 @@ public abstract class PlotCommand {
     }
     
     protected boolean isAdvancedLogging() {
-        return sob.getConfig().getBoolean("AdvancedLogging");
+        return serverBridge.getConfig().getBoolean("AdvancedLogging");
     }
 }

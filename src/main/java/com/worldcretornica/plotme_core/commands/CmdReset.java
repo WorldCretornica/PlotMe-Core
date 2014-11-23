@@ -30,17 +30,17 @@ public class CmdReset extends PlotCommand {
 
                     if (plot.getOwner().equalsIgnoreCase(playername) || player.hasPermission("PlotMe.admin.reset")) {
 
-                        InternalPlotResetEvent event = sob.getEventFactory().callPlotResetEvent(plugin, world, plot, player);
+                        InternalPlotResetEvent event = serverBridge.getEventFactory().callPlotResetEvent(plugin, world, plot, player);
 
                         if (!event.isCancelled()) {
-                            plugin.getPlotMeCoreManager().setBiome(world, id, sob.getBiome("PLAINS"));
+                            plugin.getPlotMeCoreManager().setBiome(world, id, serverBridge.getBiome("PLAINS"));
                             plugin.getPlotMeCoreManager().clear(world, plot, player, ClearReason.Reset);
 
                             if (plugin.getPlotMeCoreManager().isEconomyEnabled(pmi)) {
                                 if (plot.isAuctioned()) {
                                     if (plot.getCurrentBidderId() != null) {
-                                        IOfflinePlayer offlinePlayer = sob.getOfflinePlayer(plot.getCurrentBidderId());
-                                        EconomyResponse economyResponse = sob.depositPlayer(offlinePlayer, plot.getCurrentBid());
+                                        IOfflinePlayer offlinePlayer = serverBridge.getOfflinePlayer(plot.getCurrentBidderId());
+                                        EconomyResponse economyResponse = serverBridge.depositPlayer(offlinePlayer, plot.getCurrentBid());
 
                                         if (economyResponse.transactionSuccess()) {
                                             player.sendMessage(plot.getCurrentBidder() + " was refunded their money for their plot bid.");
@@ -52,12 +52,12 @@ public class CmdReset extends PlotCommand {
                                 }
 
                                 if (pmi.isRefundClaimPriceOnReset() && plot.getOwnerId() != null) {
-                                    IOfflinePlayer playerowner = sob.getOfflinePlayer(plot.getOwnerId());
+                                    IOfflinePlayer playerowner = serverBridge.getOfflinePlayer(plot.getOwnerId());
 
-                                    EconomyResponse er = sob.depositPlayer(playerowner, pmi.getClaimPrice());
+                                    EconomyResponse er = serverBridge.depositPlayer(playerowner, pmi.getClaimPrice());
 
                                     if (er.transactionSuccess()) {
-                                        IPlayer playerOwner = sob.getPlayer(playerowner.getUniqueId());
+                                        IPlayer playerOwner = serverBridge.getPlayer(playerowner.getUniqueId());
                                         if (playerOwner.getName().equalsIgnoreCase(plot.getOwner())) {
                                             playerOwner.sendMessage(C("WordPlot") + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner() + " " + C("MsgWasReset") + " " + Util().moneyFormat(pmi.getClaimPrice()));
                                         }
@@ -80,7 +80,7 @@ public class CmdReset extends PlotCommand {
                             pmi.addFreed(id);
 
                             if (isAdvancedLogging()) {
-                                sob.getLogger().info(LOG + player.getName() + " " + C("MsgResetPlot") + " " + id);
+                                serverBridge.getLogger().info(player.getName() + " " + C("MsgResetPlot") + " " + id);
                             }
                         }
                     } else {

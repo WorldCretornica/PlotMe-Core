@@ -17,7 +17,6 @@ public class CmdShowHelp extends PlotCommand {
     }
 
     public boolean exec(IPlayer player, int page) {
-        boolean ecoon = plugin.getPlotMeCoreManager().isEconomyEnabled(player.getWorld());
 
         List<String> allowed_commands = new ArrayList<>();
 
@@ -98,6 +97,7 @@ public class CmdShowHelp extends PlotCommand {
         }
 
         PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(player);
+        boolean ecoon = plugin.getPlotMeCoreManager().isEconomyEnabled(pmi);
 
         if (plugin.getPlotMeCoreManager().isPlotWorld(player) && ecoon) {
             if (player.hasPermission("PlotMe.use.buy")) {
@@ -129,12 +129,13 @@ public class CmdShowHelp extends PlotCommand {
             String allowedcmd = allowed_commands.get(ctr);
 
             if ("limit".equalsIgnoreCase(allowedcmd)) {
-                if (plugin.getPlotMeCoreManager().isPlotWorld(player) || sob.getConfig().getBoolean("allowWorldTeleport")) {
+                boolean plotWorld = plugin.getPlotMeCoreManager().isPlotWorld(player);
+                if (plotWorld || serverBridge.getConfig().getBoolean("allowWorldTeleport")) {
                     IWorld world = null;
 
-                    if (plugin.getPlotMeCoreManager().isPlotWorld(player)) {
+                    if (plotWorld) {
                         world = player.getWorld();
-                    } else if (sob.getConfig().getBoolean("allowWorldTeleport")) {
+                    } else if (serverBridge.getConfig().getBoolean("allowWorldTeleport")) {
                         world = plugin.getPlotMeCoreManager().getFirstWorld();
                     }
 
@@ -164,7 +165,7 @@ public class CmdShowHelp extends PlotCommand {
                     player.sendMessage("§b " + C("HelpClaimOther"));
                 }
             } else if ("auto".equalsIgnoreCase(allowedcmd)) {
-                if (sob.getConfig().getBoolean("allowWorldTeleport")) {
+                if (serverBridge.getConfig().getBoolean("allowWorldTeleport")) {
                     player.sendMessage("§a /plotme auto [" + C("WordWorld") + "]");
                 } else {
                     player.sendMessage("§a /plotme auto");
@@ -176,7 +177,7 @@ public class CmdShowHelp extends PlotCommand {
                     player.sendMessage("§b " + C("HelpAuto"));
                 }
             } else if ("home".equalsIgnoreCase(allowedcmd)) {
-                if (sob.getConfig().getBoolean("allowWorldTeleport")) {
+                if (serverBridge.getConfig().getBoolean("allowWorldTeleport")) {
                     player.sendMessage("§a /plotme home[:#] [" + C("WordWorld") + "]");
                 } else {
                     player.sendMessage("§a /plotme home[:#]");
@@ -188,7 +189,7 @@ public class CmdShowHelp extends PlotCommand {
                     player.sendMessage("§b " + C("HelpHome"));
                 }
             } else if ("home.other".equalsIgnoreCase(allowedcmd)) {
-                if (sob.getConfig().getBoolean("allowWorldTeleport")) {
+                if (serverBridge.getConfig().getBoolean("allowWorldTeleport")) {
                     player.sendMessage("§a /plotme home[:#] <" + C("WordPlayer") + "> [" + C("WordWorld") + "]");
                 } else {
                     player.sendMessage("§a /plotme home[:#] <" + C("WordPlayer") + ">");
@@ -225,7 +226,7 @@ public class CmdShowHelp extends PlotCommand {
                 player.sendMessage("§a /plotme done");
                 player.sendMessage("§b " + C("HelpDone"));
             } else if ("tp".equalsIgnoreCase(allowedcmd)) {
-                if (sob.getConfig().getBoolean("allowWorldTeleport")) {
+                if (serverBridge.getConfig().getBoolean("allowWorldTeleport")) {
                     player.sendMessage("§a /plotme tp <ID> [" + C("WordWorld") + "]");
                 } else {
                     player.sendMessage("§a /plotme tp <ID>");

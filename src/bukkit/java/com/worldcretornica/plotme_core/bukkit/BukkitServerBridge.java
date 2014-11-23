@@ -29,23 +29,39 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.logging.Logger;
 
 public class BukkitServerBridge implements IServerBridge {
 
     private final PlotMe_CorePlugin plugin;
+    private final IEventFactory eventfactory;
     private Economy economy;
     private PlotWorldEdit plotworldedit;
     private boolean usinglwc;
-    private final IEventFactory eventfactory;
-
     private MultiWorldWrapper multiworld;
     private MultiverseWrapper multiverse;
 
     public BukkitServerBridge(PlotMe_CorePlugin instance) {
         plugin = instance;
         eventfactory = new BukkitEventFactory();
+    }
+
+    private static MultiWorldWrapper getMultiWorldWrapper() {
+        if (Bukkit.getPluginManager().isPluginEnabled("MultiWorld")) {
+            return new MultiWorldWrapper((JavaPlugin) Bukkit.getPluginManager().getPlugin("MultiWorld"));
+        } else {
+            return null;
+        }
+    }
+
+    private static MultiverseWrapper getMultiverseWrapper() {
+        if (Bukkit.getPluginManager().isPluginEnabled("Multiverse-Core")) {
+            return new MultiverseWrapper((JavaPlugin) Bukkit.getPluginManager().getPlugin("Multiverse-Core"));
+        } else {
+            return null;
+        }
     }
 
     @Override
@@ -95,11 +111,11 @@ public class BukkitServerBridge implements IServerBridge {
                 Class.forName("com.sk89q.worldedit.function.mask.Mask");
                 PlotWorldEdit pwe = (PlotWorldEdit) Class.forName("com.worldcretornica.plotme_core.bukkit.worldedit.PlotWorldEdit6_0_0").getConstructor(PlotMe_Core.class, WorldEditPlugin.class).newInstance(plotme_core, worldeditplugin);
                 setPlotWorldEdit(pwe);
-            } catch (Exception unused) {
+            } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | NoSuchMethodException | SecurityException | InvocationTargetException | IllegalArgumentException unused) {
                 try {
                     PlotWorldEdit pwe = (PlotWorldEdit) Class.forName("com.worldcretornica.plotme_core.bukkit.worldedit.PlotWorldEdit5_7").getConstructor(PlotMe_Core.class, WorldEditPlugin.class).newInstance(plotme_core, worldeditplugin);
                     setPlotWorldEdit(pwe);
-                } catch (Exception unused2) {
+                } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | NoSuchMethodException | SecurityException | InvocationTargetException | IllegalArgumentException unused2) {
                     getLogger().warning("Unable to hook to WorldEdit properly, please contact the developper of plotme with your WorldEdit version.");
                     setPlotWorldEdit(null);
                 }
@@ -253,7 +269,7 @@ public class BukkitServerBridge implements IServerBridge {
 
         try {
             config.load(configfile);
-        } catch (FileNotFoundException i) {
+        } catch (FileNotFoundException ignored) {
         } catch (IOException e) {
             plugin.getLogger().severe("Can't read configuration file");
             e.printStackTrace();
@@ -333,9 +349,9 @@ public class BukkitServerBridge implements IServerBridge {
     public IPlotMe_ChunkGenerator getPlotMeGenerator(String worldname) {
         World world = Bukkit.getWorld(worldname);
         if (world != null) {
-            ChunkGenerator cg = world.getGenerator();
-            if (cg instanceof IPlotMe_ChunkGenerator) {
-                return (IPlotMe_ChunkGenerator) cg;
+            ChunkGenerator generator = world.getGenerator();
+            if (generator instanceof IPlotMe_ChunkGenerator) {
+                return (IPlotMe_ChunkGenerator) generator;
             }
         }
         return null;
@@ -382,14 +398,14 @@ public class BukkitServerBridge implements IServerBridge {
         }
 
         //Find generator
-        IPlotMe_ChunkGenerator bukkitplugin = plugin.getServerObjectBuilder().getPlotMeGenerator(generator, worldname);
+        IPlotMe_ChunkGenerator plotMeGenerator = plugin.getServerObjectBuilder().getPlotMeGenerator(generator, worldname);
 
         //Make generator create settings
-        if (bukkitplugin == null) {
+        if (plotMeGenerator == null) {
             getLogger().info(plugin.getAPI().getUtil().C("ErrCannotFindWorldGen") + " '" + generator + "'");
             return false;
         }
-        if (!bukkitplugin.getManager().createConfig(worldname, args)) { //Create the generator configurations
+        if (!plotMeGenerator.getManager().createConfig(worldname, args)) { //Create the generator configurations
             getLogger().info(plugin.getAPI().getUtil().C("ErrCannotCreateGen1") + " '" + generator + "' " + plugin.getAPI().getUtil().C("ErrCannotCreateGen2"));
             return false;
         }
@@ -493,22 +509,6 @@ public class BukkitServerBridge implements IServerBridge {
 
     private void setMultiworld(JavaPlugin multiworld) {
         this.multiworld = new MultiWorldWrapper(multiworld);
-    }
-
-    private static MultiWorldWrapper getMultiWorldWrapper() {
-        if (Bukkit.getPluginManager().isPluginEnabled("MultiWorld")) {
-            return new MultiWorldWrapper((JavaPlugin) Bukkit.getPluginManager().getPlugin("MultiWorld"));
-        } else {
-            return null;
-        }
-    }
-
-    private static MultiverseWrapper getMultiverseWrapper() {
-        if (Bukkit.getPluginManager().isPluginEnabled("Multiverse-Core")) {
-            return new MultiverseWrapper((JavaPlugin) Bukkit.getPluginManager().getPlugin("Multiverse-Core"));
-        } else {
-            return null;
-        }
     }
 
     @Override

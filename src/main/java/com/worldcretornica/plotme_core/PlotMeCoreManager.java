@@ -27,6 +27,126 @@ public class PlotMeCoreManager {
         return Integer.parseInt(id.substring(id.indexOf(";") + 1));
     }
 
+    public static Plot getPlotById(String id, PlotMapInfo pmi) {
+        if (pmi == null) {
+            return null;
+        }
+
+        return pmi.getPlot(id);
+    }
+
+    public static Plot getPlotById(IPlayer player, PlotMapInfo pmi) {
+        String id = getPlotId(player);
+
+        if (pmi == null || id.isEmpty()) {
+            return null;
+        }
+
+        return pmi.getPlot(id);
+    }
+
+    public static void removePlot(PlotMapInfo pmi, String id) {
+        if (pmi == null) {
+            return;
+        }
+
+        pmi.removePlot(id);
+    }
+
+    public static void setOwnerSign(IWorld world, Plot plot) {
+        String id = plot.getId();
+        String line1 = "ID: " + id;
+        String line2 = "";
+        String line3 = plot.getOwner();
+        String line4 = "";
+        getGenMan(world).setOwnerDisplay(world, plot.getId(), line1, line2, line3, line4);
+    }
+
+    public static boolean isPlotAvailable(String id, PlotMapInfo pmi) {
+
+        return pmi != null && pmi.getPlot(id) == null;
+    }
+
+    public static String getPlotId(ILocation location) {
+        if (getGenMan(location.getWorld()) == null) {
+            return "";
+        }
+
+        IPlotMe_GeneratorManager gen = getGenMan(location.getWorld());
+
+        if (gen == null) {
+            return "";
+        } else {
+            return gen.getPlotId(location);
+        }
+    }
+
+    public static String getPlotId(IPlayer player) {
+        if (getGenMan(player.getWorld()) == null) {
+            return "";
+        }
+
+        IPlotMe_GeneratorManager gen = getGenMan(player.getWorld());
+
+        if (gen == null) {
+            return "";
+        } else {
+            return gen.getPlotId(player);
+        }
+    }
+
+    private static IPlotMe_GeneratorManager getGenMan(IWorld world) {
+        return PlotMe_Core.getGenManager(world);
+    }
+
+    public static ILocation getPlotBottomLoc(IWorld world, String id) {
+        return getGenMan(world).getPlotBottomLoc(world, id);
+    }
+
+    public static ILocation getPlotTopLoc(IWorld world, String id) {
+        return getGenMan(world).getPlotTopLoc(world, id);
+    }
+
+    public static void removeOwnerSign(IWorld world, String id) {
+        getGenMan(world).removeOwnerDisplay(world, id);
+    }
+
+    public static void removeSellSign(IWorld world, String id) {
+        getGenMan(world).removeSellerDisplay(world, id);
+    }
+
+    public static void removeAuctionSign(IWorld world, String id) {
+        getGenMan(world).removeAuctionDisplay(world, id);
+    }
+
+    public static boolean isValidId(IWorld world, String id) {
+        return getGenMan(world).isValidId(id);
+    }
+
+    public static int bottomX(String id, IWorld world) {
+        return getGenMan(world).bottomX(id, world);
+    }
+
+    public static int topX(String id, IWorld world) {
+        return getGenMan(world).topX(id, world);
+    }
+
+    public static int bottomZ(String id, IWorld world) {
+        return getGenMan(world).bottomZ(id, world);
+    }
+
+    public static int topZ(String id, IWorld world) {
+        return getGenMan(world).topZ(id, world);
+    }
+
+    public static ILocation getPlotHome(IWorld world, String id) {
+        return getGenMan(world).getPlotHome(world, id);
+    }
+
+    public static List<IPlayer> getPlayersInPlot(IWorld world, String id) {
+        return getGenMan(world).getPlayersInPlot(world, id);
+    }
+
     public int getNbOwnedPlot(IPlayer player, IWorld world) {
         return getNbOwnedPlot(player.getUniqueId(), player.getName(), world.getName());
     }
@@ -36,7 +156,7 @@ public class PlotMeCoreManager {
     }
 
     private boolean isEconomyEnabled(String world) {
-        if (plugin.getServerBridge().getConfig().getBoolean("globalUseEconomy") || plugin.getServerBridge().getEconomy() != null) {
+        if (plugin.serverBridge.getConfig().getBoolean("globalUseEconomy") || plugin.serverBridge.getEconomy() != null) {
             return false;
         }
         PlotMapInfo pmi = getMap(world.toLowerCase());
@@ -44,18 +164,18 @@ public class PlotMeCoreManager {
         if (pmi == null) {
             return false;
         } else {
-            return pmi.isUseEconomy() && plugin.getServerBridge().getConfig().getBoolean("globalUseEconomy") && plugin.getServerBridge().getEconomy() != null;
+            return pmi.isUseEconomy() && plugin.serverBridge.getConfig().getBoolean("globalUseEconomy") && plugin.serverBridge.getEconomy() != null;
         }
     }
 
     public boolean isEconomyEnabled(PlotMapInfo pmi) {
-        if (plugin.getServerBridge().getConfig().getBoolean("globalUseEconomy") || plugin.getServerBridge().getEconomy() != null) {
+        if (plugin.serverBridge.getConfig().getBoolean("globalUseEconomy") || plugin.serverBridge.getEconomy() != null) {
             return false;
         }
         if (pmi == null) {
             return false;
         } else {
-            return pmi.isUseEconomy() && plugin.getServerBridge().getConfig().getBoolean("globalUseEconomy") && plugin.getServerBridge().getEconomy() != null;
+            return pmi.isUseEconomy() && plugin.serverBridge.getConfig().getBoolean("globalUseEconomy") && plugin.serverBridge.getEconomy() != null;
         }
     }
 
@@ -90,6 +210,76 @@ public class PlotMeCoreManager {
         return getMap(worldname);
     }
 
+/*
+    public static void adjustLinkedPlots(String id, IWorld world) {
+        //TODO
+        Map<String, Plot> plots = new HashMap<>(); //getPlots(world);
+
+        IPlotMe_GeneratorManager genMan = getGenMan(world);
+
+        int x = getIdX(id);
+        int z = getIdZ(id);
+
+        Plot p11 = plots.get(id);
+
+        if (p11 != null) {
+            Plot p01 = plots.get((x - 1) + ";" + z);
+            Plot p10 = plots.get(x + ";" + (z - 1));
+            Plot p12 = plots.get(x + ";" + (z + 1));
+            Plot p21 = plots.get((x + 1) + ";" + z);
+            Plot p00 = plots.get((x - 1) + ";" + (z - 1));
+            Plot p02 = plots.get((x - 1) + ";" + (z + 1));
+            Plot p20 = plots.get((x + 1) + ";" + (z - 1));
+            Plot p22 = plots.get((x + 1) + ";" + (z + 1));
+
+            if (p01 != null && p01.getOwner().equalsIgnoreCase(p11.getOwner())) {
+                genMan.fillroad(p01.getId(), p11.getId(), world);
+            }
+
+            if (p10 != null && p10.getOwner().equalsIgnoreCase(p11.getOwner())) {
+                genMan.fillroad(p10.getId(), p11.getId(), world);
+            }
+
+            if (p12 != null && p12.getOwner().equalsIgnoreCase(p11.getOwner())) {
+                genMan.fillroad(p12.getId(), p11.getId(), world);
+            }
+
+            if (p21 != null && p21.getOwner().equalsIgnoreCase(p11.getOwner())) {
+                genMan.fillroad(p21.getId(), p11.getId(), world);
+            }
+
+            if (p00 != null && p10 != null && p01 != null
+                        && p00.getOwner().equalsIgnoreCase(p11.getOwner())
+                        && p11.getOwner().equalsIgnoreCase(p10.getOwner())
+                        && p10.getOwner().equalsIgnoreCase(p01.getOwner())) {
+                genMan.fillmiddleroad(p00.getId(), p11.getId(), world);
+            }
+
+            if (p10 != null && p20 != null && p21 != null
+                        && p10.getOwner().equalsIgnoreCase(p11.getOwner())
+                        && p11.getOwner().equalsIgnoreCase(p20.getOwner())
+                        && p20.getOwner().equalsIgnoreCase(p21.getOwner())) {
+                genMan.fillmiddleroad(p20.getId(), p11.getId(), world);
+            }
+
+            if (p01 != null && p02 != null && p12 != null
+                        && p01.getOwner().equalsIgnoreCase(p11.getOwner())
+                        && p11.getOwner().equalsIgnoreCase(p02.getOwner())
+                        && p02.getOwner().equalsIgnoreCase(p12.getOwner())) {
+                genMan.fillmiddleroad(p02.getId(), p11.getId(), world);
+            }
+
+            if (p12 != null && p21 != null && p22 != null
+                        && p12.getOwner().equalsIgnoreCase(p11.getOwner())
+                        && p11.getOwner().equalsIgnoreCase(p21.getOwner())
+                        && p21.getOwner().equalsIgnoreCase(p22.getOwner())) {
+                genMan.fillmiddleroad(p22.getId(), p11.getId(), world);
+            }
+
+        }
+    }
+*/
+
     public Plot getPlotById(String id, IWorld world) {
         return getPlotById(id, world.getName());
     }
@@ -97,14 +287,6 @@ public class PlotMeCoreManager {
     public Plot getPlotById(String id, String name) {
         PlotMapInfo pmi = getMap(name.toLowerCase());
 
-        if (pmi == null) {
-            return null;
-        }
-
-        return pmi.getPlot(id);
-    }
-
-    public static Plot getPlotById(String id, PlotMapInfo pmi) {
         if (pmi == null) {
             return null;
         }
@@ -133,27 +315,9 @@ public class PlotMeCoreManager {
         return pmi.getPlot(id);
     }
 
-    public static Plot getPlotById(IPlayer player, PlotMapInfo pmi) {
-        String id = getPlotId(player);
-
-        if (pmi == null || id.isEmpty()) {
-            return null;
-        }
-
-        return pmi.getPlot(id);
-    }
-
     public void removePlot(IWorld world, String id) {
         PlotMapInfo pmi = getMap(world);
 
-        if (pmi == null) {
-            return;
-        }
-
-        pmi.removePlot(id);
-    }
-
-    public static void removePlot(PlotMapInfo pmi, String id) {
         if (pmi == null) {
             return;
         }
@@ -169,7 +333,7 @@ public class PlotMeCoreManager {
         }
 
         pmi.addPlot(id, plot);
-        plugin.getServerBridge().getEventFactory().callPlotLoadedEvent(plugin, world, plot);
+        plugin.serverBridge.getEventFactory().callPlotLoadedEvent(plugin, world, plot);
     }
 
     public void addPlot(IWorld world, String id, Plot plot, PlotMapInfo pmi) {
@@ -178,13 +342,13 @@ public class PlotMeCoreManager {
         }
 
         pmi.addPlot(id, plot);
-        plugin.getServerBridge().getEventFactory().callPlotLoadedEvent(plugin, world, plot);
+        plugin.serverBridge.getEventFactory().callPlotLoadedEvent(plugin, world, plot);
     }
 
     public IWorld getFirstWorld() {
         if (plotmaps != null) {
             if (plotmaps.keySet().toArray().length > 0) {
-                return plugin.getServerBridge().getWorld((String) plotmaps.keySet().toArray()[0]);
+                return plugin.serverBridge.getWorld((String) plotmaps.keySet().toArray()[0]);
             }
         }
         return null;
@@ -371,7 +535,7 @@ public class PlotMeCoreManager {
         final int z2 = top.getBlockZ();
         final String wname = world.getName();
 
-        plugin.getServerBridge().runTaskAsynchronously(new Runnable() {
+        plugin.serverBridge.runTaskAsynchronously(new Runnable() {
             @Override
             public void run() {
                 LWC lwc = LWC.getInstance();
@@ -382,15 +546,6 @@ public class PlotMeCoreManager {
                 }
             }
         });
-    }
-
-    public static void setOwnerSign(IWorld world, Plot plot) {
-        String id = plot.getId();
-        String line1 = "ID: " + id;
-        String line2 = "";
-        String line3 = plot.getOwner();
-        String line4 = "";
-        getGenMan(world).setOwnerDisplay(world, plot.getId(), line1, line2, line3, line4);
     }
 
     public void setSellSign(IWorld world, Plot plot) {
@@ -440,74 +595,6 @@ public class PlotMeCoreManager {
         }
     }
 
-    public static void adjustLinkedPlots(String id, IWorld world) {
-        //TODO
-        Map<String, Plot> plots = new HashMap<>(); //getPlots(world);
-
-        IPlotMe_GeneratorManager gm = getGenMan(world);
-
-        int x = getIdX(id);
-        int z = getIdZ(id);
-
-        Plot p11 = plots.get(id);
-
-        if (p11 != null) {
-            Plot p01 = plots.get((x - 1) + ";" + z);
-            Plot p10 = plots.get(x + ";" + (z - 1));
-            Plot p12 = plots.get(x + ";" + (z + 1));
-            Plot p21 = plots.get((x + 1) + ";" + z);
-            Plot p00 = plots.get((x - 1) + ";" + (z - 1));
-            Plot p02 = plots.get((x - 1) + ";" + (z + 1));
-            Plot p20 = plots.get((x + 1) + ";" + (z - 1));
-            Plot p22 = plots.get((x + 1) + ";" + (z + 1));
-
-            if (p01 != null && p01.getOwner().equalsIgnoreCase(p11.getOwner())) {
-                gm.fillroad(p01.getId(), p11.getId(), world);
-            }
-
-            if (p10 != null && p10.getOwner().equalsIgnoreCase(p11.getOwner())) {
-                gm.fillroad(p10.getId(), p11.getId(), world);
-            }
-
-            if (p12 != null && p12.getOwner().equalsIgnoreCase(p11.getOwner())) {
-                gm.fillroad(p12.getId(), p11.getId(), world);
-            }
-
-            if (p21 != null && p21.getOwner().equalsIgnoreCase(p11.getOwner())) {
-                gm.fillroad(p21.getId(), p11.getId(), world);
-            }
-
-            if (p00 != null && p10 != null && p01 != null
-                        && p00.getOwner().equalsIgnoreCase(p11.getOwner())
-                        && p11.getOwner().equalsIgnoreCase(p10.getOwner())
-                        && p10.getOwner().equalsIgnoreCase(p01.getOwner())) {
-                gm.fillmiddleroad(p00.getId(), p11.getId(), world);
-            }
-
-            if (p10 != null && p20 != null && p21 != null
-                        && p10.getOwner().equalsIgnoreCase(p11.getOwner())
-                        && p11.getOwner().equalsIgnoreCase(p20.getOwner())
-                        && p20.getOwner().equalsIgnoreCase(p21.getOwner())) {
-                gm.fillmiddleroad(p20.getId(), p11.getId(), world);
-            }
-
-            if (p01 != null && p02 != null && p12 != null
-                        && p01.getOwner().equalsIgnoreCase(p11.getOwner())
-                        && p11.getOwner().equalsIgnoreCase(p02.getOwner())
-                        && p02.getOwner().equalsIgnoreCase(p12.getOwner())) {
-                gm.fillmiddleroad(p02.getId(), p11.getId(), world);
-            }
-
-            if (p12 != null && p21 != null && p22 != null
-                        && p12.getOwner().equalsIgnoreCase(p11.getOwner())
-                        && p11.getOwner().equalsIgnoreCase(p21.getOwner())
-                        && p21.getOwner().equalsIgnoreCase(p22.getOwner())) {
-                gm.fillmiddleroad(p22.getId(), p11.getId(), world);
-            }
-
-        }
-    }
-
     public void clear(IWorld iWorld, Plot plot, ICommandSender sender, ClearReason reason) {
         String id = plot.getId();
 
@@ -535,7 +622,7 @@ public class PlotMeCoreManager {
             plugin.addPlotToClear(new PlotToClear(world, id, sender, reason));
         } else {
             getGenMan(iWorld).clear(iWorld, id);
-            if (plugin.getServerBridge().getUsinglwc()) {
+            if (plugin.serverBridge.getUsinglwc()) {
                 removeLWC(iWorld, id);
             }
             sender.sendMessage(Util().C("MsgPlotCleared"));
@@ -556,53 +643,8 @@ public class PlotMeCoreManager {
         return pmi != null && pmi.getPlot(id) == null;
     }
 
-    public static boolean isPlotAvailable(String id, PlotMapInfo pmi) {
-
-        return pmi != null && pmi.getPlot(id) == null;
-    }
-
-    public static String getPlotId(ILocation location) {
-        if (getGenMan(location.getWorld()) == null) {
-            return "";
-        }
-
-        IPlotMe_GeneratorManager gen = getGenMan(location.getWorld());
-
-        if (gen == null) {
-            return "";
-        } else {
-            return gen.getPlotId(location);
-        }
-    }
-
-    public static String getPlotId(IPlayer player) {
-        if (getGenMan(player.getWorld()) == null) {
-            return "";
-        }
-
-        IPlotMe_GeneratorManager gen = getGenMan(player.getWorld());
-
-        if (gen == null) {
-            return "";
-        } else {
-            return gen.getPlotId(player);
-        }
-    }
-
-    private static IPlotMe_GeneratorManager getGenMan(IWorld world) {
-        return PlotMe_Core.getGenManager(world);
-    }
-
     public IPlotMe_GeneratorManager getGenMan(String name) {
         return plugin.getGenManager(name);
-    }
-
-    public static ILocation getPlotBottomLoc(IWorld world, String id) {
-        return getGenMan(world).getPlotBottomLoc(world, id);
-    }
-
-    public static ILocation getPlotTopLoc(IWorld world, String id) {
-        return getGenMan(world).getPlotTopLoc(world, id);
     }
 
     public void adjustWall(IPlayer player) {
@@ -613,49 +655,9 @@ public class PlotMeCoreManager {
         getGenMan(world).adjustPlotFor(world, id, true, plot.isProtect(), plot.isAuctioned(), plot.isForSale());
     }
 
-    public static void removeOwnerSign(IWorld world, String id) {
-        getGenMan(world).removeOwnerDisplay(world, id);
-    }
-
-    public static void removeSellSign(IWorld world, String id) {
-        getGenMan(world).removeSellerDisplay(world, id);
-    }
-
-    public static void removeAuctionSign(IWorld world, String id) {
-        getGenMan(world).removeAuctionDisplay(world, id);
-    }
-
-    public static boolean isValidId(IWorld world, String id) {
-        return getGenMan(world).isValidId(id);
-    }
-
-    public static int bottomX(String id, IWorld world) {
-        return getGenMan(world).bottomX(id, world);
-    }
-
-    public static int topX(String id, IWorld world) {
-        return getGenMan(world).topX(id, world);
-    }
-
-    public static int bottomZ(String id, IWorld world) {
-        return getGenMan(world).bottomZ(id, world);
-    }
-
-    public static int topZ(String id, IWorld world) {
-        return getGenMan(world).topZ(id, world);
-    }
-
     public void setBiome(IWorld world, String id, IBiome biome) {
         getGenMan(world).setBiome(world, id, biome);
         plugin.getSqlManager().updatePlot(getIdX(id), getIdZ(id), world.getName(), "biome", biome.name());
-    }
-
-    public static ILocation getPlotHome(IWorld world, String id) {
-        return getGenMan(world).getPlotHome(world, id);
-    }
-
-    public static List<IPlayer> getPlayersInPlot(IWorld world, String id) {
-        return getGenMan(world).getPlayersInPlot(world, id);
     }
 
     public HashSet<UUID> getPlayersIgnoringWELimit() {

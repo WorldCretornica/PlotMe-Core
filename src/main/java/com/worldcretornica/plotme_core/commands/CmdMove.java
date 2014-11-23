@@ -27,13 +27,13 @@ public class CmdMove extends PlotCommand {
                     player.sendMessage(C("WordUsage") + ": §c/plotme move <" + C("WordIdFrom") + "> <" + C("WordIdTo") + "> §r" + C("WordExample") + ": §c/plotme move 0;1 2;-1");
                     return true;
                 } else {
-                    InternalPlotMoveEvent event = sob.getEventFactory().callPlotMoveEvent(plugin, world, world, plot1, plot2, player);
+                    InternalPlotMoveEvent event = serverBridge.getEventFactory().callPlotMoveEvent(plugin, world, world, plot1, plot2, player);
 
                     if (!event.isCancelled()) {
                         if (plugin.getPlotMeCoreManager().movePlot(world, plot1, plot2)) {
                             player.sendMessage(C("MsgPlotMovedSuccess"));
 
-                            sob.getLogger().info(LOG + player.getName() + " " + C("MsgExchangedPlot") + " " + plot1 + " " + C("MsgAndPlot") + " " + plot2);
+                            serverBridge.getLogger().info(player.getName() + " " + C("MsgExchangedPlot") + " " + plot1 + " " + C("MsgAndPlot") + " " + plot2);
                         } else {
                             player.sendMessage("§c" + C("ErrMovingPlot"));
                         }

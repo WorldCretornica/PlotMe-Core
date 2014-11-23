@@ -14,15 +14,6 @@ public class Util {
         plugin = instance;
     }
 
-    public String C(String s) {
-        if (plugin.getCaptionConfig().contains(s)) {
-            return addColor(plugin.getCaptionConfig().getString(s));
-        } else {
-            plugin.getLogger().log(Level.WARNING, "Missing caption: {0}", s);
-            return "ERROR:Missing caption '" + s + "'";
-        }
-    }
-
     private static String addColor(String string) {
         return ChatColor.translateAlternateColorCodes('&', string);
     }
@@ -44,6 +35,15 @@ public class Util {
         else return "" + money;
     }
 
+    public String C(String caption) {
+        if (plugin.getCaptionConfig().contains(caption)) {
+            return addColor(plugin.getCaptionConfig().getString(caption));
+        } else {
+            plugin.getLogger().log(Level.WARNING, "Missing caption: {0}", caption);
+            return "ERROR:Missing caption '" + caption + "'";
+        }
+    }
+
     public String moneyFormat(double price) {
         return moneyFormat(price, true);
     }
@@ -55,7 +55,7 @@ public class Util {
 
         String format = round(Math.abs(price));
 
-        Economy econ = plugin.getServerBridge().getEconomy();
+        Economy econ = plugin.serverBridge.getEconomy();
         
         if (econ != null) {
             format = price <= 1 && price >= -1 ? format + " " + econ.currencyNameSingular() : format + " " + econ.currencyNamePlural();

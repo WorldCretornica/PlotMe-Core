@@ -39,17 +39,17 @@ public class CmdDispose extends PlotCommand {
                             InternalPlotDisposeEvent event;
 
                             if (plugin.getPlotMeCoreManager().isEconomyEnabled(pmi)) {
-                                if (cost != 0 && sob.getBalance(player) < cost) {
+                                if (cost != 0 && serverBridge.getBalance(player) < cost) {
                                     player.sendMessage("§c" + C("MsgNotEnoughDispose"));
                                     return true;
                                 }
 
-                                event = sob.getEventFactory().callPlotDisposeEvent(plugin, world, plot, player);
+                                event = serverBridge.getEventFactory().callPlotDisposeEvent(plugin, world, plot, player);
 
                                 if (event.isCancelled()) {
                                     return true;
                                 } else {
-                                    EconomyResponse economyResponse = sob.withdrawPlayer(player, cost);
+                                    EconomyResponse economyResponse = serverBridge.withdrawPlayer(player, cost);
 
                                     if (!economyResponse.transactionSuccess()) {
                                         player.sendMessage("§c" + economyResponse.errorMessage);
@@ -61,11 +61,11 @@ public class CmdDispose extends PlotCommand {
                                         String currentbidder = plot.getCurrentBidder();
 
                                         if (!currentbidder.isEmpty()) {
-                                            IOfflinePlayer playercurrentbidder = sob.getOfflinePlayer(plot.getCurrentBidderId());
-                                            EconomyResponse er2 = sob.depositPlayer(playercurrentbidder, plot.getCurrentBid());
+                                            IOfflinePlayer playercurrentbidder = serverBridge.getOfflinePlayer(plot.getCurrentBidderId());
+                                            EconomyResponse er2 = serverBridge.depositPlayer(playercurrentbidder, plot.getCurrentBid());
 
                                             if (er2.transactionSuccess()) {
-                                                IPlayer currentBidder = sob.getPlayer(playercurrentbidder.getUniqueId());
+                                                IPlayer currentBidder = serverBridge.getPlayer(playercurrentbidder.getUniqueId());
                                                 if (currentBidder != null) {
                                                     currentBidder.sendMessage(C("WordPlot") + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner() + " " + C("MsgWasDisposed") + " " + Util().moneyFormat(cost));
                                                 }
@@ -77,7 +77,7 @@ public class CmdDispose extends PlotCommand {
                                     }
                                 }
                             } else {
-                                event = sob.getEventFactory().callPlotDisposeEvent(plugin, world, plot, player);
+                                event = serverBridge.getEventFactory().callPlotDisposeEvent(plugin, world, plot, player);
                             }
 
                             if (!event.isCancelled()) {
@@ -94,7 +94,7 @@ public class CmdDispose extends PlotCommand {
                                 player.sendMessage(C("MsgPlotDisposedAnyoneClaim"));
 
                                 if (isAdvancedLogging()) {
-                                    sob.getLogger().info(LOG + name + " " + C("MsgDisposedPlot") + " " + id);
+                                    serverBridge.getLogger().info(name + " " + C("MsgDisposedPlot") + " " + id);
                                 }
                             }
                         } else {

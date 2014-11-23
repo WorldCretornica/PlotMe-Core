@@ -40,16 +40,16 @@ public class CmdSetOwner extends PlotCommand {
 
                         if (plugin.getPlotMeCoreManager().isEconomyEnabled(world)) {
                             if (pmi.isRefundClaimPriceOnSetOwner() && !newowner.equals(oldowner)) {
-                                event = sob.getEventFactory().callPlotOwnerChangeEvent(plugin, world, plot, player, newowner);
+                                event = serverBridge.getEventFactory().callPlotOwnerChangeEvent(plugin, world, plot, player, newowner);
 
                                 if (event.isCancelled()) {
                                     return true;
                                 } else if (plot.getOwnerId() != null) {
-                                    IOfflinePlayer playeroldowner = sob.getOfflinePlayer(plot.getOwnerId());
-                                    EconomyResponse er = sob.depositPlayer(playeroldowner, pmi.getClaimPrice());
+                                    IOfflinePlayer playeroldowner = serverBridge.getOfflinePlayer(plot.getOwnerId());
+                                    EconomyResponse er = serverBridge.depositPlayer(playeroldowner, pmi.getClaimPrice());
 
                                     if (er.transactionSuccess()) {
-                                        IPlayer oldOwner = sob.getPlayer(playeroldowner.getUniqueId());
+                                        IPlayer oldOwner = serverBridge.getPlayer(playeroldowner.getUniqueId());
                                         if (oldOwner != null) {
                                             oldOwner.sendMessage(C("MsgYourPlot") + " " + id + " " + C("MsgNowOwnedBy") + " " + newowner + ". " + Util().moneyFormat(pmi.getClaimPrice()));
                                         }
@@ -60,15 +60,15 @@ public class CmdSetOwner extends PlotCommand {
                                     }
                                 }
                             } else {
-                                event = sob.getEventFactory().callPlotOwnerChangeEvent(plugin, world, plot, player, newowner);
+                                event = serverBridge.getEventFactory().callPlotOwnerChangeEvent(plugin, world, plot, player, newowner);
                             }
 
                             if (plot.getCurrentBidderId() != null) {
-                                IOfflinePlayer playercurrentbidder = sob.getOfflinePlayer(plot.getCurrentBidderId());
-                                EconomyResponse er = sob.depositPlayer(playercurrentbidder, plot.getCurrentBid());
+                                IOfflinePlayer playercurrentbidder = serverBridge.getOfflinePlayer(plot.getCurrentBidderId());
+                                EconomyResponse er = serverBridge.depositPlayer(playercurrentbidder, plot.getCurrentBid());
 
                                 if (er.transactionSuccess()) {
-                                    IPlayer currentBidder = sob.getPlayer(playercurrentbidder.getUniqueId());
+                                    IPlayer currentBidder = serverBridge.getPlayer(playercurrentbidder.getUniqueId());
                                     if (currentBidder != null) {
                                         currentBidder.sendMessage(C("WordPlot") + " " + id + " " + C("MsgChangedOwnerFrom") + " " + oldowner + " " + C("WordTo") + " " + newowner + ". " + Util().moneyFormat(plot.getCurrentBid()));
                                     }
@@ -78,7 +78,7 @@ public class CmdSetOwner extends PlotCommand {
                                 }
                             }
                         } else {
-                            event = sob.getEventFactory().callPlotOwnerChangeEvent(plugin, world, plot, player, newowner);
+                            event = serverBridge.getEventFactory().callPlotOwnerChangeEvent(plugin, world, plot, player, newowner);
                         }
 
                         if (!event.isCancelled()) {
@@ -109,7 +109,7 @@ public class CmdSetOwner extends PlotCommand {
                     player.sendMessage(C("MsgOwnerChangedTo") + " §c" + newowner);
 
                     if (isAdvancedLogging()) {
-                        sob.getLogger().info(LOG + playername + " " + C("MsgChangedOwnerOf") + " " + id + " " + C("WordFrom") + " " + oldowner + " " + C("WordTo") + " " + newowner);
+                        serverBridge.getLogger().info(playername + " " + C("MsgChangedOwnerOf") + " " + id + " " + C("WordFrom") + " " + oldowner + " " + C("WordTo") + " " + newowner);
                     }
                 }
             } else {

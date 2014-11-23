@@ -46,7 +46,7 @@ public class PlotWorldEdit6_0_0 implements PlotWorldEdit {
         if (!"".equalsIgnoreCase(id)) {
             Plot plot = plugin.getPlotMeCoreManager().getPlotById(id, player);
 
-            if (plot != null && plot.isAllowed(player.getUniqueId())) {
+            if (plot != null && plot.isAllowed(player.getName(), player.getUniqueId())) {
                 bottom = (BukkitLocation) PlotMeCoreManager.getPlotBottomLoc(bukkitWorld, id);
                 top = (BukkitLocation) PlotMeCoreManager.getPlotTopLoc(bukkitWorld, id);
 

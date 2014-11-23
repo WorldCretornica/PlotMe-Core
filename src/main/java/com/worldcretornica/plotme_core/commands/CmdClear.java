@@ -37,15 +37,15 @@ public class CmdClear extends PlotCommand {
 
                             if (plugin.getPlotMeCoreManager().isEconomyEnabled(pmi)) {
                                 price = pmi.getClearPrice();
-                                double balance = sob.getBalance(player);
+                                double balance = serverBridge.getBalance(player);
 
                                 if (balance >= price) {
-                                    event = sob.getEventFactory().callPlotClearEvent(plugin, world, plot, player);
+                                    event = serverBridge.getEventFactory().callPlotClearEvent(plugin, world, plot, player);
 
                                     if (event.isCancelled()) {
                                         return true;
                                     } else {
-                                        EconomyResponse er = sob.withdrawPlayer(player, price);
+                                        EconomyResponse er = serverBridge.withdrawPlayer(player, price);
 
                                         if (!er.transactionSuccess()) {
                                             player.sendMessage("§c" + er.errorMessage);
@@ -54,18 +54,18 @@ public class CmdClear extends PlotCommand {
                                         }
                                     }
                                 } else {
-                                    player.sendMessage("§c" + C("MsgNotEnoughClear") + " " + C("WordMissing") + " §r" + (price - balance) + "§c " + sob.getEconomy().currencyNamePlural());
+                                    player.sendMessage("§c" + C("MsgNotEnoughClear") + " " + C("WordMissing") + " §r" + (price - balance) + "§c " + serverBridge.getEconomy().currencyNamePlural());
                                     return true;
                                 }
                             } else {
-                                event = sob.getEventFactory().callPlotClearEvent(plugin, world, plot, player);
+                                event = serverBridge.getEventFactory().callPlotClearEvent(plugin, world, plot, player);
                             }
 
                             if (!event.isCancelled()) {
                                 plugin.getPlotMeCoreManager().clear(world, plot, player, ClearReason.Clear);
 
                                 if (isAdvancedLogging()) {
-                                    sob.getLogger().info(LOG + playername + " " + C("MsgClearedPlot") + " " + id + (price != 0 ? " " + C("WordFor") + " " + price : ""));
+                                    serverBridge.getLogger().info(playername + " " + C("MsgClearedPlot") + " " + id + (price != 0 ? " " + C("WordFor") + " " + price : ""));
                                 }
                             }
                         } else {

@@ -14,14 +14,12 @@ import java.util.logging.Level;
 
 public class SqlManager {
 
+    private static Connection conn;
     private final PlotMe_Core plugin;
-
     private final boolean usemySQL;
     private final String mySQLuname;
     private final String mySQLpass;
     private final String mySQLconn;
-
-    private static Connection conn;
 
     public SqlManager(PlotMe_Core plugin, boolean usemysql, String sqlusername, String sqlpassword, String sqlconnection) {
         this.plugin = plugin;
@@ -39,7 +37,7 @@ public class SqlManager {
                 conn.setAutoCommit(false);
             } else {
                 Class.forName("org.sqlite.JDBC");
-                conn = DriverManager.getConnection("jdbc:sqlite:" + plugin.getServerBridge().getDataFolder() + "/plots.db");
+                conn = DriverManager.getConnection("jdbc:sqlite:" + plugin.serverBridge.getDataFolder() + "/plots.db");
                 conn.setAutoCommit(false);
             }
         } catch (SQLException ex) {
@@ -621,11 +619,11 @@ public class SqlManager {
                 plugin.getLogger().info("Modifying database for MySQL support");
 
                 String sqlitedb = "plots.db";
-                File sqlitefile = new File(plugin.getServerBridge().getDataFolder(), sqlitedb);
+                File sqlitefile = new File(plugin.serverBridge.getDataFolder(), sqlitedb);
                 if (sqlitefile.exists()) {
                     plugin.getLogger().info("Trying to import plots from plots.db");
                     Class.forName("org.sqlite.JDBC");
-                    Connection sqliteconn = DriverManager.getConnection("jdbc:sqlite:" + plugin.getServerBridge().getDataFolder() + "\\" + sqlitedb);
+                    Connection sqliteconn = DriverManager.getConnection("jdbc:sqlite:" + plugin.serverBridge.getDataFolder() + "\\" + sqlitedb);
 
                     sqliteconn.setAutoCommit(false);
                     Statement slstatement = sqliteconn.createStatement();
@@ -747,7 +745,7 @@ public class SqlManager {
                     sqliteconn.close();
 
                     plugin.getLogger().info("Renaming " + sqlitedb + " to " + sqlitedb + ".old");
-                    if (!sqlitefile.renameTo(new File(plugin.getServerBridge().getDataFolder(), sqlitedb + ".old"))) {
+                    if (!sqlitefile.renameTo(new File(plugin.serverBridge.getDataFolder(), sqlitedb + ".old"))) {
                         plugin.getLogger().severe("Failed to rename " + sqlitedb + "! Please rename this manually!");
                     }
                 }
@@ -1204,8 +1202,7 @@ public class SqlManager {
                     }
                 }
 
-                if (setAllowed != null)
-                    setAllowed.close();
+                setAllowed.close();
 
                 statementDenied = conn.prepareStatement("SELECT * FROM plotmeDenied WHERE LOWER(world) = ? AND idX = ? AND idZ = ?");
                 statementDenied.setString(1, world);
@@ -1222,9 +1219,7 @@ public class SqlManager {
                         denied.put(setDenied.getString("player"), UUIDFetcher.fromBytes(byPlayerId));
                     }
                 }
-
-                if (setDenied != null)
-                    setDenied.close();
+                setDenied.close();
 
                 plot = new Plot(plugin, owner, ownerId, world, biome, expireddate, finished, allowed,
                                        idX + ";" + idZ, customprice, forsale, finisheddate, protect,
@@ -1264,7 +1259,7 @@ public class SqlManager {
     public void loadPlotsAsynchronously(String world) {
         final String worldname = world;
 
-        plugin.getServerBridge().runTaskAsynchronously(new Runnable() {
+        plugin.serverBridge.runTaskAsynchronously(new Runnable() {
             @Override
             public void run() {
                 plugin.getLogger().info("Starting to load plots for world " + worldname);
@@ -1275,12 +1270,12 @@ public class SqlManager {
 
                 for (String id : plots.keySet()) {
                     pmi.addPlot(id, plots.get(id));
-                    plugin.getServerBridge().getEventFactory().callPlotLoadedEvent(plugin, plugin.getServerBridge().getWorld(worldname), plots.get(id));
+                    plugin.serverBridge.getEventFactory().callPlotLoadedEvent(plugin, plugin.serverBridge.getWorld(worldname), plots.get(id));
                 }
 
                 // plugin.getLogger().info("Done loading " + pmi.getNbPlots() +
                 // " plots for world " + worldname);
-                plugin.getServerBridge().getEventFactory().callPlotWorldLoadEvent(worldname, pmi.getNbPlots());
+                plugin.serverBridge.getEventFactory().callPlotWorldLoadEvent(worldname, pmi.getNbPlots());
             }
         });
     }
@@ -1348,8 +1343,7 @@ public class SqlManager {
                     }
                 }
 
-                if (setAllowed != null)
-                    setAllowed.close();
+                setAllowed.close();
 
                 statementDenied = conn.createStatement();
                 setDenied = statementDenied.executeQuery("SELECT * FROM plotmeDenied WHERE idX = '" + idX + "' AND idZ = '" + idZ + "' AND LOWER(world) = '" + world + "'");
@@ -1363,8 +1357,7 @@ public class SqlManager {
                     }
                 }
 
-                if (setDenied != null)
-                    setDenied.close();
+                setDenied.close();
 
                 Plot plot = new Plot(plugin, owner, ownerId, world, biome, expireddate, finished, allowed, idX + ";" + idZ,
                                             customprice, forsale, finisheddate, protect, currentbidder, currentbidderid, currentbid, auctionned, denied, auctionneddate);
@@ -2042,7 +2035,7 @@ public class SqlManager {
     }
 
     public void plotConvertToUUIDAsynchronously() {
-        plugin.getServerBridge().runTaskAsynchronously(new Runnable() {
+        plugin.serverBridge.runTaskAsynchronously(new Runnable() {
             @Override
             public void run() {
                 plugin.getLogger().info("Checking if conversion to UUID needed...");
@@ -2263,7 +2256,7 @@ public class SqlManager {
     }
 
     private void _fetchUUIDAsync(final int idX, final int idZ, final String world, final String Property, final String name) {
-        plugin.getServerBridge().runTaskAsynchronously(new Runnable() {
+        plugin.serverBridge.runTaskAsynchronously(new Runnable() {
             @Override
             public void run() {
 
@@ -2272,7 +2265,7 @@ public class SqlManager {
                 try {
                     Connection conn = getConnection();
 
-                    IPlayer player = plugin.getServerBridge().getPlayerExact(name);
+                    IPlayer player = plugin.serverBridge.getPlayerExact(name);
                     UUID uuid = null;
                     String newname = name;
 
@@ -2384,7 +2377,7 @@ public class SqlManager {
     }
 
     public void updatePlotsNewUUID(final UUID uuid, final String newname) {
-        plugin.getServerBridge().runTaskAsynchronously(new Runnable() {
+        plugin.serverBridge.runTaskAsynchronously(new Runnable() {
             @Override
             public void run() {
                 PreparedStatement[] pss = new PreparedStatement[4];

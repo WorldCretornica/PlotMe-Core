@@ -41,15 +41,15 @@ public class CmdAdd extends PlotCommand {
 
                                 if (plugin.getPlotMeCoreManager().isEconomyEnabled(pmi)) {
                                     double price = pmi.getAddPlayerPrice();
-                                    double balance = sob.getBalance(player);
+                                    double balance = serverBridge.getBalance(player);
 
                                     if (balance >= price) {
-                                        event = sob.getEventFactory().callPlotAddAllowedEvent(plugin, world, plot, player, allowed);
+                                        event = serverBridge.getEventFactory().callPlotAddAllowedEvent(plugin, world, plot, player, allowed);
 
                                         if (event.isCancelled()) {
                                             return true;
                                         } else {
-                                            EconomyResponse er = sob.withdrawPlayer(player, price);
+                                            EconomyResponse er = serverBridge.withdrawPlayer(player, price);
 
                                             if (!er.transactionSuccess()) {
                                                 player.sendMessage("§c" + er.errorMessage);
@@ -62,11 +62,11 @@ public class CmdAdd extends PlotCommand {
                                         return true;
                                     }
                                 } else {
-                                    event = sob.getEventFactory().callPlotAddAllowedEvent(plugin, world, plot, player, allowed);
+                                    event = serverBridge.getEventFactory().callPlotAddAllowedEvent(plugin, world, plot, player, allowed);
                                 }
 
                                 if (!event.isCancelled()) {
-                                    IPlayer allowed2 = plugin.getServerBridge().getPlayerExact(allowed);
+                                    IPlayer allowed2 = plugin.serverBridge.getPlayerExact(allowed);
                                     if (allowed2 != null && allowed2.isOnline()) {
                                         plot.addAllowed(allowed, allowed2.getUniqueId());
                                         plot.removeDenied(allowed);
@@ -78,7 +78,7 @@ public class CmdAdd extends PlotCommand {
                                     player.sendMessage(C("WordPlayer") + " §c" + allowed + "§r " + C("MsgNowAllowed") + " " + Util().moneyFormat(-price));
 
                                     if (isAdvancedLogging()) {
-                                        sob.getLogger().info(LOG + player.getName() + " " + C("MsgAddedPlayer") + " " + allowed + " " + C("MsgToPlot") + " "
+                                        serverBridge.getLogger().info(player.getName() + " " + C("MsgAddedPlayer") + " " + allowed + " " + C("MsgToPlot") + " "
                                                                         + id + (price != 0 ? " " + C("WordFor") + " " + price : ""));
                                     }
                                 }

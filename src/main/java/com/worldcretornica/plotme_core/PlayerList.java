@@ -8,12 +8,11 @@ import java.util.UUID;
 public class PlayerList {
 
     private PlotMe_Core api;
+    private HashMap<String, UUID> playerlist;
 
     public PlayerList(PlotMe_Core api) {
         this.api = api;
     }
-
-    private HashMap<String, UUID> playerlist;
 
     public PlayerList() {
         playerlist = new HashMap<>();
@@ -32,7 +31,7 @@ public class PlayerList {
     }
 
     public String put(UUID uuid) {
-        String name = api.getServerBridge().getOfflinePlayer(uuid).getName();
+        String name = api.serverBridge.getOfflinePlayer(uuid).getName();
         playerlist.put(name, uuid);
         return name;
     }

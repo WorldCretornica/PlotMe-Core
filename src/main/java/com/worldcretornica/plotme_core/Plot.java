@@ -6,7 +6,9 @@ import com.worldcretornica.plotme_core.api.IWorld;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.UUID;
 
 public class Plot implements Comparable<Plot> {
 
@@ -41,12 +43,12 @@ public class Plot implements Comparable<Plot> {
         setId("");
         allowed = new PlayerList();
         denied = new PlayerList();
-        setBiome(this.plugin.getServerBridge().getBiome("PLAINS"));
+        setBiome(this.plugin.serverBridge.getBiome("PLAINS"));
 
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DAY_OF_YEAR, 7);
         java.util.Date utlDate = cal.getTime();
-        setExpiredDate(new java.sql.Date(utlDate.getTime()));
+        setExpiredDate(new Date(utlDate.getTime()));
 
         setCustomPrice(0);
         setForSale(false);
@@ -66,7 +68,7 @@ public class Plot implements Comparable<Plot> {
         setWorld(world.getName().toLowerCase());
         allowed = new PlayerList();
         denied = new PlayerList();
-        setBiome(this.plugin.getServerBridge().getBiome("PLAINS"));
+        setBiome(this.plugin.serverBridge.getBiome("PLAINS"));
         setId(plotid);
 
         if (days == 0) {
@@ -75,7 +77,7 @@ public class Plot implements Comparable<Plot> {
             Calendar cal = Calendar.getInstance();
             cal.add(Calendar.DAY_OF_YEAR, days);
             java.util.Date utlDate = cal.getTime();
-            setExpiredDate(new java.sql.Date(utlDate.getTime()));
+            setExpiredDate(new Date(utlDate.getTime()));
         }
 
         setCustomPrice(0);
@@ -97,7 +99,7 @@ public class Plot implements Comparable<Plot> {
         setOwner(owner);
         setOwnerId(ownerId);
         setWorld(world);
-        setBiome(this.plugin.getServerBridge().getBiome(biome));
+        setBiome(this.plugin.serverBridge.getBiome(biome));
         setExpiredDate(expiredDate);
         setFinished(finished);
         allowed = al;
@@ -121,7 +123,7 @@ public class Plot implements Comparable<Plot> {
         setOwner(owner);
         setOwnerId(ownerId);
         setWorld(world);
-        setBiome(this.plugin.getServerBridge().getBiome(biome));
+        setBiome(this.plugin.serverBridge.getBiome(biome));
         setExpiredDate(expiredDate);
         setFinished(finished);
         this.allowed = allowed;
@@ -149,7 +151,7 @@ public class Plot implements Comparable<Plot> {
             Calendar cal = Calendar.getInstance();
             cal.add(Calendar.DAY_OF_YEAR, days);
             java.util.Date utlDate = cal.getTime();
-            java.sql.Date temp = new java.sql.Date(utlDate.getTime());
+            Date temp = new Date(utlDate.getTime());
             if (getExpiredDate() == null || !temp.toString().equalsIgnoreCase(getExpiredDate().toString())) {
                 setExpiredDate(temp);
                 updateField("expireddate", getExpiredDate());
@@ -243,14 +245,14 @@ public class Plot implements Comparable<Plot> {
             UUID uuid = allowed.remove(name);
             plugin.getSqlManager().deletePlotAllowed(PlotMeCoreManager.getIdX(id), PlotMeCoreManager.getIdZ(id), name, uuid, world);
 
-            if (plugin.getServerBridge().getPlotWorldEdit() != null) {
-                IPlayer player = plugin.getServerBridge().getPlayer(uuid);
+            if (plugin.serverBridge.getPlotWorldEdit() != null) {
+                IPlayer player = plugin.serverBridge.getPlayer(uuid);
 
                 if (player != null) {
                     if (plugin.getPlotMeCoreManager().isPlotWorld(player.getWorld())) {
                         if (plugin.getPlotMeCoreManager().isPlayerIgnoringWELimit(player.getUniqueId()))
-                            plugin.getServerBridge().getPlotWorldEdit().removeMask(player);
-                        else plugin.getServerBridge().getPlotWorldEdit().setMask(player);
+                            plugin.serverBridge.getPlotWorldEdit().removeMask(player);
+                        else plugin.serverBridge.getPlotWorldEdit().setMask(player);
                     }
                 }
             }
@@ -269,14 +271,14 @@ public class Plot implements Comparable<Plot> {
             String name = allowed.remove(uuid);
             plugin.getSqlManager().deletePlotAllowed(PlotMeCoreManager.getIdX(id), PlotMeCoreManager.getIdZ(id), name, uuid, world);
 
-            if (plugin.getServerBridge().getPlotWorldEdit() != null) {
-                IPlayer player = plugin.getServerBridge().getPlayer(uuid);
+            if (plugin.serverBridge.getPlotWorldEdit() != null) {
+                IPlayer player = plugin.serverBridge.getPlayer(uuid);
 
                 if (player != null) {
                     if (plugin.getPlotMeCoreManager().isPlotWorld(player.getWorld())) {
                         if (plugin.getPlotMeCoreManager().isPlayerIgnoringWELimit(player.getUniqueId()))
-                            plugin.getServerBridge().getPlotWorldEdit().removeMask(player);
-                        else plugin.getServerBridge().getPlotWorldEdit().setMask(player);
+                            plugin.serverBridge.getPlotWorldEdit().removeMask(player);
+                        else plugin.serverBridge.getPlotWorldEdit().setMask(player);
                     }
                 }
             }
@@ -323,7 +325,7 @@ public class Plot implements Comparable<Plot> {
     }
 
     public boolean isAllowedConsulting(String name) {
-        IPlayer player = plugin.getServerBridge().getPlayerExact(name);
+        IPlayer player = plugin.serverBridge.getPlayerExact(name);
         if (player != null) {
             return isAllowedInternal(name, player.getUniqueId(), true, true);
         } else {
@@ -349,13 +351,9 @@ public class Plot implements Comparable<Plot> {
             return true;
         }
 
-        IPlayer player = null;
-
-        if (uuid != null) {
-            player = plugin.getServerBridge().getPlayer(uuid);
-            if (ownerId != null && ownerId.equals(uuid)) {
-                return true;
-            }
+        IPlayer player = plugin.serverBridge.getPlayer(uuid);
+        if (ownerId != null && ownerId.equals(uuid)) {
+            return true;
         }
 
         if (IncludeGroup && owner.toLowerCase().startsWith("group:") && player != null) {
@@ -382,7 +380,7 @@ public class Plot implements Comparable<Plot> {
     }
 
     public boolean isDeniedConsulting(String name) {
-        IPlayer player = plugin.getServerBridge().getPlayerExact(name);
+        IPlayer player = plugin.serverBridge.getPlayerExact(name);
         if (player != null) {
             return isDeniedInternal(name, player.getUniqueId());
         } else {
@@ -405,7 +403,7 @@ public class Plot implements Comparable<Plot> {
 
         IPlayer player = null;
         if (uuid != null) {
-            player = plugin.getServerBridge().getPlayer(uuid);
+            player = plugin.serverBridge.getPlayer(uuid);
         }
 
         HashMap<String, UUID> list = denied.getAllPlayers();
@@ -560,11 +558,11 @@ public class Plot implements Comparable<Plot> {
         this.auctioneddate = auctioneddate;
     }
 
-    public void setPlotLikes(int plotLikes) {
-        this.plotLikes = plotLikes;
-    }
-
     public int getPlotLikes() {
         return plotLikes;
+    }
+
+    public void setPlotLikes(int plotLikes) {
+        this.plotLikes = plotLikes;
     }
 }

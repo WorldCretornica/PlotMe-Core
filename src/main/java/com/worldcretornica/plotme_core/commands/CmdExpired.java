@@ -22,10 +22,7 @@ public class CmdExpired extends PlotCommand {
                 int page = 1;
 
                 if (args.length == 2) {
-                    try {
                         page = Integer.parseInt(args[1]);
-                    } catch (NumberFormatException ex) {
-                    }
                 }
 
                 int maxpage = (int) Math.ceil(plugin.getSqlManager().getExpiredPlotCount(world.getName()) / 8);

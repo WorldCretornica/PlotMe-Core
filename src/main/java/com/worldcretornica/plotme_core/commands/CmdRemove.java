@@ -42,15 +42,15 @@ public class CmdRemove extends PlotCommand {
 
                                 if (plugin.getPlotMeCoreManager().isEconomyEnabled(pmi)) {
                                     price = pmi.getRemovePlayerPrice();
-                                    double balance = sob.getBalance(player);
+                                    double balance = serverBridge.getBalance(player);
 
                                     if (balance >= price) {
-                                        event = sob.getEventFactory().callPlotRemoveAllowedEvent(plugin, world, plot, player, allowed);
+                                        event = serverBridge.getEventFactory().callPlotRemoveAllowedEvent(plugin, world, plot, player, allowed);
 
                                         if (event.isCancelled()) {
                                             return true;
                                         } else {
-                                            EconomyResponse er = sob.withdrawPlayer(player, price);
+                                            EconomyResponse er = serverBridge.withdrawPlayer(player, price);
 
                                             if (!er.transactionSuccess()) {
                                                 player.sendMessage("§c" + er.errorMessage);
@@ -63,7 +63,7 @@ public class CmdRemove extends PlotCommand {
                                         return true;
                                     }
                                 } else {
-                                    event = sob.getEventFactory().callPlotRemoveAllowedEvent(plugin, world, plot, player, allowed);
+                                    event = serverBridge.getEventFactory().callPlotRemoveAllowedEvent(plugin, world, plot, player, allowed);
                                 }
 
                                 if (!event.isCancelled()) {
@@ -72,7 +72,7 @@ public class CmdRemove extends PlotCommand {
                                     player.sendMessage(C("WordPlayer") + " §c" + allowed + "§r " + C("WordRemoved") + ". " + Util().moneyFormat(-price));
 
                                     if (isAdvancedLogging()) {
-                                        sob.getLogger().info(LOG + allowed + " " + C("MsgRemovedPlayer") + " " + allowed + " " + C("MsgFromPlot") + " " + id + (price != 0 ? " " + C("WordFor") + " " + price : ""));
+                                        serverBridge.getLogger().info(allowed + " " + C("MsgRemovedPlayer") + " " + allowed + " " + C("MsgFromPlot") + " " + id + (price != 0 ? " " + C("WordFor") + " " + price : ""));
                                     }
                                 }
                             } else {

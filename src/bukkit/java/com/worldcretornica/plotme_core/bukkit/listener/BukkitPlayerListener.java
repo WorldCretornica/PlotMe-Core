@@ -17,11 +17,11 @@
 package com.worldcretornica.plotme_core.bukkit.listener;
 
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.bukkit.PlotMe_CorePlugin;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitWorld;
 import org.bukkit.ChatColor;
+import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -43,7 +43,7 @@ public class BukkitPlayerListener implements Listener {
         if (!player.isOp()) {
             return;
         }
-        Set<String> badWorlds = plugin.getAPI().getBadWorlds();
+        Set<String> badWorlds = plugin.getAPI().badWorlds;
         for (String world : badWorlds) {
             if (plugin.getAPI().getGenManager(world) == null) {
                 // TODO: Add as multilingual caption
@@ -54,12 +54,13 @@ public class BukkitPlayerListener implements Listener {
 
     @EventHandler
     public void onWorldChange(PlayerTeleportEvent event) {
-        IWorld toWorld = new BukkitWorld(event.getTo().getWorld());
-        if (toWorld.equals(event.getFrom().getWorld())) {
+        BukkitWorld toWorld = new BukkitWorld(event.getTo().getWorld());
+        World worlds = toWorld.getWorld();
+        if (worlds.equals(event.getFrom().getWorld())) {
             return;
         }
         BukkitPlayer player = new BukkitPlayer(event.getPlayer());
-        if (player.isOp() && plugin.getAPI().getBadWorlds().contains(toWorld.getName())) {
+        if (player.isOp() && plugin.getAPI().badWorlds.contains(toWorld.getName())) {
             if (PlotMe_Core.getGenManager(toWorld) == null) {
                 // TODO: Add as multilingual caption
                 player.sendMessage("This world is defined as a plotworld but is not using a PlotMe generator.");

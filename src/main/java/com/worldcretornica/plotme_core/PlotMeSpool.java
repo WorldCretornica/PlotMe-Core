@@ -7,16 +7,14 @@ import static com.worldcretornica.plotme_core.PlotMe_Core.getGenManager;
 
 public class PlotMeSpool implements Runnable {
 
-    private final PlotMe_Core plugin;
-    private Long[] currentClear;
-    private PlotToClear plottoclear;
-
-    private int taskid;
-
     private static String T;
     private static String G;
     private static String M;
     private static String k;
+    private final PlotMe_Core plugin;
+    private Long[] currentClear;
+    private PlotToClear plottoclear;
+    private int taskid;
 
     public PlotMeSpool(PlotMe_Core instance, PlotToClear plotToClear) {
         plugin = instance;
@@ -29,16 +27,42 @@ public class PlotMeSpool implements Runnable {
         plottoclear = plotToClear;
     }
 
+    private static String format(long count) {
+        double buffer;
+
+        if (count > 1000000000000L) {
+            buffer = count / 1000000000000L;
+            buffer = Math.round(buffer * 10) / 10;
+            return buffer + T;
+        }
+        if (count > 1000000000) {
+            buffer = count / 1000000000;
+            buffer = Math.round(buffer * 10) / 10;
+            return buffer + G;
+        }
+        if (count > 1000000) {
+            buffer = count / 1000000;
+            buffer = Math.round(buffer * 10) / 10;
+            return buffer + M;
+        }
+        if (count > 1000) {
+            buffer = count / 1000;
+            buffer = Math.round(buffer * 10) / 10;
+            return buffer + k;
+        }
+        return String.valueOf(count);
+    }
+
     @Override
     public void run() {
         if (getPlotToClear() != null) {
-            IWorld world = plugin.getServerBridge().getWorld(getPlotToClear().getWorld());
+            IWorld world = plugin.serverBridge.getWorld(getPlotToClear().getWorld());
 
             if (world != null) {
                 if (currentClear == null) {
-                    currentClear = getGenManager(world).clear(world, getPlotToClear().getPlotId(), plugin.getServerBridge().getConfig().getInt("NbBlocksPerClearStep"), null);
+                    currentClear = getGenManager(world).clear(world, getPlotToClear().getPlotId(), plugin.serverBridge.getConfig().getInt("NbBlocksPerClearStep"), null);
                 } else {
-                    currentClear = getGenManager(world).clear(world, getPlotToClear().getPlotId(), plugin.getServerBridge().getConfig().getInt("NbBlocksPerClearStep"), currentClear);
+                    currentClear = getGenManager(world).clear(world, getPlotToClear().getPlotId(), plugin.serverBridge.getConfig().getInt("NbBlocksPerClearStep"), currentClear);
                 }
 
                 showProgress();
@@ -76,7 +100,7 @@ public class PlotMeSpool implements Runnable {
     }
 
     private long getTotalPlotBlocks() {
-        IWorld world = plugin.getServerBridge().getWorld(getPlotToClear().getWorld());
+        IWorld world = plugin.serverBridge.getWorld(getPlotToClear().getWorld());
         ILocation bottom = getGenManager(world).getPlotBottomLoc(world, getPlotToClear().getPlotId());
         ILocation top = getGenManager(world).getPlotTopLoc(world, getPlotToClear().getPlotId());
 
@@ -85,32 +109,6 @@ public class PlotMeSpool implements Runnable {
 
     private long getDoneBlocks() {
         return currentClear[3];
-    }
-
-    private static String format(long count) {
-        double buffer;
-
-        if (count > 1000000000000L) {
-            buffer = count / 1000000000000L;
-            buffer = Math.round(buffer * 10) / 10;
-            return buffer + T;
-        }
-        if (count > 1000000000) {
-            buffer = count / 1000000000;
-            buffer = Math.round(buffer * 10) / 10;
-            return buffer + G;
-        }
-        if (count > 1000000) {
-            buffer = count / 1000000;
-            buffer = Math.round(buffer * 10) / 10;
-            return buffer + M;
-        }
-        if (count > 1000) {
-            buffer = count / 1000;
-            buffer = Math.round(buffer * 10) / 10;
-            return buffer + k;
-        }
-        return String.valueOf(count);
     }
 
     public PlotToClear getPlotToClear() {

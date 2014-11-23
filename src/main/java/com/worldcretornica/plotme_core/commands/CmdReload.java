@@ -10,10 +10,10 @@ public class CmdReload extends PlotCommand {
     }
 
     public boolean exec() {
-        sob.getEventFactory().callPlotReloadEvent();
+        serverBridge.getEventFactory().callPlotReloadEvent();
 
         plugin.reload();
-        sob.getLogger().info(C("MsgReloadedSuccess"));
+        serverBridge.getLogger().info(C("MsgReloadedSuccess"));
 
         return true;
     }

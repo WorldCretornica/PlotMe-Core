@@ -18,7 +18,7 @@ public class CmdHome extends PlotCommand {
 
     public boolean exec(IPlayer player, String[] args) {
         if (player.hasPermission("PlotMe.use.home") || player.hasPermission("PlotMe.admin.home.other")) {
-            if (plugin.getPlotMeCoreManager().isPlotWorld(player) || sob.getConfig().getBoolean("allowWorldTeleport")) {
+            if (plugin.getPlotMeCoreManager().isPlotWorld(player) || serverBridge.getConfig().getBoolean("allowWorldTeleport")) {
                 String playername = player.getName();
                 UUID uuid = player.getUniqueId();
                 IWorld world;
@@ -36,36 +36,31 @@ public class CmdHome extends PlotCommand {
 
                 int nb = 1;
                 if (args[0].contains(":")) {
-                    try {
-                        if (args[0].split(":").length == 1 || args[0].split(":")[1].isEmpty()) {
-                            player.sendMessage(C("WordUsage") + ": §c/plotme home:# §r" + C("WordExample") + ": §c/plotme home:1");
-                            return true;
-                        } else {
-                            nb = Integer.parseInt(args[0].split(":")[1]);
-                        }
-                    } catch (Exception ex) {
+                    if (args[0].split(":").length == 1 || args[0].split(":")[1].isEmpty()) {
                         player.sendMessage(C("WordUsage") + ": §c/plotme home:# §r" + C("WordExample") + ": §c/plotme home:1");
                         return true;
+                    } else {
+                        nb = Integer.parseInt(args[0].split(":")[1]);
                     }
                 }
 
                 if (args.length >= 2) {
-                    if (sob.getWorld(args[1]) == null) {
+                    if (serverBridge.getWorld(args[1]) == null) {
                         if (player.hasPermission("PlotMe.admin.home.other")) {
                             playername = args[1];
                             uuid = null;
                         }
                     } else {
-                        world = sob.getWorld(args[1]);
+                        world = serverBridge.getWorld(args[1]);
                     }
                 }
 
                 if (args.length == 3) {
-                    if (sob.getWorld(args[2]) == null) {
+                    if (serverBridge.getWorld(args[2]) == null) {
                         player.sendMessage("§c" + args[2] + C("MsgWorldNotPlot"));
                         return true;
                     } else {
-                        world = sob.getWorld(args[2]);
+                        world = serverBridge.getWorld(args[2]);
                         worldname = args[2];
                     }
                 }
@@ -84,15 +79,15 @@ public class CmdHome extends PlotCommand {
 
                                 if (plugin.getPlotMeCoreManager().isEconomyEnabled(pmi)) {
                                     price = pmi.getPlotHomePrice();
-                                    double balance = sob.getBalance(player);
+                                    double balance = serverBridge.getBalance(player);
 
                                     if (balance >= price) {
-                                        event = sob.getEventFactory().callPlotTeleportHomeEvent(plugin, world, plot, player);
+                                        event = serverBridge.getEventFactory().callPlotTeleportHomeEvent(plugin, world, plot, player);
 
                                         if (event.isCancelled()) {
                                             return true;
                                         } else {
-                                            EconomyResponse er = sob.withdrawPlayer(player, price);
+                                            EconomyResponse er = serverBridge.withdrawPlayer(player, price);
 
                                             if (!er.transactionSuccess()) {
                                                 player.sendMessage("§c" + er.errorMessage);
@@ -104,7 +99,7 @@ public class CmdHome extends PlotCommand {
                                         return true;
                                     }
                                 } else {
-                                    event = sob.getEventFactory().callPlotTeleportHomeEvent(plugin, world, plot, player);
+                                    event = serverBridge.getEventFactory().callPlotTeleportHomeEvent(plugin, world, plot, player);
                                 }
 
                                 if (!event.isCancelled()) {

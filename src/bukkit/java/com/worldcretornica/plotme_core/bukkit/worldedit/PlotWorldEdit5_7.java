@@ -50,7 +50,7 @@ public class PlotWorldEdit5_7 implements PlotWorldEdit {
         if (!"".equalsIgnoreCase(id)) {
             Plot plot = plugin.getPlotMeCoreManager().getPlotById(id, p);
 
-            if (plot != null && plot.isAllowed(p.getUniqueId())) {
+            if (plot != null && plot.isAllowed(p.getName(), p.getUniqueId())) {
                 bottom = (BukkitLocation) PlotMeCoreManager.getPlotBottomLoc(w, id);
                 top = (BukkitLocation) PlotMeCoreManager.getPlotTopLoc(w, id);
 

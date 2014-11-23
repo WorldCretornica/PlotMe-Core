@@ -15,7 +15,7 @@ public class CmdBiomeList extends PlotCommand {
     public boolean exec(IPlayer player, String[] args) {
         if (plugin.getPlotMeCoreManager().isPlotWorld(player)) {
             if (player.hasPermission("PlotMe.use.biome")) {
-                List<String> biomes = sob.getBiomes();
+                List<String> biomes = serverBridge.getBiomes();
 
                 Collections.sort(biomes);
 
@@ -23,10 +23,7 @@ public class CmdBiomeList extends PlotCommand {
                 int pages = biomes.size() / 19 + 1;
 
                 if (args.length > 1 && !args[1].isEmpty()) {
-                    try {
-                        page = Integer.parseInt(args[1]);
-                    } catch (NumberFormatException notused) {
-                    }
+                    page = Integer.parseInt(args[1]);
                 }
 
                 if (page <= pages) {

@@ -32,35 +32,31 @@ public class CmdBid extends PlotCommand {
                         if (plot.getOwner().equalsIgnoreCase(bidder)) {
                             player.sendMessage("§c" + C("MsgCannotBidOwnPlot"));
                         } else if (args.length == 2) {
-                            double bid = 0;
                             double currentbid = plot.getCurrentBid();
                             String currentbidder = plot.getCurrentBidder();
-                            IOfflinePlayer playercurrentbidder = sob.getOfflinePlayer(plot.getCurrentBidderId());
+                            IOfflinePlayer playercurrentbidder = serverBridge.getOfflinePlayer(plot.getCurrentBidderId());
 
-                            try {
-                                bid = Double.parseDouble(args[1]);
-                            } catch (NumberFormatException e) {
-                            }
+                            double bid = Double.parseDouble(args[1]);
 
                             if (bid < currentbid || bid == currentbid && !currentbidder.isEmpty()) {
                                 player.sendMessage("§c" + C("MsgInvalidBidMustBeAbove") + " §r" + Util().moneyFormat(plot.getCurrentBid(), false));
                             } else {
-                                double balance = sob.getBalance(player);
+                                double balance = serverBridge.getBalance(player);
 
                                 if (bid >= balance && !currentbidder.equals(bidder) || currentbidder.equals(bidder) && bid > balance + currentbid) {
                                     player.sendMessage("§c" + C("MsgNotEnoughBid"));
                                 } else {
-                                    InternalPlotBidEvent event = sob.getEventFactory().callPlotBidEvent(plugin, player.getWorld(), plot, player, bid);
+                                    InternalPlotBidEvent event = serverBridge.getEventFactory().callPlotBidEvent(plugin, player.getWorld(), plot, player, bid);
 
                                     if (!event.isCancelled()) {
-                                        EconomyResponse er = sob.withdrawPlayer(player, bid);
+                                        EconomyResponse er = serverBridge.withdrawPlayer(player, bid);
 
                                         if (er.transactionSuccess()) {
                                             if (playercurrentbidder != null) {
-                                                EconomyResponse er2 = sob.depositPlayer(playercurrentbidder, currentbid);
+                                                EconomyResponse er2 = serverBridge.depositPlayer(playercurrentbidder, currentbid);
 
                                                 if (er2.transactionSuccess()) {
-                                                    for (IPlayer onlinePlayers : sob.getOnlinePlayers()) {
+                                                    for (IPlayer onlinePlayers : serverBridge.getOnlinePlayers()) {
                                                         if (onlinePlayers.getName().equalsIgnoreCase(currentbidder)) {
                                                             onlinePlayers.sendMessage(C("MsgOutbidOnPlot") + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner() + ". " + Util().moneyFormat(bid));
                                                             break;
@@ -83,7 +79,7 @@ public class CmdBid extends PlotCommand {
                                             player.sendMessage(C("MsgBidAccepted") + " " + Util().moneyFormat(-bid));
 
                                             if (isAdvancedLogging()) {
-                                                sob.getLogger().info(LOG + bidder + " bid " + bid + " on plot " + id);
+                                                serverBridge.getLogger().info(bidder + " bid " + bid + " on plot " + id);
                                             }
                                         } else {
                                             player.sendMessage(er.errorMessage);

@@ -33,7 +33,7 @@ public class CmdProtect extends PlotCommand {
                         InternalPlotProtectChangeEvent event;
 
                         if (plot.isProtect()) {
-                            event = sob.getEventFactory().callPlotProtectChangeEvent(plugin, world, plot, player, false);
+                            event = serverBridge.getEventFactory().callPlotProtectChangeEvent(plugin, world, plot, player, false);
 
                             if (!event.isCancelled()) {
                                 plot.setProtect(false);
@@ -44,7 +44,7 @@ public class CmdProtect extends PlotCommand {
                                 player.sendMessage(C("MsgPlotNoLongerProtected"));
 
                                 if (isAdvancedLogging()) {
-                                    sob.getLogger().info(LOG + name + " " + C("MsgUnprotectedPlot") + " " + id);
+                                    serverBridge.getLogger().info(name + " " + C("MsgUnprotectedPlot") + " " + id);
                                 }
                             }
                         } else {
@@ -54,16 +54,16 @@ public class CmdProtect extends PlotCommand {
                             if (plugin.getPlotMeCoreManager().isEconomyEnabled(pmi)) {
                                 cost = pmi.getProtectPrice();
 
-                                if (sob.getBalance(player) < cost) {
+                                if (serverBridge.getBalance(player) < cost) {
                                     player.sendMessage("§c" + C("MsgNotEnoughProtectPlot"));
                                     return true;
                                 } else {
-                                    event = sob.getEventFactory().callPlotProtectChangeEvent(plugin, world, plot, player, true);
+                                    event = serverBridge.getEventFactory().callPlotProtectChangeEvent(plugin, world, plot, player, true);
 
                                     if (event.isCancelled()) {
                                         return true;
                                     } else {
-                                        EconomyResponse er = sob.withdrawPlayer(player, cost);
+                                        EconomyResponse er = serverBridge.withdrawPlayer(player, cost);
 
                                         if (!er.transactionSuccess()) {
                                             player.sendMessage("§c" + er.errorMessage);
@@ -74,7 +74,7 @@ public class CmdProtect extends PlotCommand {
                                 }
 
                             } else {
-                                event = sob.getEventFactory().callPlotProtectChangeEvent(plugin, world, plot, player, true);
+                                event = serverBridge.getEventFactory().callPlotProtectChangeEvent(plugin, world, plot, player, true);
                             }
 
                             if (!event.isCancelled()) {
@@ -86,7 +86,7 @@ public class CmdProtect extends PlotCommand {
                                 player.sendMessage(C("MsgPlotNowProtected") + " " + Util().moneyFormat(-cost));
 
                                 if (isAdvancedLogging()) {
-                                    sob.getLogger().info(LOG + name + " " + C("MsgProtectedPlot") + " " + id);
+                                    serverBridge.getLogger().info(name + " " + C("MsgProtectedPlot") + " " + id);
                                 }
                             }
                         }

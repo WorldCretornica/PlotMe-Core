@@ -16,11 +16,11 @@ public class CmdAuto extends PlotCommand {
 
     public boolean exec(IPlayer player, String[] args) {
         if (player.hasPermission("PlotMe.use.auto")) {
-            if (plugin.getPlotMeCoreManager().isPlotWorld(player) || sob.getConfig().getBoolean("allowWorldTeleport")) {
+            if (plugin.getPlotMeCoreManager().isPlotWorld(player) || serverBridge.getConfig().getBoolean("allowWorldTeleport")) {
                 IWorld world;
-                if (!plugin.getPlotMeCoreManager().isPlotWorld(player) && sob.getConfig().getBoolean("allowWorldTeleport")) {
+                if (!plugin.getPlotMeCoreManager().isPlotWorld(player) && serverBridge.getConfig().getBoolean("allowWorldTeleport")) {
                     if (args.length == 2) {
-                        world = sob.getWorld(args[1]);
+                        world = serverBridge.getWorld(args[1]);
                     } else {
                         world = plugin.getPlotMeCoreManager().getFirstWorld();
                     }
@@ -81,15 +81,15 @@ public class CmdAuto extends PlotCommand {
 
                     if (plugin.getPlotMeCoreManager().isEconomyEnabled(pmi)) {
                         price = pmi.getClaimPrice();
-                        double balance = sob.getBalance(player);
+                        double balance = serverBridge.getBalance(player);
 
                         if (balance >= price) {
-                            event = sob.getEventFactory().callPlotCreatedEvent(plugin, world, id, player);
+                            event = serverBridge.getEventFactory().callPlotCreatedEvent(plugin, world, id, player);
 
                             if (event.isCancelled()) {
                                 return true;
                             } else {
-                                EconomyResponse er = sob.withdrawPlayer(player, price);
+                                EconomyResponse er = serverBridge.withdrawPlayer(player, price);
 
                                 if (!er.transactionSuccess()) {
                                     player.sendMessage("§c" + er.errorMessage);
@@ -102,7 +102,7 @@ public class CmdAuto extends PlotCommand {
                             return true;
                         }
                     } else {
-                        event = sob.getEventFactory().callPlotCreatedEvent(plugin, world, id, player);
+                        event = serverBridge.getEventFactory().callPlotCreatedEvent(plugin, world, id, player);
                     }
 
                     if (!event.isCancelled()) {
@@ -115,7 +115,7 @@ public class CmdAuto extends PlotCommand {
                         player.sendMessage(C("MsgThisPlotYours") + " " + C("WordUse") + " §c/plotme home§r " + C("MsgToGetToIt") + " " + Util().moneyFormat(-price));
 
                         if (isAdvancedLogging()) {
-                            sob.getLogger().info(LOG + player.getName() + " " + C("MsgClaimedPlot") + " " + id + (price != 0 ? " " + C("WordFor") + " " + price : ""));
+                            serverBridge.getLogger().info(player.getName() + " " + C("MsgClaimedPlot") + " " + id + (price != 0 ? " " + C("WordFor") + " " + price : ""));
                         }
 
                     }

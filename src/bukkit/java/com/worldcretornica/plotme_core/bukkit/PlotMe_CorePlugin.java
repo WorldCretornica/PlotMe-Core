@@ -11,7 +11,7 @@ import java.io.IOException;
 
 public class PlotMe_CorePlugin extends JavaPlugin {
 
-    private PlotMe_Core plotme;
+    public PlotMe_Core plotme;
     private IServerBridge serverObjectBuilder;
 
     @Override
@@ -26,11 +26,11 @@ public class PlotMe_CorePlugin extends JavaPlugin {
         getAPI().enable();
         doMetric();
     }
-    
+
     public PlotMe_Core getAPI() {
         return plotme;
     }
-    
+
     public IServerBridge getServerObjectBuilder() {
         return serverObjectBuilder;
     }

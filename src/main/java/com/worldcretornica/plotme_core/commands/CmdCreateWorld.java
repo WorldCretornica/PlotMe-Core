@@ -21,10 +21,10 @@ public class CmdCreateWorld extends PlotCommand {
                 //try to create world
                 Map<String, String> parameters = plugin.creationbuffer.get(sender.getName());
 
-                InternalPlotWorldCreateEvent event = sob.getEventFactory().callPlotWorldCreateEvent(parameters.get("worldname"), parameters);
+                InternalPlotWorldCreateEvent event = serverBridge.getEventFactory().callPlotWorldCreateEvent(parameters.get("worldname"), parameters);
 
                 if (!event.isCancelled()) {
-                    if (sob.createPlotWorld(sender, parameters.get("worldname"), parameters.get("generator"), parameters)) {
+                    if (serverBridge.createPlotWorld(sender, parameters.get("worldname"), parameters.get("generator"), parameters)) {
                         sender.sendMessage(C("MsgWorldCreationSuccess"));
                     }
                 }
@@ -80,13 +80,13 @@ public class CmdCreateWorld extends PlotCommand {
                 }
 
                 //Check if world exists
-                if (sob.worldExists(parameters.get("worldname"))) {
-                    sender.sendMessage("[PlotMe-Core] " + C("ErrWorldExists") + " '" + parameters.get("worldname") + "'");
+                if (serverBridge.worldExists(parameters.get("worldname"))) {
+                    sender.sendMessage(C("ErrWorldExists") + " '" + parameters.get("worldname") + "'");
                     return false;
                 }
 
                 //Find generator
-                IPlotMe_ChunkGenerator generator = sob.getPlotMeGenerator(parameters.get("worldname"));
+                IPlotMe_ChunkGenerator generator = serverBridge.getPlotMeGenerator(parameters.get("worldname"));
 
                 Map<String, String> genparameters;
                 if (generator != null) {
@@ -94,11 +94,11 @@ public class CmdCreateWorld extends PlotCommand {
                     genparameters = generator.getManager().getDefaultGenerationConfig();
 
                     if (genparameters == null) {
-                        sender.sendMessage("[PlotMe-Core] " + C("ErrCannotCreateGen1") + " '" + parameters.get("generator") + "' " + C("ErrCannotCreateGen2"));
+                        sender.sendMessage(C("ErrCannotCreateGen1") + " '" + parameters.get("generator") + "' " + C("ErrCannotCreateGen2"));
                         return false;
                     }
                 } else {
-                    sender.sendMessage("[PlotMe-Core] " + C("ErrCannotCreateGen1") + " '" + parameters.get("generator") + "' " + C("ErrCannotCreateGen3"));
+                    sender.sendMessage(C("ErrCannotCreateGen1") + " '" + parameters.get("generator") + "' " + C("ErrCannotCreateGen3"));
                     return false;
                 }
 
@@ -155,7 +155,7 @@ public class CmdCreateWorld extends PlotCommand {
         String buffer = " ";
 
         for (String key : parameters.keySet()) {
-            if (MinecraftFontWidthCalculator.getStringWidth(sob.stripColor(buffer + key + "=" + parameters.get(key) + " ")) >= 1250) {
+            if (MinecraftFontWidthCalculator.getStringWidth(serverBridge.stripColor(buffer + key + "=" + parameters.get(key) + " ")) >= 1250) {
                 cs.sendMessage(buffer);
                 buffer = " ";
             }

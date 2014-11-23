@@ -43,28 +43,28 @@ public class CmdBuy extends PlotCommand {
 
                                     double cost = plot.getCustomPrice();
 
-                                    if (sob.getBalance(player) < cost) {
+                                    if (serverBridge.getBalance(player) < cost) {
                                         player.sendMessage("§c" + C("MsgNotEnoughBuy"));
                                     } else {
 
-                                        InternalPlotBuyEvent event = sob.getEventFactory().callPlotBuyEvent(plugin, world, plot, player, cost);
+                                        InternalPlotBuyEvent event = serverBridge.getEventFactory().callPlotBuyEvent(plugin, world, plot, player, cost);
 
                                         if (!event.isCancelled()) {
-                                            EconomyResponse er = sob.withdrawPlayer(player, cost);
+                                            EconomyResponse er = serverBridge.withdrawPlayer(player, cost);
 
                                             if (er.transactionSuccess()) {
                                                 String oldowner = plot.getOwner();
                                                 IOfflinePlayer playercurrentbidder = null;
 
                                                 if (plot.getOwnerId() != null) {
-                                                    playercurrentbidder = sob.getOfflinePlayer(plot.getOwnerId());
+                                                    playercurrentbidder = serverBridge.getOfflinePlayer(plot.getOwnerId());
                                                 }
 
                                                 if (!"$Bank$".equalsIgnoreCase(oldowner) && playercurrentbidder != null) {
-                                                    EconomyResponse er2 = sob.depositPlayer(playercurrentbidder, cost);
+                                                    EconomyResponse er2 = serverBridge.depositPlayer(playercurrentbidder, cost);
 
                                                     if (er2.transactionSuccess()) {
-                                                        for (IPlayer onlinePlayers : sob.getOnlinePlayers()) {
+                                                        for (IPlayer onlinePlayers : serverBridge.getOnlinePlayers()) {
                                                             if (onlinePlayers.getName().equalsIgnoreCase(oldowner)) {
                                                                 onlinePlayers.sendMessage(C("WordPlot") + " " + id + " "
                                                                                            + C("MsgSoldTo") + " " + buyer + ". " + Util().moneyFormat(cost));
@@ -92,7 +92,7 @@ public class CmdBuy extends PlotCommand {
                                                 player.sendMessage(C("MsgPlotBought") + " " + Util().moneyFormat(-cost));
 
                                                 if (isAdvancedLogging()) {
-                                                    plugin.getLogger().info(LOG + buyer + " " + C("MsgBoughtPlot") + " " + id + " " + C("WordFor") + " " + cost);
+                                                    plugin.getLogger().info(buyer + " " + C("MsgBoughtPlot") + " " + id + " " + C("WordFor") + " " + cost);
                                                 }
                                             } else {
                                                 player.sendMessage("§c" + er.errorMessage);

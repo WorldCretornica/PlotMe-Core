@@ -51,15 +51,15 @@ public class CmdClaim extends PlotCommand {
 
                         if (plugin.getPlotMeCoreManager().isEconomyEnabled(pmi)) {
                             price = pmi.getClaimPrice();
-                            double balance = sob.getBalance(player);
+                            double balance = serverBridge.getBalance(player);
 
                             if (balance >= price) {
-                                event = sob.getEventFactory().callPlotCreatedEvent(plugin, world, id, player);
+                                event = serverBridge.getEventFactory().callPlotCreatedEvent(plugin, world, id, player);
 
                                 if (event.isCancelled()) {
                                     return true;
                                 } else {
-                                    EconomyResponse er = sob.withdrawPlayer(player, price);
+                                    EconomyResponse er = serverBridge.withdrawPlayer(player, price);
 
                                     if (!er.transactionSuccess()) {
                                         player.sendMessage("§c" + er.errorMessage);
@@ -68,11 +68,11 @@ public class CmdClaim extends PlotCommand {
                                     }
                                 }
                             } else {
-                                player.sendMessage("§c" + C("MsgNotEnoughBuy") + " " + C("WordMissing") + " §r" + (price - balance) + "§c " + sob.getEconomy().currencyNamePlural());
+                                player.sendMessage("§c" + C("MsgNotEnoughBuy") + " " + C("WordMissing") + " §r" + (price - balance) + "§c " + serverBridge.getEconomy().currencyNamePlural());
                                 return true;
                             }
                         } else {
-                            event = sob.getEventFactory().callPlotCreatedEvent(plugin, world, id, player);
+                            event = serverBridge.getEventFactory().callPlotCreatedEvent(plugin, world, id, player);
                         }
 
                         if (!event.isCancelled()) {
@@ -89,7 +89,7 @@ public class CmdClaim extends PlotCommand {
                                 }
 
                                 if (isAdvancedLogging()) {
-                                    sob.getLogger().info(LOG + playerName + " " + C("MsgClaimedPlot") + " " + id + (price != 0 ? " " + C("WordFor") + " " + price : ""));
+                                    serverBridge.getLogger().info(playerName + " " + C("MsgClaimedPlot") + " " + id + (price != 0 ? " " + C("WordFor") + " " + price : ""));
                                 }
                             }
                         }

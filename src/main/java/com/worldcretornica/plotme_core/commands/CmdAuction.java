@@ -37,11 +37,11 @@ public class CmdAuction extends PlotCommand {
                                 if (plot.isAuctioned()) {
                                     if (plot.getCurrentBidderId() != null) {
                                         if (player.hasPermission("PlotMe.admin.auction")) {
-                                            IOfflinePlayer playercurrentbidder = sob.getOfflinePlayer(plot.getCurrentBidderId());
-                                            EconomyResponse er = sob.depositPlayer(playercurrentbidder, plot.getCurrentBid());
+                                            IOfflinePlayer playercurrentbidder = serverBridge.getOfflinePlayer(plot.getCurrentBidderId());
+                                            EconomyResponse er = serverBridge.depositPlayer(playercurrentbidder, plot.getCurrentBid());
 
                                             if (er.transactionSuccess()) {
-                                                for (IPlayer onlinePlayers : sob.getOnlinePlayers()) {
+                                                for (IPlayer onlinePlayers : serverBridge.getOnlinePlayers()) {
                                                     if (onlinePlayers.getName().equalsIgnoreCase(plot.getCurrentBidder())) {
                                                         onlinePlayers.sendMessage(C("MsgAuctionCancelledOnPlot")
                                                                                           + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner() + ". " + Util().moneyFormat(plot.getCurrentBid()));
@@ -67,7 +67,7 @@ public class CmdAuction extends PlotCommand {
                                             player.sendMessage(C("MsgAuctionCancelled"));
 
                                             if (isAdvancedLogging()) {
-                                                sob.getLogger().info(LOG + name + " " + C("MsgStoppedTheAuctionOnPlot") + " " + id);
+                                                serverBridge.getLogger().info(name + " " + C("MsgStoppedTheAuctionOnPlot") + " " + id);
                                             }
                                         } else {
                                             player.sendMessage("§c" + C("MsgPlotHasBidsAskAdmin"));
@@ -87,24 +87,21 @@ public class CmdAuction extends PlotCommand {
                                         player.sendMessage(C("MsgAuctionCancelled"));
 
                                         if (isAdvancedLogging()) {
-                                            sob.getLogger().info(LOG + name + " " + C("MsgStoppedTheAuctionOnPlot") + " " + id);
+                                            serverBridge.getLogger().info(name + " " + C("MsgStoppedTheAuctionOnPlot") + " " + id);
                                         }
                                     }
                                 } else {
                                     double bid = 1;
 
                                     if (args.length == 2) {
-                                        try {
-                                            bid = Double.parseDouble(args[1]);
-                                        } catch (NumberFormatException e) {
-                                        }
+                                        bid = Double.parseDouble(args[1]);
                                     }
 
                                     if (bid < 0) {
                                         player.sendMessage("§c" + C("MsgInvalidAmount"));
                                     } else {
 
-                                        InternalPlotAuctionEvent event = sob.getEventFactory().callPlotAuctionEvent(plugin, world, plot, player, bid);
+                                        InternalPlotAuctionEvent event = serverBridge.getEventFactory().callPlotAuctionEvent(plugin, world, plot, player, bid);
 
                                         if (!event.isCancelled()) {
                                             plot.setCurrentBid(bid);
@@ -118,7 +115,7 @@ public class CmdAuction extends PlotCommand {
                                             player.sendMessage(C("MsgAuctionStarted"));
 
                                             if (isAdvancedLogging()) {
-                                                sob.getLogger().info(LOG + name + " " + C("MsgStartedAuctionOnPlot") + " " + id + " " + C("WordAt") + " " + bid);
+                                                serverBridge.getLogger().info(name + " " + C("MsgStartedAuctionOnPlot") + " " + id + " " + C("WordAt") + " " + bid);
                                             }
                                         }
                                     }

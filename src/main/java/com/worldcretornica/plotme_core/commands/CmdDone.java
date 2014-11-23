@@ -24,7 +24,7 @@ public class CmdDone extends PlotCommand {
                     String name = player.getName();
 
                     if (plot.getOwner().equalsIgnoreCase(name) || player.hasPermission("PlotMe.admin.done")) {
-                        InternalPlotDoneChangeEvent event = sob.getEventFactory().callPlotDoneEvent(plugin, player.getWorld(), plot, player, plot.isFinished());
+                        InternalPlotDoneChangeEvent event = serverBridge.getEventFactory().callPlotDoneEvent(plugin, player.getWorld(), plot, player, plot.isFinished());
 
                         if (!event.isCancelled()) {
                             if (plot.isFinished()) {
@@ -32,14 +32,14 @@ public class CmdDone extends PlotCommand {
                                 player.sendMessage(C("MsgUnmarkFinished"));
 
                                 if (isAdvancedLogging()) {
-                                    sob.getLogger().info(LOG + name + " " + C("WordMarked") + " " + id + " " + C("WordFinished"));
+                                    serverBridge.getLogger().info(name + " " + C("WordMarked") + " " + id + " " + C("WordFinished"));
                                 }
                             } else {
                                 plot.setFinished();
                                 player.sendMessage(C("MsgMarkFinished"));
 
                                 if (isAdvancedLogging()) {
-                                    sob.getLogger().info(LOG + name + " " + C("WordMarked") + " " + id + " " + C("WordUnfinished"));
+                                    serverBridge.getLogger().info(name + " " + C("WordMarked") + " " + id + " " + C("WordUnfinished"));
                                 }
                             }
                         }

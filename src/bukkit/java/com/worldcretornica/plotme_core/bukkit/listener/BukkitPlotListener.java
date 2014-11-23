@@ -532,7 +532,7 @@ public class BukkitPlotListener implements Listener {
                     } else {
                         Plot plot = PlotMeCoreManager.getPlotById(id, pmi);
 
-                        if (plot == null || !plot.isAllowed(player.getUniqueId())) {
+                        if (plot == null || !plot.isAllowed(player.getName(), player.getUniqueId())) {
                             event.setCancelled(true);
                         }
                     }
@@ -625,7 +625,7 @@ public class BukkitPlotListener implements Listener {
                     } else {
                         Plot plot = api.getPlotMeCoreManager().getPlotById(id, player);
 
-                        if (plot == null || !plot.isAllowed(player.getUniqueId())) {
+                        if (plot == null || !plot.isAllowed(player.getName(), player.getUniqueId())) {
                             if (canbuild) {
                                 player.sendMessage(api.getUtil().C("ErrCannotBuild"));
                                 event.setCancelled(true);
