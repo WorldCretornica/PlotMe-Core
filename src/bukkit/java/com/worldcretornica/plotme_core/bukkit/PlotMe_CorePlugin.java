@@ -11,7 +11,7 @@ import java.io.IOException;
 
 public class PlotMe_CorePlugin extends JavaPlugin {
 
-    public PlotMe_Core plotme;
+    private PlotMe_Core plotme;
     private IServerBridge serverObjectBuilder;
 
     @Override

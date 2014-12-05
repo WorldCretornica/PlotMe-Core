@@ -14,7 +14,7 @@ public interface IEventFactory {
 
     InternalPlotLoadEvent callPlotLoadedEvent(PlotMe_Core plugin, IWorld world, Plot plot);
 
-    InternalPlotMoveEvent callPlotMoveEvent(PlotMe_Core plugin, IWorld worldFrom, IWorld worldTo, String idFrom, String idTo, IPlayer mover);
+    InternalPlotMoveEvent callPlotMoveEvent(PlotMe_Core plugin, IWorld world, String idFrom, String idTo, IPlayer mover);
 
     InternalPlotResetEvent callPlotResetEvent(PlotMe_Core plugin, IWorld world, Plot plot, ICommandSender cs);
 
@@ -50,9 +50,7 @@ public interface IEventFactory {
 
     InternalPlotOwnerChangeEvent callPlotOwnerChangeEvent(PlotMe_Core plugin, IWorld world, Plot plot, IPlayer player, String newowner);
 
-    InternalPlotTeleportEvent callPlotTeleportEvent(PlotMe_Core plugin, IWorld world, Plot plot, IPlayer player, ILocation location, String plotId);
-
-    InternalPlotTeleportEvent callPlotTeleportEvent(PlotMe_Core plugin, IWorld world, IPlayer player, ILocation location, String PlotId);
+    InternalPlotTeleportEvent callPlotTeleportEvent(PlotMe_Core plugin, IWorld world, Plot plot, IPlayer player, ILocation location, String PlotId);
 
     InternalPlotWorldLoadEvent callPlotWorldLoadEvent(String worldname, int nbPlots);
 }

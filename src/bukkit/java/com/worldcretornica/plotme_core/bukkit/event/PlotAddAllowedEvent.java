@@ -25,10 +25,6 @@ public class PlotAddAllowedEvent extends PlotEvent implements Cancellable {
         event = new InternalPlotAddAllowedEvent(instance, world, plot, player, allowed);
     }
 
-    public Player getBukkitPlayer() {
-        return ((BukkitPlayer) event.getPlayer()).getPlayer();
-    }
-
     @Override
     public boolean isCancelled() {
         return event.isCancelled();

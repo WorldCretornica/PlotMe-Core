@@ -32,8 +32,8 @@ public class BukkitEventFactory implements IEventFactory {
     }
 
     @Override
-    public InternalPlotMoveEvent callPlotMoveEvent(PlotMe_Core plugin, IWorld worldFrom, IWorld worldTo, String idFrom, String idTo, IPlayer mover) {
-        PlotMoveEvent event = new PlotMoveEvent(plugin, worldFrom, worldTo, idFrom, idTo, mover);
+    public InternalPlotMoveEvent callPlotMoveEvent(PlotMe_Core plugin, IWorld world, String idFrom, String idTo, IPlayer mover) {
+        PlotMoveEvent event = new PlotMoveEvent(plugin, world, idFrom, idTo, mover);
         Bukkit.getPluginManager().callEvent(event);
         return event.getInternal();
     }
@@ -160,13 +160,6 @@ public class BukkitEventFactory implements IEventFactory {
     @Override
     public InternalPlotTeleportEvent callPlotTeleportEvent(PlotMe_Core plugin, IWorld world, Plot plot, IPlayer player, ILocation location, String plotId) {
         PlotTeleportEvent event = new PlotTeleportEvent(plugin, world, plot, player, location, plotId);
-        Bukkit.getPluginManager().callEvent(event);
-        return event.getInternal();
-    }
-
-    @Override
-    public InternalPlotTeleportEvent callPlotTeleportEvent(PlotMe_Core plugin, IWorld world, IPlayer player, ILocation location, String plotId) {
-        PlotTeleportEvent event = new PlotTeleportEvent(plugin, world, null, player, location, plotId);
         Bukkit.getPluginManager().callEvent(event);
         return event.getInternal();
     }

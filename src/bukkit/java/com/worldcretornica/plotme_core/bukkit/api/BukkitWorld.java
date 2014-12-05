@@ -44,7 +44,7 @@ public class BukkitWorld implements IWorld {
 
     @Override
     public IChunk getChunkAt(int cx, int cz) {
-        return new BukkitChunk(world.getChunkAt(cx, cx));
+        return new BukkitChunk(world.getChunkAt(cx, cz));
     }
 
     @Override

@@ -22,7 +22,7 @@ public class CmdUndeny extends PlotCommand {
             if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
                 String id = PlotMeCoreManager.getPlotId(player);
                 if (id.isEmpty()) {
-                    player.sendMessage("§c" + C("MsgNoPlotFound"));
+                    player.sendMessage("§c" + C(MSG_NO_PLOT_FOUND));
                 } else if (!PlotMeCoreManager.isPlotAvailable(id, pmi)) {
                     if (args.length < 2 || args[1].isEmpty()) {
                         player.sendMessage(C("WordUsage") + ": §c/plotme undeny <" + C("WordPlayer") + ">");
@@ -34,7 +34,7 @@ public class CmdUndeny extends PlotCommand {
                         if (plot.getOwner().equalsIgnoreCase(playername) || player.hasPermission("PlotMe.admin.undeny")) {
                             if (plot.isDeniedConsulting(denied) || plot.isGroupDenied(denied)) {
 
-                                double price = 0;
+                                double price = 0.0;
 
                                 InternalPlotRemoveDeniedEvent event;
 

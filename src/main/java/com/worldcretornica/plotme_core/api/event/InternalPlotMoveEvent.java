@@ -12,14 +12,14 @@ public class InternalPlotMoveEvent extends InternalPlotEvent implements ICancell
     private boolean canceled;
     private final String fromId;
     private final String toId;
-    private final IWorld toworld;
+    private final IWorld world;
     private final IPlayer mover;
 
-    public InternalPlotMoveEvent(PlotMe_Core instance, IWorld fromworld, IWorld toworld, String fromId, String toId, IPlayer mover) {
-        super(instance, null, fromworld);
+    public InternalPlotMoveEvent(PlotMe_Core instance, IWorld world, String fromId, String toId, IPlayer mover) {
+        super(instance, null, world);
         this.fromId = fromId;
         this.toId = toId;
-        this.toworld = toworld;
+        this.world = world;
         this.mover = mover;
     }
 
@@ -39,11 +39,7 @@ public class InternalPlotMoveEvent extends InternalPlotEvent implements ICancell
     }
 
     public Plot getPlotTo() {
-        return plugin.getPlotMeCoreManager().getPlotById(toId, toworld);
-    }
-
-    public IWorld getWorldTo() {
-        return toworld;
+        return plugin.getPlotMeCoreManager().getPlotById(toId, world);
     }
 
     public IPlayer getPlayer() {
@@ -69,11 +65,11 @@ public class InternalPlotMoveEvent extends InternalPlotEvent implements ICancell
     }
 
     public ILocation getUpperBoundTo() {
-        return PlotMeCoreManager.getPlotTopLoc(toworld, toId);
+        return PlotMeCoreManager.getPlotTopLoc(world, toId);
     }
 
     public ILocation getLowerBoundTo() {
-        return PlotMeCoreManager.getPlotBottomLoc(toworld, toId);
+        return PlotMeCoreManager.getPlotBottomLoc(world, toId);
     }
 
     public String getOwnerTo() {

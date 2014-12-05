@@ -22,7 +22,7 @@ public class CmdAdd extends PlotCommand {
             if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
                 String id = PlotMeCoreManager.getPlotId(player);
                 if (id.isEmpty()) {
-                    player.sendMessage("§c" + C("MsgNoPlotFound"));
+                    player.sendMessage("§c" + C(MSG_NO_PLOT_FOUND));
                 } else if (!PlotMeCoreManager.isPlotAvailable(id, pmi)) {
                     if (args.length < 2) {
                         player.sendMessage(C("WordUsage") + " §c/plotme add <" + C("WordPlayer") + ">");
@@ -38,9 +38,10 @@ public class CmdAdd extends PlotCommand {
 
 
                                 InternalPlotAddAllowedEvent event;
-
+                                double advancedPrice = 0.0;
                                 if (plugin.getPlotMeCoreManager().isEconomyEnabled(pmi)) {
                                     double price = pmi.getAddPlayerPrice();
+                                    advancedPrice = price;
                                     double balance = serverBridge.getBalance(player);
 
                                     if (balance >= price) {
@@ -66,20 +67,22 @@ public class CmdAdd extends PlotCommand {
                                 }
 
                                 if (!event.isCancelled()) {
-                                    IPlayer allowed2 = plugin.serverBridge.getPlayerExact(allowed);
+                                    IPlayer allowed2 = plugin.getServerBridge().getPlayerExact(allowed);
                                     if (allowed2 != null && allowed2.isOnline()) {
                                         plot.addAllowed(allowed, allowed2.getUniqueId());
                                         plot.removeDenied(allowed);
+                                    } else {
+                                        plot.addAllowed(allowed);
+                                        plot.removeDenied(allowed);
                                     }
-                                    plot.addAllowed(allowed);
-                                    plot.removeDenied(allowed);
-
-                                    double price = 0;
-                                    player.sendMessage(C("WordPlayer") + " §c" + allowed + "§r " + C("MsgNowAllowed") + " " + Util().moneyFormat(-price));
+                                    player.sendMessage(C("WordPlayer") + " §c" + allowed + "§r " + C("MsgNowAllowed"));
 
                                     if (isAdvancedLogging()) {
-                                        serverBridge.getLogger().info(player.getName() + " " + C("MsgAddedPlayer") + " " + allowed + " " + C("MsgToPlot") + " "
-                                                                        + id + (price != 0 ? " " + C("WordFor") + " " + price : ""));
+                                        if (advancedPrice == 0)
+                                            serverBridge.getLogger().info(player.getName() + " " + C("MsgAddedPlayer") + " " + allowed + " " + C("MsgToPlot") + " " + id);
+                                        else
+                                            serverBridge.getLogger().info(player.getName() + " " + C("MsgAddedPlayer") + " " + allowed + " " + C("MsgToPlot") + " "
+                                                                                  + id + (" " + C("WordFor") + " " + advancedPrice));
                                     }
                                 }
                             }

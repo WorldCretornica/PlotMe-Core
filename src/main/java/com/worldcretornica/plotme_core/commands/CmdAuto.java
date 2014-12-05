@@ -75,7 +75,7 @@ public class CmdAuto extends PlotCommand {
                         }
                     }
 
-                    double price = 0;
+                    double price = 0.0;
 
                     InternalPlotCreateEvent event;
 
@@ -112,10 +112,13 @@ public class CmdAuto extends PlotCommand {
                         //plugin.getPlotMeCoreManager().adjustLinkedPlots(id, world);
                         player.teleport(PlotMeCoreManager.getPlotHome(world, id));
 
-                        player.sendMessage(C("MsgThisPlotYours") + " " + C("WordUse") + " §c/plotme home§r " + C("MsgToGetToIt") + " " + Util().moneyFormat(-price));
+                        player.sendMessage(C("MsgThisPlotYours") + " " + C("WordUse") + " §c/plotme home§r " + C("MsgToGetToIt"));
 
                         if (isAdvancedLogging()) {
-                            serverBridge.getLogger().info(player.getName() + " " + C("MsgClaimedPlot") + " " + id + (price != 0 ? " " + C("WordFor") + " " + price : ""));
+                            if (price == 0)
+                                serverBridge.getLogger().info(player.getName() + " " + C("MsgClaimedPlot") + " " + id);
+                            else
+                                serverBridge.getLogger().info(player.getName() + " " + C("MsgClaimedPlot") + " " + id + (" " + C("WordFor") + " " + price));
                         }
 
                     }

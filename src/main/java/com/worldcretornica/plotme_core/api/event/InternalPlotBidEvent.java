@@ -36,10 +36,10 @@ public class InternalPlotBidEvent extends InternalPlotEvent implements ICancella
     }
 
     public double getPreviousBid() {
-        return plot.getCurrentBid();
+        return getPlot().getCurrentBid();
     }
 
     public String getPreviousBidder() {
-        return plot.getCurrentBidder();
+        return getPlot().getCurrentBidder();
     }
 }

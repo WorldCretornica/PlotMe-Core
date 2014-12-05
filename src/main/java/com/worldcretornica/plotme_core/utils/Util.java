@@ -31,8 +31,11 @@ public class Util {
     }
 
     public static String round(double money) {
-        if (money % 1 == 0) return String.valueOf(Math.round(money));
-        else return "" + money;
+        if (money % 1 == 0) {
+            return String.valueOf(Math.round(money));
+        } else {
+            return String.valueOf(money);
+        }
     }
 
     public String C(String caption) {
@@ -55,10 +58,11 @@ public class Util {
 
         String format = round(Math.abs(price));
 
-        Economy econ = plugin.serverBridge.getEconomy();
+        Economy econ = plugin.getServerBridge().getEconomy();
         
         if (econ != null) {
-            format = price <= 1 && price >= -1 ? format + " " + econ.currencyNameSingular() : format + " " + econ.currencyNamePlural();
+            if (price <= 1.0 && price >= -1.0) format = format + " " + econ.currencyNameSingular();
+            else format = format + " " + econ.currencyNamePlural();
         }
 
         if (showsign) {

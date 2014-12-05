@@ -25,7 +25,7 @@ public class CmdDoneList extends PlotCommand {
                     page = Integer.parseInt(args[1]);
                 }
 
-                int maxpage = (int) Math.ceil(plugin.getSqlManager().getFinishedPlotCount(player.getWorld().getName()) / 8);
+                int maxpage = (int) Math.ceil(plugin.getSqlManager().getFinishedPlotCount(player.getWorld().getName()) / 8L);
 
                 if (page < 0) {
                     page = 1;

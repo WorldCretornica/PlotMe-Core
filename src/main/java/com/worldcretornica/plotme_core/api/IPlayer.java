@@ -1,6 +1,6 @@
 package com.worldcretornica.plotme_core.api;
 
-public interface IPlayer extends IActor, ICommandSender, IEntity, IOfflinePlayer {
+public interface IPlayer extends ICommandSender, IEntity, IOfflinePlayer {
 
     IWorld getWorld();
 

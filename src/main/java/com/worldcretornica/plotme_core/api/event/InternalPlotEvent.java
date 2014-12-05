@@ -14,7 +14,7 @@ import java.util.UUID;
 public class InternalPlotEvent {
 
     final PlotMe_Core plugin;
-    protected final Plot plot;
+    private final Plot plot;
     protected final IWorld world;
 
     public InternalPlotEvent(PlotMe_Core instance, Plot plot, IWorld world) {
@@ -50,8 +50,8 @@ public class InternalPlotEvent {
      *
      */
     public String getOwner() {
-        if (plot != null) {
-            return plot.getOwner();
+        if (getPlot() != null) {
+            return getPlot().getOwner();
         } else {
             return "";
         }
@@ -64,8 +64,8 @@ public class InternalPlotEvent {
      *
      */
     public ILocation getUpperBound() {
-        if (plot != null && world != null) {
-            return PlotMeCoreManager.getPlotTopLoc(world, plot.getId());
+        if (getPlot() != null) {
+            return PlotMeCoreManager.getPlotTopLoc(world, getPlot().getId());
         } else {
             return null;
         }
@@ -78,8 +78,8 @@ public class InternalPlotEvent {
      *
      */
     public ILocation getLowerBound() {
-        if (plot != null && world != null) {
-            return PlotMeCoreManager.getPlotBottomLoc(world, plot.getId());
+        if (getPlot() != null) {
+            return PlotMeCoreManager.getPlotBottomLoc(world, getPlot().getId());
         } else {
             return null;
         }
@@ -93,8 +93,8 @@ public class InternalPlotEvent {
      *
      */
     public Set<String> getAllAllowed() {
-        if (plot != null) {
-            return plot.allowed().getAllPlayers().keySet();
+        if (getPlot() != null) {
+            return getPlot().allowed().getAllPlayers().keySet();
         } else {
             return new HashSet<>();
         }
@@ -108,8 +108,8 @@ public class InternalPlotEvent {
      *
      */
     public Collection<UUID> getAllAllowedUUID() {
-        if (plot != null) {
-            return plot.allowed().getAllPlayers().values();
+        if (getPlot() != null) {
+            return getPlot().allowed().getAllPlayers().values();
         } else {
             return new HashSet<>();
         }
@@ -123,8 +123,8 @@ public class InternalPlotEvent {
      *
      */
     public Set<String> getAllDenied() {
-        if (plot != null) {
-            return plot.denied().getAllPlayers().keySet();
+        if (getPlot() != null) {
+            return getPlot().denied().getAllPlayers().keySet();
         } else {
             return new HashSet<>();
         }
@@ -138,8 +138,8 @@ public class InternalPlotEvent {
      *
      */
     public Collection<UUID> getAllDeniedUUID() {
-        if (plot != null) {
-            return plot.denied().getAllPlayers().values();
+        if (getPlot() != null) {
+            return getPlot().denied().getAllPlayers().values();
         } else {
             return new HashSet<>();
         }
@@ -153,8 +153,8 @@ public class InternalPlotEvent {
      *
      */
     public ILocation getHomeLocation() {
-        if (plot != null && world != null) {
-            return PlotMeCoreManager.getPlotHome(world, plot.getId());
+        if (getPlot() != null) {
+            return PlotMeCoreManager.getPlotHome(world, getPlot().getId());
         } else {
             return null;
         }

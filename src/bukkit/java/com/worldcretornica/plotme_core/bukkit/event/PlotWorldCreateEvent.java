@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class PlotWorldCreateEvent extends Event implements Cancellable {
 
-    protected static final HandlerList handlers = new HandlerList();
+    private static final HandlerList handlers = new HandlerList();
     private final InternalPlotWorldCreateEvent event;
 
     public PlotWorldCreateEvent(String worldname, Map<String, String> parameters) {

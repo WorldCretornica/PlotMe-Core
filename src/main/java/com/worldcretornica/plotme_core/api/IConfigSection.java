@@ -35,7 +35,7 @@ public interface IConfigSection {
 
     boolean contains(String string);
 
-    Set<String> getKeys(boolean b);
+    Set<String> getKeys(boolean deep);
 
     IConfigSection createSection(String string);
 

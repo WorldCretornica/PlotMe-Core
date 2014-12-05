@@ -22,9 +22,9 @@ public class PlotWorldEdit6_0_0 implements PlotWorldEdit {
     private final PlotMe_Core plugin;
     private final WorldEditPlugin we;
 
-    public PlotWorldEdit6_0_0(PlotMe_Core instance, WorldEditPlugin wep) {
+    public PlotWorldEdit6_0_0(PlotMe_Core instance, WorldEditPlugin worldEditPlugin) {
         plugin = instance;
-        we = wep;
+        we = worldEditPlugin;
     }
 
     @Override

@@ -19,7 +19,7 @@ import java.util.UUID;
 
 public abstract class PlotEvent extends Event {
 
-    protected static final HandlerList handlers = new HandlerList();
+    private static final HandlerList handlers = new HandlerList();
     private final InternalPlotEvent event;
     protected final PlotMe_Core plugin;
 
@@ -75,7 +75,7 @@ public abstract class PlotEvent extends Event {
      * @return location of the upper corner
      */
     public Location getUpperBound() {
-        if (event.getPlot() != null && event.getWorld() != null) {
+        if (event.getPlot() != null) {
             return ((BukkitLocation) PlotMeCoreManager.getPlotTopLoc(event.getWorld(), event.getPlot().getId())).getLocation();
         } else {
             return null;
@@ -88,7 +88,7 @@ public abstract class PlotEvent extends Event {
      * @return location of the lower corner
      */
     public Location getLowerBound() {
-        if (event.getPlot() != null && event.getWorld() != null) {
+        if (event.getPlot() != null) {
             return ((BukkitLocation) PlotMeCoreManager.getPlotBottomLoc(event.getWorld(), event.getPlot().getId())).getLocation();
         } else {
             return null;
@@ -158,7 +158,7 @@ public abstract class PlotEvent extends Event {
      * @return home location
      */
     public Location getHomeLocation() {
-        if (event.getPlot() != null && event.getWorld() != null) {
+        if (event.getPlot() != null) {
             return ((BukkitLocation) PlotMeCoreManager.getPlotHome(event.getWorld(), event.getPlot().getId())).getLocation();
         } else {
             return null;

@@ -21,7 +21,7 @@ public class CmdReset extends PlotCommand {
                 Plot plot = PlotMeCoreManager.getPlotById(player, pmi);
 
                 if (plot == null) {
-                    player.sendMessage("§c" + C("MsgNoPlotFound"));
+                    player.sendMessage("§c" + C(MSG_NO_PLOT_FOUND));
                 } else if (plot.isProtect()) {
                     player.sendMessage("§c" + C("MsgPlotProtectedCannotReset"));
                 } else {

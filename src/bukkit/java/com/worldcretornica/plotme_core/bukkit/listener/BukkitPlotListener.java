@@ -4,6 +4,7 @@ import com.worldcretornica.plotme_core.*;
 import com.worldcretornica.plotme_core.bukkit.PlotMe_CorePlugin;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitBlock;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitLocation;
+import com.worldcretornica.plotme_core.bukkit.api.BukkitMaterial;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
 import com.worldcretornica.plotme_core.bukkit.event.PlotWorldLoadEvent;
 import org.bukkit.Material;
@@ -269,7 +270,7 @@ public class BukkitPlotListener implements Listener {
                         int itemid = item.getType().getId();
                         byte itemdata = item.getData().getData();
 
-                        if (pmi.isPreventedItem("" + itemid) || pmi.isPreventedItem(itemid + ":" + itemdata)) {
+                        if (pmi.isPreventedItem(String.valueOf(itemid)) || pmi.isPreventedItem(itemid + ":" + itemdata)) {
                             if (!player.hasPermission("plotme.unblock." + itemid)) {
                                 blocked = true;
                             }
@@ -441,7 +442,7 @@ public class BukkitPlotListener implements Listener {
     public void onBlockPistonRetract(BlockPistonRetractEvent event) {
         BukkitBlock block = new BukkitBlock(event.getRetractLocation().getBlock());
 
-        if (api.getPlotMeCoreManager().isPlotWorld(block) && block.getType() == Material.PISTON_STICKY_BASE) {
+        if (api.getPlotMeCoreManager().isPlotWorld(block) && block.getType().equals(new BukkitMaterial(Material.PISTON_STICKY_BASE))) {
             String id = PlotMeCoreManager.getPlotId(block.getLocation());
 
             if (id.isEmpty()) {

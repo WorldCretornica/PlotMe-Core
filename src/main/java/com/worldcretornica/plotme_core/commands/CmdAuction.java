@@ -26,7 +26,7 @@ public class CmdAuction extends PlotCommand {
                         String id = PlotMeCoreManager.getPlotId(player);
 
                         if (id.isEmpty()) {
-                            player.sendMessage("§c" + C("MsgNoPlotFound"));
+                            player.sendMessage("§c" + C(MSG_NO_PLOT_FOUND));
                         } else if (!PlotMeCoreManager.isPlotAvailable(id, pmi)) {
                             Plot plot = PlotMeCoreManager.getPlotById(id, pmi);
 
@@ -56,7 +56,7 @@ public class CmdAuction extends PlotCommand {
                                             plot.setAuctioned(false);
                                             plugin.getPlotMeCoreManager().adjustWall(player);
                                             plugin.getPlotMeCoreManager().setSellSign(world, plot);
-                                            plot.setCurrentBid(0);
+                                            plot.setCurrentBid(0.0);
                                             plot.setCurrentBidder("");
 
                                             plot.updateField("currentbid", 0);
@@ -76,7 +76,7 @@ public class CmdAuction extends PlotCommand {
                                         plot.setAuctioned(false);
                                         plugin.getPlotMeCoreManager().adjustWall(player);
                                         plugin.getPlotMeCoreManager().setSellSign(world, plot);
-                                        plot.setCurrentBid(0);
+                                        plot.setCurrentBid(0.0);
                                         plot.setCurrentBidder("");
 
                                         plot.updateField("currentbid", 0);
@@ -91,13 +91,13 @@ public class CmdAuction extends PlotCommand {
                                         }
                                     }
                                 } else {
-                                    double bid = 1;
+                                    double bid = 1.0;
 
                                     if (args.length == 2) {
                                         bid = Double.parseDouble(args[1]);
                                     }
 
-                                    if (bid < 0) {
+                                    if (bid < 0.0) {
                                         player.sendMessage("§c" + C("MsgInvalidAmount"));
                                     } else {
 

@@ -4,9 +4,9 @@ import java.util.Map;
 
 public class InternalPlotWorldCreateEvent implements ICancellable {
 
-    private boolean _canceled;
+    private boolean canceled;
     private final String worldname;
-    private Map<String, String> parameters;
+    private final Map<String, String> parameters;
 
     public InternalPlotWorldCreateEvent(String worldname, Map<String, String> parameters) {
         this.worldname = worldname;
@@ -15,12 +15,12 @@ public class InternalPlotWorldCreateEvent implements ICancellable {
 
     @Override
     public boolean isCancelled() {
-        return _canceled;
+        return canceled;
     }
 
     @Override
     public void setCanceled(boolean canceled) {
-        _canceled = canceled;
+        this.canceled = canceled;
     }
 
     public String getWorldName() {

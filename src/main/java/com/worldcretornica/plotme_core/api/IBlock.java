@@ -23,4 +23,6 @@ public interface IBlock {
     byte getData();
 
     void setTypeId(int i, boolean b);
+
+
 }

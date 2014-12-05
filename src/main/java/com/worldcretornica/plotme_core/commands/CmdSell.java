@@ -27,7 +27,7 @@ public class CmdSell extends PlotCommand {
                         String id = PlotMeCoreManager.getPlotId(player);
 
                         if (id.isEmpty()) {
-                            player.sendMessage("§c" + C("MsgNoPlotFound"));
+                            player.sendMessage("§c" + C(MSG_NO_PLOT_FOUND));
                         } else if (!PlotMeCoreManager.isPlotAvailable(id, pmi)) {
                             Plot plot = PlotMeCoreManager.getPlotById(id, pmi);
 
@@ -39,7 +39,7 @@ public class CmdSell extends PlotCommand {
                                     event = serverBridge.getEventFactory().callPlotSellChangeEvent(plugin, world, plot, player, plot.getCustomPrice(), false, false);
 
                                     if (!event.isCancelled()) {
-                                        plot.setCustomPrice(0);
+                                        plot.setCustomPrice(0.0);
                                         plot.setForSale(false);
 
                                         plot.updateField("customprice", 0);
@@ -79,7 +79,7 @@ public class CmdSell extends PlotCommand {
                                         if (pmi.isCanSellToBank()) {
                                             String currentbidder = plot.getCurrentBidder();
 
-                                            if (!currentbidder.isEmpty()) {
+                                            if (currentbidder != null) {
                                                 double bid = plot.getCurrentBid();
                                                 IOfflinePlayer playercurrentbidder = serverBridge.getOfflinePlayer(plot.getCurrentBidderId());
 
@@ -112,7 +112,7 @@ public class CmdSell extends PlotCommand {
                                                     plot.setAuctioned(false);
                                                     plot.setCurrentBidder("");
                                                     plot.setCurrentBidderId(null);
-                                                    plot.setCurrentBid(0);
+                                                    plot.setCurrentBid(0.0);
 
                                                     plot.removeAllAllowed();
 
@@ -140,7 +140,7 @@ public class CmdSell extends PlotCommand {
                                         } else {
                                             player.sendMessage("§c" + C("MsgCannotSellToBank"));
                                         }
-                                    } else if (price < 0) {
+                                    } else if (price < 0.0) {
                                         player.sendMessage("§c" + C("MsgInvalidAmount"));
                                     } else {
                                         event = serverBridge.getEventFactory().callPlotSellChangeEvent(plugin, world, plot, player, price, false, true);

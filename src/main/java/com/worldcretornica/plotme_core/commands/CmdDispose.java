@@ -23,7 +23,7 @@ public class CmdDispose extends PlotCommand {
             if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
                 String id = PlotMeCoreManager.getPlotId(player);
                 if (id.isEmpty()) {
-                    player.sendMessage("§c" + C("MsgNoPlotFound"));
+                    player.sendMessage("§c" + C(MSG_NO_PLOT_FOUND));
                 } else if (!PlotMeCoreManager.isPlotAvailable(id, pmi)) {
                     Plot plot = PlotMeCoreManager.getPlotById(id, pmi);
 
@@ -60,7 +60,7 @@ public class CmdDispose extends PlotCommand {
                                     if (plot.isAuctioned()) {
                                         String currentbidder = plot.getCurrentBidder();
 
-                                        if (!currentbidder.isEmpty()) {
+                                        if (currentbidder != null) {
                                             IOfflinePlayer playercurrentbidder = serverBridge.getOfflinePlayer(plot.getCurrentBidderId());
                                             EconomyResponse er2 = serverBridge.depositPlayer(playercurrentbidder, plot.getCurrentBid());
 

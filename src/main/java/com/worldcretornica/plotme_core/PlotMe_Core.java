@@ -7,23 +7,19 @@ import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.utils.Util;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class PlotMe_Core {
 
-    private static final String LANG_PATH = "language";
+    private static final String LANG_PATH = "Language";
     private static final String DEFAULT_LANG = "english";
     private static final String CAPTIONS_PATTERN = "caption-%s.yml";
     private static final String DEFAULT_GENERATOR_URL = "http://dev.bukkit.org/bukkit-plugins/plotme/";
-    // Worlds that do not have a world generator
-    public final Set<String> badWorlds = new HashSet<>();
     //Bridge
-    public final IServerBridge serverBridge;
+    private final IServerBridge serverBridge;
     //Config accessors for language <lang, accessor>
     private final Map<String, IConfigSection> captionsCA = new HashMap<>();
     public Map<String, Map<String, String>> creationbuffer;
@@ -32,27 +28,19 @@ public class PlotMe_Core {
     //Spool stuff
     private ConcurrentLinkedQueue<PlotToClear> plotsToClear;
     //Global variables
-    private PlotMeCoreManager plotmecoremanager;
-    private SqlManager sqlmanager;
+    private PlotMeCoreManager plotMeCoreManager;
+    private SqlManager sqlManager;
     private Util util;
 
     public PlotMe_Core(IServerBridge serverObjectBuilder) {
         serverBridge = serverObjectBuilder;
     }
 
-    public static IPlotMe_GeneratorManager getGenManager(IWorld world) {
-        if (world.isPlotMeGenerator()) {
-            return world.getGenerator().getManager();
-        } else {
-            return null;
-        }
-    }
-
     public void disable() {
         getSqlManager().closeConnection();
         serverBridge.unHook();
-        getPlotMeCoreManager().setPlayersIgnoringWELimit(null);
-        setWorldCurrentlyProcessingExpired(null);
+        plotMeCoreManager.setPlayersIgnoringWELimit(null);
+        this.worldcurrentlyprocessingexpired = null;
         creationbuffer = null;
         plotsToClear.clear();
         plotsToClear = null;
@@ -92,12 +80,6 @@ public class PlotMe_Core {
         // Get the config we will be working with
         IConfigSection config = serverBridge.getConfig();
 
-        // Move old configs to new locations
-        if (config.contains("Language")) {
-            config.set(LANG_PATH, config.getString("Language"));
-            config.set("Language", null);
-        }
-
         // If no world exists add config for a world
         //if (!config.contains("worlds") || config.contains("worlds") && config.getConfigurationSection("worlds").getKeys(false).isEmpty()) {
         if (!(config.contains("worlds") && !config.getConfigurationSection("worlds").getKeys(false).isEmpty())) {
@@ -119,17 +101,20 @@ public class PlotMe_Core {
     private void setupWorlds() {
         IConfigSection worldsCS = serverBridge.getConfig().getConfigurationSection("worlds");
         for (String worldname : worldsCS.getKeys(false)) {
-            getPlotMeCoreManager().addPlotMap(worldname.toLowerCase(), new PlotMapInfo(this, worldname));
-            if (getGenManager(worldname) == null) {
-                getLogger().log(Level.SEVERE, "The world {0} either does not exist or not using a PlotMe generator", worldname);
-                getLogger().log(Level.SEVERE, "Please ensure that {0} is set up and that it is using a PlotMe generator", worldname);
+            String world = worldname.toLowerCase();
+            if (getGenManager(world) == null) {
+                getLogger().log(Level.SEVERE, "The world {0} either does not exist or not using a PlotMe generator", world);
+                getLogger().log(Level.SEVERE, "Please ensure that {0} is set up and that it is using a PlotMe generator", world);
                 getLogger().log(Level.SEVERE, "The default generator can be downloaded from " + DEFAULT_GENERATOR_URL);
-                badWorlds.add(worldname);
+            } else {
+                PlotMapInfo pmi = new PlotMapInfo(this, world);
+                plotMeCoreManager.addPlotMap(world, pmi);
             }
         }
     }
 
     private String loadCaptionConfig(String language) {
+        getLogger().info("method at line 118: " + !captionsCA.containsKey(language));
         if (!captionsCA.containsKey(language)) {
             String configFilename = String.format(CAPTIONS_PATTERN, language);
             IConfigSection ca = serverBridge.getConfig(configFilename);
@@ -189,13 +174,13 @@ public class PlotMe_Core {
         if (world == null) {
             return null;
         } else {
-            return getGenManager(world);
+            return PlotMeCoreManager.getGenManager(world);
         }
     }
 
 
     public void scheduleTask(Runnable task) {
-        getLogger().info(getUtil().C("MsgStartDeleteSession"));
+        getLogger().info(util.C("MsgStartDeleteSession"));
 
         for (int ctr = 0; ctr < 10; ctr++) {
             serverBridge.scheduleSyncDelayedTask(task, ctr * 100);
@@ -232,7 +217,7 @@ public class PlotMe_Core {
     }
 
     public PlotToClear getPlotLocked(String world, String id) {
-        for (PlotToClear ptc : plotsToClear.toArray(new PlotToClear[0])) {
+        for (PlotToClear ptc : plotsToClear.toArray(new PlotToClear[plotsToClear.size()])) {
             if (ptc.getWorld().equalsIgnoreCase(world) && ptc.getPlotId().equalsIgnoreCase(id)) {
                 return ptc;
             }
@@ -242,19 +227,23 @@ public class PlotMe_Core {
     }
 
     public PlotMeCoreManager getPlotMeCoreManager() {
-        return plotmecoremanager;
+        return plotMeCoreManager;
     }
 
-    private void setPlotMeCoreManager(PlotMeCoreManager plotmecoremanager) {
-        this.plotmecoremanager = plotmecoremanager;
+    private void setPlotMeCoreManager(PlotMeCoreManager plotMeCoreManager) {
+        this.plotMeCoreManager = plotMeCoreManager;
+    }
+
+    public IServerBridge getServerBridge() {
+        return serverBridge;
     }
 
     public SqlManager getSqlManager() {
-        return sqlmanager;
+        return sqlManager;
     }
 
-    private void setSqlManager(SqlManager sqlmanager) {
-        this.sqlmanager = sqlmanager;
+    private void setSqlManager(SqlManager sqlManager) {
+        this.sqlManager = sqlManager;
     }
 
     public Util getUtil() {

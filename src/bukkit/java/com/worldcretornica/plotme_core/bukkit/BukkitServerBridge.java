@@ -8,7 +8,6 @@ import com.worldcretornica.plotme_core.api.event.IEventFactory;
 import com.worldcretornica.plotme_core.bukkit.MultiWorldWrapper.WorldGeneratorWrapper;
 import com.worldcretornica.plotme_core.bukkit.api.*;
 import com.worldcretornica.plotme_core.bukkit.event.BukkitEventFactory;
-import com.worldcretornica.plotme_core.bukkit.listener.BukkitPlayerListener;
 import com.worldcretornica.plotme_core.bukkit.listener.BukkitPlotDenyListener;
 import com.worldcretornica.plotme_core.bukkit.listener.BukkitPlotListener;
 import com.worldcretornica.plotme_core.bukkit.listener.BukkitPlotWorldEditListener;
@@ -109,12 +108,10 @@ public class BukkitServerBridge implements IServerBridge {
 
             try {
                 Class.forName("com.sk89q.worldedit.function.mask.Mask");
-                PlotWorldEdit pwe = (PlotWorldEdit) Class.forName("com.worldcretornica.plotme_core.bukkit.worldedit.PlotWorldEdit6_0_0").getConstructor(PlotMe_Core.class, WorldEditPlugin.class).newInstance(plotme_core, worldeditplugin);
-                setPlotWorldEdit(pwe);
+                setPlotWorldEdit((PlotWorldEdit) Class.forName("com.worldcretornica.plotme_core.bukkit.worldedit.PlotWorldEdit6_0_0").getConstructor(PlotMe_Core.class, WorldEditPlugin.class).newInstance(plotme_core, worldeditplugin));
             } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | NoSuchMethodException | SecurityException | InvocationTargetException | IllegalArgumentException unused) {
                 try {
-                    PlotWorldEdit pwe = (PlotWorldEdit) Class.forName("com.worldcretornica.plotme_core.bukkit.worldedit.PlotWorldEdit5_7").getConstructor(PlotMe_Core.class, WorldEditPlugin.class).newInstance(plotme_core, worldeditplugin);
-                    setPlotWorldEdit(pwe);
+                    setPlotWorldEdit((PlotWorldEdit) Class.forName("com.worldcretornica.plotme_core.bukkit.worldedit.PlotWorldEdit5_7").getConstructor(PlotMe_Core.class, WorldEditPlugin.class).newInstance(plotme_core, worldeditplugin));
                 } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | NoSuchMethodException | SecurityException | InvocationTargetException | IllegalArgumentException unused2) {
                     getLogger().warning("Unable to hook to WorldEdit properly, please contact the developper of plotme with your WorldEdit version.");
                     setPlotWorldEdit(null);
@@ -124,11 +121,7 @@ public class BukkitServerBridge implements IServerBridge {
             pm.registerEvents(new BukkitPlotWorldEditListener(plugin), plugin);
         }
 
-        if (pm.getPlugin("LWC") != null) {
-            setUsinglwc(true);
-        } else {
-            setUsinglwc(false);
-        }
+        setUsinglwc(pm.getPlugin("LWC") != null);
     }
 
     @Override
@@ -179,8 +172,6 @@ public class BukkitServerBridge implements IServerBridge {
     @Override
     public void setupListeners() {
         PluginManager pm = plugin.getServer().getPluginManager();
-
-        pm.registerEvents(new BukkitPlayerListener(plugin), plugin);
 
         pm.registerEvents(new BukkitPlotListener(plugin), plugin);
 
@@ -306,8 +297,8 @@ public class BukkitServerBridge implements IServerBridge {
     }
 
     @Override
-    public double getBalance(IPlayer playerbidder) {
-        return getEconomy().getBalance(((BukkitOfflinePlayer) playerbidder).getOfflinePlayer());
+    public double getBalance(IPlayer player) {
+        return getEconomy().getBalance(((BukkitOfflinePlayer) player).getOfflinePlayer());
     }
 
     @Override
@@ -359,7 +350,7 @@ public class BukkitServerBridge implements IServerBridge {
 
     @Override
     public boolean worldExists(String worldname) {
-        return Bukkit.getWorlds().contains(worldname);
+        return Bukkit.getWorld(worldname) != null;
     }
 
     @Override
@@ -374,7 +365,7 @@ public class BukkitServerBridge implements IServerBridge {
     }
 
     @Override
-    public boolean createPlotWorld(ICommandSender sender, String worldname, String generator, Map<String, String> args) {
+    public boolean createPlotWorld(String worldname, String generator, Map<String, String> args) {
         //Get a seed
         Long seed = new Random().nextLong();
 
@@ -447,7 +438,7 @@ public class BukkitServerBridge implements IServerBridge {
                 WorldGeneratorWrapper env;
 
                 try {
-                    env = WorldGeneratorWrapper.getGenByName("plugin");
+                    env = WorldGeneratorWrapper.getGenByName();
                 } catch (DelegateClassException ex) {
                     ex.printStackTrace();
                     return false;
@@ -469,10 +460,10 @@ public class BukkitServerBridge implements IServerBridge {
                         return false;
                     }
                 } else {
-                    sender.sendMessage("[" + plugin.getName() + "] " + plugin.getAPI().getUtil().C("ErrCannotCreateMW"));
+                    getLogger().warning(plugin.getAPI().getUtil().C("ErrCannotCreateMW"));
                 }
             } else {
-                sender.sendMessage("[" + plugin.getName() + "] " + plugin.getAPI().getUtil().C("ErrMWDisabled"));
+                getLogger().warning(plugin.getAPI().getUtil().C("ErrMWDisabled"));
             }
             return success;
         }
@@ -541,6 +532,11 @@ public class BukkitServerBridge implements IServerBridge {
             configSection.addDefault(path, defaultCS.get(path));
         }
         return new BukkitConfigSection(plugin, plugin.getConfig(), configSection);
+    }
+
+    @Override
+    public void disablePlotMe() {
+        plugin.getPluginLoader().disablePlugin(plugin);
     }
 
     private ConfigurationSection getDefaultWorld() {

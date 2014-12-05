@@ -24,7 +24,7 @@ public class CmdCreateWorld extends PlotCommand {
                 InternalPlotWorldCreateEvent event = serverBridge.getEventFactory().callPlotWorldCreateEvent(parameters.get("worldname"), parameters);
 
                 if (!event.isCancelled()) {
-                    if (serverBridge.createPlotWorld(sender, parameters.get("worldname"), parameters.get("generator"), parameters)) {
+                    if (serverBridge.createPlotWorld(parameters.get("worldname"), parameters.get("generator"), parameters)) {
                         sender.sendMessage(C("MsgWorldCreationSuccess"));
                     }
                 }

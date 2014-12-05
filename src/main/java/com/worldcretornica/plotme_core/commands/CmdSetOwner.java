@@ -23,7 +23,7 @@ public class CmdSetOwner extends PlotCommand {
             if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
                 String id = PlotMeCoreManager.getPlotId(player);
                 if (id.isEmpty()) {
-                    player.sendMessage("§c" + C("MsgNoPlotFound"));
+                    player.sendMessage("§c" + C(MSG_NO_PLOT_FOUND));
                 } else if (args.length < 2 || args[1].isEmpty()) {
                     player.sendMessage(C("WordUsage") + ": §c/plotme setowner <" + C("WordPlayer") + ">");
                 } else {
@@ -84,7 +84,7 @@ public class CmdSetOwner extends PlotCommand {
                         if (!event.isCancelled()) {
                             plot.setCurrentBidder("");
                             plot.setCurrentBidderId(null);
-                            plot.setCurrentBid(0);
+                            plot.setCurrentBid(0.0);
                             plot.setAuctioned(false);
                             plot.setForSale(false);
 

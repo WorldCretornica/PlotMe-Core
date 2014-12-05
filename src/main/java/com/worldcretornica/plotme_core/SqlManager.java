@@ -14,7 +14,7 @@ import java.util.logging.Level;
 
 public class SqlManager {
 
-    private static Connection conn;
+    private Connection conn;
     private final PlotMe_Core plugin;
     private final boolean usemySQL;
     private final String mySQLuname;
@@ -37,7 +37,7 @@ public class SqlManager {
                 conn.setAutoCommit(false);
             } else {
                 Class.forName("org.sqlite.JDBC");
-                conn = DriverManager.getConnection("jdbc:sqlite:" + plugin.serverBridge.getDataFolder() + "/plots.db");
+                conn = DriverManager.getConnection("jdbc:sqlite:" + plugin.getServerBridge().getDataFolder() + "/plots.db");
                 conn.setAutoCommit(false);
             }
         } catch (SQLException ex) {
@@ -619,11 +619,11 @@ public class SqlManager {
                 plugin.getLogger().info("Modifying database for MySQL support");
 
                 String sqlitedb = "plots.db";
-                File sqlitefile = new File(plugin.serverBridge.getDataFolder(), sqlitedb);
+                File sqlitefile = new File(plugin.getServerBridge().getDataFolder(), sqlitedb);
                 if (sqlitefile.exists()) {
                     plugin.getLogger().info("Trying to import plots from plots.db");
                     Class.forName("org.sqlite.JDBC");
-                    Connection sqliteconn = DriverManager.getConnection("jdbc:sqlite:" + plugin.serverBridge.getDataFolder() + "\\" + sqlitedb);
+                    Connection sqliteconn = DriverManager.getConnection("jdbc:sqlite:" + plugin.getServerBridge().getDataFolder() + "\\" + sqlitedb);
 
                     sqliteconn.setAutoCommit(false);
                     Statement slstatement = sqliteconn.createStatement();
@@ -745,7 +745,7 @@ public class SqlManager {
                     sqliteconn.close();
 
                     plugin.getLogger().info("Renaming " + sqlitedb + " to " + sqlitedb + ".old");
-                    if (!sqlitefile.renameTo(new File(plugin.serverBridge.getDataFolder(), sqlitedb + ".old"))) {
+                    if (!sqlitefile.renameTo(new File(plugin.getServerBridge().getDataFolder(), sqlitedb + ".old"))) {
                         plugin.getLogger().severe("Failed to rename " + sqlitedb + "! Please rename this manually!");
                     }
                 }
@@ -826,7 +826,7 @@ public class SqlManager {
             ps.setInt(6, bottomX);
             ps.setInt(7, topZ);
             ps.setInt(8, bottomZ);
-            ps.setString(9, plot.getBiome().name());
+            ps.setString(9, plot.getBiome().toString());
             ps.setDate(10, plot.getExpiredDate());
             ps.setBoolean(11, plot.isFinished());
             ps.setDouble(12, plot.getCustomPrice());
@@ -869,7 +869,7 @@ public class SqlManager {
                 fetchOwnerUUIDAsync(idX, idZ, plot.getWorld().toLowerCase(), plot.getOwner());
             }
 
-            if (plot.getCurrentBidder() != null && !plot.getCurrentBidder().isEmpty() && plot.getCurrentBidderId() == null) {
+            if (plot.getCurrentBidder() != null && plot.getCurrentBidderId() == null) {
                 fetchBidderUUIDAsync(idX, idZ, plot.getWorld().toLowerCase(), plot.getCurrentBidder());
             }
 
@@ -1259,7 +1259,7 @@ public class SqlManager {
     public void loadPlotsAsynchronously(String world) {
         final String worldname = world;
 
-        plugin.serverBridge.runTaskAsynchronously(new Runnable() {
+        plugin.getServerBridge().runTaskAsynchronously(new Runnable() {
             @Override
             public void run() {
                 plugin.getLogger().info("Starting to load plots for world " + worldname);
@@ -1270,12 +1270,12 @@ public class SqlManager {
 
                 for (String id : plots.keySet()) {
                     pmi.addPlot(id, plots.get(id));
-                    plugin.serverBridge.getEventFactory().callPlotLoadedEvent(plugin, plugin.serverBridge.getWorld(worldname), plots.get(id));
+                    plugin.getServerBridge().getEventFactory().callPlotLoadedEvent(plugin, plugin.getServerBridge().getWorld(worldname), plots.get(id));
                 }
 
                 // plugin.getLogger().info("Done loading " + pmi.getNbPlots() +
                 // " plots for world " + worldname);
-                plugin.serverBridge.getEventFactory().callPlotWorldLoadEvent(worldname, pmi.getNbPlots());
+                plugin.getServerBridge().getEventFactory().callPlotWorldLoadEvent(worldname, pmi.getNbPlots());
             }
         });
     }
@@ -1634,7 +1634,7 @@ public class SqlManager {
         return ret;
     }
 
-    public List<Plot> getExpiredPlots(String world, int Page, int NbPerPage) {
+    public List<Plot> getExpiredPlots(String world, int page, int nbPerPage) {
         List<Plot> ret = new ArrayList<>();
         PreparedStatement statementPlot = null;
         ResultSet setPlots = null;
@@ -1649,8 +1649,8 @@ public class SqlManager {
             statementPlot = conn.prepareStatement("SELECT idX, idZ, owner, expireddate FROM plotmePlots WHERE LOWER(world) = ? AND protected = 0 AND expireddate < ? ORDER BY expireddate LIMIT ?, ?");
             statementPlot.setString(1, world);
             statementPlot.setDate(2, sqlDate);
-            statementPlot.setInt(3, NbPerPage * (Page - 1));
-            statementPlot.setInt(4, NbPerPage);
+            statementPlot.setInt(3, nbPerPage * (page - 1));
+            statementPlot.setInt(4, nbPerPage);
 
             setPlots = statementPlot.executeQuery();
 
@@ -2000,42 +2000,8 @@ public class SqlManager {
         return ret;
     }
 
-    public String getFirstWorld(String owner) {
-        PreparedStatement statementPlot = null;
-        ResultSet setPlots = null;
-
-        try {
-            Connection conn = getConnection();
-
-            statementPlot = conn.prepareStatement("SELECT world FROM plotmePlots WHERE owner = ? LIMIT 1");
-            statementPlot.setString(1, owner);
-
-            setPlots = statementPlot.executeQuery();
-
-            if (setPlots.next()) {
-                return setPlots.getString("world");
-            }
-        } catch (SQLException ex) {
-            plugin.getLogger().severe("DonePlots Exception :");
-            plugin.getLogger().severe(ex.getMessage());
-        } finally {
-            try {
-                if (statementPlot != null) {
-                    statementPlot.close();
-                }
-                if (setPlots != null) {
-                    setPlots.close();
-                }
-            } catch (SQLException ex) {
-                plugin.getLogger().severe("DonePlots Exception (on close) :");
-                plugin.getLogger().severe(ex.getMessage());
-            }
-        }
-        return "";
-    }
-
     public void plotConvertToUUIDAsynchronously() {
-        plugin.serverBridge.runTaskAsynchronously(new Runnable() {
+        plugin.getServerBridge().runTaskAsynchronously(new Runnable() {
             @Override
             public void run() {
                 plugin.getLogger().info("Checking if conversion to UUID needed...");
@@ -2256,7 +2222,7 @@ public class SqlManager {
     }
 
     private void _fetchUUIDAsync(final int idX, final int idZ, final String world, final String Property, final String name) {
-        plugin.serverBridge.runTaskAsynchronously(new Runnable() {
+        plugin.getServerBridge().runTaskAsynchronously(new Runnable() {
             @Override
             public void run() {
 
@@ -2265,7 +2231,7 @@ public class SqlManager {
                 try {
                     Connection conn = getConnection();
 
-                    IPlayer player = plugin.serverBridge.getPlayerExact(name);
+                    IPlayer player = plugin.getServerBridge().getPlayerExact(name);
                     UUID uuid = null;
                     String newname = name;
 
@@ -2377,7 +2343,7 @@ public class SqlManager {
     }
 
     public void updatePlotsNewUUID(final UUID uuid, final String newname) {
-        plugin.serverBridge.runTaskAsynchronously(new Runnable() {
+        plugin.getServerBridge().runTaskAsynchronously(new Runnable() {
             @Override
             public void run() {
                 PreparedStatement[] pss = new PreparedStatement[4];

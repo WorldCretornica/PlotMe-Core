@@ -85,9 +85,9 @@ public class MultiWorldWrapper implements Delegate<MultiWorldPlugin> {
             return worldGenerator;
         }
 
-        public static WorldGeneratorWrapper getGenByName(String gen) throws DelegateClassException {
+        public static WorldGeneratorWrapper getGenByName() throws DelegateClassException {
             try {
-                return new WorldGeneratorWrapper(WorldGenerator.getGenByName(gen));
+                return new WorldGeneratorWrapper(WorldGenerator.getGenByName("PLUGIN"));
             } catch (InvalidWorldGenException ex) {
                 throw new DelegateClassException(ex);
             }

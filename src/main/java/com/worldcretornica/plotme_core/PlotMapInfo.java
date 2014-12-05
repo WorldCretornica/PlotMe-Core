@@ -17,7 +17,7 @@ public class PlotMapInfo {
     public PlotMapInfo(PlotMe_Core instance, String world) {
         plugin = instance;
         this.world = world;
-        config = plugin.serverBridge.loadDefaultConfig("worlds." + world);
+        config = plugin.getServerBridge().loadDefaultConfig("worlds." + world);
         plots = new ConcurrentHashMap<>(1000, 0.75f, 5);
         freedplots = plugin.getSqlManager().getFreed(world);
     }

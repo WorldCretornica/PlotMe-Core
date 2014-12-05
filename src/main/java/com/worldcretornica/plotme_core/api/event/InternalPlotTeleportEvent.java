@@ -8,26 +8,28 @@ import com.worldcretornica.plotme_core.api.IWorld;
 
 public class InternalPlotTeleportEvent extends InternalPlotEvent implements ICancellable {
 
-    private boolean _canceled;
+    private boolean canceled;
     private final IPlayer player;
     private final String plotId;
-    private final ILocation loc;
+    private final Plot plot;
+    private final ILocation location;
 
-    public InternalPlotTeleportEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer player, ILocation loc, String plotId) {
+    public InternalPlotTeleportEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer player, ILocation location, String plotId) {
         super(instance, plot, world);
         this.player = player;
-        this.loc = loc;
+        this.location = location;
         this.plotId = plotId;
+        this.plot = plot;
     }
 
     @Override
     public boolean isCancelled() {
-        return _canceled;
+        return canceled;
     }
 
     @Override
     public void setCanceled(boolean cancel) {
-        _canceled = cancel;
+        canceled = cancel;
     }
 
     public IPlayer getPlayer() {
@@ -35,7 +37,7 @@ public class InternalPlotTeleportEvent extends InternalPlotEvent implements ICan
     }
 
     public ILocation getLocation() {
-        return loc;
+        return location;
     }
 
     public String getPlotId() {
@@ -43,6 +45,6 @@ public class InternalPlotTeleportEvent extends InternalPlotEvent implements ICan
     }
 
     public boolean getIsPlotClaimed() {
-        return (plot != null);
+        return (getPlot() != null);
     }
 }

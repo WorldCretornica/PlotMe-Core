@@ -18,14 +18,14 @@ public class PlotMoveEvent extends PlotEvent implements Cancellable {
 
     private final InternalPlotMoveEvent event;
 
-    public PlotMoveEvent(PlotMe_Core instance, World fromworld, World toworld, String fromId, String toId, Player mover) {
-        super(instance, null, fromworld);
-        event = new InternalPlotMoveEvent(instance, new BukkitWorld(fromworld), new BukkitWorld(toworld), fromId, toId, new BukkitPlayer(mover));
+    public PlotMoveEvent(PlotMe_Core instance, World world, String fromId, String toId, Player mover) {
+        super(instance, null, world);
+        event = new InternalPlotMoveEvent(instance, new BukkitWorld(world), fromId, toId, new BukkitPlayer(mover));
     }
 
-    public PlotMoveEvent(PlotMe_Core instance, IWorld fromworld, IWorld toworld, String fromId, String toId, IPlayer mover) {
-        super(instance, null, fromworld);
-        event = new InternalPlotMoveEvent(instance, fromworld, toworld, fromId, toId, mover);
+    public PlotMoveEvent(PlotMe_Core instance, IWorld world, String fromId, String toId, IPlayer mover) {
+        super(instance, null, world);
+        event = new InternalPlotMoveEvent(instance, world, fromId, toId, mover);
     }
 
     @Override
@@ -44,11 +44,7 @@ public class PlotMoveEvent extends PlotEvent implements Cancellable {
     }
 
     public Plot getPlotTo() {
-        return plugin.getPlotMeCoreManager().getPlotById(event.getIdTo(), event.getWorldTo());
-    }
-
-    public World getWorldTo() {
-        return ((BukkitWorld) event.getWorldTo()).getWorld();
+        return plugin.getPlotMeCoreManager().getPlotById(event.getIdTo(), event.getWorld());
     }
 
     public Player getPlayer() {
@@ -74,11 +70,11 @@ public class PlotMoveEvent extends PlotEvent implements Cancellable {
     }
 
     public Location getUpperBoundTo() {
-        return ((BukkitLocation) PlotMeCoreManager.getPlotTopLoc(event.getWorldTo(), event.getIdTo())).getLocation();
+        return ((BukkitLocation) PlotMeCoreManager.getPlotTopLoc(event.getWorld(), event.getIdTo())).getLocation();
     }
 
     public Location getLowerBoundTo() {
-        return ((BukkitLocation) PlotMeCoreManager.getPlotBottomLoc(event.getWorldTo(), event.getIdTo())).getLocation();
+        return ((BukkitLocation) PlotMeCoreManager.getPlotBottomLoc(event.getWorld(), event.getIdTo())).getLocation();
     }
 
     public String getOwnerTo() {

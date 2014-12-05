@@ -7,7 +7,7 @@ import com.worldcretornica.plotme_core.api.IWorld;
 
 public class InternalPlotProtectChangeEvent extends InternalPlotEvent implements ICancellable {
 
-    private boolean _canceled;
+    private boolean canceled;
     private final IPlayer player;
     private final boolean _protected;
 
@@ -19,12 +19,12 @@ public class InternalPlotProtectChangeEvent extends InternalPlotEvent implements
 
     @Override
     public boolean isCancelled() {
-        return _canceled;
+        return canceled;
     }
 
     @Override
     public void setCanceled(boolean cancel) {
-        _canceled = cancel;
+        canceled = cancel;
     }
 
     public IPlayer getPlayer() {

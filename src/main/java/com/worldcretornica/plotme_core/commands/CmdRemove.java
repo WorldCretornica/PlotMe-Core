@@ -24,7 +24,7 @@ public class CmdRemove extends PlotCommand {
             if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
                 String id = PlotMeCoreManager.getPlotId(player);
                 if (id.isEmpty()) {
-                    player.sendMessage("§c" + C("MsgNoPlotFound"));
+                    player.sendMessage("§c" + C(MSG_NO_PLOT_FOUND));
                 } else if (!PlotMeCoreManager.isPlotAvailable(id, pmi)) {
                     if (args.length < 2 || args[1].isEmpty()) {
                         player.sendMessage(C("WordUsage") + ": §c/plotme remove <" + C("WordPlayer") + ">");
@@ -36,7 +36,7 @@ public class CmdRemove extends PlotCommand {
                         if (plot.getOwnerId().equals(playeruuid) || player.hasPermission("PlotMe.admin.remove")) {
                             if (plot.isAllowedConsulting(allowed) || plot.isGroupAllowed(allowed)) {
 
-                                double price = 0;
+                                double price = 0.0;
 
                                 InternalPlotRemoveAllowedEvent event;
 

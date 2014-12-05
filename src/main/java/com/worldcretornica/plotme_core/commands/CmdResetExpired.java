@@ -22,10 +22,8 @@ public class CmdResetExpired extends PlotCommand {
 
             if (world == null) {
                 serverBridge.getLogger().info("§c" + C("WordWorld") + " '" + args[1] + "' " + C("MsgDoesNotExistOrNotLoaded"));
-                return true;
             } else if (!plugin.getPlotMeCoreManager().isPlotWorld(world)) {
                 serverBridge.getLogger().info("§c" + C("MsgNotPlotWorld"));
-                return true;
             } else {
                 plugin.setWorldCurrentlyProcessingExpired(world);
                 plugin.setCounterExpired(50);

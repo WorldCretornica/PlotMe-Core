@@ -64,7 +64,10 @@ public class CmdPlotList extends PlotCommand {
 
                     // Is it auctionned?
                     if (plot.isAuctioned()) {
-                        addition.append(" " + C("WordAuction") + ": §a" + Util.round(plot.getCurrentBid()) + "§r" + (!plot.getCurrentBidder().isEmpty() ? " " + plot.getCurrentBidder() : ""));
+                        if (plot.getCurrentBidder() != null)
+                            addition.append(" " + C("WordAuction") + ": §a" + Util.round(plot.getCurrentBid()) + "§r" + (" " + plot.getCurrentBidder()));
+                        else
+                            addition.append(" " + C("WordAuction") + ": §a" + Util.round(plot.getCurrentBid()) + "§r");
                     }
 
                     // Is it for sale?

@@ -110,8 +110,8 @@ public class BukkitConfigSection implements IConfigSection {
     }
 
     @Override
-    public Set<String> getKeys(boolean b) {
-        return section.getKeys(b);
+    public Set<String> getKeys(boolean deep) {
+        return section.getKeys(deep);
     }
 
     @Override
@@ -121,7 +121,7 @@ public class BukkitConfigSection implements IConfigSection {
 
     @Override
     public void copyDefaults(boolean b) {
-        master.options().copyDefaults();
+        master.options().copyDefaults(b);
     }
 
     @Override

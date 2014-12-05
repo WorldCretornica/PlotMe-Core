@@ -1,18 +1,14 @@
 package com.worldcretornica.plotme_core;
 
-import com.worldcretornica.plotme_core.api.ICommandSender;
-
 public class PlotToClear {
 
     private String world;
     private String plotid;
-    private ICommandSender commandsender; //TODO Make it work if player relogs
     private ClearReason reason;
 
-    public PlotToClear(String world, String id, ICommandSender sender, ClearReason reason) {
+    public PlotToClear(String world, String id, ClearReason reason) {
         setWorld(world);
         setPlotId(id);
-        setCommandSender(sender);
         setReason(reason);
     }
 
@@ -30,14 +26,6 @@ public class PlotToClear {
 
     public final void setPlotId(String plotid) {
         this.plotid = plotid;
-    }
-
-    public final ICommandSender getCommandSender() {
-        return commandsender;
-    }
-
-    public final void setCommandSender(ICommandSender commandsender) {
-        this.commandsender = commandsender;
     }
 
     public final ClearReason getReason() {

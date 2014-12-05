@@ -23,7 +23,7 @@ public class CmdBuy extends PlotCommand {
                     String id = PlotMeCoreManager.getPlotId(player);
 
                     if (id.isEmpty()) {
-                        player.sendMessage("§c" + C("MsgNoPlotFound"));
+                        player.sendMessage("§c" + C(MSG_NO_PLOT_FOUND));
                     } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, world)) {
                         Plot plot = plugin.getPlotMeCoreManager().getPlotById(id, world);
 
@@ -78,7 +78,7 @@ public class CmdBuy extends PlotCommand {
                                                 }
 
                                                 plot.setOwner(buyer);
-                                                plot.setCustomPrice(0);
+                                                plot.setCustomPrice(0.0);
                                                 plot.setForSale(false);
 
                                                 plot.updateField("owner", buyer);

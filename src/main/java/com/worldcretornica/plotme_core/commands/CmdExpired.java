@@ -25,7 +25,7 @@ public class CmdExpired extends PlotCommand {
                         page = Integer.parseInt(args[1]);
                 }
 
-                int maxpage = (int) Math.ceil(plugin.getSqlManager().getExpiredPlotCount(world.getName()) / 8);
+                int maxpage = (int) Math.ceil(plugin.getSqlManager().getExpiredPlotCount(world.getName()) / 8L);
 
                 List<Plot> expiredplots = plugin.getSqlManager().getExpiredPlots(world.getName(), page, 8);
 

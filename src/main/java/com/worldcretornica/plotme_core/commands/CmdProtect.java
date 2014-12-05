@@ -23,7 +23,7 @@ public class CmdProtect extends PlotCommand {
                 String id = PlotMeCoreManager.getPlotId(player);
 
                 if (id.isEmpty()) {
-                    player.sendMessage("§c" + C("MsgNoPlotFound"));
+                    player.sendMessage("§c" + C(MSG_NO_PLOT_FOUND));
                 } else if (!PlotMeCoreManager.isPlotAvailable(id, pmi)) {
                     Plot plot = PlotMeCoreManager.getPlotById(id, pmi);
 
@@ -49,7 +49,7 @@ public class CmdProtect extends PlotCommand {
                             }
                         } else {
 
-                            double cost = 0;
+                            double cost = 0.0;
 
                             if (plugin.getPlotMeCoreManager().isEconomyEnabled(pmi)) {
                                 cost = pmi.getProtectPrice();

@@ -9,17 +9,17 @@ public interface IPlotMe_GeneratorManager {
 
     String getPlotId(IPlayer player);
 
-    List<IPlayer> getPlayersInPlot(IWorld world, String id);
+    List<IPlayer> getPlayersInPlot(String id);
 
     void fillroad(String id1, String id2, IWorld world);
 
     void fillmiddleroad(String id1, String id2, IWorld world);
 
-    void setOwnerDisplay(IWorld world, String id, String Line1, String Line2, String Line3, String Line4);
+    void setOwnerDisplay(IWorld world, String id, String line1, String line2, String line3, String line4);
 
-    void setSellerDisplay(IWorld world, String id, String Line1, String Line2, String Line3, String Line4);
+    void setSellerDisplay(IWorld world, String id, String line1, String line2, String line3, String line4);
 
-    void setAuctionDisplay(IWorld world, String id, String Line1, String Line2, String Line3, String Line4);
+    void setAuctionDisplay(IWorld world, String id, String line1, String line2, String line3, String line4);
 
     void removeOwnerDisplay(IWorld world, String id);
 

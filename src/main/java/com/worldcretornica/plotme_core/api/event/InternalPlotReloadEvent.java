@@ -12,7 +12,4 @@ public class InternalPlotReloadEvent extends Event {
         return handlers;
     }
 
-    public static HandlerList getHandlerList() {
-        return handlers;
-    }
 }

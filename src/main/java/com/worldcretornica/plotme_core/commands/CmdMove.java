@@ -25,9 +25,8 @@ public class CmdMove extends PlotCommand {
 
                 if (!PlotMeCoreManager.isValidId(world, plot1) || !PlotMeCoreManager.isValidId(world, plot2)) {
                     player.sendMessage(C("WordUsage") + ": §c/plotme move <" + C("WordIdFrom") + "> <" + C("WordIdTo") + "> §r" + C("WordExample") + ": §c/plotme move 0;1 2;-1");
-                    return true;
                 } else {
-                    InternalPlotMoveEvent event = serverBridge.getEventFactory().callPlotMoveEvent(plugin, world, world, plot1, plot2, player);
+                    InternalPlotMoveEvent event = serverBridge.getEventFactory().callPlotMoveEvent(plugin, world, plot1, plot2, player);
 
                     if (!event.isCancelled()) {
                         if (plugin.getPlotMeCoreManager().movePlot(world, plot1, plot2)) {

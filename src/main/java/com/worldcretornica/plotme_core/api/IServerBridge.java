@@ -44,7 +44,14 @@ public interface IServerBridge {
 
     Economy getEconomy();
 
-    double getBalance(IPlayer playerbidder);
+    /**
+     * Gets balance of a player
+     *
+     * @param player of the player
+     *
+     * @return Amount currently held in players account
+     */
+    double getBalance(IPlayer player);
 
     EconomyResponse withdrawPlayer(IPlayer player, double price);
 
@@ -90,7 +97,7 @@ public interface IServerBridge {
 
     List<IWorld> getWorlds();
 
-    boolean createPlotWorld(ICommandSender sender, String worldname, String generator, Map<String, String> args);
+    boolean createPlotWorld(String worldname, String generator, Map<String, String> args);
 
     IMaterial getMaterial(String string);
 
@@ -99,4 +106,6 @@ public interface IServerBridge {
     IEntityType getEntityType(String string);
 
     IConfigSection loadDefaultConfig(String string);
+
+    void disablePlotMe();
 }

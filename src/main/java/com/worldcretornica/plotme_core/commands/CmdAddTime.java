@@ -17,7 +17,7 @@ public class CmdAddTime extends PlotCommand {
                 String id = PlotMeCoreManager.getPlotId(player);
 
                 if (id.isEmpty()) {
-                    player.sendMessage("§c" + C("MsgNoPlotFound"));
+                    player.sendMessage("§c" + C(MSG_NO_PLOT_FOUND));
                 } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, player)) {
                     Plot plot = plugin.getPlotMeCoreManager().getPlotById(id, player);
                     if (plot != null) {

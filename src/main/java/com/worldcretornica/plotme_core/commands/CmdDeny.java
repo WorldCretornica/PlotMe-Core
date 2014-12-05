@@ -24,7 +24,7 @@ public class CmdDeny extends PlotCommand {
             if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
                 String id = PlotMeCoreManager.getPlotId(player);
                 if (id.isEmpty()) {
-                    player.sendMessage("§c" + C("MsgNoPlotFound"));
+                    player.sendMessage("§c" + C(MSG_NO_PLOT_FOUND));
                 } else if (!PlotMeCoreManager.isPlotAvailable(id, pmi)) {
                     if (args.length < 2 || args[1].isEmpty()) {
                         player.sendMessage(C("WordUsage") + " §c/plotme deny <" + C("WordPlayer") + ">");
@@ -44,7 +44,7 @@ public class CmdDeny extends PlotCommand {
                             } else {
 
 
-                                double price = 0;
+                                double price = 0.0;
 
                                 InternalPlotAddDeniedEvent event;
 
@@ -103,7 +103,10 @@ public class CmdDeny extends PlotCommand {
                                     player.sendMessage(C("WordPlayer") + " §c" + denied + "§r " + C("MsgNowDenied") + " " + Util().moneyFormat(-price));
 
                                     if (isAdvancedLogging()) {
-                                        serverBridge.getLogger().info(playername + " " + C("MsgDeniedPlayer") + " " + denied + " " + C("MsgToPlot") + " " + id + (price != 0 ? " " + C("WordFor") + " " + price : ""));
+                                        if (price == 0)
+                                            serverBridge.getLogger().info(playername + " " + C("MsgDeniedPlayer") + " " + denied + " " + C("MsgToPlot") + " " + id);
+                                        else
+                                            serverBridge.getLogger().info(playername + " " + C("MsgDeniedPlayer") + " " + denied + " " + C("MsgToPlot") + " " + id + (" " + C("WordFor") + " " + price));
                                     }
                                 }
                             }

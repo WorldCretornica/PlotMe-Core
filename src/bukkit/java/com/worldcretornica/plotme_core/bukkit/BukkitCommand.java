@@ -86,7 +86,7 @@ public class BukkitCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if ("plotme".equalsIgnoreCase(label)) {
+        if ("plotme".equalsIgnoreCase(command.getName())) {
             if (!(sender instanceof Player)) {
                 if (args.length == 0) {
                     sender.sendMessage(C("ConsoleHelpMain"));
@@ -94,14 +94,13 @@ public class BukkitCommand implements CommandExecutor {
                     sender.sendMessage(C("ConsoleHelpReload"));
                     return true;
                 } else {
-                    String a0 = args[0];
-                    if ("reload".equalsIgnoreCase(a0)) {
+                    if ("reload".equalsIgnoreCase(args[0])) {
                         return reload.exec();
                     }
-                    if ("resetexpired".equalsIgnoreCase(a0)) {
+                    if ("resetexpired".equalsIgnoreCase(args[0])) {
                         return resetexpired.exec(new BukkitCommandSender(sender), args);
                     }
-                    if ("createworld".equalsIgnoreCase(a0)) {
+                    if ("createworld".equalsIgnoreCase(args[0])) {
                         return createworld.exec(new BukkitCommandSender(sender), args);
                     }
                 }
@@ -178,9 +177,6 @@ public class BukkitCommand implements CommandExecutor {
                         }
                         if ("move".equalsIgnoreCase(a0)) {
                             return move.exec(player, args);
-                        }
-                        if ("reload".equalsIgnoreCase(a0)) {
-                            return reload.exec();
                         }
                         if ("weanywhere".equalsIgnoreCase(a0)) {
                             return weanywhere.exec(player);

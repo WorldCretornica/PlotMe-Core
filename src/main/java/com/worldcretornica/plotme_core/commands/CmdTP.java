@@ -1,5 +1,6 @@
 package com.worldcretornica.plotme_core.commands;
 
+import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ILocation;
@@ -49,12 +50,12 @@ public class CmdTP extends PlotCommand {
                         }
                         return true;
                     } else {
-                        ILocation loc = PlotMeCoreManager.getPlotHome(world, id);
-
-                        InternalPlotTeleportEvent event = serverBridge.getEventFactory().callPlotTeleportEvent(plugin, world, player, loc, id);
+                        ILocation location = PlotMeCoreManager.getPlotHome(world, id);
+                        Plot plot = plugin.getPlotMeCoreManager().getPlotById(id, world);
+                        InternalPlotTeleportEvent event = serverBridge.getEventFactory().callPlotTeleportEvent(plugin, world, plot, player, location, id);
 
                         if (!event.isCancelled()) {
-                            player.teleport(loc);
+                            player.teleport(location);
                         }
                     }
                 } else if (serverBridge.getConfig().getBoolean("allowWorldTeleport")) {

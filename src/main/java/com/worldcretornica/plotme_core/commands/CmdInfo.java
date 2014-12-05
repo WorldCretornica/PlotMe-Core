@@ -21,12 +21,12 @@ public class CmdInfo extends PlotCommand {
                 String id = PlotMeCoreManager.getPlotId(player);
 
                 if (id.isEmpty()) {
-                    player.sendMessage("§c" + C("MsgNoPlotFound"));
+                    player.sendMessage("§c" + C(MSG_NO_PLOT_FOUND));
                 } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, world)) {
                     Plot plot = plugin.getPlotMeCoreManager().getPlotById(id, world);
 
                     player.sendMessage("§aID: §b" + id + "§a " + C("InfoOwner") + ": §b" + plot.getOwner()
-                                               + "§a " + C("InfoBiome") + ": §b" + plot.getBiome().name());
+                                               + "§a " + C("InfoBiome") + ": §b" + plot.getBiome());
 
                     player.sendMessage("§a" + C("InfoExpire") + ": §b" + (plot.getExpiredDate() == null ? C("WordNever") : plot.getExpiredDate().toString())
                                           + "§a " + C("InfoFinished") + ": §b" + (plot.isFinished() ? C("WordYes") : C("WordNo"))
@@ -41,7 +41,7 @@ public class CmdInfo extends PlotCommand {
                     }
 
                     if (plugin.getPlotMeCoreManager().isEconomyEnabled(world)) {
-                        if (plot.getCurrentBidder().isEmpty()) {
+                        if (plot.getCurrentBidder() == null) {
                             player.sendMessage("§a" + C("InfoAuctionned") + ": §b" + (plot.isAuctioned() ? C("WordYes")
                                                                                                                    + "§a " + C("InfoMinimumBid") + ": §b" + Util.round(plot.getCurrentBid()) : C("WordNo"))
                                                        + "§a " + C("InfoForSale") + ": §b" + (plot.isForSale() ? "§b" + Util.round(plot.getCustomPrice()) : C("WordNo")));
@@ -52,8 +52,8 @@ public class CmdInfo extends PlotCommand {
                                                        + "§a " + C("InfoForSale") + ": §b" + (plot.isForSale() ? "§b" + Util.round(plot.getCustomPrice()) : C("WordNo")));
                         }
                     }
-                    ILocation bottom = PlotMeCoreManager.getPlotBottomLoc(player.getWorld(), id);
-                    ILocation top = PlotMeCoreManager.getPlotTopLoc(player.getWorld(), id);
+                    ILocation bottom = PlotMeCoreManager.getPlotBottomLoc(world, id);
+                    ILocation top = PlotMeCoreManager.getPlotTopLoc(world, id);
 
                     player.sendMessage("§b" + C("WordBottom") + ": §r" + bottom.getBlockX() + "§9,§r" + bottom.getBlockZ());
                     player.sendMessage("§b" + C("WordTop") + ": §r" + top.getBlockX() + "§9,§r" + top.getBlockZ());

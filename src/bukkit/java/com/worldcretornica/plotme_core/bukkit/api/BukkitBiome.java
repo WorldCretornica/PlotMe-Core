@@ -15,11 +15,6 @@ public class BukkitBiome implements IBiome {
         biome = Biome.valueOf(name);
     }
 
-    @Override
-    public String name() {
-        return biome.name();
-    }
-
     public Biome getBiome() {
         return biome;
     }

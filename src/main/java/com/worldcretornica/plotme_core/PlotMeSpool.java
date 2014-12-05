@@ -3,8 +3,6 @@ package com.worldcretornica.plotme_core;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IWorld;
 
-import static com.worldcretornica.plotme_core.PlotMe_Core.getGenManager;
-
 public class PlotMeSpool implements Runnable {
 
     private static String T;
@@ -56,23 +54,23 @@ public class PlotMeSpool implements Runnable {
     @Override
     public void run() {
         if (getPlotToClear() != null) {
-            IWorld world = plugin.serverBridge.getWorld(getPlotToClear().getWorld());
+            IWorld world = plugin.getServerBridge().getWorld(getPlotToClear().getWorld());
 
             if (world != null) {
                 if (currentClear == null) {
-                    currentClear = getGenManager(world).clear(world, getPlotToClear().getPlotId(), plugin.serverBridge.getConfig().getInt("NbBlocksPerClearStep"), null);
+                    currentClear = PlotMeCoreManager.getGenManager(world).clear(world, getPlotToClear().getPlotId(), plugin.getServerBridge().getConfig().getInt("NbBlocksPerClearStep"), null);
                 } else {
-                    currentClear = getGenManager(world).clear(world, getPlotToClear().getPlotId(), plugin.serverBridge.getConfig().getInt("NbBlocksPerClearStep"), currentClear);
+                    currentClear = PlotMeCoreManager.getGenManager(world).clear(world, getPlotToClear().getPlotId(), plugin.getServerBridge().getConfig().getInt("NbBlocksPerClearStep"), currentClear);
                 }
 
                 showProgress();
 
                 if (currentClear == null) {
-                    getGenManager(world).adjustPlotFor(world, getPlotToClear().getPlotId(), true, false, false, false);
+                    PlotMeCoreManager.getGenManager(world).adjustPlotFor(world, getPlotToClear().getPlotId(), true, false, false, false);
                     plugin.getPlotMeCoreManager().removeLWC(world, getPlotToClear().getPlotId());
-                    getGenManager(world).refreshPlotChunks(world, getPlotToClear().getPlotId());
+                    PlotMeCoreManager.getGenManager(world).refreshPlotChunks(world, getPlotToClear().getPlotId());
 
-                    Msg(plugin.getUtil().C("WordPlot") + " " + getPlotToClear().getPlotId() + " " + plugin.getUtil().C("WordCleared"));
+                    plugin.getLogger().info(plugin.getUtil().C("WordPlot") + " " + getPlotToClear().getPlotId() + " " + plugin.getUtil().C("WordCleared"));
 
                     plugin.removePlotToClear(getPlotToClear(), taskid);
                     plottoclear = null;
@@ -84,25 +82,20 @@ public class PlotMeSpool implements Runnable {
         }
     }
 
-    private void Msg(String text) {
-        getPlotToClear().getCommandSender().sendMessage(text);
-    }
-
     private void showProgress() {
         long done = getDoneBlocks();
         long total = getTotalPlotBlocks();
-        double percent = done / total * 100;
-
-        Msg(plugin.getUtil().C("WordPlot") + " §a" + getPlotToClear().getPlotId() + "§r " + plugin.getUtil().C("WordIn") + " "
-                    + "§a" + getPlotToClear().getWorld() + "§r " + plugin.getUtil().C("WordIs") + " §a" + Math.round(percent * 10) / 10 +
-                    "% §r" + plugin.getUtil().C("WordCleared") + " (§a" + format(done) + "§r/§a" + format(total) +
-                    "§r " + plugin.getUtil().C("WordBlocks") + ")");
+        double percent = (done / total * 100);
+        plugin.getLogger().info(plugin.getUtil().C("WordPlot") + " §a" + getPlotToClear().getPlotId() + "§r " + plugin.getUtil().C("WordIn") + " "
+                                        + "§a" + getPlotToClear().getWorld() + "§r " + plugin.getUtil().C("WordIs") + " §a" + Math.round(percent * 10) / 10 +
+                                        "% §r" + plugin.getUtil().C("WordCleared") + " (§a" + format(done) + "§r/§a" + format(total) +
+                                        "§r " + plugin.getUtil().C("WordBlocks") + ")");
     }
 
     private long getTotalPlotBlocks() {
-        IWorld world = plugin.serverBridge.getWorld(getPlotToClear().getWorld());
-        ILocation bottom = getGenManager(world).getPlotBottomLoc(world, getPlotToClear().getPlotId());
-        ILocation top = getGenManager(world).getPlotTopLoc(world, getPlotToClear().getPlotId());
+        IWorld world = plugin.getServerBridge().getWorld(getPlotToClear().getWorld());
+        ILocation bottom = PlotMeCoreManager.getGenManager(world).getPlotBottomLoc(world, getPlotToClear().getPlotId());
+        ILocation top = PlotMeCoreManager.getGenManager(world).getPlotTopLoc(world, getPlotToClear().getPlotId());
 
         return (top.getBlockX() - bottom.getBlockX() + 1) * (top.getBlockY() - bottom.getBlockY() + 1) * (top.getBlockZ() - bottom.getBlockZ() + 1);
     }

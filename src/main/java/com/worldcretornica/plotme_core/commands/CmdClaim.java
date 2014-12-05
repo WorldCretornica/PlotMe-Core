@@ -45,7 +45,7 @@ public class CmdClaim extends PlotCommand {
                         player.sendMessage("§c" + C("MsgAlreadyReachedMaxPlots") + " (" + plugin.getPlotMeCoreManager().getNbOwnedPlot(player, world) + "/" + getPlotLimit(player) + "). " + C("WordUse") + " §c/plotme home§r " + C("MsgToGetToIt"));
                     } else {
 
-                        double price = 0;
+                        double price = 0.0;
 
                         InternalPlotCreateEvent event;
 
@@ -89,7 +89,10 @@ public class CmdClaim extends PlotCommand {
                                 }
 
                                 if (isAdvancedLogging()) {
-                                    serverBridge.getLogger().info(playerName + " " + C("MsgClaimedPlot") + " " + id + (price != 0 ? " " + C("WordFor") + " " + price : ""));
+                                    if (price == 0)
+                                        serverBridge.getLogger().info(playerName + " " + C("MsgClaimedPlot") + " " + id);
+                                    else
+                                        serverBridge.getLogger().info(playerName + " " + C("MsgClaimedPlot") + " " + id + (" " + C("WordFor") + " " + price));
                                 }
                             }
                         }

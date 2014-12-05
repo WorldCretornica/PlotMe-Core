@@ -10,7 +10,7 @@ import java.util.Map;
 
 public interface IBukkitPlotMe_GeneratorManager {
 
-    String getPlotId(Location loc);
+    String getPlotId(Location location);
 
     String getPlotId(Player player);
 
@@ -58,7 +58,7 @@ public interface IBukkitPlotMe_GeneratorManager {
 
     void adjustPlotFor(World world, String id, boolean claimed, boolean protect, boolean auctioned, boolean forSale);
 
-    boolean isBlockInPlot(String id, Location blocklocation);
+    boolean isBlockInPlot(String id, Location location);
 
     boolean movePlot(World world, String idFrom, String idTo);
 

@@ -19,7 +19,7 @@ public class CmdClear extends PlotCommand {
             if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
                 String id = PlotMeCoreManager.getPlotId(player);
                 if (id.isEmpty()) {
-                    player.sendMessage("§c" + C("MsgNoPlotFound"));
+                    player.sendMessage("§c" + C(MSG_NO_PLOT_FOUND));
                 } else if (!PlotMeCoreManager.isPlotAvailable(id, pmi)) {
                     Plot plot = PlotMeCoreManager.getPlotById(id, pmi);
 
@@ -31,7 +31,7 @@ public class CmdClear extends PlotCommand {
                         if (plot.getOwner().equalsIgnoreCase(playername) || player.hasPermission("PlotMe.admin.clear")) {
 
 
-                            double price = 0;
+                            double price = 0.0;
 
                             InternalPlotClearEvent event;
 
@@ -65,7 +65,10 @@ public class CmdClear extends PlotCommand {
                                 plugin.getPlotMeCoreManager().clear(world, plot, player, ClearReason.Clear);
 
                                 if (isAdvancedLogging()) {
-                                    serverBridge.getLogger().info(playername + " " + C("MsgClearedPlot") + " " + id + (price != 0 ? " " + C("WordFor") + " " + price : ""));
+                                    if (price == 0)
+                                        serverBridge.getLogger().info(playername + " " + C("MsgClearedPlot") + " " + id);
+                                    else
+                                        serverBridge.getLogger().info(playername + " " + C("MsgClearedPlot") + " " + id + (" " + C("WordFor") + " " + price));
                                 }
                             }
                         } else {
