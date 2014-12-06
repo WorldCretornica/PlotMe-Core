@@ -34,7 +34,7 @@ public class PlotDenyListener implements Listener {
                 if (plot != null && plot.isDenied(p.getUniqueId())) {
                     Location to = event.getFrom().clone();
                     to.setYaw(event.getTo().getYaw());
-                    to.setPitch(Event.getTo().getPitch());
+                    to.setPitch(event.getTo().getPitch());
                     event.setTo(to);
                 }
             }
