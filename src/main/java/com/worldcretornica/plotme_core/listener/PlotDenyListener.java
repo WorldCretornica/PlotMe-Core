@@ -32,7 +32,10 @@ public class PlotDenyListener implements Listener {
                 Plot plot = plugin.getPlotMeCoreManager().getPlotById(p, idTo);
 
                 if (plot != null && plot.isDenied(p.getUniqueId())) {
-                    event.setCancelled(true);
+                    Location to = event.getFrom().clone();
+                    to.setYaw(event.getTo().getYaw());
+                    to.setPitch(event.getTo().getPitch());
+                    event.setTo(to);
                 }
             }
         }
