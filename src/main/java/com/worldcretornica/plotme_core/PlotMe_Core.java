@@ -6,6 +6,7 @@ import com.worldcretornica.plotme_core.api.IServerBridge;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.utils.Util;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -14,14 +15,10 @@ import java.util.logging.Logger;
 
 public class PlotMe_Core {
 
-    private static final String LANG_PATH = "Language";
-    private static final String DEFAULT_LANG = "english";
-    private static final String CAPTIONS_PATTERN = "caption-%s.yml";
+    public static final String CAPTION_FILE = "captions.yml";
     private static final String DEFAULT_GENERATOR_URL = "http://dev.bukkit.org/bukkit-plugins/plotme/";
     //Bridge
     private final IServerBridge serverBridge;
-    //Config accessors for language <lang, accessor>
-    private final Map<String, IConfigSection> captionsCA = new HashMap<>();
     public Map<String, Map<String, String>> creationbuffer;
     private IWorld worldcurrentlyprocessingexpired;
     private int counterexpired;
@@ -40,7 +37,7 @@ public class PlotMe_Core {
         getSqlManager().closeConnection();
         serverBridge.unHook();
         plotMeCoreManager.setPlayersIgnoringWELimit(null);
-        this.worldcurrentlyprocessingexpired = null;
+        setWorldCurrentlyProcessingExpired(null);
         creationbuffer = null;
         plotsToClear.clear();
         plotsToClear = null;
@@ -64,9 +61,6 @@ public class PlotMe_Core {
         getSqlManager().closeConnection();
         serverBridge.reloadConfig();
         setupConfig();
-        for (String lang : captionsCA.keySet()) {
-            reloadCaptionConfig(lang);
-        }
         reloadCaptionConfig();
         setupDefaultCaptions();
         setupMySQL();
@@ -79,7 +73,9 @@ public class PlotMe_Core {
     private void setupConfig() {
         // Get the config we will be working with
         IConfigSection config = serverBridge.getConfig();
-
+        config.set("allowToDeny", null);
+        config.set("Language", null);
+        config.set("language", null);
         // If no world exists add config for a world
         //if (!config.contains("worlds") || config.contains("worlds") && config.getConfigurationSection("worlds").getKeys(false).isEmpty()) {
         if (!(config.contains("worlds") && !config.getConfigurationSection("worlds").getKeys(false).isEmpty())) {
@@ -111,46 +107,50 @@ public class PlotMe_Core {
                 plotMeCoreManager.addPlotMap(world, pmi);
             }
         }
-    }
-
-    private String loadCaptionConfig(String language) {
-        getLogger().info("method at line 118: " + !captionsCA.containsKey(language));
-        if (!captionsCA.containsKey(language)) {
-            String configFilename = String.format(CAPTIONS_PATTERN, language);
-            IConfigSection ca = serverBridge.getConfig(configFilename);
-            captionsCA.put(language, ca);
+        if (getPlotMeCoreManager().getPlotMaps().isEmpty()) {
+            getLogger().severe("Uh oh. There are no plotworlds setup.");
+            getLogger().severe("Is that a mistake? Disabling PlotMe to stay safe.");
+            getServerBridge().disablePlotMe();
         }
-        if (captionsCA.get(language).getKeys(false).isEmpty()) {
-            if (language.equals(DEFAULT_LANG)) {
-                setupDefaultCaptions();
-            } else {
-                getLogger().log(Level.WARNING, "Could not load caption file for {0} or the language file was empty. Using " + DEFAULT_LANG, language);
-                return loadCaptionConfig(DEFAULT_LANG);
-            }
-        }
-        return language;
-    }
-
-    public IConfigSection getCaptionConfigCA(String language) {
-        language = loadCaptionConfig(language);
-        return captionsCA.get(language);
     }
 
     public IConfigSection getCaptionConfig() {
-        return getCaptionConfigCA(serverBridge.getConfig().getString(LANG_PATH));
+        return serverBridge.getConfig(CAPTION_FILE);
     }
 
     public void reloadCaptionConfig() {
-        reloadCaptionConfig(serverBridge.getConfig().getString(LANG_PATH));
-    }
-
-    public void reloadCaptionConfig(String lang) {
-        getCaptionConfigCA(lang).reloadConfig();
+        serverBridge.getConfig(CAPTION_FILE).reloadConfig();
     }
 
     private void setupDefaultCaptions() {
-        String fileName = String.format(CAPTIONS_PATTERN, DEFAULT_LANG);
-        serverBridge.saveResource(fileName, true);
+        //Changing Captions File Name
+        String pluginsFolder = serverBridge.getDataFolder();
+        File coreFolder = new File(pluginsFolder);
+        File newCaptionFile = new File(coreFolder, CAPTION_FILE);
+        for (String plotMeFiles : coreFolder.list()) {
+            if (plotMeFiles.startsWith("caption")) {
+                if (CAPTION_FILE.equals(plotMeFiles)) {
+                    break;
+                } else {
+                    File oldCaptionFile = new File(coreFolder, plotMeFiles);
+                    if (oldCaptionFile.renameTo(newCaptionFile)) {
+                        getLogger().info("Renamed Caption File to captions.yml");
+                        if (oldCaptionFile.delete()) {
+                            getLogger().info("Deleted old caption file.");
+                        } else {
+                            getLogger().warning("Failed to delete old caption file. ");
+                        }
+                    }
+                }
+            } else {
+                getLogger().info("No old caption file found.");
+                if (newCaptionFile.exists()) {
+                    serverBridge.saveResource(CAPTION_FILE, false);
+                } else {
+                    serverBridge.saveResource(CAPTION_FILE, true);
+                }
+            }
+        }
     }
 
     private void setupMySQL() {

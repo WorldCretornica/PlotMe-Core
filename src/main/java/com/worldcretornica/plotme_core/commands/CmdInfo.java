@@ -1,5 +1,6 @@
 package com.worldcretornica.plotme_core.commands;
 
+import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
@@ -15,7 +16,7 @@ public class CmdInfo extends PlotCommand {
     }
 
     public boolean exec(IPlayer player) {
-        if (player.hasPermission("PlotMe.use.info")) {
+        if (player.hasPermission(PermissionNames.USER_INFO)) {
             IWorld world = player.getWorld();
             if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
                 String id = PlotMeCoreManager.getPlotId(player);
@@ -28,9 +29,35 @@ public class CmdInfo extends PlotCommand {
                     player.sendMessage("§aID: §b" + id + "§a " + C("InfoOwner") + ": §b" + plot.getOwner()
                                                + "§a " + C("InfoBiome") + ": §b" + plot.getBiome());
 
-                    player.sendMessage("§a" + C("InfoExpire") + ": §b" + (plot.getExpiredDate() == null ? C("WordNever") : plot.getExpiredDate().toString())
-                                          + "§a " + C("InfoFinished") + ": §b" + (plot.isFinished() ? C("WordYes") : C("WordNo"))
-                                          + "§a " + C("InfoProtected") + ": §b" + (plot.isProtect() ? C("WordYes") : C("WordNo")));
+                    if (plot.getExpiredDate() == null)
+                        if (plot.isFinished())
+                            if (plot.isProtect()) player.sendMessage("§a" + C("InfoExpire") + ": §b" + C("WordNever")
+                                                                             + "§a " + C("InfoFinished") + ": §b" + C("WordYes")
+                                                                             + "§a " + C("InfoProtected") + ": §b" + C("WordYes"));
+                            else player.sendMessage("§a" + C("InfoExpire") + ": §b" + C("WordNever")
+                                                            + "§a " + C("InfoFinished") + ": §b" + C("WordYes")
+                                                            + "§a " + C("InfoProtected") + ": §b" + C("WordNo"));
+                        else if (plot.isProtect()) player.sendMessage("§a" + C("InfoExpire") + ": §b" + C("WordNever")
+                                                                              + "§a " + C("InfoFinished") + ": §b" + C("WordNo")
+                                                                              + "§a " + C("InfoProtected") + ": §b" + C("WordYes"));
+                        else player.sendMessage("§a" + C("InfoExpire") + ": §b" + C("WordNever")
+                                                        + "§a " + C("InfoFinished") + ": §b" + C("WordNo")
+                                                        + "§a " + C("InfoProtected") + ": §b" + C("WordNo"));
+                    else if (plot.isProtect())
+                        if (plot.isFinished())
+                            player.sendMessage("§a" + C("InfoExpire") + ": §b" + plot.getExpiredDate()
+                                                       + "§a " + C("InfoFinished") + ": §b" + C("WordYes")
+                                                       + "§a " + C("InfoProtected") + ": §b" + C("WordYes"));
+                        else player.sendMessage("§a" + C("InfoExpire") + ": §b" + plot.getExpiredDate()
+                                                        + "§a " + C("InfoFinished") + ": §b" + C("WordNo")
+                                                        + "§a " + C("InfoProtected") + ": §b" + C("WordYes"));
+                    else if (plot.isFinished())
+                        player.sendMessage("§a" + C("InfoExpire") + ": §b" + plot.getExpiredDate()
+                                                   + "§a " + C("InfoFinished") + ": §b" + C("WordYes")
+                                                   + "§a " + C("InfoProtected") + ": §b" + C("WordNo"));
+                    else player.sendMessage("§a" + C("InfoExpire") + ": §b" + plot.getExpiredDate()
+                                                    + "§a " + C("InfoFinished") + ": §b" + C("WordNo")
+                                                    + "§a " + C("InfoProtected") + ": §b" + C("WordNo"));
 
                     if (plot.allowedcount() > 0) {
                         player.sendMessage("§a" + C("InfoHelpers") + ": §b" + plot.getAllowed());
@@ -42,14 +69,30 @@ public class CmdInfo extends PlotCommand {
 
                     if (plugin.getPlotMeCoreManager().isEconomyEnabled(world)) {
                         if (plot.getCurrentBidder() == null) {
-                            player.sendMessage("§a" + C("InfoAuctionned") + ": §b" + (plot.isAuctioned() ? C("WordYes")
-                                                                                                                   + "§a " + C("InfoMinimumBid") + ": §b" + Util.round(plot.getCurrentBid()) : C("WordNo"))
-                                                       + "§a " + C("InfoForSale") + ": §b" + (plot.isForSale() ? "§b" + Util.round(plot.getCustomPrice()) : C("WordNo")));
+                            if (plot.isAuctioned())
+                                if (plot.isForSale())
+                                    player.sendMessage("§a" + C("InfoAuctionned") + ": §b" + (C("WordYes")
+                                                                                                      + "§a " + C("InfoMinimumBid") + ": §b" + Util.round(plot.getCurrentBid()))
+                                                               + "§a " + C("InfoForSale") + ": §b" + ("§b" + Util.round(plot.getCustomPrice())));
+                                else player.sendMessage("§a" + C("InfoAuctionned") + ": §b" + (C("WordYes")
+                                                                                                       + "§a " + C("InfoMinimumBid") + ": §b" + Util.round(plot.getCurrentBid()))
+                                                                + "§a " + C("InfoForSale") + ": §b" + C("WordNo"));
+                            else if (plot.isForSale())
+                                player.sendMessage("§a" + C("InfoAuctionned") + ": §b" + C("WordNo")
+                                                           + "§a " + C("InfoForSale") + ": §b" + ("§b" + Util.round(plot.getCustomPrice())));
+                            else player.sendMessage("§a" + C("InfoAuctionned") + ": §b" + C("WordNo")
+                                                            + "§a " + C("InfoForSale") + ": §b" + C("WordNo"));
                         } else {
-                            player.sendMessage("§a" + C("InfoAuctionned") + ": §b" + (plot.isAuctioned() ? C("WordYes")
-                                                                                                              + "§a " + C("InfoBidder") + ": §b" + plot.getCurrentBidder()
-                                                                                                                   + "§a " + C("InfoBid") + ": §b" + Util.round(plot.getCurrentBid()) : C("WordNo"))
-                                                       + "§a " + C("InfoForSale") + ": §b" + (plot.isForSale() ? "§b" + Util.round(plot.getCustomPrice()) : C("WordNo")));
+                            if (plot.isAuctioned())
+                                player.sendMessage("§a" + C("InfoAuctionned") + ": §b" + (C("WordYes")
+                                                                                                  + "§a " + C("InfoBidder") + ": §b" + plot.getCurrentBidder()
+                                                                                                  + "§a " + C("InfoBid") + ": §b" + Util.round(plot.getCurrentBid()))
+                                                           + "§a " + C("InfoForSale") + ": §b" + (plot.isForSale() ? "§b" + Util.round(plot.getCustomPrice()) : C("WordNo")));
+                            else if (plot.isForSale())
+                                player.sendMessage("§a" + C("InfoAuctionned") + ": §b" + C("WordNo")
+                                                           + "§a " + C("InfoForSale") + ": §b" + ("§b" + Util.round(plot.getCustomPrice())));
+                            else player.sendMessage("§a" + C("InfoAuctionned") + ": §b" + C("WordNo")
+                                                            + "§a " + C("InfoForSale") + ": §b" + C("WordNo"));
                         }
                     }
                     ILocation bottom = PlotMeCoreManager.getPlotBottomLoc(world, id);

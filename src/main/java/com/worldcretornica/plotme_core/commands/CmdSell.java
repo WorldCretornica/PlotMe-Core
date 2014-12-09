@@ -110,7 +110,7 @@ public class CmdSell extends PlotCommand {
                                                     plot.setForSale(true);
                                                     plot.setCustomPrice(pmi.getBuyFromBankPrice());
                                                     plot.setAuctioned(false);
-                                                    plot.setCurrentBidder("");
+                                                    plot.setCurrentBidder(null);
                                                     plot.setCurrentBidderId(null);
                                                     plot.setCurrentBid(0.0);
 
@@ -123,7 +123,7 @@ public class CmdSell extends PlotCommand {
                                                     plot.updateField("forsale", true);
                                                     plot.updateField("auctionned", true);
                                                     plot.updateField("customprice", plot.getCustomPrice());
-                                                    plot.updateField("currentbidder", "");
+                                                    plot.updateField("currentbidder", null);
                                                     plot.updateField("currentbidderid", null);
                                                     plot.updateField("currentbid", 0);
 

@@ -11,13 +11,15 @@ import static com.worldcretornica.plotme_core.utils.Util.whitespace;
 
 public class CmdDoneList extends PlotCommand {
 
+    public static final String ADMIN_DONE = "PlotMe.admin.done";
+
     public CmdDoneList(PlotMe_Core instance) {
         super(instance);
     }
 
     public boolean exec(IPlayer player, String[] args) {
         if (plugin.getPlotMeCoreManager().isPlotWorld(player)) {
-            if (player.hasPermission("PlotMe.admin.done")) {
+            if (player.hasPermission(ADMIN_DONE)) {
 
                 int page = 1;
 
@@ -25,7 +27,7 @@ public class CmdDoneList extends PlotCommand {
                     page = Integer.parseInt(args[1]);
                 }
 
-                int maxpage = (int) Math.ceil(plugin.getSqlManager().getFinishedPlotCount(player.getWorld().getName()) / 8L);
+                int maxpage = (int) Math.ceil((plugin.getSqlManager().getFinishedPlotCount(player.getWorld().getName()) / 8L));
 
                 if (page < 0) {
                     page = 1;

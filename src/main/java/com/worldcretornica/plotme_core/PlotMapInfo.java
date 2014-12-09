@@ -16,10 +16,10 @@ public class PlotMapInfo {
 
     public PlotMapInfo(PlotMe_Core instance, String world) {
         plugin = instance;
-        this.world = world;
-        config = plugin.getServerBridge().loadDefaultConfig("worlds." + world);
+        this.world = world.toLowerCase();
+        config = plugin.getServerBridge().loadDefaultConfig("worlds." + this.world);
         plots = new ConcurrentHashMap<>(1000, 0.75f, 5);
-        freedplots = plugin.getSqlManager().getFreed(world);
+        freedplots = plugin.getSqlManager().getFreed(this.world);
     }
 
     public int getNbPlots() {

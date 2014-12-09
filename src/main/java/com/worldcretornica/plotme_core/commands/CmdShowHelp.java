@@ -1,5 +1,6 @@
 package com.worldcretornica.plotme_core.commands;
 
+import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IPlayer;
@@ -21,36 +22,36 @@ public class CmdShowHelp extends PlotCommand {
         List<String> allowed_commands = new ArrayList<>();
 
         allowed_commands.add("limit");
-        if (player.hasPermission("PlotMe.use.claim")) {
+        if (player.hasPermission(PermissionNames.PLOT_ME_USE_CLAIM)) {
             allowed_commands.add("claim");
         }
         if (player.hasPermission("PlotMe.use.claim.other")) {
             allowed_commands.add("claim.other");
         }
-        if (player.hasPermission("PlotMe.use.auto")) {
+        if (player.hasPermission(PermissionNames.PLOT_ME_USE_AUTO)) {
             allowed_commands.add("auto");
         }
-        if (player.hasPermission("PlotMe.use.home")) {
+        if (player.hasPermission(PermissionNames.PLOT_ME_USE_HOME)) {
             allowed_commands.add("home");
         }
         if (player.hasPermission("PlotMe.use.home.other")) {
             allowed_commands.add("home.other");
         }
-        if (player.hasPermission("PlotMe.use.info")) {
+        if (player.hasPermission(PermissionNames.USER_INFO)) {
             allowed_commands.add("info");
             allowed_commands.add("biomeinfo");
         }
-        if (player.hasPermission("PlotMe.use.list")) {
+        if (player.hasPermission(PermissionNames.USE_LIST)) {
             allowed_commands.add("list");
         }
-        if (player.hasPermission("PlotMe.use.biome")) {
+        if (player.hasPermission(PermissionNames.USE_BIOME)) {
             allowed_commands.add("biome");
             allowed_commands.add("biomelist");
         }
-        if (player.hasPermission("PlotMe.use.done") || player.hasPermission("PlotMe.admin.done")) {
+        if (player.hasPermission(PermissionNames.USER_DONE) || player.hasPermission(CmdDoneList.ADMIN_DONE)) {
             allowed_commands.add("done");
         }
-        if (player.hasPermission("PlotMe.admin.done")) {
+        if (player.hasPermission(CmdDoneList.ADMIN_DONE)) {
             allowed_commands.add("donelist");
         }
         if (player.hasPermission("PlotMe.admin.tp")) {
@@ -62,7 +63,7 @@ public class CmdShowHelp extends PlotCommand {
         if (player.hasPermission("PlotMe.admin.dispose") || player.hasPermission("PlotMe.use.dispose")) {
             allowed_commands.add("dispose");
         }
-        if (player.hasPermission("PlotMe.admin.reset")) {
+        if (player.hasPermission(PermissionNames.ADMIN_RESET)) {
             allowed_commands.add("reset");
         }
         if (player.hasPermission("PlotMe.use.add") || player.hasPermission("PlotMe.admin.add")) {
@@ -74,7 +75,7 @@ public class CmdShowHelp extends PlotCommand {
         if (player.hasPermission("PlotMe.use.deny") || player.hasPermission("PlotMe.admin.deny")) {
             allowed_commands.add("deny");
         }
-        if (player.hasPermission("PlotMe.use.undeny") || player.hasPermission("PlotMe.admin.undeny")) {
+        if (player.hasPermission(PermissionNames.USER_UNDENY) || player.hasPermission(PermissionNames.ADMIN_UNDENY)) {
             allowed_commands.add("undeny");
         }
         if (player.hasPermission("PlotMe.admin.setowner")) {
@@ -92,7 +93,7 @@ public class CmdShowHelp extends PlotCommand {
         if (player.hasPermission("PlotMe.admin.expired")) {
             allowed_commands.add("expired");
         }
-        if (player.hasPermission("PlotMe.admin.addtime")) {
+        if (player.hasPermission(PermissionNames.PLOT_ME_ADMIN_ADDTIME)) {
             allowed_commands.add("addtime");
         }
 
@@ -111,7 +112,7 @@ public class CmdShowHelp extends PlotCommand {
                     }
                 }
             }
-            if (player.hasPermission("PlotMe.use.auction")) {
+            if (player.hasPermission(PermissionNames.PLOT_ME_USE_AUCTION)) {
                 allowed_commands.add("auction");
             }
             if (player.hasPermission("PlotMe.use.bid")) {
@@ -136,7 +137,7 @@ public class CmdShowHelp extends PlotCommand {
                     IWorld world = player.getWorld();
 
                     int maxplots = getPlotLimit(player);
-                    int ownedplots = plugin.getPlotMeCoreManager().getNbOwnedPlot(player, world);
+                    int ownedplots = plugin.getPlotMeCoreManager().getNbOwnedPlot(player.getUniqueId(), player.getName(), world.getName());
 
                     if (maxplots == -1) {
                         player.sendMessage("§a" + C("HelpYourPlotLimitWorld") + " : §b" + ownedplots + "§a " + C("HelpUsedOf") + " §b" + C("WordInfinite"));
@@ -148,7 +149,7 @@ public class CmdShowHelp extends PlotCommand {
                     IWorld world = plugin.getPlotMeCoreManager().getFirstWorld();
 
                     int maxplots = getPlotLimit(player);
-                    int ownedplots = plugin.getPlotMeCoreManager().getNbOwnedPlot(player, world);
+                    int ownedplots = plugin.getPlotMeCoreManager().getNbOwnedPlot(player.getUniqueId(), player.getName(), world.getName());
 
                     if (maxplots == -1) {
                         player.sendMessage("§a" + C("HelpYourPlotLimitWorld") + " : §b" + ownedplots + "§a " + C("HelpUsedOf") + " §b" + C("WordInfinite"));

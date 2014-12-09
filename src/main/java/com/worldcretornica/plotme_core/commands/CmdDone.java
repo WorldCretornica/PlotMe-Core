@@ -1,5 +1,6 @@
 package com.worldcretornica.plotme_core.commands;
 
+import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
@@ -13,7 +14,7 @@ public class CmdDone extends PlotCommand {
     }
 
     public boolean exec(IPlayer player) {
-        if (player.hasPermission("PlotMe.use.done") || player.hasPermission("PlotMe.admin.done")) {
+        if (player.hasPermission(PermissionNames.USER_DONE) || player.hasPermission(CmdDoneList.ADMIN_DONE)) {
             if (plugin.getPlotMeCoreManager().isPlotWorld(player)) {
                 String id = PlotMeCoreManager.getPlotId(player);
 
@@ -23,7 +24,7 @@ public class CmdDone extends PlotCommand {
                     Plot plot = plugin.getPlotMeCoreManager().getPlotById(id, player);
                     String name = player.getName();
 
-                    if (plot.getOwner().equalsIgnoreCase(name) || player.hasPermission("PlotMe.admin.done")) {
+                    if (plot.getOwner().equalsIgnoreCase(name) || player.hasPermission(CmdDoneList.ADMIN_DONE)) {
                         InternalPlotDoneChangeEvent event = serverBridge.getEventFactory().callPlotDoneEvent(plugin, player.getWorld(), plot, player, plot.isFinished());
 
                         if (!event.isCancelled()) {

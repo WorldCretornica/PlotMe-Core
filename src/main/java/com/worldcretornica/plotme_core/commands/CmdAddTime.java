@@ -1,5 +1,6 @@
 package com.worldcretornica.plotme_core.commands;
 
+import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
@@ -12,7 +13,7 @@ public class CmdAddTime extends PlotCommand {
     }
 
     public boolean exec(IPlayer player) {
-        if (player.hasPermission("PlotMe.admin.addtime")) {
+        if (player.hasPermission(PermissionNames.PLOT_ME_ADMIN_ADDTIME)) {
             if (plugin.getPlotMeCoreManager().isPlotWorld(player)) {
                 String id = PlotMeCoreManager.getPlotId(player);
 

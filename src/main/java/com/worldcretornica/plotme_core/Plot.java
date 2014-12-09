@@ -33,7 +33,6 @@ public class Plot implements Comparable<Plot> {
     private double currentbid;
     private UUID currentbidderId;
     private String auctioneddate;
-    private int plotLikes;
 
     public Plot(PlotMe_Core plugin) {
         this.plugin = plugin;
@@ -55,10 +54,9 @@ public class Plot implements Comparable<Plot> {
         setFinishedDate(null);
         setProtect(false);
         setAuctioned(false);
-        setCurrentBidder("");
+        setCurrentBidder(null);
         setCurrentBidderId(null);
         setCurrentBid(0.0);
-        setPlotLikes(0);
     }
 
     public Plot(PlotMe_Core plugin, String owner, UUID uuid, IWorld world, String plotid, int days) {
@@ -88,37 +86,11 @@ public class Plot implements Comparable<Plot> {
         setCurrentBidder(null);
         setCurrentBidderId(null);
         setCurrentBid(0.0);
-        setPlotLikes(0);
-
     }
 
     public Plot(PlotMe_Core plugin, String owner, UUID ownerId, String world, String biome, Date expiredDate, boolean finished,
-                PlayerList al, String id, double customPrice, boolean sale, String finishedDate,
+                PlayerList allowed, String id, double customPrice, boolean sale, String finishedDate,
                 boolean protect, String bidder, UUID bidderId, double bid, boolean isAuctioned, PlayerList denied, String auctionedDate) {
-        this.plugin = plugin;
-        setOwner(owner);
-        setOwnerId(ownerId);
-        setWorld(world);
-        setBiome(this.plugin.getServerBridge().getBiome(biome));
-        setExpiredDate(expiredDate);
-        setFinished(finished);
-        allowed = al;
-        setId(id);
-        setCustomPrice(customPrice);
-        setForSale(sale);
-        setFinishedDate(finishedDate);
-        setProtect(protect);
-        setAuctioned(isAuctioned);
-        setCurrentBidder(bidder);
-        setCurrentBidderId(bidderId);
-        setCurrentBid(bid);
-        this.denied = denied;
-        setAuctionedDate(auctionedDate);
-    }
-
-    public Plot(PlotMe_Core plugin, String owner, UUID ownerId, String world, String biome, Date expiredDate, boolean finished,
-                PlayerList allowed, String id, double customPrice, boolean sale, String finishedDate, boolean protect, String bidder,
-                UUID bidderId, double bid, boolean isAuctioned, PlayerList denied, String auctionedDate, int likes) {
         this.plugin = plugin;
         setOwner(owner);
         setOwnerId(ownerId);
@@ -138,7 +110,6 @@ public class Plot implements Comparable<Plot> {
         setCurrentBid(bid);
         this.denied = denied;
         setAuctionedDate(auctionedDate);
-        setPlotLikes(likes);
     }
 
     public void resetExpire(int days) {
@@ -558,11 +529,4 @@ public class Plot implements Comparable<Plot> {
         this.auctioneddate = auctioneddate;
     }
 
-    public int getPlotLikes() {
-        return plotLikes;
-    }
-
-    public void setPlotLikes(int plotLikes) {
-        this.plotLikes = plotLikes;
-    }
 }

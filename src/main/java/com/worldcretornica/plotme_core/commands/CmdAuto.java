@@ -1,5 +1,6 @@
 package com.worldcretornica.plotme_core.commands;
 
+import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
@@ -15,7 +16,7 @@ public class CmdAuto extends PlotCommand {
     }
 
     public boolean exec(IPlayer player, String[] args) {
-        if (player.hasPermission("PlotMe.use.auto")) {
+        if (player.hasPermission(PermissionNames.PLOT_ME_USE_AUTO)) {
             if (plugin.getPlotMeCoreManager().isPlotWorld(player) || serverBridge.getConfig().getBoolean("allowWorldTeleport")) {
                 IWorld world;
                 if (!plugin.getPlotMeCoreManager().isPlotWorld(player) && serverBridge.getConfig().getBoolean("allowWorldTeleport")) {
@@ -26,7 +27,7 @@ public class CmdAuto extends PlotCommand {
                     }
 
                     if (!plugin.getPlotMeCoreManager().isPlotWorld(world)) {
-                        player.sendMessage("§c" + args[1] + " " + C("MsgWorldNotPlot"));
+                        player.sendMessage("§c" + world + " " + C("MsgWorldNotPlot"));
                         return true;
                     }
                 } else {
@@ -36,9 +37,9 @@ public class CmdAuto extends PlotCommand {
                 PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
                 int playerlimit = getPlotLimit(player);
 
-                if (playerlimit != -1 && plugin.getPlotMeCoreManager().getNbOwnedPlot(player, world) >= playerlimit && !player.hasPermission("PlotMe.admin")) {
+                if (playerlimit != -1 && plugin.getPlotMeCoreManager().getNbOwnedPlot(player.getUniqueId(), player.getName(), world.getName()) >= playerlimit && !player.hasPermission("PlotMe.admin")) {
                     player.sendMessage("§c" + C("MsgAlreadyReachedMaxPlots") + " ("
-                                               + plugin.getPlotMeCoreManager().getNbOwnedPlot(player, world) + "/" + playerlimit + "). " + C("WordUse") + " §c/plotme home§r " + C("MsgToGetToIt"));
+                                               + plugin.getPlotMeCoreManager().getNbOwnedPlot(player.getUniqueId(), player.getName(), world.getName()) + "/" + playerlimit + "). " + C("WordUse") + " §c/plotme home§r " + C("MsgToGetToIt"));
                 } else {
                     int limit = pmi.getPlotAutoLimit();
 

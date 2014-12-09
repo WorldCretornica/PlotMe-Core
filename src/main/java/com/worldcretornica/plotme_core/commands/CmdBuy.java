@@ -35,9 +35,9 @@ public class CmdBuy extends PlotCommand {
                             } else {
                                 int plotlimit = getPlotLimit(player);
 
-                                if (plotlimit != -1 && plugin.getPlotMeCoreManager().getNbOwnedPlot(player, world) >= plotlimit) {
+                                if (plotlimit != -1 && plugin.getPlotMeCoreManager().getNbOwnedPlot(player.getUniqueId(), player.getName(), world.getName()) >= plotlimit) {
                                     player.sendMessage(C("MsgAlreadyReachedMaxPlots") + " ("
-                                                               + plugin.getPlotMeCoreManager().getNbOwnedPlot(player, world) + "/" + getPlotLimit(player) + "). "
+                                                               + plugin.getPlotMeCoreManager().getNbOwnedPlot(player.getUniqueId(), player.getName(), world.getName()) + "/" + getPlotLimit(player) + "). "
                                                           + C("WordUse") + " §c/plotme home§r " + C("MsgToGetToIt"));
                                 } else {
 

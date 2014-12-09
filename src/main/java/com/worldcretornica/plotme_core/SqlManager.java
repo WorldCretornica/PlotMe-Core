@@ -14,12 +14,12 @@ import java.util.logging.Level;
 
 public class SqlManager {
 
-    private Connection conn;
     private final PlotMe_Core plugin;
     private final boolean usemySQL;
     private final String mySQLuname;
     private final String mySQLpass;
     private final String mySQLconn;
+    private Connection conn;
 
     public SqlManager(PlotMe_Core plugin, boolean usemysql, String sqlusername, String sqlpassword, String sqlconnection) {
         this.plugin = plugin;
@@ -824,7 +824,9 @@ public class SqlManager {
             ps.setString(4, plot.getWorld().toLowerCase());
             ps.setInt(5, topX);
             ps.setInt(6, bottomX);
+            //noinspection SuspiciousNameCombination
             ps.setInt(7, topZ);
+            //noinspection SuspiciousNameCombination
             ps.setInt(8, bottomZ);
             ps.setString(9, plot.getBiome().toString());
             ps.setDate(10, plot.getExpiredDate());
@@ -866,11 +868,11 @@ public class SqlManager {
             }
 
             if (plot.getOwner() != null && !plot.getOwner().isEmpty() && plot.getOwnerId() == null) {
-                fetchOwnerUUIDAsync(idX, idZ, plot.getWorld().toLowerCase(), plot.getOwner());
+                fetchUUIDAsync(idX, idZ, plot.getWorld().toLowerCase(), "owner", plot.getOwner());
             }
 
             if (plot.getCurrentBidder() != null && plot.getCurrentBidderId() == null) {
-                fetchBidderUUIDAsync(idX, idZ, plot.getWorld().toLowerCase(), plot.getCurrentBidder());
+                fetchUUIDAsync(idX, idZ, plot.getWorld().toLowerCase(), "bidder", plot.getCurrentBidder());
             }
 
         } catch (SQLException ex) {
@@ -894,8 +896,7 @@ public class SqlManager {
         //Plots
         try {
             Connection conn = getConnection();
-            ps = conn.prepareStatement("UPDATE plotmePlots SET " + field + " = ? "
-                                               + "WHERE idX = ? AND idZ = ? AND world = ?");
+            ps = conn.prepareStatement("UPDATE plotmePlots SET " + field + " = ? " + "WHERE idX = ? AND idZ = ? AND world = ?");
 
             ps.setObject(1, value);
             ps.setInt(2, idX);
@@ -906,9 +907,13 @@ public class SqlManager {
             conn.commit();
 
             if ("owner".equalsIgnoreCase(field)) {
-                fetchOwnerUUIDAsync(idX, idZ, world, value.toString());
+                fetchUUIDAsync(idX, idZ, world, "owner", value.toString());
             } else if ("currentbidder".equalsIgnoreCase(field)) {
-                fetchBidderUUIDAsync(idX, idZ, world, value.toString());
+                if (value == null) {
+                    fetchUUIDAsync(idX, idZ, world, "bidder", null);
+                } else {
+                    fetchUUIDAsync(idX, idZ, world, "bidder", value.toString());
+                }
             }
 
         } catch (SQLException ex) {
@@ -942,7 +947,7 @@ public class SqlManager {
                 ps.setBytes(5, UUIDFetcher.toBytes(playerid));
             } else {
                 ps.setBytes(5, null);
-                fetchAllowedUUIDAsync(idX, idZ, world, player);
+                fetchUUIDAsync(idX, idZ, world, "allowed", player);
             }
 
             ps.executeUpdate();
@@ -980,7 +985,7 @@ public class SqlManager {
                 ps.setBytes(5, UUIDFetcher.toBytes(playerid));
             } else {
                 ps.setBytes(5, null);
-                fetchDeniedUUIDAsync(idX, idZ, world, player);
+                fetchUUIDAsync(idX, idZ, world, "denied", player);
             }
 
             ps.executeUpdate();
@@ -2205,23 +2210,7 @@ public class SqlManager {
         });
     }
 
-    public void fetchOwnerUUIDAsync(int idX, int idZ, String world, String owner) {
-        _fetchUUIDAsync(idX, idZ, world, "owner", owner);
-    }
-
-    public void fetchBidderUUIDAsync(int idX, int idZ, String world, String bidder) {
-        _fetchUUIDAsync(idX, idZ, world, "bidder", bidder);
-    }
-
-    public void fetchAllowedUUIDAsync(int idX, int idZ, String world, String allowed) {
-        _fetchUUIDAsync(idX, idZ, world, "allowed", allowed);
-    }
-
-    public void fetchDeniedUUIDAsync(int idX, int idZ, String world, String denied) {
-        _fetchUUIDAsync(idX, idZ, world, "denied", denied);
-    }
-
-    private void _fetchUUIDAsync(final int idX, final int idZ, final String world, final String Property, final String name) {
+    private void fetchUUIDAsync(final int idX, final int idZ, final String world, final String Property, final String name) {
         plugin.getServerBridge().runTaskAsynchronously(new Runnable() {
             @Override
             public void run() {

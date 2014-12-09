@@ -1,5 +1,6 @@
 package com.worldcretornica.plotme_core.commands;
 
+import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
@@ -17,7 +18,7 @@ public class CmdHome extends PlotCommand {
     }
 
     public boolean exec(IPlayer player, String[] args) {
-        if (player.hasPermission("PlotMe.use.home") || player.hasPermission("PlotMe.admin.home.other")) {
+        if (player.hasPermission(PermissionNames.PLOT_ME_USE_HOME) || player.hasPermission("PlotMe.admin.home.other")) {
             if (plugin.getPlotMeCoreManager().isPlotWorld(player) || serverBridge.getConfig().getBoolean("allowWorldTeleport")) {
                 String playerName = player.getName();
                 UUID uuid = player.getUniqueId();

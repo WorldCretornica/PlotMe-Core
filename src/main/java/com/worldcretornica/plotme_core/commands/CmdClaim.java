@@ -1,9 +1,6 @@
 package com.worldcretornica.plotme_core.commands;
 
-import com.worldcretornica.plotme_core.Plot;
-import com.worldcretornica.plotme_core.PlotMapInfo;
-import com.worldcretornica.plotme_core.PlotMeCoreManager;
-import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.*;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotCreateEvent;
@@ -18,7 +15,7 @@ public class CmdClaim extends PlotCommand {
     }
 
     public boolean exec(IPlayer player, String[] args) {
-        if (player.hasPermission("PlotMe.use.claim") || player.hasPermission("PlotMe.admin.claim.other")) {
+        if (player.hasPermission(PermissionNames.PLOT_ME_USE_CLAIM) || player.hasPermission("PlotMe.admin.claim.other")) {
             IWorld world = player.getWorld();
             PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
             if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
@@ -41,8 +38,8 @@ public class CmdClaim extends PlotCommand {
 
                     int plotLimit = getPlotLimit(player);
 
-                    if (playerName.equals(player.getName()) && plotLimit != -1 && plugin.getPlotMeCoreManager().getNbOwnedPlot(player, world) >= plotLimit) {
-                        player.sendMessage("§c" + C("MsgAlreadyReachedMaxPlots") + " (" + plugin.getPlotMeCoreManager().getNbOwnedPlot(player, world) + "/" + getPlotLimit(player) + "). " + C("WordUse") + " §c/plotme home§r " + C("MsgToGetToIt"));
+                    if (playerName.equals(player.getName()) && plotLimit != -1 && plugin.getPlotMeCoreManager().getNbOwnedPlot(player.getUniqueId(), player.getName(), world.getName()) >= plotLimit) {
+                        player.sendMessage("§c" + C("MsgAlreadyReachedMaxPlots") + " (" + plugin.getPlotMeCoreManager().getNbOwnedPlot(player.getUniqueId(), player.getName(), world.getName()) + "/" + getPlotLimit(player) + "). " + C("WordUse") + " §c/plotme home§r " + C("MsgToGetToIt"));
                     } else {
 
                         double price = 0.0;

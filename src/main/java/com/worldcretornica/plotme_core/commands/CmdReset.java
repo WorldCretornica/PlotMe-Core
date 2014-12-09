@@ -14,7 +14,7 @@ public class CmdReset extends PlotCommand {
     }
 
     public boolean exec(IPlayer player) {
-        if (player.hasPermission("PlotMe.admin.reset") || player.hasPermission("PlotMe.use.reset")) {
+        if (player.hasPermission(PermissionNames.ADMIN_RESET) || player.hasPermission("PlotMe.use.reset")) {
             IWorld world = player.getWorld();
             PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
             if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
@@ -28,7 +28,7 @@ public class CmdReset extends PlotCommand {
                     String playername = player.getName();
                     String id = plot.getId();
 
-                    if (plot.getOwner().equalsIgnoreCase(playername) || player.hasPermission("PlotMe.admin.reset")) {
+                    if (plot.getOwner().equalsIgnoreCase(playername) || player.hasPermission(PermissionNames.ADMIN_RESET)) {
 
                         InternalPlotResetEvent event = serverBridge.getEventFactory().callPlotResetEvent(plugin, world, plot, player);
 

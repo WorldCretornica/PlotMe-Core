@@ -79,7 +79,7 @@ public class PlotMe_CorePlugin extends JavaPlugin {
                     int nbplot = 0;
 
                     for (String map : getAPI().getPlotMeCoreManager().getPlotMaps().keySet()) {
-                        nbplot += getAPI().getSqlManager().getPlotCount(map);
+                        nbplot += (int) getAPI().getSqlManager().getPlotCount(map);
                     }
 
                     return nbplot;

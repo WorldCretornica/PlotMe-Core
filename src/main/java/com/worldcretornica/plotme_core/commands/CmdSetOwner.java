@@ -82,7 +82,7 @@ public class CmdSetOwner extends PlotCommand {
                         }
 
                         if (!event.isCancelled()) {
-                            plot.setCurrentBidder("");
+                            plot.setCurrentBidder(null);
                             plot.setCurrentBidderId(null);
                             plot.setCurrentBid(0.0);
                             plot.setAuctioned(false);
@@ -90,7 +90,7 @@ public class CmdSetOwner extends PlotCommand {
 
                             plugin.getPlotMeCoreManager().setSellSign(world, plot);
 
-                            plot.updateField("currentbidder", "");
+                            plot.updateField("currentbidder", null);
                             plot.updateField("currentbid", 0);
                             plot.updateField("auctionned", false);
                             plot.updateField("forsale", false);

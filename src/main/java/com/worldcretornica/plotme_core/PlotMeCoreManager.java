@@ -144,10 +144,6 @@ public class PlotMeCoreManager {
         }
     }
 
-    public int getNbOwnedPlot(IPlayer player, IWorld world) {
-        return getNbOwnedPlot(player.getUniqueId(), player.getName(), world.getName());
-    }
-
     public int getNbOwnedPlot(UUID uuid, String name, String world) {
         return plugin.getSqlManager().getPlotCount(world, uuid, name);
     }
@@ -597,8 +593,8 @@ public class PlotMeCoreManager {
         plot.setProtect(false);
         plot.setAuctioned(false);
         plot.setAuctionedDate(null);
-        plot.setCurrentBid(0);
-        plot.setCurrentBidder("");
+        plot.setCurrentBid(0.0);
+        plot.setCurrentBidder(null);
 
         String name = world.getName();
         int idX = getIdX(id);
@@ -609,9 +605,9 @@ public class PlotMeCoreManager {
         sm.updatePlot(idX, idZ, name, "forsale", false);
         sm.updatePlot(idX, idZ, name, "protected", false);
         sm.updatePlot(idX, idZ, name, "auctionned", false);
-        sm.updatePlot(idX, idZ, name, "auctionneddate", "");
+        sm.updatePlot(idX, idZ, name, "auctionneddate", null);
         sm.updatePlot(idX, idZ, name, "currentbid", 0);
-        sm.updatePlot(idX, idZ, name, "currentbidder", "");
+        sm.updatePlot(idX, idZ, name, "currentbidder", null);
 
         if (getMap(world).isUseProgressiveClear()) {
             plugin.addPlotToClear(new PlotToClear(name, id, reason));

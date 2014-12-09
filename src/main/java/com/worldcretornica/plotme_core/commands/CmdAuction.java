@@ -1,9 +1,6 @@
 package com.worldcretornica.plotme_core.commands;
 
-import com.worldcretornica.plotme_core.Plot;
-import com.worldcretornica.plotme_core.PlotMapInfo;
-import com.worldcretornica.plotme_core.PlotMeCoreManager;
-import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.*;
 import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
@@ -22,7 +19,7 @@ public class CmdAuction extends PlotCommand {
         if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
             if (plugin.getPlotMeCoreManager().isEconomyEnabled(pmi)) {
                 if (pmi.isCanPutOnSale()) {
-                    if (player.hasPermission("PlotMe.use.auction") || player.hasPermission("PlotMe.admin.auction")) {
+                    if (player.hasPermission(PermissionNames.PLOT_ME_USE_AUCTION) || player.hasPermission(PermissionNames.PLOT_ME_ADMIN_AUCTION)) {
                         String id = PlotMeCoreManager.getPlotId(player);
 
                         if (id.isEmpty()) {
@@ -32,11 +29,11 @@ public class CmdAuction extends PlotCommand {
 
                             String name = player.getName();
 
-                            if (plot.getOwner().equalsIgnoreCase(name) || player.hasPermission("PlotMe.admin.auction")) {
+                            if (plot.getOwner().equalsIgnoreCase(name) || player.hasPermission(PermissionNames.PLOT_ME_ADMIN_AUCTION)) {
 
                                 if (plot.isAuctioned()) {
                                     if (plot.getCurrentBidderId() != null) {
-                                        if (player.hasPermission("PlotMe.admin.auction")) {
+                                        if (player.hasPermission(PermissionNames.PLOT_ME_ADMIN_AUCTION)) {
                                             IOfflinePlayer playercurrentbidder = serverBridge.getOfflinePlayer(plot.getCurrentBidderId());
                                             EconomyResponse er = serverBridge.depositPlayer(playercurrentbidder, plot.getCurrentBid());
 
@@ -57,10 +54,10 @@ public class CmdAuction extends PlotCommand {
                                             plugin.getPlotMeCoreManager().adjustWall(player);
                                             plugin.getPlotMeCoreManager().setSellSign(world, plot);
                                             plot.setCurrentBid(0.0);
-                                            plot.setCurrentBidder("");
+                                            plot.setCurrentBidder(null);
 
                                             plot.updateField("currentbid", 0);
-                                            plot.updateField("currentbidder", "");
+                                            plot.updateField("currentbidder", null);
                                             plot.updateField("currentbidderid", null);
                                             plot.updateField("auctionned", false);
 
@@ -77,10 +74,10 @@ public class CmdAuction extends PlotCommand {
                                         plugin.getPlotMeCoreManager().adjustWall(player);
                                         plugin.getPlotMeCoreManager().setSellSign(world, plot);
                                         plot.setCurrentBid(0.0);
-                                        plot.setCurrentBidder("");
+                                        plot.setCurrentBidder(null);
 
                                         plot.updateField("currentbid", 0);
-                                        plot.updateField("currentbidder", "");
+                                        plot.updateField("currentbidder", null);
                                         plot.updateField("currentbidderid", null);
                                         plot.updateField("auctionned", false);
 

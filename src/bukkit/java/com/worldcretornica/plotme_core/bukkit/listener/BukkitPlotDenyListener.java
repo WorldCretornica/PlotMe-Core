@@ -34,7 +34,10 @@ public class BukkitPlotDenyListener implements Listener {
                 Plot plot = api.getPlotMeCoreManager().getPlotById(idTo, player);
 
                 if (plot != null && plot.isDeniedInternal(player.getName(), player.getUniqueId())) {
-                    event.setCancelled(true);
+                    BukkitLocation t = new BukkitLocation(event.getFrom().clone());
+                    t.getLocation().setYaw(event.getTo().getYaw());
+                    t.getLocation().setPitch(event.getTo().getPitch());
+                    event.setTo(t.getLocation());
                 }
             }
         }

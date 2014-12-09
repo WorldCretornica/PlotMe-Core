@@ -3,8 +3,8 @@ package com.worldcretornica.plotme_core.bukkit.listener;
 import com.worldcretornica.plotme_core.*;
 import com.worldcretornica.plotme_core.bukkit.PlotMe_CorePlugin;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitBlock;
+import com.worldcretornica.plotme_core.bukkit.api.BukkitEntity;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitLocation;
-import com.worldcretornica.plotme_core.bukkit.api.BukkitMaterial;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
 import com.worldcretornica.plotme_core.bukkit.event.PlotWorldLoadEvent;
 import org.bukkit.Material;
@@ -442,7 +442,7 @@ public class BukkitPlotListener implements Listener {
     public void onBlockPistonRetract(BlockPistonRetractEvent event) {
         BukkitBlock block = new BukkitBlock(event.getRetractLocation().getBlock());
 
-        if (api.getPlotMeCoreManager().isPlotWorld(block) && block.getType().equals(new BukkitMaterial(Material.PISTON_STICKY_BASE))) {
+        if (api.getPlotMeCoreManager().isPlotWorld(block) && block.getType().equals(Material.PISTON_STICKY_BASE)) {
             String id = PlotMeCoreManager.getPlotId(block.getLocation());
 
             if (id.isEmpty()) {
@@ -502,39 +502,50 @@ public class BukkitPlotListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onBlockIgnite(BlockIgniteEvent event) {
-        BukkitPlayer player = new BukkitPlayer(event.getPlayer());
+        BukkitEntity entity = new BukkitEntity(event.getIgnitingEntity());
 
-        PlotMapInfo pmi = api.getPlotMeCoreManager().getMap(player);
+        PlotMapInfo pmi = api.getPlotMeCoreManager().getMap(entity.getLocation());
 
         if (pmi != null) {
             if (pmi.isDisableIgnition()) {
                 event.setCancelled(true);
             } else {
-                String id = PlotMeCoreManager.getPlotId(player.getLocation());
+                String id = PlotMeCoreManager.getPlotId(entity.getLocation());
 
                 if (id.isEmpty()) {
                     event.setCancelled(true);
                 } else {
-                    PlotToClear ptc = api.getPlotLocked(player.getWorld().getName(), id);
+                    PlotToClear ptc = api.getPlotLocked(entity.getLocation().getWorld().getName(), id);
 
+                    Player player = null;
                     if (ptc != null) {
-                        switch (ptc.getReason()) {
-                            case Clear:
-                                player.sendMessage(api.getUtil().C("MsgPlotLockedClear"));
-                                break;
-                            case Reset:
-                                player.sendMessage(api.getUtil().C("MsgPlotLockedReset"));
-                                break;
-                            case Expired:
-                                player.sendMessage(api.getUtil().C("MsgPlotLockedExpired"));
-                                break;
+                        if (event.getPlayer() != null) {
+                            player = event.getPlayer();
+                            switch (ptc.getReason()) {
+                                case Clear:
+                                    player.sendMessage(api.getUtil().C("MsgPlotLockedClear"));
+                                    break;
+                                case Reset:
+                                    player.sendMessage(api.getUtil().C("MsgPlotLockedReset"));
+                                    break;
+                                case Expired:
+                                    player.sendMessage(api.getUtil().C("MsgPlotLockedExpired"));
+                                    break;
+                            }
                         }
                         event.setCancelled(true);
                     } else {
+                        if (event.getPlayer() != null) {
+                            player = event.getPlayer();
+                        }
                         Plot plot = PlotMeCoreManager.getPlotById(id, pmi);
 
-                        if (plot == null || !plot.isAllowed(player.getName(), player.getUniqueId())) {
+                        if (plot == null) {
                             event.setCancelled(true);
+                        } else {
+                            if (player != null && !plot.isAllowed(player.getName(), entity.getUniqueId())) {
+                                event.setCancelled(true);
+                            }
                         }
                     }
                 }

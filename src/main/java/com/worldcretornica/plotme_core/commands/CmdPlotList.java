@@ -1,5 +1,6 @@
 package com.worldcretornica.plotme_core.commands;
 
+import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IPlayer;
@@ -17,7 +18,7 @@ public class CmdPlotList extends PlotCommand {
     }
 
     public boolean exec(IPlayer player, String[] args) {
-        if (player.hasPermission("PlotMe.use.list")) {
+        if (player.hasPermission(PermissionNames.USE_LIST)) {
             if (plugin.getPlotMeCoreManager().isPlotWorld(player)) {
                 String name;
                 UUID uuid;
