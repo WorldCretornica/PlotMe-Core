@@ -15,7 +15,7 @@ public class CmdClaim extends PlotCommand {
     }
 
     public boolean exec(IPlayer player, String[] args) {
-        if (player.hasPermission(PermissionNames.PLOT_ME_USE_CLAIM) || player.hasPermission("PlotMe.admin.claim.other")) {
+        if (player.hasPermission(PermissionNames.USER_CLAIM) || player.hasPermission("PlotMe.admin.claim.other")) {
             IWorld world = player.getWorld();
             PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
             if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {

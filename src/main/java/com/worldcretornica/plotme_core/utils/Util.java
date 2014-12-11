@@ -30,14 +30,6 @@ public class Util {
         return ret;
     }
 
-    public static String round(double money) {
-        if (money % 1.0 == 0) {
-            return String.valueOf(Math.round(money));
-        } else {
-            return String.valueOf(money);
-        }
-    }
-
     public String C(String caption) {
         if (plugin.getCaptionConfig().contains(caption)) {
             return addColor(plugin.getCaptionConfig().getString(caption));
@@ -56,17 +48,21 @@ public class Util {
             return "";
         }
 
-        String format = round(Math.abs(price));
+        String format = String.valueOf(Math.round(Math.abs(price)));
 
         Economy economy = plugin.getServerBridge().getEconomy();
 
         if (economy != null) {
-            if (price <= 1.0 && price >= -1.0) format = format + " " + economy.currencyNameSingular();
-            else format = format + " " + economy.currencyNamePlural();
+            if (price <= 1.0 && price >= -1.0) {
+                format = format + " " + economy.currencyNameSingular();
+            } else {
+                format = format + " " + economy.currencyNamePlural();
+            }
         }
 
         if (showsign) {
-            return "§a" + (price > 0.0 ? "+" + format : "-" + format);
+            if (price > 0.0) return "§a" + ("+" + format);
+            else return "§a" + ("-" + format);
         } else {
             return "§a" + format;
         }

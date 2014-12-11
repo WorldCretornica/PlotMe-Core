@@ -14,7 +14,7 @@ public enum PermissionNames {
     public static final String PLOT_ME_ADMIN_ADDTIME = "PlotMe.admin.addtime";
     public static final String PLOT_ME_USE_HOME = "PlotMe.use.home";
     public static final String PLOT_ME_USE_AUTO = "PlotMe.use.auto";
-    public static final String PLOT_ME_USE_CLAIM = "PlotMe.use.claim";
+    public static final String USER_CLAIM = "PlotMe.use.claim";
     public static final String USE_LIST = "PlotMe.use.list";
     public static final String USE_BIOME = "PlotMe.use.biome";
     public static final String USER_INFO = "PlotMe.use.info";

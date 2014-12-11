@@ -127,7 +127,7 @@ public class SqlManager {
                 set = statement.executeQuery("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '" + schema + "' AND "
                                                      + "TABLE_NAME='plotmePlots' AND (column_name='auctionenddate' OR column_name='auctionneddate')");
                 if (!set.next()) {
-                    statement.executeUpdate("ALTER TABLE plotmePlots ADD auctionenddate varchar(16) NULL;");
+                    statement.executeUpdate("ALTER TABLE plotmePlots ADD auctionenddate VARCHAR(16);");
                     conn.commit();
                 }
                 set.close();
@@ -136,7 +136,7 @@ public class SqlManager {
                 set = statement.executeQuery("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '" + schema + "' AND "
                                                      + "TABLE_NAME='plotmePlots' AND column_name='currentbidder'");
                 if (!set.next()) {
-                    statement.executeUpdate("ALTER TABLE plotmePlots ADD currentbidder varchar(32) NULL;");
+                    statement.executeUpdate("ALTER TABLE plotmePlots ADD currentbidder VARCHAR(32);");
                     conn.commit();
                 }
                 set.close();
@@ -558,16 +558,16 @@ public class SqlManager {
                                             + "`topZ` INTEGER NOT NULL DEFAULT '0',"
                                             + "`bottomZ` INTEGER NOT NULL DEFAULT '0',"
                                             + "`biome` varchar(32) NOT NULL DEFAULT '0',"
-                                            + "`expireddate` DATETIME NULL,"
+                                            + "`expireddate` DATE,"
                                             + "`finished` boolean NOT NULL DEFAULT '0',"
                                             + "`customprice` double NOT NULL DEFAULT '0',"
                                             + "`forsale` boolean NOT NULL DEFAULT '0',"
-                                            + "`finisheddate` varchar(16) NULL,"
+                                            + "`finisheddate` varchar(16),"
                                             + "`protected` boolean NOT NULL DEFAULT '0',"
                                             + "`auctionned` boolean NOT NULL DEFAULT '0',"
-                                            + "`auctionneddate` varchar(16) NULL,"
+                                            + "`auctionneddate` varchar(16),"
                                             + "`currentbid` double NOT NULL DEFAULT '0',"
-                                            + "`currentbidder` varchar(32) NULL,"
+                                            + "`currentbidder` varchar(32),"
                                             + "`currentbidderId` blob(16),"
                                             + "`ownerId` blob(16),"
                                             + "PRIMARY KEY (idX, idZ, world) "
@@ -708,7 +708,7 @@ public class SqlManager {
                         Plot plot = new Plot(plugin, owner, ownerId, world, biome,
                                                     expireddate, finished, allowed, idX + ";" + idZ, customprice,
                                                     forsale, finisheddate, protect, currentbidder, currentbidderid, currentbid,
-                                                    auctionned, denied, auctionneddate);
+                                                    auctionned, denied);
                         addPlot(plot, idX, idZ, topX, bottomX, topZ, bottomZ);
 
                         size++;
@@ -1228,7 +1228,7 @@ public class SqlManager {
 
                 plot = new Plot(plugin, owner, ownerId, world, biome, expireddate, finished, allowed,
                                        idX + ";" + idZ, customprice, forsale, finisheddate, protect,
-                                       currentbidder, currentbidderid, currentbid, auctionned, denied, auctionneddate);
+                                       currentbidder, currentbidderid, currentbid, auctionned, denied);
             }
         } catch (SQLException ex) {
             plugin.getLogger().severe("Plot load Exception :");
@@ -1365,7 +1365,7 @@ public class SqlManager {
                 setDenied.close();
 
                 Plot plot = new Plot(plugin, owner, ownerId, world, biome, expireddate, finished, allowed, idX + ";" + idZ,
-                                            customprice, forsale, finisheddate, protect, currentbidder, currentbidderid, currentbid, auctionned, denied, auctionneddate);
+                                            customprice, forsale, finisheddate, protect, currentbidder, currentbidderid, currentbid, auctionned, denied);
                 ret.put(idX + ";" + idZ, plot);
             }
         } catch (SQLException ex) {
@@ -1866,7 +1866,7 @@ public class SqlManager {
 
                 Plot plot = new Plot(plugin, owner, ownerId, world, biome, expireddate, finished, allowed,
                                             idX + ";" + idZ, customprice, forsale, finisheddate, protect,
-                                            currentbidder, currentbidderid, currentbid, auctionned, denied, auctionneddate);
+                                            currentbidder, currentbidderid, currentbid, auctionned, denied);
 
                 ret.add(plot);
             }
@@ -1982,7 +1982,7 @@ public class SqlManager {
 
                 Plot plot = new Plot(plugin, owner, ownerId, world, biome, expireddate, finished, allowed,
                                             idX + ";" + idZ, customprice, forsale, finisheddate, protect,
-                                            currentbidder, currentbidderid, currentbid, auctionned, denied, auctionneddate);
+                                            currentbidder, currentbidderid, currentbid, auctionned, denied);
 
                 ret.add(plot);
             }

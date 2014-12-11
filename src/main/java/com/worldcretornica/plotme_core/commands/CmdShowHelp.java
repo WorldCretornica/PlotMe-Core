@@ -5,7 +5,6 @@ import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
-import com.worldcretornica.plotme_core.utils.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +21,7 @@ public class CmdShowHelp extends PlotCommand {
         List<String> allowed_commands = new ArrayList<>();
 
         allowed_commands.add("limit");
-        if (player.hasPermission(PermissionNames.PLOT_ME_USE_CLAIM)) {
+        if (player.hasPermission(PermissionNames.USER_CLAIM)) {
             allowed_commands.add("claim");
         }
         if (player.hasPermission("PlotMe.use.claim.other")) {
@@ -162,14 +161,14 @@ public class CmdShowHelp extends PlotCommand {
             } else if ("claim".equalsIgnoreCase(allowedcmd)) {
                 player.sendMessage("§a /plotme claim");
                 if (economyEnabled && pmi != null && pmi.getClaimPrice() != 0) {
-                    player.sendMessage("§b " + C("HelpClaim") + " " + C("WordPrice") + " : §r" + Util.round(pmi.getClaimPrice()));
+                    player.sendMessage("§b " + C("HelpClaim") + " " + C("WordPrice") + " : §r" + Math.round(pmi.getClaimPrice()));
                 } else {
                     player.sendMessage("§b " + C("HelpClaim"));
                 }
             } else if ("claim.other".equalsIgnoreCase(allowedcmd)) {
                 player.sendMessage("§a /plotme claim <" + C("WordPlayer") + ">");
                 if (economyEnabled && pmi != null && pmi.getClaimPrice() != 0) {
-                    player.sendMessage("§b " + C("HelpClaimOther") + " " + C("WordPrice") + " : §r" + Util.round(pmi.getClaimPrice()));
+                    player.sendMessage("§b " + C("HelpClaimOther") + " " + C("WordPrice") + " : §r" + Math.round(pmi.getClaimPrice()));
                 } else {
                     player.sendMessage("§b " + C("HelpClaimOther"));
                 }
@@ -181,7 +180,7 @@ public class CmdShowHelp extends PlotCommand {
                 }
 
                 if (economyEnabled && pmi != null && pmi.getClaimPrice() != 0) {
-                    player.sendMessage("§b " + C("HelpAuto") + " " + C("WordPrice") + " : §r" + Util.round(pmi.getClaimPrice()));
+                    player.sendMessage("§b " + C("HelpAuto") + " " + C("WordPrice") + " : §r" + Math.round(pmi.getClaimPrice()));
                 } else {
                     player.sendMessage("§b " + C("HelpAuto"));
                 }
@@ -193,7 +192,7 @@ public class CmdShowHelp extends PlotCommand {
                 }
 
                 if (economyEnabled && pmi != null && pmi.getPlotHomePrice() != 0) {
-                    player.sendMessage("§b " + C("HelpHome") + " " + C("WordPrice") + " : §r" + Util.round(pmi.getPlotHomePrice()));
+                    player.sendMessage("§b " + C("HelpHome") + " " + C("WordPrice") + " : §r" + Math.round(pmi.getPlotHomePrice()));
                 } else {
                     player.sendMessage("§b " + C("HelpHome"));
                 }
@@ -205,7 +204,7 @@ public class CmdShowHelp extends PlotCommand {
                 }
 
                 if (economyEnabled && pmi != null && pmi.getPlotHomePrice() != 0) {
-                    player.sendMessage("§b " + C("HelpHomeOther") + " " + C("WordPrice") + " : §r" + Util.round(pmi.getPlotHomePrice()));
+                    player.sendMessage("§b " + C("HelpHomeOther") + " " + C("WordPrice") + " : §r" + Math.round(pmi.getPlotHomePrice()));
                 } else {
                     player.sendMessage("§b " + C("HelpHomeOther"));
                 }
@@ -221,7 +220,7 @@ public class CmdShowHelp extends PlotCommand {
             } else if ("biome".equalsIgnoreCase(allowedcmd)) {
                 player.sendMessage("§a /plotme biome <" + C("WordBiome") + ">");
                 if (economyEnabled && pmi != null && pmi.getBiomeChangePrice() != 0) {
-                    player.sendMessage("§b " + C("HelpBiome") + " " + C("WordPrice") + " : §r" + Util.round(pmi.getBiomeChangePrice()));
+                    player.sendMessage("§b " + C("HelpBiome") + " " + C("WordPrice") + " : §r" + Math.round(pmi.getBiomeChangePrice()));
                 } else {
                     player.sendMessage("§b " + C("HelpBiome"));
                 }
@@ -241,7 +240,7 @@ public class CmdShowHelp extends PlotCommand {
             } else if ("clear".equalsIgnoreCase(allowedcmd)) {
                 player.sendMessage("§a /plotme clear");
                 if (economyEnabled && pmi != null && pmi.getClearPrice() != 0) {
-                    player.sendMessage("§b " + C("HelpId") + " " + C("WordPrice") + " : §r" + Util.round(pmi.getClearPrice()));
+                    player.sendMessage("§b " + C("HelpId") + " " + C("WordPrice") + " : §r" + Math.round(pmi.getClearPrice()));
                 } else {
                     player.sendMessage("§b " + C("HelpClear"));
                 }
@@ -251,28 +250,28 @@ public class CmdShowHelp extends PlotCommand {
             } else if ("add".equalsIgnoreCase(allowedcmd)) {
                 player.sendMessage("§a /plotme add <" + C("WordPlayer") + ">");
                 if (economyEnabled && pmi != null && pmi.getAddPlayerPrice() != 0) {
-                    player.sendMessage("§b " + C("HelpAdd") + " " + C("WordPrice") + " : §r" + Util.round(pmi.getAddPlayerPrice()));
+                    player.sendMessage("§b " + C("HelpAdd") + " " + C("WordPrice") + " : §r" + Math.round(pmi.getAddPlayerPrice()));
                 } else {
                     player.sendMessage("§b " + C("HelpAdd"));
                 }
             } else if ("deny".equalsIgnoreCase(allowedcmd)) {
                 player.sendMessage("§a /plotme deny <" + C("WordPlayer") + ">");
                 if (economyEnabled && pmi != null && pmi.getDenyPlayerPrice() != 0) {
-                    player.sendMessage("§b " + C("HelpDeny") + " " + C("WordPrice") + " : §r" + Util.round(pmi.getDenyPlayerPrice()));
+                    player.sendMessage("§b " + C("HelpDeny") + " " + C("WordPrice") + " : §r" + Math.round(pmi.getDenyPlayerPrice()));
                 } else {
                     player.sendMessage("§b " + C("HelpDeny"));
                 }
             } else if ("remove".equalsIgnoreCase(allowedcmd)) {
                 player.sendMessage("§a /plotme remove <" + C("WordPlayer") + ">");
                 if (economyEnabled && pmi != null && pmi.getRemovePlayerPrice() != 0) {
-                    player.sendMessage("§b " + C("HelpRemove") + " " + C("WordPrice") + " : §r" + Util.round(pmi.getRemovePlayerPrice()));
+                    player.sendMessage("§b " + C("HelpRemove") + " " + C("WordPrice") + " : §r" + Math.round(pmi.getRemovePlayerPrice()));
                 } else {
                     player.sendMessage("§b " + C("HelpRemove"));
                 }
             } else if ("undeny".equalsIgnoreCase(allowedcmd)) {
                 player.sendMessage("§a /plotme undeny <" + C("WordPlayer") + ">");
                 if (economyEnabled && pmi != null && pmi.getUndenyPlayerPrice() != 0) {
-                    player.sendMessage("§b " + C("HelpUndeny") + " " + C("WordPrice") + " : §r" + Util.round(pmi.getUndenyPlayerPrice()));
+                    player.sendMessage("§b " + C("HelpUndeny") + " " + C("WordPrice") + " : §r" + Math.round(pmi.getUndenyPlayerPrice()));
                 } else {
                     player.sendMessage("§b " + C("HelpUndeny"));
                 }
@@ -302,7 +301,7 @@ public class CmdShowHelp extends PlotCommand {
             } else if ("dispose".equalsIgnoreCase(allowedcmd)) {
                 player.sendMessage("§a /plotme dispose");
                 if (economyEnabled && pmi != null && pmi.getDisposePrice() != 0) {
-                    player.sendMessage("§b " + C("HelpDispose") + " " + C("WordPrice") + " : §r" + Util.round(pmi.getDisposePrice()));
+                    player.sendMessage("§b " + C("HelpDispose") + " " + C("WordPrice") + " : §r" + Math.round(pmi.getDisposePrice()));
                 } else {
                     player.sendMessage("§b " + C("HelpDispose"));
                 }
@@ -311,10 +310,10 @@ public class CmdShowHelp extends PlotCommand {
                 player.sendMessage("§b " + C("HelpBuy"));
             } else if ("sell".equalsIgnoreCase(allowedcmd)) {
                 player.sendMessage("§a /plotme sell [" + C("WordAmount") + "]");
-                player.sendMessage("§b " + C("HelpSell") + " " + C("WordDefault") + " : §r" + Util.round(pmi.getSellToPlayerPrice()));
+                player.sendMessage("§b " + C("HelpSell") + " " + C("WordDefault") + " : §r" + Math.round(pmi.getSellToPlayerPrice()));
             } else if ("sellbank".equalsIgnoreCase(allowedcmd)) {
                 player.sendMessage("§a /plotme sell bank");
-                player.sendMessage("§b " + C("HelpSellBank") + " §r" + Util.round(pmi.getSellToBankPrice()));
+                player.sendMessage("§b " + C("HelpSellBank") + " §r" + Math.round(pmi.getSellToBankPrice()));
             } else if ("auction".equalsIgnoreCase(allowedcmd)) {
                 player.sendMessage("§a /plotme auction [" + C("WordAmount") + "]");
                 player.sendMessage("§b " + C("HelpAuction") + " " + C("WordDefault") + " : §r1");

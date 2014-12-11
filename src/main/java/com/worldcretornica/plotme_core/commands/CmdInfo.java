@@ -7,7 +7,6 @@ import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
-import com.worldcretornica.plotme_core.utils.Util;
 
 public class CmdInfo extends PlotCommand {
 
@@ -72,25 +71,25 @@ public class CmdInfo extends PlotCommand {
                             if (plot.isAuctioned())
                                 if (plot.isForSale())
                                     player.sendMessage("§a" + C("InfoAuctionned") + ": §b" + (C("WordYes")
-                                                                                                      + "§a " + C("InfoMinimumBid") + ": §b" + Util.round(plot.getCurrentBid()))
-                                                               + "§a " + C("InfoForSale") + ": §b" + ("§b" + Util.round(plot.getCustomPrice())));
+                                                                                                      + "§a " + C("InfoMinimumBid") + ": §b" + Math.round(plot.getCurrentBid()))
+                                                               + "§a " + C("InfoForSale") + ": §b" + ("§b" + Math.round(plot.getCustomPrice())));
                                 else player.sendMessage("§a" + C("InfoAuctionned") + ": §b" + (C("WordYes")
-                                                                                                       + "§a " + C("InfoMinimumBid") + ": §b" + Util.round(plot.getCurrentBid()))
+                                                                                                       + "§a " + C("InfoMinimumBid") + ": §b" + Math.round(plot.getCurrentBid()))
                                                                 + "§a " + C("InfoForSale") + ": §b" + C("WordNo"));
                             else if (plot.isForSale())
                                 player.sendMessage("§a" + C("InfoAuctionned") + ": §b" + C("WordNo")
-                                                           + "§a " + C("InfoForSale") + ": §b" + ("§b" + Util.round(plot.getCustomPrice())));
+                                                           + "§a " + C("InfoForSale") + ": §b" + ("§b" + Math.round(plot.getCustomPrice())));
                             else player.sendMessage("§a" + C("InfoAuctionned") + ": §b" + C("WordNo")
                                                             + "§a " + C("InfoForSale") + ": §b" + C("WordNo"));
                         } else {
                             if (plot.isAuctioned())
                                 player.sendMessage("§a" + C("InfoAuctionned") + ": §b" + (C("WordYes")
                                                                                                   + "§a " + C("InfoBidder") + ": §b" + plot.getCurrentBidder()
-                                                                                                  + "§a " + C("InfoBid") + ": §b" + Util.round(plot.getCurrentBid()))
-                                                           + "§a " + C("InfoForSale") + ": §b" + (plot.isForSale() ? "§b" + Util.round(plot.getCustomPrice()) : C("WordNo")));
+                                                                                                  + "§a " + C("InfoBid") + ": §b" + Math.round(plot.getCurrentBid()))
+                                                           + "§a " + C("InfoForSale") + ": §b" + (plot.isForSale() ? "§b" + Math.round(plot.getCustomPrice()) : C("WordNo")));
                             else if (plot.isForSale())
                                 player.sendMessage("§a" + C("InfoAuctionned") + ": §b" + C("WordNo")
-                                                           + "§a " + C("InfoForSale") + ": §b" + ("§b" + Util.round(plot.getCustomPrice())));
+                                                           + "§a " + C("InfoForSale") + ": §b" + ("§b" + Math.round(plot.getCustomPrice())));
                             else player.sendMessage("§a" + C("InfoAuctionned") + ": §b" + C("WordNo")
                                                             + "§a " + C("InfoForSale") + ": §b" + C("WordNo"));
                         }

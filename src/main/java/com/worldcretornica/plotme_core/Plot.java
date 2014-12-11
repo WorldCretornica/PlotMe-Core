@@ -32,7 +32,6 @@ public class Plot implements Comparable<Plot> {
     private String currentbidder;
     private double currentbid;
     private UUID currentbidderId;
-    private String auctioneddate;
 
     public Plot(PlotMe_Core plugin) {
         this.plugin = plugin;
@@ -90,7 +89,7 @@ public class Plot implements Comparable<Plot> {
 
     public Plot(PlotMe_Core plugin, String owner, UUID ownerId, String world, String biome, Date expiredDate, boolean finished,
                 PlayerList allowed, String id, double customPrice, boolean sale, String finishedDate,
-                boolean protect, String bidder, UUID bidderId, double bid, boolean isAuctioned, PlayerList denied, String auctionedDate) {
+                boolean protect, String bidder, UUID bidderId, double bid, boolean isAuctioned, PlayerList denied) {
         this.plugin = plugin;
         setOwner(owner);
         setOwnerId(ownerId);
@@ -109,7 +108,6 @@ public class Plot implements Comparable<Plot> {
         setCurrentBidderId(bidderId);
         setCurrentBid(bid);
         this.denied = denied;
-        setAuctionedDate(auctionedDate);
     }
 
     public void resetExpire(int days) {
@@ -519,14 +517,6 @@ public class Plot implements Comparable<Plot> {
 
     public final void setCurrentBid(double currentbid) {
         this.currentbid = currentbid;
-    }
-
-    public final String getAuctionedDate() {
-        return auctioneddate;
-    }
-
-    public final void setAuctionedDate(String auctioneddate) {
-        this.auctioneddate = auctioneddate;
     }
 
 }

@@ -48,8 +48,8 @@ public class MultiWorldWrapper implements Delegate<MultiWorldPlugin> {
 
         public boolean makeWorld(String name, WorldGeneratorWrapper env, long seed, String options) throws DelegateClassException {
             try {
-                return dataHandler.makeWorld(name, env.getDelegate(), seed, options);
-            } catch (ConfigException | WorldGenException ex) {
+                return dataHandler.getWorldManager().makeWorld(name, env.getDelegate(), seed, options);
+            } catch (WorldGenException ex) {
                 throw new DelegateClassException(ex);
             }
         }
@@ -62,12 +62,8 @@ public class MultiWorldWrapper implements Delegate<MultiWorldPlugin> {
             }
         }
 
-        public World loadWorld(String name, boolean mustSave) throws DelegateClassException {
-            try {
-                return dataHandler.loadWorld(name, mustSave);
-            } catch (ConfigException ex) {
-                throw new DelegateClassException(ex);
-            }
+        public World loadWorld(String name) {
+            return dataHandler.getWorldManager().loadWorld(name);
         }
 
     }
@@ -80,17 +76,17 @@ public class MultiWorldWrapper implements Delegate<MultiWorldPlugin> {
             this.worldGenerator = worldGenerator;
         }
 
-        @Override
-        public WorldGenerator getDelegate() {
-            return worldGenerator;
-        }
-
         public static WorldGeneratorWrapper getGenByName() throws DelegateClassException {
             try {
                 return new WorldGeneratorWrapper(WorldGenerator.getGenByName("PLUGIN"));
             } catch (InvalidWorldGenException ex) {
                 throw new DelegateClassException(ex);
             }
+        }
+
+        @Override
+        public WorldGenerator getDelegate() {
+            return worldGenerator;
         }
 
     }

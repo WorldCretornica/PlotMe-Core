@@ -109,16 +109,15 @@ public class BukkitCommand implements CommandExecutor {
             if (args.length == 0) {
                 return showhelp.exec(player, 1);
             } else {
-                String a0 = args[0];
                 int ipage = -1;
 
                 try {
-                    ipage = Integer.parseInt(a0);
+                    ipage = Integer.parseInt(args[0]);
                 } catch (NumberFormatException ignored) {
                 }
 
                 if (ipage == -1) {
-                    if ("help".equalsIgnoreCase(a0)) {
+                    if ("help".equalsIgnoreCase(args[0])) {
                         if (args.length > 1) {
                             String a1 = args[1];
                             ipage = -1;
@@ -135,85 +134,85 @@ public class BukkitCommand implements CommandExecutor {
                             return showhelp.exec(player, ipage);
                         }
                     }
-                    if ("claim".equalsIgnoreCase(a0)) {
+                    if ("claim".equalsIgnoreCase(args[0])) {
                         return claim.exec(player, args);
                     }
-                    if ("auto".equalsIgnoreCase(a0)) {
+                    if ("auto".equalsIgnoreCase(args[0])) {
                         return auto.exec(player, args);
                     }
-                    if ("info".equalsIgnoreCase(a0) || "i".equalsIgnoreCase(a0)) {
+                    if ("info".equalsIgnoreCase(args[0]) || "i".equalsIgnoreCase(args[0])) {
                         return info.exec(player);
                     }
-                    if ("biome".equalsIgnoreCase(a0)) {
+                    if ("biome".equalsIgnoreCase(args[0])) {
                         return biome.exec(player, args);
                     }
-                    if ("biomelist".equalsIgnoreCase(a0)) {
+                    if ("biomelist".equalsIgnoreCase(args[0])) {
                         return biomelist.exec(player, args);
                     }
-                    if ("tp".equalsIgnoreCase(a0)) {
+                    if ("tp".equalsIgnoreCase(args[0])) {
                         return tp.exec(player, args);
                     }
-                    if ("clear".equalsIgnoreCase(a0)) {
+                    if ("clear".equalsIgnoreCase(args[0])) {
                         return clear.exec(player);
                     }
-                    if ("reset".equalsIgnoreCase(a0)) {
+                    if ("reset".equalsIgnoreCase(args[0])) {
                         return reset.exec(player);
                     }
-                    if ("add".equalsIgnoreCase(a0) || "+".equalsIgnoreCase(a0)) {
+                    if ("add".equalsIgnoreCase(args[0]) || "+".equalsIgnoreCase(args[0])) {
                         return add.exec(player, args);
                     }
-                    if ("deny".equalsIgnoreCase(a0)) {
+                    if ("deny".equalsIgnoreCase(args[0])) {
                         return deny.exec(player, args);
                     }
-                    if ("undeny".equalsIgnoreCase(a0)) {
+                    if ("undeny".equalsIgnoreCase(args[0])) {
                         return undeny.exec(player, args);
                     }
-                    if ("remove".equalsIgnoreCase(a0) || "-".equalsIgnoreCase(a0)) {
+                    if ("remove".equalsIgnoreCase(args[0]) || "-".equalsIgnoreCase(args[0])) {
                         return remove.exec(player, args);
                     }
-                    if ("setowner".equalsIgnoreCase(a0)) {
+                    if ("setowner".equalsIgnoreCase(args[0])) {
                         return setowner.exec(player, args);
                     }
-                    if ("move".equalsIgnoreCase(a0)) {
+                    if ("move".equalsIgnoreCase(args[0])) {
                         return move.exec(player, args);
                     }
-                    if ("weanywhere".equalsIgnoreCase(a0)) {
+                    if ("weanywhere".equalsIgnoreCase(args[0])) {
                         return weanywhere.exec(player);
                     }
-                    if ("list".equalsIgnoreCase(a0)) {
+                    if ("list".equalsIgnoreCase(args[0])) {
                         return plotlist.exec(player, args);
                     }
-                    if ("expired".equalsIgnoreCase(a0)) {
+                    if ("expired".equalsIgnoreCase(args[0])) {
                         return expired.exec(player, args);
                     }
-                    if ("addtime".equalsIgnoreCase(a0)) {
+                    if ("addtime".equalsIgnoreCase(args[0])) {
                         return addtime.exec(player);
                     }
-                    if ("done".equalsIgnoreCase(a0)) {
+                    if ("done".equalsIgnoreCase(args[0])) {
                         return done.exec(player);
                     }
-                    if ("donelist".equalsIgnoreCase(a0)) {
+                    if ("donelist".equalsIgnoreCase(args[0])) {
                         return donelist.exec(player, args);
                     }
-                    if ("protect".equalsIgnoreCase(a0)) {
+                    if ("protect".equalsIgnoreCase(args[0])) {
                         return protect.exec(player);
                     }
-                    if ("sell".equalsIgnoreCase(a0)) {
+                    if ("sell".equalsIgnoreCase(args[0])) {
                         return sell.exec(player, args);
                     }
-                    if ("dispose".equalsIgnoreCase(a0)) {
+                    if ("dispose".equalsIgnoreCase(args[0])) {
                         return dispose.exec(player);
                     }
-                    if ("auction".equalsIgnoreCase(a0)) {
+                    if ("auction".equalsIgnoreCase(args[0])) {
                         return auction.exec(player, args);
                     }
-                    if ("buy".equalsIgnoreCase(a0)) {
+                    if ("buy".equalsIgnoreCase(args[0])) {
                         return buy.exec(player);
                     }
-                    if ("bid".equalsIgnoreCase(a0)) {
+                    if ("bid".equalsIgnoreCase(args[0])) {
                         return bid.exec(player, args);
                     }
-                    if (a0.startsWith("home") || a0.startsWith("h")) {
+                    if (args[0].startsWith("home") || args[0].startsWith("h")) {
                         return home.exec(player, args);
                     }
                 } else {

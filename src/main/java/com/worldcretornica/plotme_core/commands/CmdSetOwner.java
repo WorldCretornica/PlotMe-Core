@@ -24,8 +24,6 @@ public class CmdSetOwner extends PlotCommand {
                 String id = PlotMeCoreManager.getPlotId(player);
                 if (id.isEmpty()) {
                     player.sendMessage("§c" + C(MSG_NO_PLOT_FOUND));
-                } else if (args.length < 2 || args[1].isEmpty()) {
-                    player.sendMessage(C("WordUsage") + ": §c/plotme setowner <" + C("WordPlayer") + ">");
                 } else {
                     String newowner = args[1];
                     String oldowner = "<" + C("WordNotApplicable") + ">";

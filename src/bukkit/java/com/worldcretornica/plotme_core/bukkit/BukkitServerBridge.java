@@ -433,19 +433,18 @@ public class BukkitServerBridge implements IServerBridge {
         //Are we using multiworld?
         if (getMultiWorldWrapper() != null) {
             boolean success = false;
-
             if (getMultiWorld().isEnabled()) {
-                WorldGeneratorWrapper env;
+                WorldGeneratorWrapper worldGenerator;
 
                 try {
-                    env = WorldGeneratorWrapper.getGenByName();
+                    worldGenerator = WorldGeneratorWrapper.getGenByName();
                 } catch (DelegateClassException ex) {
                     ex.printStackTrace();
                     return false;
                 }
 
                 try {
-                    success = getMultiWorld().getDataManager().makeWorld(worldname, env, seed, generator);
+                    success = getMultiWorld().getDataManager().makeWorld(worldname, worldGenerator, seed, generator);
                 } catch (DelegateClassException ex) {
                     ex.printStackTrace();
                     return false;
@@ -453,7 +452,7 @@ public class BukkitServerBridge implements IServerBridge {
 
                 if (success) {
                     try {
-                        getMultiWorld().getDataManager().loadWorld(worldname, true);
+                        getMultiWorld().getDataManager().loadWorld(worldname);
                         getMultiWorld().getDataManager().save();
                     } catch (DelegateClassException ex) {
                         ex.printStackTrace();

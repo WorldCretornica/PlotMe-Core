@@ -104,6 +104,10 @@
 
 	<repositories>
 		<repository>
+			<id>spigot-repo</id>
+			<url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
+		</repository>
+		<repository>
 			<id>onarandombox-repo</id>
 			<url>http://repo.onarandombox.com/content/groups/public</url>
 			<snapshots>
@@ -161,21 +165,16 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>com.sk89q</groupId>
-			<artifactId>worldedit</artifactId>
-			<version>6.0.0-SNAPSHOT</version>
+			<groupId>com.sk89q.worldedit</groupId>
+			<artifactId>worldedit-bukkit</artifactId>
+			<version>6.0.1-SNAPSHOT</version>
+			<optional>true</optional>
 			<scope>provided</scope>
-			<exclusions>
-				<exclusion>
-					<artifactId>bukkit</artifactId>
-					<groupId>org.bukkit</groupId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>net.milkbowl.vault</groupId>
 			<artifactId>VaultAPI</artifactId>
-			<version>1.4</version>
+			<version>1.5</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -205,7 +204,7 @@
 		<dependency>
 			<groupId>multiworld</groupId>
 			<artifactId>multiworld</artifactId>
-			<version>4.7.3</version>
+			<version>5.2.5</version>
 			<scope>system</scope>
 			<type>jar</type>
 			<systemPath>${project.basedir}/lib/multiworld.jar</systemPath>

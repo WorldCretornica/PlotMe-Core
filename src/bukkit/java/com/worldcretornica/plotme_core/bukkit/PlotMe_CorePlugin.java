@@ -2,11 +2,14 @@ package com.worldcretornica.plotme_core.bukkit;
 
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IServerBridge;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.Metrics;
 import org.mcstats.Metrics.Graph;
 
 import java.io.IOException;
+
+import static org.bukkit.Bukkit.getPluginManager;
 
 
 public class PlotMe_CorePlugin extends JavaPlugin {
@@ -21,6 +24,10 @@ public class PlotMe_CorePlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        Plugin competition = getPluginManager().getPlugin("PlotSquared");
+        if (competition != null) {
+            getPluginLoader().disablePlugin(competition);
+        }
         serverObjectBuilder = new BukkitServerBridge(this);
         plotme = new PlotMe_Core(serverObjectBuilder);
         getAPI().enable();

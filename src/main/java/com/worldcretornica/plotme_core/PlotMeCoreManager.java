@@ -592,7 +592,6 @@ public class PlotMeCoreManager {
         plot.setForSale(false);
         plot.setProtect(false);
         plot.setAuctioned(false);
-        plot.setAuctionedDate(null);
         plot.setCurrentBid(0.0);
         plot.setCurrentBidder(null);
 
