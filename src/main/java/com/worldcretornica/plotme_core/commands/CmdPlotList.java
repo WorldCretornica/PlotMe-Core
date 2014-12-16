@@ -17,12 +17,12 @@ public class CmdPlotList extends PlotCommand {
     }
 
     public boolean exec(IPlayer player, String[] args) {
-        if (player.hasPermission(PermissionNames.USE_LIST)) {
+        if (player.hasPermission(PermissionNames.USER_LIST)) {
             if (plugin.getPlotMeCoreManager().isPlotWorld(player)) {
                 String name;
                 UUID uuid;
 
-                if (player.hasPermission("PlotMe.admin.list") && args.length == 2) {
+                if (player.hasPermission(PermissionNames.ADMIN_LIST) && args.length == 2) {
                     name = args[1];
                     uuid = player.getUniqueId();
                     player.sendMessage(C("MsgListOfPlotsWhere") + " §b" + name + "§r " + C("MsgCanBuild"));

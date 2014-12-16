@@ -59,7 +59,7 @@ public class CmdReset extends PlotCommand {
                                     if (er.transactionSuccess()) {
                                         IPlayer playerOwner = serverBridge.getPlayer(playerowner.getUniqueId());
                                         if (playerOwner.getName().equalsIgnoreCase(plot.getOwner())) {
-                                            playerOwner.sendMessage(C("WordPlot") + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner() + " " + C("MsgWasReset") + " " + Util().moneyFormat(pmi.getClaimPrice()));
+                                            playerOwner.sendMessage(C("WordPlot") + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner() + " " + C("MsgWasReset") + " " + Util().moneyFormat(pmi.getClaimPrice(), true));
                                         }
                                     } else {
                                         player.sendMessage("§c" + er.errorMessage);
@@ -75,7 +75,7 @@ public class CmdReset extends PlotCommand {
 
                             PlotMeCoreManager.removeOwnerSign(world, id);
                             PlotMeCoreManager.removeSellSign(world, id);
-                            plugin.getSqlManager().deletePlot(PlotMeCoreManager.getIdX(id), PlotMeCoreManager.getIdZ(id), world.getName().toLowerCase());
+                            plugin.getSqlManager().deletePlot(PlotMeCoreManager.getIdX(id), PlotMeCoreManager.getIdZ(id), world.getName());
 
                             pmi.addFreed(id);
 

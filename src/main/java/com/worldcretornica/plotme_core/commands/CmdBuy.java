@@ -1,5 +1,6 @@
 package com.worldcretornica.plotme_core.commands;
 
+import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
@@ -19,7 +20,7 @@ public class CmdBuy extends PlotCommand {
         IWorld world = player.getWorld();
         if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
             if (plugin.getPlotMeCoreManager().isEconomyEnabled(world)) {
-                if (player.hasPermission("PlotMe.use.buy") || player.hasPermission("PlotMe.admin.buy")) {
+                if (player.hasPermission(PermissionNames.USER_BUY) || player.hasPermission("PlotMe.admin.buy")) {
                     String id = PlotMeCoreManager.getPlotId(player);
 
                     if (id.isEmpty()) {
@@ -67,7 +68,7 @@ public class CmdBuy extends PlotCommand {
                                                         for (IPlayer onlinePlayers : serverBridge.getOnlinePlayers()) {
                                                             if (onlinePlayers.getName().equalsIgnoreCase(oldowner)) {
                                                                 onlinePlayers.sendMessage(C("WordPlot") + " " + id + " "
-                                                                                           + C("MsgSoldTo") + " " + buyer + ". " + Util().moneyFormat(cost));
+                                                                                                  + C("MsgSoldTo") + " " + buyer + ". " + Util().moneyFormat(cost, true));
                                                                 break;
                                                             }
                                                         }
@@ -89,7 +90,8 @@ public class CmdBuy extends PlotCommand {
                                                 plugin.getPlotMeCoreManager().setSellSign(world, plot);
                                                 PlotMeCoreManager.setOwnerSign(world, plot);
 
-                                                player.sendMessage(C("MsgPlotBought") + " " + Util().moneyFormat(-cost));
+                                                double price = -cost;
+                                                player.sendMessage(C("MsgPlotBought") + " " + Util().moneyFormat(price, true));
 
                                                 if (isAdvancedLogging()) {
                                                     plugin.getLogger().info(buyer + " " + C("MsgBoughtPlot") + " " + id + " " + C("WordFor") + " " + cost);

@@ -1,5 +1,6 @@
 package com.worldcretornica.plotme_core.commands;
 
+import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
@@ -15,7 +16,7 @@ public class CmdTP extends PlotCommand {
     }
 
     public boolean exec(IPlayer player, String[] args) {
-        if (player.hasPermission("PlotMe.admin.tp")) {
+        if (player.hasPermission(PermissionNames.ADMIN_TP)) {
             if (plugin.getPlotMeCoreManager().isPlotWorld(player) || serverBridge.getConfig().getBoolean("allowWorldTeleport")) {
                 if (args.length == 2 || args.length == 3) {
                     String id = args[1];
@@ -27,17 +28,13 @@ public class CmdTP extends PlotCommand {
                         world = serverBridge.getWorld(args[2]);
 
                         if (world == null) {
-                            for (IWorld bworld : serverBridge.getWorlds()) {
-                                if (bworld.getName().startsWith(args[2])) {
-                                    world = bworld;
-                                    break;
-                                }
-                            }
+                            player.sendMessage("§c" + C("MsgNoPlotworldFound"));
+                            return true;
                         }
-                    } else if (!plugin.getPlotMeCoreManager().isPlotWorld(player)) {
-                        world = plugin.getPlotMeCoreManager().getFirstWorld();
-                    } else {
+                    } else if (plugin.getPlotMeCoreManager().isPlotWorld(player)) {
                         world = player.getWorld();
+                    } else {
+                        world = plugin.getPlotMeCoreManager().getFirstWorld();
                     }
 
                     if (!plugin.getPlotMeCoreManager().isPlotWorld(world)) {
@@ -65,6 +62,7 @@ public class CmdTP extends PlotCommand {
                 }
             } else {
                 player.sendMessage("§c" + C("MsgNotPlotWorld"));
+                return true;
             }
         } else {
             player.sendMessage("§c" + C("MsgPermissionDenied"));

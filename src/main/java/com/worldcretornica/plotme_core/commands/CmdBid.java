@@ -1,5 +1,6 @@
 package com.worldcretornica.plotme_core.commands;
 
+import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
@@ -18,7 +19,7 @@ public class CmdBid extends PlotCommand {
     public boolean exec(IPlayer player, String[] args) {
         IWorld world = player.getWorld();
         if (plugin.getPlotMeCoreManager().isEconomyEnabled(world)) {
-            if (player.hasPermission("PlotMe.use.bid")) {
+            if (player.hasPermission(PermissionNames.PLOT_ME_USE_BID)) {
                 String id = PlotMeCoreManager.getPlotId(player);
 
                 if (id.isEmpty()) {
@@ -60,7 +61,7 @@ public class CmdBid extends PlotCommand {
                                                 if (er2.transactionSuccess()) {
                                                     for (IPlayer onlinePlayers : serverBridge.getOnlinePlayers()) {
                                                         if (onlinePlayers.getName().equalsIgnoreCase(currentbidder)) {
-                                                            onlinePlayers.sendMessage(C("MsgOutbidOnPlot") + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner() + ". " + Util().moneyFormat(bid));
+                                                            onlinePlayers.sendMessage(C("MsgOutbidOnPlot") + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner() + ". " + Util().moneyFormat(bid, true));
                                                             break;
                                                         }
                                                     }
@@ -78,7 +79,8 @@ public class CmdBid extends PlotCommand {
 
                                             plugin.getPlotMeCoreManager().setSellSign(player.getWorld(), plot);
 
-                                            player.sendMessage(C("MsgBidAccepted") + " " + Util().moneyFormat(-bid));
+                                            double price = -bid;
+                                            player.sendMessage(C("MsgBidAccepted") + " " + Util().moneyFormat(price, true));
 
                                             if (isAdvancedLogging()) {
                                                 serverBridge.getLogger().info(bidder + " bid " + bid + " on plot " + id);

@@ -1,20 +1,13 @@
 package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.ICommandSender;
-import com.worldcretornica.plotme_core.api.IPlotMe_ChunkGenerator;
-import com.worldcretornica.plotme_core.api.event.InternalPlotWorldCreateEvent;
-import com.worldcretornica.plotme_core.utils.MinecraftFontWidthCalculator;
 
-import java.util.HashMap;
-import java.util.Map;
-
+@SuppressWarnings("ALL")
 public class CmdCreateWorld extends PlotCommand {
-
     public CmdCreateWorld(PlotMe_Core instance) {
         super(instance);
     }
-
+/*
     public boolean exec(ICommandSender sender, String[] args) {
         if (plugin.creationbuffer.containsKey(sender.getName())) {
             if (args.length == 1) {
@@ -164,4 +157,5 @@ public class CmdCreateWorld extends PlotCommand {
         }
         cs.sendMessage(buffer);
     }
+*/
 }

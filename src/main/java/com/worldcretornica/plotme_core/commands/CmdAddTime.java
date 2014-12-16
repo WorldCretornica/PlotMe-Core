@@ -13,7 +13,7 @@ public class CmdAddTime extends PlotCommand {
     }
 
     public boolean exec(IPlayer player) {
-        if (player.hasPermission(PermissionNames.PLOT_ME_ADMIN_ADDTIME)) {
+        if (player.hasPermission(PermissionNames.ADMIN_ADDTIME)) {
             if (plugin.getPlotMeCoreManager().isPlotWorld(player)) {
                 String id = PlotMeCoreManager.getPlotId(player);
 

@@ -1,9 +1,6 @@
 package com.worldcretornica.plotme_core.commands;
 
-import com.worldcretornica.plotme_core.Plot;
-import com.worldcretornica.plotme_core.PlotMapInfo;
-import com.worldcretornica.plotme_core.PlotMeCoreManager;
-import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.*;
 import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
@@ -17,7 +14,7 @@ public class CmdDispose extends PlotCommand {
     }
 
     public boolean exec(IPlayer player) {
-        if (player.hasPermission("PlotMe.admin.dispose") || player.hasPermission("PlotMe.use.dispose")) {
+        if (player.hasPermission(PermissionNames.ADMIN_DISPOSE) || player.hasPermission(PermissionNames.USER_DISPOSE)) {
             IWorld world = player.getWorld();
             PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
             if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
@@ -32,7 +29,7 @@ public class CmdDispose extends PlotCommand {
                     } else {
                         String name = player.getName();
 
-                        if (plot.getOwner().equalsIgnoreCase(name) || player.hasPermission("PlotMe.admin.dispose")) {
+                        if (plot.getOwner().equalsIgnoreCase(name) || player.hasPermission(PermissionNames.ADMIN_DISPOSE)) {
 
                             double cost = pmi.getDisposePrice();
 
@@ -67,7 +64,7 @@ public class CmdDispose extends PlotCommand {
                                             if (er2.transactionSuccess()) {
                                                 IPlayer currentBidder = serverBridge.getPlayer(playercurrentbidder.getUniqueId());
                                                 if (currentBidder != null) {
-                                                    currentBidder.sendMessage(C("WordPlot") + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner() + " " + C("MsgWasDisposed") + " " + Util().moneyFormat(cost));
+                                                    currentBidder.sendMessage(C("WordPlot") + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner() + " " + C("MsgWasDisposed") + " " + Util().moneyFormat(cost, true));
                                                 }
                                             } else {
                                                 player.sendMessage("§c" + er2.errorMessage);
@@ -89,7 +86,7 @@ public class CmdDispose extends PlotCommand {
                                 PlotMeCoreManager.removeSellSign(world, id);
                                 PlotMeCoreManager.removeAuctionSign(world, id);
 
-                                plugin.getSqlManager().deletePlot(PlotMeCoreManager.getIdX(id), PlotMeCoreManager.getIdZ(id), world.getName().toLowerCase());
+                                plugin.getSqlManager().deletePlot(PlotMeCoreManager.getIdX(id), PlotMeCoreManager.getIdZ(id), world.getName());
 
                                 player.sendMessage(C("MsgPlotDisposedAnyoneClaim"));
 

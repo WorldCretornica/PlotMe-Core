@@ -1,9 +1,6 @@
 package com.worldcretornica.plotme_core.commands;
 
-import com.worldcretornica.plotme_core.Plot;
-import com.worldcretornica.plotme_core.PlotMapInfo;
-import com.worldcretornica.plotme_core.PlotMeCoreManager;
-import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.*;
 import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
@@ -23,7 +20,7 @@ public class CmdSell extends PlotCommand {
             if (plugin.getPlotMeCoreManager().isEconomyEnabled(pmi)) {
 
                 if (pmi.isCanSellToBank() || pmi.isCanPutOnSale()) {
-                    if (player.hasPermission("PlotMe.use.sell") || player.hasPermission("PlotMe.admin.sell")) {
+                    if (player.hasPermission(PermissionNames.USER_SELL) || player.hasPermission(PermissionNames.ADMIN_SELL)) {
                         String id = PlotMeCoreManager.getPlotId(player);
 
                         if (id.isEmpty()) {
@@ -31,7 +28,7 @@ public class CmdSell extends PlotCommand {
                         } else if (!PlotMeCoreManager.isPlotAvailable(id, pmi)) {
                             Plot plot = PlotMeCoreManager.getPlotById(id, pmi);
 
-                            if (plot.getOwnerId().equals(player.getUniqueId()) || player.hasPermission("PlotMe.admin.sell")) {
+                            if (plot.getOwnerId().equals(player.getUniqueId()) || player.hasPermission(PermissionNames.ADMIN_SELL)) {
 
                                 InternalPlotSellChangeEvent event;
 
@@ -88,7 +85,7 @@ public class CmdSell extends PlotCommand {
                                                 if (er.transactionSuccess()) {
                                                     for (IPlayer iPlayer : serverBridge.getOnlinePlayers()) {
                                                         if (iPlayer.getName().equalsIgnoreCase(currentbidder)) {
-                                                            iPlayer.sendMessage(C("WordPlot") + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner() + " " + C("MsgSoldToBank") + " " + Util().moneyFormat(bid));
+                                                            iPlayer.sendMessage(C("WordPlot") + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner() + " " + C("MsgSoldToBank") + " " + Util().moneyFormat(bid, true));
                                                             break;
                                                         }
                                                     }
@@ -127,7 +124,7 @@ public class CmdSell extends PlotCommand {
                                                     plot.updateField("currentbidderid", null);
                                                     plot.updateField("currentbid", 0);
 
-                                                    player.sendMessage(C("MsgPlotSold") + " " + Util().moneyFormat(sellprice));
+                                                    player.sendMessage(C("MsgPlotSold") + " " + Util().moneyFormat(sellprice, true));
 
                                                     if (isAdvancedLogging()) {
                                                         serverBridge.getLogger().info(player.getName() + " " + C("MsgSoldToBankPlot") + " " + id + " " + C("WordFor") + " " + sellprice);

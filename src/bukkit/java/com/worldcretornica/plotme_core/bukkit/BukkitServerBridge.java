@@ -3,6 +3,7 @@ package com.worldcretornica.plotme_core.bukkit;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.PlotWorldEdit;
 import com.worldcretornica.plotme_core.api.*;
 import com.worldcretornica.plotme_core.api.event.IEventFactory;
 import com.worldcretornica.plotme_core.bukkit.MultiWorldWrapper.WorldGeneratorWrapper;
@@ -28,7 +29,6 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.*;
-import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.logging.Logger;
 
@@ -95,33 +95,30 @@ public class BukkitServerBridge implements IServerBridge {
 
     @Override
     public void setupHooks() {
-        PluginManager pm = plugin.getServer().getPluginManager();
+        PluginManager pluginManager = plugin.getServer().getPluginManager();
 
-        if (pm.getPlugin("Vault") != null) {
+        if (pluginManager.getPlugin("Vault") != null) {
             setupEconomy();
         }
 
-        if (pm.getPlugin("WorldEdit") != null) {
+        if (pluginManager.getPlugin("WorldEdit") != null) {
 
-            PlotMe_Core plotme_core = plugin.getAPI();
-            WorldEditPlugin worldeditplugin = (WorldEditPlugin) pm.getPlugin("WorldEdit");
-
+            PlotMe_Core plotMeCore = plugin.getAPI();
+            WorldEditPlugin worldEdit = (WorldEditPlugin) pluginManager.getPlugin("WorldEdit");
+            PlotWorldEdit we = null;
             try {
                 Class.forName("com.sk89q.worldedit.function.mask.Mask");
-                setPlotWorldEdit((PlotWorldEdit) Class.forName("com.worldcretornica.plotme_core.bukkit.worldedit.PlotWorldEdit6_0_0").getConstructor(PlotMe_Core.class, WorldEditPlugin.class).newInstance(plotme_core, worldeditplugin));
-            } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | NoSuchMethodException | SecurityException | InvocationTargetException | IllegalArgumentException unused) {
-                try {
-                    setPlotWorldEdit((PlotWorldEdit) Class.forName("com.worldcretornica.plotme_core.bukkit.worldedit.PlotWorldEdit5_7").getConstructor(PlotMe_Core.class, WorldEditPlugin.class).newInstance(plotme_core, worldeditplugin));
-                } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | NoSuchMethodException | SecurityException | InvocationTargetException | IllegalArgumentException unused2) {
-                    getLogger().warning("Unable to hook to WorldEdit properly, please contact the developper of plotme with your WorldEdit version.");
-                    setPlotWorldEdit(null);
-                }
+                we = new PlotWorldEdit(plotMeCore, worldEdit);
+                setPlotWorldEdit(we);
+            } catch (ClassNotFoundException | SecurityException | IllegalArgumentException unused) {
+                getLogger().warning("Unable to hook to WorldEdit properly, please contact the developper of plotme with your WorldEdit version.");
+                setPlotWorldEdit(null);
             }
 
-            pm.registerEvents(new BukkitPlotWorldEditListener(plugin), plugin);
+            pluginManager.registerEvents(new BukkitPlotWorldEditListener(plugin, we), plugin);
         }
 
-        setUsinglwc(pm.getPlugin("LWC") != null);
+        setUsinglwc(pluginManager.getPlugin("LWC") != null);
     }
 
     @Override
@@ -176,6 +173,7 @@ public class BukkitServerBridge implements IServerBridge {
         pm.registerEvents(new BukkitPlotListener(plugin), plugin);
 
         pm.registerEvents(new BukkitPlotDenyListener(plugin), plugin);
+
     }
 
     @Override

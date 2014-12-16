@@ -1,4 +1,4 @@
-package com.worldcretornica.plotme_core.api;
+package com.worldcretornica.plotme_core;
 
 
 import com.sk89q.worldedit.LocalSession;
@@ -8,9 +8,7 @@ import com.sk89q.worldedit.function.mask.Mask;
 import com.sk89q.worldedit.function.mask.RegionMask;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.world.World;
-import com.worldcretornica.plotme_core.Plot;
-import com.worldcretornica.plotme_core.PlotMeCoreManager;
-import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitLocation;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitWorld;
@@ -19,11 +17,11 @@ import org.bukkit.Location;
 public class PlotWorldEdit {
 
     private final PlotMe_Core plugin;
-    private final WorldEditPlugin we;
+    private final WorldEditPlugin worldEdit;
 
     public PlotWorldEdit(PlotMe_Core instance, WorldEditPlugin worldEditPlugin) {
         plugin = instance;
-        we = worldEditPlugin;
+        this.worldEdit = worldEditPlugin;
     }
 
     public void setMask(IPlayer player) {
@@ -38,7 +36,7 @@ public class PlotWorldEdit {
         BukkitLocation bottom;
         BukkitLocation top;
 
-        LocalSession session = we.getSession(bukkitPlayer.getPlayer());
+        LocalSession session = worldEdit.getSession(bukkitPlayer.getPlayer());
 
         if (!"".equalsIgnoreCase(id)) {
             Plot plot = plugin.getPlotMeCoreManager().getPlotById(id, player);
@@ -47,7 +45,7 @@ public class PlotWorldEdit {
                 bottom = (BukkitLocation) PlotMeCoreManager.getPlotBottomLoc(bukkitWorld, id);
                 top = (BukkitLocation) PlotMeCoreManager.getPlotTopLoc(bukkitWorld, id);
 
-                LocalSession localsession = we.getSession(bukkitPlayer.getPlayer());
+                LocalSession localsession = worldEdit.getSession(bukkitPlayer.getPlayer());
                 World world = localsession.getSelectionWorld();
 
                 Vector pos1 = new Vector(bottom.getBlockX(), bottom.getBlockY(), bottom.getBlockZ());
@@ -55,7 +53,7 @@ public class PlotWorldEdit {
 
                 CuboidRegion cr = new CuboidRegion(world, pos1, pos2);
 
-                RegionMask rm = new RegionMask(cr);
+                Mask rm = new RegionMask(cr);
 
                 session.setMask(rm);
                 return;
@@ -66,7 +64,7 @@ public class PlotWorldEdit {
         top = new BukkitLocation(new Location(bukkitWorld.getWorld(), 0, 0, 0));
 
         if (session.getMask() == null) {
-            LocalSession localsession = we.getSession(bukkitPlayer.getPlayer());
+            LocalSession localsession = worldEdit.getSession(bukkitPlayer.getPlayer());
             World world = localsession.getSelectionWorld();
 
             Vector pos1 = new Vector(bottom.getBlockX(), bottom.getBlockY(), bottom.getBlockZ());
@@ -74,7 +72,7 @@ public class PlotWorldEdit {
 
             CuboidRegion cr = new CuboidRegion(world, pos1, pos2);
 
-            RegionMask rm = new RegionMask(cr);
+            Mask rm = new RegionMask(cr);
 
             session.setMask(rm);
         }
@@ -82,7 +80,8 @@ public class PlotWorldEdit {
 
     public void removeMask(IPlayer player) {
         BukkitPlayer bp = (BukkitPlayer) player;
-        LocalSession session = we.getSession(bp.getPlayer());
+        LocalSession session = worldEdit.getSession(bp.getPlayer());
         session.setMask((Mask) null);
     }
+
 }

@@ -16,6 +16,7 @@ import java.util.logging.Logger;
 public class PlotMe_Core {
 
     public static final String CAPTION_FILE = "captions.yml";
+    public static final String WORLDS_CONFIG_SECTION = "worlds";
     private static final String DEFAULT_GENERATOR_URL = "http://dev.bukkit.org/bukkit-plugins/plotme/";
     //Bridge
     private final IServerBridge serverBridge;
@@ -50,9 +51,9 @@ public class PlotMe_Core {
         setPlotMeCoreManager(new PlotMeCoreManager(this));
         setUtil(new Util(this));
         setupWorlds(); // TODO: Remove concept of pmi so this is not needed
-        serverBridge.setupListeners();
-        serverBridge.setupCommands();
         serverBridge.setupHooks();
+        serverBridge.setupCommands();
+        serverBridge.setupListeners();
         setupClearSpools();
         getSqlManager().plotConvertToUUIDAsynchronously();
     }
@@ -78,7 +79,7 @@ public class PlotMe_Core {
         config.set("language", null);
         // If no world exists add config for a world
         //if (!config.contains("worlds") || config.contains("worlds") && config.getConfigurationSection("worlds").getKeys(false).isEmpty()) {
-        if (!(config.contains("worlds") && !config.getConfigurationSection("worlds").getKeys(false).isEmpty())) {
+        if (!(config.contains(WORLDS_CONFIG_SECTION) && !config.getConfigurationSection(WORLDS_CONFIG_SECTION).getKeys(false).isEmpty())) {
             new PlotMapInfo(this, "plotworld");
         }
 
@@ -95,10 +96,10 @@ public class PlotMe_Core {
     }
 
     private void setupWorlds() {
-        IConfigSection worldsCS = serverBridge.getConfig().getConfigurationSection("worlds");
+        IConfigSection worldsCS = serverBridge.getConfig().getConfigurationSection(WORLDS_CONFIG_SECTION);
         for (String worldname : worldsCS.getKeys(false)) {
             String world = worldname.toLowerCase();
-            if (getGenManager(world) == null) {
+            if (getGenManager(worldname) == null) {
                 getLogger().log(Level.SEVERE, "The world {0} either does not exist or not using a PlotMe generator", world);
                 getLogger().log(Level.SEVERE, "Please ensure that {0} is set up and that it is using a PlotMe generator", world);
                 getLogger().log(Level.SEVERE, "The default generator can be downloaded from " + DEFAULT_GENERATOR_URL);
@@ -141,13 +142,6 @@ public class PlotMe_Core {
                             getLogger().warning("Failed to delete old caption file. ");
                         }
                     }
-                }
-            } else {
-                getLogger().info("No old caption file found.");
-                if (newCaptionFile.exists()) {
-                    serverBridge.saveResource(CAPTION_FILE, false);
-                } else {
-                    serverBridge.saveResource(CAPTION_FILE, true);
                 }
             }
         }

@@ -41,7 +41,7 @@ public class PlotMeCoreManager {
     public static Plot getPlotById(IPlayer player, PlotMapInfo pmi) {
         String id = getPlotId(player);
 
-        if (pmi == null || id.isEmpty()) {
+        if (pmi == null) {
             return null;
         }
 
@@ -144,7 +144,7 @@ public class PlotMeCoreManager {
         }
     }
 
-    public int getNbOwnedPlot(UUID uuid, String name, String world) {
+    public short getNbOwnedPlot(UUID uuid, String name, String world) {
         return plugin.getSqlManager().getPlotCount(world, uuid, name);
     }
 
@@ -457,32 +457,6 @@ public class PlotMeCoreManager {
                 setOwnerSign(world, plot2);
                 setSellSign(world, plot2);
 
-            } else {
-                int idX = getIdX(idFrom);
-                int idZ = getIdZ(idFrom);
-                plugin.getSqlManager().deletePlot(idX, idZ, world.getName());
-                removePlot(world, idFrom);
-                idX = getIdX(idTo);
-                idZ = getIdZ(idTo);
-                plot1.setId(idTo);
-                plugin.getSqlManager().addPlot(plot1, idX, idZ, topX(idTo, world), bottomX(idTo, world), topZ(idTo, world), bottomZ(idTo, world));
-                addPlot(world, idTo, plot1);
-
-                HashMap<String, UUID> allowed = plot1.allowed().getAllPlayers();
-                for (String player : allowed.keySet()) {
-                    plugin.getSqlManager().addPlotAllowed(player, allowed.get(player), idX, idZ, world.getName());
-                }
-
-                HashMap<String, UUID> denied = plot1.denied().getAllPlayers();
-                for (String player : denied.keySet()) {
-                    plugin.getSqlManager().addPlotDenied(player, denied.get(player), idX, idZ, world.getName());
-                }
-
-                setOwnerSign(world, plot1);
-                setSellSign(world, plot1);
-                removeOwnerSign(world, idFrom);
-                getGenManager(world).removeSellerDisplay(world, idFrom);
-
             }
         } else if (plot2 != null) {
             int idX = getIdX(idTo);
@@ -595,21 +569,20 @@ public class PlotMeCoreManager {
         plot.setCurrentBid(0.0);
         plot.setCurrentBidder(null);
 
-        String name = world.getName();
+        String worldName = world.getName();
         int idX = getIdX(id);
         int idZ = getIdZ(id);
 
         SqlManager sm = plugin.getSqlManager();
 
-        sm.updatePlot(idX, idZ, name, "forsale", false);
-        sm.updatePlot(idX, idZ, name, "protected", false);
-        sm.updatePlot(idX, idZ, name, "auctionned", false);
-        sm.updatePlot(idX, idZ, name, "auctionneddate", null);
-        sm.updatePlot(idX, idZ, name, "currentbid", 0);
-        sm.updatePlot(idX, idZ, name, "currentbidder", null);
+        sm.updatePlot(idX, idZ, worldName, "forsale", false);
+        sm.updatePlot(idX, idZ, worldName, "protected", false);
+        sm.updatePlot(idX, idZ, worldName, "auctionned", false);
+        sm.updatePlot(idX, idZ, worldName, "currentbid", 0);
+        sm.updatePlot(idX, idZ, worldName, "currentbidder", null);
 
-        if (getMap(world).isUseProgressiveClear()) {
-            plugin.addPlotToClear(new PlotToClear(name, id, reason));
+        if (getMap(worldName).isUseProgressiveClear()) {
+            plugin.addPlotToClear(new PlotToClear(worldName, id, reason));
         } else {
             getGenManager(world).clear(world, id);
             if (plugin.getServerBridge().getUsinglwc()) {

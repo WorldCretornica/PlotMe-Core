@@ -67,7 +67,8 @@ public class CmdBiome extends PlotCommand {
                                 plugin.getPlotMeCoreManager().setBiome(world, id, biome);
                                 plot.setBiome(biome);
 
-                                player.sendMessage(C("MsgBiomeSet") + " §9" + biome + " " + Util().moneyFormat(-price));
+                                double price1 = -price;
+                                player.sendMessage(C("MsgBiomeSet") + " §9" + biome + " " + Util().moneyFormat(price1, true));
 
                                 if (isAdvancedLogging()) {
                                     if (price == 0)

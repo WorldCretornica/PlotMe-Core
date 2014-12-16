@@ -39,10 +39,6 @@ public class Util {
         }
     }
 
-    public String moneyFormat(double price) {
-        return moneyFormat(price, true);
-    }
-
     public String moneyFormat(double price, boolean showsign) {
         if (price == 0) {
             return "";

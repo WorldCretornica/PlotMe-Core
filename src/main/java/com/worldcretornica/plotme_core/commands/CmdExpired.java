@@ -1,5 +1,6 @@
 package com.worldcretornica.plotme_core.commands;
 
+import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IPlayer;
@@ -16,7 +17,7 @@ public class CmdExpired extends PlotCommand {
     }
 
     public boolean exec(IPlayer player, String[] args) {
-        if (player.hasPermission("PlotMe.admin.expired")) {
+        if (player.hasPermission(PermissionNames.ADMIN_EXPIRED)) {
             IWorld world = player.getWorld();
             if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
                 int page = 1;
@@ -25,7 +26,7 @@ public class CmdExpired extends PlotCommand {
                         page = Integer.parseInt(args[1]);
                 }
 
-                int maxpage = (int) Math.ceil(plugin.getSqlManager().getExpiredPlotCount(world.getName()) / 8L);
+                int maxpage = (int) Math.ceil(plugin.getSqlManager().getExpiredPlotCount(world.getName()) / 8);
 
                 List<Plot> expiredplots = plugin.getSqlManager().getExpiredPlots(world.getName(), page, 8);
 

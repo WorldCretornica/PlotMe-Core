@@ -13,7 +13,7 @@ public class CmdClear extends PlotCommand {
     }
 
     public boolean exec(IPlayer player) {
-        if (player.hasPermission("PlotMe.admin.clear") || player.hasPermission("PlotMe.use.clear")) {
+        if (player.hasPermission(PermissionNames.ADMIN_CLEAR) || player.hasPermission(PermissionNames.USER_CLEAR)) {
             IWorld world = player.getWorld();
             PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
             if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
@@ -26,9 +26,9 @@ public class CmdClear extends PlotCommand {
                     if (plot.isProtect()) {
                         player.sendMessage("§c" + C("MsgPlotProtectedCannotClear"));
                     } else {
-                        String playername = player.getName();
+                        String playerName = player.getName();
 
-                        if (plot.getOwner().equalsIgnoreCase(playername) || player.hasPermission("PlotMe.admin.clear")) {
+                        if (plot.getOwner().equalsIgnoreCase(playerName) || player.hasPermission(PermissionNames.ADMIN_CLEAR)) {
 
 
                             double price = 0.0;
@@ -66,9 +66,9 @@ public class CmdClear extends PlotCommand {
 
                                 if (isAdvancedLogging()) {
                                     if (price == 0)
-                                        serverBridge.getLogger().info(playername + " " + C("MsgClearedPlot") + " " + id);
+                                        serverBridge.getLogger().info(playerName + " " + C("MsgClearedPlot") + " " + id);
                                     else
-                                        serverBridge.getLogger().info(playername + " " + C("MsgClearedPlot") + " " + id + (" " + C("WordFor") + " " + price));
+                                        serverBridge.getLogger().info(playerName + " " + C("MsgClearedPlot") + " " + id + (" " + C("WordFor") + " " + price));
                                 }
                             }
                         } else {

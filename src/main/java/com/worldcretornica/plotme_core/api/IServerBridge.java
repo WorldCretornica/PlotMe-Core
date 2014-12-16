@@ -1,5 +1,6 @@
 package com.worldcretornica.plotme_core.api;
 
+import com.worldcretornica.plotme_core.PlotWorldEdit;
 import com.worldcretornica.plotme_core.api.event.IEventFactory;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
@@ -61,6 +62,13 @@ public interface IServerBridge {
 
     boolean getUsinglwc();
 
+    /**
+     * Gets the world with the given name.
+     *
+     * @param name the name of the world to retrieve. Converted to lowercase in Bukkit/Spigot
+     *
+     * @return a world with the given name, or null if none exists
+     */
     IWorld getWorld(String name);
 
     void setupCommands();

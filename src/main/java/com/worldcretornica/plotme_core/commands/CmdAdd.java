@@ -1,9 +1,6 @@
 package com.worldcretornica.plotme_core.commands;
 
-import com.worldcretornica.plotme_core.Plot;
-import com.worldcretornica.plotme_core.PlotMapInfo;
-import com.worldcretornica.plotme_core.PlotMeCoreManager;
-import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.*;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotAddAllowedEvent;
@@ -16,7 +13,7 @@ public class CmdAdd extends PlotCommand {
     }
 
     public boolean exec(IPlayer player, String[] args) {
-        if (player.hasPermission("PlotMe.admin.add") || player.hasPermission("PlotMe.use.add")) {
+        if (player.hasPermission(PermissionNames.ADMIN_ADD) || player.hasPermission(PermissionNames.USER_ADD)) {
             IWorld world = player.getWorld();
             PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
             if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
@@ -31,7 +28,7 @@ public class CmdAdd extends PlotCommand {
 
                         String allowed = args[1];
 
-                        if (plot.getOwner().equalsIgnoreCase(player.getName()) || player.hasPermission("PlotMe.admin.add")) {
+                        if (plot.getOwner().equalsIgnoreCase(player.getName()) || player.hasPermission(PermissionNames.ADMIN_ADD)) {
                             if (plot.isAllowedConsulting(allowed) || plot.isGroupAllowed(allowed)) {
                                 player.sendMessage(C("WordPlayer") + " §c" + allowed + "§r " + C("MsgAlreadyAllowed"));
                             } else {

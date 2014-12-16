@@ -19,7 +19,7 @@ public class CmdAuction extends PlotCommand {
         if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
             if (plugin.getPlotMeCoreManager().isEconomyEnabled(pmi)) {
                 if (pmi.isCanPutOnSale()) {
-                    if (player.hasPermission(PermissionNames.PLOT_ME_USE_AUCTION) || player.hasPermission(PermissionNames.PLOT_ME_ADMIN_AUCTION)) {
+                    if (player.hasPermission(PermissionNames.USE_AUCTION) || player.hasPermission(PermissionNames.ADMIN_AUCTION)) {
                         String id = PlotMeCoreManager.getPlotId(player);
 
                         if (id.isEmpty()) {
@@ -29,11 +29,11 @@ public class CmdAuction extends PlotCommand {
 
                             String name = player.getName();
 
-                            if (plot.getOwner().equalsIgnoreCase(name) || player.hasPermission(PermissionNames.PLOT_ME_ADMIN_AUCTION)) {
+                            if (plot.getOwner().equalsIgnoreCase(name) || player.hasPermission(PermissionNames.ADMIN_AUCTION)) {
 
                                 if (plot.isAuctioned()) {
                                     if (plot.getCurrentBidderId() != null) {
-                                        if (player.hasPermission(PermissionNames.PLOT_ME_ADMIN_AUCTION)) {
+                                        if (player.hasPermission(PermissionNames.ADMIN_AUCTION)) {
                                             IOfflinePlayer playercurrentbidder = serverBridge.getOfflinePlayer(plot.getCurrentBidderId());
                                             EconomyResponse er = serverBridge.depositPlayer(playercurrentbidder, plot.getCurrentBid());
 
@@ -41,7 +41,7 @@ public class CmdAuction extends PlotCommand {
                                                 for (IPlayer onlinePlayers : serverBridge.getOnlinePlayers()) {
                                                     if (onlinePlayers.getName().equalsIgnoreCase(plot.getCurrentBidder())) {
                                                         onlinePlayers.sendMessage(C("MsgAuctionCancelledOnPlot")
-                                                                                          + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner() + ". " + Util().moneyFormat(plot.getCurrentBid()));
+                                                                                          + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner() + ". " + Util().moneyFormat(plot.getCurrentBid(), true));
                                                         break;
                                                     }
                                                 }

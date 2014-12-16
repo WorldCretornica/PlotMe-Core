@@ -1,9 +1,6 @@
 package com.worldcretornica.plotme_core.commands;
 
-import com.worldcretornica.plotme_core.Plot;
-import com.worldcretornica.plotme_core.PlotMapInfo;
-import com.worldcretornica.plotme_core.PlotMeCoreManager;
-import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.*;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotRemoveAllowedEvent;
@@ -18,7 +15,7 @@ public class CmdRemove extends PlotCommand {
     }
 
     public boolean exec(IPlayer player, String[] args) {
-        if (player.hasPermission("PlotMe.admin.remove") || player.hasPermission("PlotMe.use.remove")) {
+        if (player.hasPermission("PlotMe.admin.remove") || player.hasPermission(PermissionNames.USER_REMOVE)) {
             IWorld world = player.getWorld();
             PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
             if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
@@ -69,7 +66,8 @@ public class CmdRemove extends PlotCommand {
                                 if (!event.isCancelled()) {
                                     plot.removeAllowed(allowed);
 
-                                    player.sendMessage(C("WordPlayer") + " §c" + allowed + "§r " + C("WordRemoved") + ". " + Util().moneyFormat(-price));
+                                    double price1 = -price;
+                                    player.sendMessage(C("WordPlayer") + " §c" + allowed + "§r " + C("WordRemoved") + ". " + Util().moneyFormat(price1, true));
 
                                     if (isAdvancedLogging()) {
                                         serverBridge.getLogger().info(allowed + " " + C("MsgRemovedPlayer") + " " + allowed + " " + C("MsgFromPlot") + " " + id + (price != 0 ? " " + C("WordFor") + " " + price : ""));

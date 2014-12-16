@@ -7,9 +7,9 @@ import com.worldcretornica.plotme_core.api.IPlayer;
 import java.util.Collections;
 import java.util.List;
 
-public class CmdBiomeList extends PlotCommand {
+public class CmdBiomes extends PlotCommand {
 
-    public CmdBiomeList(PlotMe_Core instance) {
+    public CmdBiomes(PlotMe_Core instance) {
         super(instance);
     }
 

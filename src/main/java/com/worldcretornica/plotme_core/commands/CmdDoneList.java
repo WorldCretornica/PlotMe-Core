@@ -1,5 +1,6 @@
 package com.worldcretornica.plotme_core.commands;
 
+import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IPlayer;
@@ -11,15 +12,13 @@ import static com.worldcretornica.plotme_core.utils.Util.whitespace;
 
 public class CmdDoneList extends PlotCommand {
 
-    public static final String ADMIN_DONE = "PlotMe.admin.done";
-
     public CmdDoneList(PlotMe_Core instance) {
         super(instance);
     }
 
     public boolean exec(IPlayer player, String[] args) {
         if (plugin.getPlotMeCoreManager().isPlotWorld(player)) {
-            if (player.hasPermission(ADMIN_DONE)) {
+            if (player.hasPermission(PermissionNames.ADMIN_DONE)) {
 
                 int page = 1;
 

@@ -27,10 +27,10 @@ public class CmdShowHelp extends PlotCommand {
         if (player.hasPermission("PlotMe.use.claim.other")) {
             allowed_commands.add("claim.other");
         }
-        if (player.hasPermission(PermissionNames.PLOT_ME_USE_AUTO)) {
+        if (player.hasPermission(PermissionNames.USE_AUTO)) {
             allowed_commands.add("auto");
         }
-        if (player.hasPermission(PermissionNames.PLOT_ME_USE_HOME)) {
+        if (player.hasPermission(PermissionNames.USE_HOME)) {
             allowed_commands.add("home");
         }
         if (player.hasPermission("PlotMe.use.home.other")) {
@@ -40,35 +40,35 @@ public class CmdShowHelp extends PlotCommand {
             allowed_commands.add("info");
             allowed_commands.add("biomeinfo");
         }
-        if (player.hasPermission(PermissionNames.USE_LIST)) {
+        if (player.hasPermission(PermissionNames.USER_LIST)) {
             allowed_commands.add("list");
         }
         if (player.hasPermission(PermissionNames.USE_BIOME)) {
             allowed_commands.add("biome");
             allowed_commands.add("biomelist");
         }
-        if (player.hasPermission(PermissionNames.USER_DONE) || player.hasPermission(CmdDoneList.ADMIN_DONE)) {
+        if (player.hasPermission(PermissionNames.USER_DONE) || player.hasPermission(PermissionNames.ADMIN_DONE)) {
             allowed_commands.add("done");
         }
-        if (player.hasPermission(CmdDoneList.ADMIN_DONE)) {
+        if (player.hasPermission(PermissionNames.ADMIN_DONE)) {
             allowed_commands.add("donelist");
         }
-        if (player.hasPermission("PlotMe.admin.tp")) {
+        if (player.hasPermission(PermissionNames.ADMIN_TP)) {
             allowed_commands.add("tp");
         }
-        if (player.hasPermission("PlotMe.use.clear") || player.hasPermission("PlotMe.admin.clear")) {
+        if (player.hasPermission(PermissionNames.USER_CLEAR) || player.hasPermission(PermissionNames.ADMIN_CLEAR)) {
             allowed_commands.add("clear");
         }
-        if (player.hasPermission("PlotMe.admin.dispose") || player.hasPermission("PlotMe.use.dispose")) {
+        if (player.hasPermission(PermissionNames.ADMIN_DISPOSE) || player.hasPermission(PermissionNames.USER_DISPOSE)) {
             allowed_commands.add("dispose");
         }
         if (player.hasPermission(PermissionNames.ADMIN_RESET)) {
             allowed_commands.add("reset");
         }
-        if (player.hasPermission("PlotMe.use.add") || player.hasPermission("PlotMe.admin.add")) {
+        if (player.hasPermission(PermissionNames.USER_ADD) || player.hasPermission(PermissionNames.ADMIN_ADD)) {
             allowed_commands.add("add");
         }
-        if (player.hasPermission("PlotMe.use.remove") || player.hasPermission("PlotMe.admin.remove")) {
+        if (player.hasPermission(PermissionNames.USER_REMOVE) || player.hasPermission("PlotMe.admin.remove")) {
             allowed_commands.add("remove");
         }
         if (player.hasPermission("PlotMe.use.deny") || player.hasPermission("PlotMe.admin.deny")) {
@@ -77,22 +77,22 @@ public class CmdShowHelp extends PlotCommand {
         if (player.hasPermission(PermissionNames.USER_UNDENY) || player.hasPermission(PermissionNames.ADMIN_UNDENY)) {
             allowed_commands.add("undeny");
         }
-        if (player.hasPermission("PlotMe.admin.setowner")) {
+        if (player.hasPermission(PermissionNames.ADMIN_SETOWNER)) {
             allowed_commands.add("setowner");
         }
-        if (player.hasPermission("PlotMe.admin.move")) {
+        if (player.hasPermission(PermissionNames.ADMIN_MOVE)) {
             allowed_commands.add("move");
         }
         if (player.hasPermission("PlotMe.admin.weanywhere")) {
             allowed_commands.add("weanywhere");
         }
-        if (player.hasPermission("PlotMe.admin.list")) {
+        if (player.hasPermission(PermissionNames.ADMIN_LIST)) {
             allowed_commands.add("listother");
         }
-        if (player.hasPermission("PlotMe.admin.expired")) {
+        if (player.hasPermission(PermissionNames.ADMIN_EXPIRED)) {
             allowed_commands.add("expired");
         }
-        if (player.hasPermission(PermissionNames.PLOT_ME_ADMIN_ADDTIME)) {
+        if (player.hasPermission(PermissionNames.ADMIN_ADDTIME)) {
             allowed_commands.add("addtime");
         }
 
@@ -100,10 +100,10 @@ public class CmdShowHelp extends PlotCommand {
         boolean economyEnabled = plugin.getPlotMeCoreManager().isEconomyEnabled(pmi);
 
         if (plugin.getPlotMeCoreManager().isPlotWorld(player) && economyEnabled) {
-            if (player.hasPermission("PlotMe.use.buy")) {
+            if (player.hasPermission(PermissionNames.USER_BUY)) {
                 allowed_commands.add("buy");
             }
-            if (player.hasPermission("PlotMe.use.sell")) {
+            if (player.hasPermission(PermissionNames.USER_SELL)) {
                 allowed_commands.add("sell");
                 if (pmi != null) {
                     if (pmi.isCanSellToBank()) {
@@ -111,10 +111,10 @@ public class CmdShowHelp extends PlotCommand {
                     }
                 }
             }
-            if (player.hasPermission(PermissionNames.PLOT_ME_USE_AUCTION)) {
+            if (player.hasPermission(PermissionNames.USE_AUCTION)) {
                 allowed_commands.add("auction");
             }
-            if (player.hasPermission("PlotMe.use.bid")) {
+            if (player.hasPermission(PermissionNames.PLOT_ME_USE_BID)) {
                 allowed_commands.add("bid");
             }
         }

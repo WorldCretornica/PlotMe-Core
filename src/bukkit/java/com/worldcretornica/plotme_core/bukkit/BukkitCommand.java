@@ -19,7 +19,7 @@ public class BukkitCommand implements CommandExecutor {
     private final CmdAuto auto;
     private final CmdBid bid;
     private final CmdBiome biome;
-    private final CmdBiomeList biomelist;
+    private final CmdBiomes biomes;
     private final CmdBuy buy;
     private final CmdClaim claim;
     private final CmdClear clear;
@@ -43,7 +43,6 @@ public class BukkitCommand implements CommandExecutor {
     private final CmdTP tp;
     private final CmdUndeny undeny;
     private final CmdWEAnywhere weanywhere;
-    private final CmdCreateWorld createworld;
 
     public BukkitCommand(PlotMe_CorePlugin instance) {
         api = instance.getAPI();
@@ -53,7 +52,7 @@ public class BukkitCommand implements CommandExecutor {
         auto = new CmdAuto(api);
         bid = new CmdBid(api);
         biome = new CmdBiome(api);
-        biomelist = new CmdBiomeList(api);
+        biomes = new CmdBiomes(api);
         buy = new CmdBuy(api);
         claim = new CmdClaim(api);
         clear = new CmdClear(api);
@@ -77,7 +76,6 @@ public class BukkitCommand implements CommandExecutor {
         tp = new CmdTP(api);
         undeny = new CmdUndeny(api);
         weanywhere = new CmdWEAnywhere(api);
-        createworld = new CmdCreateWorld(api);
     }
 
     private String C(String caption) {
@@ -98,9 +96,6 @@ public class BukkitCommand implements CommandExecutor {
                 }
                 if ("resetexpired".equalsIgnoreCase(args[0])) {
                     return resetexpired.exec(new BukkitCommandSender(sender), args);
-                }
-                if ("createworld".equalsIgnoreCase(args[0])) {
-                    return createworld.exec(new BukkitCommandSender(sender), args);
                 }
             }
         } else {
@@ -146,8 +141,8 @@ public class BukkitCommand implements CommandExecutor {
                     if ("biome".equalsIgnoreCase(args[0])) {
                         return biome.exec(player, args);
                     }
-                    if ("biomelist".equalsIgnoreCase(args[0])) {
-                        return biomelist.exec(player, args);
+                    if ("biomes".equalsIgnoreCase(args[0])) {
+                        return biomes.exec(player, args);
                     }
                     if ("tp".equalsIgnoreCase(args[0])) {
                         return tp.exec(player, args);

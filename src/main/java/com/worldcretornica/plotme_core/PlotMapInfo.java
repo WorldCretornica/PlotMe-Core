@@ -22,8 +22,8 @@ public class PlotMapInfo {
         freedplots = plugin.getSqlManager().getFreed(this.world);
     }
 
-    public int getNbPlots() {
-        return plots.size();
+    public short getNbPlots() {
+        return (short) plots.size();
     }
 
     public Plot getPlot(String id) {

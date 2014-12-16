@@ -100,7 +100,8 @@ public class CmdDeny extends PlotCommand {
                                         }
                                     }
 
-                                    player.sendMessage(C("WordPlayer") + " §c" + denied + "§r " + C("MsgNowDenied") + " " + Util().moneyFormat(-price));
+                                    double price1 = -price;
+                                    player.sendMessage(C("WordPlayer") + " §c" + denied + "§r " + C("MsgNowDenied") + " " + Util().moneyFormat(price1, true));
 
                                     if (isAdvancedLogging()) {
                                         if (price == 0)

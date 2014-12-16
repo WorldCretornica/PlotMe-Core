@@ -1,5 +1,6 @@
 package com.worldcretornica.plotme_core.bukkit.listener;
 
+import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
@@ -25,7 +26,7 @@ public class BukkitPlotDenyListener implements Listener {
     public void onPlayerMove(PlayerMoveEvent event) {
         BukkitPlayer player = new BukkitPlayer(event.getPlayer());
 
-        if (api.getPlotMeCoreManager().isPlotWorld(player) && !player.hasPermission("plotme.admin.bypassdeny")) {
+        if (api.getPlotMeCoreManager().isPlotWorld(player) && !player.hasPermission(PermissionNames.ADMIN_BYPASSDENY)) {
             BukkitLocation to = new BukkitLocation(event.getTo());
 
             String idTo = PlotMeCoreManager.getPlotId(to);
@@ -47,7 +48,7 @@ public class BukkitPlotDenyListener implements Listener {
     public void onPlayerTeleport(PlayerTeleportEvent event) {
         BukkitPlayer player = new BukkitPlayer(event.getPlayer());
 
-        if (api.getPlotMeCoreManager().isPlotWorld(player) && !player.hasPermission("plotme.admin.bypassdeny")) {
+        if (api.getPlotMeCoreManager().isPlotWorld(player) && !player.hasPermission(PermissionNames.ADMIN_BYPASSDENY)) {
             BukkitLocation to = new BukkitLocation(event.getTo());
 
             String idTo = PlotMeCoreManager.getPlotId(to);
@@ -67,7 +68,7 @@ public class BukkitPlotDenyListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         BukkitPlayer player = new BukkitPlayer(event.getPlayer());
 
-        if (api.getPlotMeCoreManager().isPlotWorld(player) && !player.hasPermission("plotme.admin.bypassdeny")) {
+        if (api.getPlotMeCoreManager().isPlotWorld(player) && !player.hasPermission(PermissionNames.ADMIN_BYPASSDENY)) {
             String id = PlotMeCoreManager.getPlotId(player);
 
             if (!id.isEmpty()) {

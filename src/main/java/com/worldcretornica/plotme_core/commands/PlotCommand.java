@@ -25,13 +25,13 @@ public abstract class PlotCommand {
         serverBridge.getLogger().warning(msg);
     }
 
-    int getPlotLimit(IPlayer player) {
+    short getPlotLimit(IPlayer player) {
 
         if (player.hasPermission("plotme.limit.*")) {
             return -1;
         }
-        int max = -2;
-        for (int ctr = 0; ctr < 255; ctr++) {
+        short max = -2;
+        for (short ctr = 0; ctr < 255; ctr++) {
             if (player.hasPermission("plotme.limit." + ctr)) {
                 max = ctr;
             }

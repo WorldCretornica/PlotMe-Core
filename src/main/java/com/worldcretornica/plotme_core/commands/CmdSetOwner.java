@@ -1,9 +1,6 @@
 package com.worldcretornica.plotme_core.commands;
 
-import com.worldcretornica.plotme_core.Plot;
-import com.worldcretornica.plotme_core.PlotMapInfo;
-import com.worldcretornica.plotme_core.PlotMeCoreManager;
-import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.*;
 import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
@@ -19,7 +16,7 @@ public class CmdSetOwner extends PlotCommand {
     public boolean exec(IPlayer player, String[] args) {
         IWorld world = player.getWorld();
         PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
-        if (player.hasPermission("PlotMe.admin.setowner")) {
+        if (player.hasPermission(PermissionNames.ADMIN_SETOWNER)) {
             if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
                 String id = PlotMeCoreManager.getPlotId(player);
                 if (id.isEmpty()) {
@@ -49,7 +46,7 @@ public class CmdSetOwner extends PlotCommand {
                                     if (er.transactionSuccess()) {
                                         IPlayer oldOwner = serverBridge.getPlayer(playeroldowner.getUniqueId());
                                         if (oldOwner != null) {
-                                            oldOwner.sendMessage(C("MsgYourPlot") + " " + id + " " + C("MsgNowOwnedBy") + " " + newowner + ". " + Util().moneyFormat(pmi.getClaimPrice()));
+                                            oldOwner.sendMessage(C("MsgYourPlot") + " " + id + " " + C("MsgNowOwnedBy") + " " + newowner + ". " + Util().moneyFormat(pmi.getClaimPrice(), true));
                                         }
                                     } else {
                                         player.sendMessage("§c" + er.errorMessage);
@@ -68,7 +65,7 @@ public class CmdSetOwner extends PlotCommand {
                                 if (er.transactionSuccess()) {
                                     IPlayer currentBidder = serverBridge.getPlayer(playercurrentbidder.getUniqueId());
                                     if (currentBidder != null) {
-                                        currentBidder.sendMessage(C("WordPlot") + " " + id + " " + C("MsgChangedOwnerFrom") + " " + oldowner + " " + C("WordTo") + " " + newowner + ". " + Util().moneyFormat(plot.getCurrentBid()));
+                                        currentBidder.sendMessage(C("WordPlot") + " " + id + " " + C("MsgChangedOwnerFrom") + " " + oldowner + " " + C("WordTo") + " " + newowner + ". " + Util().moneyFormat(plot.getCurrentBid(), true));
                                     }
                                 } else {
                                     player.sendMessage(er.errorMessage);

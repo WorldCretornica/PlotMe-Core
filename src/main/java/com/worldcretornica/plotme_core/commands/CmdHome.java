@@ -18,7 +18,7 @@ public class CmdHome extends PlotCommand {
     }
 
     public boolean exec(IPlayer player, String[] args) {
-        if (player.hasPermission(PermissionNames.PLOT_ME_USE_HOME) || player.hasPermission("PlotMe.admin.home.other")) {
+        if (player.hasPermission(PermissionNames.USE_HOME) || player.hasPermission(PermissionNames.ADMIN_HOME_OTHER)) {
             if (plugin.getPlotMeCoreManager().isPlotWorld(player) || serverBridge.getConfig().getBoolean("allowWorldTeleport")) {
                 String playerName = player.getName();
                 UUID uuid = player.getUniqueId();
@@ -30,7 +30,7 @@ public class CmdHome extends PlotCommand {
                     world = plugin.getPlotMeCoreManager().getFirstWorld();
                 }
 
-                String worldName = "";
+                String worldName = null;
                 if (world != null) {
                     worldName = world.getName();
                 }
@@ -47,7 +47,7 @@ public class CmdHome extends PlotCommand {
 
                 if (args.length >= 2) {
                     if (serverBridge.getWorld(args[1]) == null) {
-                        if (player.hasPermission("PlotMe.admin.home.other")) {
+                        if (player.hasPermission(PermissionNames.ADMIN_HOME_OTHER)) {
                             playerName = args[1];
                             uuid = null;
                         }
@@ -65,7 +65,9 @@ public class CmdHome extends PlotCommand {
                         worldName = args[2];
                     }
                 }
-
+                if (world == null) {
+                    return true;
+                }
                 PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
                 if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
                     int i = nb - 1;
@@ -108,7 +110,8 @@ public class CmdHome extends PlotCommand {
                                         player.teleport(event.getHomeLocation());
 
                                         if (price != 0) {
-                                            player.sendMessage(Util().moneyFormat(-price));
+                                            double price1 = -price;
+                                            player.sendMessage(Util().moneyFormat(price1, true));
                                         }
                                     }
                                     return true;
@@ -150,7 +153,8 @@ public class CmdHome extends PlotCommand {
                                     player.teleport(event.getHomeLocation());
 
                                     if (price != 0) {
-                                        player.sendMessage(Util().moneyFormat(-price));
+                                        double price1 = -price;
+                                        player.sendMessage(Util().moneyFormat(price1, true));
                                     }
                                 }
                                 return true;

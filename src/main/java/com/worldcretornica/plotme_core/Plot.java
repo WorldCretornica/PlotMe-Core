@@ -62,7 +62,7 @@ public class Plot implements Comparable<Plot> {
         this.plugin = plugin;
         setOwner(owner);
         setOwnerId(uuid);
-        setWorld(world.getName().toLowerCase());
+        setWorld(world.getName());
         allowed = new PlayerList();
         denied = new PlayerList();
         setBiome(this.plugin.getServerBridge().getBiome("PLAINS"));
@@ -428,7 +428,7 @@ public class Plot implements Comparable<Plot> {
     }
 
     public final void setWorld(String world) {
-        this.world = world;
+        this.world = world.toLowerCase();
     }
 
     public final Date getExpiredDate() {

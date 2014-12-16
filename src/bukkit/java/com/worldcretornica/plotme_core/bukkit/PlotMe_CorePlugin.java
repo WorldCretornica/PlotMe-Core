@@ -65,10 +65,10 @@ public class PlotMe_CorePlugin extends JavaPlugin {
                     if (!getAPI().getPlotMeCoreManager().getPlotMaps().isEmpty()) {
                         int totalplotsize = 0;
 
-                        for (String s : getAPI().getPlotMeCoreManager().getPlotMaps().keySet()) {
-                            if (getAPI().getPlotMeCoreManager().getGenMan(s) != null) {
-                                if (getAPI().getPlotMeCoreManager().getGenMan(s).getPlotSize(s) != 0) {
-                                    totalplotsize += getAPI().getPlotMeCoreManager().getGenMan(s).getPlotSize(s);
+                        for (String plotter : getAPI().getPlotMeCoreManager().getPlotMaps().keySet()) {
+                            if (getAPI().getPlotMeCoreManager().getGenMan(plotter) != null) {
+                                if (getAPI().getPlotMeCoreManager().getGenMan(plotter).getPlotSize(plotter) != 0) {
+                                    totalplotsize += getAPI().getPlotMeCoreManager().getGenMan(plotter).getPlotSize(plotter);
                                 }
                             }
                         }

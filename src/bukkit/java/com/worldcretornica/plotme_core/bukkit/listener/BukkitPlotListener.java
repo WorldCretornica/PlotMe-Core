@@ -42,7 +42,7 @@ public class BukkitPlotListener implements Listener {
         BukkitPlayer player = new BukkitPlayer(event.getPlayer());
 
         if (api.getPlotMeCoreManager().isPlotWorld(player)) {
-            boolean cannotBuild = !player.hasPermission("plotme.admin.buildanywhere");
+            boolean cannotBuild = !player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE);
             String id = PlotMeCoreManager.getPlotId(player);
 
             if (id.isEmpty()) {
@@ -86,7 +86,7 @@ public class BukkitPlotListener implements Listener {
     public void onBlockPlace(BlockPlaceEvent event) {
         BukkitPlayer player = new BukkitPlayer(event.getPlayer());
         if (api.getPlotMeCoreManager().isPlotWorld(player)) {
-            boolean canbuild = !player.hasPermission("plotme.admin.buildanywhere");
+            boolean canbuild = !player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE);
             String id = PlotMeCoreManager.getPlotId(player);
 
             if (id.isEmpty()) {
@@ -130,7 +130,7 @@ public class BukkitPlotListener implements Listener {
     public void onPlayerBucketEmpty(PlayerBucketEmptyEvent event) {
         BukkitPlayer player = new BukkitPlayer(event.getPlayer());
 
-        if (!player.hasPermission("plotme.admin.buildanywhere")) {
+        if (!player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE)) {
             if (api.getPlotMeCoreManager().isPlotWorld(player)) {
                 String id = PlotMeCoreManager.getPlotId(player);
 
@@ -170,7 +170,7 @@ public class BukkitPlotListener implements Listener {
     public void onPlayerBucketFill(PlayerBucketFillEvent event) {
         BukkitPlayer player = new BukkitPlayer(event.getPlayer());
 
-        if (!player.hasPermission("plotme.admin.buildanywhere")) {
+        if (!player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE)) {
             if (api.getPlotMeCoreManager().isPlotWorld(player)) {
                 String id = PlotMeCoreManager.getPlotId(player);
 
@@ -231,7 +231,7 @@ public class BukkitPlotListener implements Listener {
                 }
                 event.setCancelled(true);
             } else {
-                boolean canbuild = !player.hasPermission("plotme.admin.buildanywhere");
+                boolean canbuild = !player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE);
                 PlotMapInfo pmi = api.getPlotMeCoreManager().getMap(player);
 
                 if (event.isBlockInHand() && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
@@ -267,12 +267,14 @@ public class BukkitPlotListener implements Listener {
                     ItemStack item = event.getItem();
 
                     if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-                        int itemid = item.getType().getId();
-                        byte itemdata = item.getData().getData();
+                        if (item != null) {
+                            int itemid = item.getType().getId();
+                            byte itemdata = item.getData().getData();
 
-                        if (pmi.isPreventedItem(String.valueOf(itemid)) || pmi.isPreventedItem(itemid + ":" + itemdata)) {
-                            if (!player.hasPermission("plotme.unblock." + itemid)) {
-                                blocked = true;
+                            if (pmi.isPreventedItem(String.valueOf(itemid)) || pmi.isPreventedItem(itemid + ":" + itemdata)) {
+                                if (!player.hasPermission("plotme.unblock." + itemid)) {
+                                    blocked = true;
+                                }
                             }
                         }
                     }
@@ -559,7 +561,7 @@ public class BukkitPlotListener implements Listener {
 
         if (api.getPlotMeCoreManager().isPlotWorld(player)) {
             String id = PlotMeCoreManager.getPlotId(player);
-            boolean canbuild = !player.hasPermission("plotme.admin.buildanywhere");
+            boolean canbuild = !player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE);
 
             if (id.isEmpty()) {
                 if (canbuild) {
@@ -605,7 +607,7 @@ public class BukkitPlotListener implements Listener {
         if (entity instanceof Player) {
             BukkitPlayer player = new BukkitPlayer((Player) entity);
 
-            boolean canbuild = !player.hasPermission("plotme.admin.buildanywhere");
+            boolean canbuild = !player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE);
 
             if (api.getPlotMeCoreManager().isPlotWorld(player)) {
                 String id = PlotMeCoreManager.getPlotId(player);
@@ -656,7 +658,7 @@ public class BukkitPlotListener implements Listener {
         BukkitPlayer player = new BukkitPlayer(event.getPlayer());
 
         if (api.getPlotMeCoreManager().isPlotWorld(player)) {
-            boolean canbuild = !player.hasPermission("plotme.admin.buildanywhere");
+            boolean canbuild = !player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE);
             String id = PlotMeCoreManager.getPlotId(player);
 
             if (id.isEmpty()) {
@@ -701,7 +703,7 @@ public class BukkitPlotListener implements Listener {
         BukkitPlayer player = new BukkitPlayer(event.getPlayer());
 
         if (api.getPlotMeCoreManager().isPlotWorld(player)) {
-            boolean canbuild = player.hasPermission("plotme.admin.buildanywhere");
+            boolean canbuild = player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE);
             String id = PlotMeCoreManager.getPlotId(player);
 
             if (id.isEmpty()) {

@@ -1,5 +1,6 @@
 package com.worldcretornica.plotme_core.commands;
 
+import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IPlayer;
@@ -13,7 +14,7 @@ public class CmdMove extends PlotCommand {
     }
 
     public boolean exec(IPlayer player, String[] args) {
-        if (player.hasPermission("PlotMe.admin.move")) {
+        if (player.hasPermission(PermissionNames.ADMIN_MOVE)) {
             if (!plugin.getPlotMeCoreManager().isPlotWorld(player)) {
                 player.sendMessage("§c" + C("MsgNotPlotWorld"));
             } else if (args.length < 3 || args[1].isEmpty() || args[2].isEmpty()) {
