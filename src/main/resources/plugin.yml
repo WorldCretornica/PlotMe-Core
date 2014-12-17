@@ -16,6 +16,7 @@ permissions:
     plotme.use:
       description: Gives default user commands
       children:
+        plotme.use.nameplot: true
         plotme.use.claim: true
         plotme.use.auto: true
         plotme.use.home: true
@@ -96,6 +97,8 @@ permissions:
       description: Gives the undeny command for plots owned
     plotme.use.protect:
       description: Gives the protect command
+    plotme.use.nameplot:
+      description: Gives the player the ability to name their plot.
     plotme.limit.*:
       description: Gives unlimited plots
     plotme.limit.1:
