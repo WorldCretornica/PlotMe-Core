@@ -1,17 +1,11 @@
 package com.worldcretornica.plotme_core.commands;
 
-import com.worldcretornica.plotme_core.Plot;
-import com.worldcretornica.plotme_core.PlotMapInfo;
-import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.event.PlotDisposeEvent;
-import com.worldcretornica.plotme_core.event.PlotMeEventFactory;
-
+import com.worldcretornica.plotme_core.*;
+import com.worldcretornica.plotme_core.api.IOfflinePlayer;
+import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.api.event.InternalPlotDisposeEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
-
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
 
 public class CmdDispose extends PlotCommand {
 
@@ -19,100 +13,100 @@ public class CmdDispose extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(Player p, String[] args) {
-        if (plugin.cPerms(p, "PlotMe.admin.dispose") || plugin.cPerms(p, "PlotMe.use.dispose")) {
-            if (!plugin.getPlotMeCoreManager().isPlotWorld(p)) {
-                p.sendMessage(RED + C("MsgNotPlotWorld"));
-            } else {
-                String id = plugin.getPlotMeCoreManager().getPlotId(p.getLocation());
+    public boolean exec(IPlayer player) {
+        if (player.hasPermission(PermissionNames.ADMIN_DISPOSE) || player.hasPermission(PermissionNames.USER_DISPOSE)) {
+            IWorld world = player.getWorld();
+            PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
+            if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
+                String id = PlotMeCoreManager.getPlotId(player);
                 if (id.isEmpty()) {
-                    p.sendMessage(RED + C("MsgNoPlotFound"));
-                } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, p)) {
-                    Plot plot = plugin.getPlotMeCoreManager().getPlotById(p, id);
+                    player.sendMessage("§c" + C(MSG_NO_PLOT_FOUND));
+                } else if (!PlotMeCoreManager.isPlotAvailable(id, pmi)) {
+                    Plot plot = PlotMeCoreManager.getPlotById(id, pmi);
 
                     if (plot.isProtect()) {
-                        p.sendMessage(RED + C("MsgPlotProtectedNotDisposed"));
+                        player.sendMessage("§c" + C("MsgPlotProtectedNotDisposed"));
                     } else {
-                        String name = p.getName();
+                        String name = player.getName();
 
-                        if (plot.getOwner().equalsIgnoreCase(name) || plugin.cPerms(p, "PlotMe.admin.dispose")) {
-                            PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(p);
+                        if (plot.getOwner().equalsIgnoreCase(name) || player.hasPermission(PermissionNames.ADMIN_DISPOSE)) {
 
                             double cost = pmi.getDisposePrice();
 
-                            World w = p.getWorld();
+                            InternalPlotDisposeEvent event;
 
-                            PlotDisposeEvent event;
-
-                            if (plugin.getPlotMeCoreManager().isEconomyEnabled(p)) {
-                                if (cost != 0 && plugin.getEconomy().getBalance(p) < cost) {
-                                    p.sendMessage(RED + C("MsgNotEnoughDispose"));
+                            if (plugin.getPlotMeCoreManager().isEconomyEnabled(pmi)) {
+                                if (cost != 0 && serverBridge.getBalance(player) < cost) {
+                                    player.sendMessage("§c" + C("MsgNotEnoughDispose"));
                                     return true;
                                 }
 
-                                event = PlotMeEventFactory.callPlotDisposeEvent(plugin, w, plot, p);
+                                event = serverBridge.getEventFactory().callPlotDisposeEvent(plugin, world, plot, player);
 
                                 if (event.isCancelled()) {
                                     return true;
                                 } else {
-                                    EconomyResponse er = plugin.getEconomy().withdrawPlayer(p, cost);
+                                    EconomyResponse economyResponse = serverBridge.withdrawPlayer(player, cost);
 
-                                    if (!er.transactionSuccess()) {
-                                        p.sendMessage(RED + er.errorMessage);
-                                        Util().warn(er.errorMessage);
+                                    if (!economyResponse.transactionSuccess()) {
+                                        player.sendMessage("§c" + economyResponse.errorMessage);
+                                        warn(economyResponse.errorMessage);
                                         return true;
                                     }
 
-                                    if (plot.isAuctionned()) {
+                                    if (plot.isAuctioned()) {
                                         String currentbidder = plot.getCurrentBidder();
 
-                                        if (!currentbidder.isEmpty()) {
-                                            OfflinePlayer playercurrentbidder = Bukkit.getOfflinePlayer(plot.getCurrentBidderId());
-                                            EconomyResponse er2 = plugin.getEconomy().depositPlayer(playercurrentbidder, plot.getCurrentBid());
+                                        if (currentbidder != null) {
+                                            IOfflinePlayer playercurrentbidder = serverBridge.getOfflinePlayer(plot.getCurrentBidderId());
+                                            EconomyResponse er2 = serverBridge.depositPlayer(playercurrentbidder, plot.getCurrentBid());
 
-                                            if (!er2.transactionSuccess()) {
-                                                p.sendMessage(RED + er2.errorMessage);
-                                                Util().warn(er2.errorMessage);
-                                            } else {
-                                                Player player = Bukkit.getPlayer(playercurrentbidder.getUniqueId());
-                                                if (player != null) {
-                                                    player.sendMessage(C("WordPlot") + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner() + " " + C("MsgWasDisposed") + " " + Util().moneyFormat(cost));
+                                            if (er2.transactionSuccess()) {
+                                                IPlayer currentBidder = serverBridge.getPlayer(playercurrentbidder.getUniqueId());
+                                                if (currentBidder != null) {
+                                                    currentBidder.sendMessage(C("WordPlot") + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner() + " " + C("MsgWasDisposed") + " " + Util().moneyFormat(cost, true));
                                                 }
+                                            } else {
+                                                player.sendMessage("§c" + er2.errorMessage);
+                                                warn(er2.errorMessage);
                                             }
                                         }
                                     }
                                 }
                             } else {
-                                event = PlotMeEventFactory.callPlotDisposeEvent(plugin, w, plot, p);
+                                event = serverBridge.getEventFactory().callPlotDisposeEvent(plugin, world, plot, player);
                             }
 
                             if (!event.isCancelled()) {
-                                if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, p)) {
-                                    plugin.getPlotMeCoreManager().removePlot(w, id);
+                                if (!PlotMeCoreManager.isPlotAvailable(id, pmi)) {
+                                    PlotMeCoreManager.removePlot(pmi, id);
                                 }
 
-                                plugin.getPlotMeCoreManager().removeOwnerSign(w, id);
-                                plugin.getPlotMeCoreManager().removeSellSign(w, id);
-                                plugin.getPlotMeCoreManager().removeAuctionSign(w, id);
+                                PlotMeCoreManager.removeOwnerSign(world, id);
+                                PlotMeCoreManager.removeSellSign(world, id);
+                                PlotMeCoreManager.removeAuctionSign(world, id);
 
-                                plugin.getSqlManager().deletePlot(plugin.getPlotMeCoreManager().getIdX(id), plugin.getPlotMeCoreManager().getIdZ(id), w.getName().toLowerCase());
+                                plugin.getSqlManager().deletePlot(PlotMeCoreManager.getIdX(id), PlotMeCoreManager.getIdZ(id), world.getName());
 
-                                p.sendMessage(C("MsgPlotDisposedAnyoneClaim"));
+                                player.sendMessage(C("MsgPlotDisposedAnyoneClaim"));
 
                                 if (isAdvancedLogging()) {
-                                    plugin.getLogger().info(LOG + name + " " + C("MsgDisposedPlot") + " " + id);
+                                    serverBridge.getLogger().info(name + " " + C("MsgDisposedPlot") + " " + id);
                                 }
                             }
                         } else {
-                            p.sendMessage(RED + C("MsgThisPlot") + "(" + id + ") " + C("MsgNotYoursCannotDispose"));
+                            player.sendMessage("§c" + C("MsgThisPlot") + "(" + id + ") " + C("MsgNotYoursCannotDispose"));
                         }
                     }
                 } else {
-                    p.sendMessage(RED + C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
+                    player.sendMessage("§c" + C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
                 }
+            } else {
+                player.sendMessage("§c" + C("MsgNotPlotWorld"));
             }
         } else {
-            p.sendMessage(RED + C("MsgPermissionDenied"));
+            player.sendMessage("§c" + C("MsgPermissionDenied"));
+            return false;
         }
         return true;
     }

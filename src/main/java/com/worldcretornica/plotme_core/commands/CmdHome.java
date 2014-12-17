@@ -1,18 +1,15 @@
 package com.worldcretornica.plotme_core.commands;
 
-import java.util.UUID;
-
+import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.event.PlotMeEventFactory;
-import com.worldcretornica.plotme_core.event.PlotTeleportHomeEvent;
-
+import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.api.event.InternalPlotTeleportHomeEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
 
-import org.bukkit.Bukkit;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
+import java.util.UUID;
 
 public class CmdHome extends PlotCommand {
 
@@ -20,106 +17,144 @@ public class CmdHome extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(Player p, String[] args) {
-        if (plugin.cPerms(p, "PlotMe.use.home") || plugin.cPerms(p, "PlotMe.admin.home.other")) {
-            if (!plugin.getPlotMeCoreManager().isPlotWorld(p) && !plugin.getConfig().getBoolean("allowWorldTeleport")) {
-                p.sendMessage(RED + C("MsgNotPlotWorld"));
-            } else {
-                String playername = p.getName();
-                UUID uuid = p.getUniqueId();
-                int nb = 1;
-                World w;
-                String worldname = "";
+    public boolean exec(IPlayer player, String[] args) {
+        if (player.hasPermission(PermissionNames.USE_HOME) || player.hasPermission(PermissionNames.ADMIN_HOME_OTHER)) {
+            if (plugin.getPlotMeCoreManager().isPlotWorld(player) || serverBridge.getConfig().getBoolean("allowWorldTeleport")) {
+                String playerName = player.getName();
+                UUID uuid = player.getUniqueId();
+                IWorld world;
 
-                if (!plugin.getPlotMeCoreManager().isPlotWorld(p)) {
-                    w = plugin.getPlotMeCoreManager().getFirstWorld();
+                if (plugin.getPlotMeCoreManager().isPlotWorld(player)) {
+                    world = player.getWorld();
                 } else {
-                    w = p.getWorld();
-                }
-                
-                if (w != null) {
-                    worldname = w.getName();
+                    world = plugin.getPlotMeCoreManager().getFirstWorld();
                 }
 
+                String worldName = null;
+                if (world != null) {
+                    worldName = world.getName();
+                }
+
+                int nb = 1;
                 if (args[0].contains(":")) {
-                    try {
-                        if (args[0].split(":").length == 1 || args[0].split(":")[1].equals("")) {
-                            p.sendMessage(C("WordUsage") + ": " + RED + "/plotme " + C("CommandHome") + ":# " + RESET + C("WordExample") + ": " + RED + "/plotme " + C("CommandHome") + ":1");
-                            return true;
-                        } else {
-                            nb = Integer.parseInt(args[0].split(":")[1]);
-                        }
-                    } catch (Exception ex) {
-                        p.sendMessage(C("WordUsage") + ": " + RED + "/plotme " + C("CommandHome") + ":# " + RESET + C("WordExample") + ": " + RED + "/plotme " + C("CommandHome") + ":1");
+                    if (args[0].split(":").length == 1 || args[0].split(":")[1].isEmpty()) {
+                        player.sendMessage(C("WordUsage") + ": §c/plotme home:# §r" + C("WordExample") + ": §c/plotme home:1");
                         return true;
+                    } else {
+                        nb = Integer.parseInt(args[0].split(":")[1]);
                     }
                 }
 
-                if (args.length >= 2) {
-                    if (Bukkit.getWorld(args[1]) == null) {
-                        if (plugin.cPerms(p, "PlotMe.admin.home.other")) {
-                            playername = args[1];
+                if (args.length == 2) {
+                    if (serverBridge.getWorld(args[1]) == null) {
+                        if (player.hasPermission(PermissionNames.ADMIN_HOME_OTHER)) {
+                            playerName = args[1];
                             uuid = null;
                         }
                     } else {
-                        w = Bukkit.getWorld(args[1]);
+                        world = serverBridge.getWorld(args[1]);
                     }
                 }
 
                 if (args.length == 3) {
-                    if (Bukkit.getWorld(args[2]) == null) {
-                        p.sendMessage(RED + args[2] + C("MsgWorldNotPlot"));
+                    if (serverBridge.getWorld(args[2]) == null) {
+                        player.sendMessage("§c" + args[2] + C("MsgWorldNotPlot"));
                         return true;
                     } else {
-                        w = Bukkit.getWorld(args[2]);
-                        worldname = args[2];
+                        world = serverBridge.getWorld(args[2]);
+                        worldName = args[2];
                     }
                 }
-
-                if (!plugin.getPlotMeCoreManager().isPlotWorld(w)) {
-                    p.sendMessage(RED + worldname + C("MsgWorldNotPlot"));
-                } else {
+                if (world == null) {
+                    return true;
+                }
+                PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
+                if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
                     int i = nb - 1;
 
-                    for (Plot plot : plugin.getSqlManager().getOwnedPlots(w.getName(), uuid, playername)) {
-                        if (uuid == null && plot.getOwner().equalsIgnoreCase(playername) || uuid != null && plot.getOwnerId() != null && plot.getOwnerId().equals(uuid)) {
+                    for (Plot plot : plugin.getSqlManager().getOwnedPlots(world.getName(), uuid, playerName)) {
+                        if (uuid == null) {
+                            if (plot.getOwner().equalsIgnoreCase(playerName)) {
+                                if (i == 0) {
+
+                                    double price = 0.0;
+
+                                    InternalPlotTeleportHomeEvent event;
+
+                                    if (plugin.getPlotMeCoreManager().isEconomyEnabled(pmi)) {
+                                        price = pmi.getPlotHomePrice();
+                                        double balance = serverBridge.getBalance(player);
+
+                                        if (balance >= price) {
+                                            event = serverBridge.getEventFactory().callPlotTeleportHomeEvent(plugin, world, plot, player);
+
+                                            if (event.isCancelled()) {
+                                                return true;
+                                            } else {
+                                                EconomyResponse er = serverBridge.withdrawPlayer(player, price);
+
+                                                if (!er.transactionSuccess()) {
+                                                    player.sendMessage("§c" + er.errorMessage);
+                                                    return true;
+                                                }
+                                            }
+                                        } else {
+                                            player.sendMessage("§c" + C("MsgNotEnoughTp") + " " + C("WordMissing") + " §r" + Util().moneyFormat(price - balance, false));
+                                            return true;
+                                        }
+                                    } else {
+                                        event = serverBridge.getEventFactory().callPlotTeleportHomeEvent(plugin, world, plot, player);
+                                    }
+
+                                    if (!event.isCancelled()) {
+                                        player.teleport(event.getHomeLocation());
+
+                                        if (price != 0) {
+                                            double price1 = -price;
+                                            player.sendMessage(Util().moneyFormat(price1, true));
+                                        }
+                                    }
+                                    return true;
+                                } else {
+                                    i--;
+                                }
+                            }
+                        } else if (plot.getOwnerId() != null && plot.getOwnerId().equals(uuid)) {
                             if (i == 0) {
-                                PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(w);
 
-                                double price = 0;
+                                double price = 0.0;
 
-                                PlotTeleportHomeEvent event;
+                                InternalPlotTeleportHomeEvent event;
 
-                                if (plugin.getPlotMeCoreManager().isEconomyEnabled(w)) {
+                                if (plugin.getPlotMeCoreManager().isEconomyEnabled(pmi)) {
                                     price = pmi.getPlotHomePrice();
-                                    double balance = plugin.getEconomy().getBalance(p);
+                                    double balance = serverBridge.getBalance(player);
 
                                     if (balance >= price) {
-                                        event = PlotMeEventFactory.callPlotTeleportHomeEvent(plugin, w, plot, p);
+                                        event = serverBridge.getEventFactory().callPlotTeleportHomeEvent(plugin, world, plot, player);
 
-                                        if (event.isCancelled()) {
-                                            return true;
-                                        } else {
-                                            EconomyResponse er = plugin.getEconomy().withdrawPlayer(p, price);
+                                        if (!event.isCancelled()) {
+                                            EconomyResponse er = serverBridge.withdrawPlayer(player, price);
 
                                             if (!er.transactionSuccess()) {
-                                                p.sendMessage(RED + er.errorMessage);
+                                                player.sendMessage("§c" + er.errorMessage);
                                                 return true;
                                             }
                                         }
                                     } else {
-                                        p.sendMessage(RED + C("MsgNotEnoughTp") + " " + C("WordMissing") + " " + RESET + Util().moneyFormat(price - balance, false));
+                                        player.sendMessage("§c" + C("MsgNotEnoughTp") + " " + C("WordMissing") + " §r" + Util().moneyFormat(price - balance, false));
                                         return true;
                                     }
                                 } else {
-                                    event = PlotMeEventFactory.callPlotTeleportHomeEvent(plugin, w, plot, p);
+                                    event = serverBridge.getEventFactory().callPlotTeleportHomeEvent(plugin, world, plot, player);
                                 }
 
                                 if (!event.isCancelled()) {
-                                    p.teleport(event.getHomeLocation());
+                                    player.teleport(event.getHomeLocation());
 
                                     if (price != 0) {
-                                        p.sendMessage(Util().moneyFormat(-price));
+                                        double price1 = -price;
+                                        player.sendMessage(Util().moneyFormat(price1, true));
                                     }
                                 }
                                 return true;
@@ -130,20 +165,25 @@ public class CmdHome extends PlotCommand {
                     }
 
                     if (nb > 0) {
-                        if (!playername.equalsIgnoreCase(p.getName())) {
-                            p.sendMessage(RED + playername + " " + C("MsgDoesNotHavePlot") + " #" + nb);
+                        if (playerName.equalsIgnoreCase(player.getName())) {
+                            player.sendMessage("§c" + C("MsgPlotNotFound") + " #" + nb);
                         } else {
-                            p.sendMessage(RED + C("MsgPlotNotFound") + " #" + nb);
+                            player.sendMessage("§c" + playerName + " " + C("MsgDoesNotHavePlot") + " #" + nb);
                         }
-                    } else if (!playername.equalsIgnoreCase(p.getName())) {
-                        p.sendMessage(RED + playername + " " + C("MsgDoesNotHavePlot"));
+                    } else if (!playerName.equalsIgnoreCase(player.getName())) {
+                        player.sendMessage("§c" + playerName + " " + C("MsgDoesNotHavePlot"));
                     } else {
-                        p.sendMessage(RED + C("MsgYouHaveNoPlot"));
+                        player.sendMessage("§c" + C("MsgYouHaveNoPlot"));
                     }
+                } else {
+                    player.sendMessage("§c" + worldName + C("MsgWorldNotPlot"));
                 }
+            } else {
+                player.sendMessage("§c" + C("MsgNotPlotWorld"));
             }
         } else {
-            p.sendMessage(RED + C("MsgPermissionDenied"));
+            player.sendMessage("§c" + C("MsgPermissionDenied"));
+            return false;
         }
         return true;
     }

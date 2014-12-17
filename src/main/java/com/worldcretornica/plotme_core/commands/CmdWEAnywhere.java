@@ -1,10 +1,10 @@
 package com.worldcretornica.plotme_core.commands;
 
-import java.util.UUID;
-
+import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.api.IPlayer;
 
-import org.bukkit.entity.Player;
+import java.util.UUID;
 
 public class CmdWEAnywhere extends PlotCommand {
 
@@ -12,37 +12,47 @@ public class CmdWEAnywhere extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(Player p, String[] args) {
-        if (plugin.cPerms(p, "PlotMe.admin.weanywhere")) {
-            String name = p.getName();
-            UUID uuid = p.getUniqueId();
-
-            if (plugin.getPlotMeCoreManager().isPlayerIgnoringWELimit(uuid) && !plugin.getConfig().getBoolean("defaultWEAnywhere")
-                    || !plugin.getPlotMeCoreManager().isPlayerIgnoringWELimit(uuid) && plugin.getConfig().getBoolean("defaultWEAnywhere")) {
-                plugin.getPlotMeCoreManager().removePlayerIgnoringWELimit(uuid);
-                if (plugin.getPlotMeCoreManager().isPlotWorld(p)) {
-                    plugin.getPlotWorldEdit().setMask(p);
-                }
-            } else {
-                plugin.getPlotMeCoreManager().addPlayerIgnoringWELimit(uuid);
-                plugin.getPlotWorldEdit().removeMask(p);
-            }
+    public boolean exec(IPlayer player) {
+        if (player.hasPermission(PermissionNames.ADMIN_WEANYWHERE)) {
+            String name = player.getName();
+            UUID uuid = player.getUniqueId();
 
             if (plugin.getPlotMeCoreManager().isPlayerIgnoringWELimit(uuid)) {
-                p.sendMessage(C("MsgWorldEditAnywhere"));
+                if (serverBridge.getConfig().getBoolean("defaultWEAnywhere")) {
+                    plugin.getPlotMeCoreManager().addPlayerIgnoringWELimit(uuid);
+                    serverBridge.getPlotWorldEdit().removeMask(player);
+                } else {
+                    plugin.getPlotMeCoreManager().removePlayerIgnoringWELimit(uuid);
+                    if (plugin.getPlotMeCoreManager().isPlotWorld(player)) {
+                        serverBridge.getPlotWorldEdit().setMask(player);
+                    }
+                }
+
+                player.sendMessage(C("MsgWorldEditAnywhere"));
 
                 if (isAdvancedLogging()) {
-                    plugin.getLogger().info(LOG + name + " enabled WorldEdit anywhere");
+                    plugin.getLogger().info(name + " enabled WorldEdit anywhere");
                 }
             } else {
-                p.sendMessage(C("MsgWorldEditInYourPlots"));
+                if (serverBridge.getConfig().getBoolean("defaultWEAnywhere")) {
+                    plugin.getPlotMeCoreManager().removePlayerIgnoringWELimit(uuid);
+                    if (plugin.getPlotMeCoreManager().isPlotWorld(player)) {
+                        serverBridge.getPlotWorldEdit().setMask(player);
+                    }
+                } else {
+                    plugin.getPlotMeCoreManager().addPlayerIgnoringWELimit(uuid);
+                    serverBridge.getPlotWorldEdit().removeMask(player);
+                }
+                player.sendMessage(C("MsgWorldEditInYourPlots"));
 
                 if (isAdvancedLogging()) {
-                    plugin.getLogger().info(LOG + name + " disabled WorldEdit anywhere");
+                    plugin.getLogger().info(name + " disabled WorldEdit anywhere");
                 }
             }
+
         } else {
-            p.sendMessage(RED + C("MsgPermissionDenied"));
+            player.sendMessage("§c" + C("MsgPermissionDenied"));
+            return false;
         }
         return true;
     }

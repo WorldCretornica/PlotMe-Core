@@ -1,17 +1,12 @@
 package com.worldcretornica.plotme_core.commands;
 
-import java.util.UUID;
-
-import com.worldcretornica.plotme_core.Plot;
-import com.worldcretornica.plotme_core.PlotMapInfo;
-import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.event.PlotMeEventFactory;
-import com.worldcretornica.plotme_core.event.PlotRemoveAllowedEvent;
-
+import com.worldcretornica.plotme_core.*;
+import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.api.event.InternalPlotRemoveAllowedEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
 
-import org.bukkit.World;
-import org.bukkit.entity.Player;
+import java.util.UUID;
 
 public class CmdRemove extends PlotCommand {
 
@@ -19,81 +14,81 @@ public class CmdRemove extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(Player p, String[] args) {
-        if (plugin.cPerms(p, "PlotMe.admin.remove") || plugin.cPerms(p, "PlotMe.use.remove")) {
-            if (!plugin.getPlotMeCoreManager().isPlotWorld(p)) {
-                p.sendMessage(RED + C("MsgNotPlotWorld"));
-            } else {
-                String id = plugin.getPlotMeCoreManager().getPlotId(p.getLocation());
+    public boolean exec(IPlayer player, String[] args) {
+        if (player.hasPermission("PlotMe.admin.remove") || player.hasPermission(PermissionNames.USER_REMOVE)) {
+            IWorld world = player.getWorld();
+            PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
+            if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
+                String id = PlotMeCoreManager.getPlotId(player);
                 if (id.isEmpty()) {
-                    p.sendMessage(RED + C("MsgNoPlotFound"));
-                } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, p)) {
+                    player.sendMessage("§c" + C(MSG_NO_PLOT_FOUND));
+                } else if (!PlotMeCoreManager.isPlotAvailable(id, pmi)) {
                     if (args.length < 2 || args[1].isEmpty()) {
-                        p.sendMessage(C("WordUsage") + ": " + RED + "/plotme " + C("CommandRemove") + " <" + C("WordPlayer") + ">");
+                        player.sendMessage(C("WordUsage") + ": §c/plotme remove <" + C("WordPlayer") + ">");
                     } else {
-                        Plot plot = plugin.getPlotMeCoreManager().getPlotById(p, id);
-                        UUID playeruuid = p.getUniqueId();
+                        Plot plot = PlotMeCoreManager.getPlotById(id, pmi);
+                        UUID playeruuid = player.getUniqueId();
                         String allowed = args[1];
 
-                        if (plot.getOwnerId().equals(playeruuid) || plugin.cPerms(p, "PlotMe.admin.remove")) {
+                        if (plot.getOwnerId().equals(playeruuid) || player.hasPermission("PlotMe.admin.remove")) {
                             if (plot.isAllowedConsulting(allowed) || plot.isGroupAllowed(allowed)) {
 
-                                World w = p.getWorld();
+                                double price = 0.0;
 
-                                PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(w);
+                                InternalPlotRemoveAllowedEvent event;
 
-                                double price = 0;
-
-                                PlotRemoveAllowedEvent event;
-
-                                if (plugin.getPlotMeCoreManager().isEconomyEnabled(w)) {
+                                if (plugin.getPlotMeCoreManager().isEconomyEnabled(pmi)) {
                                     price = pmi.getRemovePlayerPrice();
-                                    double balance = plugin.getEconomy().getBalance(p);
+                                    double balance = serverBridge.getBalance(player);
 
                                     if (balance >= price) {
-                                        event = PlotMeEventFactory.callPlotRemoveAllowedEvent(plugin, w, plot, p, allowed);
+                                        event = serverBridge.getEventFactory().callPlotRemoveAllowedEvent(plugin, world, plot, player, allowed);
 
                                         if (event.isCancelled()) {
                                             return true;
                                         } else {
-                                            EconomyResponse er = plugin.getEconomy().withdrawPlayer(p, price);
+                                            EconomyResponse er = serverBridge.withdrawPlayer(player, price);
 
                                             if (!er.transactionSuccess()) {
-                                                p.sendMessage(RED + er.errorMessage);
-                                                Util().warn(er.errorMessage);
+                                                player.sendMessage("§c" + er.errorMessage);
+                                                warn(er.errorMessage);
                                                 return true;
                                             }
                                         }
                                     } else {
-                                        p.sendMessage(RED + C("MsgNotEnoughRemove") + " " + C("WordMissing") + " " + RESET + Util().moneyFormat(price - balance, false));
+                                        player.sendMessage("§c" + C("MsgNotEnoughRemove") + " " + C("WordMissing") + " §r" + Util().moneyFormat(price - balance, false));
                                         return true;
                                     }
                                 } else {
-                                    event = PlotMeEventFactory.callPlotRemoveAllowedEvent(plugin, w, plot, p, allowed);
+                                    event = serverBridge.getEventFactory().callPlotRemoveAllowedEvent(plugin, world, plot, player, allowed);
                                 }
 
                                 if (!event.isCancelled()) {
                                     plot.removeAllowed(allowed);
 
-                                    p.sendMessage(C("WordPlayer") + " " + RED + allowed + RESET + " " + C("WordRemoved") + ". " + Util().moneyFormat(-price));
+                                    double price1 = -price;
+                                    player.sendMessage(C("WordPlayer") + " §c" + allowed + "§r " + C("WordRemoved") + ". " + Util().moneyFormat(price1, true));
 
                                     if (isAdvancedLogging()) {
-                                        plugin.getLogger().info(LOG + allowed + " " + C("MsgRemovedPlayer") + " " + allowed + " " + C("MsgFromPlot") + " " + id + ((price != 0) ? " " + C("WordFor") + " " + price : ""));
+                                        serverBridge.getLogger().info(allowed + " " + C("MsgRemovedPlayer") + " " + allowed + " " + C("MsgFromPlot") + " " + id + (price != 0 ? " " + C("WordFor") + " " + price : ""));
                                     }
                                 }
                             } else {
-                                p.sendMessage(C("WordPlayer") + " " + RED + args[1] + RESET + " " + C("MsgWasNotAllowed"));
+                                player.sendMessage(C("WordPlayer") + " §c" + args[1] + "§r " + C("MsgWasNotAllowed"));
                             }
                         } else {
-                            p.sendMessage(RED + C("MsgThisPlot") + "(" + id + ") " + C("MsgNotYoursNotAllowedRemove"));
+                            player.sendMessage("§c" + C("MsgThisPlot") + "(" + id + ") " + C("MsgNotYoursNotAllowedRemove"));
                         }
                     }
                 } else {
-                    p.sendMessage(RED + C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
+                    player.sendMessage("§c" + C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
                 }
+            } else {
+                player.sendMessage("§c" + C("MsgNotPlotWorld"));
             }
         } else {
-            p.sendMessage(RED + C("MsgPermissionDenied"));
+            player.sendMessage("§c" + C("MsgPermissionDenied"));
+            return false;
         }
         return true;
     }

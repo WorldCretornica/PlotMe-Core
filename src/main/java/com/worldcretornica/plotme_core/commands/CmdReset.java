@@ -1,19 +1,11 @@
 package com.worldcretornica.plotme_core.commands;
 
-import com.worldcretornica.plotme_core.ClearReason;
-import com.worldcretornica.plotme_core.Plot;
-import com.worldcretornica.plotme_core.PlotMapInfo;
-import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.event.PlotMeEventFactory;
-import com.worldcretornica.plotme_core.event.PlotResetEvent;
-
+import com.worldcretornica.plotme_core.*;
+import com.worldcretornica.plotme_core.api.IOfflinePlayer;
+import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.api.event.InternalPlotResetEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
-
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.World;
-import org.bukkit.block.Biome;
-import org.bukkit.entity.Player;
 
 public class CmdReset extends PlotCommand {
 
@@ -21,88 +13,86 @@ public class CmdReset extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(Player p, String[] args) {
-        if (plugin.cPerms(p, "PlotMe.admin.reset") || plugin.cPerms(p, "PlotMe.use.reset")) {
-            if (!plugin.getPlotMeCoreManager().isPlotWorld(p)) {
-                p.sendMessage(RED + C("MsgNotPlotWorld"));
-            } else {
-                Plot plot = plugin.getPlotMeCoreManager().getPlotById(p.getLocation());
+    public boolean exec(IPlayer player) {
+        if (player.hasPermission(PermissionNames.ADMIN_RESET) || player.hasPermission("PlotMe.use.reset")) {
+            IWorld world = player.getWorld();
+            PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
+            if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
+                Plot plot = PlotMeCoreManager.getPlotById(player, pmi);
 
                 if (plot == null) {
-                    p.sendMessage(RED + C("MsgNoPlotFound"));
+                    player.sendMessage("§c" + C(MSG_NO_PLOT_FOUND));
                 } else if (plot.isProtect()) {
-                    p.sendMessage(RED + C("MsgPlotProtectedCannotReset"));
+                    player.sendMessage("§c" + C("MsgPlotProtectedCannotReset"));
                 } else {
-                    String playername = p.getName();
+                    String playername = player.getName();
                     String id = plot.getId();
 
-                    if (plot.getOwner().equalsIgnoreCase(playername) || plugin.cPerms(p, "PlotMe.admin.reset")) {
-                        World w = p.getWorld();
+                    if (plot.getOwner().equalsIgnoreCase(playername) || player.hasPermission(PermissionNames.ADMIN_RESET)) {
 
-                        PlotResetEvent event = PlotMeEventFactory.callPlotResetEvent(plugin, w, plot, p);
+                        InternalPlotResetEvent event = serverBridge.getEventFactory().callPlotResetEvent(plugin, world, plot, player);
 
                         if (!event.isCancelled()) {
-                            plugin.getPlotMeCoreManager().setBiome(w, id, Biome.PLAINS);
-                            plugin.getPlotMeCoreManager().clear(w, plot, p, ClearReason.Reset);
-                            PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(p);
+                            plugin.getPlotMeCoreManager().setBiome(world, id, serverBridge.getBiome("PLAINS"));
+                            plugin.getPlotMeCoreManager().clear(world, plot, player, ClearReason.Reset);
 
-                            if (plugin.getPlotMeCoreManager().isEconomyEnabled(p)) {
-                                if (plot.isAuctionned()) {
+                            if (plugin.getPlotMeCoreManager().isEconomyEnabled(pmi)) {
+                                if (plot.isAuctioned()) {
                                     if (plot.getCurrentBidderId() != null) {
-                                        OfflinePlayer playercurrentbidder = Bukkit.getOfflinePlayer(plot.getCurrentBidderId());
-                                        EconomyResponse er = plugin.getEconomy().depositPlayer(playercurrentbidder, plot.getCurrentBid());
+                                        IOfflinePlayer offlinePlayer = serverBridge.getOfflinePlayer(plot.getCurrentBidderId());
+                                        EconomyResponse economyResponse = serverBridge.depositPlayer(offlinePlayer, plot.getCurrentBid());
 
-                                        if (!er.transactionSuccess()) {
-                                            p.sendMessage(er.errorMessage);
-                                            Util().warn(er.errorMessage);
+                                        if (economyResponse.transactionSuccess()) {
+                                            player.sendMessage(plot.getCurrentBidder() + " was refunded their money for their plot bid.");
                                         } else {
-                                            Player player = Bukkit.getPlayer(playercurrentbidder.getUniqueId());
-                                            if (player != null) {
-                                                player.sendMessage(C("WordPlot") + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner() + " " + C("MsgWasReset") + " " + Util().moneyFormat(plot.getCurrentBid()));
-                                            }
+                                            player.sendMessage(economyResponse.errorMessage);
+                                            warn(economyResponse.errorMessage);
                                         }
                                     }
                                 }
 
-                                if (pmi.isRefundClaimPriceOnReset() && plot.getOwnerId() != null) {                                    
-                                    OfflinePlayer playerowner = Bukkit.getOfflinePlayer(plot.getOwnerId());
-                                    
-                                    EconomyResponse er = plugin.getEconomy().depositPlayer(playerowner, pmi.getClaimPrice());
+                                if (pmi.isRefundClaimPriceOnReset() && plot.getOwnerId() != null) {
+                                    IOfflinePlayer playerowner = serverBridge.getOfflinePlayer(plot.getOwnerId());
 
-                                    if (!er.transactionSuccess()) {
-                                        p.sendMessage(RED + er.errorMessage);
-                                        Util().warn(er.errorMessage);
-                                        return true;
+                                    EconomyResponse er = serverBridge.depositPlayer(playerowner, pmi.getClaimPrice());
+
+                                    if (er.transactionSuccess()) {
+                                        IPlayer playerOwner = serverBridge.getPlayer(playerowner.getUniqueId());
+                                        if (playerOwner.getName().equalsIgnoreCase(plot.getOwner())) {
+                                            playerOwner.sendMessage(C("WordPlot") + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner() + " " + C("MsgWasReset") + " " + Util().moneyFormat(pmi.getClaimPrice(), true));
+                                        }
                                     } else {
-                                        Player player = Bukkit.getPlayer(playerowner.getUniqueId());
-                                        if (player.getName().equalsIgnoreCase(plot.getOwner())) {
-                                            player.sendMessage(C("WordPlot") + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner() + " " + C("MsgWasReset") + " " + Util().moneyFormat(pmi.getClaimPrice()));
-                                        }
+                                        player.sendMessage("§c" + er.errorMessage);
+                                        warn(er.errorMessage);
+                                        return true;
                                     }
                                 }
                             }
 
-                            if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, p)) {
-                                plugin.getPlotMeCoreManager().removePlot(w, id);
+                            if (!PlotMeCoreManager.isPlotAvailable(id, pmi)) {
+                                PlotMeCoreManager.removePlot(pmi, id);
                             }
 
-                            plugin.getPlotMeCoreManager().removeOwnerSign(w, id);
-                            plugin.getPlotMeCoreManager().removeSellSign(w, id);
-                            plugin.getSqlManager().deletePlot(plugin.getPlotMeCoreManager().getIdX(id), plugin.getPlotMeCoreManager().getIdZ(id), w.getName().toLowerCase());
+                            PlotMeCoreManager.removeOwnerSign(world, id);
+                            PlotMeCoreManager.removeSellSign(world, id);
+                            plugin.getSqlManager().deletePlot(PlotMeCoreManager.getIdX(id), PlotMeCoreManager.getIdZ(id), world.getName());
 
                             pmi.addFreed(id);
 
                             if (isAdvancedLogging()) {
-                                plugin.getLogger().info(LOG + p.getName() + " " + C("MsgResetPlot") + " " + id);
+                                serverBridge.getLogger().info(player.getName() + " " + C("MsgResetPlot") + " " + id);
                             }
                         }
                     } else {
-                        p.sendMessage(RED + C("MsgThisPlot") + "(" + id + ") " + C("MsgNotYoursNotAllowedReset"));
+                        player.sendMessage("§c" + C("MsgThisPlot") + "(" + id + ") " + C("MsgNotYoursNotAllowedReset"));
                     }
                 }
+            } else {
+                player.sendMessage("§c" + C("MsgNotPlotWorld"));
             }
         } else {
-            p.sendMessage(RED + C("MsgPermissionDenied"));
+            player.sendMessage("§c" + C("MsgPermissionDenied"));
+            return false;
         }
         return true;
     }

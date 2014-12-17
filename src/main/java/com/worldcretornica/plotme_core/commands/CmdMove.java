@@ -1,10 +1,11 @@
 package com.worldcretornica.plotme_core.commands;
 
+import com.worldcretornica.plotme_core.PermissionNames;
+import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.event.PlotMeEventFactory;
-import com.worldcretornica.plotme_core.event.PlotMoveEvent;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
+import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.api.event.InternalPlotMoveEvent;
 
 public class CmdMove extends PlotCommand {
 
@@ -12,38 +13,35 @@ public class CmdMove extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(Player p, String[] args) {
-        if (plugin.cPerms(p, "PlotMe.admin.move")) {
-            if (!plugin.getPlotMeCoreManager().isPlotWorld(p)) {
-                p.sendMessage(RED + C("MsgNotPlotWorld"));
+    public boolean exec(IPlayer player, String[] args) {
+        if (player.hasPermission(PermissionNames.ADMIN_MOVE)) {
+            if (!plugin.getPlotMeCoreManager().isPlotWorld(player)) {
+                player.sendMessage("§c" + C("MsgNotPlotWorld"));
             } else if (args.length < 3 || args[1].isEmpty() || args[2].isEmpty()) {
-                p.sendMessage(C("WordUsage") + ": " + RED + "/plotme " + C("CommandMove") + " <" + C("WordIdFrom") + "> <" + C("WordIdTo") + "> "
-                                      + RESET + C("WordExample") + ": " + RED + "/plotme " + C("CommandMove") + " 0;1 2;-1");
+                player.sendMessage(C("WordUsage") + ": §c/plotme move <" + C("WordIdFrom") + "> <" + C("WordIdTo") + "> §r" + C("WordExample") + ": §c/plotme move 0;1 2;-1");
             } else {
                 String plot1 = args[1];
                 String plot2 = args[2];
-                World w = p.getWorld();
+                IWorld world = player.getWorld();
 
-                if (!plugin.getPlotMeCoreManager().isValidId(w, plot1) || !plugin.getPlotMeCoreManager().isValidId(w, plot2)) {
-                    p.sendMessage(C("WordUsage") + ": " + RED + "/plotme " + C("CommandMove") + " <" + C("WordIdFrom") + "> <" + C("WordIdTo") + "> "
-                                          + RESET + C("WordExample") + ": " + RED + "/plotme " + C("CommandMove") + " 0;1 2;-1");
-                    return true;
+                if (!PlotMeCoreManager.isValidId(world, plot1) || !PlotMeCoreManager.isValidId(world, plot2)) {
+                    player.sendMessage(C("WordUsage") + ": §c/plotme move <" + C("WordIdFrom") + "> <" + C("WordIdTo") + "> §r" + C("WordExample") + ": §c/plotme move 0;1 2;-1");
                 } else {
-                    PlotMoveEvent event = PlotMeEventFactory.callPlotMoveEvent(plugin, w, w, plot1, plot2, p);
-
+                    InternalPlotMoveEvent event = serverBridge.getEventFactory().callPlotMoveEvent(plugin, world, plot1, plot2, player);
                     if (!event.isCancelled()) {
-                        if (plugin.getPlotMeCoreManager().movePlot(p.getWorld(), plot1, plot2)) {
-                            p.sendMessage(C("MsgPlotMovedSuccess"));
+                        if (plugin.getPlotMeCoreManager().movePlot(world, plot1, plot2)) {
+                            player.sendMessage(C("MsgPlotMovedSuccess"));
 
-                            plugin.getLogger().info(LOG + p.getName() + " " + C("MsgExchangedPlot") + " " + plot1 + " " + C("MsgAndPlot") + " " + plot2);
+                            serverBridge.getLogger().info(player.getName() + " " + C("MsgExchangedPlot") + " " + plot1 + " " + C("MsgAndPlot") + " " + plot2);
                         } else {
-                            p.sendMessage(RED + C("ErrMovingPlot"));
+                            player.sendMessage("§c" + C("ErrMovingPlot"));
                         }
                     }
                 }
             }
         } else {
-            p.sendMessage(RED + C("MsgPermissionDenied"));
+            player.sendMessage("§c" + C("MsgPermissionDenied"));
+            return false;
         }
         return true;
     }

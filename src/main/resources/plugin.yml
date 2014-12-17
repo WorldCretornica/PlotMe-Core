@@ -1,5 +1,5 @@
 name: PlotMe
-main: com.worldcretornica.plotme_core.PlotMe_Core
+main: com.worldcretornica.plotme_core.bukkit.PlotMe_CorePlugin
 version: ${project.version}
 author: ZachBora
 authors: [flungo, MattBDev]
@@ -21,8 +21,6 @@ permissions:
         plotme.use.auto: true
         plotme.use.home: true
         plotme.use.info: true
-        plotme.use.comment: true
-        plotme.use.comments: true
         plotme.use.biome: true
         plotme.use.clear: true
         plotme.use.list: true
@@ -42,7 +40,6 @@ permissions:
         plotme.admin.claim.other: true
         plotme.admin.home.other: true
         plotme.admin.tp: true
-        plotme.admin.id: true
         plotme.admin.clear: true
         plotme.admin.reset: true
         plotme.admin.add: true
@@ -51,7 +48,6 @@ permissions:
         plotme.admin.move: true
         plotme.admin.weanywhere: true
         plotme.admin.list: true
-        plotme.admin.reload: true
         plotme.admin.buy: true
         plotme.admin.sell: true
         plotme.admin.auction: true
@@ -59,12 +55,10 @@ permissions:
         plotme.admin.done: true
         plotme.admin.addtime: true
         plotme.admin.expired: true
-        plotme.admin.resetexpired: true
         plotme.admin.deny: true
         plotme.admin.undeny: true
         plotme.admin.bypassdeny: true
         plotme.admin.buildanywhere: true
-        plotme.admin.createworld: true
     plotme.use.buy:
       description: Gives the buy command
     plotme.use.sell:
@@ -87,10 +81,6 @@ permissions:
       description: Gives the home command
     plotme.use.info:
       description: Gives the info command
-    plotme.use.comment:
-      description: Gives the comment command
-    plotme.use.comments:
-      description: Gives the comments command
     plotme.use.biome:
       description: Gives the biome and biomelist command
     plotme.use.clear:
@@ -123,8 +113,6 @@ permissions:
       description: Gives the home command for any players
     plotme.admin.tp:
       description: Gives the tp command
-    plotme.admin.id:
-      description: Gives the id command
     plotme.admin.clear:
       description: Gives the clear command for any plots
     plotme.admin.reset:
@@ -147,8 +135,6 @@ permissions:
       description: Gives the weanywhere command
     plotme.admin.list:
       description: Gives the list command for any players
-    plotme.admin.reload:
-      description: Gives the reload command
     plotme.admin.buy:
       description: Gives the buy command
     plotme.admin.sell:
@@ -163,9 +149,5 @@ permissions:
       description: Gives the addtime command for any plots
     plotme.admin.expired:
       description: Gives the expired command
-    plotme.admin.resetexpired:
-      description: Resets expired plots
     plotme.admin.buildanywhere:
       description: Allows to build anywhere in the plot world
-    plotme.admin.createworld:
-      description: Allows to create a new plot world
