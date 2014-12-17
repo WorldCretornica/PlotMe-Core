@@ -27,7 +27,7 @@ public class CmdShowHelp extends PlotCommand {
         if (player.hasPermission("PlotMe.use.claim.other")) {
             allowed_commands.add("claim.other");
         }
-        if (player.hasPermission(PermissionNames.USE_AUTO)) {
+        if (player.hasPermission(PermissionNames.USER_AUTO)) {
             allowed_commands.add("auto");
         }
         if (player.hasPermission(PermissionNames.USE_HOME)) {
@@ -43,7 +43,7 @@ public class CmdShowHelp extends PlotCommand {
         if (player.hasPermission(PermissionNames.USER_LIST)) {
             allowed_commands.add("list");
         }
-        if (player.hasPermission(PermissionNames.USE_BIOME)) {
+        if (player.hasPermission(PermissionNames.USER_BIOME)) {
             allowed_commands.add("biome");
             allowed_commands.add("biomelist");
         }
@@ -71,7 +71,7 @@ public class CmdShowHelp extends PlotCommand {
         if (player.hasPermission(PermissionNames.USER_REMOVE) || player.hasPermission("PlotMe.admin.remove")) {
             allowed_commands.add("remove");
         }
-        if (player.hasPermission("PlotMe.use.deny") || player.hasPermission("PlotMe.admin.deny")) {
+        if (player.hasPermission(PermissionNames.USER_DENY) || player.hasPermission("PlotMe.admin.deny")) {
             allowed_commands.add("deny");
         }
         if (player.hasPermission(PermissionNames.USER_UNDENY) || player.hasPermission(PermissionNames.ADMIN_UNDENY)) {
@@ -83,7 +83,7 @@ public class CmdShowHelp extends PlotCommand {
         if (player.hasPermission(PermissionNames.ADMIN_MOVE)) {
             allowed_commands.add("move");
         }
-        if (player.hasPermission("PlotMe.admin.weanywhere")) {
+        if (player.hasPermission(PermissionNames.ADMIN_WEANYWHERE)) {
             allowed_commands.add("weanywhere");
         }
         if (player.hasPermission(PermissionNames.ADMIN_LIST)) {

@@ -13,10 +13,10 @@ public enum PermissionNames {
     public static final String USE_AUCTION = "PlotMe.use.auction";
     public static final String ADMIN_ADDTIME = "PlotMe.admin.addtime";
     public static final String USE_HOME = "PlotMe.use.home";
-    public static final String USE_AUTO = "PlotMe.use.auto";
+    public static final String USER_AUTO = "PlotMe.use.auto";
     public static final String USER_CLAIM = "PlotMe.use.claim";
     public static final String USER_LIST = "PlotMe.use.list";
-    public static final String USE_BIOME = "PlotMe.use.biome";
+    public static final String USER_BIOME = "PlotMe.use.biome";
     public static final String USER_INFO = "PlotMe.use.info";
     public static final String USER_DONE = "PlotMe.use.done";
     public static final String ADMIN_BUILDANYWHERE = "plotme.admin.buildanywhere";
@@ -39,4 +39,7 @@ public enum PermissionNames {
     public static final String ADMIN_SETOWNER = "PlotMe.admin.setowner";
     public static final String ADMIN_TP = "PlotMe.admin.tp";
     public static final String USER_REMOVE = "PlotMe.use.remove";
+    public static final String ADMIN_CLAIM_OTHER = "PlotMe.admin.claim.other";
+    public static final String ADMIN_WEANYWHERE = "PlotMe.admin.weanywhere";
+    public static final String USER_DENY = "PlotMe.use.deny";
 }

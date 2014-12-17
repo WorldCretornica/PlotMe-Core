@@ -108,7 +108,7 @@ public class PlotMeSpool implements Runnable {
         return plottoclear;
     }
 
-    public void setTaskId(int taskid) {
+    public void setTaskid(int taskid) {
         this.taskid = taskid;
     }
 }

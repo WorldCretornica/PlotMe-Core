@@ -347,11 +347,6 @@ public class BukkitServerBridge implements IServerBridge {
     }
 
     @Override
-    public boolean worldExists(String worldname) {
-        return Bukkit.getWorld(worldname) != null;
-    }
-
-    @Override
     public List<IWorld> getWorlds() {
         List<IWorld> worlds = new ArrayList<>();
 

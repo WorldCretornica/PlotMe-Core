@@ -101,8 +101,6 @@ public interface IServerBridge {
 
     String stripColor(String string);
 
-    boolean worldExists(String string);
-
     List<IWorld> getWorlds();
 
     boolean createPlotWorld(String worldname, String generator, Map<String, String> args);

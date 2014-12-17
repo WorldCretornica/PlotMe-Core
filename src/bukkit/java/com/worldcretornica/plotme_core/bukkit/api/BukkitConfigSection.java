@@ -100,11 +100,6 @@ public class BukkitConfigSection implements IConfigSection {
     }
 
     @Override
-    public double getDouble(String string, double defaultvalue) {
-        return section.getDouble(string, defaultvalue);
-    }
-
-    @Override
     public boolean contains(String string) {
         return section.contains(string);
     }

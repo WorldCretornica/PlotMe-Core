@@ -1,5 +1,6 @@
 package com.worldcretornica.plotme_core.commands;
 
+import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IPlayer;
 
@@ -12,7 +13,7 @@ public class CmdWEAnywhere extends PlotCommand {
     }
 
     public boolean exec(IPlayer player) {
-        if (player.hasPermission("PlotMe.admin.weanywhere")) {
+        if (player.hasPermission(PermissionNames.ADMIN_WEANYWHERE)) {
             String name = player.getName();
             UUID uuid = player.getUniqueId();
 

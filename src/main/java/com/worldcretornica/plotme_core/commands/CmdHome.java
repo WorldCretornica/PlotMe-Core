@@ -45,7 +45,7 @@ public class CmdHome extends PlotCommand {
                     }
                 }
 
-                if (args.length >= 2) {
+                if (args.length == 2) {
                     if (serverBridge.getWorld(args[1]) == null) {
                         if (player.hasPermission(PermissionNames.ADMIN_HOME_OTHER)) {
                             playerName = args[1];

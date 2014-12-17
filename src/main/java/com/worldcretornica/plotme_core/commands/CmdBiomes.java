@@ -15,7 +15,7 @@ public class CmdBiomes extends PlotCommand {
 
     public boolean exec(IPlayer player, String[] args) {
         if (plugin.getPlotMeCoreManager().isPlotWorld(player)) {
-            if (player.hasPermission(PermissionNames.USE_BIOME)) {
+            if (player.hasPermission(PermissionNames.USER_BIOME)) {
                 List<String> biomes = serverBridge.getBiomes();
 
                 Collections.sort(biomes);

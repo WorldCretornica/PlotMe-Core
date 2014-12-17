@@ -51,9 +51,7 @@ public class PlotMapInfo {
     }
 
     public void removePlot(String id) {
-        if (plots.containsKey(id)) {
             plots.remove(id);
-        }
     }
 
     public void addFreed(String id) {

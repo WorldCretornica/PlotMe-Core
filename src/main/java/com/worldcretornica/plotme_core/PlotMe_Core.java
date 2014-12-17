@@ -98,14 +98,13 @@ public class PlotMe_Core {
     private void setupWorlds() {
         IConfigSection worldsCS = serverBridge.getConfig().getConfigurationSection(WORLDS_CONFIG_SECTION);
         for (String worldname : worldsCS.getKeys(false)) {
-            String world = worldname.toLowerCase();
             if (getGenManager(worldname) == null) {
-                getLogger().log(Level.SEVERE, "The world {0} either does not exist or not using a PlotMe generator", world);
-                getLogger().log(Level.SEVERE, "Please ensure that {0} is set up and that it is using a PlotMe generator", world);
+                getLogger().log(Level.SEVERE, "The world {0} either does not exist or not using a PlotMe generator", worldname);
+                getLogger().log(Level.SEVERE, "Please ensure that {0} is set up and that it is using a PlotMe generator", worldname);
                 getLogger().log(Level.SEVERE, "The default generator can be downloaded from " + DEFAULT_GENERATOR_URL);
             } else {
-                PlotMapInfo pmi = new PlotMapInfo(this, world);
-                plotMeCoreManager.addPlotMap(world, pmi);
+                PlotMapInfo pmi = new PlotMapInfo(this, worldname);
+                plotMeCoreManager.addPlotMap(worldname, pmi);
             }
         }
         if (getPlotMeCoreManager().getPlotMaps().isEmpty()) {

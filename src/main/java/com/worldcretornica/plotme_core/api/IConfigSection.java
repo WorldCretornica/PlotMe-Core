@@ -31,8 +31,6 @@ public interface IConfigSection {
 
     double getDouble(String string);
 
-    double getDouble(String string, double defaultvalue);
-
     boolean contains(String string);
 
     Set<String> getKeys(boolean deep);

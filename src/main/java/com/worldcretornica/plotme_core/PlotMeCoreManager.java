@@ -40,20 +40,13 @@ public class PlotMeCoreManager {
 
     public static Plot getPlotById(IPlayer player, PlotMapInfo pmi) {
         String id = getPlotId(player);
-
-        if (pmi == null) {
-            return null;
-        }
-
-        return pmi.getPlot(id);
+        return getPlotById(id, pmi);
     }
 
     public static void removePlot(PlotMapInfo pmi, String id) {
-        if (pmi == null) {
-            return;
+        if (pmi != null) {
+            pmi.removePlot(id);
         }
-
-        pmi.removePlot(id);
     }
 
     public static void setOwnerSign(IWorld world, Plot plot) {
@@ -186,11 +179,7 @@ public class PlotMeCoreManager {
     }
 
     public PlotMapInfo getMap(String world) {
-        if (getPlotMaps().containsKey(world)) {
             return getPlotMaps().get(world);
-        } else {
-            return null;
-        }
     }
 
     public PlotMapInfo getMap(ILocation location) {
@@ -199,8 +188,8 @@ public class PlotMeCoreManager {
     }
 
     public PlotMapInfo getMap(IPlayer player) {
-        String worldname = player.getWorld().getName().toLowerCase();
-        return getMap(worldname);
+        String world = player.getWorld().getName().toLowerCase();
+        return getMap(world);
     }
 
 /*
@@ -311,38 +300,29 @@ public class PlotMeCoreManager {
     public void removePlot(IWorld world, String id) {
         PlotMapInfo pmi = getMap(world);
 
-        if (pmi == null) {
-            return;
+        if (pmi != null) {
+            pmi.removePlot(id);
         }
-
-        pmi.removePlot(id);
     }
 
     public void addPlot(IWorld world, String id, Plot plot) {
         PlotMapInfo pmi = getMap(world);
 
-        if (pmi == null) {
-            return;
+        if (pmi != null) {
+            pmi.addPlot(id, plot);
+            plugin.getServerBridge().getEventFactory().callPlotLoadedEvent(plugin, world, plot);
         }
-
-        pmi.addPlot(id, plot);
-        plugin.getServerBridge().getEventFactory().callPlotLoadedEvent(plugin, world, plot);
     }
 
     public void addPlot(IWorld world, String id, Plot plot, PlotMapInfo pmi) {
-        if (pmi == null) {
-            return;
+        if (pmi != null) {
+            pmi.addPlot(id, plot);
+            plugin.getServerBridge().getEventFactory().callPlotLoadedEvent(plugin, world, plot);
         }
-
-        pmi.addPlot(id, plot);
-        plugin.getServerBridge().getEventFactory().callPlotLoadedEvent(plugin, world, plot);
     }
 
     public IWorld getFirstWorld() {
-        if (getPlotMaps().keySet().toArray().length > 0) {
-            return plugin.getServerBridge().getWorld((String) getPlotMaps().keySet().toArray()[0]);
-        }
-        return null;
+        return plugin.getServerBridge().getWorld((String) getPlotMaps().keySet().toArray()[0]);
     }
 
     /**
@@ -364,27 +344,15 @@ public class PlotMeCoreManager {
      * @return true if world is plotworld, false otherwise
      */
     public boolean isPlotWorld(ILocation location) {
-        if (getGenManager(location.getWorld()) == null) {
-            return false;
-        } else {
-            return getPlotMaps().containsKey(location.getWorld().getName().toLowerCase());
-        }
+        return isPlotWorld(location.getWorld());
     }
 
     public boolean isPlotWorld(IPlayer player) {
-        if (getGenManager(player.getWorld()) == null) {
-            return false;
-        } else {
-            return getPlotMaps().containsKey(player.getWorld().getName().toLowerCase());
-        }
+        return isPlotWorld(player.getWorld());
     }
 
     public boolean isPlotWorld(IBlock block) {
-        if (getGenManager(block.getWorld()) != null)
-            if (getPlotMaps().containsKey(block.getWorld().getName().toLowerCase())) {
-                return true;
-            }
-        return false;
+        return isPlotWorld(block.getWorld());
     }
 
     public Plot createPlot(IWorld world, String id, String owner, UUID uuid, PlotMapInfo pmi) {
@@ -498,13 +466,13 @@ public class PlotMeCoreManager {
         final int x2 = top.getBlockX();
         final int y2 = top.getBlockY();
         final int z2 = top.getBlockZ();
-        final String wname = world.getName();
+        final String worldName = world.getName();
 
         plugin.getServerBridge().runTaskAsynchronously(new Runnable() {
             @Override
             public void run() {
                 LWC lwc = LWC.getInstance();
-                List<Protection> protections = lwc.getPhysicalDatabase().loadProtections(wname, x1, x2, y1, y2, z1, z2);
+                List<Protection> protections = lwc.getPhysicalDatabase().loadProtections(worldName, x1, x2, y1, y2, z1, z2);
 
                 for (Protection protection : protections) {
                     protection.remove();
@@ -569,7 +537,7 @@ public class PlotMeCoreManager {
         plot.setCurrentBid(0.0);
         plot.setCurrentBidder(null);
 
-        String worldName = world.getName();
+        String worldName = world.getName().toLowerCase();
         int idX = getIdX(id);
         int idZ = getIdZ(id);
 
@@ -648,7 +616,7 @@ public class PlotMeCoreManager {
     }
 
     public void addPlotMap(String world, PlotMapInfo map) {
-        getPlotMaps().put(world, map);
+        getPlotMaps().put(world.toLowerCase(), map);
     }
 
     public void removePlotMap(String world, PlotMapInfo map) {
