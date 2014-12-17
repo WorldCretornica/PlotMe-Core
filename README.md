@@ -1,10 +1,4 @@
-############################################################################################################
-#PlotMe Wiki                                                                                               #
-#Wiki is under construct, and this readme file will be updated with new information and a changelog later. #
-############################################################################################################
+#PlotMe Wiki
 
-Information:
-
-
-
-Changelog:
+#Changelog:
+  1. 18/12/2014 00:00 (CET) - Initial setup and workspace preparations.
