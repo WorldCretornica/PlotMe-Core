@@ -3,10 +3,9 @@ mySQLconn: jdbc:mysql://localhost:3306/minecraft
 mySQLuname: root
 mySQLpass: password
 globalUseEconomy: false
-language: english
+Language: english
 allowWorldTeleport: true
 defaultWEAnywhere: false
-allowToDeny: true
 NbClearSpools: 3
 NbBlocksPerClearStep: 50000
 AdvancedLogging: false

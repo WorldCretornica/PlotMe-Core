@@ -39,11 +39,9 @@ economy:
     RemovePlayerPrice: 0.0
     UndenyPlayerPrice: 0.0
     PlotHomePrice: 0.0
-    CanCustomizeSellPrice: false
     SellToPlayerPrice: 0.0
     SellToBankPrice: 0.0
     BuyFromBankPrice: 0.0
-    AddCommentPrice: 0.0
     BiomeChangePrice: 0.0
     ProtectPrice: 0.0
     DisposePrice: 0.0

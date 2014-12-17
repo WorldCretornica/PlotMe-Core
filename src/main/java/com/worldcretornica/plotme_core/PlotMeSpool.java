@@ -1,22 +1,18 @@
 package com.worldcretornica.plotme_core;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.World;
+import com.worldcretornica.plotme_core.api.ILocation;
+import com.worldcretornica.plotme_core.api.IWorld;
 
 public class PlotMeSpool implements Runnable {
-
-    private PlotMe_Core plugin = null;
-    private Long[] currentClear = null;
-    private PlotToClear plottoclear = null;
-
-    private int taskid = 0;
 
     private static String T;
     private static String G;
     private static String M;
     private static String k;
+    private final PlotMe_Core plugin;
+    private Long[] currentClear;
+    private PlotToClear plottoclear;
+    private int taskid;
 
     public PlotMeSpool(PlotMe_Core instance, PlotToClear plotToClear) {
         plugin = instance;
@@ -25,60 +21,81 @@ public class PlotMeSpool implements Runnable {
         G = plugin.getUtil().C("Unit_1000000000");
         M = plugin.getUtil().C("Unit_1000000");
         k = plugin.getUtil().C("Unit_1000");
-        
-        this.plottoclear = plotToClear;
+
+        plottoclear = plotToClear;
+    }
+
+    private static String format(long count) {
+        double buffer;
+
+        if (count > 1000000000000L) {
+            buffer = count / 1000000000000L;
+            buffer = Math.round(buffer * 10) / 10;
+            return buffer + T;
+        }
+        if (count > 1000000000) {
+            buffer = count / 1000000000;
+            buffer = Math.round(buffer * 10) / 10;
+            return buffer + G;
+        }
+        if (count > 1000000) {
+            buffer = count / 1000000;
+            buffer = Math.round(buffer * 10) / 10;
+            return buffer + M;
+        }
+        if (count > 1000) {
+            buffer = count / 1000;
+            buffer = Math.round(buffer * 10) / 10;
+            return buffer + k;
+        }
+        return String.valueOf(count);
     }
 
     @Override
     public void run() {
-        if (this.plottoclear != null) {
-            World w = Bukkit.getWorld(this.plottoclear.getWorld());
+        if (getPlotToClear() != null) {
+            IWorld world = plugin.getServerBridge().getWorld(getPlotToClear().getWorld());
 
-            if (w != null) {
-                if (this.currentClear == null)
-                    this.currentClear = this.plugin.getGenManager(w).clear(w, getPlotToClear().getPlotId(), plugin.getConfig().getInt("NbBlocksPerClearStep"), true, null);
-                else {
-                    this.currentClear = this.plugin.getGenManager(w).clear(w, getPlotToClear().getPlotId(), plugin.getConfig().getInt("NbBlocksPerClearStep"), false, this.currentClear);
+            if (world != null) {
+                if (currentClear == null) {
+                    currentClear = PlotMeCoreManager.getGenManager(world).clear(world, getPlotToClear().getPlotId(), plugin.getServerBridge().getConfig().getInt("NbBlocksPerClearStep"), null);
+                } else {
+                    currentClear = PlotMeCoreManager.getGenManager(world).clear(world, getPlotToClear().getPlotId(), plugin.getServerBridge().getConfig().getInt("NbBlocksPerClearStep"), currentClear);
                 }
 
-                ShowProgress();
+                showProgress();
 
-                if (this.currentClear == null) {
-                    this.plugin.getGenManager(getPlotToClear().getWorld()).adjustPlotFor(w, getPlotToClear().getPlotId(), true, false, false, false);
-                    this.plugin.getPlotMeCoreManager().RemoveLWC(w, getPlotToClear().getPlotId());
-                    this.plugin.getGenManager(getPlotToClear().getWorld()).refreshPlotChunks(w, getPlotToClear().getPlotId());
+                if (currentClear == null) {
+                    PlotMeCoreManager.getGenManager(world).adjustPlotFor(world, getPlotToClear().getPlotId(), true, false, false, false);
+                    plugin.getPlotMeCoreManager().removeLWC(world, getPlotToClear().getPlotId());
+                    PlotMeCoreManager.getGenManager(world).refreshPlotChunks(world, getPlotToClear().getPlotId());
 
-                    Msg(this.plugin.getUtil().C("WordPlot") + " " + getPlotToClear().getPlotId() + " " + this.plugin.getUtil().C("WordCleared"));
+                    plugin.getLogger().info(plugin.getUtil().C("WordPlot") + " " + getPlotToClear().getPlotId() + " " + plugin.getUtil().C("WordCleared"));
 
-                    this.plugin.removePlotToClear(this.plottoclear, this.taskid);
-                    this.plottoclear = null;
+                    plugin.removePlotToClear(getPlotToClear(), taskid);
+                    plottoclear = null;
                 }
             } else {
-                this.plugin.removePlotToClear(this.plottoclear, this.taskid);
-                this.plottoclear = null;
+                plugin.removePlotToClear(getPlotToClear(), taskid);
+                plottoclear = null;
             }
         }
     }
 
-    private void Msg(String text) {
-        getPlotToClear().getCommandSender().sendMessage(text);
-    }
-
-    private void ShowProgress() {
+    private void showProgress() {
         long done = getDoneBlocks();
         long total = getTotalPlotBlocks();
-        double percent = ((double) done) / ((double) total) * 100;
-
-        Msg(plugin.getUtil().C("WordPlot") + " " + ChatColor.GREEN + getPlotToClear().getPlotId() + ChatColor.RESET + " " + plugin.getUtil().C("WordIn") + " "
-                + ChatColor.GREEN + getPlotToClear().getWorld() + ChatColor.RESET + " "
-                + plugin.getUtil().C("WordIs") + " " + ChatColor.GREEN + ((double) Math.round(percent * 10) / 10) + "% " + ChatColor.RESET + plugin.getUtil().C("WordCleared")
-                + " (" + ChatColor.GREEN + format(done) + ChatColor.RESET + "/" + ChatColor.GREEN + format(total) + ChatColor.RESET + " " + plugin.getUtil().C("WordBlocks") + ")");
+        double percent = (done / total * 100);
+        plugin.getLogger().info(plugin.getUtil().C("WordPlot") + " §a" + getPlotToClear().getPlotId() + "§r " + plugin.getUtil().C("WordIn") + " "
+                                        + "§a" + getPlotToClear().getWorld() + "§r " + plugin.getUtil().C("WordIs") + " §a" + Math.round(percent * 10) / 10 +
+                                        "% §r" + plugin.getUtil().C("WordCleared") + " (§a" + format(done) + "§r/§a" + format(total) +
+                                        "§r " + plugin.getUtil().C("WordBlocks") + ")");
     }
 
     private long getTotalPlotBlocks() {
-        World w = Bukkit.getWorld(getPlotToClear().getWorld());
-        Location bottom = plugin.getGenManager(w).getPlotBottomLoc(w, getPlotToClear().getPlotId());
-        Location top = plugin.getGenManager(w).getPlotTopLoc(w, getPlotToClear().getPlotId());
+        IWorld world = plugin.getServerBridge().getWorld(getPlotToClear().getWorld());
+        ILocation bottom = PlotMeCoreManager.getGenManager(world).getPlotBottomLoc(world, getPlotToClear().getPlotId());
+        ILocation top = PlotMeCoreManager.getGenManager(world).getPlotTopLoc(world, getPlotToClear().getPlotId());
 
         return (top.getBlockX() - bottom.getBlockX() + 1) * (top.getBlockY() - bottom.getBlockY() + 1) * (top.getBlockZ() - bottom.getBlockZ() + 1);
     }
@@ -87,35 +104,11 @@ public class PlotMeSpool implements Runnable {
         return currentClear[3];
     }
 
-    private String format(Long count) {
-        double buffer;
-
-        if (count > 1000000000000L) {
-            buffer = ((double) count / 1000000000000L);
-            buffer = ((double) Math.round(buffer * 10) / 10);
-            return buffer + T;
-        }
-        if (count > 1000000000) {
-            buffer = ((double) count / 1000000000);
-            buffer = ((double) Math.round(buffer * 10) / 10);
-            return buffer + G;
-        } else if (count > 1000000) {
-            buffer = ((double) count / 1000000);
-            buffer = ((double) Math.round(buffer * 10) / 10);
-            return buffer + M;
-        } else if (count > 1000) {
-            buffer = ((double) count / 1000);
-            buffer = ((double) Math.round(buffer * 10) / 10);
-            return buffer + k;
-        }
-        return count.toString();
-    }
-
     public PlotToClear getPlotToClear() {
         return plottoclear;
     }
 
-    public void setTaskId(int taskid) {
+    public void setTaskid(int taskid) {
         this.taskid = taskid;
     }
 }

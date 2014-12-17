@@ -1,11 +1,7 @@
 package com.worldcretornica.plotme_core;
 
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
+import com.worldcretornica.plotme_core.api.IConfigSection;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -16,54 +12,18 @@ public class PlotMapInfo {
     private final ConcurrentHashMap<String, Plot> plots;
     private final List<String> freedplots;
     private final String world;
-    private final String worldPath;
+    private final IConfigSection config;
 
     public PlotMapInfo(PlotMe_Core instance, String world) {
-        this.plugin = instance;
-        this.world = world;
-        this.worldPath = "worlds." + world;
-        loadConfig();
-        this.plots = new ConcurrentHashMap<>(1000, 0.75f, 5);
-        this.freedplots = plugin.getSqlManager().getFreed(world);
+        plugin = instance;
+        this.world = world.toLowerCase();
+        config = plugin.getServerBridge().loadDefaultConfig("worlds." + this.world);
+        plots = new ConcurrentHashMap<>(1000, 0.75f, 5);
+        freedplots = plugin.getSqlManager().getFreed(this.world);
     }
 
-    private ConfigurationSection loadConfig() {
-        ConfigurationSection defaultCS = getDefaultWorld();
-        ConfigurationSection configCS;
-        if (plugin.getConfig().contains(worldPath)) {
-            configCS = plugin.getConfig().getConfigurationSection(worldPath);
-        } else {
-            plugin.getConfig().set(worldPath, defaultCS);
-            saveConfig();
-            configCS = plugin.getConfig().getConfigurationSection(worldPath);
-        }
-        for (String path : defaultCS.getKeys(true)) {
-            configCS.addDefault(path, defaultCS.get(path));
-        }
-        return configCS;
-    }
-
-    private ConfigurationSection getConfig() {
-	    return plugin.getConfig().getConfigurationSection(worldPath);
-    }
-
-    private ConfigurationSection getDefaultWorld() {
-        InputStream defConfigStream = plugin.getResource("default-world.yml");
-        InputStreamReader isr;
-        try {
-            isr = new InputStreamReader(defConfigStream, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            isr = new InputStreamReader(defConfigStream);
-        }
-        return YamlConfiguration.loadConfiguration(isr);
-    }
-
-    public void saveConfig() {
-        plugin.saveConfig();
-    }
-
-    public int getNbPlots() {
-        return plots.size();
+    public short getNbPlots() {
+        return (short) plots.size();
     }
 
     public Plot getPlot(String id) {
@@ -91,16 +51,14 @@ public class PlotMapInfo {
     }
 
     public void removePlot(String id) {
-        if (plots.containsKey(id)) {
             plots.remove(id);
-        }
     }
 
     public void addFreed(String id) {
         if (!freedplots.contains(id)) {
             freedplots.add(id);
-            int x = plugin.getPlotMeCoreManager().getIdX(id);
-            int z = plugin.getPlotMeCoreManager().getIdZ(id);
+            int x = PlotMeCoreManager.getIdX(id);
+            int z = PlotMeCoreManager.getIdZ(id);
             plugin.getSqlManager().addFreed(x, z, world);
         }
     }
@@ -108,64 +66,22 @@ public class PlotMapInfo {
     public void removeFreed(String id) {
         if (freedplots.contains(id)) {
             freedplots.remove(id);
-            int x = plugin.getPlotMeCoreManager().getIdX(id);
-            int z = plugin.getPlotMeCoreManager().getIdZ(id);
+            int x = PlotMeCoreManager.getIdX(id);
+            int z = PlotMeCoreManager.getIdZ(id);
             plugin.getSqlManager().deleteFreed(x, z, world);
         }
     }
 
     private List<Integer> getProtectedBlocks() {
-        return getConfig().getIntegerList("ProtectedBlocks");
+        return config.getIntegerList("ProtectedBlocks");
     }
 
-    private void setProtectedBlocks(List<Integer> protectedBlocks) {
-        getConfig().set("ProtectedBlocks", protectedBlocks);
-        saveConfig();
-    }
-
-    public void addProtectedBlock(Integer blockId) {
-        if (!isProtectedBlock(blockId)) {
-            final List<Integer> protectedBlocks = getProtectedBlocks();
-            protectedBlocks.add(blockId);
-            setProtectedBlocks(protectedBlocks);
-        }
-    }
-
-    public void removeProtectedBlock(Integer blockId) {
-        if (isProtectedBlock(blockId)) {
-            final List<Integer> protectedBlocks = getProtectedBlocks();
-            protectedBlocks.remove(blockId);
-            setProtectedBlocks(protectedBlocks);
-        }
-    }
-
-    public boolean isProtectedBlock(Integer blockId) {
+    public boolean isProtectedBlock(int blockId) {
         return getProtectedBlocks().contains(blockId);
     }
 
     private List<String> getPreventedItems() {
-        return getConfig().getStringList("PreventedItems");
-    }
-
-    private void setPreventedItems(List<String> preventedItems) {
-        getConfig().set("PreventedItems", preventedItems);
-        saveConfig();
-    }
-
-    public void addPreventedItem(String itemId) {
-        if (!isPreventedItem(itemId)) {
-            final List<String> preventedItems = getPreventedItems();
-            preventedItems.add(itemId);
-            setPreventedItems(preventedItems);
-        }
-    }
-
-    public void removePreventedItems(String itemId) {
-        if (isPreventedItem(itemId)) {
-            final List<String> preventedItems = getPreventedItems();
-            preventedItems.remove(itemId);
-            setPreventedItems(preventedItems);
-        }
+        return config.getStringList("PreventedItems");
     }
 
     public boolean isPreventedItem(String itemId) {
@@ -173,38 +89,38 @@ public class PlotMapInfo {
     }
 
     public String getNextFreed() {
-        if (!freedplots.isEmpty()) {
-            return freedplots.get(0);
+        if (freedplots.isEmpty()) {
+            return config.getString("NextFreed");
         } else {
-            return getConfig().getString("NextFreed");
+            return freedplots.get(0);
         }
     }
 
     public void setNextFreed(String id) {
-        getConfig().set("NextFreed", id);
-        saveConfig();
+        config.set("NextFreed", id);
+        config.saveConfig();
     }
 
     public int getPlotAutoLimit() {
-        return getConfig().getInt("PlotAutoLimit");
+        return config.getInt("PlotAutoLimit");
     }
 
     public void setPlotAutoLimit(int plotAutoLimit) {
-        getConfig().set("PlotAutoLimit", plotAutoLimit);
-        saveConfig();
+        config.set("PlotAutoLimit", plotAutoLimit);
+        config.saveConfig();
     }
 
     public int getDaysToExpiration() {
-        return getConfig().getInt("DaysToExpiration");
+        return config.getInt("DaysToExpiration");
     }
 
     public void setDaysToExpiration(int daysToExpiration) {
-        getConfig().set("DaysToExpiration", daysToExpiration);
-        saveConfig();
+        config.set("DaysToExpiration", daysToExpiration);
+        config.saveConfig();
     }
 
-    private ConfigurationSection getEconomySection() {
-        return getConfig().getConfigurationSection("economy");
+    private IConfigSection getEconomySection() {
+        return config.getConfigurationSection("economy");
     }
 
     public boolean isUseEconomy() {
@@ -213,7 +129,7 @@ public class PlotMapInfo {
 
     public void setUseEconomy(boolean useEconomy) {
         getEconomySection().set("UseEconomy", useEconomy);
-        saveConfig();
+        config.saveConfig();
     }
 
     public boolean isCanPutOnSale() {
@@ -222,7 +138,7 @@ public class PlotMapInfo {
 
     public void setCanPutOnSale(boolean canPutOnSale) {
         getEconomySection().set("CanPutOnSale", canPutOnSale);
-        saveConfig();
+        config.saveConfig();
     }
 
     public boolean isCanSellToBank() {
@@ -231,7 +147,7 @@ public class PlotMapInfo {
 
     public void setCanSellToBank(boolean canSellToBank) {
         getEconomySection().set("CanSellToBank", canSellToBank);
-        saveConfig();
+        config.saveConfig();
     }
 
     public boolean isRefundClaimPriceOnReset() {
@@ -240,7 +156,7 @@ public class PlotMapInfo {
 
     public void setRefundClaimPriceOnReset(boolean refundClaimPriceOnReset) {
         getEconomySection().set("RefundClaimPriceOnReset", refundClaimPriceOnReset);
-        saveConfig();
+        config.saveConfig();
     }
 
     public boolean isRefundClaimPriceOnSetOwner() {
@@ -249,7 +165,7 @@ public class PlotMapInfo {
 
     public void setRefundClaimPriceOnSetOwner(boolean refundClaimPriceOnSetOwner) {
         getEconomySection().set("RefundClaimPriceOnSetOwner", refundClaimPriceOnSetOwner);
-        saveConfig();
+        config.saveConfig();
     }
 
     public double getClaimPrice() {
@@ -258,7 +174,7 @@ public class PlotMapInfo {
 
     public void setClaimPrice(double claimPrice) {
         getEconomySection().set("ClaimPrice", claimPrice);
-        saveConfig();
+        config.saveConfig();
     }
 
     public double getClearPrice() {
@@ -267,7 +183,7 @@ public class PlotMapInfo {
 
     public void setClearPrice(double clearPrice) {
         getEconomySection().set("ClearPrice", clearPrice);
-        saveConfig();
+        config.saveConfig();
     }
 
     public double getAddPlayerPrice() {
@@ -276,7 +192,7 @@ public class PlotMapInfo {
 
     public void setAddPlayerPrice(double addPlayerPrice) {
         getEconomySection().set("AddPlayerPrice", addPlayerPrice);
-        saveConfig();
+        config.saveConfig();
     }
 
     public double getDenyPlayerPrice() {
@@ -285,7 +201,7 @@ public class PlotMapInfo {
 
     public void setDenyPlayerPrice(double denyPlayerPrice) {
         getEconomySection().set("DenyPlayerPrice", denyPlayerPrice);
-        saveConfig();
+        config.saveConfig();
     }
 
     public double getRemovePlayerPrice() {
@@ -294,7 +210,7 @@ public class PlotMapInfo {
 
     public void setRemovePlayerPrice(double removePlayerPrice) {
         getEconomySection().set("RemovePlayerPrice", removePlayerPrice);
-        saveConfig();
+        config.saveConfig();
     }
 
     public double getUndenyPlayerPrice() {
@@ -303,7 +219,7 @@ public class PlotMapInfo {
 
     public void setUndenyPlayerPrice(double undenyPlayerPrice) {
         getEconomySection().set("UndenyPlayerPrice", undenyPlayerPrice);
-        saveConfig();
+        config.saveConfig();
     }
 
     public double getPlotHomePrice() {
@@ -312,16 +228,7 @@ public class PlotMapInfo {
 
     public void setPlotHomePrice(double plotHomePrice) {
         getEconomySection().set("PlotHomePrice", plotHomePrice);
-        saveConfig();
-    }
-
-    public boolean isCanCustomizeSellPrice() {
-        return getEconomySection().getBoolean("CanCustomizeSellPrice");
-    }
-
-    public void setCanCustomizeSellPrice(boolean canCustomizeSellPrice) {
-        getEconomySection().set("CanCustomizeSellPrice", canCustomizeSellPrice);
-        saveConfig();
+        config.saveConfig();
     }
 
     public double getSellToPlayerPrice() {
@@ -330,7 +237,7 @@ public class PlotMapInfo {
 
     public void setSellToPlayerPrice(double sellToPlayerPrice) {
         getEconomySection().set("SellToPlayerPrice", sellToPlayerPrice);
-        saveConfig();
+        config.saveConfig();
     }
 
     public double getSellToBankPrice() {
@@ -339,7 +246,7 @@ public class PlotMapInfo {
 
     public void setSellToBankPrice(double sellToBankPrice) {
         getEconomySection().set("SellToBankPrice", sellToBankPrice);
-        saveConfig();
+        config.saveConfig();
     }
 
     public double getBuyFromBankPrice() {
@@ -348,16 +255,7 @@ public class PlotMapInfo {
 
     public void setBuyFromBankPrice(double buyFromBankPrice) {
         getEconomySection().set("BuyFromBankPrice", buyFromBankPrice);
-        saveConfig();
-    }
-
-    public double getAddCommentPrice() {
-        return getEconomySection().getDouble("AddCommentPrice");
-    }
-
-    public void setAddCommentPrice(double addCommentPrice) {
-        getEconomySection().set("AddCommentPrice", addCommentPrice);
-        saveConfig();
+        config.saveConfig();
     }
 
     public double getBiomeChangePrice() {
@@ -366,7 +264,7 @@ public class PlotMapInfo {
 
     public void setBiomeChangePrice(double biomeChangePrice) {
         getEconomySection().set("BiomeChangePrice", biomeChangePrice);
-        saveConfig();
+        config.saveConfig();
     }
 
     public double getProtectPrice() {
@@ -375,7 +273,7 @@ public class PlotMapInfo {
 
     public void setProtectPrice(double protectPrice) {
         getEconomySection().set("ProtectPrice", protectPrice);
-        saveConfig();
+        config.saveConfig();
     }
 
     public double getDisposePrice() {
@@ -384,42 +282,42 @@ public class PlotMapInfo {
 
     public void setDisposePrice(double disposePrice) {
         getEconomySection().set("DisposePrice", disposePrice);
-        saveConfig();
+        config.saveConfig();
     }
 
     public boolean isAutoLinkPlots() {
-        return getConfig().getBoolean("AutoLinkPlots");
+        return config.getBoolean("AutoLinkPlots");
     }
 
     public void setAutoLinkPlots(boolean autoLinkPlots) {
-        getConfig().set("AutoLinkPlots", autoLinkPlots);
-        saveConfig();
+        config.set("AutoLinkPlots", autoLinkPlots);
+        config.saveConfig();
     }
 
     public boolean isDisableExplosion() {
-        return getConfig().getBoolean("DisableExplosion");
+        return config.getBoolean("DisableExplosion");
     }
 
     public void setDisableExplosion(boolean disableExplosion) {
-        getConfig().set("DisableExplosion", disableExplosion);
-        saveConfig();
+        config.set("DisableExplosion", disableExplosion);
+        config.saveConfig();
     }
 
     public boolean isDisableIgnition() {
-        return getConfig().getBoolean("DisableIgnition");
+        return config.getBoolean("DisableIgnition");
     }
 
     public void setDisableIgnition(boolean disableIgnition) {
-        getConfig().set("DisableIgnition", disableIgnition);
-        saveConfig();
+        config.set("DisableIgnition", disableIgnition);
+        config.saveConfig();
     }
 
     public boolean isUseProgressiveClear() {
-        return getConfig().getBoolean("UseProgressiveClear");
+        return config.getBoolean("UseProgressiveClear");
     }
 
     public void setUseProgressiveClear(boolean useProgressiveClear) {
-        getConfig().set("UseProgressiveClear", useProgressiveClear);
-        saveConfig();
+        config.set("UseProgressiveClear", useProgressiveClear);
+        config.saveConfig();
     }
 }

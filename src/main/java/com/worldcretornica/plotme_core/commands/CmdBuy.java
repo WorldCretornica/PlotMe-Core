@@ -1,17 +1,14 @@
 package com.worldcretornica.plotme_core.commands;
 
+import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
+import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.event.PlotBuyEvent;
-import com.worldcretornica.plotme_core.event.PlotMeEventFactory;
-
+import com.worldcretornica.plotme_core.api.IOfflinePlayer;
+import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.api.event.InternalPlotBuyEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
 
 public class CmdBuy extends PlotCommand {
 
@@ -19,104 +16,107 @@ public class CmdBuy extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(Player p, String[] args) {
-        if (plugin.getPlotMeCoreManager().isEconomyEnabled(p)) {
-            if (plugin.cPerms(p, "PlotMe.use.buy") || plugin.cPerms(p, "PlotMe.admin.buy")) {
-                Location l = p.getLocation();
-                String id = plugin.getPlotMeCoreManager().getPlotId(l);
+    public boolean exec(IPlayer player) {
+        IWorld world = player.getWorld();
+        if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
+            if (plugin.getPlotMeCoreManager().isEconomyEnabled(world)) {
+                if (player.hasPermission(PermissionNames.USER_BUY) || player.hasPermission("PlotMe.admin.buy")) {
+                    String id = PlotMeCoreManager.getPlotId(player);
 
-                if (id.equals("")) {
-                    p.sendMessage(RED + C("MsgNoPlotFound"));
-                } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, p)) {
-                    Plot plot = plugin.getPlotMeCoreManager().getPlotById(p, id);
+                    if (id.isEmpty()) {
+                        player.sendMessage("§c" + C(MSG_NO_PLOT_FOUND));
+                    } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, world)) {
+                        Plot plot = plugin.getPlotMeCoreManager().getPlotById(id, world);
 
-                    if (!plot.isForSale()) {
-                        p.sendMessage(RED + C("MsgPlotNotForSale"));
-                    } else {
-                        String buyer = p.getName();
+                        if (plot.isForSale()) {
+                            String buyer = player.getName();
 
-                        if (plot.getOwner().equalsIgnoreCase(buyer)) {
-                            p.sendMessage(RED + C("MsgCannotBuyOwnPlot"));
-                        } else {
-                            int plotlimit = plugin.getPlotLimit(p);
-
-                            if (plotlimit != -1 && plugin.getPlotMeCoreManager().getNbOwnedPlot(p) >= plotlimit) {
-                                p.sendMessage(C("MsgAlreadyReachedMaxPlots") + " ("
-                                                      + plugin.getPlotMeCoreManager().getNbOwnedPlot(p) + "/" + plugin.getPlotLimit(p) + "). "
-                                                      + C("WordUse") + " " + RED + "/plotme " + C("CommandHome") + RESET + " " + C("MsgToGetToIt"));
+                            if (plot.getOwner().equalsIgnoreCase(buyer)) {
+                                player.sendMessage("§c" + C("MsgCannotBuyOwnPlot"));
                             } else {
-                                World w = p.getWorld();
+                                int plotlimit = getPlotLimit(player);
 
-                                double cost = plot.getCustomPrice();
-
-                                if (plugin.getEconomy().getBalance(p) < cost) {
-                                    p.sendMessage(RED + C("MsgNotEnoughBuy"));
+                                if (plotlimit != -1 && plugin.getPlotMeCoreManager().getNbOwnedPlot(player.getUniqueId(), player.getName(), world.getName()) >= plotlimit) {
+                                    player.sendMessage(C("MsgAlreadyReachedMaxPlots") + " ("
+                                                               + plugin.getPlotMeCoreManager().getNbOwnedPlot(player.getUniqueId(), player.getName(), world.getName()) + "/" + getPlotLimit(player) + "). "
+                                                          + C("WordUse") + " §c/plotme home§r " + C("MsgToGetToIt"));
                                 } else {
 
-                                    PlotBuyEvent event = PlotMeEventFactory.callPlotBuyEvent(plugin, w, plot, p, cost);
+                                    double cost = plot.getCustomPrice();
 
-                                    if (!event.isCancelled()) {
-                                        EconomyResponse er = plugin.getEconomy().withdrawPlayer(p, cost);
+                                    if (serverBridge.getBalance(player) < cost) {
+                                        player.sendMessage("§c" + C("MsgNotEnoughBuy"));
+                                    } else {
 
-                                        if (er.transactionSuccess()) {
-                                            String oldowner = plot.getOwner();
-                                            OfflinePlayer playercurrentbidder = null;
-                                            
-                                            if (plot.getOwnerId() != null) {
-                                                playercurrentbidder = Bukkit.getOfflinePlayer(plot.getOwnerId());
-                                            }
+                                        InternalPlotBuyEvent event = serverBridge.getEventFactory().callPlotBuyEvent(plugin, world, plot, player, cost);
 
-                                            if (!oldowner.equalsIgnoreCase("$Bank$") && playercurrentbidder != null) {
-                                                EconomyResponse er2 = plugin.getEconomy().depositPlayer(playercurrentbidder, cost);
+                                        if (!event.isCancelled()) {
+                                            EconomyResponse er = serverBridge.withdrawPlayer(player, cost);
 
-                                                if (!er2.transactionSuccess()) {
-                                                    p.sendMessage(RED + er2.errorMessage);
-                                                    Util().warn(er2.errorMessage);
-                                                } else {
-                                                    for (Player player : Bukkit.getServer().getOnlinePlayers()) {
-                                                        if (player.getName().equalsIgnoreCase(oldowner)) {
-                                                            player.sendMessage(C("WordPlot") + " " + id + " "
-                                                                                       + C("MsgSoldTo") + " " + buyer + ". " + Util().moneyFormat(cost));
-                                                            break;
+                                            if (er.transactionSuccess()) {
+                                                String oldowner = plot.getOwner();
+                                                IOfflinePlayer playercurrentbidder = null;
+
+                                                if (plot.getOwnerId() != null) {
+                                                    playercurrentbidder = serverBridge.getOfflinePlayer(plot.getOwnerId());
+                                                }
+
+                                                if (!"$Bank$".equalsIgnoreCase(oldowner) && playercurrentbidder != null) {
+                                                    EconomyResponse er2 = serverBridge.depositPlayer(playercurrentbidder, cost);
+
+                                                    if (er2.transactionSuccess()) {
+                                                        for (IPlayer onlinePlayers : serverBridge.getOnlinePlayers()) {
+                                                            if (onlinePlayers.getName().equalsIgnoreCase(oldowner)) {
+                                                                onlinePlayers.sendMessage(C("WordPlot") + " " + id + " "
+                                                                                                  + C("MsgSoldTo") + " " + buyer + ". " + Util().moneyFormat(cost, true));
+                                                                break;
+                                                            }
                                                         }
+                                                    } else {
+                                                        player.sendMessage("§c" + er2.errorMessage);
+                                                        warn(er2.errorMessage);
                                                     }
                                                 }
+
+                                                plot.setOwner(buyer);
+                                                plot.setCustomPrice(0.0);
+                                                plot.setForSale(false);
+
+                                                plot.updateField("owner", buyer);
+                                                plot.updateField("customprice", 0);
+                                                plot.updateField("forsale", false);
+
+                                                plugin.getPlotMeCoreManager().adjustWall(player);
+                                                plugin.getPlotMeCoreManager().setSellSign(world, plot);
+                                                PlotMeCoreManager.setOwnerSign(world, plot);
+
+                                                double price = -cost;
+                                                player.sendMessage(C("MsgPlotBought") + " " + Util().moneyFormat(price, true));
+
+                                                if (isAdvancedLogging()) {
+                                                    plugin.getLogger().info(buyer + " " + C("MsgBoughtPlot") + " " + id + " " + C("WordFor") + " " + cost);
+                                                }
+                                            } else {
+                                                player.sendMessage("§c" + er.errorMessage);
+                                                warn(er.errorMessage);
                                             }
-
-                                            plot.setOwner(buyer);
-                                            plot.setCustomPrice(0);
-                                            plot.setForSale(false);
-
-                                            plot.updateField("owner", buyer);
-                                            plot.updateField("customprice", 0);
-                                            plot.updateField("forsale", false);
-
-                                            plugin.getPlotMeCoreManager().adjustWall(l);
-                                            plugin.getPlotMeCoreManager().setSellSign(w, plot);
-                                            plugin.getPlotMeCoreManager().setOwnerSign(w, plot);
-
-                                            p.sendMessage(C("MsgPlotBought") + " " + Util().moneyFormat(-cost));
-
-                                            if (isAdvancedLogging()) {
-                                                plugin.getLogger().info(LOG + buyer + " " + C("MsgBoughtPlot") + " " + id + " " + C("WordFor") + " " + cost);
-                                            }
-                                        } else {
-                                            p.sendMessage(RED + er.errorMessage);
-                                            Util().warn(er.errorMessage);
                                         }
                                     }
                                 }
                             }
+                        } else {
+                            player.sendMessage("§c" + C("MsgPlotNotForSale"));
                         }
+                    } else {
+                        player.sendMessage("§c" + C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
                     }
                 } else {
-                    p.sendMessage(RED + C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
+                    player.sendMessage("§c" + C("MsgPermissionDenied"));
+                    return false;
                 }
             } else {
-                p.sendMessage(RED + C("MsgPermissionDenied"));
+                player.sendMessage("§c" + C("MsgEconomyDisabledWorld"));
             }
-        } else {
-            p.sendMessage(RED + C("MsgEconomyDisabledWorld"));
         }
         return true;
     }
