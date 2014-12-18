@@ -47,6 +47,17 @@ table {
 /*******************************************************************************
 Markus Styles :)
 *******************************************************************************/
+#header {
+  height: 100px;
+  background: #ffffff url(images/headerback.png) repeat-x;
+  position: relative;
+}
+a.logo {
+  display: block;
+  float: left;
+  margin-top: 2px;
+  margin-left: 2px;
+}
 .topmenu {
   position: absolute;
   right: 380px;
