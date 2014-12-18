@@ -1,9 +1,6 @@
 package com.worldcretornica.plotme_core.commands;
 
-import com.worldcretornica.plotme_core.Plot;
-import com.worldcretornica.plotme_core.PlotMapInfo;
-import com.worldcretornica.plotme_core.PlotMeCoreManager;
-import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.*;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotProtectChangeEvent;
@@ -16,7 +13,7 @@ public class CmdProtect extends PlotCommand {
     }
 
     public boolean exec(IPlayer player) {
-        if (player.hasPermission("PlotMe.admin.protect") || player.hasPermission("PlotMe.use.protect")) {
+        if (player.hasPermission(PermissionNames.ADMIN_PROTECT) || player.hasPermission("PlotMe.use.protect")) {
             IWorld world = player.getWorld();
             PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
             if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
@@ -29,7 +26,7 @@ public class CmdProtect extends PlotCommand {
 
                     String name = player.getName();
 
-                    if (plot.getOwner().equalsIgnoreCase(name) || player.hasPermission("PlotMe.admin.protect")) {
+                    if (plot.getOwner().equalsIgnoreCase(name) || player.hasPermission(PermissionNames.ADMIN_PROTECT)) {
                         InternalPlotProtectChangeEvent event;
 
                         if (plot.isProtect()) {

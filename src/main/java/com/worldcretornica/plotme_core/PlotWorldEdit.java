@@ -38,7 +38,7 @@ public class PlotWorldEdit {
 
         LocalSession session = worldEdit.getSession(bukkitPlayer.getPlayer());
 
-        if (!"".equalsIgnoreCase(id)) {
+        if (!id.isEmpty()) {
             Plot plot = plugin.getPlotMeCoreManager().getPlotById(id, player);
 
             if (plot != null && plot.isAllowed(player.getName(), player.getUniqueId())) {
@@ -53,9 +53,9 @@ public class PlotWorldEdit {
 
                 CuboidRegion cr = new CuboidRegion(world, pos1, pos2);
 
-                Mask rm = new RegionMask(cr);
+                Mask regionMask = new RegionMask(cr);
 
-                session.setMask(rm);
+                session.setMask(regionMask);
                 return;
             }
         }

@@ -39,7 +39,7 @@ public class BukkitPlotWorldEditListener implements Listener {
             String idFrom = PlotMeCoreManager.getPlotId(from);
             idTo = PlotMeCoreManager.getPlotId(to);
 
-            if (!idFrom.equalsIgnoreCase(idTo)) {
+            if (!idFrom.equals(idTo)) {
                 changemask = true;
             }
         }

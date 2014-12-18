@@ -32,6 +32,7 @@ public class Plot implements Comparable<Plot> {
     private String currentbidder;
     private double currentbid;
     private UUID currentbidderId;
+    private String plotName;
 
     public Plot(PlotMe_Core plugin) {
         this.plugin = plugin;
@@ -519,4 +520,7 @@ public class Plot implements Comparable<Plot> {
         this.currentbid = currentbid;
     }
 
+    public void setPlotName(String plotName) {
+        this.plotName = plotName;
+    }
 }
