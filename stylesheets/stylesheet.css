@@ -108,6 +108,7 @@ body {
     font-size: 12px;
     padding: 1em;
     display: none;
+    background: url('http://www.evlsnoopy.com/assets/images/up-arrow.png') no-repeat;
 }
 
 .back-to-top:hover {    
