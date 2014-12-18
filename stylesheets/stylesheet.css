@@ -104,15 +104,15 @@ body {
     right: 0px;
     text-decoration: none;
     color: #000000;
-    background-color: rgba(235, 235, 235, 0.80);
+    background-color: rgba(135, 135, 135, 0.50);
     font-size: 12px;
     padding: 1em;
     display: none;
-    background: url('http://www.evlsnoopy.com/assets/images/up-arrow.png') no-repeat;
 }
 
 .back-to-top:hover {    
-    background-color: rgba(135, 135, 135, 0.50);
+    background-color: rgba(93, 94, 94, 0.50);
+    text-decoration: none;
 }
 
 /*******************************************************************************
