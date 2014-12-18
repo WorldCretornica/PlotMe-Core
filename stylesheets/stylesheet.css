@@ -45,6 +45,26 @@ table {
 }
 
 /*******************************************************************************
+Markus Styles :)
+*******************************************************************************/
+.topmenu {
+  position: absolute;
+  right: 380px;
+  top: 1px;
+  font-size: 12px;
+  font-family: "varela round", arial, helvetica, sans-serif;
+}
+.topmenu a {
+  display: inline-block;
+  padding: 10px 12px;
+  color: #2e2e2e;
+}
+.topmenu a:hover {
+  color: #fff;
+  background: #666;
+}
+
+/*******************************************************************************
 Theme Styles
 *******************************************************************************/
 
