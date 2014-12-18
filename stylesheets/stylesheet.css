@@ -47,12 +47,17 @@ table {
 /*******************************************************************************
 Markus Styles :)
 *******************************************************************************/
-
+body {
+    padding: 0;
+    margin: 0;
+    font-family: Arial;
+    font-size: 17px;
+}
 #nav {
     background-color: #222;
 }
 #nav_wrapper {
-    width: 1000px;
+    width: 960px;
     margin: 0 auto;
     text-align: left;
 }
@@ -92,7 +97,6 @@ Markus Styles :)
 #nav ul ul li a:hover {
     color: #699;
 }
-
 /*******************************************************************************
 Theme Styles
 *******************************************************************************/
@@ -103,7 +107,7 @@ body {
   background: #212121;
   padding: 0;
   margin: 0;
-  font-size: 16px;
+  font-size: 17px;
   font-family: 'Myriad Pro', Calibri, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
