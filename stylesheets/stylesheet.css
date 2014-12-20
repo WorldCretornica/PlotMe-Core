@@ -121,7 +121,7 @@ body {
 /* Spoiler Function */
 .spoilerbutton {
   display:block;
-  margin:20px 0;
+  margin:5px 0;
 }
 .spoiler {
   overflow:hidden;
