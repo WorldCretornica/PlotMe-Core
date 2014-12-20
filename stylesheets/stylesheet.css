@@ -99,6 +99,10 @@ body {
     color: #699;
 }
 
+#navLink {
+  display:none;
+}
+
 .back-to-top {
     position: fixed;
     bottom: 2em;
