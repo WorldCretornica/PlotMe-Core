@@ -8,18 +8,16 @@ import com.worldcretornica.plotme_core.api.IWorld;
 
 public class InternalPlotTeleportEvent extends InternalPlotEvent implements ICancellable {
 
-    private boolean canceled;
     private final IPlayer player;
     private final String plotId;
-    private final Plot plot;
     private final ILocation location;
+    private boolean canceled;
 
     public InternalPlotTeleportEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer player, ILocation location, String plotId) {
         super(instance, plot, world);
         this.player = player;
         this.location = location;
         this.plotId = plotId;
-        this.plot = plot;
     }
 
     @Override

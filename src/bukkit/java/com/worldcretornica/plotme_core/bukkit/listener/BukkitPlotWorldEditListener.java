@@ -35,7 +35,7 @@ public class BukkitPlotWorldEditListener implements Listener {
         boolean changemask = false;
         if (!from.getWorld().getName().equalsIgnoreCase(to.getWorld().getName())) {
             changemask = true;
-        } else if (from.getBlockX() != to.getBlockX() || from.getBlockZ() != to.getBlockZ()) {
+        } else if (from.getLocation() != to.getLocation()) {
             String idFrom = PlotMeCoreManager.getPlotId(from);
             idTo = PlotMeCoreManager.getPlotId(to);
 

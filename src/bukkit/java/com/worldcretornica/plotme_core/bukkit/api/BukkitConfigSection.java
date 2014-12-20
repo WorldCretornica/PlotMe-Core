@@ -45,9 +45,23 @@ public class BukkitConfigSection implements IConfigSection {
         plugin.saveConfig();
     }
 
+    /**
+     * Sets the specified path to the given value.
+     * <p/>
+     * If value is null, the entry will be removed. Any existing entry will be
+     * replaced, regardless of what the new value is.
+     * <p/>
+     * Some implementations may have limitations on what you may store. See
+     * their individual javadocs for details. No implementations should allow
+     * you to store {@link org.bukkit.configuration.Configuration}s or {@link ConfigurationSection}s,
+     * please use {@link #createSection(java.lang.String)} for that.
+     *
+     * @param path  Path of the object to set.
+     * @param value New value to set the path to.
+     */
     @Override
-    public void set(String string, Object value) {
-        section.set(string, value);
+    public void set(String path, Object value) {
+        section.set(path, value);
     }
 
     @Override

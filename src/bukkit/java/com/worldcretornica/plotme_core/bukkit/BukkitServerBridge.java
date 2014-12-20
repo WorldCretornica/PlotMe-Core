@@ -107,10 +107,9 @@ public class BukkitServerBridge implements IServerBridge {
             WorldEditPlugin worldEdit = (WorldEditPlugin) pluginManager.getPlugin("WorldEdit");
             PlotWorldEdit we = null;
             try {
-                Class.forName("com.sk89q.worldedit.function.mask.Mask");
                 we = new PlotWorldEdit(plotMeCore, worldEdit);
                 setPlotWorldEdit(we);
-            } catch (ClassNotFoundException | SecurityException | IllegalArgumentException unused) {
+            } catch (SecurityException | IllegalArgumentException unused) {
                 getLogger().warning("Unable to hook to WorldEdit properly, please contact the developper of plotme with your WorldEdit version.");
                 setPlotWorldEdit(null);
             }
