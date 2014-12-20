@@ -120,10 +120,12 @@ body {
 
 /* Spoiler Function */
 .spoilerbutton {
-  display:block;margin:5px 0;
+  display:block;
+  margin:20px 0;
 }
 .spoiler {
-  overflow:hidden;background: #f5f5f5;
+  overflow:hidden;
+  background: #f5f5f5;
 }
 .spoiler > div {
   -webkit-transition: all 0.2s ease;
