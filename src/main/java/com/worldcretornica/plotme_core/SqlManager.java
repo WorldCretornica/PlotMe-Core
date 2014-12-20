@@ -10,9 +10,11 @@ import java.sql.Date;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.logging.Level;
+import java.util.regex.Pattern;
 
 public class SqlManager {
 
+    private static final Pattern COMPILE = Pattern.compile("^[a-zA-Z0-9_]{1,16}$");
     private final PlotMe_Core plugin;
     private final boolean usemySQL;
     private final String mySQLuname;
@@ -31,19 +33,14 @@ public class SqlManager {
     public Connection initialize() {
         try {
             if (usemySQL) {
-                Class.forName("com.mysql.jdbc.Driver");
                 conn = DriverManager.getConnection(mySQLconn, mySQLuname, mySQLpass);
                 conn.setAutoCommit(false);
             } else {
-                Class.forName("org.sqlite.JDBC");
                 conn = DriverManager.getConnection("jdbc:sqlite:" + plugin.getServerBridge().getDataFolder() + "/plots.db");
                 conn.setAutoCommit(false);
             }
         } catch (SQLException ex) {
             plugin.getLogger().severe("SQL exception on initialize :");
-            plugin.getLogger().severe(ex.getMessage());
-        } catch (ClassNotFoundException ex) {
-            plugin.getLogger().severe("You need the SQLite/MySQL library. :");
             plugin.getLogger().severe(ex.getMessage());
         }
 
@@ -536,7 +533,6 @@ public class SqlManager {
                 File sqlitefile = new File(plugin.getServerBridge().getDataFolder(), sqlitedb);
                 if (sqlitefile.exists()) {
                     plugin.getLogger().info("Trying to import plots from plots.db");
-                    Class.forName("org.sqlite.JDBC");
                     Connection sqliteconn = DriverManager.getConnection("jdbc:sqlite:" + plugin.getServerBridge().getDataFolder() + "\\" + sqlitedb);
 
                     sqliteconn.setAutoCommit(false);
@@ -599,7 +595,6 @@ public class SqlManager {
                         }
 
                         setAllowed.close();
-
                         setDenied = slDenied.executeQuery("SELECT * FROM plotmeDenied WHERE idX = '" + idX + "' AND idZ = '" + idZ + "' AND world = '" + world + "'");
 
                         while (setDenied.next()) {
@@ -661,9 +656,6 @@ public class SqlManager {
         } catch (SQLException ex) {
             plugin.getLogger().severe("Create Table Exception :");
             ex.printStackTrace();
-        } catch (ClassNotFoundException ex) {
-            plugin.getLogger().severe("You need the SQLite library :");
-            plugin.getLogger().severe(ex.getMessage());
         } finally {
             try {
                 if (st != null) {
@@ -1068,7 +1060,7 @@ public class SqlManager {
             if (setPlots.next()) {
                 String owner = setPlots.getString("owner");
                 String biome = setPlots.getString("biome");
-                java.sql.Date expireddate = null;
+                Date expireddate = null;
                 try {
                     expireddate = setPlots.getDate("expireddate");
                 } catch (SQLException ignored) {
@@ -1197,7 +1189,7 @@ public class SqlManager {
     }
 
     //Do NOT call from the main thread
-    private HashMap<String, Plot> getPlots(String world) {
+    public HashMap<String, Plot> getPlots(String world) {
         HashMap<String, Plot> ret = new HashMap<>();
         Statement statementPlot = null;
         Statement statementAllowed = null;
@@ -1217,7 +1209,7 @@ public class SqlManager {
                 int idZ = setPlots.getInt("idZ");
                 String owner = setPlots.getString("owner");
                 String biome = setPlots.getString("biome");
-                java.sql.Date expireddate = null;
+                Date expireddate = null;
                 try {
                     expireddate = setPlots.getDate("expireddate");
                 } catch (SQLException ignored) {
@@ -1471,7 +1463,7 @@ public class SqlManager {
 
             Calendar cal = Calendar.getInstance();
             java.util.Date time = cal.getTime();
-            java.sql.Date date = new Date(time.getTime());
+            Date date = new Date(time.getTime());
 
             ps = conn.prepareStatement("SELECT Count(*) as NbPlot FROM plotmePlots WHERE LOWER(world) = ? AND expireddate < ?");
             ps.setString(1, world);
@@ -1559,7 +1551,7 @@ public class SqlManager {
 
             Calendar cal = Calendar.getInstance();
             java.util.Date utilDate = cal.getTime();
-            java.sql.Date sqlDate = new Date(utilDate.getTime());
+            Date sqlDate = new Date(utilDate.getTime());
 
             statementPlot = conn.prepareStatement("SELECT idX, idZ, owner, expireddate FROM plotmePlots WHERE LOWER(world) = ? AND protected = 0 AND expireddate < ? ORDER BY expireddate LIMIT ?, ?");
             statementPlot.setString(1, world);
@@ -1574,7 +1566,7 @@ public class SqlManager {
                 int idZ = setPlots.getInt("idZ");
                 String owner = setPlots.getString("owner");
 
-                java.sql.Date expireddate = null;
+                Date expireddate = null;
                 try {
                     expireddate = setPlots.getDate("expireddate");
                 } catch (SQLException ignored) {
@@ -1615,7 +1607,7 @@ public class SqlManager {
 
             Calendar cal = Calendar.getInstance();
             java.util.Date utilDate = cal.getTime();
-            java.sql.Date sqlDate = new Date(utilDate.getTime());
+            Date sqlDate = new Date(utilDate.getTime());
 
             statementPlot = conn.prepareStatement("SELECT idX, idZ, owner, expireddate FROM plotmePlots WHERE LOWER(world) = ? AND protected = 0 AND expireddate < ? ORDER BY expireddate LIMIT 1");
             statementPlot.setString(1, world);
@@ -1628,7 +1620,7 @@ public class SqlManager {
                 int idZ = setPlots.getInt("idZ");
                 String owner = setPlots.getString("owner");
 
-                java.sql.Date expireddate = null;
+                Date expireddate = null;
                 try {
                     expireddate = setPlots.getDate("expireddate");
                 } catch (SQLException ignored) {
@@ -1705,7 +1697,7 @@ public class SqlManager {
                 int idX = setPlots.getInt("idX");
                 int idZ = setPlots.getInt("idZ");
                 String biome = setPlots.getString("biome");
-                java.sql.Date expireddate = null;
+                Date expireddate = null;
                 try {
                     expireddate = setPlots.getDate("expireddate");
                 } catch (SQLException ignored) {
@@ -1822,7 +1814,7 @@ public class SqlManager {
                 int idX = setPlots.getInt("idX");
                 int idZ = setPlots.getInt("idZ");
                 String biome = setPlots.getString("biome");
-                java.sql.Date expireddate = null;
+                Date expireddate = null;
                 try {
                     expireddate = setPlots.getDate("expireddate");
                 } catch (SQLException ignored) {
@@ -1956,7 +1948,7 @@ public class SqlManager {
                         do {
                             String name = setPlayers.getString("Name");
                             if (!name.isEmpty()) {
-                                if (name.matches("^[a-zA-Z0-9_]{1,16}$")) {
+                                if (COMPILE.matcher(name).matches()) {
                                     names.add(name);
                                 } else {
                                     plugin.getLogger().warning("Invalid name found : " + name + ". Removing from database.");

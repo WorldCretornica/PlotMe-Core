@@ -17,7 +17,7 @@ public class PlotMe_Core {
 
     public static final String CAPTION_FILE = "captions.yml";
     public static final String WORLDS_CONFIG_SECTION = "worlds";
-    private static final String DEFAULT_GENERATOR_URL = "http://dev.bukkit.org/bukkit-plugins/plotme/";
+    private static final String DEFAULT_GENERATOR_URL = "";
     //Bridge
     private final IServerBridge serverBridge;
     public Map<String, Map<String, String>> creationbuffer;
@@ -75,8 +75,6 @@ public class PlotMe_Core {
         // Get the config we will be working with
         IConfigSection config = serverBridge.getConfig();
         config.set("allowToDeny", null);
-        config.set("Language", null);
-        config.set("language", null);
         // If no world exists add config for a world
         //if (!config.contains("worlds") || config.contains("worlds") && config.getConfigurationSection("worlds").getKeys(false).isEmpty()) {
         if (!(config.contains(WORLDS_CONFIG_SECTION) && !config.getConfigurationSection(WORLDS_CONFIG_SECTION).getKeys(false).isEmpty())) {
@@ -91,7 +89,8 @@ public class PlotMe_Core {
 
         // Copy new values over
         config.copyDefaults(true);
-
+        config.set("Language", null);
+        config.set("language", null);
         config.saveConfig();
     }
 
@@ -104,6 +103,11 @@ public class PlotMe_Core {
                 getLogger().log(Level.SEVERE, "The default generator can be downloaded from " + DEFAULT_GENERATOR_URL);
             } else {
                 PlotMapInfo pmi = new PlotMapInfo(this, world);
+
+                //Lets just hide a bit of code to clean up the config in here.
+                IConfigSection config = getServerBridge().loadDefaultConfig("worlds." + world);
+                config.set("BottomBlockId", null);
+                config.set("AutoLinkPlots", null);
                 plotMeCoreManager.addPlotMap(world, pmi);
             }
         }
@@ -144,6 +148,9 @@ public class PlotMe_Core {
                 }
             }
         }
+        if (!newCaptionFile.exists()) {
+            getServerBridge().saveResource(CAPTION_FILE, true);
+        }
     }
 
     private void setupMySQL() {
@@ -165,8 +172,10 @@ public class PlotMe_Core {
     public IPlotMe_GeneratorManager getGenManager(String name) {
         IWorld world = serverBridge.getWorld(name);
         if (world == null) {
+            getLogger().info("Line 166 of PlotMe_Core returned null....");
             return null;
         } else {
+            getLogger().info("Line 166 of PlotMe_Core did not return null.... line 172 will return this:  " + PlotMeCoreManager.getGenManager(world));
             return PlotMeCoreManager.getGenManager(world);
         }
     }
