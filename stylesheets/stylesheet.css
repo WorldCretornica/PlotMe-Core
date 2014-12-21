@@ -144,10 +144,6 @@ body {
 	position:relative;
 	top:1px;
 }
-/*.spoilerbutton {
-  display:block;
-  margin:5px 0;
-}*/
 .spoiler {
   overflow:hidden;
   background: #f5f5f5;
@@ -164,7 +160,13 @@ body {
 .spoilerbutton[value="Hide"] + .spoiler {
   padding:5px;
 }
-
+.insidespoiler {
+	background-color:transparent;
+	-webkit-border-radius:10px;
+	-moz-border-radius:10px;
+	border-radius:6px;
+	border:2px solid #b6b6b6;
+}
 /*******************************************************************************
 Theme Styles
 *******************************************************************************/
