@@ -1,18 +1,18 @@
 package com.worldcretornica.plotme_core.api.event;
 
+import com.worldcretornica.plotme_core.Biomes;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.IBiome;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 
 public class InternalPlotBiomeChangeEvent extends InternalPlotEvent implements ICancellable {
 
-    private boolean canceled;
     private final IPlayer player;
-    private IBiome biome;
+    private boolean canceled;
+    private Biomes biome;
 
-    public InternalPlotBiomeChangeEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer player, IBiome biome) {
+    public InternalPlotBiomeChangeEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer player, Biomes biome) {
         super(instance, plot, world);
         this.player = player;
         this.biome = biome;
@@ -32,11 +32,11 @@ public class InternalPlotBiomeChangeEvent extends InternalPlotEvent implements I
         return player;
     }
 
-    public IBiome getBiome() {
+    public Biomes getBiome() {
         return biome;
     }
-    
-    public void setBiome(IBiome biome) {
+
+    public void setBiome(Biomes biome) {
         this.biome = biome;
     }
 }

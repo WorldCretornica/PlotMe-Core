@@ -4,7 +4,6 @@ import com.worldcretornica.plotme_core.*;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotBiomeChangeEvent;
-import com.worldcretornica.plotme_core.bukkit.api.BukkitBiome;
 import net.milkbowl.vault.economy.EconomyResponse;
 
 public class CmdBiome extends PlotCommand {
@@ -23,7 +22,7 @@ public class CmdBiome extends PlotCommand {
 
                     if (args.length == 2) {
 
-                        BukkitBiome biome = (BukkitBiome) serverBridge.getBiome(args[1]);
+                        Biomes biome = serverBridge.getBiome(args[1]);
 
                         if (biome == null) {
                             player.sendMessage("§c" + args[1] + "§r " + C("MsgIsInvalidBiome"));

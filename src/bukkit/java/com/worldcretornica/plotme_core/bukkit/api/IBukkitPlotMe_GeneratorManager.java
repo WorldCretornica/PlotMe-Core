@@ -1,8 +1,8 @@
 package com.worldcretornica.plotme_core.bukkit.api;
 
+import com.worldcretornica.plotme_core.Biomes;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.block.Biome;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -40,7 +40,7 @@ public interface IBukkitPlotMe_GeneratorManager {
 
     Location getPlotTopLoc(World world, String id);
 
-    void setBiome(World world, String id, Biome biome);
+    void setBiome(World world, String id, Biomes biome);
 
     void refreshPlotChunks(World world, String id);
 

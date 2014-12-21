@@ -1,7 +1,14 @@
 package com.worldcretornica.plotme_core.bukkit;
 
-import com.worldcretornica.plotme_core.api.*;
-import com.worldcretornica.plotme_core.bukkit.api.*;
+import com.worldcretornica.plotme_core.Biomes;
+import com.worldcretornica.plotme_core.api.ILocation;
+import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.api.IPlotMe_GeneratorManager;
+import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.bukkit.api.BukkitLocation;
+import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
+import com.worldcretornica.plotme_core.bukkit.api.BukkitWorld;
+import com.worldcretornica.plotme_core.bukkit.api.IBukkitPlotMe_GeneratorManager;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -98,8 +105,8 @@ public class BukkitPlotMe_GeneratorManagerBridge implements IPlotMe_GeneratorMan
     }
 
     @Override
-    public void setBiome(IWorld world, String id, IBiome biome) {
-        generatorManager.setBiome(((BukkitWorld) world).getWorld(), id, ((BukkitBiome) biome).getBiome());
+    public void setBiome(IWorld world, String id, Biomes biome) {
+        generatorManager.setBiome(((BukkitWorld) world).getWorld(), id, biome);
     }
 
     @Override

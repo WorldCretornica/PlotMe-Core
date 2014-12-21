@@ -1,5 +1,7 @@
 package com.worldcretornica.plotme_core.api;
 
+import com.worldcretornica.plotme_core.Biomes;
+
 import java.util.List;
 import java.util.Map;
 
@@ -35,7 +37,7 @@ public interface IPlotMe_GeneratorManager {
 
     ILocation getPlotTopLoc(IWorld world, String id);
 
-    void setBiome(IWorld world, String id, IBiome biome);
+    void setBiome(IWorld world, String id, Biomes biome);
 
     void refreshPlotChunks(IWorld world, String id);
 

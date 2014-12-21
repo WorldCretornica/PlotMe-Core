@@ -1,5 +1,6 @@
 package com.worldcretornica.plotme_core.api;
 
+import com.worldcretornica.plotme_core.Biomes;
 import com.worldcretornica.plotme_core.PlotWorldEdit;
 import com.worldcretornica.plotme_core.api.event.IEventFactory;
 import net.milkbowl.vault.economy.Economy;
@@ -79,7 +80,7 @@ public interface IServerBridge {
 
     void runTaskAsynchronously(Runnable runnable);
 
-    IBiome getBiome(String name);
+    Biomes getBiome(String name);
 
     IEventFactory getEventFactory();
 
