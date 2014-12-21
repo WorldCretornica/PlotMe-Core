@@ -33,15 +33,17 @@ public class SqlManager {
     public Connection initialize() {
         try {
             if (usemySQL) {
+                Class.forName("com.mysql.jdbc.Driver");
                 conn = DriverManager.getConnection(mySQLconn, mySQLuname, mySQLpass);
                 conn.setAutoCommit(false);
             } else {
+                Class.forName("org.sqlite.JDBC");
                 conn = DriverManager.getConnection("jdbc:sqlite:" + plugin.getServerBridge().getDataFolder() + "/plots.db");
                 conn.setAutoCommit(false);
             }
-        } catch (SQLException ex) {
+        } catch (SQLException | ClassNotFoundException e) {
             plugin.getLogger().severe("SQL exception on initialize :");
-            plugin.getLogger().severe(ex.getMessage());
+            plugin.getLogger().severe(e.getMessage());
         }
 
         createTable();
