@@ -3,6 +3,7 @@ package com.worldcretornica.plotme_core;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.utils.UUIDFetcher;
+import com.worldcretornica.plotme_core.bukkit.api.BukkitBiome;
 
 import java.io.File;
 import java.sql.*;
@@ -731,7 +732,7 @@ public class SqlManager {
             ps.setInt(7, topZ);
             //noinspection SuspiciousNameCombination
             ps.setInt(8, bottomZ);
-            ps.setString(9, plot.getBiome().toString());
+            ps.setString(9, ((BukkitBiome)plot.getBiome()).getBiome().name());
             ps.setDate(10, plot.getExpiredDate());
             ps.setBoolean(11, plot.isFinished());
             ps.setDouble(12, plot.getCustomPrice());

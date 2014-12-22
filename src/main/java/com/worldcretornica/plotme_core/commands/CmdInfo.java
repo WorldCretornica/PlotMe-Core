@@ -7,6 +7,7 @@ import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.bukkit.api.BukkitBiome;
 
 public class CmdInfo extends PlotCommand {
 
@@ -26,7 +27,7 @@ public class CmdInfo extends PlotCommand {
                     Plot plot = plugin.getPlotMeCoreManager().getPlotById(id, world);
 
                     player.sendMessage("§aID: §b" + id + "§a " + C("InfoOwner") + ": §b" + plot.getOwner()
-                                               + "§a " + C("InfoBiome") + ": §b" + plot.getBiome());
+                                               + "§a " + C("InfoBiome") + ": §b" + ((BukkitBiome)plot.getBiome()).getBiome().name());
 
                     if (plot.getExpiredDate() == null)
                         if (plot.isFinished())
