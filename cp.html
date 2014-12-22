@@ -81,15 +81,33 @@
 </script>
 
 <style type="text/css">
-table.tftable {font-size:12px;color:#333333;width:100%;border-width: 1px;border-color: #a9a9a9;border-collapse: collapse;}
-table.tftable th {font-size:12px;background-color:#b8b8b8;border-width: 1px;padding: 8px;border-style: solid;border-color: #a9a9a9;text-align:left;}
+table.tftable {font-size:15px;color:#333333;width:100%;border-width: 1px;border-color: #a9a9a9;border-collapse: collapse;}
+table.tftable th {font-size:20px;background-color:#b8b8b8;border-width: 1px;padding: 8px;border-style: solid;border-color: #a9a9a9;text-align:left;}
 table.tftable tr {background-color:#ffffff;}
-table.tftable td {font-size:12px;border-width: 1px;padding: 8px;border-style: solid;border-color: #a9a9a9;}
+table.tftable td {font-size:15px;border-width: 1px;padding: 8px;border-style: solid;border-color: #a9a9a9;}
 </style>
 
 <table id="tfhover" class="tftable" border="2">
 	<tr><th>Command</th><th>Subcommand</th><th>Argument</th><th>Description</th><th>Permission</th><th>Permission Group</th></tr>
-		<tr><td><strong>/plotme</strong> /plot /p</td><td>claim</td><td> </td><td>plotme.use.claim</td><td>plotme.use</td></tr>
+		<tr><td><strong>/plotme</strong> (/plot,/p)</td><td>claim</td><td> </td><td>Claim the plot you're standing on</td></td><td>plotme.use.claim</td><td>plotme.use</td></tr>
+		<tr><td><strong>/plotme</strong> (/plot,/p)</td><td>auto</td><td> </td><td>Auto claim the next free plot</td></td><td>plotme.use.auto</td><td>plotme.use</td></tr>
+		<tr><td><strong>/plotme</strong> (/plot,/p)</td><td>home</td>:1,2,3.. etc.<td></td><td>Teleport to your plot home. Use :# if multiple homes</td></td><td>plotme.use.home</td><td>plotme.use</td></tr>
+		<tr><td><strong>/plotme</strong> (/plot,/p)</td><td>list</td><td> </td><td>List your own plots</td></td><td>plotme.use.list</td><td>plotme.use</td></tr>
+		<tr><td><strong>/plotme</strong> (/plot,/p)</td><td>info</td><td> </td><td>Displays info about the plot you're standing on</td></td><td>plotme.use.auto</td><td>plotme.use</td></tr>
+		<tr><td><strong>/plotme</strong> (/plot,/p)</td><td>biome</td><td>biome</td><td>Change the biome of your plot</td></td><td>plotme.use.biome</td><td>plotme.use</td></tr>
+		<tr><td><strong>/plotme</strong> (/plot,/p)</td><td>biomelist</td><td> </td><td>List avaiable biomes</td></td><td>plotme.use.biome</td><td>plotme.use</td></tr>
+		<tr><td><strong>/plotme</strong> (/plot,/p)</td><td>clear</td><td> </td><td>Clear your plot</td></td><td>plotme.use.clear</td><td>plotme.use</td></tr>
+		<tr><td><strong>/plotme</strong> (/plot,/p)</td><td>dispose</td><td> </td><td>Dispose your plot</td></td><td>plotme.use.dispose</td><td>plotme.use</td></tr>
+		<tr><td><strong>/plotme</strong> (/plot,/p)</td><td>done</td><td> </td><td>Mark your plot as done</td></td><td>plotme.use.done</td><td>plotme.use</td></tr>
+		<tr><td><strong>/plotme</strong> (/plot,/p)</td><td>deny</td><td>player</td><td>Deny a player from your plot</td></td><td>plotme.use.deny</td><td>plotme.use</td></tr>
+		<tr><td><strong>/plotme</strong> (/plot,/p)</td><td>undeny</td><td> </td><td>Undeny a denied player from your plot</td></td><td>plotme.use.undeny</td><td>plotme.use</td></tr>
+		<tr><td><strong>/plotme</strong> (/plot,/p)</td><td>buy</td><td> </td><td>Buy the plot you're standing on (economy)</td></td><td>plotme.use.buy</td><td>plotme.use</td></tr>
+		<tr><td><strong>/plotme</strong> (/plot,/p)</td><td>sell</td><td> </td><td>Sell your plot</td></td><td>plotme.use.sell</td><td>plotme.use</td></tr>
+		<tr><td><strong>/plotme</strong> (/plot,/p)</td><td>auction</td><td> </td><td>Auction your plot</td></td><td>plotme.use.auction</td><td>plotme.use</td></tr>
+		<tr><td><strong>/plotme</strong> (/plot,/p)</td><td>add</td><td>player</td><td>Grant a player build access on your plot</td></td><td>plotme.use.add</td><td></td></tr>
+		<tr><td><strong>/plotme</strong> (/plot,/p)</td><td>remove</td><td>player</td><td>Remove an added players build access on your plot</td></td><td>plotme.use.remove</td><td></td></tr>
+		<tr><td><strong>/plotme</strong> (/plot,/p)</td><td>protect</td><td> </td><td>Protect the plot you are standing on from being cleared or reset</td></td><td>plotme.use.protect</td><td></td></tr>
+		<tr><td><strong>/plotme</strong> (/plot,/p)</td><td>protect</td><td> </td><td>Limit the number of plots a user can claim/auto or buy</td></td><td>plotme.use.limit.X</td><td></td>Replace X with a number, or use * for infinite plots</tr>
 </table>
       </section>
     </div>
