@@ -163,6 +163,35 @@ body {
 /*	text-align: center;  Remove comment and this text to align the text in the middle of the spoiler*/
 	padding: 6px 18px;
 }
+
+/* Table Function */
+table.tftable {
+	font-size:15px;
+	color:#333333;
+	width:100%;
+	border-width: 1px;
+	border-color: #a9a9a9;
+	border-collapse: collapse;
+}
+table.tftable th {
+	font-size:20px;
+	background-color:#b8b8b8;
+	border-width: 1px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #a9a9a9;
+	text-align:left;
+}
+table.tftable tr {
+	background-color:#ffffff;
+}
+table.tftable td {
+	font-size:15px;
+	border-width: 1px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #a9a9a9;
+}
 /*******************************************************************************
 Theme Styles
 *******************************************************************************/
