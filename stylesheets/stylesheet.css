@@ -392,8 +392,8 @@ form {
 Full-Width Styles
 *******************************************************************************/
 
-.outer {
-  width: 50%;
+/*.outer {
+  width: 100%;
 }
 
 .inner {
@@ -401,7 +401,7 @@ Full-Width Styles
   max-width: 640px;
   padding: 20px 10px;
   margin: 0 auto;
-}
+}*/
 
 #forkme_banner {
   display: block;
