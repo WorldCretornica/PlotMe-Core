@@ -143,6 +143,9 @@ table.tftable {
 	font-size:15px;
 	color: #DBDBDB;
 	width:100%;
+	border-width: 1px;
+	border-color: #a9a9a9;
+	border-collapse: collapse;
 	-webkit-border-radius: 15px;
 	-moz-border-radius: 15px;
 	border-radius: 15px;
