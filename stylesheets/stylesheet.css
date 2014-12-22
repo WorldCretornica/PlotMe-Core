@@ -21,11 +21,10 @@ article, aside, canvas, details, embed,
 figure, figcaption, footer, header, hgroup,
 menu, nav, output, ruby, section, summary,
 time, mark, audio, video {
-  margin: 0;
-  padding: 0;
-  border: 0;
+  margin: auto;
+  padding: auto;
+  border: auto;
   font: inherit;
-  vertical-align: baseline;
 }
 
 /* HTML5 display-role reset for older browsers */
@@ -398,7 +397,7 @@ Full-Width Styles
 
 .inner {
   position: relative;
-  max-width: 800px;
+  max-width: 850px;
   padding: 10px 10px;
   margin: auto;
 }
