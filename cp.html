@@ -63,50 +63,34 @@
     <h2 style="font-size: 25px; text-decoration: none; color: black;">Command and Permissions</h2>
 
     <p style="font-size: 15px; text-decoration: none; color: black;">User commands and permissions</p>
-<div class="datagrid">
-	<table>
-		<thead>
-			<tr>
-				<th>header</th>
-				<th>header</th>
-				<th>header</th>
-				<th>header</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td>data</td>
-				<td>data</td>
-				<td>data</td>
-				<td>data</td>
-			</tr>
-				<tr class="alt">
-				<td>data</td>
-				<td>data</td>
-				<td>data</td>
-				<td>data</td>
-			</tr>
-			<tr>
-				<td>data</td>
-				<td>data</td>
-				<td>data</td>
-				<td>data</td>
-			</tr>
-			<tr class="alt">
-				<td>data</td>
-				<td>data</td>
-				<td>data</td>
-				<td>data</td>
-			</tr>
-			<tr>
-				<td>data</td>
-				<td>data</td>
-				<td>data</td>
-				<td>data</td>
-			</tr>
-		</tbody>
-	</table>
-</div>
+
+<script type="text/javascript">
+	window.onload=function(){
+	var tfrow = document.getElementById('tfhover').rows.length;
+	var tbRow=[];
+	for (var i=1;i<tfrow;i++) {
+		tbRow[i]=document.getElementById('tfhover').rows[i];
+		tbRow[i].onmouseover = function(){
+		  this.style.backgroundColor = '#f3f8aa';
+		};
+		tbRow[i].onmouseout = function() {
+		  this.style.backgroundColor = '#ffffff';
+		};
+	}
+};
+</script>
+
+<style type="text/css">
+table.tftable {font-size:12px;color:#333333;width:100%;border-width: 1px;border-color: #a9a9a9;border-collapse: collapse;}
+table.tftable th {font-size:12px;background-color:#b8b8b8;border-width: 1px;padding: 8px;border-style: solid;border-color: #a9a9a9;text-align:left;}
+table.tftable tr {background-color:#ffffff;}
+table.tftable td {font-size:12px;border-width: 1px;padding: 8px;border-style: solid;border-color: #a9a9a9;}
+</style>
+
+<table id="tfhover" class="tftable" border="2">
+	<tr><th>Command</th><th>Subcommand</th><th>Argument</th><th>Description</th><th>Permission</th><th>Permission Group</th></tr>
+		<tr><td><strong>/plotme</strong> /plot /p</td><td>claim</td><td> </td><td>plotme.use.claim</td><td>plotme.use</td></tr>
+</table>
       </section>
     </div>
 
