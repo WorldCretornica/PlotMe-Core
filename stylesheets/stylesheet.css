@@ -23,10 +23,6 @@ ol, ul {
 Markus Styles :)
 *******************************************************************************/
 
-html {
-	min-width: 1080px;
-}
-
 /* Dropdown Menu (navigator) function */
 #nav {
     background-color: #222;
@@ -376,7 +372,7 @@ Full-Width Styles
 }
 
 .inner {
-  position: relative;
+  position: center;
   max-width: 850px;
   padding: 10px 10px;
   margin: auto;
