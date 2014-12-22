@@ -8,6 +8,7 @@
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
     <link rel="shortcut icon" type="image/x-icon" href="images/favicon.ico" />
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+    <script type="text/javascript" src="floatingtableheader.js"></script>
 
     <title>PlotMe Wiki</title>
   </head>
@@ -75,13 +76,13 @@
 		};
 	}
 };
-var $table = $('table.tftable');
-$table.floatThead({
-    scrollContainer: function($table){
-		return $table.closest('.wrapper');
-	}
-});
 </script>
+    <script type="text/javascript">
+
+        $(document).ready(function() {
+            ActivateFloatingHeaders("table.tftable");
+        });
+    </script>
 <table id="tfhover" class="tftable" border="2">
 	<tr><th>Command</th><th>Subcommand</th><th>Argument</th><th>Description</th><th>Permission</th><th>Group</th></tr>
 		<tr><td><strong>/plotme</strong> (/plot,/p)</td><td>claim</td><td> </td><td>Claim the plot you're standing on</td></td><td>plotme.use.claim</td><td>plotme.use</td></tr>
