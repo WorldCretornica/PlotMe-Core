@@ -146,6 +146,8 @@ table.tftable {
 	border-width: 1px;
 	border-color: #a9a9a9;
 	border-collapse: collapse;
+	-webkit-border-radius: 15px;
+	-moz-border-radius: 15px;
 	border-radius: 15px;
 }
 table.tftable th {
@@ -162,11 +164,8 @@ table.tftable tr {
 }
 table.tftable td {
 	font-size:15px;
-	border-width: 1px;
 	padding: 8px;
-	border-style: solid;
-	border-color: #a9a9a9;
-	color: #777777;
+	color: #232323;
 }
 /*******************************************************************************
 Theme Styles
