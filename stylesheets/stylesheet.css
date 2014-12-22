@@ -163,51 +163,6 @@ body {
 /*	text-align: center;  Remove comment and this text to align the text in the middle of the spoiler*/
 	padding: 6px 18px;
 }
-
-/* Table Settings */
-.cp_table table {
-	border-collapse: collapse;
-	text-align: left;
-	width: 100%;
-}
-.cp_table {
-	font: normal 12px/150% Georgia, Times New Roman, Times, serif;
-	background: #fff;
-	overflow: hidden;
-	border: 3px solid #B3B3B3;
-	-webkit-border-radius: 10px;
-	-moz-border-radius: 10px;
-	border-radius: 10px;
-}
-.cp_table table td, .datagrid table th {
-	padding: 15px 6px;
-}
-.cp_table table thead th {
-	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #999999), color-stop(1, #A8A8A8) );
-	background:-moz-linear-gradient( center top, #999999 5%, #A8A8A8 100% );
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#999999', endColorstr='#A8A8A8');
-	background-color:#999999;
-	color:#333333;
-	font-size: 20px; 
-	font-weight: normal;
-}
-.cp_table table thead th:first-child {
-	border: none;
-}
-.cp_table table tbody td { color: #7D7D7D;
-	font-size: 15px;
-	font-weight: normal;
-}
-.cp_table table tbody .alt td {
-	background: #EBEBEB;
-	color: #7D7D7D; 
-}
-.cp_table table tbody td:first-child {
-	border-left: none;
-}
-.cp_table table tbody tr:last-child td {
-	border-bottom: none;
-}
 /*******************************************************************************
 Theme Styles
 *******************************************************************************/
