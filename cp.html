@@ -52,27 +52,6 @@
     <h2 style="font-size: 30px; text-decoration: none; color: black;">Commands and Permissions</h2>
 
     <p style="font-size: 20px; text-decoration: none; color: black;"><strong>User</strong> commands and permissions</p>
-
-<script type="text/javascript">
-window.onload = function() {
-    var tfhover = document.getElementById('tfhover');
-    var tfrow = tfhover.rows.length;
-    var tbRow = [];
-    for (var i=1; i<tfrow; i++) {
-        (function(index) {
-            var original;
-            tbRow[index] = tfhover.rows[index];
-            tbRow[index].onmouseover = function() {
-                original = this.style.backgroundColor;
-                this.style.backgroundColor = '#f3f8aa';
-            };
-            tbRow[index].onmouseout = function() {
-                this.style.backgroundColor = original;
-            };
-        })(i);
-    }
-};
-</script>
 <table id="tfhover" class="tftable" border="2">
 	<tr><th>Command</th><th>Subcommand</th><th>Argument</th><th>Description</th><th>Permission</th><th>Group</th></tr>
 		<tr><td><strong>/plotme</strong> (/plot,/p)</td><td>claim</td><td> </td><td>Claim the plot you're standing on</td></td><td>plotme.use.claim</td><td>plotme.use</td></tr>
@@ -97,28 +76,8 @@ window.onload = function() {
 		<tr><td><strong>/plotme</strong> (/plot,/p)</td><td>like</td><td> </td><td>Like the plot you are standing on</td></td><td>plotme.use.like</td><td></td></tr>
 		<tr><td></td><td></td><td> </td><td>Limit the number of plots a user can claim/auto or buy</td></td><td>plotme.use.limit.#</td><td>Replace # with a number, or * for infinite plots</td></tr>
 </table>
-<script type="text/javascript">
-window.onload = function() {
-    var tfhover = document.getElementById('tfhoverr');
-    var tfrow = tfhover.rows.length;
-    var tbRow = [];
-    for (var i=1; i<tfrow; i++) {
-        (function(index) {
-            var original;
-            tbRow[index] = tfhover.rows[index];
-            tbRow[index].onmouseover = function() {
-                original = this.style.backgroundColor;
-                this.style.backgroundColor = '#f3f8aa';
-            };
-            tbRow[index].onmouseout = function() {
-                this.style.backgroundColor = original;
-            };
-        })(i);
-    }
-};
-</script>
 <p style="font-size: 20px; text-decoration: none; color: black;"><strong>Admin</strong> commands and permissions</p>
-<table id="tfhoverr" class="tftable" border="2">
+<table id="tfhover" class="tftable" border="2">
 	<tr><th>Command</th><th>Subcommand</th><th>Argument</th><th>Description</th><th>Permission</th><th>Group</th></tr>
 		<tr><td><strong>/plotme</strong> (/plot,/p)</td><td>claim</td><td>player</td><td>Claim a plot for another player</td></td><td>plotme.admin.claim.other</td><td>plotme.admin</td></tr>
 		<tr><td><strong>/plotme</strong> (/plot,/p)</td><td>home</td><td>player</td><td>Teleport to another players home. Use :# if multiple homes</td></td><td>plotme.admin.home.other</td><td>plotme.admin</td></tr>
