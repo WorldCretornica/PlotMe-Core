@@ -400,7 +400,7 @@ Full-Width Styles
   position: relative;
   max-width: 1000px;
   padding: 10px 10px;
-  margin: 100%;
+  margin: 0 auto;
 }
 
 #forkme_banner {
