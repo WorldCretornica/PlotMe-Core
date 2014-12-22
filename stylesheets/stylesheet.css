@@ -143,9 +143,6 @@ table.tftable {
 	font-size:15px;
 	color: #DBDBDB;
 	width:100%;
-	border-width: 1px;
-	border-color: #a9a9a9;
-	border-collapse: collapse;
 	-webkit-border-radius: 15px;
 	-moz-border-radius: 15px;
 	border-radius: 15px;
@@ -153,10 +150,7 @@ table.tftable {
 table.tftable th {
 	font-size:20px;
 	background-color:#939393;
-	border-width: 1px;
 	padding: 8px;
-	border-style: solid;
-	border-color: #a9a9a9;
 	text-align:left;
 }
 table.tftable tr {
@@ -373,7 +367,7 @@ Full-Width Styles
 
 .inner {
   position: center;
-  max-width: 850px;
+  max-width: 900px;
   padding: 10px 10px;
   margin: auto;
 }
