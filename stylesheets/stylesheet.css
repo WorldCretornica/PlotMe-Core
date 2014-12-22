@@ -373,8 +373,8 @@ Full-Width Styles
 
 .inner {
   position: center;
+  max-width: 850px;
   padding: 10px 10px;
-  margin: auto;
 }
 
 #forkme_banner {
