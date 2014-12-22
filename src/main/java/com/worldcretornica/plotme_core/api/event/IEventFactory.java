@@ -1,12 +1,8 @@
 package com.worldcretornica.plotme_core.api.event;
 
-import com.worldcretornica.plotme_core.Biomes;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.ICommandSender;
-import com.worldcretornica.plotme_core.api.ILocation;
-import com.worldcretornica.plotme_core.api.IPlayer;
-import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.api.*;
 
 import java.util.Map;
 
@@ -26,7 +22,7 @@ public interface IEventFactory {
 
     InternalPlotAuctionEvent callPlotAuctionEvent(PlotMe_Core plugin, IWorld world, Plot plot, IPlayer player, double minimumbid);
 
-    InternalPlotBiomeChangeEvent callPlotBiomeChangeEvent(PlotMe_Core plugin, IWorld world, Plot plot, IPlayer player, Biomes biome);
+    InternalPlotBiomeChangeEvent callPlotBiomeChangeEvent(PlotMe_Core plugin, IWorld world, Plot plot, IPlayer player, IBiome biome);
 
     InternalPlotBuyEvent callPlotBuyEvent(PlotMe_Core plugin, IWorld world, Plot plot, IPlayer player, double price);
 

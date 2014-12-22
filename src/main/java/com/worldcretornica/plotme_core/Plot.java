@@ -1,5 +1,6 @@
 package com.worldcretornica.plotme_core;
 
+import com.worldcretornica.plotme_core.api.IBiome;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 
@@ -19,7 +20,7 @@ public class Plot implements Comparable<Plot> {
     private String world;
     private PlayerList allowed;
     private PlayerList denied;
-    private Biomes biome;
+    private IBiome biome;
     private Date expireddate;
     private boolean finished;
     private String id;
@@ -41,7 +42,7 @@ public class Plot implements Comparable<Plot> {
         setId("");
         allowed = new PlayerList();
         denied = new PlayerList();
-        setBiome(Biomes.PLAINS);
+        setBiome(this.plugin.getServerBridge().getBiome("PLAINS"));
 
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DAY_OF_YEAR, 7);
@@ -65,7 +66,7 @@ public class Plot implements Comparable<Plot> {
         setWorld(world.getName());
         allowed = new PlayerList();
         denied = new PlayerList();
-        setBiome(Biomes.PLAINS);
+        setBiome(this.plugin.getServerBridge().getBiome("PLAINS"));
         setId(plotid);
 
         if (days == 0) {
@@ -142,11 +143,11 @@ public class Plot implements Comparable<Plot> {
         updateFinished(getFinishedDate(), isFinished());
     }
 
-    public Biomes getBiome() {
+    public IBiome getBiome() {
         return biome;
     }
 
-    public final void setBiome(Biomes biome) {
+    public final void setBiome(IBiome biome) {
         this.biome = biome;
     }
 

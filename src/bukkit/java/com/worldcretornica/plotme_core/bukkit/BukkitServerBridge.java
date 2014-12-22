@@ -1,7 +1,6 @@
 package com.worldcretornica.plotme_core.bukkit;
 
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
-import com.worldcretornica.plotme_core.Biomes;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.PlotWorldEdit;
@@ -182,15 +181,20 @@ public class BukkitServerBridge implements IServerBridge {
     }
 
     @Override
-    public Biomes getBiome(String name) {
-        Biomes biome = null;
+    public IBiome getBiome(String name) {
+        Biome biome = null;
 
-        for (Biomes bio : Biomes.values()) {
+        for (Biome bio : Biome.values()) {
             if (bio.name().equalsIgnoreCase(name)) {
                 biome = bio;
             }
         }
-        return biome;
+
+        if (biome == null) {
+            return null;
+        } else {
+            return new BukkitBiome(biome);
+        }
     }
 
     @Override

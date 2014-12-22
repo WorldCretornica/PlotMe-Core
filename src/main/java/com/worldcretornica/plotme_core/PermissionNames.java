@@ -4,7 +4,6 @@ package com.worldcretornica.plotme_core;
  * Created by Matthew on 12/5/2014.
  */
 public enum PermissionNames {
-
     ;
 
     public static final String ADMIN_UNDENY = "PlotMe.admin.undeny";

@@ -586,7 +586,7 @@ public class PlotMeCoreManager {
         getGenManager(world).adjustPlotFor(world, id, true, plot.isProtect(), plot.isAuctioned(), plot.isForSale());
     }
 
-    public void setBiome(IWorld world, String id, Biomes biome) {
+    public void setBiome(IWorld world, String id, IBiome biome) {
         getGenManager(world).setBiome(world, id, biome);
         plugin.getSqlManager().updatePlot(getIdX(id), getIdZ(id), world.getName(), "biome", biome.toString());
     }
