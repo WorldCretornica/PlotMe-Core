@@ -108,11 +108,13 @@ public class BukkitPlotWorldEditListener implements Listener {
         if (api.getPlotMeCoreManager().isPlotWorld(player)) {
             if (!api.getPlotMeCoreManager().isPlayerIgnoringWELimit(player.getUniqueId())) {
                 if (event.getMessage().startsWith("//gmask")) {
+                    player.sendMessage(api.getUtil().C("ErrCannotUse"));
                     event.setCancelled(true);
                 } else if (event.getMessage().startsWith("//up")) {
                     Plot plot = api.getPlotMeCoreManager().getPlotById(player);
 
                     if (plot == null || !plot.isAllowed(player.getName(), player.getUniqueId())) {
+                        player.sendMessage(api.getUtil().C("ErrCannotUse"));
                         event.setCancelled(true);
                     }
                 }
@@ -133,6 +135,7 @@ public class BukkitPlotWorldEditListener implements Listener {
                 if (plot != null && plot.isAllowed(player.getName(), player.getUniqueId())) {
                     worldEdit.setMask(player);
                 } else {
+                    player.sendMessage(api.getUtil().C("ErrCannotBuild"));
                     event.setCancelled(true);
                 }
             }
