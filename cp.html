@@ -60,7 +60,7 @@
       <section id="main_content" class="inner">
     <h2 style="font-size: 30px; text-decoration: none; color: black;">Command and Permissions</h2>
 
-    <p style="font-size: 20px; text-decoration: none; color: black;">User commands and permissions</p>
+    <p style="font-size: 20px; text-decoration: none; color: black;"><strong>User</strong> commands and permissions</p>
 
 <script type="text/javascript">
 	window.onload=function(){
@@ -90,14 +90,40 @@
 		<tr><td><strong>/plotme</strong> (/plot,/p)</td><td>dispose</td><td> </td><td>Dispose your plot</td></td><td>plotme.use.dispose</td><td>plotme.use</td></tr>
 		<tr><td><strong>/plotme</strong> (/plot,/p)</td><td>done</td><td> </td><td>Mark your plot as done</td></td><td>plotme.use.done</td><td>plotme.use</td></tr>
 		<tr><td><strong>/plotme</strong> (/plot,/p)</td><td>deny</td><td>player</td><td>Deny a player from your plot</td></td><td>plotme.use.deny</td><td>plotme.use</td></tr>
-		<tr><td><strong>/plotme</strong> (/plot,/p)</td><td>undeny</td><td> </td><td>Undeny a denied player from your plot</td></td><td>plotme.use.undeny</td><td>plotme.use</td></tr>
+		<tr><td><strong>/plotme</strong> (/plot,/p)</td><td>undeny</td><td>player</td><td>Undeny a denied player from your plot</td></td><td>plotme.use.undeny</td><td>plotme.use</td></tr>
 		<tr><td><strong>/plotme</strong> (/plot,/p)</td><td>buy</td><td> </td><td>Buy the plot you're standing on (economy)</td></td><td>plotme.use.buy</td><td>plotme.use</td></tr>
 		<tr><td><strong>/plotme</strong> (/plot,/p)</td><td>sell</td><td> </td><td>Sell your plot</td></td><td>plotme.use.sell</td><td>plotme.use</td></tr>
 		<tr><td><strong>/plotme</strong> (/plot,/p)</td><td>auction</td><td> </td><td>Auction your plot</td></td><td>plotme.use.auction</td><td>plotme.use</td></tr>
 		<tr><td><strong>/plotme</strong> (/plot,/p)</td><td>add</td><td>player</td><td>Grant a player build access on your plot</td></td><td>plotme.use.add</td><td></td></tr>
 		<tr><td><strong>/plotme</strong> (/plot,/p)</td><td>remove</td><td>player</td><td>Remove an added players build access on your plot</td></td><td>plotme.use.remove</td><td></td></tr>
 		<tr><td><strong>/plotme</strong> (/plot,/p)</td><td>protect</td><td> </td><td>Protect the plot you are standing on from being cleared or reset</td></td><td>plotme.use.protect</td><td></td></tr>
-		<tr><td><strong>/plotme</strong> (/plot,/p)</td><td>protect</td><td> </td><td>Limit the number of plots a user can claim/auto or buy</td></td><td>plotme.use.limit.#</td><td>Replace # with a number, or * for infinite plots</td></tr>
+		<tr><td></td><td></td><td> </td><td>Limit the number of plots a user can claim/auto or buy</td></td><td>plotme.use.limit.#</td><td>Replace # with a number, or * for infinite plots</td></tr>
+</table>
+<p style="font-size: 20px; text-decoration: none; color: black;"><strong>Admin</strong> commands and permissions</p>
+<table id="tfhover" class="tftable" border="2">
+	<tr><th>Command</th><th>Subcommand</th><th>Argument</th><th>Description</th><th>Permission</th><th>Group</th></tr>
+		<tr><td><strong>/plotme</strong> (/plot,/p)</td><td>claim</td><td>player</td><td>Claim a plot for another player</td></td><td>plotme.admin.claim.other</td><td>plotme.admin</td></tr>
+		<tr><td><strong>/plotme</strong> (/plot,/p)</td><td>home</td><td>player</td><td>Teleport to another players home. Use :# if multiple homes</td></td><td>plotme.admin.home.other</td><td>plotme.admin</td></tr>
+		<tr><td><strong>/plotme</strong> (/plot,/p)</td><td>list</td><td>player</td><td>List your another players plots</td></td><td>plotme.admin.list</td><td>plotme.admin</td></tr>
+		<tr><td><strong>/plotme</strong> (/plot,/p)</td><td>reset</td><td> </td><td>Reset the plot you're standing on</td></td><td>plotme.admin.reset</td><td>plotme.admin</td></tr>
+		<tr><td><strong>/plotme</strong> (/plot,/p)</td><td>buy</td><td>player</td><td>Buy a plot for another player</td></td><td>plotme.admin.buy</td><td>plotme.admin</td></tr>
+		<tr><td><strong>/plotme</strong> (/plot,/p)</td><td>sell</td><td>player</td><td>Sell another players plot</td></td><td>plotme.admin.sell</td><td>plotme.admin</td></tr>
+		<tr><td><strong>/plotme</strong> (/plot,/p)</td><td>auctionr</td><td>player</td><td>Auction another players plot</td></td><td>plotme.admin.auction</td><td>plotme.admin</td></tr>
+		<tr><td><strong>/plotme</strong> (/plot,/p)</td><td>dispose</td><td>player</td><td>Dispose your plot</td></td><td>plotme.admin.dispose</td><td>plotme.admin</td></tr>
+		<tr><td><strong>/plotme</strong> (/plot,/p)</td><td>done</td><td>player</td><td>Mark another players plot done</td></td><td>plotme.admin.done</td><td>plotme.admin</td></tr>
+		<tr><td><strong>/plotme</strong> (/plot,/p)</td><td>deny</td><td>player</td><td>Deny a player from another players plot</td></td><td>plotme.admin.deny</td><td>plotme.admin</td></tr>
+		<tr><td><strong>/plotme</strong> (/plot,/p)</td><td>undeny</td><td>player</td><td>Undeny a denied player from another players plot</td></td><td>plotme.admin.undeny</td><td>plotme.admin</td></tr>
+		<tr><td><strong>/plotme</strong> (/plot,/p)</td><td>setowner</td><td>player</td><td>Set a new plot owner of the plot you're standing on</td></td><td>plotme.admin.setowner</td><td>plotme.admin</td></tr>
+		<tr><td><strong>/plotme</strong> (/plot,/p)</td><td>move</td><td>id-from id-to</td><td>Move a plot</td></td><td>plotme.admin.move</td><td>plotme.admin</td></tr>
+		<tr><td><strong>/plotme</strong> (/plot,/p)</td><td>weanywhere</td><td> </td><td>WorldEdit everywhere, not only your own plots</td></td><td>plotme.admin.weanywhere</td><td>plotme.admin</td></tr>
+		<tr><td><strong>/plotme</strong> (/plot,/p)</td><td>tp</td><td>id</td><td>Teleport to a plot/td></td><td>plotme.admin.tp</td><td>plotme.admin</td></tr>
+		<tr><td><strong>/plotme</strong> (/plot,/p)</td><td>expired</td><td></td><td>List the expired plots in your current world</td></td><td>plotme.admin.expired</td><td>plotme.admin</td></tr>
+		<tr><td><strong>/plotme</strong> (/plot,/p)</td><td>addtime</td><td> </td><td>Reset the expiration date to whats configured in the config</td></td><td>plotme.admin.addtime</td><td>plotme.admin</td></tr>
+		<tr><td><strong>/plotme</strong> (/plot,/p)</td><td>resetexpired</td><td>world</td><td>Resets the 50 oldest plots on that world</td></td><td>plotme.admin.resetexpired</td><td>plotme.admin</td></tr>
+		<tr><td></td><td></td></td><td></td><td>Bypass plot deny</td></td><td>plotme.admin.bypassdeny</td><td>plotme.admin</td></tr>
+		<tr><td></td><td></td></td><td></td><td>Build anywhere, even on the roads!</td></td><td>plotme.admin.buildanywhere</td><td>plotme.admin</td></tr>
+		<tr><td></td><td></td></td><td></td><td>Bypass protection of a certain block with the given ID</td></td><td>plotme.unblock.#</td><td>Replace # with a minecraft block ID</td></tr>
+		<tr><td><strong>/plotme</strong> (/plot,/p)</td><td>reload</td><td> </td><td>Reload PlotMe</td></td><td>plotme.admin.reload</td><td>plotme.admin</td></tr>
 </table>
       </section>
     </div>
