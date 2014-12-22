@@ -29,6 +29,8 @@ public class CmdBiome extends PlotCommand {
                             player.sendMessage("§c" + args[1] + "§r " + C("MsgIsInvalidBiome"));
                             return true;
                         }
+                        String biomeName = biome.getBiome().name();
+
                         Plot plot = PlotMeCoreManager.getPlotById(id, pmi);
                         String playerName = player.getName();
 
@@ -68,15 +70,15 @@ public class CmdBiome extends PlotCommand {
                                 plugin.getPlotMeCoreManager().setBiome(world, id, biome);
 
                                 double price1 = -price;
-                                player.sendMessage(C("MsgBiomeSet") + " §9" + biome + " " + Util().moneyFormat(price1, true));
+                                player.sendMessage(C("MsgBiomeSet") + " §9" + biomeName + " " + Util().moneyFormat(price1, true));
 
                                 if (isAdvancedLogging()) {
                                     if (price == 0)
                                         serverBridge.getLogger().info(playerName + " " + C("MsgChangedBiome") + " " + id + " " + C("WordTo") + " "
-                                                                              + biome);
+                                                                              + biomeName);
                                     else
                                         serverBridge.getLogger().info(playerName + " " + C("MsgChangedBiome") + " " + id + " " + C("WordTo") + " "
-                                                                              + biome + (" " + C("WordFor") + " " + price));
+                                                                              + biomeName + (" " + C("WordFor") + " " + price));
                                 }
                             }
                         } else {
