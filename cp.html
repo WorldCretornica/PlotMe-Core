@@ -100,6 +100,21 @@
 		<tr><td></td><td></td><td> </td><td>Limit the number of plots a user can claim/auto or buy</td></td><td>plotme.use.limit.#</td><td>Replace # with a number, or * for infinite plots</td></tr>
 </table>
 <p style="font-size: 20px; text-decoration: none; color: black;"><strong>Admin</strong> commands and permissions</p>
+<script type="text/javascript">
+	window.onload=function(){
+	var tfrow = document.getElementById('tfhover').rows.length;
+	var tbRow=[];
+	for (var i=1;i<tfrow;i++) {
+		tbRow[i]=document.getElementById('tfhover').rows[i];
+		tbRow[i].onmouseover = function(){
+		  this.style.backgroundColor = '#f3f8aa';
+		};
+		tbRow[i].onmouseout = function() {
+		  this.style.backgroundColor = '#ffffff';
+		};
+	}
+};
+</script>
 <table id="tfhover" class="tftable" border="2">
 	<tr><th>Command</th><th>Subcommand</th><th>Argument</th><th>Description</th><th>Permission</th><th>Group</th></tr>
 		<tr><td><strong>/plotme</strong> (/plot,/p)</td><td>claim</td><td>player</td><td>Claim a plot for another player</td></td><td>plotme.admin.claim.other</td><td>plotme.admin</td></tr>
