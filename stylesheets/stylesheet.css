@@ -165,95 +165,43 @@ body {
 }
 
 /* Table Settings */
+.cp_table table {
+	border-collapse: collapse;
+	text-align: left; width: 100%;
+}
 .cp_table {
-	margin:0px;padding:0px;
-	width:100%;
-	border:1px solid #000000;
-	-moz-border-radius-bottomleft:10px;
-	-webkit-border-bottom-left-radius:10px;
-	border-bottom-left-radius:10px;
-	-moz-border-radius-bottomright:10px;
-	-webkit-border-bottom-right-radius:10px;
-	border-bottom-right-radius:10px;
-	-moz-border-radius-topright:10px;
-	-webkit-border-top-right-radius:10px;
-	border-top-right-radius:10px;
-	-moz-border-radius-topleft:10px;
-	-webkit-border-top-left-radius:10px;
-	border-top-left-radius:10px;
-}.cp_table table{
-    border-collapse: collapse;
-        border-spacing: 0;
-	width:100%;
-	height:100%;
-	margin:0px;padding:0px;
-}.cp_table tr:last-child td:last-child {
-	-moz-border-radius-bottomright:10px;
-	-webkit-border-bottom-right-radius:10px;
-	border-bottom-right-radius:10px;
+	font: normal 12px/150% Georgia, Times New Roman, Times, serif;
+	background: #fff; overflow: hidden; border: 3px solid #B3B3B3; 
+	-webkit-border-radius: 10px; -moz-border-radius: 10px; border-radius: 10px;
 }
-.cp_table table tr:first-child td:first-child {
-	-moz-border-radius-topleft:10px;
-	-webkit-border-top-left-radius:10px;
-	border-top-left-radius:10px;
+.cp_table table td, .datagrid table th {
+	padding: 15px 6px;
 }
-.cp_table table tr:first-child td:last-child {
-	-moz-border-radius-topright:10px;
-	-webkit-border-top-right-radius:10px;
-	border-top-right-radius:10px;
-}.cp_table tr:last-child td:first-child{
-	-moz-border-radius-bottomleft:10px;
-	-webkit-border-bottom-left-radius:10px;
-	border-bottom-left-radius:10px;
-}.cp_table tr:hover td{
-	background-color:#ffffff;
-}
-.cp_table td{
-	vertical-align:middle;
-	background-color:#ffffff;
-	border:1px solid #000000;
-	border-width:0px 1px 1px 0px;
-	text-align:left;
-	padding:15px;
-	font-size:13px;
-	font-family:Trebuchet MS;
-	font-weight:normal;
+.cp_table table thead th {
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #999999), color-stop(1, #A8A8A8) );
+	background:-moz-linear-gradient( center top, #999999 5%, #A8A8A8 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#999999', endColorstr='#A8A8A8');
+	background-color:#999999;
 	color:#333333;
-}.cp_table tr:last-child td{
-	border-width:0px 1px 0px 0px;
-}.cp_table tr td:last-child{
-	border-width:0px 0px 1px 0px;
-}.cp_table tr:last-child td:last-child{
-	border-width:0px 0px 0px 0px;
+	font-size: 20px; 
+	font-weight: normal;
 }
-.cp_table tr:first-child td{
-	background:-o-linear-gradient(bottom, #d3d3d3 5%, #d3d3d3 100%);	
-	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #d3d3d3), color-stop(1, #d3d3d3) );
-	background:-moz-linear-gradient( center top, #d3d3d3 5%, #d3d3d3 100% );
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr="#d3d3d3", endColorstr="#d3d3d3");	
-	background: -o-linear-gradient(top,#d3d3d3,d3d3d3);
-	background-color:#d3d3d3;
-	border:0px solid #000000;
-	text-align:center;
-	border-width:0px 0px 1px 1px;
-	font-size:17px;
-	font-family:Courier;
-	font-weight:normal;
-	color:#333333;
+.cp_table table thead th:first-child {
+	border: none;
 }
-.cp_table tr:first-child:hover td{
-	background:-o-linear-gradient(bottom, #d3d3d3 5%, #d3d3d3 100%);	
-	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #d3d3d3), color-stop(1, #d3d3d3) );
-	background:-moz-linear-gradient( center top, #d3d3d3 5%, #d3d3d3 100% );
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr="#d3d3d3", endColorstr="#d3d3d3");	
-	background: -o-linear-gradient(top,#d3d3d3,d3d3d3);
-	background-color:#d3d3d3;
+.cp_table table tbody td { color: #7D7D7D;
+	font-size: 15px;
+	font-weight: normal;
 }
-.cp_table tr:first-child td:first-child{
-	border-width:0px 0px 1px 0px;
+.cp_table table tbody .alt td {
+	background: #EBEBEB;
+	color: #7D7D7D; 
 }
-.cp_table tr:first-child td:last-child{
-	border-width:0px 0px 1px 1px;
+.cp_table table tbody td:first-child {
+	border-left: none;
+}
+.cp_table table tbody tr:last-child td {
+	border-bottom: none;
 }
 /*******************************************************************************
 Theme Styles
