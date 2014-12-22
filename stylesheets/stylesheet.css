@@ -383,24 +383,6 @@ hr {
   background: url('../images/bg_hr.png') repeat-x center;
 }
 
-table {
-  border: 1px solid #373737;
-  margin-bottom: 20px;
-  text-align: left;
- }
-
-th {
-  font-family: 'Lucida Grande', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  padding: 10px;
-  background: #373737;
-  color: #fff;
- }
-
-td {
-  padding: 10px;
-  border: 1px solid #373737;
- }
-
 form {
   background: #f2f2f2;
   padding: 20px;
@@ -411,7 +393,7 @@ Full-Width Styles
 *******************************************************************************/
 
 .outer {
-  width: 100%;
+  width: 50%;
 }
 
 .inner {
