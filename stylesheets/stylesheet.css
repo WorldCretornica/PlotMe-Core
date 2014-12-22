@@ -167,12 +167,17 @@ body {
 /* Table Settings */
 .cp_table table {
 	border-collapse: collapse;
-	text-align: left; width: 100%;
+	text-align: left;
+	width: 100%;
 }
 .cp_table {
 	font: normal 12px/150% Georgia, Times New Roman, Times, serif;
-	background: #fff; overflow: hidden; border: 3px solid #B3B3B3; 
-	-webkit-border-radius: 10px; -moz-border-radius: 10px; border-radius: 10px;
+	background: #fff;
+	overflow: hidden;
+	border: 3px solid #B3B3B3;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
 }
 .cp_table table td, .datagrid table th {
 	padding: 15px 6px;
