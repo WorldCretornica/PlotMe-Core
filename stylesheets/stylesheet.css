@@ -396,12 +396,12 @@ Full-Width Styles
   width: 100%;
 }
 
-/*.inner {
+.inner {
   position: relative;
-  max-width: 640px;
-  padding: 20px 10px;
-  margin: 0 auto;
-}*/
+  max-width: 1000px;
+  padding: 10px 10px;
+  margin: 100%;
+}
 
 #forkme_banner {
   display: block;
