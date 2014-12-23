@@ -47,22 +47,6 @@
 </div>
 
     <!-- MAIN CONTENT -->
-<script>
-var tableOffset = $("#table-1").offset().top;
-var $header = $("#table-1 > thead").clone();
-var $fixedHeader = $("#header-fixed").append($header);
-
-$(window).bind("scroll", function() {
-    var offset = $(this).scrollTop();
-
-    if (offset >= tableOffset && $fixedHeader.is(":hidden")) {
-        $fixedHeader.show();
-    }
-    else if (offset < tableOffset) {
-        $fixedHeader.hide();
-    }
-});
-</script>
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
     <h2 style="font-size: 30px; text-decoration: none; color: black;">Commands and Permissions</h2>
