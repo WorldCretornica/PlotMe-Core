@@ -4,7 +4,8 @@ version: ${project.version}
 author: ZachBora
 authors: [flungo, MattBDev]
 website: http://dev.bukkit.org/server-mods/plotme/
-softdepend: [WorldEdit, Vault, LWC, PlotMe-DefaultGenerator, Multiverse-Core, MultiWorld]
+depend: [PlotMe-DefaultGenerator]
+softdepend: [WorldEdit, Vault, LWC, Multiverse-Core, MultiWorld]
 description: >
              Handles plot management and protection
 commands:

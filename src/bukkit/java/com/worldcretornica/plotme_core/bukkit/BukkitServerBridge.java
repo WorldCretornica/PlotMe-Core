@@ -152,7 +152,12 @@ public class BukkitServerBridge implements IServerBridge {
 
     @Override
     public IWorld getWorld(String name) {
-        return new BukkitWorld(Bukkit.getWorld(name));
+        World world = Bukkit.getWorld(name);
+        if (world == null) {
+            return null;
+        } else {
+            return new BukkitWorld(world);
+        }
     }
 
     @Override
