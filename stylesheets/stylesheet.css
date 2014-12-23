@@ -164,8 +164,8 @@ table.tftable td {
 	padding: 8px;
 	color: #232323;
 }
-.table_comingsoon {
-	color:#BA5A5A;
+table.table_comingsoon {
+	background-color:#BA5A5A
 }
 /*******************************************************************************
 Theme Styles
