@@ -165,8 +165,7 @@ table.tftable td {
 	color: #232323;
 }
 .table_comingsoon {
-	border-width: 2px;
-	border-color: #BA5A5A;
+	background-color:#BA5A5A;
 }
 /*******************************************************************************
 Theme Styles
