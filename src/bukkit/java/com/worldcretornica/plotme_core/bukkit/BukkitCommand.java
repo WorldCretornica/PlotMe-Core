@@ -207,7 +207,8 @@ public class BukkitCommand implements CommandExecutor {
                     if ("bid".equalsIgnoreCase(args[0])) {
                         return bid.exec(player, args);
                     }
-                    if (args[0].startsWith("home") || args[0].startsWith("h")) {
+                    // arg can be "home" or "home:n"
+                    if ((args[0].toLowerCase() + ":").startsWith("home:") || (args[0].toLowerCase() + ":").startsWith("h:")) {
                         return home.exec(player, args);
                     }
                 } else {
