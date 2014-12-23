@@ -1,12 +1,8 @@
 package com.worldcretornica.plotme_core.bukkit.event;
 
-import com.worldcretornica.plotme_core.Biomes;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.ICommandSender;
-import com.worldcretornica.plotme_core.api.ILocation;
-import com.worldcretornica.plotme_core.api.IPlayer;
-import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.api.*;
 import com.worldcretornica.plotme_core.api.event.*;
 import org.bukkit.Bukkit;
 
@@ -64,7 +60,7 @@ public class BukkitEventFactory implements IEventFactory {
     }
 
     @Override
-    public InternalPlotBiomeChangeEvent callPlotBiomeChangeEvent(PlotMe_Core plugin, IWorld world, Plot plot, IPlayer player, Biomes biome) {
+    public InternalPlotBiomeChangeEvent callPlotBiomeChangeEvent(PlotMe_Core plugin, IWorld world, Plot plot, IPlayer player, IBiome biome) {
         PlotBiomeChangeEvent event = new PlotBiomeChangeEvent(plugin, world, plot, player, biome);
         Bukkit.getPluginManager().callEvent(event);
         return event.getInternal();
