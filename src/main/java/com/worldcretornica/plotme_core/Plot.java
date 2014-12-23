@@ -177,7 +177,7 @@ public class Plot implements Comparable<Plot> {
 
     public void addAllowed(String name, UUID uuid) {
         if (!isAllowedConsulting(name)) {
-            allowed().put(name);
+            allowed().put(name, uuid);
             plugin.getSqlManager().addPlotAllowed(name, uuid, PlotMeCoreManager.getIdX(getId()), PlotMeCoreManager.getIdZ(getId()), getWorld());
         }
     }
