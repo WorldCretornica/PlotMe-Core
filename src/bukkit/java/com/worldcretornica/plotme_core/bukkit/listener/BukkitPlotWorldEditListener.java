@@ -1,5 +1,6 @@
 package com.worldcretornica.plotme_core.bukkit.listener;
 
+import java.util.Arrays;
 import com.worldcretornica.plotme_core.*;
 import com.worldcretornica.plotme_core.bukkit.PlotMe_CorePlugin;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitLocation;
@@ -107,10 +108,18 @@ public class BukkitPlotWorldEditListener implements Listener {
 
         if (api.getPlotMeCoreManager().isPlotWorld(player)) {
             if (!api.getPlotMeCoreManager().isPlayerIgnoringWELimit(player.getUniqueId())) {
-                if (event.getMessage().startsWith("//gmask")) {
+                String cmd = event.getMessage().split(" ")[0].toLowerCase();
+                // forbid these commands completely
+                String[] disableCommands = {
+                    "/gmask", "//gmask", "/worldedit:gmask", "/worldedit:/gmask",
+                    "//regen", "/worldedit:/regen"
+                };
+                // restrict these commands to allowed plots
+                String[] restrictCommands = {"/up", "//up", "/worldedit:up", "/worldedit:/up"};
+                if (Arrays.asList(disableCommands).contains(cmd)) {
                     player.sendMessage(api.getUtil().C("ErrCannotUse"));
                     event.setCancelled(true);
-                } else if (event.getMessage().startsWith("//up")) {
+                } else if (Arrays.asList(restrictCommands).contains(cmd)) {
                     Plot plot = api.getPlotMeCoreManager().getPlotById(player);
 
                     if (plot == null || !plot.isAllowed(player.getName(), player.getUniqueId())) {
