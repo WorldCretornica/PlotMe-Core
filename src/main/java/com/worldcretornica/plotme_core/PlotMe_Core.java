@@ -103,7 +103,6 @@ public class PlotMe_Core {
                 getLogger().log(Level.SEVERE, "The default generator can be downloaded from " + DEFAULT_GENERATOR_URL);
             } else {
                 PlotMapInfo pmi = new PlotMapInfo(this, world);
-
                 //Lets just hide a bit of code to clean up the config in here.
                 IConfigSection config = getServerBridge().loadDefaultConfig("worlds." + world);
                 config.set("BottomBlockId", null);
@@ -172,10 +171,8 @@ public class PlotMe_Core {
     public IPlotMe_GeneratorManager getGenManager(String name) {
         IWorld world = serverBridge.getWorld(name);
         if (world == null) {
-            getLogger().info("Line 166 of PlotMe_Core returned null....");
             return null;
         } else {
-            getLogger().info("Line 166 of PlotMe_Core did not return null.... line 172 will return this:  " + PlotMeCoreManager.getGenManager(world));
             return PlotMeCoreManager.getGenManager(world);
         }
     }

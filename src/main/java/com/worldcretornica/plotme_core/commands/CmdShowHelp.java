@@ -45,7 +45,7 @@ public class CmdShowHelp extends PlotCommand {
         }
         if (player.hasPermission(PermissionNames.USER_BIOME)) {
             allowed_commands.add("biome");
-            allowed_commands.add("biomelist");
+            allowed_commands.add("biomes");
         }
         if (player.hasPermission(PermissionNames.USER_DONE) || player.hasPermission(PermissionNames.ADMIN_DONE)) {
             allowed_commands.add("done");
@@ -224,8 +224,8 @@ public class CmdShowHelp extends PlotCommand {
                 } else {
                     player.sendMessage("§b " + C("HelpBiome"));
                 }
-            } else if ("biomelist".equalsIgnoreCase(allowedcmd)) {
-                player.sendMessage("§a /plotme biomelist");
+            } else if ("biomes".equalsIgnoreCase(allowedcmd)) {
+                player.sendMessage("§a /plotme biomes");
                 player.sendMessage("§b " + C("HelpBiomeList"));
             } else if ("done".equalsIgnoreCase(allowedcmd)) {
                 player.sendMessage("§a /plotme done");
