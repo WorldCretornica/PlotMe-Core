@@ -164,6 +164,14 @@ table.tftable td {
 	padding: 8px;
 	color: #232323;
 }
+#header-fixed { 
+    position: fixed; 
+    top: 0px; display:none;
+    font-size:20px;
+    background-color:#939393;
+    padding: 8px;
+    text-align:left;
+}
 /*******************************************************************************
 Theme Styles
 *******************************************************************************/
