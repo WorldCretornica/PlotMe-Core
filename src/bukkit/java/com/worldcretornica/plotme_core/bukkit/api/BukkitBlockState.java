@@ -11,7 +11,7 @@ public class BukkitBlockState implements IBlockState {
     public BukkitBlockState(BlockState blockstate) {
         this.blockstate = blockstate;
     }
-    
+
     @Override
     public IWorld getWorld() {
         return new BukkitWorld(blockstate.getWorld());
