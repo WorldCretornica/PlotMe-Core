@@ -3,7 +3,6 @@ package com.worldcretornica.plotme_core.bukkit.listener;
 import com.worldcretornica.plotme_core.*;
 import com.worldcretornica.plotme_core.bukkit.PlotMe_CorePlugin;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitBlock;
-import com.worldcretornica.plotme_core.bukkit.api.BukkitEntity;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitLocation;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
 import com.worldcretornica.plotme_core.bukkit.event.PlotWorldLoadEvent;
@@ -511,20 +510,20 @@ public class BukkitPlotListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onBlockIgnite(BlockIgniteEvent event) {
-        BukkitEntity entity = new BukkitEntity(event.getIgnitingEntity());
+        BukkitBlock block = new BukkitBlock(event.getBlock());
 
-        PlotMapInfo pmi = api.getPlotMeCoreManager().getMap(entity.getLocation());
+        PlotMapInfo pmi = api.getPlotMeCoreManager().getMap(block.getLocation());
 
         if (pmi != null) {
             if (pmi.isDisableIgnition()) {
                 event.setCancelled(true);
             } else {
-                String id = PlotMeCoreManager.getPlotId(entity.getLocation());
+                String id = PlotMeCoreManager.getPlotId(block.getLocation());
 
                 if (id.isEmpty()) {
                     event.setCancelled(true);
                 } else {
-                    PlotToClear ptc = api.getPlotLocked(entity.getLocation().getWorld().getName(), id);
+                    PlotToClear ptc = api.getPlotLocked(block.getLocation().getWorld().getName(), id);
 
                     Player player = null;
                     if (ptc != null) {
@@ -552,7 +551,7 @@ public class BukkitPlotListener implements Listener {
                         if (plot == null) {
                             event.setCancelled(true);
                         } else {
-                            if (player != null && !plot.isAllowed(player.getName(), entity.getUniqueId())) {
+                            if (player != null && !plot.isAllowed(player.getName(), player.getUniqueId())) {
                                 event.setCancelled(true);
                             }
                         }
