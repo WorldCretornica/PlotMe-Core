@@ -449,15 +449,16 @@ public class BukkitPlotListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onBlockPistonRetract(BlockPistonRetractEvent event) {
+        BukkitBlock piston = new BukkitBlock(event.getBlock());
         BukkitBlock block = new BukkitBlock(event.getRetractLocation().getBlock());
 
-        if (api.getPlotMeCoreManager().isPlotWorld(block) && block.getType().equals(Material.PISTON_STICKY_BASE)) {
+        if (api.getPlotMeCoreManager().isPlotWorld(piston) && piston.getType().equals(Material.PISTON_STICKY_BASE)) {
             String id = PlotMeCoreManager.getPlotId(block.getLocation());
 
             if (id.isEmpty()) {
                 event.setCancelled(true);
             } else {
-                PlotToClear ptc = api.getPlotLocked(block.getWorld().getName(), id);
+                PlotToClear ptc = api.getPlotLocked(piston.getWorld().getName(), id);
 
                 if (ptc != null) {
                     event.setCancelled(true);
