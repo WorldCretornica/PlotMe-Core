@@ -112,8 +112,7 @@ public class PlotMe_Core {
         }
         if (getPlotMeCoreManager().getPlotMaps().isEmpty()) {
             getLogger().severe("Uh oh. There are no plotworlds setup.");
-            getLogger().severe("Is that a mistake? Disabling PlotMe to stay safe.");
-            getServerBridge().disablePlotMe();
+            getLogger().severe("Is that a mistake? Try making sure you setup PlotMe Correctly PlotMe to stay safe.");
         }
     }
 
