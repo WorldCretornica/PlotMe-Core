@@ -5,6 +5,7 @@ import com.worldcretornica.plotme_core.bukkit.PlotMe_CorePlugin;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitBlock;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitLocation;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
+import com.worldcretornica.plotme_core.bukkit.api.BukkitBlockState;
 import com.worldcretornica.plotme_core.bukkit.event.PlotWorldLoadEvent;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -447,15 +448,16 @@ public class BukkitPlotListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onBlockPistonRetract(BlockPistonRetractEvent event) {
+        BukkitBlock piston = new BukkitBlock(event.getBlock());
         BukkitBlock block = new BukkitBlock(event.getRetractLocation().getBlock());
 
-        if (api.getPlotMeCoreManager().isPlotWorld(block) && block.getType().equals(Material.PISTON_STICKY_BASE)) {
+        if (api.getPlotMeCoreManager().isPlotWorld(piston) && piston.getType().equals(Material.PISTON_STICKY_BASE)) {
             String id = PlotMeCoreManager.getPlotId(block.getLocation());
 
             if (id.isEmpty()) {
                 event.setCancelled(true);
             } else {
-                PlotToClear ptc = api.getPlotLocked(block.getWorld().getName(), id);
+                PlotToClear ptc = api.getPlotLocked(piston.getWorld().getName(), id);
 
                 if (ptc != null) {
                     event.setCancelled(true);
@@ -469,22 +471,21 @@ public class BukkitPlotListener implements Listener {
         BukkitPlayer player = new BukkitPlayer(event.getPlayer());
         BukkitLocation location = new BukkitLocation(event.getLocation());
         List<BlockState> blocks = event.getBlocks();
-        boolean found = false;
+
+        if (!api.getPlotMeCoreManager().isPlotWorld(location)) {
+          return;
+        }
 
         for (int i = 0; i < blocks.size(); i++) {
-            if (found || api.getPlotMeCoreManager().isPlotWorld(location)) {
-                found = true;
-                String id = PlotMeCoreManager.getPlotId(location);
+            String id = PlotMeCoreManager.getPlotId(new BukkitLocation(blocks.get(i).getLocation()));
+            if (id.isEmpty()) {
+                blocks.remove(i);
+                i--;
+            } else {
+                PlotToClear ptc = api.getPlotLocked(blocks.get(i).getWorld().getName(), id);
 
-                if (id.isEmpty()) {
-                    event.getBlocks().remove(i);
-                    i--;
-                } else {
-                    PlotToClear ptc = api.getPlotLocked(location.getWorld().getName(), id);
-
-                    if (ptc != null) {
-                        event.setCancelled(true);
-                    }
+                if (ptc != null) {
+                    event.setCancelled(true);
                 }
             }
         }
