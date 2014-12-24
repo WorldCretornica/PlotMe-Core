@@ -17,7 +17,7 @@ public class CmdWEAnywhere extends PlotCommand {
             String name = player.getName();
             UUID uuid = player.getUniqueId();
 
-            if (plugin.getPlotMeCoreManager().isPlayerIgnoringWELimit(uuid)) {
+            if (!plugin.getPlotMeCoreManager().isPlayerIgnoringWELimit(uuid)) {
                 if (serverBridge.getConfig().getBoolean("defaultWEAnywhere")) {
                     plugin.getPlotMeCoreManager().addPlayerIgnoringWELimit(uuid);
                     serverBridge.getPlotWorldEdit().removeMask(player);
