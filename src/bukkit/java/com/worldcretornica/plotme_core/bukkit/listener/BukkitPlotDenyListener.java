@@ -27,6 +27,9 @@ public class BukkitPlotDenyListener implements Listener {
         BukkitPlayer player = new BukkitPlayer(event.getPlayer());
 
         if (api.getPlotMeCoreManager().isPlotWorld(player) && !player.hasPermission(PermissionNames.ADMIN_BYPASSDENY)) {
+            if (event.getTo() == null) {
+                return;
+            }
             BukkitLocation to = new BukkitLocation(event.getTo());
 
             String idTo = PlotMeCoreManager.getPlotId(to);
@@ -49,6 +52,9 @@ public class BukkitPlotDenyListener implements Listener {
         BukkitPlayer player = new BukkitPlayer(event.getPlayer());
 
         if (api.getPlotMeCoreManager().isPlotWorld(player) && !player.hasPermission(PermissionNames.ADMIN_BYPASSDENY)) {
+            if (event.getTo() == null) {
+                return;
+            }
             BukkitLocation to = new BukkitLocation(event.getTo());
 
             String idTo = PlotMeCoreManager.getPlotId(to);
