@@ -18,6 +18,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingPlaceEvent;
@@ -754,6 +755,41 @@ public class BukkitPlotListener implements Listener {
         }
     }
 
+    @EventHandler
+    public void onEntityDamagebyEntity(EntityDamageByEntityEvent event) {
+        BukkitLocation location = new BukkitLocation(event.getDamager().getLocation());
+        if (api.getPlotMeCoreManager().isPlotWorld(location)) {
+            BukkitEntity entityDamaged = new BukkitEntity(event.getEntity());
+            if (event.getDamager() instanceof Player) {
+                Player player = (Player) event.getDamager();
+                BukkitPlayer bukkitPlayer = new BukkitPlayer(player);
+                boolean cantbuild = !player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE);
+                String id = PlotMeCoreManager.getPlotId(location);
+                if (id.isEmpty()) {
+                    if (cantbuild) {
+                        player.sendMessage(api.getUtil().C("ErrCannotBuild"));
+                        event.setCancelled(true);
+                    }
+                } else {
+                    Plot plot = api.getPlotMeCoreManager().getPlotById(id, bukkitPlayer);
+                    if (plot == null) {
+                        if (cantbuild) {
+                            bukkitPlayer.sendMessage(api.getUtil().C("ErrCannotBuild"));
+                            event.setCancelled(true);
+                        }
+                    } else if (!plot.isAllowed(player.getName(), player.getUniqueId())) {
+                        if (cantbuild) {
+                            bukkitPlayer.sendMessage(api.getUtil().C("ErrCannotBuild"));
+                            event.setCancelled(true);
+                        }
+                    }
+                }
+
+            } else {
+                event.setCancelled(true);
+            }
+        }
+    }
     @EventHandler
     public void onPlotWorldLoad(PlotWorldLoadEvent event) {
         plugin.getLogger().info("Done loading " + event.getNbPlots() + " plots for world " + event.getWorldName());
