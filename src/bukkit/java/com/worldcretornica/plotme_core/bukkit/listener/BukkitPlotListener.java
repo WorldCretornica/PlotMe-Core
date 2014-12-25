@@ -350,7 +350,6 @@ public class BukkitPlotListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onBlockDamage(BlockDamageEvent event) {
-        BukkitPlayer player = new BukkitPlayer(event.getPlayer());
         BukkitBlock block = new BukkitBlock(event.getBlock());
 
         if (api.getPlotMeCoreManager().isPlotWorld(block.getLocation())) {
