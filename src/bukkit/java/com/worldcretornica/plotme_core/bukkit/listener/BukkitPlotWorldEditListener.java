@@ -87,6 +87,9 @@ public class BukkitPlotWorldEditListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onPlayerPortal(PlayerPortalEvent event) {
         BukkitPlayer player = new BukkitPlayer(event.getPlayer());
+        if (event.getFrom() == null || event.getTo() == null) {
+            return;
+        }
         BukkitLocation from = new BukkitLocation(event.getFrom());
         BukkitLocation to = new BukkitLocation(event.getTo());
 

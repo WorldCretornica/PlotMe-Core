@@ -3,9 +3,9 @@ package com.worldcretornica.plotme_core.bukkit.listener;
 import com.worldcretornica.plotme_core.*;
 import com.worldcretornica.plotme_core.bukkit.PlotMe_CorePlugin;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitBlock;
+import com.worldcretornica.plotme_core.bukkit.api.BukkitEntity;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitLocation;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
-import com.worldcretornica.plotme_core.bukkit.api.BukkitBlockState;
 import com.worldcretornica.plotme_core.bukkit.event.PlotWorldLoadEvent;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -468,7 +468,6 @@ public class BukkitPlotListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onStructureGrow(StructureGrowEvent event) {
-        BukkitPlayer player = new BukkitPlayer(event.getPlayer());
         BukkitLocation location = new BukkitLocation(event.getLocation());
         List<BlockState> blocks = event.getBlocks();
 
@@ -511,50 +510,54 @@ public class BukkitPlotListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onBlockIgnite(BlockIgniteEvent event) {
-        BukkitBlock block = new BukkitBlock(event.getBlock());
+        if (event.getIgnitingEntity() == null) {
+            return;
+        }
+        BukkitEntity entity = new BukkitEntity(event.getIgnitingEntity());
 
-        PlotMapInfo pmi = api.getPlotMeCoreManager().getMap(block.getLocation());
+        PlotMapInfo pmi = api.getPlotMeCoreManager().getMap(entity.getLocation());
 
-        if (pmi != null) {
-            if (pmi.isDisableIgnition()) {
+        if (pmi == null) {
+            return;
+        }
+        if (pmi.isDisableIgnition()) {
+            event.setCancelled(true);
+        } else {
+            String id = PlotMeCoreManager.getPlotId(entity.getLocation());
+
+            if (id.isEmpty()) {
                 event.setCancelled(true);
             } else {
-                String id = PlotMeCoreManager.getPlotId(block.getLocation());
+                PlotToClear ptc = api.getPlotLocked(entity.getLocation().getWorld().getName(), id);
 
-                if (id.isEmpty()) {
+                Player player = null;
+                if (ptc != null) {
+                    if (event.getPlayer() != null) {
+                        player = event.getPlayer();
+                        switch (ptc.getReason()) {
+                            case Clear:
+                                player.sendMessage(api.getUtil().C("MsgPlotLockedClear"));
+                                break;
+                            case Reset:
+                                player.sendMessage(api.getUtil().C("MsgPlotLockedReset"));
+                                break;
+                            case Expired:
+                                player.sendMessage(api.getUtil().C("MsgPlotLockedExpired"));
+                                break;
+                        }
+                    }
                     event.setCancelled(true);
                 } else {
-                    PlotToClear ptc = api.getPlotLocked(block.getLocation().getWorld().getName(), id);
+                    if (event.getPlayer() != null) {
+                        player = event.getPlayer();
+                    }
+                    Plot plot = PlotMeCoreManager.getPlotById(id, pmi);
 
-                    Player player = null;
-                    if (ptc != null) {
-                        if (event.getPlayer() != null) {
-                            player = event.getPlayer();
-                            switch (ptc.getReason()) {
-                                case Clear:
-                                    player.sendMessage(api.getUtil().C("MsgPlotLockedClear"));
-                                    break;
-                                case Reset:
-                                    player.sendMessage(api.getUtil().C("MsgPlotLockedReset"));
-                                    break;
-                                case Expired:
-                                    player.sendMessage(api.getUtil().C("MsgPlotLockedExpired"));
-                                    break;
-                            }
-                        }
+                    if (plot == null) {
                         event.setCancelled(true);
                     } else {
-                        if (event.getPlayer() != null) {
-                            player = event.getPlayer();
-                        }
-                        Plot plot = PlotMeCoreManager.getPlotById(id, pmi);
-
-                        if (plot == null) {
+                        if (player != null && !plot.isAllowed(player.getName(), player.getUniqueId())) {
                             event.setCancelled(true);
-                        } else {
-                            if (player != null && !plot.isAllowed(player.getName(), player.getUniqueId())) {
-                                event.setCancelled(true);
-                            }
                         }
                     }
                 }
