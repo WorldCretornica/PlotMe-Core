@@ -305,8 +305,8 @@ code {
   padding: 3px;
   margin: 0 3px;
   box-shadow: 0 0 10px rgba(0,0,0,.1);
-  background-color:#D3D3D3;
-  color:#F5F5F5;
+  background-color:#F0F0F0;
+  color:#363636;
 }
 
 pre code {
@@ -374,6 +374,7 @@ Full-Width Styles
 
 .inner {
   position: center;
+  min-width:100px;
   padding: 10px 10px;
   margin: auto;
 }
