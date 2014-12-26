@@ -150,14 +150,14 @@ table.tftable {
 	-webkit-border-radius: 15px;
 	-moz-border-radius: 15px;
 	border-radius: 15px;
+	text-align:center;
 }
 table.tftable th {
 	font-size:20px;
 	background-color:#DFDFDF;
 	color:#555555;
 	padding: 10px;
-	text-align:center;
-	min-width:125px;
+	min-width:100px;
 }
 table.tftable tr {
 	background-color:#F2F2F2;
