@@ -154,6 +154,7 @@ table.tftable {
 table.tftable th {
 	font-size:20px;
 	background-color:#DFDFDF;
+	color:#555555;
 	padding: 10px;
 	text-align:center;
 	min-width:100px;
