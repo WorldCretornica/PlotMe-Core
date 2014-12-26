@@ -375,7 +375,7 @@ Full-Width Styles
 .inner {
   position: center;
   min-width:100px;
-  max-width:900px;
+  max-width:1200px;
   padding: 10px 10px;
   margin: auto;
 }
