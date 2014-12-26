@@ -1,7 +1,6 @@
 package com.worldcretornica.plotme_core.bukkit.listener;
 
 import com.worldcretornica.plotme_core.*;
-import com.worldcretornica.plotme_core.bukkit.PlotMe_CorePlugin;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitBlock;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitEntity;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitLocation;
@@ -30,12 +29,10 @@ import java.util.List;
 
 public class BukkitPlotListener implements Listener {
 
-    private final PlotMe_CorePlugin plugin;
     private final PlotMe_Core api;
 
-    public BukkitPlotListener(PlotMe_CorePlugin instance) {
-        plugin = instance;
-        api = plugin.getAPI();
+    public BukkitPlotListener(PlotMe_Core instance) {
+        api = instance;
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -389,11 +386,13 @@ public class BukkitPlotListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onBlockFromTo(BlockFromToEvent event) {
-        BukkitBlock block = new BukkitBlock(event.getBlock());
-
+        BukkitBlock block = new BukkitBlock(event.getToBlock());
         if (api.getPlotMeCoreManager().isPlotWorld(block)) {
             String id = PlotMeCoreManager.getPlotId(block.getLocation());
-
+            String id2 = PlotMeCoreManager.getPlotId(block.getLocation());
+            if (id2.isEmpty()) {
+                event.setCancelled(true);
+            }
             if (id.isEmpty()) {
                 event.setCancelled(true);
             } else {
@@ -759,7 +758,6 @@ public class BukkitPlotListener implements Listener {
     public void onEntityDamagebyEntity(EntityDamageByEntityEvent event) {
         BukkitLocation location = new BukkitLocation(event.getDamager().getLocation());
         if (api.getPlotMeCoreManager().isPlotWorld(location)) {
-            BukkitEntity entityDamaged = new BukkitEntity(event.getEntity());
             if (event.getDamager() instanceof Player) {
                 Player player = (Player) event.getDamager();
                 BukkitPlayer bukkitPlayer = new BukkitPlayer(player);
@@ -792,6 +790,6 @@ public class BukkitPlotListener implements Listener {
     }
     @EventHandler
     public void onPlotWorldLoad(PlotWorldLoadEvent event) {
-        plugin.getLogger().info("Done loading " + event.getNbPlots() + " plots for world " + event.getWorldName());
+        api.getLogger().info("Done loading " + event.getNbPlots() + " plots for world " + event.getWorldName());
     }
 }
