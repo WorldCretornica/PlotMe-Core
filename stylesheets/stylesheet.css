@@ -40,7 +40,7 @@ Markus Styles :)
     min-width: 100px;
 }
 #nav ul li {
-    display: inline-block;
+    display: block;
 }
 #nav ul li:hover {
     background-color: #333;
@@ -169,8 +169,6 @@ Theme Styles
 *******************************************************************************/
 
 body {
-  height: 1000px;
-  box-sizing: border-box;
   color:#373737;
   background: #212121;
   padding: 0;
