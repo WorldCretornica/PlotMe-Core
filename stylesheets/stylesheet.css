@@ -37,7 +37,7 @@ Markus Styles :)
     padding: 0;
     margin: 0;
     position: relative;
-    min-width: 100px;
+    min-width: 200px;
 }
 #nav ul li {
     display: inline-block;
