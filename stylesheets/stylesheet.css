@@ -141,7 +141,7 @@ Markus Styles :)
 /* Table Function */
 table.tftable {
 	font-size:15px;
-	color: #DBDBDB;
+	color: #555555;
 	width:100%;
 	height:100%;
 	border-width: 1px;
@@ -156,15 +156,15 @@ table.tftable th {
 	background-color:#DFDFDF;
 	padding: 10px;
 	text-align:center;
-	min-width:50px;
+	min-width:100px;
 }
 table.tftable tr {
-	background-color:#ffffff;
+	background-color:#F2F2F2;
 }
 table.tftable td {
 	font-size:15px;
 	padding: 10px;
-	color: #232323;
+	color: #1B1B1B;
 }
 /*******************************************************************************
 Theme Styles
