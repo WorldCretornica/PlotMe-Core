@@ -298,12 +298,14 @@ pre {
   padding: 10px;
   box-shadow: 0 0 10px rgba(0,0,0,.1);
   overflow: auto;
+  color:#D3D3D3;
 }
 
 code {
   padding: 3px;
   margin: 0 3px;
   box-shadow: 0 0 10px rgba(0,0,0,.1);
+  color:#D3D3D3;
 }
 
 pre code {
