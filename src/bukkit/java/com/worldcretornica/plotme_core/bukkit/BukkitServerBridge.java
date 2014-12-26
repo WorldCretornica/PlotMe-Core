@@ -174,7 +174,7 @@ public class BukkitServerBridge implements IServerBridge {
     public void setupListeners() {
         PluginManager pm = plugin.getServer().getPluginManager();
 
-        pm.registerEvents(new BukkitPlotListener(plugin), plugin);
+        pm.registerEvents(new BukkitPlotListener(plugin.getAPI()), plugin);
 
         pm.registerEvents(new BukkitPlotDenyListener(plugin), plugin);
 
