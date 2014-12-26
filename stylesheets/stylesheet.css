@@ -143,7 +143,8 @@ table.tftable {
 	font-size:15px;
 	color: #DBDBDB;
 	width:100%;
-	border-width: 2px;
+	height:100%;
+	border-width: 1px;
 	border-color: #a9a9a9;
 	border-collapse: collapse;
 	-webkit-border-radius: 15px;
@@ -152,16 +153,17 @@ table.tftable {
 }
 table.tftable th {
 	font-size:20px;
-	background-color:#939393;
-	padding: 8px;
-	text-align:left;
+	background-color:#DFDFDF;
+	padding: 10px;
+	text-align:center;
+	min-width:50px;
 }
 table.tftable tr {
 	background-color:#ffffff;
 }
 table.tftable td {
 	font-size:15px;
-	padding: 8px;
+	padding: 10px;
 	color: #232323;
 }
 /*******************************************************************************
