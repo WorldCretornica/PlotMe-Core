@@ -40,7 +40,7 @@ Markus Styles :)
     min-width: 100px;
 }
 #nav ul li {
-    display: block;
+    display: inline-block;
 }
 #nav ul li:hover {
     background-color: #333;
