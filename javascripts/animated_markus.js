@@ -1,4 +1,4 @@
-var myName = "Markus V / CoD2204";
+var myName = "MarkusAV";
 
 var red = [0, 100, 63];
 var orange = [40, 100, 60];
