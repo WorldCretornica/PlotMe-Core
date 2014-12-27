@@ -1,4 +1,4 @@
-var myName = "Matthew B / MBon29";
+var myName = "MBon29";
 
 var red = [0, 100, 63];
 var orange = [40, 100, 60];
