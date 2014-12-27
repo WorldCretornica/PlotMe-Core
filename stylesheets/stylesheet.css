@@ -530,3 +530,86 @@ Small Device Styles
   }
 
 }
+
+/* CSS FLIP ANIMATION - Credz to Davidwalsh*/
+.flip-container {
+	perspective: 1000;
+}
+.flip-container:hover .flipper, .flip-container.hover .flipper {
+	transform: rotateY(180deg);
+}
+.flip-container, .front, .back {
+	width: 320px;
+	height: 480px;
+}
+.flipper {
+	transition: 0.6s;
+	transform-style: preserve-3d;
+
+	position: relative;
+}
+.front, .back {
+	backface-visibility: hidden;
+
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+.front {
+	z-index: 2;
+	transform: rotateY(0deg);
+}
+.back {
+	transform: rotateY(180deg);
+}
+/*Internet Explorer FLIP*/
+.flip-container {
+	perspective: 1000;
+	transform-style: preserve-3d;
+}
+	.flip-container:hover .back {
+		transform: rotateY(0deg);
+	}
+	.flip-container:hover .front {
+	    transform: rotateY(180deg);
+	}
+.flip-container, .front, .back {
+	width: 320px;
+	height: 480px;
+}
+.flipper {
+	transition: 0.6s;
+	transform-style: preserve-3d;
+
+	position: relative;
+}
+.front, .back {
+	backface-visibility: hidden;
+	transition: 0.6s;
+	transform-style: preserve-3d;
+
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+.front {
+	z-index: 2;
+	transform: rotateY(0deg);
+}
+.back {
+	transform: rotateY(-180deg);
+}
+.vertical.flip-container {
+	position: relative;
+}
+	.vertical .back {
+		transform: rotateX(180deg);
+	}
+
+	.vertical.flip-container:hover .back {
+	    transform: rotateX(0deg);
+	}
+
+	.vertical.flip-container:hover .front {
+	    transform: rotateX(180deg);
+	}
