@@ -167,6 +167,36 @@ table.tftable td {
 	padding: 10px;
 	color: #1B1B1B;
 }
+
+/* Code styles */
+pre, code {
+  width: 100%;
+  color: #222;
+  background-color: #fff;
+  font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
+  font-size: 14px;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+}
+pre {
+  width: 100%;
+  padding: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,.1);
+  overflow: auto;
+  color:##A4A4A4;
+}
+code {
+  padding: 3px;
+  margin: 0 3px;
+  box-shadow: 0 0 10px rgba(0,0,0,.1);
+  background-color:#FAFAFA;
+  color:#151515;
+}
+pre code {
+  display: block;
+  box-shadow: none;
+}
 /*******************************************************************************
 Theme Styles
 *******************************************************************************/
@@ -279,39 +309,6 @@ p img {
   vertical-align: middle;
   text-align: center;
   border: none;
-}
-
-pre, code {
-  width: 100%;
-  color: #222;
-  background-color: #fff;
-  font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
-  font-size: 14px;
-
-  border-radius: 2px;
-  -moz-border-radius: 2px;
-  -webkit-border-radius: 2px;
-}
-
-pre {
-  width: 100%;
-  padding: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,.1);
-  overflow: auto;
-  color:##A4A4A4;
-}
-
-code {
-  padding: 3px;
-  margin: 0 3px;
-  box-shadow: 0 0 10px rgba(0,0,0,.1);
-  background-color:#E6E6E6;
-  color:#151515;
-}
-
-pre code {
-  display: block;
-  box-shadow: none;
 }
 
 blockquote {
