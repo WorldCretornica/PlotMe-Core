@@ -304,11 +304,9 @@ img {
 }
 
 p img {
-  margin: 0;
-  padding: 0;
-  vertical-align: middle;
-  text-align: center;
-  border: none;
+  margin: 5px;
+  padding: 10px;
+  border: 10px;
 }
 
 blockquote {
