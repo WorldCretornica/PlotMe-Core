@@ -201,15 +201,14 @@ pre code {
 
 .contributors {
   float:right;
+  clear: both;
   margin: 5px;
   padding: 10px;
   border: 5px solid #A4A4A4;
+  clear: both;
 }
 img {
 	float:left;
-}
-p.clear {
-    clear: both;
 }
 /*******************************************************************************
 Theme Styles
