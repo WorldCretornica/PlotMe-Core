@@ -248,10 +248,6 @@ h6 {
   font-size: 16px;
 }
 
-p {
-  margin: 10px 0 15px 0;
-}
-
 footer p {
   color: #f2f2f2;
 }
@@ -288,25 +284,10 @@ strong {
   font-weight: bold;
 }
 
-img {
-  position: relative;
-  margin: 0 auto;
-  max-width: 739px;
-  padding: 5px;
-  margin: 10px 0 10px 0;
-  border: 1px solid #ebebeb;
-
-  box-shadow: 0 0 5px #ebebeb;
-  -webkit-box-shadow: 0 0 5px #ebebeb;
-  -moz-box-shadow: 0 0 5px #ebebeb;
-  -o-box-shadow: 0 0 5px #ebebeb;
-  -ms-box-shadow: 0 0 5px #ebebeb;
-}
-
 p img {
   margin: 5px;
   padding: 10px;
-  border: 10px;
+  border: 5px solid #A4A4A4;p
 }
 
 blockquote {
