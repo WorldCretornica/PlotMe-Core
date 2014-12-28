@@ -207,6 +207,8 @@ pre code {
   clear: both;
   position:relative;
   overflow:scroll;
+  min-width:100px;
+  max-width:1095px;
 }
 img {
 	float:left;
