@@ -453,6 +453,9 @@ Full-Width Styles
 
 #main_content {
   padding-top: 40px;
+  height:auto;
+  width:auto;
+  overflow:scroll;
 }
 
 #footer_wrap {
