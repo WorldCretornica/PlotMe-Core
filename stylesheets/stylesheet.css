@@ -205,13 +205,15 @@ pre code {
   padding: 10px;
   border: 5px solid #A4A4A4;
   clear: both;
-  position:absolute;
-  height:250px;
-  width:250px
-  overflow:scroll;
 }
 img {
 	float:left;
+}
+.about {
+  position:absolute;
+  height:100px;
+  width:100px;
+  overflow:scroll;
 }
 /*******************************************************************************
 Theme Styles
