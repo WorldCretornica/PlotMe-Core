@@ -202,9 +202,13 @@ pre code {
 .contributors {
   height:auto;
   width:auto;
+  float:right;
   margin: 5px;
   padding: 10px;
   border: 5px solid #A4A4A4;
+}
+p img {
+	float:left;
 }
 /*******************************************************************************
 Theme Styles
