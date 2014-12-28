@@ -200,6 +200,7 @@ pre code {
 }
 
 .contributors {
+  position: relative;
   height:auto;
   width:auto;
   float:right;
