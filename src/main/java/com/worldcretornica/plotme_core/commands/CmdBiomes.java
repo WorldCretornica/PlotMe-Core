@@ -12,19 +12,21 @@ public class CmdBiomes extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(IPlayer player, String arg) {
+    public boolean exec(IPlayer player, String[] args) {
         if (plugin.getPlotMeCoreManager().isPlotWorld(player)) {
             if (player.hasPermission(PermissionNames.USER_BIOME)) {
                 List<String> biomes = serverBridge.getBiomes();
 
                 int pages = biomes.size() / 19 + 1;
-                int page;
+                int page = 1;
 
-                try {
-                    page = Integer.parseInt(arg);
-                } catch (NumberFormatException e) {
-                    page = 1;
+                if(args.length > 1) {
+                    try {
+                        page = Integer.parseInt(args[1]);
+                    } catch (NumberFormatException ignored) {
+                    }
                 }
+
                 player.sendMessage(C("WordBiomes") + " (" + page + "/" + pages + ") : ");
 
                 for (int ctr = 0; ctr < 19; ctr++) {
