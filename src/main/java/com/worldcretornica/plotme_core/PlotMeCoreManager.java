@@ -143,26 +143,20 @@ public class PlotMeCoreManager {
     }
 
     private boolean isEconomyEnabled(String world) {
-        if (plugin.getServerBridge().getConfig().getBoolean("globalUseEconomy") || plugin.getServerBridge().getEconomy() != null) {
-            return false;
-        }
         PlotMapInfo pmi = getMap(world.toLowerCase());
-
-        if (pmi == null) {
-            return false;
-        } else {
-            return pmi.isUseEconomy() && plugin.getServerBridge().getConfig().getBoolean("globalUseEconomy") && plugin.getServerBridge().getEconomy() != null;
-        }
+        return isEconomyEnabled(pmi);
     }
 
     public boolean isEconomyEnabled(PlotMapInfo pmi) {
-        if (plugin.getServerBridge().getConfig().getBoolean("globalUseEconomy") || plugin.getServerBridge().getEconomy() != null) {
+        if (!plugin.getServerBridge().getConfig().getBoolean("globalUseEconomy") || plugin.getServerBridge().getEconomy() == null) {
             return false;
         }
         if (pmi == null) {
             return false;
         } else {
-            return pmi.isUseEconomy() && plugin.getServerBridge().getConfig().getBoolean("globalUseEconomy") && plugin.getServerBridge().getEconomy() != null;
+            if (pmi.isUseEconomy() && plugin.getServerBridge().getConfig().getBoolean("globalUseEconomy") && plugin.getServerBridge().getEconomy() != null)
+                return true;
+            else return false;
         }
     }
 
