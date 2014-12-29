@@ -207,10 +207,12 @@ pre code {
   border: 5px solid #A4A4A4;
 }
 .contributors h2 {
-  left:400px;
+  position: absolute;
+  left:280px;
 }
 .contributors p {
-  float:center;
+  position: absolute;
+  left:300px;
 }
 .contributors img {
   float:left;
