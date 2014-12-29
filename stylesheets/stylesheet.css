@@ -200,7 +200,7 @@ pre code {
 }
 
 .contributors {
-/*  float:right;*/
+  float:right;
   margin: 5px;
   padding: 10px;
   border: 5px solid #A4A4A4;
