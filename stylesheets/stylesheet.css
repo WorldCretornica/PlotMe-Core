@@ -208,11 +208,11 @@ pre code {
 }
 .contributors h2 {
   position: absolute;
-  left:280px;
+  left:500px;
 }
 .contributors p {
   position: absolute;
-  left:300px;
+  left:550px;
 }
 .contributors img {
   float:left;
