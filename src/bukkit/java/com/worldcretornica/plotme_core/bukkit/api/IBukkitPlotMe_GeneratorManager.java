@@ -48,8 +48,6 @@ public interface IBukkitPlotMe_GeneratorManager {
 
     Location getBottom(World world, String id);
 
-    void clear(World world, String id);
-
     void clear(Location bottom, Location top);
 
     Long[] clear(Location bottom, Location top, long maxBlocks, Long[] start);

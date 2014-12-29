@@ -118,11 +118,6 @@ public class BukkitPlotMe_GeneratorManagerBridge implements IPlotMe_GeneratorMan
     }
 
     @Override
-    public void clear(IWorld world, String id) {
-        generatorManager.clear(((BukkitWorld) world).getWorld(), id);
-    }
-
-    @Override
     public void clear(ILocation bottom, ILocation top) {
         generatorManager.clear(((BukkitLocation) bottom).getLocation(), ((BukkitLocation) top).getLocation());
     }

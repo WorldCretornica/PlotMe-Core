@@ -168,6 +168,8 @@ public class BukkitServerBridge implements IServerBridge {
     @Override
     public void unHook() {
         economy = null;
+        plotworldedit = null;
+        usinglwc = false;
     }
 
     @Override

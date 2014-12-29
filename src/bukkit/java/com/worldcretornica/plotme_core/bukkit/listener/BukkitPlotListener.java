@@ -6,7 +6,6 @@ import com.worldcretornica.plotme_core.bukkit.api.BukkitEntity;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitLocation;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
 import com.worldcretornica.plotme_core.bukkit.event.PlotWorldLoadEvent;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
@@ -450,7 +449,7 @@ public class BukkitPlotListener implements Listener {
         BukkitBlock piston = new BukkitBlock(event.getBlock());
         BukkitBlock block = new BukkitBlock(event.getRetractLocation().getBlock());
 
-        if (api.getPlotMeCoreManager().isPlotWorld(piston) && piston.getType().equals(Material.PISTON_STICKY_BASE)) {
+        if (api.getPlotMeCoreManager().isPlotWorld(piston)) {
             String id = PlotMeCoreManager.getPlotId(block.getLocation());
 
             if (id.isEmpty()) {

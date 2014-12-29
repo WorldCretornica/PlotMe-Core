@@ -3,8 +3,8 @@ package com.worldcretornica.plotme_core;
 import com.griefcraft.lwc.LWC;
 import com.griefcraft.model.Protection;
 import com.worldcretornica.plotme_core.api.*;
-import com.worldcretornica.plotme_core.utils.Util;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitBiome;
+import com.worldcretornica.plotme_core.utils.Util;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -543,7 +543,8 @@ public class PlotMeCoreManager {
         int idZ = getIdZ(id);
 
         SqlManager sm = plugin.getSqlManager();
-
+        ILocation bottom = getGenManager(world).getBottom(world, id);
+        ILocation top = getGenManager(world).getTop(world, id)
         sm.updatePlot(idX, idZ, worldName, "forsale", false);
         sm.updatePlot(idX, idZ, worldName, "protected", false);
         sm.updatePlot(idX, idZ, worldName, "auctionned", false);
@@ -553,7 +554,7 @@ public class PlotMeCoreManager {
         if (getMap(worldName).isUseProgressiveClear()) {
             plugin.addPlotToClear(new PlotToClear(worldName, id, reason));
         } else {
-            getGenManager(world).clear(world, id);
+            getGenManager(world).clear(bottom, top);
             if (plugin.getServerBridge().getUsinglwc()) {
                 removeLWC(world, id);
             }
@@ -589,7 +590,7 @@ public class PlotMeCoreManager {
 
     public void setBiome(IWorld world, String id, IBiome biome) {
         getGenManager(world).setBiome(world, id, biome);
-        plugin.getSqlManager().updatePlot(getIdX(id), getIdZ(id), world.getName(), "biome", ((BukkitBiome)biome).getBiome().name());
+        plugin.getSqlManager().updatePlot(getIdX(id), getIdZ(id), world.getName(), "biome", ((BukkitBiome) biome).getBiome().name());
     }
 
     public HashSet<UUID> getPlayersIgnoringWELimit() {
@@ -608,7 +609,12 @@ public class PlotMeCoreManager {
         getPlayersIgnoringWELimit().remove(uuid);
     }
 
+    @SuppressWarnings("UnusedDeclaration")
+    @Deprecated
     public boolean isPlayerIgnoringWELimit(UUID uuid) {
+        if (plugin.getServerBridge().getConfig().getBoolean("defaultWEAnywhere")) {
+            return getPlayersIgnoringWELimit().contains(uuid);
+        }
         return getPlayersIgnoringWELimit().contains(uuid);
     }
 
@@ -626,5 +632,17 @@ public class PlotMeCoreManager {
 
     private Util Util() {
         return plugin.getUtil();
+    }
+
+    public boolean isPlayerIgnoringWELimit(IPlayer player) {
+        if (plugin.getServerBridge().getConfig().getBoolean("defaultWEAnywhere")) {
+            if (player.hasPermission(PermissionNames.ADMIN_WEANYWHERE)) {
+                return !getPlayersIgnoringWELimit().contains(player.getUniqueId());
+            } else {
+                return getPlayersIgnoringWELimit().contains(player.getUniqueId());
+            }
+        } else {
+            return getPlayersIgnoringWELimit().contains(player.getUniqueId());
+        }
     }
 }

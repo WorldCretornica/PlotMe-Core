@@ -13,19 +13,20 @@ public class CmdWEAnywhere extends PlotCommand {
     }
 
     public boolean exec(IPlayer player) {
-        if (player.hasPermission(PermissionNames.ADMIN_WEANYWHERE)) {
+        boolean defaultWEAnywhere = serverBridge.getConfig().getBoolean("defaultWEAnywhere");
+        if (player.hasPermission(PermissionNames.ADMIN_WEANYWHERE) && plugin.getServerBridge().getPlotWorldEdit() != null) {
             String name = player.getName();
             UUID uuid = player.getUniqueId();
 
-            if (!plugin.getPlotMeCoreManager().isPlayerIgnoringWELimit(uuid)) {
-                if (serverBridge.getConfig().getBoolean("defaultWEAnywhere")) {
-                    plugin.getPlotMeCoreManager().addPlayerIgnoringWELimit(uuid);
-                    serverBridge.getPlotWorldEdit().removeMask(player);
-                } else {
+            if (plugin.getPlotMeCoreManager().isPlayerIgnoringWELimit(player)) {
+                if (!defaultWEAnywhere) {
                     plugin.getPlotMeCoreManager().removePlayerIgnoringWELimit(uuid);
                     if (plugin.getPlotMeCoreManager().isPlotWorld(player)) {
                         serverBridge.getPlotWorldEdit().setMask(player);
                     }
+                } else {
+                    plugin.getPlotMeCoreManager().addPlayerIgnoringWELimit(uuid);
+                    serverBridge.getPlotWorldEdit().removeMask(player);
                 }
 
                 player.sendMessage(C("MsgWorldEditAnywhere"));
@@ -34,14 +35,14 @@ public class CmdWEAnywhere extends PlotCommand {
                     plugin.getLogger().info(name + " enabled WorldEdit anywhere");
                 }
             } else {
-                if (serverBridge.getConfig().getBoolean("defaultWEAnywhere")) {
+                if (defaultWEAnywhere) {
                     plugin.getPlotMeCoreManager().removePlayerIgnoringWELimit(uuid);
-                    if (plugin.getPlotMeCoreManager().isPlotWorld(player)) {
-                        serverBridge.getPlotWorldEdit().setMask(player);
-                    }
+                    serverBridge.getPlotWorldEdit().setMask(player);
                 } else {
                     plugin.getPlotMeCoreManager().addPlayerIgnoringWELimit(uuid);
-                    serverBridge.getPlotWorldEdit().removeMask(player);
+                    if (plugin.getPlotMeCoreManager().isPlotWorld(player)) {
+                        serverBridge.getPlotWorldEdit().removeMask(player);
+                    }
                 }
                 player.sendMessage(C("MsgWorldEditInYourPlots"));
 

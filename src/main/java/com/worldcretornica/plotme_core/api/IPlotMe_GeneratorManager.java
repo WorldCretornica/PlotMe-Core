@@ -43,8 +43,6 @@ public interface IPlotMe_GeneratorManager {
 
     ILocation getBottom(IWorld world, String id);
 
-    void clear(IWorld world, String id);
-
     void clear(ILocation bottom, ILocation top);
 
     Long[] clear(ILocation bottom, ILocation top, long maxBlocks, Long[] start);

@@ -48,7 +48,7 @@ public class BukkitPlotWorldEditListener implements Listener {
         }
 
         if (changemask && api.getPlotMeCoreManager().isPlotWorld(to.getWorld())) {
-            if (api.getPlotMeCoreManager().isPlayerIgnoringWELimit(player.getUniqueId())) {
+            if (api.getPlotMeCoreManager().isPlayerIgnoringWELimit(player)) {
                 worldEdit.removeMask(player);
             } else {
                 worldEdit.setMask(player, idTo);
@@ -60,7 +60,7 @@ public class BukkitPlotWorldEditListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         BukkitPlayer player = new BukkitPlayer(event.getPlayer());
         if (api.getPlotMeCoreManager().isPlotWorld(player)) {
-            if (api.getPlotMeCoreManager().isPlayerIgnoringWELimit(player.getUniqueId())) {
+            if (api.getPlotMeCoreManager().isPlayerIgnoringWELimit(player)) {
                 worldEdit.removeMask(player);
             } else {
                 worldEdit.setMask(player);
@@ -116,7 +116,7 @@ public class BukkitPlotWorldEditListener implements Listener {
         BukkitPlayer player = new BukkitPlayer(event.getPlayer());
 
         if (api.getPlotMeCoreManager().isPlotWorld(player)) {
-            if (!api.getPlotMeCoreManager().isPlayerIgnoringWELimit(player.getUniqueId())) {
+            if (!api.getPlotMeCoreManager().isPlayerIgnoringWELimit(player)) {
                 if (event.getMessage().startsWith("//gmask")) {
                     player.sendMessage(api.getUtil().C("ErrCannotUse"));
                     event.setCancelled(true);
@@ -139,7 +139,7 @@ public class BukkitPlotWorldEditListener implements Listener {
 
         if (api.getPlotMeCoreManager().isPlotWorld(location)) {
             if (!player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE) &&
-                        !api.getPlotMeCoreManager().isPlayerIgnoringWELimit(player.getUniqueId()) &&
+                        !api.getPlotMeCoreManager().isPlayerIgnoringWELimit(player) &&
                         (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK) && ((BukkitMaterial) player.getItemInHand().getType()).getMaterial() != Material.AIR) {
                 String id = PlotMeCoreManager.getPlotId(location);
                 Plot plot = api.getPlotMeCoreManager().getMap(location).getPlot(id);
