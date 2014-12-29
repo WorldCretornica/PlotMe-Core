@@ -207,14 +207,14 @@ pre code {
   border: 5px solid #A4A4A4;
 }
 .contributors h2 {
-  position: absolute;
-  left:450px;
+  float:center;
 }
 .contributors p {
-  float: center;
+  float:center;
 }
 .contributors img {
   float:left;
+  padding:20px;
   height:250px;
   width:250px;
 }
