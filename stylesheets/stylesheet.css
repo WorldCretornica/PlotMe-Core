@@ -204,11 +204,8 @@ pre code {
   margin: 5px;
   padding: 10px;
   border: 5px solid #A4A4A4;
-  clear: both;
   position:relative;
   overflow:scroll;
-  min-width:100px;
-  max-width:1095px;
 }
 img {
 	float:left;
