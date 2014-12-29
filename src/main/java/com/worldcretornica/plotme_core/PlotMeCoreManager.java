@@ -544,7 +544,7 @@ public class PlotMeCoreManager {
 
         SqlManager sm = plugin.getSqlManager();
         ILocation bottom = getGenManager(world).getBottom(world, id);
-        ILocation top = getGenManager(world).getTop(world, id)
+        ILocation top = getGenManager(world).getTop(world, id);
         sm.updatePlot(idX, idZ, worldName, "forsale", false);
         sm.updatePlot(idX, idZ, worldName, "protected", false);
         sm.updatePlot(idX, idZ, worldName, "auctionned", false);
