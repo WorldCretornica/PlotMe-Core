@@ -208,10 +208,9 @@ pre code {
 }
 .contributors h2 {
   position: absolute;
-  left:400px;
+  left:450px;
 }
 .contributors p {
-  position: absolute;
   float: center;
 }
 .contributors img {
