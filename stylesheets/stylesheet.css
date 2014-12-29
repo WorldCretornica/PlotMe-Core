@@ -200,12 +200,13 @@ pre code {
 }
 
 .contributors {
+  height: auto;
+  width: auto;
   margin: 5px;
   padding: 10px;
   border: 5px solid #A4A4A4;
-  position:relative;
-  left:0;
-  right:0;	
+  left:100%;
+  right:100%;	
 }
 .contributors p {
   float:right;
