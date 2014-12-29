@@ -460,7 +460,7 @@ Full-Width Styles
   padding-top: 40px;
   height:auto;
   width:auto;
-  overflow:scroll;
+  overflow:hidden;
 }
 
 #footer_wrap {
