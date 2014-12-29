@@ -200,20 +200,19 @@ pre code {
 }
 
 .contributors {
-  float:right;
+/*  float:right;*/
   margin: 5px;
   padding: 10px;
   border: 5px solid #A4A4A4;
-  overflow:scroll;
   position:relative;
   left:0;
   right:0;
 }
-img {
+/* img {
 	float:left;
   	height:100px;
   	width:100px;
-}
+}*/
 /*******************************************************************************
 Theme Styles
 *******************************************************************************/
