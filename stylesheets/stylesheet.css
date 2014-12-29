@@ -200,19 +200,22 @@ pre code {
 }
 
 .contributors {
-  height: 400px;
+  height: 250px;
   width: auto;
   margin: 5px;
   padding: 10px;
   border: 5px solid #A4A4A4;
 }
+.contributors h2 {
+  left:400px;
+}
 .contributors p {
-  float:right;
+  float:center;
 }
 .contributors img {
   float:left;
-  height:200px;
-  width:200px;
+  height:250px;
+  width:250px;
 }
 /*******************************************************************************
 Theme Styles
