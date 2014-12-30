@@ -26,28 +26,28 @@ public class CmdWEAnywhere extends PlotCommand {
                     }
                 } else {
                     plugin.getPlotMeCoreManager().addPlayerIgnoringWELimit(uuid);
-                    serverBridge.getPlotWorldEdit().removeMask(player);
+                    serverBridge.getPlotWorldEdit().setMask(player);
                 }
 
-                player.sendMessage(C("MsgWorldEditAnywhere"));
+                player.sendMessage(C("MsgWorldEditInYourPlots"));
 
                 if (isAdvancedLogging()) {
-                    plugin.getLogger().info(name + " enabled WorldEdit anywhere");
+                    plugin.getLogger().info(name + " disabled WorldEdit anywhere");
                 }
             } else {
                 if (defaultWEAnywhere) {
                     plugin.getPlotMeCoreManager().removePlayerIgnoringWELimit(uuid);
-                    serverBridge.getPlotWorldEdit().setMask(player);
+                    serverBridge.getPlotWorldEdit().removeMask(player);
                 } else {
                     plugin.getPlotMeCoreManager().addPlayerIgnoringWELimit(uuid);
                     if (plugin.getPlotMeCoreManager().isPlotWorld(player)) {
                         serverBridge.getPlotWorldEdit().removeMask(player);
                     }
                 }
-                player.sendMessage(C("MsgWorldEditInYourPlots"));
+                player.sendMessage(C("MsgWorldEditAnywhere"));
 
                 if (isAdvancedLogging()) {
-                    plugin.getLogger().info(name + " disabled WorldEdit anywhere");
+                    plugin.getLogger().info(name + " enabled WorldEdit anywhere");
                 }
             }
 
