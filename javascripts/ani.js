@@ -1,4 +1,4 @@
-var myName = "Michelle ❤";
+var myName = "Michelle <3";
 
 var red = [0, 100, 63];
 var orange = [40, 100, 60];
