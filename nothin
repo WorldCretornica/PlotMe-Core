@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="PlotMe : A Minecraft Plot Management Plugin">
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+    <link rel="shortcut icon" type="image/x-icon" href="images/favicon.ico" />
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="http://s3.amazonaws.com/codecademy-content/courses/hour-of-code/js/alphabet.js"></script>
+
+    <title>Michelle &hearts;</title>
+  </head>
+
+  <body>
+    	<div align="center">
+    		<canvas id="myCanvas"></canvas>
+    		<script type="text/javascript" src="javascripts/bubbles.js"></script>
+    		<script type="text/javascript" src="javascripts/ani.js"></script>
+    	</div>
+  </body>
+</html>
