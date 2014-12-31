@@ -61,6 +61,8 @@ public class PlotMe_Core {
         reloadCaptionConfig();
         setupDefaultCaptions();
         setupMySQL();
+        getPlotMeCoreManager().getPlotMaps().clear();
+        setupWorlds();
     }
 
     public Logger getLogger() {

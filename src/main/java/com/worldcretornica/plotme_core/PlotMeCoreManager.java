@@ -604,8 +604,8 @@ public class PlotMeCoreManager {
         getPlotMaps().put(world.toLowerCase(), map);
     }
 
-    public void removePlotMap(String world, PlotMapInfo map) {
-        getPlotMaps().remove(world, map);
+    public void removePlotMap(String world) {
+        getPlotMaps().remove(world.toLowerCase());
     }
 
     private Util Util() {
