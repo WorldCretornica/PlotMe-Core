@@ -61,7 +61,7 @@ public class CmdBuy extends PlotCommand {
                                                     playercurrentbidder = serverBridge.getOfflinePlayer(plot.getOwnerId());
                                                 }
 
-                                                if (!"$Bank$".equalsIgnoreCase(oldowner) && playercurrentbidder != null) {
+                                                if (playercurrentbidder != null) {
                                                     EconomyResponse er2 = serverBridge.depositPlayer(playercurrentbidder, cost);
 
                                                     if (er2.transactionSuccess()) {

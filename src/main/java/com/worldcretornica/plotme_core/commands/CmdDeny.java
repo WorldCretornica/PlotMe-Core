@@ -15,7 +15,7 @@ public class CmdDeny extends PlotCommand {
     }
 
     public boolean exec(IPlayer player, String[] args) {
-        if (player.hasPermission("PlotMe.admin.deny") || player.hasPermission(PermissionNames.USER_DENY)) {
+        if (player.hasPermission(PermissionNames.ADMIN_DENY) || player.hasPermission(PermissionNames.USER_DENY)) {
             IWorld world = player.getWorld();
             PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
             if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
@@ -30,7 +30,7 @@ public class CmdDeny extends PlotCommand {
                         String playername = player.getName();
                         String denied = args[1];
 
-                        if (plot.getOwner().equalsIgnoreCase(playername) || player.hasPermission("PlotMe.admin.deny")) {
+                        if (plot.getOwner().equalsIgnoreCase(playername) || player.hasPermission(PermissionNames.ADMIN_DENY)) {
                             if (plot.getOwner().equalsIgnoreCase(denied)) {
                                 //TODO output something using a caption that says like "Cannot deny owner"
                                 return true;

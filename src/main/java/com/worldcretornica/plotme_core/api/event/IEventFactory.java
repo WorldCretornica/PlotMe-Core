@@ -46,7 +46,7 @@ public interface IEventFactory {
 
     InternalPlotRemoveDeniedEvent callPlotRemoveDeniedEvent(PlotMe_Core plugin, IWorld world, Plot plot, IPlayer player, String denied);
 
-    InternalPlotSellChangeEvent callPlotSellChangeEvent(PlotMe_Core plugin, IWorld world, Plot plot, IPlayer seller, double price, boolean soldToBank, boolean isForSale);
+    InternalPlotSellChangeEvent callPlotSellChangeEvent(PlotMe_Core plugin, IWorld world, Plot plot, IPlayer seller, double price, boolean isForSale);
 
     InternalPlotOwnerChangeEvent callPlotOwnerChangeEvent(PlotMe_Core plugin, IWorld world, Plot plot, IPlayer player, String newowner);
 

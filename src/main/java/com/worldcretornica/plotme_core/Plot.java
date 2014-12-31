@@ -520,7 +520,4 @@ public class Plot implements Comparable<Plot> {
     public final void setCurrentBid(double currentbid) {
         this.currentbid = currentbid;
     }
-
-    public void setPlotName(String plotName) {
-    }
 }

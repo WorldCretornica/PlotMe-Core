@@ -99,8 +99,6 @@ public interface IServerBridge {
 
     List<String> getBiomes();
 
-    String stripColor(String string);
-
     List<IWorld> getWorlds();
 
     boolean createPlotWorld(String worldname, String generator, Map<String, String> args);

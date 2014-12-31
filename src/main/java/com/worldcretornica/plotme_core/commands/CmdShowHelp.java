@@ -68,10 +68,10 @@ public class CmdShowHelp extends PlotCommand {
         if (player.hasPermission(PermissionNames.USER_ADD) || player.hasPermission(PermissionNames.ADMIN_ADD)) {
             allowed_commands.add("add");
         }
-        if (player.hasPermission(PermissionNames.USER_REMOVE) || player.hasPermission("PlotMe.admin.remove")) {
+        if (player.hasPermission(PermissionNames.USER_REMOVE) || player.hasPermission(PermissionNames.ADMIN_REMOVE)) {
             allowed_commands.add("remove");
         }
-        if (player.hasPermission(PermissionNames.USER_DENY) || player.hasPermission("PlotMe.admin.deny")) {
+        if (player.hasPermission(PermissionNames.USER_DENY) || player.hasPermission(PermissionNames.ADMIN_DENY)) {
             allowed_commands.add("deny");
         }
         if (player.hasPermission(PermissionNames.USER_UNDENY) || player.hasPermission(PermissionNames.ADMIN_UNDENY)) {
@@ -97,7 +97,9 @@ public class CmdShowHelp extends PlotCommand {
         }
 
         PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(player);
-        boolean economyEnabled = plugin.getPlotMeCoreManager().isEconomyEnabled(pmi);
+
+
+        boolean economyEnabled = pmi != null && plugin.getPlotMeCoreManager().isEconomyEnabled(pmi);
 
         if (plugin.getPlotMeCoreManager().isPlotWorld(player) && economyEnabled) {
             if (player.hasPermission(PermissionNames.USER_BUY)) {
@@ -105,11 +107,6 @@ public class CmdShowHelp extends PlotCommand {
             }
             if (player.hasPermission(PermissionNames.USER_SELL)) {
                 allowed_commands.add("sell");
-                if (pmi != null) {
-                    if (pmi.isCanSellToBank()) {
-                        allowed_commands.add("sellbank");
-                    }
-                }
             }
             if (player.hasPermission(PermissionNames.USE_AUCTION)) {
                 allowed_commands.add("auction");
@@ -131,11 +128,11 @@ public class CmdShowHelp extends PlotCommand {
             String allowedcmd = allowed_commands.get(ctr);
 
             if ("limit".equalsIgnoreCase(allowedcmd)) {
+                int maxplots = getPlotLimit(player);
                 if (plugin.getPlotMeCoreManager().isPlotWorld(player)) {
 
                     IWorld world = player.getWorld();
 
-                    int maxplots = getPlotLimit(player);
                     int ownedplots = plugin.getPlotMeCoreManager().getNbOwnedPlot(player.getUniqueId(), player.getName(), world.getName());
 
                     if (maxplots == -1) {
@@ -147,7 +144,6 @@ public class CmdShowHelp extends PlotCommand {
 
                     IWorld world = plugin.getPlotMeCoreManager().getFirstWorld();
 
-                    int maxplots = getPlotLimit(player);
                     int ownedplots = plugin.getPlotMeCoreManager().getNbOwnedPlot(player.getUniqueId(), player.getName(), world.getName());
 
                     if (maxplots == -1) {
@@ -292,10 +288,13 @@ public class CmdShowHelp extends PlotCommand {
                 player.sendMessage("§b " + C("HelpDoneList"));
             } else if ("addtime".equalsIgnoreCase(allowedcmd)) {
                 player.sendMessage("§a /plotme addtime");
-                int days = (pmi == null) ? 0 : pmi.getDaysToExpiration();
-                if (days == 0) {
-                    player.sendMessage("§b " + C("HelpAddTime1") + " §r" + C("WordNever"));
+                int days;
+                if (pmi == null) {
+                    days = 0;
                 } else {
+                    days = pmi.getDaysToExpiration();
+                }
+                if (days != 0) {
                     player.sendMessage("§b " + C("HelpAddTime1") + " §r" + days + "§b " + C("HelpAddTime2"));
                 }
             } else if ("dispose".equalsIgnoreCase(allowedcmd)) {
@@ -310,10 +309,8 @@ public class CmdShowHelp extends PlotCommand {
                 player.sendMessage("§b " + C("HelpBuy"));
             } else if ("sell".equalsIgnoreCase(allowedcmd)) {
                 player.sendMessage("§a /plotme sell [" + C("WordAmount") + "]");
+                assert pmi != null;
                 player.sendMessage("§b " + C("HelpSell") + " " + C("WordDefault") + " : §r" + Math.round(pmi.getSellToPlayerPrice()));
-            } else if ("sellbank".equalsIgnoreCase(allowedcmd)) {
-                player.sendMessage("§a /plotme sell bank");
-                player.sendMessage("§b " + C("HelpSellBank") + " §r" + Math.round(pmi.getSellToBankPrice()));
             } else if ("auction".equalsIgnoreCase(allowedcmd)) {
                 player.sendMessage("§a /plotme auction [" + C("WordAmount") + "]");
                 player.sendMessage("§b " + C("HelpAuction") + " " + C("WordDefault") + " : §r1");

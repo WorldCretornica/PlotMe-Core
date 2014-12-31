@@ -5,10 +5,6 @@ import com.worldcretornica.plotme_core.api.IWorld;
 
 public class PlotMeSpool implements Runnable {
 
-    private static String T;
-    private static String G;
-    private static String M;
-    private static String k;
     private final PlotMe_Core plugin;
     private Long[] currentClear;
     private PlotToClear plottoclear;
@@ -16,11 +12,6 @@ public class PlotMeSpool implements Runnable {
 
     public PlotMeSpool(PlotMe_Core instance, PlotToClear plotToClear) {
         plugin = instance;
-
-        T = plugin.getUtil().C("Unit_1000000000000");
-        G = plugin.getUtil().C("Unit_1000000000");
-        M = plugin.getUtil().C("Unit_1000000");
-        k = plugin.getUtil().C("Unit_1000");
 
         plottoclear = plotToClear;
     }
@@ -31,22 +22,22 @@ public class PlotMeSpool implements Runnable {
         if (count > 1000000000000L) {
             buffer = count / 1000000000000L;
             buffer = Math.round(buffer * 10) / 10;
-            return buffer + T;
+            return buffer + "T";
         }
         if (count > 1000000000) {
             buffer = count / 1000000000;
             buffer = Math.round(buffer * 10) / 10;
-            return buffer + G;
+            return buffer + "G";
         }
         if (count > 1000000) {
             buffer = count / 1000000;
             buffer = Math.round(buffer * 10) / 10;
-            return buffer + M;
+            return buffer + "M";
         }
         if (count > 1000) {
             buffer = count / 1000;
             buffer = Math.round(buffer * 10) / 10;
-            return buffer + k;
+            return buffer + "k";
         }
         return String.valueOf(count);
     }

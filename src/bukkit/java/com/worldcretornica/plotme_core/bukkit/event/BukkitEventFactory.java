@@ -144,8 +144,8 @@ public class BukkitEventFactory implements IEventFactory {
     }
 
     @Override
-    public InternalPlotSellChangeEvent callPlotSellChangeEvent(PlotMe_Core plugin, IWorld world, Plot plot, IPlayer seller, double price, boolean soldToBank, boolean isForSale) {
-        PlotSellChangeEvent event = new PlotSellChangeEvent(plugin, world, plot, seller, price, soldToBank, isForSale);
+    public InternalPlotSellChangeEvent callPlotSellChangeEvent(PlotMe_Core plugin, IWorld world, Plot plot, IPlayer seller, double price, boolean isForSale) {
+        PlotSellChangeEvent event = new PlotSellChangeEvent(plugin, world, plot, seller, price, isForSale);
         Bukkit.getPluginManager().callEvent(event);
         return event.getInternal();
     }

@@ -7,8 +7,6 @@ import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.utils.Util;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,7 +18,6 @@ public class PlotMe_Core {
     private static final String DEFAULT_GENERATOR_URL = "";
     //Bridge
     private final IServerBridge serverBridge;
-    public Map<String, Map<String, String>> creationbuffer;
     private IWorld worldcurrentlyprocessingexpired;
     private int counterexpired;
     //Spool stuff
@@ -39,7 +36,6 @@ public class PlotMe_Core {
         serverBridge.unHook();
         plotMeCoreManager.setPlayersIgnoringWELimit(null);
         setWorldCurrentlyProcessingExpired(null);
-        creationbuffer = null;
         plotsToClear.clear();
         plotsToClear = null;
     }
@@ -163,7 +159,6 @@ public class PlotMe_Core {
     }
 
     private void setupClearSpools() {
-        creationbuffer = new HashMap<>();
         plotsToClear = new ConcurrentLinkedQueue<>();
     }
 

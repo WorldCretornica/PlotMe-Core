@@ -15,14 +15,14 @@ public class PlotSellChangeEvent extends PlotEvent implements Cancellable {
 
     private final InternalPlotSellChangeEvent event;
 
-    public PlotSellChangeEvent(PlotMe_Core instance, World world, Plot plot, Player seller, double price, boolean soldToBank, boolean isForSale) {
+    public PlotSellChangeEvent(PlotMe_Core instance, World world, Plot plot, Player seller, double price, boolean isForSale) {
         super(instance, plot, world);
-        event = new InternalPlotSellChangeEvent(instance, new BukkitWorld(world), plot, new BukkitPlayer(seller), price, soldToBank, isForSale);
+        event = new InternalPlotSellChangeEvent(instance, new BukkitWorld(world), plot, new BukkitPlayer(seller), price, isForSale);
     }
 
-    public PlotSellChangeEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer seller, double price, boolean soldToBank, boolean isForSale) {
+    public PlotSellChangeEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer seller, double price, boolean isForSale) {
         super(instance, plot, world);
-        event = new InternalPlotSellChangeEvent(instance, world, plot, seller, price, soldToBank, isForSale);
+        event = new InternalPlotSellChangeEvent(instance, world, plot, seller, price, isForSale);
     }
 
     @Override
@@ -41,10 +41,6 @@ public class PlotSellChangeEvent extends PlotEvent implements Cancellable {
 
     public double getPrice() {
         return event.getPrice();
-    }
-
-    public boolean isSoldToBank() {
-        return event.isSoldToBank();
     }
 
     public boolean isForSale() {

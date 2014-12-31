@@ -82,7 +82,7 @@
 						</configuration>
 					</execution>
 					<execution>
-						<id>add-spong-sources</id>
+                        <id>add-sponge-sources</id>
 						<phase>generate-sources</phase>
 						<goals>
 							<goal>add-test-source</goal>
@@ -135,10 +135,26 @@
 				<enabled>true</enabled>
 			</snapshots>
 		</repository>
-	</repositories>
+        <repository>
+            <id>sponge-maven-repo</id>
+            <name>Sponge maven repo</name>
+            <url>http://repo.spongepowered.org/Sponge/maven</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 
 	<dependencies>
-		<dependency>
+        <dependency>
+            <groupId>org.spongepowered</groupId>
+            <artifactId>spongeapi</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
 			<groupId>org.bukkit</groupId>
 			<artifactId>bukkit</artifactId>
 			<version>1.8-R0.1-SNAPSHOT</version>

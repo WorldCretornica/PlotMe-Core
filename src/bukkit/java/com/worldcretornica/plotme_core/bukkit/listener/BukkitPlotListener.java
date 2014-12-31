@@ -21,6 +21,7 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.event.player.*;
+import org.bukkit.event.server.ServerCommandEvent;
 import org.bukkit.event.world.StructureGrowEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -757,7 +758,9 @@ public class BukkitPlotListener implements Listener {
     public void onEntityDamagebyEntity(EntityDamageByEntityEvent event) {
         BukkitLocation location = new BukkitLocation(event.getDamager().getLocation());
         if (api.getPlotMeCoreManager().isPlotWorld(location)) {
-            if (event.getDamager() instanceof Player) {
+            if (!(event.getDamager() instanceof Player)) {
+                event.setCancelled(true);
+            } else {
                 Player player = (Player) event.getDamager();
                 BukkitPlayer bukkitPlayer = new BukkitPlayer(player);
                 boolean cantbuild = !player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE);
@@ -779,16 +782,36 @@ public class BukkitPlotListener implements Listener {
                             bukkitPlayer.sendMessage(api.getUtil().C("ErrCannotBuild"));
                             event.setCancelled(true);
                         }
+                    } else {
+                        plot.resetExpire(api.getPlotMeCoreManager().getMap(bukkitPlayer).getDaysToExpiration());
                     }
                 }
 
-            } else {
-                event.setCancelled(true);
             }
         }
     }
     @EventHandler
     public void onPlotWorldLoad(PlotWorldLoadEvent event) {
         api.getLogger().info("Done loading " + event.getNbPlots() + " plots for world " + event.getWorldName());
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onServerCommand(ServerCommandEvent event) {
+        if ("reload".equalsIgnoreCase(event.getCommand())) {
+            api.getLogger().warning("Using the reload command does not properly reload a server");
+            api.getLogger().warning("It generates many bugs and with PlotMe, the plugin won't function");
+            api.getLogger().warning("The server is being shut down so it can be properly restarted");
+            event.setCommand("stop");
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onPlayerCommand(PlayerCommandPreprocessEvent event) {
+        if ("/reload".equalsIgnoreCase(event.getMessage()) && event.getPlayer().hasPermission("bukkit.command.reload")) {
+            event.getPlayer().sendMessage("Using the reload command does not properly reload a server");
+            event.getPlayer().sendMessage("It generates many bugs and with PlotMe, the plugin won't function");
+            event.getPlayer().sendMessage("The command will not execute.");
+            event.setCancelled(true);
+        }
     }
 }

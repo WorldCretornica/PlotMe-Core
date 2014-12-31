@@ -15,7 +15,7 @@ public class CmdRemove extends PlotCommand {
     }
 
     public boolean exec(IPlayer player, String[] args) {
-        if (player.hasPermission("PlotMe.admin.remove") || player.hasPermission(PermissionNames.USER_REMOVE)) {
+        if (player.hasPermission(PermissionNames.ADMIN_REMOVE) || player.hasPermission(PermissionNames.USER_REMOVE)) {
             IWorld world = player.getWorld();
             PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
             if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
@@ -30,7 +30,7 @@ public class CmdRemove extends PlotCommand {
                         UUID playeruuid = player.getUniqueId();
                         String allowed = args[1];
 
-                        if (plot.getOwnerId().equals(playeruuid) || player.hasPermission("PlotMe.admin.remove")) {
+                        if (plot.getOwnerId().equals(playeruuid) || player.hasPermission(PermissionNames.ADMIN_REMOVE)) {
                             if (plot.isAllowedConsulting(allowed) || plot.isGroupAllowed(allowed)) {
 
                                 double price = 0.0;

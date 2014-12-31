@@ -153,11 +153,9 @@ public class PlotMeCoreManager {
         }
         if (pmi == null) {
             return false;
-        } else {
-            if (pmi.isUseEconomy() && plugin.getServerBridge().getConfig().getBoolean("globalUseEconomy") && plugin.getServerBridge().getEconomy() != null)
-                return true;
-            else return false;
-        }
+        } else if (pmi.isUseEconomy() && plugin.getServerBridge().getConfig().getBoolean("globalUseEconomy") && plugin.getServerBridge().getEconomy() != null)
+            return true;
+        else return false;
     }
 
     public boolean isEconomyEnabled(IWorld world) {
@@ -526,24 +524,10 @@ public class PlotMeCoreManager {
     public void clear(IWorld world, Plot plot, ICommandSender sender, ClearReason reason) {
         String id = plot.getId();
 
-        plot.setForSale(false);
-        plot.setProtect(false);
-        plot.setAuctioned(false);
-        plot.setCurrentBid(0.0);
-        plot.setCurrentBidder(null);
-
         String worldName = world.getName().toLowerCase();
-        int idX = getIdX(id);
-        int idZ = getIdZ(id);
 
-        SqlManager sm = plugin.getSqlManager();
         ILocation bottom = getGenManager(world).getBottom(world, id);
         ILocation top = getGenManager(world).getTop(world, id);
-        sm.updatePlot(idX, idZ, worldName, "forsale", false);
-        sm.updatePlot(idX, idZ, worldName, "protected", false);
-        sm.updatePlot(idX, idZ, worldName, "auctionned", false);
-        sm.updatePlot(idX, idZ, worldName, "currentbid", 0);
-        sm.updatePlot(idX, idZ, worldName, "currentbidder", null);
 
         if (getMap(worldName).isUseProgressiveClear()) {
             plugin.addPlotToClear(new PlotToClear(worldName, id, reason));

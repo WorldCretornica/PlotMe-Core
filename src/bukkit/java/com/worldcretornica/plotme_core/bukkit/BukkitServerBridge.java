@@ -214,10 +214,18 @@ public class BukkitServerBridge implements IServerBridge {
         }
     }
 
+    /**
+     * Gets the player with the given name.
+     *
+     * @param playerName Player name
+     *
+     * @return returns a an instance of IPlayer if found, otherwise null
+     */
+    @SuppressWarnings("deprecation")
+    @Deprecated
     @Override
-    public IPlayer getPlayerExact(String name) {
-        @SuppressWarnings("deprecation")
-        Player player = Bukkit.getPlayerExact(name);
+    public IPlayer getPlayerExact(String playerName) {
+        Player player = Bukkit.getPlayerExact(playerName);
         if (player == null) {
             return null;
         } else {
@@ -336,11 +344,6 @@ public class BukkitServerBridge implements IServerBridge {
     }
 
     @Override
-    public String stripColor(String text) {
-        return ChatColor.stripColor(text);
-    }
-
-    @Override
     public IPlotMe_ChunkGenerator getPlotMeGenerator(String worldname) {
         World world = Bukkit.getWorld(worldname);
         if (world != null) {
@@ -410,7 +413,6 @@ public class BukkitServerBridge implements IServerBridge {
         tempPlotInfo.setUseProgressiveClear(Boolean.parseBoolean(args.get("UseProgressiveClear")));
         tempPlotInfo.setUseEconomy(Boolean.parseBoolean(args.get("UseEconomy")));
         tempPlotInfo.setCanPutOnSale(Boolean.parseBoolean(args.get("CanPutOnSale")));
-        tempPlotInfo.setCanSellToBank(Boolean.parseBoolean(args.get("CanSellToBank")));
         tempPlotInfo.setRefundClaimPriceOnReset(Boolean.parseBoolean(args.get("RefundClaimPriceOnReset")));
         tempPlotInfo.setRefundClaimPriceOnSetOwner(Boolean.parseBoolean(args.get("RefundClaimPriceOnSetOwner")));
         tempPlotInfo.setClaimPrice(Double.parseDouble(args.get("ClaimPrice")));
@@ -421,8 +423,6 @@ public class BukkitServerBridge implements IServerBridge {
         tempPlotInfo.setUndenyPlayerPrice(Double.parseDouble(args.get("UndenyPlayerPrice")));
         tempPlotInfo.setPlotHomePrice(Double.parseDouble(args.get("PlotHomePrice")));
         tempPlotInfo.setSellToPlayerPrice(Double.parseDouble(args.get("SellToPlayerPrice")));
-        tempPlotInfo.setSellToBankPrice(Double.parseDouble(args.get("SellToBankPrice")));
-        tempPlotInfo.setBuyFromBankPrice(Double.parseDouble(args.get("BuyFromBankPrice")));
         tempPlotInfo.setBiomeChangePrice(Double.parseDouble(args.get("BiomeChangePrice")));
         tempPlotInfo.setProtectPrice(Double.parseDouble(args.get("ProtectPrice")));
         tempPlotInfo.setDisposePrice(Double.parseDouble(args.get("DisposePrice")));

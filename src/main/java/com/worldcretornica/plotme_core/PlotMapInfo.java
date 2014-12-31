@@ -141,15 +141,6 @@ public class PlotMapInfo {
         config.saveConfig();
     }
 
-    public boolean isCanSellToBank() {
-        return getEconomySection().getBoolean("CanSellToBank");
-    }
-
-    public void setCanSellToBank(boolean canSellToBank) {
-        getEconomySection().set("CanSellToBank", canSellToBank);
-        config.saveConfig();
-    }
-
     public boolean isRefundClaimPriceOnReset() {
         return getEconomySection().getBoolean("RefundClaimPriceOnReset");
     }
@@ -237,24 +228,6 @@ public class PlotMapInfo {
 
     public void setSellToPlayerPrice(double sellToPlayerPrice) {
         getEconomySection().set("SellToPlayerPrice", sellToPlayerPrice);
-        config.saveConfig();
-    }
-
-    public double getSellToBankPrice() {
-        return getEconomySection().getDouble("SellToBankPrice");
-    }
-
-    public void setSellToBankPrice(double sellToBankPrice) {
-        getEconomySection().set("SellToBankPrice", sellToBankPrice);
-        config.saveConfig();
-    }
-
-    public double getBuyFromBankPrice() {
-        return getEconomySection().getDouble("BuyFromBankPrice");
-    }
-
-    public void setBuyFromBankPrice(double buyFromBankPrice) {
-        getEconomySection().set("BuyFromBankPrice", buyFromBankPrice);
         config.saveConfig();
     }
 

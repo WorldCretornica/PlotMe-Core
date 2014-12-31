@@ -1,11 +1,9 @@
 package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.*;
-import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotSellChangeEvent;
-import net.milkbowl.vault.economy.EconomyResponse;
 
 public class CmdSell extends PlotCommand {
 
@@ -19,7 +17,7 @@ public class CmdSell extends PlotCommand {
             PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
             if (plugin.getPlotMeCoreManager().isEconomyEnabled(pmi)) {
 
-                if (pmi.isCanSellToBank() || pmi.isCanPutOnSale()) {
+                if (pmi.isCanPutOnSale()) {
                     if (player.hasPermission(PermissionNames.USER_SELL) || player.hasPermission(PermissionNames.ADMIN_SELL)) {
                         String id = PlotMeCoreManager.getPlotId(player);
 
@@ -33,7 +31,7 @@ public class CmdSell extends PlotCommand {
                                 InternalPlotSellChangeEvent event;
 
                                 if (plot.isForSale()) {
-                                    event = serverBridge.getEventFactory().callPlotSellChangeEvent(plugin, world, plot, player, plot.getCustomPrice(), false, false);
+                                    event = serverBridge.getEventFactory().callPlotSellChangeEvent(plugin, world, plot, player, plot.getCustomPrice(), false);
 
                                     if (!event.isCancelled()) {
                                         plot.setCustomPrice(0.0);
@@ -62,85 +60,17 @@ public class CmdSell extends PlotCommand {
                                             try {
                                                 price = Double.parseDouble(args[1]);
                                             } catch (Exception e) {
-                                                if (pmi.isCanSellToBank()) {
-                                                    player.sendMessage(C("WordUsage") + ": §c /plotme sell bank|<" + C("WordAmount") + ">");
-                                                    player.sendMessage(C("WordExample") + ": §c/plotme sell bank §r or §c /plotme sell 200");
-                                                } else {
-                                                    player.sendMessage(C("WordUsage") + ": §c /plotme sell <" + C("WordAmount") + ">§r " + C("WordExample") + ": §c/plotme sell 200");
-                                                }
+                                                player.sendMessage(C("WordUsage") + ": §c /plotme sell <" + C("WordAmount") + ">§r " + C("WordExample") + ": §c/plotme sell 200");
                                             }
                                         }
                                     }
 
                                     if (bank) {
-                                        if (pmi.isCanSellToBank()) {
-                                            String currentbidder = plot.getCurrentBidder();
-
-                                            if (currentbidder != null) {
-                                                double bid = plot.getCurrentBid();
-                                                IOfflinePlayer playercurrentbidder = serverBridge.getOfflinePlayer(plot.getCurrentBidderId());
-
-                                                EconomyResponse er = serverBridge.depositPlayer(playercurrentbidder, bid);
-
-                                                if (er.transactionSuccess()) {
-                                                    for (IPlayer iPlayer : serverBridge.getOnlinePlayers()) {
-                                                        if (iPlayer.getName().equalsIgnoreCase(currentbidder)) {
-                                                            iPlayer.sendMessage(C("WordPlot") + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner() + " " + C("MsgSoldToBank") + " " + Util().moneyFormat(bid, true));
-                                                            break;
-                                                        }
-                                                    }
-                                                } else {
-                                                    player.sendMessage("§c" + er.errorMessage);
-                                                    warn(er.errorMessage);
-                                                }
-                                            }
-
-                                            double sellprice = pmi.getSellToBankPrice();
-
-                                            event = serverBridge.getEventFactory().callPlotSellChangeEvent(plugin, world, plot, player, pmi.getBuyFromBankPrice(), true, true);
-
-                                            if (!event.isCancelled()) {
-                                                EconomyResponse er = serverBridge.depositPlayer(player, sellprice);
-
-                                                if (er.transactionSuccess()) {
-                                                    plot.setOwner("$Bank$");
-                                                    plot.setForSale(true);
-                                                    plot.setCustomPrice(pmi.getBuyFromBankPrice());
-                                                    plot.setAuctioned(false);
-                                                    plot.setCurrentBidder(null);
-                                                    plot.setCurrentBidderId(null);
-                                                    plot.setCurrentBid(0.0);
-
-                                                    plot.removeAllAllowed();
-
-                                                    PlotMeCoreManager.setOwnerSign(world, plot);
-                                                    plugin.getPlotMeCoreManager().setSellSign(world, plot);
-
-                                                    plot.updateField("owner", plot.getOwner());
-                                                    plot.updateField("forsale", true);
-                                                    plot.updateField("auctionned", true);
-                                                    plot.updateField("customprice", plot.getCustomPrice());
-                                                    plot.updateField("currentbidder", null);
-                                                    plot.updateField("currentbidderid", null);
-                                                    plot.updateField("currentbid", 0);
-
-                                                    player.sendMessage(C("MsgPlotSold") + " " + Util().moneyFormat(sellprice, true));
-
-                                                    if (isAdvancedLogging()) {
-                                                        serverBridge.getLogger().info(player.getName() + " " + C("MsgSoldToBankPlot") + " " + id + " " + C("WordFor") + " " + sellprice);
-                                                    }
-                                                } else {
-                                                    player.sendMessage(er.errorMessage);
-                                                    warn(er.errorMessage);
-                                                }
-                                            }
-                                        } else {
-                                            player.sendMessage("§c" + C("MsgCannotSellToBank"));
-                                        }
+                                        player.sendMessage("§c" + C("MsgCannotSellToBank"));
                                     } else if (price < 0.0) {
                                         player.sendMessage("§c" + C("MsgInvalidAmount"));
                                     } else {
-                                        event = serverBridge.getEventFactory().callPlotSellChangeEvent(plugin, world, plot, player, price, false, true);
+                                        event = serverBridge.getEventFactory().callPlotSellChangeEvent(plugin, world, plot, player, price, true);
 
                                         if (!event.isCancelled()) {
                                             plot.setCustomPrice(price);

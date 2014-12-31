@@ -105,7 +105,6 @@ public class CmdCreateWorld extends PlotCommand {
                 parameters.put("DisableIgnition", "true");
                 parameters.put("UseEconomy", "false");
                 parameters.put("CanPutOnSale", "false");
-                parameters.put("CanSellToBank", "false");
                 parameters.put("RefundClaimPriceOnReset", "false");
                 parameters.put("RefundClaimPriceOnSetOwner", "false");
                 parameters.put("ClaimPrice", "0");
@@ -116,8 +115,6 @@ public class CmdCreateWorld extends PlotCommand {
                 parameters.put("UndenyPlayerPrice", "0");
                 parameters.put("PlotHomePrice", "0");
                 parameters.put("SellToPlayerPrice", "0");
-                parameters.put("SellToBankPrice", "0");
-                parameters.put("BuyFromBankPrice", "0");
                 parameters.put("BiomeChangePrice", "0");
                 parameters.put("ProtectPrice", "0");
                 parameters.put("DisposePrice", "0");
