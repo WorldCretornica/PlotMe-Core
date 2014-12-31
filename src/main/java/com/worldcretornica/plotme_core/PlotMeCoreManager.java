@@ -159,7 +159,7 @@ public class PlotMeCoreManager {
     }
 
     public boolean isEconomyEnabled(IWorld world) {
-        return isEconomyEnabled(world.getName());
+        return isEconomyEnabled(world.getName().toLowerCase());
     }
 
     public PlotMapInfo getMap(IWorld world) {
@@ -172,7 +172,7 @@ public class PlotMeCoreManager {
     }
 
     public PlotMapInfo getMap(String world) {
-            return getPlotMaps().get(world);
+        return getPlotMaps().get(world.toLowerCase());
     }
 
     public PlotMapInfo getMap(ILocation location) {

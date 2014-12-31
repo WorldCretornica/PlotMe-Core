@@ -59,7 +59,7 @@ public class BukkitLocation implements ILocation {
 
     @Override
     public String toString() {
-        return "World: " + location.getWorld() + " X/Y/Z: " + getX() + "," + getY() + "," + getZ() + " Block: " + getBlock();
+        return "World: " + location.getWorld().getName().toLowerCase() + " X/Y/Z: " + getX() + "," + getY() + "," + getZ() + " Block: " + getBlock();
     }
 
     @Override
