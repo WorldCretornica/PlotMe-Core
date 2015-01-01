@@ -69,7 +69,7 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
     }
  
     public static UUID getUUIDOf(String name) throws Exception {
-        return new UUIDFetcher(Arrays.asList(name)).call().get(name);
+        return new UUIDFetcher(Arrays.asList(name)).call().get(name.toLowerCase());
     }
 
     @Override
@@ -86,7 +86,7 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
                 String id = (String) jsonProfile.get("id");
                 String name = (String) jsonProfile.get("name");
                 UUID uuid = UUIDFetcher.getUUID(id);
-                uuidMap.put(name, uuid);
+                uuidMap.put(name.toLowerCase(), uuid);
             }
             if (rateLimiting && i != requests - 1) {
                 Thread.sleep(1100L);
