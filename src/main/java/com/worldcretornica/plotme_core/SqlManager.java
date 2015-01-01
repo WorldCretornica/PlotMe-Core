@@ -342,7 +342,8 @@ public class SqlManager {
                 File sqlitefile = new File(plugin.getServerBridge().getDataFolder(), sqlitedb);
                 if (sqlitefile.exists()) {
                     plugin.getLogger().info("Trying to import plots from plots.db");
-                    Connection sqliteconn = DriverManager.getConnection("jdbc:sqlite:" + plugin.getServerBridge().getDataFolder() + "\\" + sqlitedb);
+                    Class.forName("org.sqlite.JDBC");
+                    Connection sqliteconn = DriverManager.getConnection("jdbc:sqlite:" + sqlitefile.getPath());
 
                     sqliteconn.setAutoCommit(false);
                     Statement slstatement = sqliteconn.createStatement();
@@ -464,6 +465,9 @@ public class SqlManager {
             }
         } catch (SQLException ex) {
             plugin.getLogger().severe("Create Table Exception :");
+            ex.printStackTrace();
+        } catch (ClassNotFoundException ex) {
+            plugin.getLogger().severe("Class Not Found Exception :");
             ex.printStackTrace();
         } finally {
             try {
