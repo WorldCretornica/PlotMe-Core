@@ -26,9 +26,9 @@ public class CmdDoneList extends PlotCommand {
                     page = Integer.parseInt(args[1]);
                 }
 
-                int maxpage = (int) Math.ceil(plugin.getSqlManager().getFinishedPlotCount(player.getWorld().getName()) / 8L);
+                int maxpage = (int) Math.ceil(plugin.getSqlManager().getFinishedPlotCount(player.getWorld().getName()) / 8F);
 
-                if (page < 0) {
+                if (page < 1) {
                     page = 1;
                 } else if (page > maxpage) {
                     page = maxpage;
@@ -41,7 +41,7 @@ public class CmdDoneList extends PlotCommand {
                 } else {
                     player.sendMessage(C("MsgFinishedPlotsPage") + " " + page + "/" + maxpage);
 
-                    for (int i = (page - 1) * 8; i < finishedplots.size() && i < page * 8; i++) {
+                    for (int i = 0; i < finishedplots.size(); i++) {
                         Plot plot = finishedplots.get(i);
 
                         String starttext = "  §b" + plot.getId() + "§r -> " + plot.getOwner();
