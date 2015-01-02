@@ -221,7 +221,6 @@ public class BukkitServerBridge implements IServerBridge {
      *
      * @return returns a an instance of IPlayer if found, otherwise null
      */
-    @SuppressWarnings("deprecation")
     @Deprecated
     @Override
     public IPlayer getPlayerExact(String playerName) {

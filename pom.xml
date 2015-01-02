@@ -4,7 +4,7 @@
 
 	<groupId>com.worldcretornica</groupId>
 	<artifactId>PlotMe-Core</artifactId>
-    <version>0.15.2</version>
+    <version>0.16-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>PlotMe-Core</name>
@@ -85,7 +85,7 @@
                         <id>add-sponge-sources</id>
 						<phase>generate-sources</phase>
 						<goals>
-							<goal>add-test-source</goal>
+                            <goal>add-source</goal>
 						</goals>
 						<configuration>
 							<sources>

@@ -4,7 +4,6 @@ import com.worldcretornica.plotme_core.api.IBiome;
 import com.worldcretornica.plotme_core.api.IBlock;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IWorld;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 
 public class BukkitBlock implements IBlock {
@@ -47,13 +46,13 @@ public class BukkitBlock implements IBlock {
     }
 
     @Override
-    public void setBiome(IBiome biome) {
-        block.setBiome(((BukkitBiome) biome).getBiome());
+    public IBiome getBiome() {
+        return new BukkitBiome(block.getBiome());
     }
 
     @Override
-    public IBiome getBiome() {
-        return new BukkitBiome(block.getBiome());
+    public void setBiome(IBiome biome) {
+        block.setBiome(((BukkitBiome) biome).getBiome());
     }
 
     @SuppressWarnings("deprecation")
@@ -74,7 +73,4 @@ public class BukkitBlock implements IBlock {
         block.setTypeId(type, applyPhysics);
     }
 
-    public Material getType() {
-        return block.getType();
-    }
 }

@@ -587,8 +587,11 @@ public class PlotMeCoreManager {
         getPlayersIgnoringWELimit().remove(uuid);
     }
 
-    @SuppressWarnings("UnusedDeclaration")
+    /**
+     * @deprecated Use {@link #isPlayerIgnoringWELimit(IPlayer)} instead
+     */
     @Deprecated
+    @SuppressWarnings("UnusedDeclaration")
     public boolean isPlayerIgnoringWELimit(UUID uuid) {
         if (plugin.getServerBridge().getConfig().getBoolean("defaultWEAnywhere")) {
             return getPlayersIgnoringWELimit().contains(uuid);

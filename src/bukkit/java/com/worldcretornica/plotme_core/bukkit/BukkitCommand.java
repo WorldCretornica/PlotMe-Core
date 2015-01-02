@@ -129,6 +129,9 @@ public class BukkitCommand implements CommandExecutor {
                             return showhelp.exec(player, ipage);
                         }
                     }
+                    if ("reload".equalsIgnoreCase(args[0])) {
+                        return reload.exec();
+                    }
                     if ("claim".equalsIgnoreCase(args[0])) {
                         return claim.exec(player, args);
                     }
