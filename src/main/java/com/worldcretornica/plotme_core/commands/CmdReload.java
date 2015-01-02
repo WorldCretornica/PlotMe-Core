@@ -10,6 +10,7 @@ public class CmdReload extends PlotCommand {
     }
 
     public boolean exec() {
+
         serverBridge.getEventFactory().callPlotReloadEvent();
 
         plugin.reload();

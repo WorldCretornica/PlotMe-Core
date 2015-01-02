@@ -130,7 +130,9 @@ public class BukkitCommand implements CommandExecutor {
                         }
                     }
                     if ("reload".equalsIgnoreCase(args[0])) {
-                        return reload.exec();
+                        if (player.hasPermission("plotme.admin.reload")) {
+                            return reload.exec();
+                        }
                     }
                     if ("claim".equalsIgnoreCase(args[0])) {
                         return claim.exec(player, args);
