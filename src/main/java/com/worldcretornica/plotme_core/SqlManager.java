@@ -2004,7 +2004,7 @@ public class SqlManager {
                     ps.close();
 
                     if (uuid != null) {
-                        Plot plot = plugin.getPlotMeCoreManager().getPlotById(world, idX + ";" + idZ);
+                        Plot plot = plugin.getPlotMeCoreManager().getPlotById(idX + ";" + idZ, world);
 
                         if (plot != null) {
                             switch (property) {
