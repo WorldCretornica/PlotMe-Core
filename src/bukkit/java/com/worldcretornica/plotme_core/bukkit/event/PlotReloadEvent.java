@@ -13,12 +13,12 @@ public class PlotReloadEvent extends Event {
         event = new InternalPlotReloadEvent();
     }
 
-    @Override
-    public HandlerList getHandlers() {
+    public static HandlerList getHandlerList() {
         return handlers;
     }
 
-    public static HandlerList getHandlerList() {
+    @Override
+    public HandlerList getHandlers() {
         return handlers;
     }
 

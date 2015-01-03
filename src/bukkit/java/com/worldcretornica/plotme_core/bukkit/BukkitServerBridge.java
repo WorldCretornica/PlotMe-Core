@@ -218,7 +218,6 @@ public class BukkitServerBridge implements IServerBridge {
      * Gets the player with the given name.
      *
      * @param playerName Player name
-     *
      * @return returns a an instance of IPlayer if found, otherwise null
      */
     @Deprecated

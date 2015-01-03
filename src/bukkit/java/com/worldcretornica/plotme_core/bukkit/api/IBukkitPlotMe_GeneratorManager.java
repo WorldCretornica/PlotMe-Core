@@ -79,5 +79,5 @@ public interface IBukkitPlotMe_GeneratorManager {
     int getPlotSize(String worldname);
 
     int getRoadHeight(String worldname);
-    
+
 }

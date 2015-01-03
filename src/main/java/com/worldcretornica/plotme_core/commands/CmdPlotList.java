@@ -55,7 +55,7 @@ public class CmdPlotList extends PlotCommand {
                     if (plot.getExpiredDate() != null) {
                         Date tempdate = plot.getExpiredDate();
 
-                        if (tempdate.compareTo(Calendar.getInstance().getTime()) < 0) {
+                        if (tempdate.before(Calendar.getInstance().getTime())) {
                             addition.append("§c @" + plot.getExpiredDate() + "§r");
                         } else {
                             addition.append(" @" + plot.getExpiredDate());

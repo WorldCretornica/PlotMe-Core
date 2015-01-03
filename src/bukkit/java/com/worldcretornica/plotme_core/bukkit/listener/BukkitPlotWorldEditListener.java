@@ -141,8 +141,8 @@ public class BukkitPlotWorldEditListener implements Listener {
 
         if (api.getPlotMeCoreManager().isPlotWorld(location)) {
             if (!player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE) &&
-                        !api.getPlotMeCoreManager().isPlayerIgnoringWELimit(player) &&
-                        (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK) && ((BukkitMaterial) player.getItemInHand().getType()).getMaterial() != Material.AIR) {
+                    !api.getPlotMeCoreManager().isPlayerIgnoringWELimit(player) &&
+                    (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK) && ((BukkitMaterial) player.getItemInHand().getType()).getMaterial() != Material.AIR) {
                 String id = PlotMeCoreManager.getPlotId(location);
                 Plot plot = api.getPlotMeCoreManager().getMap(location).getPlot(id);
 

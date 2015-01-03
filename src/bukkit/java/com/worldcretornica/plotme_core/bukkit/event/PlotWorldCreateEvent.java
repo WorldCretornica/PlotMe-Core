@@ -16,6 +16,10 @@ public class PlotWorldCreateEvent extends Event implements Cancellable {
         event = new InternalPlotWorldCreateEvent(worldname, parameters);
     }
 
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
     @Override
     public boolean isCancelled() {
         return event.isCancelled();
@@ -28,10 +32,6 @@ public class PlotWorldCreateEvent extends Event implements Cancellable {
 
     @Override
     public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 

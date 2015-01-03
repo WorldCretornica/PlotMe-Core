@@ -333,6 +333,7 @@ public class PlotMeCoreManager {
 
     /**
      * Checks if location is a PlotWorld
+     *
      * @param location location to be checked
      * @return true if world is plotworld, false otherwise
      */

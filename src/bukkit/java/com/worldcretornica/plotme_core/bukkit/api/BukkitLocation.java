@@ -52,7 +52,7 @@ public class BukkitLocation implements ILocation {
     public IBlock getBlock() {
         return new BukkitBlock(location.getBlock());
     }
-    
+
     public Location getLocation() {
         return location;
     }

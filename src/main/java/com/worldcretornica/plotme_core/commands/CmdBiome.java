@@ -75,10 +75,10 @@ public class CmdBiome extends PlotCommand {
                                 if (isAdvancedLogging()) {
                                     if (price == 0)
                                         serverBridge.getLogger().info(playerName + " " + C("MsgChangedBiome") + " " + id + " " + C("WordTo") + " "
-                                                                              + biomeName);
+                                                + biomeName);
                                     else
                                         serverBridge.getLogger().info(playerName + " " + C("MsgChangedBiome") + " " + id + " " + C("WordTo") + " "
-                                                                              + biomeName + (" " + C("WordFor") + " " + price));
+                                                + biomeName + (" " + C("WordFor") + " " + price));
                                 }
                             }
                         } else {

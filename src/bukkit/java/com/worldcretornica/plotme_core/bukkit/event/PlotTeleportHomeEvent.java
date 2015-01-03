@@ -41,10 +41,6 @@ public class PlotTeleportHomeEvent extends PlotEvent implements Cancellable {
         return ((BukkitPlayer) event.getPlayer()).getPlayer();
     }
 
-    public void setHomeLocation(Location homelocation) {
-        event.setHomeLocation(new BukkitLocation(homelocation));
-    }
-
     @Override
     public Location getHomeLocation() {
         if (event.getHomeLocation() == null) {
@@ -52,6 +48,10 @@ public class PlotTeleportHomeEvent extends PlotEvent implements Cancellable {
         } else {
             return ((BukkitLocation) event.getHomeLocation()).getLocation();
         }
+    }
+
+    public void setHomeLocation(Location homelocation) {
+        event.setHomeLocation(new BukkitLocation(homelocation));
     }
 
     public InternalPlotTeleportHomeEvent getInternal() {

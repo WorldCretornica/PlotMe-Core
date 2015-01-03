@@ -78,9 +78,9 @@ public class PlotMeSpool implements Runnable {
         long total = getTotalPlotBlocks();
         double percent = (done / total * 100);
         plugin.getLogger().info(plugin.getUtil().C("WordPlot") + " §a" + getPlotToClear().getPlotId() + "§r " + plugin.getUtil().C("WordIn") + " "
-                                        + "§a" + getPlotToClear().getWorld() + "§r " + plugin.getUtil().C("WordIs") + " §a" + Math.round(percent * 10) / 10 +
-                                        "% §r" + plugin.getUtil().C("WordCleared") + " (§a" + format(done) + "§r/§a" + format(total) +
-                                        "§r " + plugin.getUtil().C("WordBlocks") + ")");
+                + "§a" + getPlotToClear().getWorld() + "§r " + plugin.getUtil().C("WordIs") + " §a" + Math.round(percent * 10) / 10 +
+                "% §r" + plugin.getUtil().C("WordCleared") + " (§a" + format(done) + "§r/§a" + format(total) +
+                "§r " + plugin.getUtil().C("WordBlocks") + ")");
     }
 
     private long getTotalPlotBlocks() {

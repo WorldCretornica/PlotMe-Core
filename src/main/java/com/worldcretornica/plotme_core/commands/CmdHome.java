@@ -42,10 +42,10 @@ public class CmdHome extends PlotCommand {
                         return true;
                     } else {
                         try {
-                          nb = Integer.parseInt(args[0].split(":")[1]);
+                            nb = Integer.parseInt(args[0].split(":")[1]);
                         } catch (NumberFormatException e) {
-                          player.sendMessage(C("WordUsage") + ": §c/plotme home:# §r" + C("WordExample") + ": §c/plotme home:1");
-                          return true;
+                            player.sendMessage(C("WordUsage") + ": §c/plotme home:# §r" + C("WordExample") + ": §c/plotme home:1");
+                            return true;
                         }
                     }
                 }

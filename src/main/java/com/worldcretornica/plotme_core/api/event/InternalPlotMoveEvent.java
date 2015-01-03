@@ -9,11 +9,11 @@ import com.worldcretornica.plotme_core.api.IWorld;
 
 public class InternalPlotMoveEvent extends InternalPlotEvent implements ICancellable {
 
-    private boolean canceled;
     private final String fromId;
     private final String toId;
     private final IWorld world;
     private final IPlayer mover;
+    private boolean canceled;
 
     public InternalPlotMoveEvent(PlotMe_Core instance, IWorld world, String fromId, String toId, IPlayer mover) {
         super(instance, null, world);

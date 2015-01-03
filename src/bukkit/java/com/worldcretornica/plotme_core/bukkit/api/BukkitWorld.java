@@ -8,7 +8,7 @@ import org.bukkit.World;
 public class BukkitWorld implements IWorld {
 
     private final World world;
-    
+
     public BukkitWorld(World world) {
         this.world = world;
     }
@@ -32,7 +32,7 @@ public class BukkitWorld implements IWorld {
     public IBlock getBlockAt(int x, int y, int z) {
         return new BukkitBlock(world.getBlockAt(x, y, z));
     }
-    
+
     public World getWorld() {
         return world;
     }

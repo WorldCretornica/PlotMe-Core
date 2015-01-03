@@ -41,7 +41,7 @@ public class CmdAuction extends PlotCommand {
                                                 for (IPlayer onlinePlayers : serverBridge.getOnlinePlayers()) {
                                                     if (onlinePlayers.getName().equalsIgnoreCase(plot.getCurrentBidder())) {
                                                         onlinePlayers.sendMessage(C("MsgAuctionCancelledOnPlot")
-                                                                                          + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner() + ". " + Util().moneyFormat(plot.getCurrentBid(), true));
+                                                                + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner() + ". " + Util().moneyFormat(plot.getCurrentBid(), true));
                                                         break;
                                                     }
                                                 }

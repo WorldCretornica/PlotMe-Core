@@ -8,8 +8,8 @@ import com.worldcretornica.plotme_core.api.IWorld;
 
 public class InternalPlotBiomeChangeEvent extends InternalPlotEvent implements ICancellable {
 
-    private boolean canceled;
     private final IPlayer player;
+    private boolean canceled;
     private IBiome biome;
 
     public InternalPlotBiomeChangeEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer player, IBiome biome) {
@@ -35,7 +35,7 @@ public class InternalPlotBiomeChangeEvent extends InternalPlotEvent implements I
     public IBiome getBiome() {
         return biome;
     }
-    
+
     public void setBiome(IBiome biome) {
         this.biome = biome;
     }

@@ -26,5 +26,5 @@ public interface IEntity {
      */
     UUID getUniqueId();
 
-    void teleport(ILocation newl);
+    void teleport(ILocation location);
 }

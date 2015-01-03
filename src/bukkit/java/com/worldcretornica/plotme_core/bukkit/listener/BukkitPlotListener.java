@@ -54,15 +54,15 @@ public class BukkitPlotListener implements Listener {
 
                 if (ptc != null) {
                     switch (ptc.getReason()) {
-                    case Clear:
-                        player.sendMessage(api.getUtil().C("MsgPlotLockedClear"));
-                        break;
-                    case Reset:
-                        player.sendMessage(api.getUtil().C("MsgPlotLockedReset"));
-                        break;
-                    case Expired:
-                        player.sendMessage(api.getUtil().C("MsgPlotLockedExpired"));
-                        break;
+                        case Clear:
+                            player.sendMessage(api.getUtil().C("MsgPlotLockedClear"));
+                            break;
+                        case Reset:
+                            player.sendMessage(api.getUtil().C("MsgPlotLockedReset"));
+                            break;
+                        case Expired:
+                            player.sendMessage(api.getUtil().C("MsgPlotLockedExpired"));
+                            break;
                     }
                     event.setCancelled(true);
                 } else {
@@ -100,15 +100,15 @@ public class BukkitPlotListener implements Listener {
 
                 if (ptc != null) {
                     switch (ptc.getReason()) {
-                    case Clear:
-                        player.sendMessage(api.getUtil().C("MsgPlotLockedClear"));
-                        break;
-                    case Reset:
-                        player.sendMessage(api.getUtil().C("MsgPlotLockedReset"));
-                        break;
-                    case Expired:
-                        player.sendMessage(api.getUtil().C("MsgPlotLockedExpired"));
-                        break;
+                        case Clear:
+                            player.sendMessage(api.getUtil().C("MsgPlotLockedClear"));
+                            break;
+                        case Reset:
+                            player.sendMessage(api.getUtil().C("MsgPlotLockedReset"));
+                            break;
+                        case Expired:
+                            player.sendMessage(api.getUtil().C("MsgPlotLockedExpired"));
+                            break;
                     }
                     event.setCancelled(true);
                 } else {
@@ -144,15 +144,15 @@ public class BukkitPlotListener implements Listener {
 
                     if (ptc != null) {
                         switch (ptc.getReason()) {
-                        case Clear:
-                            player.sendMessage(api.getUtil().C("MsgPlotLockedClear"));
-                            break;
-                        case Reset:
-                            player.sendMessage(api.getUtil().C("MsgPlotLockedReset"));
-                            break;
-                        case Expired:
-                            player.sendMessage(api.getUtil().C("MsgPlotLockedExpired"));
-                            break;
+                            case Clear:
+                                player.sendMessage(api.getUtil().C("MsgPlotLockedClear"));
+                                break;
+                            case Reset:
+                                player.sendMessage(api.getUtil().C("MsgPlotLockedReset"));
+                                break;
+                            case Expired:
+                                player.sendMessage(api.getUtil().C("MsgPlotLockedExpired"));
+                                break;
                         }
                         event.setCancelled(true);
                     } else {
@@ -184,15 +184,15 @@ public class BukkitPlotListener implements Listener {
 
                     if (ptc != null) {
                         switch (ptc.getReason()) {
-                        case Clear:
-                            player.sendMessage(api.getUtil().C("MsgPlotLockedClear"));
-                            break;
-                        case Reset:
-                            player.sendMessage(api.getUtil().C("MsgPlotLockedReset"));
-                            break;
-                        case Expired:
-                            player.sendMessage(api.getUtil().C("MsgPlotLockedExpired"));
-                            break;
+                            case Clear:
+                                player.sendMessage(api.getUtil().C("MsgPlotLockedClear"));
+                                break;
+                            case Reset:
+                                player.sendMessage(api.getUtil().C("MsgPlotLockedReset"));
+                                break;
+                            case Expired:
+                                player.sendMessage(api.getUtil().C("MsgPlotLockedExpired"));
+                                break;
                         }
                         event.setCancelled(true);
                     } else {
@@ -470,7 +470,7 @@ public class BukkitPlotListener implements Listener {
         List<BlockState> blocks = event.getBlocks();
 
         if (!api.getPlotMeCoreManager().isPlotWorld(location)) {
-          return;
+            return;
         }
 
         for (int i = 0; i < blocks.size(); i++) {
@@ -582,15 +582,15 @@ public class BukkitPlotListener implements Listener {
 
                 if (ptc != null) {
                     switch (ptc.getReason()) {
-                    case Clear:
-                        player.sendMessage(api.getUtil().C("MsgPlotLockedClear"));
-                        break;
-                    case Reset:
-                        player.sendMessage(api.getUtil().C("MsgPlotLockedReset"));
-                        break;
-                    case Expired:
-                        player.sendMessage(api.getUtil().C("MsgPlotLockedExpired"));
-                        break;
+                        case Clear:
+                            player.sendMessage(api.getUtil().C("MsgPlotLockedClear"));
+                            break;
+                        case Reset:
+                            player.sendMessage(api.getUtil().C("MsgPlotLockedReset"));
+                            break;
+                        case Expired:
+                            player.sendMessage(api.getUtil().C("MsgPlotLockedExpired"));
+                            break;
                     }
                     event.setCancelled(true);
                 } else {
@@ -682,15 +682,15 @@ public class BukkitPlotListener implements Listener {
 
                 if (ptc != null) {
                     switch (ptc.getReason()) {
-                    case Clear:
-                        player.sendMessage(api.getUtil().C("MsgPlotLockedClear"));
-                        break;
-                    case Reset:
-                        player.sendMessage(api.getUtil().C("MsgPlotLockedReset"));
-                        break;
-                    case Expired:
-                        player.sendMessage(api.getUtil().C("MsgPlotLockedExpired"));
-                        break;
+                        case Clear:
+                            player.sendMessage(api.getUtil().C("MsgPlotLockedClear"));
+                            break;
+                        case Reset:
+                            player.sendMessage(api.getUtil().C("MsgPlotLockedReset"));
+                            break;
+                        case Expired:
+                            player.sendMessage(api.getUtil().C("MsgPlotLockedExpired"));
+                            break;
                     }
                     event.setCancelled(true);
                 } else {
@@ -789,6 +789,7 @@ public class BukkitPlotListener implements Listener {
             }
         }
     }
+
     @EventHandler
     public void onPlotWorldLoad(PlotWorldLoadEvent event) {
         api.getLogger().info("Done loading " + event.getNbPlots() + " plots for world " + event.getWorldName());

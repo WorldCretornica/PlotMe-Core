@@ -8,9 +8,9 @@ import com.worldcretornica.plotme_core.api.IWorld;
 
 public class InternalPlotCreateEvent extends InternalPlotEvent implements ICancellable {
 
-    private boolean canceled;
     private final String plotId;
     private final IPlayer creator;
+    private boolean canceled;
 
     public InternalPlotCreateEvent(PlotMe_Core instance, IWorld world, String plotId, IPlayer creator) {
         super(instance, null, world);

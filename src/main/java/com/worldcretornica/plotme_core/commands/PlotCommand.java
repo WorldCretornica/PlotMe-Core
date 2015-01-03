@@ -54,7 +54,7 @@ public abstract class PlotCommand {
     protected String C(String caption) {
         return Util().C(caption);
     }
-    
+
     protected boolean isAdvancedLogging() {
         return serverBridge.getConfig().getBoolean("AdvancedLogging");
     }

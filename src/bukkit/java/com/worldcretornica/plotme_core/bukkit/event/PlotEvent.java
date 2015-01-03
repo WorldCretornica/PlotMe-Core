@@ -20,8 +20,8 @@ import java.util.UUID;
 public abstract class PlotEvent extends Event {
 
     private static final HandlerList handlers = new HandlerList();
-    private final InternalPlotEvent event;
     protected final PlotMe_Core plugin;
+    private final InternalPlotEvent event;
 
     public PlotEvent(PlotMe_Core instance, Plot plot, World world) {
         event = new InternalPlotEvent(instance, plot, new BukkitWorld(world));
@@ -36,6 +36,10 @@ public abstract class PlotEvent extends Event {
     public PlotEvent(PlotMe_Core instance, InternalPlotEvent event) {
         this.event = event;
         plugin = instance;
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 
     /**
@@ -167,10 +171,6 @@ public abstract class PlotEvent extends Event {
 
     @Override
     public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

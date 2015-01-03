@@ -409,7 +409,7 @@ public class Plot implements Comparable<Plot> {
 
     @Override
     public int compareTo(Plot plot) {
-        if (getExpiredDate().compareTo(plot.getExpiredDate()) == 0) {
+        if (getExpiredDate().equals(plot.getExpiredDate())) {
             return getOwner().compareTo(plot.getOwner());
         } else {
             return getExpiredDate().compareTo(plot.getExpiredDate());

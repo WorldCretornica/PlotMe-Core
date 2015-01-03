@@ -7,8 +7,8 @@ import com.worldcretornica.plotme_core.api.IWorld;
 
 public class InternalPlotDisposeEvent extends InternalPlotEvent implements ICancellable {
 
-    private boolean canceled;
     private final IPlayer disposer;
+    private boolean canceled;
 
     public InternalPlotDisposeEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer disposer) {
         super(instance, plot, world);

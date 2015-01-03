@@ -67,7 +67,7 @@ public class CmdAdd extends PlotCommand {
                                     IPlayer allowed2 = plugin.getServerBridge().getPlayerExact(allowed);
                                     if (allowed2 != null) {
                                         plot.addAllowed(allowed, allowed2.getUniqueId());
-                                        plot.removeDenied(allowed);
+                                        plot.removeDenied(allowed2.getUniqueId());
                                     } else {
                                         plot.addAllowed(allowed);
                                         plot.removeDenied(allowed);
@@ -75,11 +75,12 @@ public class CmdAdd extends PlotCommand {
                                     player.sendMessage(C("WordPlayer") + " §c" + allowed + "§r " + C("MsgNowAllowed"));
 
                                     if (isAdvancedLogging()) {
-                                        if (advancedPrice == 0)
+                                        if (advancedPrice == 0) {
                                             serverBridge.getLogger().info(player.getName() + " " + C("MsgAddedPlayer") + " " + allowed + " " + C("MsgToPlot") + " " + id);
-                                        else
+                                        } else {
                                             serverBridge.getLogger().info(player.getName() + " " + C("MsgAddedPlayer") + " " + allowed + " " + C("MsgToPlot") + " "
-                                                                                  + id + (" " + C("WordFor") + " " + advancedPrice));
+                                                    + id + (" " + C("WordFor") + " " + advancedPrice));
+                                        }
                                     }
                                 }
                             }

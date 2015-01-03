@@ -9,7 +9,7 @@ import org.bukkit.block.Block;
 public class BukkitBlock implements IBlock {
 
     private final Block block;
-    
+
     public BukkitBlock(Block block) {
         this.block = block;
     }

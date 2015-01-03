@@ -11,7 +11,7 @@ public class BukkitPlotMe_ChunkGeneratorBridge implements IPlotMe_ChunkGenerator
     public BukkitPlotMe_ChunkGeneratorBridge(IBukkitPlotMe_ChunkGenerator chunkGenerator) {
         this.chunkGenerator = chunkGenerator;
     }
-    
+
     @Override
     public IPlotMe_GeneratorManager getManager() {
         return new BukkitPlotMe_GeneratorManagerBridge(chunkGenerator.getManager());

@@ -38,8 +38,8 @@ public class CmdBuy extends PlotCommand {
 
                                 if (plotlimit != -1 && plugin.getPlotMeCoreManager().getNbOwnedPlot(player.getUniqueId(), player.getName(), world.getName()) >= plotlimit) {
                                     player.sendMessage(C("MsgAlreadyReachedMaxPlots") + " ("
-                                                               + plugin.getPlotMeCoreManager().getNbOwnedPlot(player.getUniqueId(), player.getName(), world.getName()) + "/" + getPlotLimit(player) + "). "
-                                                          + C("WordUse") + " §c/plotme home§r " + C("MsgToGetToIt"));
+                                            + plugin.getPlotMeCoreManager().getNbOwnedPlot(player.getUniqueId(), player.getName(), world.getName()) + "/" + getPlotLimit(player) + "). "
+                                            + C("WordUse") + " §c/plotme home§r " + C("MsgToGetToIt"));
                                 } else {
 
                                     double cost = plot.getCustomPrice();
@@ -68,7 +68,7 @@ public class CmdBuy extends PlotCommand {
                                                         for (IPlayer onlinePlayers : serverBridge.getOnlinePlayers()) {
                                                             if (onlinePlayers.getName().equalsIgnoreCase(oldowner)) {
                                                                 onlinePlayers.sendMessage(C("WordPlot") + " " + id + " "
-                                                                                                  + C("MsgSoldTo") + " " + buyer + ". " + Util().moneyFormat(cost, true));
+                                                                        + C("MsgSoldTo") + " " + buyer + ". " + Util().moneyFormat(cost, true));
                                                                 break;
                                                             }
                                                         }

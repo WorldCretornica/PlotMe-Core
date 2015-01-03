@@ -6,7 +6,7 @@ import org.bukkit.entity.EntityType;
 public class BukkitEntityType implements IEntityType {
 
     private final EntityType entitytype;
-    
+
     public BukkitEntityType(EntityType type) {
         entitytype = type;
     }

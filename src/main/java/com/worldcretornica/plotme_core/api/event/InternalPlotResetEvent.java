@@ -7,8 +7,8 @@ import com.worldcretornica.plotme_core.api.IWorld;
 
 public class InternalPlotResetEvent extends InternalPlotEvent implements ICancellable {
 
-    private boolean canceled;
     private final ICommandSender reseter;
+    private boolean canceled;
 
     public InternalPlotResetEvent(PlotMe_Core instance, IWorld world, Plot plot, ICommandSender reseter) {
         super(instance, plot, world);

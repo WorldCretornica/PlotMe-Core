@@ -6,8 +6,8 @@ public interface IPainting {
 
     IArt getArt();
 
-    void teleport(ILocation newl);
+    void teleport(ILocation location);
 
-    void setFacingDirection(IBlockFace bf, boolean b);
+    void setFacingDirection(IBlockFace blockFace, boolean force);
 
 }

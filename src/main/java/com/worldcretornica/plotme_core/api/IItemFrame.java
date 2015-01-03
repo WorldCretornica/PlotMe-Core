@@ -6,12 +6,12 @@ public interface IItemFrame extends IEntity {
 
     IItemStack getItem();
 
+    void setItem(IItemStack item);
+
     IRotation getRotation();
 
-    void setItem(IItemStack is);
+    void setRotation(IRotation rotation);
 
-    void setRotation(IRotation rot);
-
-    void setFacingDirection(IBlockFace bf, boolean b);
+    void setFacingDirection(IBlockFace blockFace, boolean force);
 
 }
