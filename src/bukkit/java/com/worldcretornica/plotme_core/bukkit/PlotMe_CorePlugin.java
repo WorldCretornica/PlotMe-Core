@@ -2,7 +2,9 @@ package com.worldcretornica.plotme_core.bukkit;
 
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IServerBridge;
+import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.Metrics;
@@ -102,5 +104,9 @@ public class PlotMe_CorePlugin extends JavaPlugin {
         } catch (IOException e) {
             // Failed to submit the stats :-(
         }
+    }
+
+    public BukkitPlayer wrapPlayer(Player player) {
+        return new BukkitPlayer(player);
     }
 }

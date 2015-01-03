@@ -1,7 +1,6 @@
 package com.worldcretornica.plotme_core.bukkit;
 
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitCommandSender;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
 import com.worldcretornica.plotme_core.commands.*;
@@ -43,8 +42,10 @@ public class BukkitCommand implements CommandExecutor {
     private final CmdTP tp;
     private final CmdUndeny undeny;
     private final CmdWEAnywhere weanywhere;
+    private final PlotMe_CorePlugin plugin;
 
     public BukkitCommand(PlotMe_CorePlugin instance) {
+        plugin = instance;
         api = instance.getAPI();
         add = new CmdAdd(api);
         addtime = new CmdAddTime(api);
@@ -99,7 +100,7 @@ public class BukkitCommand implements CommandExecutor {
                 }
             }
         } else {
-            IPlayer player = new BukkitPlayer((Player) sender);
+            BukkitPlayer player = plugin.wrapPlayer((Player) sender);
 
             if (args.length == 0) {
                 return showhelp.exec(player, 1);

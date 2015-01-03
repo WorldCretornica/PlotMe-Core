@@ -114,7 +114,7 @@ public class BukkitServerBridge implements IServerBridge {
                 setPlotWorldEdit(null);
             }
 
-            pluginManager.registerEvents(new BukkitPlotWorldEditListener(plugin, we), plugin);
+            pluginManager.registerEvents(new BukkitPlotWorldEditListener(plugin, we, plugin), plugin);
         }
 
         setUsinglwc(pluginManager.getPlugin("LWC") != null);

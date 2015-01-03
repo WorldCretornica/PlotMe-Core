@@ -7,6 +7,7 @@ import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.bukkit.PlotMe_CorePlugin;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitLocation;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
+import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -38,10 +39,10 @@ public class BukkitPlotDenyListener implements Listener {
                 Plot plot = api.getPlotMeCoreManager().getPlotById(idTo, player);
 
                 if (plot != null && plot.isDeniedInternal(player.getName(), player.getUniqueId())) {
-                    BukkitLocation t = new BukkitLocation(event.getFrom().clone());
-                    t.getLocation().setYaw(event.getTo().getYaw());
-                    t.getLocation().setPitch(event.getTo().getPitch());
-                    event.setTo(t.getLocation());
+                    Location t = event.getFrom().clone();
+                    t.setYaw(event.getTo().getYaw());
+                    t.setPitch(event.getTo().getPitch());
+                    event.setTo(t);
                 }
             }
         }

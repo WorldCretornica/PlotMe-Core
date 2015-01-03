@@ -12,26 +12,37 @@ public class BukkitOfflinePlayer implements IOfflinePlayer {
     public BukkitOfflinePlayer(OfflinePlayer player) {
         offlineplayer = player;
     }
-    
+
+    /**
+     * Returns the player name
+     *
+     * @return player name or in rare cases, null
+     */
     @Override
     public String getName() {
         return offlineplayer.getName();
     }
 
-    @Override
-    public boolean isOp() {
-        return offlineplayer.isOp();
-    }
-
+    /**
+     * Returns the player UUID
+     *
+     * @return player UUID
+     */
     @Override
     public UUID getUniqueId() {
         return offlineplayer.getUniqueId();
     }
-    
+
+
     public OfflinePlayer getOfflinePlayer() {
         return offlineplayer;
     }
 
+    /**
+     * Checks if the player is currently online
+     *
+     * @return true if the user is online
+     */
     @Override
     public boolean isOnline() {
         return offlineplayer.isOnline();

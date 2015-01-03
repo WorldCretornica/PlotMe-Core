@@ -60,6 +60,9 @@ permissions:
         plotme.admin.undeny: true
         plotme.admin.bypassdeny: true
         plotme.admin.buildanywhere: true
+    plotme.unblock.*:
+      default: true
+      description: Unblocks a certain item that was blocked in the config
     plotme.use.buy:
       description: Gives the buy command
     plotme.use.sell:

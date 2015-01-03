@@ -37,7 +37,7 @@ public class BukkitPlotListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent event) {
-        BukkitPlayer player = new BukkitPlayer(event.getPlayer());
+        Player player = event.getPlayer();
         BukkitBlock block = new BukkitBlock(event.getBlock());
 
         if (api.getPlotMeCoreManager().isPlotWorld(block.getLocation())) {
@@ -83,8 +83,8 @@ public class BukkitPlotListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onBlockPlace(BlockPlaceEvent event) {
-        BukkitPlayer player = new BukkitPlayer(event.getPlayer());
-        BukkitBlock block = new BukkitBlock(event.getBlock());
+        Player player = event.getPlayer();
+        BukkitBlock block = new BukkitBlock(event.getBlockPlaced());
 
         if (api.getPlotMeCoreManager().isPlotWorld(block.getLocation())) {
             boolean canbuild = !player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE);
@@ -129,7 +129,7 @@ public class BukkitPlotListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onPlayerBucketEmpty(PlayerBucketEmptyEvent event) {
-        BukkitPlayer player = new BukkitPlayer(event.getPlayer());
+        Player player = event.getPlayer();
         BukkitBlock block = new BukkitBlock(event.getBlockClicked());
 
         if (!player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE)) {
@@ -140,7 +140,7 @@ public class BukkitPlotListener implements Listener {
                     player.sendMessage(api.getUtil().C("ErrCannotBuild"));
                     event.setCancelled(true);
                 } else {
-                    PlotToClear ptc = api.getPlotLocked(block.getWorld().getName(), id);
+                    PlotToClear ptc = api.getPlotLocked(player.getWorld().getName(), id);
 
                     if (ptc != null) {
                         switch (ptc.getReason()) {
@@ -170,9 +170,8 @@ public class BukkitPlotListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onPlayerBucketFill(PlayerBucketFillEvent event) {
-        BukkitPlayer player = new BukkitPlayer(event.getPlayer());
+        Player player = event.getPlayer();
         BukkitBlock block = new BukkitBlock(event.getBlockClicked());
-
         if (!player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE)) {
             if (api.getPlotMeCoreManager().isPlotWorld(block.getLocation())) {
                 String id = PlotMeCoreManager.getPlotId(block.getLocation());
@@ -212,7 +211,7 @@ public class BukkitPlotListener implements Listener {
     @SuppressWarnings("deprecation")
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onPlayerInteract(PlayerInteractEvent event) {
-        BukkitPlayer player = new BukkitPlayer(event.getPlayer());
+        Player player = event.getPlayer();
         BukkitBlock block = new BukkitBlock(event.getClickedBlock());
 
         if (api.getPlotMeCoreManager().isPlotWorld(block.getLocation())) {
@@ -566,7 +565,7 @@ public class BukkitPlotListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onHangingPlace(HangingPlaceEvent event) {
-        BukkitPlayer player = new BukkitPlayer(event.getPlayer());
+        Player player = event.getPlayer();
         BukkitBlock block = new BukkitBlock(event.getBlock());
 
         if (api.getPlotMeCoreManager().isPlotWorld(block.getLocation())) {
@@ -666,7 +665,7 @@ public class BukkitPlotListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
-        BukkitPlayer player = new BukkitPlayer(event.getPlayer());
+        Player player = event.getPlayer();
         BukkitLocation location = new BukkitLocation(event.getRightClicked().getLocation());
 
         if (api.getPlotMeCoreManager().isPlotWorld(location)) {
@@ -712,7 +711,7 @@ public class BukkitPlotListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onPlayerEggThrow(PlayerEggThrowEvent event) {
-        BukkitPlayer player = new BukkitPlayer(event.getPlayer());
+        Player player = event.getPlayer();
         BukkitLocation location = new BukkitLocation(event.getEgg().getLocation());
 
         if (api.getPlotMeCoreManager().isPlotWorld(location)) {

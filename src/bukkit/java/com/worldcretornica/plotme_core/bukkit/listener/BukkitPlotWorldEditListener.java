@@ -16,10 +16,12 @@ public class BukkitPlotWorldEditListener implements Listener {
 
     private final PlotMe_Core api;
     private final PlotWorldEdit worldEdit;
+    private final PlotMe_CorePlugin plugin;
 
 
-    public BukkitPlotWorldEditListener(PlotMe_CorePlugin plugin, PlotWorldEdit worldEdit) {
-        api = plugin.getAPI();
+    public BukkitPlotWorldEditListener(PlotMe_CorePlugin core, PlotWorldEdit worldEdit, PlotMe_CorePlugin plugin) {
+        api = core.getAPI();
+        this.plugin = plugin;
         this.worldEdit = worldEdit;
     }
 
@@ -31,7 +33,7 @@ public class BukkitPlotWorldEditListener implements Listener {
         BukkitLocation from = new BukkitLocation(event.getFrom());
         BukkitLocation to = new BukkitLocation(event.getTo());
 
-        BukkitPlayer player = new BukkitPlayer(event.getPlayer());
+        BukkitPlayer player = plugin.wrapPlayer(event.getPlayer());
 
         String idTo = "";
 
