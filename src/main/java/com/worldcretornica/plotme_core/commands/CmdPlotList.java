@@ -36,11 +36,9 @@ public class CmdPlotList extends PlotCommand {
 
                 // Get plots of that player
                 for (Plot plot : plugin.getSqlManager().getPlayerPlots(name, uuid)) {
-                    if (!plot.getWorld().isEmpty()) {
-                        IWorld world = serverBridge.getWorld(plot.getWorld());
-                        if (world != null) {
-                            plugin.getPlotMeCoreManager().getMap(world).addPlot(plot.getId(), plot);
-                        }
+                    IWorld world = serverBridge.getWorld(plot.getWorld());
+                    if (world != null) {
+                        plugin.getPlotMeCoreManager().getMap(world).addPlot(plot.getId(), plot);
                     }
 
                     StringBuilder addition = new StringBuilder();

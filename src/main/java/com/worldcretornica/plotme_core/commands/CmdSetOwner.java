@@ -77,9 +77,6 @@ public class CmdSetOwner extends PlotCommand {
                         }
 
                         if (!event.isCancelled()) {
-                            PlotMeCoreManager.removePlot(pmi, id);
-                            PlotMeCoreManager.removeSellSign(world, id);
-                            PlotMeCoreManager.removeAuctionSign(world, id);
                             plot.setCurrentBidder(null);
                             plot.setCurrentBidderId(null);
                             plot.setCurrentBid(0.0);
@@ -95,6 +92,7 @@ public class CmdSetOwner extends PlotCommand {
                             plot.updateField("currentbidderid", null);
 
                             plot.setOwner(newowner);
+
                             PlotMeCoreManager.setOwnerSign(world, plot);
 
                             plot.updateField("owner", newowner);

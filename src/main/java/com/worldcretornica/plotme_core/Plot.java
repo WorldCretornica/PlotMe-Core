@@ -43,9 +43,8 @@ public class Plot implements Comparable<Plot> {
         denied = new PlayerList();
         setBiome(this.plugin.getServerBridge().getBiome("PLAINS"));
 
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DAY_OF_YEAR, 7);
-        java.util.Date utlDate = cal.getTime();
+        Calendar.getInstance().add(Calendar.DAY_OF_YEAR, 7);
+        java.util.Date utlDate = Calendar.getInstance().getTime();
         setExpiredDate(new Date(utlDate.getTime()));
 
         setCustomPrice(0.0);
