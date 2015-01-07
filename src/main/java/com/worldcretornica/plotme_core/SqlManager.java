@@ -1495,7 +1495,7 @@ public class SqlManager {
     }
 
     /**
-     * Get plots for the given player UUID or name.
+     * Get plots where the player is allowed or owns.
      *
      * @param playername
      * @param playerId
@@ -1621,6 +1621,14 @@ public class SqlManager {
         return ret;
     }
 
+    /**
+     * Get plots that the player owns.
+     *
+     * @param world
+     * @param ownerId
+     * @param owner
+     * @return
+     */
     public List<Plot> getOwnedPlots(String world, UUID ownerId, String owner) {
         List<Plot> ret = new ArrayList<>();
         PreparedStatement statementPlot = null;

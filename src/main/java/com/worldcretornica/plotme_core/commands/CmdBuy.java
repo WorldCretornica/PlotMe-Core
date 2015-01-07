@@ -36,9 +36,9 @@ public class CmdBuy extends PlotCommand {
                             } else {
                                 int plotlimit = getPlotLimit(player);
 
-                                if (plotlimit != -1 && plugin.getPlotMeCoreManager().getNbOwnedPlot(player.getUniqueId(), player.getName(), world.getName()) >= plotlimit) {
+                                if (plotlimit != -1 && plugin.getSqlManager().getPlotCount(world.getName().toLowerCase(), player.getUniqueId(), player.getName()) >= plotlimit) {
                                     player.sendMessage(C("MsgAlreadyReachedMaxPlots") + " ("
-                                            + plugin.getPlotMeCoreManager().getNbOwnedPlot(player.getUniqueId(), player.getName(), world.getName()) + "/" + getPlotLimit(player) + "). "
+                                            + plugin.getSqlManager().getPlotCount(world.getName().toLowerCase(), player.getUniqueId(), player.getName()) + "/" + getPlotLimit(player) + "). "
                                             + C("WordUse") + " §c/plotme home§r " + C("MsgToGetToIt"));
                                 } else {
 
@@ -74,7 +74,7 @@ public class CmdBuy extends PlotCommand {
                                                         }
                                                     } else {
                                                         player.sendMessage("§c" + er2.errorMessage);
-                                                        warn(er2.errorMessage);
+                                                        serverBridge.getLogger().warning(er2.errorMessage);
                                                     }
                                                 }
 
@@ -98,7 +98,7 @@ public class CmdBuy extends PlotCommand {
                                                 }
                                             } else {
                                                 player.sendMessage("§c" + er.errorMessage);
-                                                warn(er.errorMessage);
+                                                serverBridge.getLogger().warning(er.errorMessage);
                                             }
                                         }
                                     }

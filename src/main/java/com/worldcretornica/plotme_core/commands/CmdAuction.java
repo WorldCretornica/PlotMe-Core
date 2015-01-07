@@ -47,7 +47,7 @@ public class CmdAuction extends PlotCommand {
                                                 }
                                             } else {
                                                 player.sendMessage("§c" + er.errorMessage);
-                                                warn(er.errorMessage);
+                                                serverBridge.getLogger().warning(er.errorMessage);
                                             }
 
                                             plot.setAuctioned(false);

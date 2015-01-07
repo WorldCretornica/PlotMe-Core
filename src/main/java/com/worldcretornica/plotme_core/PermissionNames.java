@@ -1,11 +1,6 @@
 package com.worldcretornica.plotme_core;
 
-/**
- * Created by Matthew on 12/5/2014.
- */
-public enum PermissionNames {
-    ;
-
+public class PermissionNames {
     public static final String ADMIN_UNDENY = "PlotMe.admin.undeny";
     public static final String USER_UNDENY = "PlotMe.use.undeny";
     public static final String ADMIN_RESET = "PlotMe.admin.reset";
@@ -45,4 +40,5 @@ public enum PermissionNames {
     public static final String ADMIN_PROTECT = "PlotMe.admin.protect";
     public static final String ADMIN_DENY = "PlotMe.admin.deny";
     public static final String ADMIN_REMOVE = "PlotMe.admin.remove";
+    public static final String USER_PROTECT = "PlotMe.use.protect";
 }

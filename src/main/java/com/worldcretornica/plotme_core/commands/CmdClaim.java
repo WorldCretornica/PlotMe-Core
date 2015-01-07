@@ -38,8 +38,8 @@ public class CmdClaim extends PlotCommand {
 
                     int plotLimit = getPlotLimit(player);
 
-                    if (playerName.equals(player.getName()) && plotLimit != -1 && plugin.getPlotMeCoreManager().getNbOwnedPlot(player.getUniqueId(), player.getName(), world.getName()) >= plotLimit) {
-                        player.sendMessage("§c" + C("MsgAlreadyReachedMaxPlots") + " (" + plugin.getPlotMeCoreManager().getNbOwnedPlot(player.getUniqueId(), player.getName(), world.getName()) + "/" + getPlotLimit(player) + "). " + C("WordUse") + " §c/plotme home§r " + C("MsgToGetToIt"));
+                    if (playerName.equals(player.getName()) && plotLimit != -1 && plugin.getSqlManager().getPlotCount(world.getName().toLowerCase(), player.getUniqueId(), player.getName()) >= plotLimit) {
+                        player.sendMessage("§c" + C("MsgAlreadyReachedMaxPlots") + " (" + plugin.getSqlManager().getPlotCount(world.getName().toLowerCase(), player.getUniqueId(), player.getName()) + "/" + getPlotLimit(player) + "). " + C("WordUse") + " §c/plotme home§r " + C("MsgToGetToIt"));
                     } else {
 
                         double price = 0.0;
@@ -60,7 +60,7 @@ public class CmdClaim extends PlotCommand {
 
                                     if (!er.transactionSuccess()) {
                                         player.sendMessage("§c" + er.errorMessage);
-                                        warn(er.errorMessage);
+                                        serverBridge.getLogger().warning(er.errorMessage);
                                         return true;
                                     }
                                 }

@@ -21,10 +21,6 @@ public abstract class PlotCommand {
         return plugin.getUtil();
     }
 
-    void warn(String msg) {
-        serverBridge.getLogger().warning(msg);
-    }
-
     short getPlotLimit(IPlayer player) {
 
         if (player.hasPermission("plotme.limit.*")) {

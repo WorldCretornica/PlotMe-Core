@@ -46,7 +46,7 @@ public class CmdReset extends PlotCommand {
                                             player.sendMessage(plot.getCurrentBidder() + " was refunded their money for their plot bid.");
                                         } else {
                                             player.sendMessage(economyResponse.errorMessage);
-                                            warn(economyResponse.errorMessage);
+                                            serverBridge.getLogger().warning(economyResponse.errorMessage);
                                         }
                                     }
                                 }
@@ -63,7 +63,7 @@ public class CmdReset extends PlotCommand {
                                         }
                                     } else {
                                         player.sendMessage("§c" + er.errorMessage);
-                                        warn(er.errorMessage);
+                                        serverBridge.getLogger().warning(er.errorMessage);
                                         return true;
                                     }
                                 }

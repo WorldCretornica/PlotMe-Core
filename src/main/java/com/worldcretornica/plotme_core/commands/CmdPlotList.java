@@ -24,7 +24,7 @@ public class CmdPlotList extends PlotCommand {
 
                 if (player.hasPermission(PermissionNames.ADMIN_LIST) && args.length == 2) {
                     name = args[1];
-                    uuid = player.getUniqueId();
+                    uuid = null;
                     player.sendMessage(C("MsgListOfPlotsWhere") + " §b" + name + "§r " + C("MsgCanBuild"));
                 } else {
                     name = player.getName();

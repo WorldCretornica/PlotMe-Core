@@ -133,7 +133,7 @@ public class CmdShowHelp extends PlotCommand {
 
                     IWorld world = player.getWorld();
 
-                    int ownedplots = plugin.getPlotMeCoreManager().getNbOwnedPlot(player.getUniqueId(), player.getName(), world.getName());
+                    int ownedplots = plugin.getSqlManager().getPlotCount(world.getName().toLowerCase(), player.getUniqueId(), player.getName());
 
                     if (maxplots == -1) {
                         player.sendMessage("§a" + C("HelpYourPlotLimitWorld") + " : §b" + ownedplots + "§a " + C("HelpUsedOf") + " §b" + C("WordInfinite"));
@@ -144,7 +144,7 @@ public class CmdShowHelp extends PlotCommand {
 
                     IWorld world = plugin.getPlotMeCoreManager().getFirstWorld();
 
-                    int ownedplots = plugin.getPlotMeCoreManager().getNbOwnedPlot(player.getUniqueId(), player.getName(), world.getName());
+                    int ownedplots = plugin.getSqlManager().getPlotCount(world.getName().toLowerCase(), player.getUniqueId(), player.getName());
 
                     if (maxplots == -1) {
                         player.sendMessage("§a" + C("HelpYourPlotLimitWorld") + " : §b" + ownedplots + "§a " + C("HelpUsedOf") + " §b" + C("WordInfinite"));

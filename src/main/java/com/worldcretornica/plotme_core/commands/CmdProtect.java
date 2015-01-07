@@ -13,7 +13,7 @@ public class CmdProtect extends PlotCommand {
     }
 
     public boolean exec(IPlayer player) {
-        if (player.hasPermission(PermissionNames.ADMIN_PROTECT) || player.hasPermission("PlotMe.use.protect")) {
+        if (player.hasPermission(PermissionNames.ADMIN_PROTECT) || player.hasPermission(PermissionNames.USER_PROTECT)) {
             IWorld world = player.getWorld();
             PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
             if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
@@ -64,7 +64,7 @@ public class CmdProtect extends PlotCommand {
 
                                         if (!er.transactionSuccess()) {
                                             player.sendMessage("§c" + er.errorMessage);
-                                            warn(er.errorMessage);
+                                            serverBridge.getLogger().warning(er.errorMessage);
                                             return true;
                                         }
                                     }

@@ -37,9 +37,9 @@ public class CmdAuto extends PlotCommand {
                 PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
                 int playerlimit = getPlotLimit(player);
 
-                if (playerlimit != -1 && plugin.getPlotMeCoreManager().getNbOwnedPlot(player.getUniqueId(), player.getName(), world.getName()) >= playerlimit && !player.hasPermission("PlotMe.admin")) {
+                if (playerlimit != -1 && plugin.getSqlManager().getPlotCount(world.getName().toLowerCase(), player.getUniqueId(), player.getName()) >= playerlimit && !player.hasPermission("PlotMe.admin")) {
                     player.sendMessage("§c" + C("MsgAlreadyReachedMaxPlots") + " ("
-                            + plugin.getPlotMeCoreManager().getNbOwnedPlot(player.getUniqueId(), player.getName(), world.getName()) + "/" + playerlimit + "). " + C("WordUse") + " §c/plotme home§r " + C("MsgToGetToIt"));
+                            + plugin.getSqlManager().getPlotCount(world.getName().toLowerCase(), player.getUniqueId(), player.getName()) + "/" + playerlimit + "). " + C("WordUse") + " §c/plotme home§r " + C("MsgToGetToIt"));
                 } else {
                     int limit = pmi.getPlotAutoLimit();
 
@@ -94,7 +94,7 @@ public class CmdAuto extends PlotCommand {
 
                                 if (!er.transactionSuccess()) {
                                     player.sendMessage("§c" + er.errorMessage);
-                                    warn(er.errorMessage);
+                                    serverBridge.getLogger().warning(er.errorMessage);
                                     return true;
                                 }
                             }

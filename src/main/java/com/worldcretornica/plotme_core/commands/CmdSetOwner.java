@@ -50,7 +50,7 @@ public class CmdSetOwner extends PlotCommand {
                                         }
                                     } else {
                                         player.sendMessage("§c" + er.errorMessage);
-                                        warn(er.errorMessage);
+                                        serverBridge.getLogger().warning(er.errorMessage);
                                         return true;
                                     }
                                 }
@@ -69,7 +69,7 @@ public class CmdSetOwner extends PlotCommand {
                                     }
                                 } else {
                                     player.sendMessage(er.errorMessage);
-                                    warn(er.errorMessage);
+                                    serverBridge.getLogger().warning(er.errorMessage);
                                 }
                             }
                         } else {

@@ -138,6 +138,7 @@ public class PlotMeCoreManager {
         }
     }
 
+    @Deprecated
     public short getNbOwnedPlot(UUID uuid, String name, String world) {
         return plugin.getSqlManager().getPlotCount(world, uuid, name);
     }

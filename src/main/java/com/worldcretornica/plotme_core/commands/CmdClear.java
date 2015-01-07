@@ -49,7 +49,7 @@ public class CmdClear extends PlotCommand {
 
                                         if (!er.transactionSuccess()) {
                                             player.sendMessage("§c" + er.errorMessage);
-                                            warn(er.errorMessage);
+                                            serverBridge.getLogger().warning(er.errorMessage);
                                             return true;
                                         }
                                     }

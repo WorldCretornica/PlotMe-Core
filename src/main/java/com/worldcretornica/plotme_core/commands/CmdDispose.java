@@ -50,7 +50,7 @@ public class CmdDispose extends PlotCommand {
 
                                     if (!economyResponse.transactionSuccess()) {
                                         player.sendMessage("§c" + economyResponse.errorMessage);
-                                        warn(economyResponse.errorMessage);
+                                        serverBridge.getLogger().warning(economyResponse.errorMessage);
                                         return true;
                                     }
 
@@ -68,7 +68,7 @@ public class CmdDispose extends PlotCommand {
                                                 }
                                             } else {
                                                 player.sendMessage("§c" + er2.errorMessage);
-                                                warn(er2.errorMessage);
+                                                serverBridge.getLogger().warning(er2.errorMessage);
                                             }
                                         }
                                     }

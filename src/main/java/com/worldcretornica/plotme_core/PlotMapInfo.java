@@ -23,6 +23,7 @@ public class PlotMapInfo {
     }
 
     public short getNbPlots() {
+        //noinspection NumericCastThatLosesPrecision
         return (short) plots.size();
     }
 

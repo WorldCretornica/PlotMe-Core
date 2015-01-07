@@ -19,7 +19,7 @@ public class PlotMe_Core {
     //Bridge
     private final IServerBridge serverBridge;
     private IWorld worldcurrentlyprocessingexpired;
-    private int counterexpired;
+    private short counterexpired;
     //Spool stuff
     private ConcurrentLinkedQueue<PlotToClear> plotsToClear;
     //Global variables
@@ -191,11 +191,11 @@ public class PlotMe_Core {
         this.worldcurrentlyprocessingexpired = worldcurrentlyprocessingexpired;
     }
 
-    public int getCounterExpired() {
+    public short getCounterExpired() {
         return counterexpired;
     }
 
-    public void setCounterExpired(int counterexpired) {
+    public void setCounterExpired(short counterexpired) {
         this.counterexpired = counterexpired;
     }
 

@@ -124,7 +124,7 @@ public class CmdHome extends PlotCommand {
                                     i--;
                                 }
                             }
-                        } else if (plot.getOwnerId() != null && plot.getOwnerId().equals(uuid)) {
+                        } else if (plot.getOwnerId().equals(uuid)) {
                             if (i == 0) {
 
                                 double price = 0.0;
