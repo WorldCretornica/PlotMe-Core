@@ -4,7 +4,7 @@ public interface IBlock {
 
     ILocation getLocation();
 
-    IWorld getWorld();
+    World getWorld();
 
     int getX();
 
@@ -22,7 +22,7 @@ public interface IBlock {
 
     byte getData();
 
-    void setTypeId(int i, boolean b);
+    void setTypeId(int id, boolean applyPhysics);
 
 
 }

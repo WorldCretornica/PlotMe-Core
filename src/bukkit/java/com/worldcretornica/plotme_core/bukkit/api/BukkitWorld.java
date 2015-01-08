@@ -1,15 +1,14 @@
 package com.worldcretornica.plotme_core.bukkit.api;
 
-import com.worldcretornica.plotme_core.api.*;
+import com.worldcretornica.plotme_core.api.IPlotMe_ChunkGenerator;
+import com.worldcretornica.plotme_core.api.World;
 import com.worldcretornica.plotme_core.bukkit.BukkitPlotMe_ChunkGeneratorBridge;
-import org.bukkit.Location;
-import org.bukkit.World;
 
-public class BukkitWorld implements IWorld {
+public class BukkitWorld implements World {
 
-    private final World world;
+    private final org.bukkit.World world;
 
-    public BukkitWorld(World world) {
+    public BukkitWorld(org.bukkit.World world) {
         this.world = world;
     }
 
@@ -23,32 +22,18 @@ public class BukkitWorld implements IWorld {
         return new BukkitPlotMe_ChunkGeneratorBridge((IBukkitPlotMe_ChunkGenerator) world.getGenerator());
     }
 
+    /**
+     * Get the name of the world
+     *
+     * @return world name
+     */
     @Override
     public String getName() {
-        return world.getName();
+        return null;
     }
 
-    @Override
-    public IBlock getBlockAt(int x, int y, int z) {
-        return new BukkitBlock(world.getBlockAt(x, y, z));
-    }
-
-    public World getWorld() {
+    public org.bukkit.World getWorld() {
         return world;
     }
 
-    @Override
-    public void refreshChunk(int x, int z) {
-        world.refreshChunk(x, z);
-    }
-
-    @Override
-    public IChunk getChunkAt(int cx, int cz) {
-        return new BukkitChunk(world.getChunkAt(cx, cz));
-    }
-
-    @Override
-    public ILocation createLocation(double x, double y, double z) {
-        return new BukkitLocation(new Location(world, x, y, z));
-    }
 }

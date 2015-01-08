@@ -2,7 +2,7 @@ package com.worldcretornica.plotme_core;
 
 import com.worldcretornica.plotme_core.api.IBiome;
 import com.worldcretornica.plotme_core.api.IPlayer;
-import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.api.World;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
@@ -57,7 +57,7 @@ public class Plot implements Comparable<Plot> {
         setCurrentBid(0.0);
     }
 
-    public Plot(PlotMe_Core plugin, String owner, UUID uuid, IWorld world, String plotid, int days) {
+    public Plot(PlotMe_Core plugin, String owner, UUID uuid, World world, String plotid, int days) {
         this.plugin = plugin;
         setOwner(owner);
         setOwnerId(uuid);

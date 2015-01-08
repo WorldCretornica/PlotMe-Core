@@ -2,7 +2,7 @@ package com.worldcretornica.plotme_core.api;
 
 import java.util.UUID;
 
-public interface IEntity {
+public interface IEntity extends IActor {
 
     /**
      * Get the entity's current position.
@@ -19,12 +19,23 @@ public interface IEntity {
 
     IEntityType getType();
 
+    void teleport(ILocation location);
+
     /**
-     * Returns a unique and persistent id for this entity
+     * Returns the entity name
      *
-     * @return unique id
+     * @return entity name
      */
+    @Override
+    String getName();
+
+    /**
+     * Returns the entity UUID
+     *
+     * @return entity UUID
+     */
+    @Override
     UUID getUniqueId();
 
-    void teleport(ILocation location);
+    boolean hasPermission(String node);
 }

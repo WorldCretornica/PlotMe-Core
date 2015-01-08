@@ -50,7 +50,7 @@ public class PlotMeCoreManager {
         }
     }
 
-    public static void setOwnerSign(IWorld world, Plot plot) {
+    public static void setOwnerSign(World world, Plot plot) {
         String id = plot.getId();
         String line1 = "ID: " + id;
         String line2 = "";
@@ -82,55 +82,55 @@ public class PlotMeCoreManager {
 
     }
 
-    public static ILocation getPlotBottomLoc(IWorld world, String id) {
+    public static ILocation getPlotBottomLoc(World world, String id) {
         return getGenManager(world).getPlotBottomLoc(world, id);
     }
 
-    public static ILocation getPlotTopLoc(IWorld world, String id) {
+    public static ILocation getPlotTopLoc(World world, String id) {
         return getGenManager(world).getPlotTopLoc(world, id);
     }
 
-    public static void removeOwnerSign(IWorld world, String id) {
+    public static void removeOwnerSign(World world, String id) {
         getGenManager(world).removeOwnerDisplay(world, id);
     }
 
-    public static void removeSellSign(IWorld world, String id) {
+    public static void removeSellSign(World world, String id) {
         getGenManager(world).removeSellerDisplay(world, id);
     }
 
-    public static void removeAuctionSign(IWorld world, String id) {
+    public static void removeAuctionSign(World world, String id) {
         getGenManager(world).removeAuctionDisplay(world, id);
     }
 
-    public static boolean isValidId(IWorld world, String id) {
+    public static boolean isValidId(World world, String id) {
         return getGenManager(world).isValidId(id);
     }
 
-    public static int bottomX(String id, IWorld world) {
+    public static int bottomX(String id, World world) {
         return getGenManager(world).bottomX(id, world);
     }
 
-    public static int topX(String id, IWorld world) {
+    public static int topX(String id, World world) {
         return getGenManager(world).topX(id, world);
     }
 
-    public static int bottomZ(String id, IWorld world) {
+    public static int bottomZ(String id, World world) {
         return getGenManager(world).bottomZ(id, world);
     }
 
-    public static int topZ(String id, IWorld world) {
+    public static int topZ(String id, World world) {
         return getGenManager(world).topZ(id, world);
     }
 
-    public static ILocation getPlotHome(IWorld world, String id) {
+    public static ILocation getPlotHome(World world, String id) {
         return getGenManager(world).getPlotHome(world, id);
     }
 
-    public static List<IPlayer> getPlayersInPlot(IWorld world, String id) {
+    public static List<IPlayer> getPlayersInPlot(World world, String id) {
         return getGenManager(world).getPlayersInPlot(id);
     }
 
-    public static IPlotMe_GeneratorManager getGenManager(IWorld world) {
+    public static IPlotMe_GeneratorManager getGenManager(World world) {
         if (world.isPlotMeGenerator()) {
             return world.getGenerator().getManager();
         } else {
@@ -159,11 +159,11 @@ public class PlotMeCoreManager {
         else return false;
     }
 
-    public boolean isEconomyEnabled(IWorld world) {
+    public boolean isEconomyEnabled(World world) {
         return isEconomyEnabled(world.getName().toLowerCase());
     }
 
-    public PlotMapInfo getMap(IWorld world) {
+    public PlotMapInfo getMap(World world) {
         if (world == null) {
             return null;
         } else {
@@ -256,7 +256,7 @@ public class PlotMeCoreManager {
     }
 */
 
-    public Plot getPlotById(String id, IWorld world) {
+    public Plot getPlotById(String id, World world) {
         return getPlotById(id, world.getName());
     }
 
@@ -291,7 +291,7 @@ public class PlotMeCoreManager {
         return pmi.getPlot(id);
     }
 
-    public void removePlot(IWorld world, String id) {
+    public void removePlot(World world, String id) {
         PlotMapInfo pmi = getMap(world);
 
         if (pmi != null) {
@@ -299,7 +299,7 @@ public class PlotMeCoreManager {
         }
     }
 
-    public void addPlot(IWorld world, String id, Plot plot) {
+    public void addPlot(World world, String id, Plot plot) {
         PlotMapInfo pmi = getMap(world);
 
         if (pmi != null) {
@@ -308,15 +308,21 @@ public class PlotMeCoreManager {
         }
     }
 
-    public void addPlot(IWorld world, String id, Plot plot, PlotMapInfo pmi) {
+    public void addPlot(World world, String id, Plot plot, PlotMapInfo pmi) {
         if (pmi != null) {
             pmi.addPlot(id, plot);
             plugin.getServerBridge().getEventFactory().callPlotLoadedEvent(plugin, world, plot);
         }
     }
 
-    public IWorld getFirstWorld() {
-        return plugin.getServerBridge().getWorld((String) getPlotMaps().keySet().toArray()[0]);
+    public World getFirstWorld() {
+        String firstWorld = null;
+        try {
+            firstWorld = (String) getPlotMaps().keySet().toArray()[0];
+        } catch (ArrayIndexOutOfBoundsException error) {
+            plugin.getLogger().warning("Uh oh. You don't have any plotworlds so there is gonna be a bunch of errors now.");
+        }
+        return plugin.getServerBridge().getWorld(firstWorld);
     }
 
     /**
@@ -325,7 +331,7 @@ public class PlotMeCoreManager {
      * @param world world to be checked
      * @return true if world is plotworld, false otherwise
      */
-    public boolean isPlotWorld(IWorld world) {
+    public boolean isPlotWorld(World world) {
         if (world == null || getGenManager(world) == null) {
             return false;
         }
@@ -350,7 +356,7 @@ public class PlotMeCoreManager {
         return isPlotWorld(block.getWorld());
     }
 
-    public Plot createPlot(IWorld world, String id, String owner, UUID uuid, PlotMapInfo pmi) {
+    public Plot createPlot(World world, String id, String owner, UUID uuid, PlotMapInfo pmi) {
         if (isPlotAvailable(id, pmi) && !id.isEmpty()) {
             Plot plot = new Plot(plugin, owner, uuid, world, id, pmi.getDaysToExpiration());
 
@@ -365,7 +371,7 @@ public class PlotMeCoreManager {
         }
     }
 
-    public boolean movePlot(IWorld world, String idFrom, String idTo) {
+    public boolean movePlot(World world, String idFrom, String idTo) {
 
         if (!getGenManager(world).movePlot(world, idFrom, idTo)) {
             return false;
@@ -452,7 +458,7 @@ public class PlotMeCoreManager {
         return true;
     }
 
-    public void removeLWC(IWorld world, String id) {
+    public void removeLWC(World world, String id) {
         ILocation bottom = getGenManager(world).getBottom(world, id);
         ILocation top = getGenManager(world).getTop(world, id);
         final int x1 = bottom.getBlockX();
@@ -476,7 +482,7 @@ public class PlotMeCoreManager {
         });
     }
 
-    public void setSellSign(IWorld world, Plot plot) {
+    public void setSellSign(World world, Plot plot) {
         String id = plot.getId();
 
         getGenManager(world).removeSellerDisplay(world, id);
@@ -523,7 +529,7 @@ public class PlotMeCoreManager {
         }
     }
 
-    public void clear(IWorld world, Plot plot, ICommandSender sender, ClearReason reason) {
+    public void clear(World world, Plot plot, ICommandSender sender, ClearReason reason) {
         String id = plot.getId();
 
         String worldName = world.getName().toLowerCase();
@@ -542,7 +548,7 @@ public class PlotMeCoreManager {
         }
     }
 
-    public boolean isPlotAvailable(String id, IWorld world) {
+    public boolean isPlotAvailable(String id, World world) {
         return isPlotAvailable(id, world.getName().toLowerCase());
     }
 
@@ -561,14 +567,14 @@ public class PlotMeCoreManager {
     }
 
     public void adjustWall(IPlayer player) {
-        IWorld world = player.getWorld();
+        World world = player.getWorld();
         String id = getPlotId(player);
         Plot plot = getPlotById(id, world);
 
         getGenManager(world).adjustPlotFor(world, id, true, plot.isProtect(), plot.isAuctioned(), plot.isForSale());
     }
 
-    public void setBiome(IWorld world, String id, IBiome biome) {
+    public void setBiome(World world, String id, IBiome biome) {
         getGenManager(world).setBiome(world, id, biome);
         plugin.getSqlManager().updatePlot(getIdX(id), getIdZ(id), world.getName(), "biome", ((BukkitBiome) biome).getBiome().name());
     }

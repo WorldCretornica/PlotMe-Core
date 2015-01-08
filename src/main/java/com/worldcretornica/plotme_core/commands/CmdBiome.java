@@ -2,7 +2,7 @@ package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.*;
 import com.worldcretornica.plotme_core.api.IPlayer;
-import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.api.World;
 import com.worldcretornica.plotme_core.api.event.InternalPlotBiomeChangeEvent;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitBiome;
 import net.milkbowl.vault.economy.EconomyResponse;
@@ -15,7 +15,7 @@ public class CmdBiome extends PlotCommand {
 
     public boolean exec(IPlayer player, String[] args) {
         if (player.hasPermission(PermissionNames.USER_BIOME)) {
-            IWorld world = player.getWorld();
+            World world = player.getWorld();
             PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
             if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
                 String id = PlotMeCoreManager.getPlotId(player);
@@ -86,7 +86,7 @@ public class CmdBiome extends PlotCommand {
                         }
                     }
                 } else if (id.isEmpty()) {
-                    player.sendMessage("§c" + C(MSG_NO_PLOT_FOUND));
+                    player.sendMessage("§c" + C("MsgNoPlotFound"));
                 } else {
                     player.sendMessage("§c" + C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
                 }

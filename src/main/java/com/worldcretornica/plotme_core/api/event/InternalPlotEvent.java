@@ -4,7 +4,7 @@ import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ILocation;
-import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.api.World;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -13,11 +13,11 @@ import java.util.UUID;
 
 public class InternalPlotEvent {
 
-    protected final IWorld world;
+    protected final World world;
     final PlotMe_Core plugin;
     private final Plot plot;
 
-    public InternalPlotEvent(PlotMe_Core instance, Plot plot, IWorld world) {
+    public InternalPlotEvent(PlotMe_Core instance, Plot plot, World world) {
         plugin = instance;
         this.plot = plot;
         this.world = world;
@@ -37,7 +37,7 @@ public class InternalPlotEvent {
      *
      * @return world
      */
-    public IWorld getWorld() {
+    public World getWorld() {
         return world;
     }
 

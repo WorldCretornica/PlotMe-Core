@@ -4,7 +4,7 @@ import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
-import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.api.World;
 
 public class InternalPlotCreateEvent extends InternalPlotEvent implements ICancellable {
 
@@ -12,7 +12,7 @@ public class InternalPlotCreateEvent extends InternalPlotEvent implements ICance
     private final IPlayer creator;
     private boolean canceled;
 
-    public InternalPlotCreateEvent(PlotMe_Core instance, IWorld world, String plotId, IPlayer creator) {
+    public InternalPlotCreateEvent(PlotMe_Core instance, World world, String plotId, IPlayer creator) {
         super(instance, null, world);
         this.plotId = plotId;
         this.creator = creator;

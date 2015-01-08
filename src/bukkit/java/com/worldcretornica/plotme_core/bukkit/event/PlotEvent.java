@@ -3,12 +3,11 @@ package com.worldcretornica.plotme_core.bukkit.event;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.api.World;
 import com.worldcretornica.plotme_core.api.event.InternalPlotEvent;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitLocation;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitWorld;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
@@ -23,12 +22,12 @@ public abstract class PlotEvent extends Event {
     protected final PlotMe_Core plugin;
     private final InternalPlotEvent event;
 
-    public PlotEvent(PlotMe_Core instance, Plot plot, World world) {
+    public PlotEvent(PlotMe_Core instance, Plot plot, org.bukkit.World world) {
         event = new InternalPlotEvent(instance, plot, new BukkitWorld(world));
         plugin = instance;
     }
 
-    public PlotEvent(PlotMe_Core instance, Plot plot, IWorld world) {
+    public PlotEvent(PlotMe_Core instance, Plot plot, World world) {
         event = new InternalPlotEvent(instance, plot, world);
         plugin = instance;
     }
@@ -56,7 +55,7 @@ public abstract class PlotEvent extends Event {
      *
      * @return world
      */
-    public World getWorld() {
+    public org.bukkit.World getWorld() {
         return ((BukkitWorld) event.getWorld()).getWorld();
     }
 

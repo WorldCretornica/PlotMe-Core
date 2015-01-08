@@ -3,13 +3,12 @@ package com.worldcretornica.plotme_core.bukkit.event;
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IPlayer;
-import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.api.World;
 import com.worldcretornica.plotme_core.api.event.InternalPlotCreateEvent;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitLocation;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitWorld;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 
@@ -17,12 +16,12 @@ public class PlotCreateEvent extends PlotEvent implements Cancellable {
 
     private final InternalPlotCreateEvent event;
 
-    public PlotCreateEvent(PlotMe_Core instance, World world, String plotId, Player creator) {
+    public PlotCreateEvent(PlotMe_Core instance, org.bukkit.World world, String plotId, Player creator) {
         super(instance, null, world);
         event = new InternalPlotCreateEvent(instance, new BukkitWorld(world), plotId, new BukkitPlayer(creator));
     }
 
-    public PlotCreateEvent(PlotMe_Core instance, IWorld world, String plotId, IPlayer creator) {
+    public PlotCreateEvent(PlotMe_Core instance, World world, String plotId, IPlayer creator) {
         super(instance, null, world);
         event = new InternalPlotCreateEvent(instance, world, plotId, creator);
     }

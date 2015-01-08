@@ -14,8 +14,11 @@ import com.worldcretornica.plotme_core.bukkit.listener.BukkitPlotListener;
 import com.worldcretornica.plotme_core.bukkit.listener.BukkitPlotWorldEditListener;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.World.Environment;
+import org.bukkit.WorldType;
 import org.bukkit.block.Biome;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -151,8 +154,8 @@ public class BukkitServerBridge implements IServerBridge {
     }
 
     @Override
-    public IWorld getWorld(String name) {
-        World world = Bukkit.getWorld(name);
+    public World getWorld(String name) {
+        org.bukkit.World world = Bukkit.getWorld(name);
         if (world == null) {
             return null;
         } else {
@@ -343,7 +346,7 @@ public class BukkitServerBridge implements IServerBridge {
 
     @Override
     public IPlotMe_ChunkGenerator getPlotMeGenerator(String worldname) {
-        World world = Bukkit.getWorld(worldname);
+        org.bukkit.World world = Bukkit.getWorld(worldname);
         if (world != null) {
             ChunkGenerator generator = world.getGenerator();
             if (generator instanceof IPlotMe_ChunkGenerator) {
@@ -354,10 +357,10 @@ public class BukkitServerBridge implements IServerBridge {
     }
 
     @Override
-    public List<IWorld> getWorlds() {
-        List<IWorld> worlds = new ArrayList<>();
+    public List<World> getWorlds() {
+        List<World> worlds = new ArrayList<>();
 
-        for (World world : Bukkit.getWorlds()) {
+        for (org.bukkit.World world : Bukkit.getWorlds()) {
             worlds.add(new BukkitWorld(world));
         }
 
@@ -504,11 +507,6 @@ public class BukkitServerBridge implements IServerBridge {
     }
 
     @Override
-    public ILocation createLocation(IWorld world, int x, int y, int z) {
-        return world.createLocation(x, y, z);
-    }
-
-    @Override
     public IEntityType getEntityType(String string) {
         return new BukkitEntityType(EntityType.valueOf(string));
     }
@@ -528,11 +526,6 @@ public class BukkitServerBridge implements IServerBridge {
             configSection.addDefault(path, defaultCS.get(path));
         }
         return new BukkitConfigSection(plugin, plugin.getConfig(), configSection);
-    }
-
-    @Override
-    public void disablePlotMe() {
-        plugin.getPluginLoader().disablePlugin(plugin);
     }
 
     private ConfigurationSection getDefaultWorld() {

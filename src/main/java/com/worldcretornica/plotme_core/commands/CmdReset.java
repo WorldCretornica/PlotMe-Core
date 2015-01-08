@@ -3,7 +3,7 @@ package com.worldcretornica.plotme_core.commands;
 import com.worldcretornica.plotme_core.*;
 import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import com.worldcretornica.plotme_core.api.IPlayer;
-import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.api.World;
 import com.worldcretornica.plotme_core.api.event.InternalPlotResetEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
 
@@ -15,13 +15,13 @@ public class CmdReset extends PlotCommand {
 
     public boolean exec(IPlayer player) {
         if (player.hasPermission(PermissionNames.ADMIN_RESET) || player.hasPermission("PlotMe.use.reset")) {
-            IWorld world = player.getWorld();
+            World world = player.getWorld();
             PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
             if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
                 Plot plot = PlotMeCoreManager.getPlotById(player, pmi);
 
                 if (plot == null) {
-                    player.sendMessage("§c" + C(MSG_NO_PLOT_FOUND));
+                    player.sendMessage("§c" + C("MsgNoPlotFound"));
                 } else if (plot.isProtect()) {
                     player.sendMessage("§c" + C("MsgPlotProtectedCannotReset"));
                 } else {

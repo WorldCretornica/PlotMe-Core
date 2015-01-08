@@ -5,17 +5,17 @@ import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
-import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.api.World;
 
 public class InternalPlotMoveEvent extends InternalPlotEvent implements ICancellable {
 
     private final String fromId;
     private final String toId;
-    private final IWorld world;
+    private final World world;
     private final IPlayer mover;
     private boolean canceled;
 
-    public InternalPlotMoveEvent(PlotMe_Core instance, IWorld world, String fromId, String toId, IPlayer mover) {
+    public InternalPlotMoveEvent(PlotMe_Core instance, World world, String fromId, String toId, IPlayer mover) {
         super(instance, null, world);
         this.fromId = fromId;
         this.toId = toId;

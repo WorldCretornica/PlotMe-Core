@@ -1,7 +1,7 @@
 package com.worldcretornica.plotme_core;
 
 import com.worldcretornica.plotme_core.api.IPlayer;
-import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.api.World;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitBiome;
 import com.worldcretornica.plotme_core.utils.UUIDFetcher;
 
@@ -509,7 +509,7 @@ public class SqlManager {
         }
     }
 
-    public void addPlot(Plot plot, int idX, int idZ, IWorld world) {
+    public void addPlot(Plot plot, int idX, int idZ, World world) {
         addPlot(plot, idX, idZ,
                        PlotMeCoreManager.topX(plot.getId(), world),
                        PlotMeCoreManager.bottomX(plot.getId(), world),

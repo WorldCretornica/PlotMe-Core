@@ -12,9 +12,15 @@ public class BukkitPlayer extends BukkitOfflinePlayer implements IPlayer {
         this.player = player;
     }
 
+    /**
+     * Sends this sender a message
+     *
+     * @param message Message to be displayed
+     */
+
     @Override
-    public void sendMessage(String msg) {
-        player.sendMessage(msg);
+    public void sendMessage(String message) {
+        player.sendMessage(message);
     }
 
     @Override
@@ -23,7 +29,7 @@ public class BukkitPlayer extends BukkitOfflinePlayer implements IPlayer {
     }
 
     @Override
-    public IWorld getWorld() {
+    public World getWorld() {
         return new BukkitWorld(player.getWorld());
     }
 

@@ -3,7 +3,7 @@ package com.worldcretornica.plotme_core.bukkit.api;
 import com.worldcretornica.plotme_core.api.IBiome;
 import com.worldcretornica.plotme_core.api.IBlock;
 import com.worldcretornica.plotme_core.api.ILocation;
-import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.api.World;
 import org.bukkit.block.Block;
 
 public class BukkitBlock implements IBlock {
@@ -20,7 +20,7 @@ public class BukkitBlock implements IBlock {
     }
 
     @Override
-    public IWorld getWorld() {
+    public World getWorld() {
         return new BukkitWorld(block.getWorld());
     }
 
@@ -69,8 +69,8 @@ public class BukkitBlock implements IBlock {
 
     @SuppressWarnings("deprecation")
     @Override
-    public void setTypeId(int type, boolean applyPhysics) {
-        block.setTypeId(type, applyPhysics);
+    public void setTypeId(int id, boolean applyPhysics) {
+        block.setTypeId(id, applyPhysics);
     }
 
 }

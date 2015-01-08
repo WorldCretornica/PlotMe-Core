@@ -7,7 +7,6 @@ import com.worldcretornica.plotme_core.utils.Util;
 
 public abstract class PlotCommand {
 
-    public static final String MSG_NO_PLOT_FOUND = "MsgNoPlotFound";
     protected final PlotMe_Core plugin;
 
     protected final IServerBridge serverBridge;

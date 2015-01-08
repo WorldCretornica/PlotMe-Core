@@ -4,7 +4,7 @@ import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IPlayer;
-import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.api.World;
 import com.worldcretornica.plotme_core.api.event.InternalPlotMoveEvent;
 
 public class CmdMove extends PlotCommand {
@@ -22,7 +22,7 @@ public class CmdMove extends PlotCommand {
             } else {
                 String plot1 = args[1];
                 String plot2 = args[2];
-                IWorld world = player.getWorld();
+                World world = player.getWorld();
 
                 if (!PlotMeCoreManager.isValidId(world, plot1) || !PlotMeCoreManager.isValidId(world, plot2)) {
                     player.sendMessage(C("WordUsage") + ": §c/plotme move <" + C("WordIdFrom") + "> <" + C("WordIdTo") + "> §r" + C("WordExample") + ": §c/plotme move 0;1 2;-1");

@@ -3,7 +3,7 @@ package com.worldcretornica.plotme_core.commands;
 import com.worldcretornica.plotme_core.*;
 import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import com.worldcretornica.plotme_core.api.IPlayer;
-import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.api.World;
 import com.worldcretornica.plotme_core.api.event.InternalPlotOwnerChangeEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
 
@@ -14,13 +14,13 @@ public class CmdSetOwner extends PlotCommand {
     }
 
     public boolean exec(IPlayer player, String[] args) {
-        IWorld world = player.getWorld();
+        World world = player.getWorld();
         PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
         if (player.hasPermission(PermissionNames.ADMIN_SETOWNER)) {
             if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
                 String id = PlotMeCoreManager.getPlotId(player);
                 if (id.isEmpty()) {
-                    player.sendMessage("§c" + C(MSG_NO_PLOT_FOUND));
+                    player.sendMessage("§c" + C("MsgNoPlotFound"));
                 } else {
                     String newowner = args[1];
                     String oldowner = "<" + C("WordNotApplicable") + ">";

@@ -12,8 +12,8 @@ public class BukkitCommandSender implements ICommandSender {
     }
 
     @Override
-    public void sendMessage(String msg) {
-        commandsender.sendMessage(msg);
+    public void sendMessage(String message) {
+        commandsender.sendMessage(message);
     }
 
     public CommandSender getCommandSender() {

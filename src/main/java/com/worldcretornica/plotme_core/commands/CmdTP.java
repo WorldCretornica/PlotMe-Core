@@ -6,7 +6,7 @@ import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
-import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.api.World;
 import com.worldcretornica.plotme_core.api.event.InternalPlotTeleportEvent;
 
 public class CmdTP extends PlotCommand {
@@ -21,7 +21,7 @@ public class CmdTP extends PlotCommand {
                 if (args.length == 2 || args.length == 3) {
                     String id = args[1];
 
-                    IWorld world;
+                    World world;
 
                     if (args.length == 3) {
 

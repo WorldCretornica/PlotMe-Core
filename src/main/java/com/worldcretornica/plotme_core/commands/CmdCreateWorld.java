@@ -8,6 +8,7 @@ public class CmdCreateWorld extends PlotCommand {
         super(instance);
     }
 /*
+
     public boolean exec(ICommandSender sender, String[] args) {
         if (plugin.creationbuffer.containsKey(sender.getName())) {
             if (args.length == 1) {
@@ -154,5 +155,6 @@ public class CmdCreateWorld extends PlotCommand {
         }
         cs.sendMessage(buffer);
     }
+
 */
 }

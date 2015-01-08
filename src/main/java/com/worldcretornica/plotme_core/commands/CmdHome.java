@@ -5,7 +5,7 @@ import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IPlayer;
-import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.api.World;
 import com.worldcretornica.plotme_core.api.event.InternalPlotTeleportHomeEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
 
@@ -22,7 +22,7 @@ public class CmdHome extends PlotCommand {
             if (plugin.getPlotMeCoreManager().isPlotWorld(player) || serverBridge.getConfig().getBoolean("allowWorldTeleport")) {
                 String playerName = player.getName();
                 UUID uuid = player.getUniqueId();
-                IWorld world;
+                World world;
 
                 if (plugin.getPlotMeCoreManager().isPlotWorld(player)) {
                     world = player.getWorld();

@@ -41,9 +41,7 @@ public class CmdDoneList extends PlotCommand {
                 } else {
                     player.sendMessage(C("MsgFinishedPlotsPage") + " " + page + "/" + maxpage);
 
-                    for (int i = 0; i < finishedplots.size(); i++) {
-                        Plot plot = finishedplots.get(i);
-
+                    for (Plot plot : finishedplots) {
                         String starttext = "  §b" + plot.getId() + "§r -> " + plot.getOwner();
 
                         int textLength = MinecraftFontWidthCalculator.getStringWidth(starttext);

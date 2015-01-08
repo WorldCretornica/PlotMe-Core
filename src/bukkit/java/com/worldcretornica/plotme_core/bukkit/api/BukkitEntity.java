@@ -31,13 +31,32 @@ public class BukkitEntity implements IEntity {
     }
 
     @Override
+    public void teleport(ILocation newl) {
+        entity.teleport(((BukkitLocation) newl).getLocation());
+    }
+
+    /**
+     * Gets the name of the actor
+     *
+     * @return name of the actor
+     */
+    @Override
+    public String getName() {
+        return entity.getName();
+    }
+
+    /**
+     * Gets the UUID of the actor
+     *
+     * @return UUID of the actor
+     */
+    @Override
     public UUID getUniqueId() {
         return entity.getUniqueId();
     }
 
     @Override
-    public void teleport(ILocation newl) {
-        entity.teleport(((BukkitLocation) newl).getLocation());
+    public boolean hasPermission(String node) {
+        return entity.hasPermission(node);
     }
-
 }

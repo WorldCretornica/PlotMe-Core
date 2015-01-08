@@ -6,7 +6,7 @@ import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import com.worldcretornica.plotme_core.api.IPlayer;
-import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.api.World;
 import com.worldcretornica.plotme_core.api.event.InternalPlotBidEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
 
@@ -17,13 +17,13 @@ public class CmdBid extends PlotCommand {
     }
 
     public boolean exec(IPlayer player, String[] args) {
-        IWorld world = player.getWorld();
+        World world = player.getWorld();
         if (plugin.getPlotMeCoreManager().isEconomyEnabled(world)) {
             if (player.hasPermission(PermissionNames.PLOT_ME_USE_BID)) {
                 String id = PlotMeCoreManager.getPlotId(player);
 
                 if (id.isEmpty()) {
-                    player.sendMessage("§c" + C(MSG_NO_PLOT_FOUND));
+                    player.sendMessage("§c" + C("MsgNoPlotFound"));
                 } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, world)) {
                     Plot plot = plugin.getPlotMeCoreManager().getPlotById(id, world);
 

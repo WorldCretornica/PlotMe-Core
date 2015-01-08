@@ -4,7 +4,7 @@ import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IPlayer;
-import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.api.World;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -36,7 +36,7 @@ public class CmdPlotList extends PlotCommand {
 
                 // Get plots of that player
                 for (Plot plot : plugin.getSqlManager().getPlayerPlots(name, uuid)) {
-                    IWorld world = serverBridge.getWorld(plot.getWorld());
+                    World world = serverBridge.getWorld(plot.getWorld());
                     if (world != null) {
                         plugin.getPlotMeCoreManager().getMap(world).addPlot(plot.getId(), plot);
                     }
