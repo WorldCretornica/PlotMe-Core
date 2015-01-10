@@ -3,16 +3,12 @@ package com.worldcretornica.plotme_core.bukkit;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IServerBridge;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.Metrics;
 import org.mcstats.Metrics.Graph;
 
 import java.io.IOException;
-
-import static org.bukkit.Bukkit.getPluginManager;
 
 
 public class PlotMe_CorePlugin extends JavaPlugin {
@@ -27,14 +23,6 @@ public class PlotMe_CorePlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        Plugin competition = getPluginManager().getPlugin("PlotSquared");
-        if (competition != null) {
-            getPluginLoader().disablePlugin(competition);
-        }
-        if (!Bukkit.getOnlineMode()) {
-            getLogger().info("Offline Servers are not supported by PlotMe due to Mojangs recent change to UUID's.");
-            getLogger().info("Since you are in offline mode, the plugin may not work properly.");
-        }
         serverObjectBuilder = new BukkitServerBridge(this);
         plotme = new PlotMe_Core(serverObjectBuilder);
         getAPI().enable();

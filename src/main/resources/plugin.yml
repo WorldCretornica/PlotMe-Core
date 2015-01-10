@@ -5,7 +5,7 @@ author: ZachBora
 authors: [flungo, MattBDev]
 website: http://dev.bukkit.org/server-mods/plotme/
 load: POSTWORLD
-softdepend: [WorldEdit, Vault, LWC, Multiverse-Core, MultiWorld, PlotMe-DefaultGenerator]
+softdepend: [WorldEdit, Vault, LWC, Multiverse-Core, PlotMe-DefaultGenerator]
 description: >
              Handles plot management and protection
 commands:

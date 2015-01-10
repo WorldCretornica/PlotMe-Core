@@ -6,7 +6,6 @@ import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.PlotWorldEdit;
 import com.worldcretornica.plotme_core.api.*;
 import com.worldcretornica.plotme_core.api.event.IEventFactory;
-import com.worldcretornica.plotme_core.bukkit.MultiWorldWrapper.WorldGeneratorWrapper;
 import com.worldcretornica.plotme_core.bukkit.api.*;
 import com.worldcretornica.plotme_core.bukkit.event.BukkitEventFactory;
 import com.worldcretornica.plotme_core.bukkit.listener.BukkitPlotDenyListener;
@@ -42,20 +41,11 @@ public class BukkitServerBridge implements IServerBridge {
     private Economy economy;
     private PlotWorldEdit plotworldedit;
     private boolean usinglwc;
-    private MultiWorldWrapper multiworld;
     private MultiverseWrapper multiverse;
 
     public BukkitServerBridge(PlotMe_CorePlugin instance) {
         plugin = instance;
         eventfactory = new BukkitEventFactory();
-    }
-
-    private static MultiWorldWrapper getMultiWorldWrapper() {
-        if (Bukkit.getPluginManager().isPluginEnabled("MultiWorld")) {
-            return new MultiWorldWrapper((JavaPlugin) Bukkit.getPluginManager().getPlugin("MultiWorld"));
-        } else {
-            return null;
-        }
     }
 
     private static MultiverseWrapper getMultiverseWrapper() {
@@ -372,12 +362,6 @@ public class BukkitServerBridge implements IServerBridge {
         //Get a seed
         Long seed = new Random().nextLong();
 
-        //Check if we have multiworld
-        if (getMultiWorld() == null) {
-            if (Bukkit.getPluginManager().isPluginEnabled("MultiWorld")) {
-                setMultiworld((JavaPlugin) Bukkit.getPluginManager().getPlugin("MultiWorld"));
-            }
-        }
         //Check if we have multiverse
         if (getMultiverse() == null) {
             if (Bukkit.getPluginManager().isPluginEnabled("Multiverse-Core")) {
@@ -386,7 +370,7 @@ public class BukkitServerBridge implements IServerBridge {
         }
 
         //Do we have one of them
-        if (getMultiWorld() == null && getMultiverse() == null) {
+        if (getMultiverse() == null) {
             getLogger().info(plugin.getAPI().getUtil().C("ErrWorldPluginNotFound"));
             return false;
         }
@@ -430,42 +414,6 @@ public class BukkitServerBridge implements IServerBridge {
 
         plugin.getAPI().getPlotMeCoreManager().addPlotMap(worldname.toLowerCase(), tempPlotInfo);
 
-        //Are we using multiworld?
-        if (getMultiWorldWrapper() != null) {
-            boolean success = false;
-            if (getMultiWorld().isEnabled()) {
-                WorldGeneratorWrapper worldGenerator;
-
-                try {
-                    worldGenerator = WorldGeneratorWrapper.getGenByName();
-                } catch (DelegateClassException ex) {
-                    ex.printStackTrace();
-                    return false;
-                }
-
-                try {
-                    success = getMultiWorld().getDataManager().makeWorld(worldname, worldGenerator, seed, generator);
-                } catch (DelegateClassException ex) {
-                    ex.printStackTrace();
-                    return false;
-                }
-
-                if (success) {
-                    try {
-                        getMultiWorld().getDataManager().loadWorld(worldname);
-                        getMultiWorld().getDataManager().save();
-                    } catch (DelegateClassException ex) {
-                        ex.printStackTrace();
-                        return false;
-                    }
-                } else {
-                    getLogger().warning(plugin.getAPI().getUtil().C("ErrCannotCreateMW"));
-                }
-            } else {
-                getLogger().warning(plugin.getAPI().getUtil().C("ErrMWDisabled"));
-            }
-            return success;
-        }
 
         //Are we using multiverse?
         if (getMultiverse() != null) {
@@ -485,20 +433,12 @@ public class BukkitServerBridge implements IServerBridge {
         return false;
     }
 
-    private MultiWorldWrapper getMultiWorld() {
-        return multiworld;
-    }
-
     private MultiverseWrapper getMultiverse() {
         return multiverse;
     }
 
     private void setMultiverse(JavaPlugin multiverse) {
         this.multiverse = new MultiverseWrapper(multiverse);
-    }
-
-    private void setMultiworld(JavaPlugin multiworld) {
-        this.multiworld = new MultiWorldWrapper(multiworld);
     }
 
     @Override
