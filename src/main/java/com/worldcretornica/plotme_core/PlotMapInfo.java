@@ -10,7 +10,6 @@ public class PlotMapInfo {
     private final PlotMe_Core plugin;
 
     private final ConcurrentHashMap<String, Plot> plots;
-    private final List<String> freedplots;
     private final String world;
     private final IConfigSection config;
 
@@ -19,7 +18,6 @@ public class PlotMapInfo {
         this.world = world.toLowerCase();
         config = plugin.getServerBridge().loadDefaultConfig("worlds." + this.world);
         plots = new ConcurrentHashMap<>(1000, 0.75f, 5);
-        freedplots = plugin.getSqlManager().getFreed(this.world);
     }
 
     public short getNbPlots() {
@@ -55,24 +53,6 @@ public class PlotMapInfo {
         plots.remove(id);
     }
 
-    public void addFreed(String id) {
-        if (!freedplots.contains(id)) {
-            freedplots.add(id);
-            int x = PlotMeCoreManager.getIdX(id);
-            int z = PlotMeCoreManager.getIdZ(id);
-            plugin.getSqlManager().addFreed(x, z, world);
-        }
-    }
-
-    public void removeFreed(String id) {
-        if (freedplots.contains(id)) {
-            freedplots.remove(id);
-            int x = PlotMeCoreManager.getIdX(id);
-            int z = PlotMeCoreManager.getIdZ(id);
-            plugin.getSqlManager().deleteFreed(x, z, world);
-        }
-    }
-
     private List<Integer> getProtectedBlocks() {
         return config.getIntegerList("ProtectedBlocks");
     }
@@ -87,19 +67,6 @@ public class PlotMapInfo {
 
     public boolean isPreventedItem(String itemId) {
         return getPreventedItems().contains(itemId);
-    }
-
-    public String getNextFreed() {
-        if (freedplots.isEmpty()) {
-            return config.getString("NextFreed");
-        } else {
-            return freedplots.get(0);
-        }
-    }
-
-    public void setNextFreed(String id) {
-        config.set("NextFreed", id);
-        config.saveConfig();
     }
 
     public int getPlotAutoLimit() {

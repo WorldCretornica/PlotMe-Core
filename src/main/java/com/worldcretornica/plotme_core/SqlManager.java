@@ -322,17 +322,6 @@ public class SqlManager {
                 conn.commit();
             }
 
-            if (!tableExists("plotmeFreed")) {
-                String FREED_TABLE = "CREATE TABLE `plotmeFreed` ("
-                                             + "`idX` INTEGER,"
-                                             + "`idZ` INTEGER,"
-                                             + "`world` varchar(32) NOT NULL,"
-                                             + "PRIMARY KEY (idX, idZ, world) "
-                                             + ");";
-                st.executeUpdate(FREED_TABLE);
-                conn.commit();
-            }
-
             UpdateTables();
 
             if (usemySQL) {
@@ -352,7 +341,6 @@ public class SqlManager {
                     ResultSet setAllowed = null;
                     Statement slDenied = sqliteconn.createStatement();
                     ResultSet setDenied = null;
-                    Statement slFreed = sqliteconn.createStatement();
 
                     short size = 0;
                     while (setPlots.next()) {
@@ -427,15 +415,6 @@ public class SqlManager {
                         size++;
                     }
 
-                    ResultSet setFreed = slstatement.executeQuery("SELECT * FROM plotmeFreed");
-                    while (setFreed.next()) {
-                        int idX = setPlots.getInt("idX");
-                        int idZ = setPlots.getInt("idZ");
-                        String world = setPlots.getString("world");
-
-                        addFreed(idX, idZ, world);
-                    }
-
                     plugin.getLogger().info("Imported " + size + " plots from " + sqlitedb);
                     slstatement.close();
                     if (slAllowed != null) {
@@ -444,9 +423,6 @@ public class SqlManager {
                     if (slDenied != null) {
                         slDenied.close();
                     }
-                    if (slFreed != null) {
-                        slFreed.close();
-                    }
                     setPlots.close();
                     if (setDenied != null) {
                         setDenied.close();
@@ -454,7 +430,6 @@ public class SqlManager {
                     if (setAllowed != null) {
                         setAllowed.close();
                     }
-                    setFreed.close();
                     sqliteconn.close();
 
                     plugin.getLogger().info("Renaming " + sqlitedb + " to " + sqlitedb + ".old");
@@ -476,34 +451,6 @@ public class SqlManager {
                 }
             } catch (SQLException ex) {
                 plugin.getLogger().severe("Could not create the table (on close) :");
-                plugin.getLogger().severe(ex.getMessage());
-            }
-        }
-    }
-
-    public void addFreed(int idX, int idZ, String world) {
-        PreparedStatement ps = null;
-
-        //Freed
-        try {
-            Connection conn = getConnection();
-            ps = conn.prepareStatement("INSERT INTO plotmeFreed (idX, idZ, world) VALUES (?,?,?)");
-            ps.setInt(1, idX);
-            ps.setInt(2, idZ);
-            ps.setString(3, world.toLowerCase());
-
-            ps.executeUpdate();
-            conn.commit();
-        } catch (SQLException ex) {
-            plugin.getLogger().severe("Insert Exception :");
-            plugin.getLogger().severe(ex.getMessage());
-        } finally {
-            try {
-                if (ps != null) {
-                    ps.close();
-                }
-            } catch (SQLException ex) {
-                plugin.getLogger().severe("Insert Exception (on close) :");
                 plugin.getLogger().severe(ex.getMessage());
             }
         }
@@ -744,32 +691,6 @@ public class SqlManager {
             ps.close();
             conn.commit();
 
-        } catch (SQLException ex) {
-            plugin.getLogger().severe("Delete Exception :");
-            plugin.getLogger().severe(ex.getMessage());
-        } finally {
-            try {
-                if (ps != null) {
-                    ps.close();
-                }
-            } catch (SQLException ex) {
-                plugin.getLogger().severe("Delete Exception (on close) :");
-                plugin.getLogger().severe(ex.getMessage());
-            }
-        }
-    }
-
-    public void deleteFreed(int idX, int idZ, String world) {
-        PreparedStatement ps = null;
-        try {
-            Connection conn = getConnection();
-
-            ps = conn.prepareStatement("DELETE FROM plotmeFreed WHERE idX = ? and idZ = ? and LOWER(world) = ?");
-            ps.setInt(1, idX);
-            ps.setInt(2, idZ);
-            ps.setString(3, world);
-            ps.executeUpdate();
-            conn.commit();
         } catch (SQLException ex) {
             plugin.getLogger().severe("Delete Exception :");
             plugin.getLogger().severe(ex.getMessage());
@@ -1113,46 +1034,6 @@ public class SqlManager {
                 }
             } catch (SQLException ex) {
                 plugin.getLogger().severe("Load Exception (on close) :");
-                plugin.getLogger().severe(ex.getMessage());
-            }
-        }
-        return ret;
-    }
-
-    public List<String> getFreed(String world) {
-        List<String> ret = new ArrayList<>();
-        PreparedStatement statementPlot = null;
-        ResultSet setPlots = null;
-
-        try {
-            Connection conn = getConnection();
-
-            statementPlot = conn.prepareStatement("SELECT idX, idZ FROM plotmeFreed WHERE LOWER(world) = ?");
-            statementPlot.setString(1, world);
-
-            setPlots = statementPlot.executeQuery();
-
-            while (setPlots.next()) {
-                int idX = setPlots.getInt("idX");
-                int idZ = setPlots.getInt("idZ");
-
-                String id = idX + ";" + idZ;
-
-                ret.add(id);
-            }
-        } catch (SQLException ex) {
-            plugin.getLogger().severe("GetFreed Exception :");
-            plugin.getLogger().severe(ex.getMessage());
-        } finally {
-            try {
-                if (statementPlot != null) {
-                    statementPlot.close();
-                }
-                if (setPlots != null) {
-                    setPlots.close();
-                }
-            } catch (SQLException ex) {
-                plugin.getLogger().severe("GetFreed Exception (on close) :");
                 plugin.getLogger().severe(ex.getMessage());
             }
         }

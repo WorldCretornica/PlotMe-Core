@@ -77,8 +77,6 @@ public class CmdReset extends PlotCommand {
                             PlotMeCoreManager.removeSellSign(world, id);
                             plugin.getSqlManager().deletePlot(PlotMeCoreManager.getIdX(id), PlotMeCoreManager.getIdZ(id), world.getName());
 
-                            pmi.addFreed(id);
-
                             if (isAdvancedLogging()) {
                                 serverBridge.getLogger().info(player.getName() + " " + C("MsgResetPlot") + " " + id);
                             }
