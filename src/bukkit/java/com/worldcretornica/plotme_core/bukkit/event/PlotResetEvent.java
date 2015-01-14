@@ -2,23 +2,24 @@ package com.worldcretornica.plotme_core.bukkit.event;
 
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.CommandSender;
+import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.World;
 import com.worldcretornica.plotme_core.api.event.InternalPlotResetEvent;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitCommandSender;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitWorld;
+import org.bukkit.command.CommandSender;
 import org.bukkit.event.Cancellable;
 
 public class PlotResetEvent extends PlotEvent implements Cancellable {
 
     private final InternalPlotResetEvent event;
 
-    public PlotResetEvent(PlotMe_Core instance, org.bukkit.World world, Plot plot, org.bukkit.command.CommandSender reseter) {
+    public PlotResetEvent(PlotMe_Core instance, org.bukkit.World world, Plot plot, CommandSender reseter) {
         super(instance, plot, world);
         event = new InternalPlotResetEvent(instance, new BukkitWorld(world), plot, new BukkitCommandSender(reseter));
     }
 
-    public PlotResetEvent(PlotMe_Core instance, World world, Plot plot, CommandSender reseter) {
+    public PlotResetEvent(PlotMe_Core instance, World world, Plot plot, ICommandSender reseter) {
         super(instance, plot, world);
         event = new InternalPlotResetEvent(instance, world, plot, reseter);
     }
@@ -33,7 +34,7 @@ public class PlotResetEvent extends PlotEvent implements Cancellable {
         event.setCanceled(cancel);
     }
 
-    public org.bukkit.command.CommandSender getReseter() {
+    public CommandSender getReseter() {
         return ((BukkitCommandSender) event.getReseter()).getCommandSender();
     }
 

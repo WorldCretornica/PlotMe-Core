@@ -1,6 +1,6 @@
 package com.worldcretornica.plotme_core;
 
-import com.worldcretornica.plotme_core.api.Player;
+import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.World;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitBiome;
 import com.worldcretornica.plotme_core.utils.UUIDFetcher;
@@ -1901,7 +1901,7 @@ public class SqlManager {
                 try {
                     Connection conn = getConnection();
 
-                    Player player = null;
+                    IPlayer player = null;
                     if (name != null) {
                         player = plugin.getServerBridge().getPlayerExact(name);
                     }

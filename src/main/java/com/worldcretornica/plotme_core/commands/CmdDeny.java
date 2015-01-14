@@ -5,7 +5,7 @@ import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.Player;
+import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.World;
 import com.worldcretornica.plotme_core.api.event.InternalPlotAddDeniedEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
@@ -18,7 +18,7 @@ public class CmdDeny extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(Player player, String[] args) {
+    public boolean exec(IPlayer player, String[] args) {
         if (player.hasPermission(PermissionNames.ADMIN_DENY) || player.hasPermission(PermissionNames.USER_DENY)) {
             World world = player.getWorld();
             PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
@@ -80,15 +80,15 @@ public class CmdDeny extends PlotCommand {
                                     plot.removeAllowed(denied);
 
                                     if ("*".equals(denied)) {
-                                        List<Player> deniedplayers = PlotMeCoreManager.getPlayersInPlot(world, id);
+                                        List<IPlayer> deniedplayers = PlotMeCoreManager.getPlayersInPlot(world, id);
 
-                                        for (Player deniedplayer : deniedplayers) {
+                                        for (IPlayer deniedplayer : deniedplayers) {
                                             if (!plot.isAllowed(deniedplayer.getName(), deniedplayer.getUniqueId())) {
                                                 deniedplayer.setLocation(PlotMeCoreManager.getPlotHome(world, plot.getId()));
                                             }
                                         }
                                     } else {
-                                        Player deniedplayer = serverBridge.getPlayerExact(denied);
+                                        IPlayer deniedplayer = serverBridge.getPlayerExact(denied);
 
                                         if (deniedplayer != null) {
                                             if (deniedplayer.getWorld().equals(world)) {

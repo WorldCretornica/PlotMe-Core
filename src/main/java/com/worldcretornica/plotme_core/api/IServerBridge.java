@@ -29,11 +29,11 @@ public abstract class IServerBridge {
      * @param uuid UUID of the player to retrieve
      * @return a player if one was found, null otherwise
      */
-    public abstract Player getPlayer(UUID uuid);
+    public abstract IPlayer getPlayer(UUID uuid);
 
-    public abstract Player getPlayerExact(String name);
+    public abstract IPlayer getPlayerExact(String name);
 
-    public abstract List<Player> getOnlinePlayers();
+    public abstract List<IPlayer> getOnlinePlayers();
 
     public abstract Logger getLogger();
 
@@ -53,9 +53,9 @@ public abstract class IServerBridge {
      * @param player of the player
      * @return Amount currently held in players account
      */
-    public abstract double getBalance(Player player);
+    public abstract double getBalance(IPlayer player);
 
-    public abstract EconomyResponse withdrawPlayer(Player player, double price);
+    public abstract EconomyResponse withdrawPlayer(IPlayer player, double price);
 
     public abstract EconomyResponse depositPlayer(IOfflinePlayer playercurrentbidder, double currentBid);
 

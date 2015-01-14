@@ -4,8 +4,8 @@ import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.Location;
-import com.worldcretornica.plotme_core.api.Player;
+import com.worldcretornica.plotme_core.api.ILocation;
+import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.World;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitBiome;
 
@@ -15,7 +15,7 @@ public class CmdInfo extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(Player player) {
+    public boolean exec(IPlayer player) {
         if (player.hasPermission(PermissionNames.USER_INFO)) {
             World world = player.getWorld();
             if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
@@ -115,8 +115,8 @@ public class CmdInfo extends PlotCommand {
                             }
                         }
                     }
-                    Location bottom = PlotMeCoreManager.getPlotBottomLoc(world, id);
-                    Location top = PlotMeCoreManager.getPlotTopLoc(world, id);
+                    ILocation bottom = PlotMeCoreManager.getPlotBottomLoc(world, id);
+                    ILocation top = PlotMeCoreManager.getPlotTopLoc(world, id);
 
                     player.sendMessage("§b" + C("WordBottom") + ": §r" + bottom.getBlockX() + "§9,§r" + bottom.getBlockZ());
                     player.sendMessage("§b" + C("WordTop") + ": §r" + top.getBlockX() + "§9,§r" + top.getBlockZ());

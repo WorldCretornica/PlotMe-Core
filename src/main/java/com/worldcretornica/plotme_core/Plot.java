@@ -1,7 +1,7 @@
 package com.worldcretornica.plotme_core;
 
 import com.worldcretornica.plotme_core.api.IBiome;
-import com.worldcretornica.plotme_core.api.Player;
+import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.World;
 
 import java.sql.Date;
@@ -214,7 +214,7 @@ public class Plot implements Comparable<Plot> {
             plugin.getSqlManager().deletePlotAllowed(PlotMeCoreManager.getIdX(getId()), PlotMeCoreManager.getIdZ(getId()), name, uuid, getWorld());
 
             if (plugin.getServerBridge().getPlotWorldEdit() != null) {
-                Player player = plugin.getServerBridge().getPlayer(uuid);
+                IPlayer player = plugin.getServerBridge().getPlayer(uuid);
 
                 if (player != null) {
                     if (plugin.getPlotMeCoreManager().isPlotWorld(player.getWorld())) {
@@ -242,7 +242,7 @@ public class Plot implements Comparable<Plot> {
             plugin.getSqlManager().deletePlotAllowed(PlotMeCoreManager.getIdX(getId()), PlotMeCoreManager.getIdZ(getId()), name, uuid, getWorld());
 
             if (plugin.getServerBridge().getPlotWorldEdit() != null) {
-                Player player = plugin.getServerBridge().getPlayer(uuid);
+                IPlayer player = plugin.getServerBridge().getPlayer(uuid);
 
                 if (player != null) {
                     if (plugin.getPlotMeCoreManager().isPlotWorld(player.getWorld())) {
@@ -297,7 +297,7 @@ public class Plot implements Comparable<Plot> {
     }
 
     public boolean isAllowedConsulting(String name) {
-        Player player = plugin.getServerBridge().getPlayerExact(name);
+        IPlayer player = plugin.getServerBridge().getPlayerExact(name);
         if (player != null) {
             return isAllowedInternal(name, player.getUniqueId(), true, true);
         } else {
@@ -323,7 +323,7 @@ public class Plot implements Comparable<Plot> {
             return true;
         }
 
-        Player player = plugin.getServerBridge().getPlayer(uuid);
+        IPlayer player = plugin.getServerBridge().getPlayer(uuid);
         if (getOwnerId() != null && getOwnerId().equals(uuid)) {
             return true;
         }
@@ -354,7 +354,7 @@ public class Plot implements Comparable<Plot> {
     }
 
     public boolean isDeniedConsulting(String name) {
-        Player player = plugin.getServerBridge().getPlayerExact(name);
+        IPlayer player = plugin.getServerBridge().getPlayerExact(name);
         if (player != null) {
             return isDeniedInternal(name, player.getUniqueId());
         } else {
@@ -376,7 +376,7 @@ public class Plot implements Comparable<Plot> {
             return false;
         }
 
-        Player player = null;
+        IPlayer player = null;
         if (uuid != null) {
             player = plugin.getServerBridge().getPlayer(uuid);
         }

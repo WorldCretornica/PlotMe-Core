@@ -2,15 +2,15 @@ package com.worldcretornica.plotme_core.api.event;
 
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.Player;
+import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.World;
 
 public class InternalPlotDisposeEvent extends InternalPlotEvent implements ICancellable {
 
-    private final Player disposer;
+    private final IPlayer disposer;
     private boolean canceled;
 
-    public InternalPlotDisposeEvent(PlotMe_Core instance, World world, Plot plot, Player disposer) {
+    public InternalPlotDisposeEvent(PlotMe_Core instance, World world, Plot plot, IPlayer disposer) {
         super(instance, plot, world);
         this.disposer = disposer;
     }
@@ -25,7 +25,7 @@ public class InternalPlotDisposeEvent extends InternalPlotEvent implements ICanc
         canceled = cancel;
     }
 
-    public Player getPlayer() {
+    public IPlayer getPlayer() {
         return disposer;
     }
 }

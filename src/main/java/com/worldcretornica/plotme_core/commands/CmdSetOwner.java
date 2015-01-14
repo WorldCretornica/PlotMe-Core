@@ -6,7 +6,7 @@ import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IOfflinePlayer;
-import com.worldcretornica.plotme_core.api.Player;
+import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.World;
 import com.worldcretornica.plotme_core.api.event.InternalPlotOwnerChangeEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
@@ -17,7 +17,7 @@ public class CmdSetOwner extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(Player player, String[] args) {
+    public boolean exec(IPlayer player, String[] args) {
         World world = player.getWorld();
         PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
         if (player.hasPermission(PermissionNames.ADMIN_SETOWNER)) {
@@ -48,7 +48,7 @@ public class CmdSetOwner extends PlotCommand {
                                     EconomyResponse er = serverBridge.depositPlayer(playeroldowner, pmi.getClaimPrice());
 
                                     if (er.transactionSuccess()) {
-                                        Player oldOwner = serverBridge.getPlayer(playeroldowner.getUniqueId());
+                                        IPlayer oldOwner = serverBridge.getPlayer(playeroldowner.getUniqueId());
                                         if (oldOwner != null) {
                                             oldOwner.sendMessage(
                                                     C("MsgYourPlot") + " " + id + " " + C("MsgNowOwnedBy") + " " + newowner + ". " + Util()
@@ -69,7 +69,7 @@ public class CmdSetOwner extends PlotCommand {
                                 EconomyResponse er = serverBridge.depositPlayer(playercurrentbidder, plot.getCurrentBid());
 
                                 if (er.transactionSuccess()) {
-                                    Player currentBidder = serverBridge.getPlayer(playercurrentbidder.getUniqueId());
+                                    IPlayer currentBidder = serverBridge.getPlayer(playercurrentbidder.getUniqueId());
                                     if (currentBidder != null) {
                                         currentBidder.sendMessage(
                                                 C("WordPlot") + " " + id + " " + C("MsgChangedOwnerFrom") + " " + oldowner + " " + C("WordTo") + " "

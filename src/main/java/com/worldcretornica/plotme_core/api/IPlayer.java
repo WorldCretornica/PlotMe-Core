@@ -1,6 +1,6 @@
 package com.worldcretornica.plotme_core.api;
 
-public interface Player extends CommandSender, IEntity, IOfflinePlayer {
+public interface IPlayer extends ICommandSender, IEntity, IOfflinePlayer {
 
     IItemStack getItemInHand();
 }

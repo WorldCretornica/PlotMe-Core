@@ -1,6 +1,6 @@
 package com.worldcretornica.plotme_core.api;
 
-public interface CommandSender {
+public interface ICommandSender {
 
     /**
      * Sends this sender a message

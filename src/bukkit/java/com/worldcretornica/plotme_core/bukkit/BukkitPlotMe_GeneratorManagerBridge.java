@@ -1,15 +1,16 @@
 package com.worldcretornica.plotme_core.bukkit;
 
 import com.worldcretornica.plotme_core.api.IBiome;
+import com.worldcretornica.plotme_core.api.ILocation;
+import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IPlotMe_GeneratorManager;
-import com.worldcretornica.plotme_core.api.Location;
-import com.worldcretornica.plotme_core.api.Player;
 import com.worldcretornica.plotme_core.api.World;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitBiome;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitLocation;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitWorld;
 import com.worldcretornica.plotme_core.bukkit.api.IBukkitPlotMe_GeneratorManager;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,20 +25,20 @@ public class BukkitPlotMe_GeneratorManagerBridge implements IPlotMe_GeneratorMan
     }
 
     @Override
-    public String getPlotId(Location location) {
+    public String getPlotId(ILocation location) {
         return generatorManager.getPlotId(((BukkitLocation) location).getLocation());
     }
 
     @Override
-    public String getPlotId(Player player) {
+    public String getPlotId(IPlayer player) {
         return generatorManager.getPlotId(((BukkitPlayer) player).getPlayer());
     }
 
     @Override
-    public List<Player> getPlayersInPlot(String id) {
-        List<Player> players = new ArrayList<>();
+    public List<IPlayer> getPlayersInPlot(String id) {
+        List<IPlayer> players = new ArrayList<>();
 
-        for (org.bukkit.entity.Player player : generatorManager.getPlayersInPlot(id)) {
+        for (Player player : generatorManager.getPlayersInPlot(id)) {
             players.add(new BukkitPlayer(player));
         }
 
@@ -95,12 +96,12 @@ public class BukkitPlotMe_GeneratorManagerBridge implements IPlotMe_GeneratorMan
     }
 
     @Override
-    public Location getPlotBottomLoc(World world, String id) {
+    public ILocation getPlotBottomLoc(World world, String id) {
         return new BukkitLocation(generatorManager.getPlotBottomLoc(((BukkitWorld) world).getWorld(), id));
     }
 
     @Override
-    public Location getPlotTopLoc(World world, String id) {
+    public ILocation getPlotTopLoc(World world, String id) {
         return new BukkitLocation(generatorManager.getPlotTopLoc(((BukkitWorld) world).getWorld(), id));
     }
 
@@ -115,22 +116,22 @@ public class BukkitPlotMe_GeneratorManagerBridge implements IPlotMe_GeneratorMan
     }
 
     @Override
-    public Location getTop(World world, String id) {
+    public ILocation getTop(World world, String id) {
         return new BukkitLocation(generatorManager.getTop(((BukkitWorld) world).getWorld(), id));
     }
 
     @Override
-    public Location getBottom(World world, String id) {
+    public ILocation getBottom(World world, String id) {
         return new BukkitLocation(generatorManager.getBottom(((BukkitWorld) world).getWorld(), id));
     }
 
     @Override
-    public void clear(Location bottom, Location top) {
+    public void clear(ILocation bottom, ILocation top) {
         generatorManager.clear(((BukkitLocation) bottom).getLocation(), ((BukkitLocation) top).getLocation());
     }
 
     @Override
-    public Long[] clear(Location bottom, Location top, long maxBlocks, Long[] start) {
+    public Long[] clear(ILocation bottom, ILocation top, long maxBlocks, Long[] start) {
         return generatorManager.clear(((BukkitLocation) bottom).getLocation(), ((BukkitLocation) top).getLocation(), maxBlocks, start);
     }
 
@@ -145,7 +146,7 @@ public class BukkitPlotMe_GeneratorManagerBridge implements IPlotMe_GeneratorMan
     }
 
     @Override
-    public boolean isBlockInPlot(String id, Location location) {
+    public boolean isBlockInPlot(String id, ILocation location) {
         return generatorManager.isBlockInPlot(id, ((BukkitLocation) location).getLocation());
     }
 
@@ -175,7 +176,7 @@ public class BukkitPlotMe_GeneratorManagerBridge implements IPlotMe_GeneratorMan
     }
 
     @Override
-    public Location getPlotHome(World world, String id) {
+    public ILocation getPlotHome(World world, String id) {
         return new BukkitLocation(generatorManager.getPlotHome(((BukkitWorld) world).getWorld(), id));
     }
 

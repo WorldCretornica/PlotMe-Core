@@ -5,7 +5,7 @@ import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IOfflinePlayer;
-import com.worldcretornica.plotme_core.api.Player;
+import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.World;
 import com.worldcretornica.plotme_core.api.event.InternalPlotBuyEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
@@ -16,7 +16,7 @@ public class CmdBuy extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(Player player) {
+    public boolean exec(IPlayer player) {
         World world = player.getWorld();
         if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
             if (plugin.getPlotMeCoreManager().isEconomyEnabled(world)) {
@@ -71,7 +71,7 @@ public class CmdBuy extends PlotCommand {
                                                     EconomyResponse er2 = serverBridge.depositPlayer(playercurrentbidder, cost);
 
                                                     if (er2.transactionSuccess()) {
-                                                        for (Player onlinePlayers : serverBridge.getOnlinePlayers()) {
+                                                        for (IPlayer onlinePlayers : serverBridge.getOnlinePlayers()) {
                                                             if (onlinePlayers.getName().equalsIgnoreCase(oldowner)) {
                                                                 onlinePlayers.sendMessage(C("WordPlot") + " " + id + " "
                                                                                           + C("MsgSoldTo") + " " + buyer + ". " + Util()

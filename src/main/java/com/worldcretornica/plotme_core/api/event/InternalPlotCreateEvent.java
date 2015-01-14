@@ -2,17 +2,17 @@ package com.worldcretornica.plotme_core.api.event;
 
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.Location;
-import com.worldcretornica.plotme_core.api.Player;
+import com.worldcretornica.plotme_core.api.ILocation;
+import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.World;
 
 public class InternalPlotCreateEvent extends InternalPlotEvent implements ICancellable {
 
     private final String plotId;
-    private final Player creator;
+    private final IPlayer creator;
     private boolean canceled;
 
-    public InternalPlotCreateEvent(PlotMe_Core instance, World world, String plotId, Player creator) {
+    public InternalPlotCreateEvent(PlotMe_Core instance, World world, String plotId, IPlayer creator) {
         super(instance, null, world);
         this.plotId = plotId;
         this.creator = creator;
@@ -32,17 +32,17 @@ public class InternalPlotCreateEvent extends InternalPlotEvent implements ICance
         return plotId;
     }
 
-    public Player getPlayer() {
+    public IPlayer getPlayer() {
         return creator;
     }
 
     @Override
-    public Location getUpperBound() {
+    public ILocation getUpperBound() {
         return PlotMeCoreManager.getPlotTopLoc(world, plotId);
     }
 
     @Override
-    public Location getLowerBound() {
+    public ILocation getLowerBound() {
         return PlotMeCoreManager.getPlotBottomLoc(world, plotId);
     }
 }

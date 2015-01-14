@@ -1,8 +1,8 @@
 package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IServerBridge;
-import com.worldcretornica.plotme_core.api.Player;
 import com.worldcretornica.plotme_core.utils.Util;
 
 public abstract class PlotCommand {
@@ -20,7 +20,7 @@ public abstract class PlotCommand {
         return plugin.getUtil();
     }
 
-    short getPlotLimit(Player player) {
+    short getPlotLimit(IPlayer player) {
 
         if (player.hasPermission("plotme.limit.*")) {
             return -1;

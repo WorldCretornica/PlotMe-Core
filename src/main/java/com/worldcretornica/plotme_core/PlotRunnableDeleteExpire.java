@@ -1,6 +1,6 @@
 package com.worldcretornica.plotme_core;
 
-import com.worldcretornica.plotme_core.api.CommandSender;
+import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.World;
 import com.worldcretornica.plotme_core.api.event.InternalPlotResetEvent;
 
@@ -9,9 +9,9 @@ import java.util.List;
 public class PlotRunnableDeleteExpire implements Runnable {
 
     private final PlotMe_Core plugin;
-    private final CommandSender sender;
+    private final ICommandSender sender;
 
-    public PlotRunnableDeleteExpire(PlotMe_Core instance, CommandSender sender) {
+    public PlotRunnableDeleteExpire(PlotMe_Core instance, ICommandSender sender) {
         plugin = instance;
         this.sender = sender;
     }

@@ -2,59 +2,59 @@ package com.worldcretornica.plotme_core.api.event;
 
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.CommandSender;
 import com.worldcretornica.plotme_core.api.IBiome;
-import com.worldcretornica.plotme_core.api.Location;
-import com.worldcretornica.plotme_core.api.Player;
+import com.worldcretornica.plotme_core.api.ICommandSender;
+import com.worldcretornica.plotme_core.api.ILocation;
+import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.World;
 
 import java.util.Map;
 
 public interface IEventFactory {
 
-    InternalPlotCreateEvent callPlotCreatedEvent(PlotMe_Core plugin, World world, String plotId, Player creator);
+    InternalPlotCreateEvent callPlotCreatedEvent(PlotMe_Core plugin, World world, String plotId, IPlayer creator);
 
-    InternalPlotClearEvent callPlotClearEvent(PlotMe_Core plugin, World world, Plot plot, Player clearer);
+    InternalPlotClearEvent callPlotClearEvent(PlotMe_Core plugin, World world, Plot plot, IPlayer clearer);
 
     InternalPlotLoadEvent callPlotLoadedEvent(PlotMe_Core plugin, World world, Plot plot);
 
-    InternalPlotMoveEvent callPlotMoveEvent(PlotMe_Core plugin, World world, String idFrom, String idTo, Player mover);
+    InternalPlotMoveEvent callPlotMoveEvent(PlotMe_Core plugin, World world, String idFrom, String idTo, IPlayer mover);
 
-    InternalPlotResetEvent callPlotResetEvent(PlotMe_Core plugin, World world, Plot plot, CommandSender cs);
+    InternalPlotResetEvent callPlotResetEvent(PlotMe_Core plugin, World world, Plot plot, ICommandSender cs);
 
-    InternalPlotBidEvent callPlotBidEvent(PlotMe_Core plugin, World world, Plot plot, Player bidder, double bid);
+    InternalPlotBidEvent callPlotBidEvent(PlotMe_Core plugin, World world, Plot plot, IPlayer bidder, double bid);
 
-    InternalPlotAuctionEvent callPlotAuctionEvent(PlotMe_Core plugin, World world, Plot plot, Player player, double minimumbid);
+    InternalPlotAuctionEvent callPlotAuctionEvent(PlotMe_Core plugin, World world, Plot plot, IPlayer player, double minimumbid);
 
-    InternalPlotBiomeChangeEvent callPlotBiomeChangeEvent(PlotMe_Core plugin, World world, Plot plot, Player player, IBiome biome);
+    InternalPlotBiomeChangeEvent callPlotBiomeChangeEvent(PlotMe_Core plugin, World world, Plot plot, IPlayer player, IBiome biome);
 
-    InternalPlotBuyEvent callPlotBuyEvent(PlotMe_Core plugin, World world, Plot plot, Player player, double price);
+    InternalPlotBuyEvent callPlotBuyEvent(PlotMe_Core plugin, World world, Plot plot, IPlayer player, double price);
 
     InternalPlotWorldCreateEvent callPlotWorldCreateEvent(String worldname, Map<String, String> parameters);
 
-    InternalPlotDisposeEvent callPlotDisposeEvent(PlotMe_Core plugin, World world, Plot plot, Player disposer);
+    InternalPlotDisposeEvent callPlotDisposeEvent(PlotMe_Core plugin, World world, Plot plot, IPlayer disposer);
 
-    InternalPlotDoneChangeEvent callPlotDoneEvent(PlotMe_Core plugin, World world, Plot plot, Player player, boolean done);
+    InternalPlotDoneChangeEvent callPlotDoneEvent(PlotMe_Core plugin, World world, Plot plot, IPlayer player, boolean done);
 
-    InternalPlotTeleportHomeEvent callPlotTeleportHomeEvent(PlotMe_Core plugin, World world, Plot plot, Player player);
+    InternalPlotTeleportHomeEvent callPlotTeleportHomeEvent(PlotMe_Core plugin, World world, Plot plot, IPlayer player);
 
-    InternalPlotProtectChangeEvent callPlotProtectChangeEvent(PlotMe_Core plugin, World world, Plot plot, Player player, boolean protect);
+    InternalPlotProtectChangeEvent callPlotProtectChangeEvent(PlotMe_Core plugin, World world, Plot plot, IPlayer player, boolean protect);
 
     InternalPlotReloadEvent callPlotReloadEvent();
 
-    InternalPlotAddAllowedEvent callPlotAddAllowedEvent(PlotMe_Core plugin, World world, Plot plot, Player player, String allowed);
+    InternalPlotAddAllowedEvent callPlotAddAllowedEvent(PlotMe_Core plugin, World world, Plot plot, IPlayer player, String allowed);
 
-    InternalPlotRemoveAllowedEvent callPlotRemoveAllowedEvent(PlotMe_Core plugin, World world, Plot plot, Player player, String allowed);
+    InternalPlotRemoveAllowedEvent callPlotRemoveAllowedEvent(PlotMe_Core plugin, World world, Plot plot, IPlayer player, String allowed);
 
-    InternalPlotAddDeniedEvent callPlotAddDeniedEvent(PlotMe_Core plugin, World world, Plot plot, Player player, String denied);
+    InternalPlotAddDeniedEvent callPlotAddDeniedEvent(PlotMe_Core plugin, World world, Plot plot, IPlayer player, String denied);
 
-    InternalPlotRemoveDeniedEvent callPlotRemoveDeniedEvent(PlotMe_Core plugin, World world, Plot plot, Player player, String denied);
+    InternalPlotRemoveDeniedEvent callPlotRemoveDeniedEvent(PlotMe_Core plugin, World world, Plot plot, IPlayer player, String denied);
 
-    InternalPlotSellChangeEvent callPlotSellChangeEvent(PlotMe_Core plugin, World world, Plot plot, Player seller, double price, boolean isForSale);
+    InternalPlotSellChangeEvent callPlotSellChangeEvent(PlotMe_Core plugin, World world, Plot plot, IPlayer seller, double price, boolean isForSale);
 
-    InternalPlotOwnerChangeEvent callPlotOwnerChangeEvent(PlotMe_Core plugin, World world, Plot plot, Player player, String newowner);
+    InternalPlotOwnerChangeEvent callPlotOwnerChangeEvent(PlotMe_Core plugin, World world, Plot plot, IPlayer player, String newowner);
 
-    InternalPlotTeleportEvent callPlotTeleportEvent(PlotMe_Core plugin, World world, Plot plot, Player player, Location location, String PlotId);
+    InternalPlotTeleportEvent callPlotTeleportEvent(PlotMe_Core plugin, World world, Plot plot, IPlayer player, ILocation location, String PlotId);
 
     InternalPlotWorldLoadEvent callPlotWorldLoadEvent(String worldname, int nbPlots);
 }

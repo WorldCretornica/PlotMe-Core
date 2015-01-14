@@ -3,7 +3,7 @@ package com.worldcretornica.plotme_core.commands;
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.Player;
+import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.World;
 
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ public class CmdShowHelp extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(Player player, int page) {
+    public boolean exec(IPlayer player, int page) {
 
         List<String> allowed_commands = new ArrayList<>();
 

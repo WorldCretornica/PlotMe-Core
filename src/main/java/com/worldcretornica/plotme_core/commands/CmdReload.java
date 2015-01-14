@@ -1,7 +1,7 @@
 package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.CommandSender;
+import com.worldcretornica.plotme_core.api.ICommandSender;
 
 @SuppressWarnings("SameReturnValue")
 public class CmdReload extends PlotCommand {
@@ -10,7 +10,7 @@ public class CmdReload extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(CommandSender sender) {
+    public boolean exec(ICommandSender sender) {
 
         if (sender.hasPermission("plotme.admin.reload")) {
             serverBridge.getEventFactory().callPlotReloadEvent();

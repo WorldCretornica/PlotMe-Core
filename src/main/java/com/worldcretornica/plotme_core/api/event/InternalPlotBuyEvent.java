@@ -2,16 +2,16 @@ package com.worldcretornica.plotme_core.api.event;
 
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.Player;
+import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.World;
 
 public class InternalPlotBuyEvent extends InternalPlotEvent implements ICancellable {
 
-    private final Player buyer;
+    private final IPlayer buyer;
     private final double price;
     private boolean canceled;
 
-    public InternalPlotBuyEvent(PlotMe_Core instance, World world, Plot plot, Player buyer, double price) {
+    public InternalPlotBuyEvent(PlotMe_Core instance, World world, Plot plot, IPlayer buyer, double price) {
         super(instance, plot, world);
         this.buyer = buyer;
         this.price = price;
@@ -27,7 +27,7 @@ public class InternalPlotBuyEvent extends InternalPlotEvent implements ICancella
         canceled = cancel;
     }
 
-    public Player getPlayer() {
+    public IPlayer getPlayer() {
         return buyer;
     }
 

@@ -1,6 +1,6 @@
 package com.worldcretornica.plotme_core;
 
-import com.worldcretornica.plotme_core.api.Location;
+import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.World;
 
 public class PlotMeSpool implements Runnable {
@@ -93,8 +93,8 @@ public class PlotMeSpool implements Runnable {
 
     private long getTotalPlotBlocks() {
         World world = plugin.getServerBridge().getWorld(getPlotToClear().getWorld());
-        Location bottom = PlotMeCoreManager.getGenManager(world).getPlotBottomLoc(world, getPlotToClear().getPlotId());
-        Location top = PlotMeCoreManager.getGenManager(world).getPlotTopLoc(world, getPlotToClear().getPlotId());
+        ILocation bottom = PlotMeCoreManager.getGenManager(world).getPlotBottomLoc(world, getPlotToClear().getPlotId());
+        ILocation top = PlotMeCoreManager.getGenManager(world).getPlotTopLoc(world, getPlotToClear().getPlotId());
 
         return (top.getBlockX() - bottom.getBlockX() + 1) * (top.getBlockY() - bottom.getBlockY() + 1) * (top.getBlockZ() - bottom.getBlockZ() + 1);
     }

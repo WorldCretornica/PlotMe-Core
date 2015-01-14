@@ -6,7 +6,7 @@ import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IOfflinePlayer;
-import com.worldcretornica.plotme_core.api.Player;
+import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.World;
 import com.worldcretornica.plotme_core.api.event.InternalPlotAuctionEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
@@ -17,7 +17,7 @@ public class CmdAuction extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(Player player, String[] args) {
+    public boolean exec(IPlayer player, String[] args) {
         World world = player.getWorld();
         PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
         if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
@@ -42,7 +42,7 @@ public class CmdAuction extends PlotCommand {
                                             EconomyResponse er = serverBridge.depositPlayer(playercurrentbidder, plot.getCurrentBid());
 
                                             if (er.transactionSuccess()) {
-                                                for (Player onlinePlayers : serverBridge.getOnlinePlayers()) {
+                                                for (IPlayer onlinePlayers : serverBridge.getOnlinePlayers()) {
                                                     if (onlinePlayers.getName().equalsIgnoreCase(plot.getCurrentBidder())) {
                                                         onlinePlayers.sendMessage(C("MsgAuctionCancelledOnPlot")
                                                                                   + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner() + ". "

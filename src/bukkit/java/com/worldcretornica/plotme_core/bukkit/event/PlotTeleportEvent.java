@@ -2,19 +2,21 @@ package com.worldcretornica.plotme_core.bukkit.event;
 
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.Location;
-import com.worldcretornica.plotme_core.api.Player;
+import com.worldcretornica.plotme_core.api.ILocation;
+import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.World;
 import com.worldcretornica.plotme_core.api.event.InternalPlotTeleportEvent;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitLocation;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 
 public class PlotTeleportEvent extends PlotEvent implements Cancellable {
 
     private final InternalPlotTeleportEvent event;
 
-    public PlotTeleportEvent(PlotMe_Core instance, World world, Plot plot, Player player, Location loc, String plotId) {
+    public PlotTeleportEvent(PlotMe_Core instance, World world, Plot plot, IPlayer player, ILocation loc, String plotId) {
         super(instance, plot, world);
         event = new InternalPlotTeleportEvent(instance, world, plot, player, loc, plotId);
     }
@@ -29,11 +31,11 @@ public class PlotTeleportEvent extends PlotEvent implements Cancellable {
         event.setCanceled(cancel);
     }
 
-    public org.bukkit.entity.Player getPlayer() {
+    public Player getPlayer() {
         return ((BukkitPlayer) event.getPlayer()).getPlayer();
     }
 
-    public org.bukkit.Location getLocation() {
+    public Location getLocation() {
         return ((BukkitLocation) event.getLocation()).getLocation();
     }
 

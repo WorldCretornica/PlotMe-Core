@@ -2,7 +2,7 @@ package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.Player;
+import com.worldcretornica.plotme_core.api.IPlayer;
 
 import java.util.UUID;
 
@@ -12,7 +12,7 @@ public class CmdWEAnywhere extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(Player player) {
+    public boolean exec(IPlayer player) {
         boolean defaultWEAnywhere = serverBridge.getConfig().getBoolean("defaultWEAnywhere");
         if (player.hasPermission(PermissionNames.ADMIN_WEANYWHERE) && plugin.getServerBridge().getPlotWorldEdit() != null) {
             String name = player.getName();

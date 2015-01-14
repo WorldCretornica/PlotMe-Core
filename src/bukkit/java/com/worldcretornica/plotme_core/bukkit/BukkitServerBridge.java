@@ -9,9 +9,9 @@ import com.worldcretornica.plotme_core.api.IConfigSection;
 import com.worldcretornica.plotme_core.api.IEntityType;
 import com.worldcretornica.plotme_core.api.IMaterial;
 import com.worldcretornica.plotme_core.api.IOfflinePlayer;
+import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IPlotMe_ChunkGenerator;
 import com.worldcretornica.plotme_core.api.IServerBridge;
-import com.worldcretornica.plotme_core.api.Player;
 import com.worldcretornica.plotme_core.api.World;
 import com.worldcretornica.plotme_core.api.event.IEventFactory;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitBiome;
@@ -38,6 +38,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
@@ -223,8 +224,8 @@ public class BukkitServerBridge extends IServerBridge {
     }
 
     @Override
-    public Player getPlayer(UUID uuid) {
-        org.bukkit.entity.Player player = Bukkit.getPlayer(uuid);
+    public IPlayer getPlayer(UUID uuid) {
+        Player player = Bukkit.getPlayer(uuid);
         if (player == null) {
             return null;
         } else {
@@ -240,8 +241,8 @@ public class BukkitServerBridge extends IServerBridge {
      */
     @Deprecated
     @Override
-    public Player getPlayerExact(String playerName) {
-        org.bukkit.entity.Player player = Bukkit.getPlayerExact(playerName);
+    public IPlayer getPlayerExact(String playerName) {
+        Player player = Bukkit.getPlayerExact(playerName);
         if (player == null) {
             return null;
         } else {
@@ -326,12 +327,12 @@ public class BukkitServerBridge extends IServerBridge {
     }
 
     @Override
-    public double getBalance(Player player) {
+    public double getBalance(IPlayer player) {
         return getEconomy().getBalance(((BukkitOfflinePlayer) player).getOfflinePlayer());
     }
 
     @Override
-    public EconomyResponse withdrawPlayer(Player player, double price) {
+    public EconomyResponse withdrawPlayer(IPlayer player, double price) {
         return getEconomy().withdrawPlayer(((BukkitOfflinePlayer) player).getOfflinePlayer(), price);
     }
 
@@ -341,10 +342,10 @@ public class BukkitServerBridge extends IServerBridge {
     }
 
     @Override
-    public List<Player> getOnlinePlayers() {
-        List<Player> players = new ArrayList<>();
+    public List<IPlayer> getOnlinePlayers() {
+        List<IPlayer> players = new ArrayList<>();
 
-        for (org.bukkit.entity.Player player : Bukkit.getOnlinePlayers()) {
+        for (Player player : Bukkit.getOnlinePlayers()) {
             players.add(new BukkitPlayer(player));
         }
 

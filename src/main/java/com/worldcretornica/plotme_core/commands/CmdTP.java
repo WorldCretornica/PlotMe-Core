@@ -4,8 +4,8 @@ import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.Location;
-import com.worldcretornica.plotme_core.api.Player;
+import com.worldcretornica.plotme_core.api.ILocation;
+import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.World;
 import com.worldcretornica.plotme_core.api.event.InternalPlotTeleportEvent;
 
@@ -15,7 +15,7 @@ public class CmdTP extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(Player player, String[] args) {
+    public boolean exec(IPlayer player, String[] args) {
         if (player.hasPermission(PermissionNames.ADMIN_TP)) {
             if (plugin.getPlotMeCoreManager().isPlotWorld(player) || serverBridge.getConfig().getBoolean("allowWorldTeleport")) {
                 if (args.length == 2 || args.length == 3) {
@@ -48,7 +48,7 @@ public class CmdTP extends PlotCommand {
                         }
                         return true;
                     } else {
-                        Location location = PlotMeCoreManager.getPlotHome(world, id);
+                        ILocation location = PlotMeCoreManager.getPlotHome(world, id);
                         Plot plot = plugin.getPlotMeCoreManager().getPlotById(id, world);
                         InternalPlotTeleportEvent
                                 event =

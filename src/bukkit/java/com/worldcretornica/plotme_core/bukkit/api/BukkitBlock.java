@@ -2,7 +2,7 @@ package com.worldcretornica.plotme_core.bukkit.api;
 
 import com.worldcretornica.plotme_core.api.IBiome;
 import com.worldcretornica.plotme_core.api.IBlock;
-import com.worldcretornica.plotme_core.api.Location;
+import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.World;
 import org.bukkit.block.Block;
 
@@ -15,7 +15,7 @@ public class BukkitBlock implements IBlock {
     }
 
     @Override
-    public Location getLocation() {
+    public ILocation getLocation() {
         return new BukkitLocation(block.getLocation());
     }
 
