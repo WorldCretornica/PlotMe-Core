@@ -378,7 +378,7 @@ Full-Width Styles
   position: center;
   min-width:100px;
   max-width:1100px;
-  padding: 10px 10px;
+  padding: 5px 5px;
   margin: auto;
 }
 
@@ -472,7 +472,7 @@ Full-Width Styles
 }
 
 #main_content {
-  padding-top: 40px;
+  padding-top: 20px;
   height:auto;
   width:auto;
   overflow:hidden;
