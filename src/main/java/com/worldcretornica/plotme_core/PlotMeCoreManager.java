@@ -2,7 +2,13 @@ package com.worldcretornica.plotme_core;
 
 import com.griefcraft.lwc.LWC;
 import com.griefcraft.model.Protection;
-import com.worldcretornica.plotme_core.api.*;
+import com.worldcretornica.plotme_core.api.CommandSender;
+import com.worldcretornica.plotme_core.api.IBiome;
+import com.worldcretornica.plotme_core.api.IBlock;
+import com.worldcretornica.plotme_core.api.IPlotMe_GeneratorManager;
+import com.worldcretornica.plotme_core.api.Location;
+import com.worldcretornica.plotme_core.api.Player;
+import com.worldcretornica.plotme_core.api.World;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitBiome;
 import com.worldcretornica.plotme_core.utils.Util;
 
@@ -23,14 +29,32 @@ public class PlotMeCoreManager {
         plotmaps = new HashMap<>();
     }
 
+    /**
+     * Gets the X coordinate on the plot grid
+     * Not to be confused with the X coordinate of a Block or Entity
+     * @param id PlotID
+     * @return X Coordinate
+     */
     public static int getIdX(String id) {
         return Integer.parseInt(id.substring(0, id.indexOf(";")));
     }
 
+    /**
+     * Gets the Z coordinate on the plot grid
+     * Not to be confused with the Z coordinate of a Block or Entity
+     * @param id PlotID
+     * @return Z Coordinate
+     */
     public static int getIdZ(String id) {
         return Integer.parseInt(id.substring(id.indexOf(";") + 1));
     }
 
+    /**
+     * Gets the plot by the id and pmi
+     * @param id Plot ID
+     * @param pmi PlotMapInfo
+     * @return
+     */
     public static Plot getPlotById(String id, PlotMapInfo pmi) {
         if (pmi == null) {
             return null;
@@ -39,7 +63,14 @@ public class PlotMeCoreManager {
         return pmi.getPlot(id);
     }
 
-    public static Plot getPlotById(IPlayer player, PlotMapInfo pmi) {
+    /**
+     * Gets the plot with the player and pmi. The player has its location checked to retrieve the plotID.
+     * @param player player standing in the plot
+     * @param pmi PlotMapInfo
+     * @return
+     */
+
+    public static Plot getPlotById(Player player, PlotMapInfo pmi) {
         String id = getPlotId(player);
         return getPlotById(id, pmi);
     }
@@ -64,7 +95,7 @@ public class PlotMeCoreManager {
         return pmi != null && pmi.getPlot(id) == null;
     }
 
-    public static String getPlotId(ILocation location) {
+    public static String getPlotId(Location location) {
         if (getGenManager(location.getWorld()) == null) {
             return "";
         } else {
@@ -73,7 +104,7 @@ public class PlotMeCoreManager {
 
     }
 
-    public static String getPlotId(IPlayer player) {
+    public static String getPlotId(Player player) {
         if (getGenManager(player.getWorld()) == null) {
             return "";
         } else {
@@ -82,11 +113,11 @@ public class PlotMeCoreManager {
 
     }
 
-    public static ILocation getPlotBottomLoc(World world, String id) {
+    public static Location getPlotBottomLoc(World world, String id) {
         return getGenManager(world).getPlotBottomLoc(world, id);
     }
 
-    public static ILocation getPlotTopLoc(World world, String id) {
+    public static Location getPlotTopLoc(World world, String id) {
         return getGenManager(world).getPlotTopLoc(world, id);
     }
 
@@ -122,11 +153,11 @@ public class PlotMeCoreManager {
         return getGenManager(world).topZ(id, world);
     }
 
-    public static ILocation getPlotHome(World world, String id) {
+    public static Location getPlotHome(World world, String id) {
         return getGenManager(world).getPlotHome(world, id);
     }
 
-    public static List<IPlayer> getPlayersInPlot(World world, String id) {
+    public static List<Player> getPlayersInPlot(World world, String id) {
         return getGenManager(world).getPlayersInPlot(id);
     }
 
@@ -143,21 +174,41 @@ public class PlotMeCoreManager {
         return plugin.getSqlManager().getPlotCount(world, uuid, name);
     }
 
+    /**
+     * Checks if the plotworld has economy features enabled
+     * @param world worldname
+     * @return true if economy enabled
+     */
     private boolean isEconomyEnabled(String world) {
         PlotMapInfo pmi = getMap(world.toLowerCase());
         return isEconomyEnabled(pmi);
     }
 
+    /**
+     * Checks if the plotworld has economy features enabled
+     *
+     * @param pmi plotmapinfo
+     * @return true if economy enabled
+     */
     public boolean isEconomyEnabled(PlotMapInfo pmi) {
         if (!plugin.getServerBridge().getConfig().getBoolean("globalUseEconomy") || plugin.getServerBridge().getEconomy() == null) {
             return false;
         }
         if (pmi == null) {
             return false;
-        } else if (pmi.isUseEconomy() && plugin.getServerBridge().getConfig().getBoolean("globalUseEconomy") && plugin.getServerBridge().getEconomy() != null)
+        } else if (pmi.isUseEconomy() && plugin.getServerBridge().getConfig().getBoolean("globalUseEconomy")
+                   && plugin.getServerBridge().getEconomy() != null) {
             return true;
-        else return false;
+        } else {
+            return false;
+        }
     }
+
+    /**
+     * Checks if the plotworld has economy features enabled
+     * @param world world
+     * @return true if economy enabled
+     */
 
     public boolean isEconomyEnabled(World world) {
         return isEconomyEnabled(world.getName().toLowerCase());
@@ -176,12 +227,12 @@ public class PlotMeCoreManager {
         return getPlotMaps().get(world.toLowerCase());
     }
 
-    public PlotMapInfo getMap(ILocation location) {
+    public PlotMapInfo getMap(Location location) {
         String worldname = location.getWorld().getName().toLowerCase();
         return getMap(worldname);
     }
 
-    public PlotMapInfo getMap(IPlayer player) {
+    public PlotMapInfo getMap(Player player) {
         String world = player.getWorld().getName().toLowerCase();
         return getMap(world);
     }
@@ -270,7 +321,7 @@ public class PlotMeCoreManager {
         return pmi.getPlot(id);
     }
 
-    public Plot getPlotById(String id, IPlayer player) {
+    public Plot getPlotById(String id, Player player) {
         PlotMapInfo pmi = getMap(player.getWorld());
 
         if (pmi == null) {
@@ -280,7 +331,7 @@ public class PlotMeCoreManager {
         return pmi.getPlot(id);
     }
 
-    public Plot getPlotById(IPlayer player) {
+    public Plot getPlotById(Player player) {
         PlotMapInfo pmi = getMap(player);
         String id = getPlotId(player);
 
@@ -299,6 +350,12 @@ public class PlotMeCoreManager {
         }
     }
 
+    /**
+     * Plot to add to loaded plotmap.
+     * @param world world
+     * @param id ID
+     * @param plot Plot to be added
+     */
     public void addPlot(World world, String id, Plot plot) {
         PlotMapInfo pmi = getMap(world);
 
@@ -315,6 +372,10 @@ public class PlotMeCoreManager {
         }
     }
 
+    /**
+     * Get the first plotworld defined in config
+     * @return plotworld
+     */
     public World getFirstWorld() {
         String firstWorld = null;
         try {
@@ -344,11 +405,11 @@ public class PlotMeCoreManager {
      * @param location location to be checked
      * @return true if world is plotworld, false otherwise
      */
-    public boolean isPlotWorld(ILocation location) {
+    public boolean isPlotWorld(Location location) {
         return isPlotWorld(location.getWorld());
     }
 
-    public boolean isPlotWorld(IPlayer player) {
+    public boolean isPlotWorld(Player player) {
         return isPlotWorld(player.getWorld());
     }
 
@@ -392,7 +453,8 @@ public class PlotMeCoreManager {
                 plugin.getSqlManager().deletePlot(idX, idZ, world.getName());
 
                 plot2.setId(idFrom);
-                plugin.getSqlManager().addPlot(plot2, idX, idZ, topX(idFrom, world), bottomX(idFrom, world), topZ(idFrom, world), bottomZ(idFrom, world));
+                plugin.getSqlManager()
+                        .addPlot(plot2, idX, idZ, topX(idFrom, world), bottomX(idFrom, world), topZ(idFrom, world), bottomZ(idFrom, world));
                 addPlot(world, idFrom, plot2);
 
                 HashMap<String, UUID> allowed = plot2.allowed().getAllPlayers();
@@ -458,9 +520,14 @@ public class PlotMeCoreManager {
         return true;
     }
 
+    /**
+     * Remove any LWC Data that may be on the plot.
+     * @param world Plotworld
+     * @param id Plot ID
+     */
     public void removeLWC(World world, String id) {
-        ILocation bottom = getGenManager(world).getBottom(world, id);
-        ILocation top = getGenManager(world).getTop(world, id);
+        Location bottom = getGenManager(world).getBottom(world, id);
+        Location top = getGenManager(world).getTop(world, id);
         final int x1 = bottom.getBlockX();
         final int y1 = bottom.getBlockY();
         final int z1 = bottom.getBlockZ();
@@ -529,13 +596,13 @@ public class PlotMeCoreManager {
         }
     }
 
-    public void clear(World world, Plot plot, ICommandSender sender, ClearReason reason) {
+    public void clear(World world, Plot plot, CommandSender sender, ClearReason reason) {
         String id = plot.getId();
 
         String worldName = world.getName().toLowerCase();
 
-        ILocation bottom = getGenManager(world).getBottom(world, id);
-        ILocation top = getGenManager(world).getTop(world, id);
+        Location bottom = getGenManager(world).getBottom(world, id);
+        Location top = getGenManager(world).getTop(world, id);
 
         if (getMap(worldName).isUseProgressiveClear()) {
             plugin.addPlotToClear(new PlotToClear(worldName, id, reason));
@@ -552,7 +619,7 @@ public class PlotMeCoreManager {
         return isPlotAvailable(id, world.getName().toLowerCase());
     }
 
-    public boolean isPlotAvailable(String id, IPlayer player) {
+    public boolean isPlotAvailable(String id, Player player) {
         return isPlotAvailable(id, player.getWorld());
     }
 
@@ -566,7 +633,7 @@ public class PlotMeCoreManager {
         return plugin.getGenManager(name);
     }
 
-    public void adjustWall(IPlayer player) {
+    public void adjustWall(Player player) {
         World world = player.getWorld();
         String id = getPlotId(player);
         Plot plot = getPlotById(id, world);
@@ -596,7 +663,7 @@ public class PlotMeCoreManager {
     }
 
     /**
-     * @deprecated Use {@link #isPlayerIgnoringWELimit(IPlayer)} instead
+     * @deprecated Use {@link #isPlayerIgnoringWELimit(Player)} instead
      */
     @Deprecated
     @SuppressWarnings("UnusedDeclaration")
@@ -623,7 +690,7 @@ public class PlotMeCoreManager {
         return plugin.getUtil();
     }
 
-    public boolean isPlayerIgnoringWELimit(IPlayer player) {
+    public boolean isPlayerIgnoringWELimit(Player player) {
         if (plugin.getServerBridge().getConfig().getBoolean("defaultWEAnywhere")) {
             if (player.hasPermission(PermissionNames.ADMIN_WEANYWHERE)) {
                 return !getPlayersIgnoringWELimit().contains(player.getUniqueId());

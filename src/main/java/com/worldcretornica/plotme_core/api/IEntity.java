@@ -9,17 +9,27 @@ public interface IEntity extends IActor {
      *
      * @return the location of entity
      */
-    ILocation getLocation();
+    Location getLocation();
+
+    /**
+     * Sets the location of the entity
+     * "Teleports" or moves the entity
+     *
+     * @param location new location
+     */
+    void setLocation(Location location);
+
+    /**
+     * Get the world the entity is currently in.
+     *
+     * @return the world the entity is in
+     */
+    World getWorld();
 
     /**
      * Mark the entity's removal.
      */
-
     void remove();
-
-    IEntityType getType();
-
-    void teleport(ILocation location);
 
     /**
      * Returns the entity name
@@ -37,5 +47,4 @@ public interface IEntity extends IActor {
     @Override
     UUID getUniqueId();
 
-    boolean hasPermission(String node);
 }

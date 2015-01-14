@@ -1,15 +1,14 @@
 package com.worldcretornica.plotme_core.bukkit.api;
 
 import com.worldcretornica.plotme_core.api.IBlock;
-import com.worldcretornica.plotme_core.api.ILocation;
+import com.worldcretornica.plotme_core.api.Location;
 import com.worldcretornica.plotme_core.api.World;
-import org.bukkit.Location;
 
-public class BukkitLocation implements ILocation {
+public class BukkitLocation implements Location {
 
-    private final Location location;
+    private final org.bukkit.Location location;
 
-    public BukkitLocation(Location location) {
+    public BukkitLocation(org.bukkit.Location location) {
         this.location = location;
     }
 
@@ -53,7 +52,7 @@ public class BukkitLocation implements ILocation {
         return new BukkitBlock(location.getBlock());
     }
 
-    public Location getLocation() {
+    public org.bukkit.Location getLocation() {
         return location;
     }
 
@@ -63,7 +62,7 @@ public class BukkitLocation implements ILocation {
     }
 
     @Override
-    public ILocation add(double x, double y, double z) {
+    public Location add(double x, double y, double z) {
         return new BukkitLocation(location.add(x, y, z));
     }
 }

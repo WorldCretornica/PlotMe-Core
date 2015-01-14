@@ -3,8 +3,8 @@ package com.worldcretornica.plotme_core.api.event;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.ILocation;
-import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.api.Location;
+import com.worldcretornica.plotme_core.api.Player;
 import com.worldcretornica.plotme_core.api.World;
 
 public class InternalPlotMoveEvent extends InternalPlotEvent implements ICancellable {
@@ -12,10 +12,10 @@ public class InternalPlotMoveEvent extends InternalPlotEvent implements ICancell
     private final String fromId;
     private final String toId;
     private final World world;
-    private final IPlayer mover;
+    private final Player mover;
     private boolean canceled;
 
-    public InternalPlotMoveEvent(PlotMe_Core instance, World world, String fromId, String toId, IPlayer mover) {
+    public InternalPlotMoveEvent(PlotMe_Core instance, World world, String fromId, String toId, Player mover) {
         super(instance, null, world);
         this.fromId = fromId;
         this.toId = toId;
@@ -42,7 +42,7 @@ public class InternalPlotMoveEvent extends InternalPlotEvent implements ICancell
         return plugin.getPlotMeCoreManager().getPlotById(toId, world);
     }
 
-    public IPlayer getPlayer() {
+    public Player getPlayer() {
         return mover;
     }
 
@@ -55,20 +55,20 @@ public class InternalPlotMoveEvent extends InternalPlotEvent implements ICancell
     }
 
     @Override
-    public ILocation getUpperBound() {
+    public Location getUpperBound() {
         return PlotMeCoreManager.getPlotTopLoc(world, fromId);
     }
 
     @Override
-    public ILocation getLowerBound() {
+    public Location getLowerBound() {
         return PlotMeCoreManager.getPlotBottomLoc(world, fromId);
     }
 
-    public ILocation getUpperBoundTo() {
+    public Location getUpperBoundTo() {
         return PlotMeCoreManager.getPlotTopLoc(world, toId);
     }
 
-    public ILocation getLowerBoundTo() {
+    public Location getLowerBoundTo() {
         return PlotMeCoreManager.getPlotBottomLoc(world, toId);
     }
 

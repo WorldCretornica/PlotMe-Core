@@ -1,7 +1,11 @@
 package com.worldcretornica.plotme_core.commands;
 
-import com.worldcretornica.plotme_core.*;
-import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.PermissionNames;
+import com.worldcretornica.plotme_core.Plot;
+import com.worldcretornica.plotme_core.PlotMapInfo;
+import com.worldcretornica.plotme_core.PlotMeCoreManager;
+import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.api.Player;
 import com.worldcretornica.plotme_core.api.World;
 import com.worldcretornica.plotme_core.api.event.InternalPlotRemoveDeniedEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
@@ -12,7 +16,7 @@ public class CmdUndeny extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(IPlayer player, String[] args) {
+    public boolean exec(Player player, String[] args) {
         if (player.hasPermission(PermissionNames.ADMIN_UNDENY) || player.hasPermission(PermissionNames.USER_UNDENY)) {
             World world = player.getWorld();
             PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
@@ -54,7 +58,8 @@ public class CmdUndeny extends PlotCommand {
                                             }
                                         }
                                     } else {
-                                        player.sendMessage("§c" + C("MsgNotEnoughUndeny") + " " + C("WordMissing") + " §r" + Util().moneyFormat(price - balance, false));
+                                        player.sendMessage("§c" + C("MsgNotEnoughUndeny") + " " + C("WordMissing") + " §r" + Util()
+                                                .moneyFormat(price - balance, false));
                                         return true;
                                     }
                                 } else {
@@ -65,13 +70,19 @@ public class CmdUndeny extends PlotCommand {
                                     plot.removeDenied(denied);
 
                                     double price1 = -price;
-                                    player.sendMessage(C("WordPlayer") + " §c" + denied + "§r " + C("MsgNowUndenied") + " " + Util().moneyFormat(price1, true));
+                                    player.sendMessage(
+                                            C("WordPlayer") + " §c" + denied + "§r " + C("MsgNowUndenied") + " " + Util().moneyFormat(price1, true));
 
                                     if (isAdvancedLogging()) {
-                                        if (price != 0)
-                                            serverBridge.getLogger().info(playername + " " + C("MsgUndeniedPlayer") + " " + denied + " " + C("MsgFromPlot") + " " + id + (" " + C("WordFor") + " " + price));
-                                        else
-                                            serverBridge.getLogger().info(playername + " " + C("MsgUndeniedPlayer") + " " + denied + " " + C("MsgFromPlot") + " " + id);
+                                        if (price != 0) {
+                                            serverBridge.getLogger()
+                                                    .info(playername + " " + C("MsgUndeniedPlayer") + " " + denied + " " + C("MsgFromPlot") + " " + id
+                                                          + (" " + C("WordFor") + " " + price));
+                                        } else {
+                                            serverBridge.getLogger()
+                                                    .info(playername + " " + C("MsgUndeniedPlayer") + " " + denied + " " + C("MsgFromPlot") + " "
+                                                          + id);
+                                        }
                                     }
                                 }
                             } else {

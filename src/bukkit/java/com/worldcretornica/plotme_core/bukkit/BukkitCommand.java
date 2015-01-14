@@ -3,7 +3,36 @@ package com.worldcretornica.plotme_core.bukkit;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitCommandSender;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
-import com.worldcretornica.plotme_core.commands.*;
+import com.worldcretornica.plotme_core.commands.CmdAdd;
+import com.worldcretornica.plotme_core.commands.CmdAddTime;
+import com.worldcretornica.plotme_core.commands.CmdAuction;
+import com.worldcretornica.plotme_core.commands.CmdAuto;
+import com.worldcretornica.plotme_core.commands.CmdBid;
+import com.worldcretornica.plotme_core.commands.CmdBiome;
+import com.worldcretornica.plotme_core.commands.CmdBiomes;
+import com.worldcretornica.plotme_core.commands.CmdBuy;
+import com.worldcretornica.plotme_core.commands.CmdClaim;
+import com.worldcretornica.plotme_core.commands.CmdClear;
+import com.worldcretornica.plotme_core.commands.CmdDeny;
+import com.worldcretornica.plotme_core.commands.CmdDispose;
+import com.worldcretornica.plotme_core.commands.CmdDone;
+import com.worldcretornica.plotme_core.commands.CmdDoneList;
+import com.worldcretornica.plotme_core.commands.CmdExpired;
+import com.worldcretornica.plotme_core.commands.CmdHome;
+import com.worldcretornica.plotme_core.commands.CmdInfo;
+import com.worldcretornica.plotme_core.commands.CmdMove;
+import com.worldcretornica.plotme_core.commands.CmdPlotList;
+import com.worldcretornica.plotme_core.commands.CmdProtect;
+import com.worldcretornica.plotme_core.commands.CmdReload;
+import com.worldcretornica.plotme_core.commands.CmdRemove;
+import com.worldcretornica.plotme_core.commands.CmdReset;
+import com.worldcretornica.plotme_core.commands.CmdResetExpired;
+import com.worldcretornica.plotme_core.commands.CmdSell;
+import com.worldcretornica.plotme_core.commands.CmdSetOwner;
+import com.worldcretornica.plotme_core.commands.CmdShowHelp;
+import com.worldcretornica.plotme_core.commands.CmdTP;
+import com.worldcretornica.plotme_core.commands.CmdUndeny;
+import com.worldcretornica.plotme_core.commands.CmdWEAnywhere;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -93,7 +122,7 @@ public class BukkitCommand implements CommandExecutor {
                 return true;
             } else {
                 if ("reload".equalsIgnoreCase(args[0])) {
-                    return reload.exec();
+                    return reload.exec(new BukkitCommandSender(sender));
                 }
                 if ("resetexpired".equalsIgnoreCase(args[0])) {
                     return resetexpired.exec(new BukkitCommandSender(sender), args);
@@ -132,7 +161,7 @@ public class BukkitCommand implements CommandExecutor {
                     }
                     if ("reload".equalsIgnoreCase(args[0])) {
                         if (player.hasPermission("plotme.admin.reload")) {
-                            return reload.exec();
+                            return reload.exec(player);
                         }
                     }
                     if ("claim".equalsIgnoreCase(args[0])) {

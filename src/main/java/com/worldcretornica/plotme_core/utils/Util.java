@@ -57,8 +57,11 @@ public class Util {
         }
 
         if (showsign) {
-            if (price > 0.0) return "§a" + ("+" + format);
-            else return "§a" + ("-" + format);
+            if (price > 0.0) {
+                return "§a" + ("+" + format);
+            } else {
+                return "§a" + ("-" + format);
+            }
         } else {
             return "§a" + format;
         }

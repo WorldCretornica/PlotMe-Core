@@ -1,6 +1,6 @@
 package com.worldcretornica.plotme_core.api;
 
-public interface ILocation {
+public interface Location {
 
     World getWorld();
 
@@ -18,6 +18,6 @@ public interface ILocation {
 
     IBlock getBlock();
 
-    ILocation add(double x, double y, double z);
+    Location add(double x, double y, double z);
 
 }

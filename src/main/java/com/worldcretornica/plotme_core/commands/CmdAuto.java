@@ -4,7 +4,7 @@ import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.api.Player;
 import com.worldcretornica.plotme_core.api.World;
 import com.worldcretornica.plotme_core.api.event.InternalPlotCreateEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
@@ -15,7 +15,7 @@ public class CmdAuto extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(IPlayer player, String[] args) {
+    public boolean exec(Player player, String[] args) {
         if (player.hasPermission(PermissionNames.USER_AUTO)) {
             if (plugin.getPlotMeCoreManager().isPlotWorld(player) || serverBridge.getConfig().getBoolean("allowWorldTeleport")) {
                 World world;
@@ -37,9 +37,12 @@ public class CmdAuto extends PlotCommand {
                 PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
                 int playerlimit = getPlotLimit(player);
 
-                if (playerlimit != -1 && plugin.getSqlManager().getPlotCount(world.getName().toLowerCase(), player.getUniqueId(), player.getName()) >= playerlimit && !player.hasPermission("PlotMe.admin")) {
+                if (playerlimit != -1
+                    && plugin.getSqlManager().getPlotCount(world.getName().toLowerCase(), player.getUniqueId(), player.getName()) >= playerlimit
+                    && !player.hasPermission("PlotMe.admin")) {
                     player.sendMessage("§c" + C("MsgAlreadyReachedMaxPlots") + " ("
-                            + plugin.getSqlManager().getPlotCount(world.getName().toLowerCase(), player.getUniqueId(), player.getName()) + "/" + playerlimit + "). " + C("WordUse") + " §c/plotme home§r " + C("MsgToGetToIt"));
+                                       + plugin.getSqlManager().getPlotCount(world.getName().toLowerCase(), player.getUniqueId(), player.getName())
+                                       + "/" + playerlimit + "). " + C("WordUse") + " §c/plotme home§r " + C("MsgToGetToIt"));
                 } else {
                     int limit = pmi.getPlotAutoLimit();
 
@@ -77,7 +80,8 @@ public class CmdAuto extends PlotCommand {
                                             }
                                         }
                                     } else {
-                                        player.sendMessage("§c" + C("MsgNotEnoughAuto") + " " + C("WordMissing") + " §r" + Util().moneyFormat(price - balance, false));
+                                        player.sendMessage("§c" + C("MsgNotEnoughAuto") + " " + C("WordMissing") + " §r" + Util()
+                                                .moneyFormat(price - balance, false));
                                         return true;
                                     }
                                 } else {
@@ -86,15 +90,18 @@ public class CmdAuto extends PlotCommand {
                                 if (!event.isCancelled()) {
                                     plugin.getPlotMeCoreManager().createPlot(world, id, player.getName(), player.getUniqueId(), pmi);
 
-                                    player.teleport(PlotMeCoreManager.getPlotHome(world, id));
+                                    player.setLocation(PlotMeCoreManager.getPlotHome(world, id));
 
                                     player.sendMessage(C("MsgThisPlotYours") + " " + C("WordUse") + " §c/plotme home§r " + C("MsgToGetToIt"));
 
                                     if (isAdvancedLogging()) {
-                                        if (price == 0)
+                                        if (price == 0) {
                                             serverBridge.getLogger().info(player.getName() + " " + C("MsgClaimedPlot") + " " + id);
-                                        else
-                                            serverBridge.getLogger().info(player.getName() + " " + C("MsgClaimedPlot") + " " + id + (" " + C("WordFor") + " " + price));
+                                        } else {
+                                            serverBridge.getLogger()
+                                                    .info(player.getName() + " " + C("MsgClaimedPlot") + " " + id + (" " + C("WordFor") + " "
+                                                                                                                     + price));
+                                        }
                                     }
                                     return true;
                                 }

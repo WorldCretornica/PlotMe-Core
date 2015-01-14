@@ -3,7 +3,7 @@ package com.worldcretornica.plotme_core.api.event;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.ILocation;
+import com.worldcretornica.plotme_core.api.Location;
 import com.worldcretornica.plotme_core.api.World;
 
 import java.util.Collection;
@@ -59,7 +59,7 @@ public class InternalPlotEvent {
      *
      * @return location of the upper corner
      */
-    public ILocation getUpperBound() {
+    public Location getUpperBound() {
         if (getPlot() != null) {
             return PlotMeCoreManager.getPlotTopLoc(world, getPlot().getId());
         } else {
@@ -72,7 +72,7 @@ public class InternalPlotEvent {
      *
      * @return location of the lower corner
      */
-    public ILocation getLowerBound() {
+    public Location getLowerBound() {
         if (getPlot() != null) {
             return PlotMeCoreManager.getPlotBottomLoc(world, getPlot().getId());
         } else {
@@ -142,7 +142,7 @@ public class InternalPlotEvent {
      *
      * @return home location
      */
-    public ILocation getHomeLocation() {
+    public Location getHomeLocation() {
         if (getPlot() != null) {
             return PlotMeCoreManager.getPlotHome(world, getPlot().getId());
         } else {

@@ -4,9 +4,24 @@ import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.PlotWorldEdit;
-import com.worldcretornica.plotme_core.api.*;
+import com.worldcretornica.plotme_core.api.IBiome;
+import com.worldcretornica.plotme_core.api.IConfigSection;
+import com.worldcretornica.plotme_core.api.IEntityType;
+import com.worldcretornica.plotme_core.api.IMaterial;
+import com.worldcretornica.plotme_core.api.IOfflinePlayer;
+import com.worldcretornica.plotme_core.api.IPlotMe_ChunkGenerator;
+import com.worldcretornica.plotme_core.api.IServerBridge;
+import com.worldcretornica.plotme_core.api.Player;
+import com.worldcretornica.plotme_core.api.World;
 import com.worldcretornica.plotme_core.api.event.IEventFactory;
-import com.worldcretornica.plotme_core.bukkit.api.*;
+import com.worldcretornica.plotme_core.bukkit.api.BukkitBiome;
+import com.worldcretornica.plotme_core.bukkit.api.BukkitConfigSection;
+import com.worldcretornica.plotme_core.bukkit.api.BukkitEntityType;
+import com.worldcretornica.plotme_core.bukkit.api.BukkitMaterial;
+import com.worldcretornica.plotme_core.bukkit.api.BukkitOfflinePlayer;
+import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
+import com.worldcretornica.plotme_core.bukkit.api.BukkitWorld;
+import com.worldcretornica.plotme_core.bukkit.api.IBukkitPlotMe_ChunkGenerator;
 import com.worldcretornica.plotme_core.bukkit.event.BukkitEventFactory;
 import com.worldcretornica.plotme_core.bukkit.listener.BukkitPlotDenyListener;
 import com.worldcretornica.plotme_core.bukkit.listener.BukkitPlotListener;
@@ -23,24 +38,31 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.UUID;
 import java.util.logging.Logger;
 
-public class BukkitServerBridge implements IServerBridge {
+public class BukkitServerBridge extends IServerBridge {
 
     private final PlotMe_CorePlugin plugin;
     private final IEventFactory eventfactory;
     private Economy economy;
     private PlotWorldEdit plotworldedit;
-    private boolean usinglwc;
     private MultiverseWrapper multiverse;
 
     public BukkitServerBridge(PlotMe_CorePlugin instance) {
@@ -66,14 +88,18 @@ public class BukkitServerBridge implements IServerBridge {
         plugin.reloadConfig();
     }
 
+    /**
+     * PlotMe Logger
+     * @return logger
+     */
     @Override
     public Logger getLogger() {
         return plugin.getLogger();
     }
 
     @Override
-    public void scheduleSyncRepeatingTask(Runnable func, long l, long l2) {
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, func, l, l2);
+    public int scheduleSyncRepeatingTask(Runnable func, long l, long l2) {
+        return Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, func, l, l2);
     }
 
     @Override
@@ -82,10 +108,13 @@ public class BukkitServerBridge implements IServerBridge {
     }
 
     @Override
-    public void scheduleSyncDelayedTask(Runnable task, int i) {
-        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, task, i);
+    public int scheduleSyncDelayedTask(Runnable task, int i) {
+        return Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, task, i);
     }
 
+    /**
+     * Setup PlotMe plugin hooks
+     */
     @Override
     public void setupHooks() {
         PluginManager pluginManager = plugin.getServer().getPluginManager();
@@ -113,11 +142,18 @@ public class BukkitServerBridge implements IServerBridge {
         setUsinglwc(pluginManager.getPlugin("LWC") != null);
     }
 
+    /**
+     * Get Economy from Vault
+     * @return
+     */
     @Override
     public Economy getEconomy() {
         return economy;
     }
 
+    /**
+     * Register economy with Vault
+     */
     private void setupEconomy() {
         RegisteredServiceProvider<Economy> economyProvider = plugin.getServer().getServicesManager().getRegistration(Economy.class);
         if (economyProvider != null) {
@@ -135,22 +171,12 @@ public class BukkitServerBridge implements IServerBridge {
     }
 
     @Override
-    public boolean getUsinglwc() {
-        return usinglwc;
-    }
-
-    public void setUsinglwc(boolean usinglwc) {
-        this.usinglwc = usinglwc;
-    }
-
-    @Override
-    public World getWorld(String name) {
-        org.bukkit.World world = Bukkit.getWorld(name);
+    public World getWorld(String worldName) {
+        org.bukkit.World world = Bukkit.getWorld(worldName);
         if (world == null) {
             return null;
-        } else {
-            return new BukkitWorld(world);
         }
+        return new BukkitWorld(world);
     }
 
     @Override
@@ -162,7 +188,6 @@ public class BukkitServerBridge implements IServerBridge {
     public void unHook() {
         economy = null;
         plotworldedit = null;
-        usinglwc = false;
     }
 
     @Override
@@ -198,8 +223,8 @@ public class BukkitServerBridge implements IServerBridge {
     }
 
     @Override
-    public IPlayer getPlayer(UUID uuid) {
-        Player player = Bukkit.getPlayer(uuid);
+    public Player getPlayer(UUID uuid) {
+        org.bukkit.entity.Player player = Bukkit.getPlayer(uuid);
         if (player == null) {
             return null;
         } else {
@@ -215,8 +240,8 @@ public class BukkitServerBridge implements IServerBridge {
      */
     @Deprecated
     @Override
-    public IPlayer getPlayerExact(String playerName) {
-        Player player = Bukkit.getPlayerExact(playerName);
+    public Player getPlayerExact(String playerName) {
+        org.bukkit.entity.Player player = Bukkit.getPlayerExact(playerName);
         if (player == null) {
             return null;
         } else {
@@ -296,16 +321,17 @@ public class BukkitServerBridge implements IServerBridge {
 
     @Override
     public boolean addMultiverseWorld(String worldname, String environment, String seed, String worldtype, boolean bool, String generator) {
-        return getMultiverseWrapper().getMVWorldManager().addWorld(worldname, Environment.valueOf(environment), seed, WorldType.valueOf(worldtype), bool, generator);
+        return getMultiverseWrapper().getMVWorldManager()
+                .addWorld(worldname, Environment.valueOf(environment), seed, WorldType.valueOf(worldtype), bool, generator);
     }
 
     @Override
-    public double getBalance(IPlayer player) {
+    public double getBalance(Player player) {
         return getEconomy().getBalance(((BukkitOfflinePlayer) player).getOfflinePlayer());
     }
 
     @Override
-    public EconomyResponse withdrawPlayer(IPlayer player, double price) {
+    public EconomyResponse withdrawPlayer(Player player, double price) {
         return getEconomy().withdrawPlayer(((BukkitOfflinePlayer) player).getOfflinePlayer(), price);
     }
 
@@ -315,10 +341,10 @@ public class BukkitServerBridge implements IServerBridge {
     }
 
     @Override
-    public List<IPlayer> getOnlinePlayers() {
-        List<IPlayer> players = new ArrayList<>();
+    public List<Player> getOnlinePlayers() {
+        List<Player> players = new ArrayList<>();
 
-        for (Player player : Bukkit.getOnlinePlayers()) {
+        for (org.bukkit.entity.Player player : Bukkit.getOnlinePlayers()) {
             players.add(new BukkitPlayer(player));
         }
 
@@ -384,7 +410,8 @@ public class BukkitServerBridge implements IServerBridge {
             return false;
         }
         if (!plotMeGenerator.getManager().createConfig(worldname, args)) { //Create the generator configurations
-            getLogger().info(plugin.getAPI().getUtil().C("ErrCannotCreateGen1") + " '" + generator + "' " + plugin.getAPI().getUtil().C("ErrCannotCreateGen2"));
+            getLogger().info(plugin.getAPI().getUtil().C("ErrCannotCreateGen1") + " '" + generator + "' " + plugin.getAPI().getUtil()
+                    .C("ErrCannotCreateGen2"));
             return false;
         }
 
@@ -413,7 +440,6 @@ public class BukkitServerBridge implements IServerBridge {
         tempPlotInfo.setDisposePrice(Double.parseDouble(args.get("DisposePrice")));
 
         plugin.getAPI().getPlotMeCoreManager().addPlotMap(worldname.toLowerCase(), tempPlotInfo);
-
 
         //Are we using multiverse?
         if (getMultiverse() != null) {

@@ -1,8 +1,8 @@
 package com.worldcretornica.plotme_core.bukkit.api;
 
 import com.worldcretornica.plotme_core.api.IEntity;
-import com.worldcretornica.plotme_core.api.IEntityType;
-import com.worldcretornica.plotme_core.api.ILocation;
+import com.worldcretornica.plotme_core.api.Location;
+import com.worldcretornica.plotme_core.api.World;
 import org.bukkit.entity.Entity;
 
 import java.util.UUID;
@@ -16,23 +16,34 @@ public class BukkitEntity implements IEntity {
     }
 
     @Override
-    public ILocation getLocation() {
+    public Location getLocation() {
         return new BukkitLocation(entity.getLocation());
+    }
+
+    @Override
+    public void setLocation(Location location) {
+        BukkitLocation loc = null;
+        if (location instanceof BukkitLocation) {
+            loc = (BukkitLocation) location;
+        }
+        if (loc != null) {
+            entity.teleport(loc.getLocation());
+        }
+    }
+
+    /**
+     * Get the world the entity is currently in.
+     *
+     * @return the world the entity is in
+     */
+    @Override
+    public World getWorld() {
+        return new BukkitWorld(entity.getWorld());
     }
 
     @Override
     public void remove() {
         entity.remove();
-    }
-
-    @Override
-    public IEntityType getType() {
-        return new BukkitEntityType(entity.getType());
-    }
-
-    @Override
-    public void teleport(ILocation newl) {
-        entity.teleport(((BukkitLocation) newl).getLocation());
     }
 
     /**
@@ -55,8 +66,4 @@ public class BukkitEntity implements IEntity {
         return entity.getUniqueId();
     }
 
-    @Override
-    public boolean hasPermission(String node) {
-        return entity.hasPermission(node);
-    }
 }

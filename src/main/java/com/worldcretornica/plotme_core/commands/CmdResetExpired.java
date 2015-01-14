@@ -2,7 +2,7 @@ package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.PlotRunnableDeleteExpire;
-import com.worldcretornica.plotme_core.api.ICommandSender;
+import com.worldcretornica.plotme_core.api.CommandSender;
 import com.worldcretornica.plotme_core.api.World;
 
 @SuppressWarnings("SameReturnValue")
@@ -12,9 +12,10 @@ public class CmdResetExpired extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(ICommandSender sender, String[] args) {
+    public boolean exec(CommandSender sender, String[] args) {
         if (args.length <= 1) {
-            serverBridge.getLogger().info(C("WordUsage") + ": plotme resetexpired <" + C("WordWorld") + "> §rExample: §c/plotme resetexpired plotworld ");
+            serverBridge.getLogger()
+                    .info(C("WordUsage") + ": plotme resetexpired <" + C("WordWorld") + "> §rExample: §c/plotme resetexpired plotworld ");
         } else if (plugin.getWorldCurrentlyProcessingExpired() != null) {
             serverBridge.getLogger().info(C("MsgAlreadyProcessingPlots"));
         } else {

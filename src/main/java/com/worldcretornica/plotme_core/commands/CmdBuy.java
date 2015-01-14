@@ -5,7 +5,7 @@ import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IOfflinePlayer;
-import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.api.Player;
 import com.worldcretornica.plotme_core.api.World;
 import com.worldcretornica.plotme_core.api.event.InternalPlotBuyEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
@@ -16,7 +16,7 @@ public class CmdBuy extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(IPlayer player) {
+    public boolean exec(Player player) {
         World world = player.getWorld();
         if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
             if (plugin.getPlotMeCoreManager().isEconomyEnabled(world)) {
@@ -36,10 +36,14 @@ public class CmdBuy extends PlotCommand {
                             } else {
                                 int plotlimit = getPlotLimit(player);
 
-                                if (plotlimit != -1 && plugin.getSqlManager().getPlotCount(world.getName().toLowerCase(), player.getUniqueId(), player.getName()) >= plotlimit) {
+                                if (plotlimit != -1
+                                    && plugin.getSqlManager().getPlotCount(world.getName().toLowerCase(), player.getUniqueId(), player.getName())
+                                       >= plotlimit) {
                                     player.sendMessage(C("MsgAlreadyReachedMaxPlots") + " ("
-                                            + plugin.getSqlManager().getPlotCount(world.getName().toLowerCase(), player.getUniqueId(), player.getName()) + "/" + getPlotLimit(player) + "). "
-                                            + C("WordUse") + " §c/plotme home§r " + C("MsgToGetToIt"));
+                                                       + plugin.getSqlManager()
+                                            .getPlotCount(world.getName().toLowerCase(), player.getUniqueId(), player.getName()) + "/" + getPlotLimit(
+                                            player) + "). "
+                                                       + C("WordUse") + " §c/plotme home§r " + C("MsgToGetToIt"));
                                 } else {
 
                                     double cost = plot.getCustomPrice();
@@ -48,7 +52,9 @@ public class CmdBuy extends PlotCommand {
                                         player.sendMessage("§c" + C("MsgNotEnoughBuy"));
                                     } else {
 
-                                        InternalPlotBuyEvent event = serverBridge.getEventFactory().callPlotBuyEvent(plugin, world, plot, player, cost);
+                                        InternalPlotBuyEvent
+                                                event =
+                                                serverBridge.getEventFactory().callPlotBuyEvent(plugin, world, plot, player, cost);
 
                                         if (!event.isCancelled()) {
                                             EconomyResponse er = serverBridge.withdrawPlayer(player, cost);
@@ -65,10 +71,11 @@ public class CmdBuy extends PlotCommand {
                                                     EconomyResponse er2 = serverBridge.depositPlayer(playercurrentbidder, cost);
 
                                                     if (er2.transactionSuccess()) {
-                                                        for (IPlayer onlinePlayers : serverBridge.getOnlinePlayers()) {
+                                                        for (Player onlinePlayers : serverBridge.getOnlinePlayers()) {
                                                             if (onlinePlayers.getName().equalsIgnoreCase(oldowner)) {
                                                                 onlinePlayers.sendMessage(C("WordPlot") + " " + id + " "
-                                                                        + C("MsgSoldTo") + " " + buyer + ". " + Util().moneyFormat(cost, true));
+                                                                                          + C("MsgSoldTo") + " " + buyer + ". " + Util()
+                                                                        .moneyFormat(cost, true));
                                                                 break;
                                                             }
                                                         }
@@ -94,7 +101,8 @@ public class CmdBuy extends PlotCommand {
                                                 player.sendMessage(C("MsgPlotBought") + " " + Util().moneyFormat(price, true));
 
                                                 if (isAdvancedLogging()) {
-                                                    plugin.getLogger().info(buyer + " " + C("MsgBoughtPlot") + " " + id + " " + C("WordFor") + " " + cost);
+                                                    plugin.getLogger()
+                                                            .info(buyer + " " + C("MsgBoughtPlot") + " " + id + " " + C("WordFor") + " " + cost);
                                                 }
                                             } else {
                                                 player.sendMessage("§c" + er.errorMessage);

@@ -3,7 +3,7 @@ package com.worldcretornica.plotme_core.commands;
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.api.Player;
 import com.worldcretornica.plotme_core.api.World;
 
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ public class CmdShowHelp extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(IPlayer player, int page) {
+    public boolean exec(Player player, int page) {
 
         List<String> allowed_commands = new ArrayList<>();
 
@@ -98,7 +98,6 @@ public class CmdShowHelp extends PlotCommand {
 
         PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(player);
 
-
         boolean economyEnabled = pmi != null && plugin.getPlotMeCoreManager().isEconomyEnabled(pmi);
 
         if (plugin.getPlotMeCoreManager().isPlotWorld(player) && economyEnabled) {
@@ -136,7 +135,8 @@ public class CmdShowHelp extends PlotCommand {
                     int ownedplots = plugin.getSqlManager().getPlotCount(world.getName().toLowerCase(), player.getUniqueId(), player.getName());
 
                     if (maxplots == -1) {
-                        player.sendMessage("§a" + C("HelpYourPlotLimitWorld") + " : §b" + ownedplots + "§a " + C("HelpUsedOf") + " §b" + C("WordInfinite"));
+                        player.sendMessage(
+                                "§a" + C("HelpYourPlotLimitWorld") + " : §b" + ownedplots + "§a " + C("HelpUsedOf") + " §b" + C("WordInfinite"));
                     } else {
                         player.sendMessage("§a" + C("HelpYourPlotLimitWorld") + " : §b" + ownedplots + "§a " + C("HelpUsedOf") + " §b" + maxplots);
                     }
@@ -147,7 +147,8 @@ public class CmdShowHelp extends PlotCommand {
                     int ownedplots = plugin.getSqlManager().getPlotCount(world.getName().toLowerCase(), player.getUniqueId(), player.getName());
 
                     if (maxplots == -1) {
-                        player.sendMessage("§a" + C("HelpYourPlotLimitWorld") + " : §b" + ownedplots + "§a " + C("HelpUsedOf") + " §b" + C("WordInfinite"));
+                        player.sendMessage(
+                                "§a" + C("HelpYourPlotLimitWorld") + " : §b" + ownedplots + "§a " + C("HelpUsedOf") + " §b" + C("WordInfinite"));
                     } else {
                         player.sendMessage("§a" + C("HelpYourPlotLimitWorld") + " : §b" + ownedplots + "§a " + C("HelpUsedOf") + " §b" + maxplots);
                     }

@@ -1,7 +1,11 @@
 package com.worldcretornica.plotme_core.commands;
 
-import com.worldcretornica.plotme_core.*;
-import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.PermissionNames;
+import com.worldcretornica.plotme_core.Plot;
+import com.worldcretornica.plotme_core.PlotMapInfo;
+import com.worldcretornica.plotme_core.PlotMeCoreManager;
+import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.api.Player;
 import com.worldcretornica.plotme_core.api.World;
 import com.worldcretornica.plotme_core.api.event.InternalPlotSellChangeEvent;
 
@@ -11,7 +15,7 @@ public class CmdSell extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(IPlayer player, String[] args) {
+    public boolean exec(Player player, String[] args) {
         World world = player.getWorld();
         if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
             PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
@@ -31,7 +35,9 @@ public class CmdSell extends PlotCommand {
                                 InternalPlotSellChangeEvent event;
 
                                 if (plot.isForSale()) {
-                                    event = serverBridge.getEventFactory().callPlotSellChangeEvent(plugin, world, plot, player, plot.getCustomPrice(), false);
+                                    event =
+                                            serverBridge.getEventFactory()
+                                                    .callPlotSellChangeEvent(plugin, world, plot, player, plot.getCustomPrice(), false);
 
                                     if (!event.isCancelled()) {
                                         plot.setCustomPrice(0.0);
@@ -46,7 +52,8 @@ public class CmdSell extends PlotCommand {
                                         player.sendMessage(C("MsgPlotNoLongerSale"));
 
                                         if (isAdvancedLogging()) {
-                                            serverBridge.getLogger().info(player.getName() + " " + C("MsgRemovedPlot") + " " + id + " " + C("MsgFromBeingSold"));
+                                            serverBridge.getLogger()
+                                                    .info(player.getName() + " " + C("MsgRemovedPlot") + " " + id + " " + C("MsgFromBeingSold"));
                                         }
                                     }
                                 } else {
@@ -60,7 +67,9 @@ public class CmdSell extends PlotCommand {
                                             try {
                                                 price = Double.parseDouble(args[1]);
                                             } catch (Exception e) {
-                                                player.sendMessage(C("WordUsage") + ": §c /plotme sell <" + C("WordAmount") + ">§r " + C("WordExample") + ": §c/plotme sell 200");
+                                                player.sendMessage(
+                                                        C("WordUsage") + ": §c /plotme sell <" + C("WordAmount") + ">§r " + C("WordExample")
+                                                        + ": §c/plotme sell 200");
                                             }
                                         }
                                     }
@@ -85,7 +94,9 @@ public class CmdSell extends PlotCommand {
                                             player.sendMessage(C("MsgPlotForSale"));
 
                                             if (isAdvancedLogging()) {
-                                                serverBridge.getLogger().info(player.getName() + " " + C("MsgPutOnSalePlot") + " " + id + " " + C("WordFor") + " " + price);
+                                                serverBridge.getLogger()
+                                                        .info(player.getName() + " " + C("MsgPutOnSalePlot") + " " + id + " " + C("WordFor") + " "
+                                                              + price);
                                             }
                                         }
                                     }

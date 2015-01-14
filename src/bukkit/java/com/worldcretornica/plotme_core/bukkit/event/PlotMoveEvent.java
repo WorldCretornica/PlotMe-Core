@@ -3,26 +3,25 @@ package com.worldcretornica.plotme_core.bukkit.event;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.api.Player;
 import com.worldcretornica.plotme_core.api.World;
 import com.worldcretornica.plotme_core.api.event.InternalPlotMoveEvent;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitLocation;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitWorld;
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 
 public class PlotMoveEvent extends PlotEvent implements Cancellable {
 
     private final InternalPlotMoveEvent event;
 
-    public PlotMoveEvent(PlotMe_Core instance, org.bukkit.World world, String fromId, String toId, Player mover) {
+    public PlotMoveEvent(PlotMe_Core instance, org.bukkit.World world, String fromId, String toId, org.bukkit.entity.Player mover) {
         super(instance, null, world);
         event = new InternalPlotMoveEvent(instance, new BukkitWorld(world), fromId, toId, new BukkitPlayer(mover));
     }
 
-    public PlotMoveEvent(PlotMe_Core instance, World world, String fromId, String toId, IPlayer mover) {
+    public PlotMoveEvent(PlotMe_Core instance, World world, String fromId, String toId, Player mover) {
         super(instance, null, world);
         event = new InternalPlotMoveEvent(instance, world, fromId, toId, mover);
     }
@@ -46,7 +45,7 @@ public class PlotMoveEvent extends PlotEvent implements Cancellable {
         return plugin.getPlotMeCoreManager().getPlotById(event.getIdTo(), event.getWorld());
     }
 
-    public Player getPlayer() {
+    public org.bukkit.entity.Player getPlayer() {
         return ((BukkitPlayer) event.getPlayer()).getPlayer();
     }
 

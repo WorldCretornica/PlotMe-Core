@@ -2,7 +2,7 @@ package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.api.Player;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ public class CmdBiomes extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(IPlayer player, String[] args) {
+    public boolean exec(Player player, String[] args) {
         if (plugin.getPlotMeCoreManager().isPlotWorld(player)) {
             if (player.hasPermission(PermissionNames.USER_BIOME)) {
                 List<String> biomes = serverBridge.getBiomes();

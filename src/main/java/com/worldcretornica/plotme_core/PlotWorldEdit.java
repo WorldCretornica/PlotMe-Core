@@ -8,7 +8,7 @@ import com.sk89q.worldedit.function.mask.Mask;
 import com.sk89q.worldedit.function.mask.RegionMask;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.world.World;
-import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.api.Player;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitLocation;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitWorld;
@@ -24,12 +24,12 @@ public class PlotWorldEdit {
         this.worldEdit = worldEditPlugin;
     }
 
-    public void setMask(IPlayer player) {
+    public void setMask(Player player) {
         String id = PlotMeCoreManager.getPlotId(player);
         setMask(player, id);
     }
 
-    public void setMask(IPlayer player, String id) {
+    public void setMask(Player player, String id) {
         BukkitWorld bukkitWorld = (BukkitWorld) player.getWorld();
         BukkitPlayer bukkitPlayer = (BukkitPlayer) player;
 
@@ -78,7 +78,7 @@ public class PlotWorldEdit {
         }
     }
 
-    public void removeMask(IPlayer player) {
+    public void removeMask(Player player) {
         BukkitPlayer bp = (BukkitPlayer) player;
         LocalSession session = worldEdit.getSession(bp.getPlayer());
         session.setMask((Mask) null);

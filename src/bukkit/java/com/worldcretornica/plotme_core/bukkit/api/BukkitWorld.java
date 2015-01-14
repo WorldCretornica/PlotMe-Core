@@ -29,7 +29,7 @@ public class BukkitWorld implements World {
      */
     @Override
     public String getName() {
-        return null;
+        return world.getName();
     }
 
     public org.bukkit.World getWorld() {

@@ -1,8 +1,12 @@
 package com.worldcretornica.plotme_core.commands;
 
-import com.worldcretornica.plotme_core.*;
+import com.worldcretornica.plotme_core.PermissionNames;
+import com.worldcretornica.plotme_core.Plot;
+import com.worldcretornica.plotme_core.PlotMapInfo;
+import com.worldcretornica.plotme_core.PlotMeCoreManager;
+import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IOfflinePlayer;
-import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.api.Player;
 import com.worldcretornica.plotme_core.api.World;
 import com.worldcretornica.plotme_core.api.event.InternalPlotOwnerChangeEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
@@ -13,7 +17,7 @@ public class CmdSetOwner extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(IPlayer player, String[] args) {
+    public boolean exec(Player player, String[] args) {
         World world = player.getWorld();
         PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
         if (player.hasPermission(PermissionNames.ADMIN_SETOWNER)) {
@@ -44,9 +48,11 @@ public class CmdSetOwner extends PlotCommand {
                                     EconomyResponse er = serverBridge.depositPlayer(playeroldowner, pmi.getClaimPrice());
 
                                     if (er.transactionSuccess()) {
-                                        IPlayer oldOwner = serverBridge.getPlayer(playeroldowner.getUniqueId());
+                                        Player oldOwner = serverBridge.getPlayer(playeroldowner.getUniqueId());
                                         if (oldOwner != null) {
-                                            oldOwner.sendMessage(C("MsgYourPlot") + " " + id + " " + C("MsgNowOwnedBy") + " " + newowner + ". " + Util().moneyFormat(pmi.getClaimPrice(), true));
+                                            oldOwner.sendMessage(
+                                                    C("MsgYourPlot") + " " + id + " " + C("MsgNowOwnedBy") + " " + newowner + ". " + Util()
+                                                            .moneyFormat(pmi.getClaimPrice(), true));
                                         }
                                     } else {
                                         player.sendMessage("§c" + er.errorMessage);
@@ -63,9 +69,11 @@ public class CmdSetOwner extends PlotCommand {
                                 EconomyResponse er = serverBridge.depositPlayer(playercurrentbidder, plot.getCurrentBid());
 
                                 if (er.transactionSuccess()) {
-                                    IPlayer currentBidder = serverBridge.getPlayer(playercurrentbidder.getUniqueId());
+                                    Player currentBidder = serverBridge.getPlayer(playercurrentbidder.getUniqueId());
                                     if (currentBidder != null) {
-                                        currentBidder.sendMessage(C("WordPlot") + " " + id + " " + C("MsgChangedOwnerFrom") + " " + oldowner + " " + C("WordTo") + " " + newowner + ". " + Util().moneyFormat(plot.getCurrentBid(), true));
+                                        currentBidder.sendMessage(
+                                                C("WordPlot") + " " + id + " " + C("MsgChangedOwnerFrom") + " " + oldowner + " " + C("WordTo") + " "
+                                                + newowner + ". " + Util().moneyFormat(plot.getCurrentBid(), true));
                                     }
                                 } else {
                                     player.sendMessage(er.errorMessage);
@@ -104,7 +112,9 @@ public class CmdSetOwner extends PlotCommand {
                     player.sendMessage(C("MsgOwnerChangedTo") + " §c" + newowner);
 
                     if (isAdvancedLogging()) {
-                        serverBridge.getLogger().info(playername + " " + C("MsgChangedOwnerOf") + " " + id + " " + C("WordFrom") + " " + oldowner + " " + C("WordTo") + " " + newowner);
+                        serverBridge.getLogger()
+                                .info(playername + " " + C("MsgChangedOwnerOf") + " " + id + " " + C("WordFrom") + " " + oldowner + " " + C("WordTo")
+                                      + " " + newowner);
                     }
                 }
             } else {

@@ -4,7 +4,7 @@ import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.api.Player;
 import com.worldcretornica.plotme_core.api.event.InternalPlotDoneChangeEvent;
 
 public class CmdDone extends PlotCommand {
@@ -13,7 +13,7 @@ public class CmdDone extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(IPlayer player) {
+    public boolean exec(Player player) {
         if (player.hasPermission(PermissionNames.USER_DONE) || player.hasPermission(PermissionNames.ADMIN_DONE)) {
             if (plugin.getPlotMeCoreManager().isPlotWorld(player)) {
                 String id = PlotMeCoreManager.getPlotId(player);
@@ -25,7 +25,9 @@ public class CmdDone extends PlotCommand {
                     String name = player.getName();
 
                     if (plot.getOwner().equalsIgnoreCase(name) || player.hasPermission(PermissionNames.ADMIN_DONE)) {
-                        InternalPlotDoneChangeEvent event = serverBridge.getEventFactory().callPlotDoneEvent(plugin, player.getWorld(), plot, player, plot.isFinished());
+                        InternalPlotDoneChangeEvent
+                                event =
+                                serverBridge.getEventFactory().callPlotDoneEvent(plugin, player.getWorld(), plot, player, plot.isFinished());
 
                         if (!event.isCancelled()) {
                             if (plot.isFinished()) {

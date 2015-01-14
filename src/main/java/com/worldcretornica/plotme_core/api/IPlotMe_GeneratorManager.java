@@ -5,11 +5,11 @@ import java.util.Map;
 
 public interface IPlotMe_GeneratorManager {
 
-    String getPlotId(ILocation location);
+    String getPlotId(Location location);
 
-    String getPlotId(IPlayer player);
+    String getPlotId(Player player);
 
-    List<IPlayer> getPlayersInPlot(String id);
+    List<Player> getPlayersInPlot(String id);
 
     void fillroad(String id1, String id2, World world);
 
@@ -31,27 +31,27 @@ public interface IPlotMe_GeneratorManager {
 
     int getIdZ(String id);
 
-    ILocation getPlotBottomLoc(World world, String id);
+    Location getPlotBottomLoc(World world, String id);
 
-    ILocation getPlotTopLoc(World world, String id);
+    Location getPlotTopLoc(World world, String id);
 
     void setBiome(World world, String id, IBiome biome);
 
     void refreshPlotChunks(World world, String id);
 
-    ILocation getTop(World world, String id);
+    Location getTop(World world, String id);
 
-    ILocation getBottom(World world, String id);
+    Location getBottom(World world, String id);
 
-    void clear(ILocation bottom, ILocation top);
+    void clear(Location bottom, Location top);
 
-    Long[] clear(ILocation bottom, ILocation top, long maxBlocks, Long[] start);
+    Long[] clear(Location bottom, Location top, long maxBlocks, Long[] start);
 
     Long[] clear(World world, String id, long maxBlocks, Long[] start);
 
     void adjustPlotFor(World world, String id, boolean claimed, boolean protect, boolean auctionned, boolean forSale);
 
-    boolean isBlockInPlot(String id, ILocation blocklocation);
+    boolean isBlockInPlot(String id, Location blocklocation);
 
     boolean movePlot(World world, String idFrom, String idTo);
 
@@ -63,7 +63,7 @@ public interface IPlotMe_GeneratorManager {
 
     int topZ(String id, World world);
 
-    ILocation getPlotHome(World world, String id);
+    Location getPlotHome(World world, String id);
 
     boolean isValidId(String id);
 

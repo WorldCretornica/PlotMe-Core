@@ -1,6 +1,6 @@
 package com.worldcretornica.plotme_core;
 
-import com.worldcretornica.plotme_core.api.ILocation;
+import com.worldcretornica.plotme_core.api.Location;
 import com.worldcretornica.plotme_core.api.World;
 
 public class PlotMeSpool implements Runnable {
@@ -49,9 +49,15 @@ public class PlotMeSpool implements Runnable {
 
             if (world != null) {
                 if (currentClear == null) {
-                    currentClear = PlotMeCoreManager.getGenManager(world).clear(world, getPlotToClear().getPlotId(), plugin.getServerBridge().getConfig().getInt("NbBlocksPerClearStep"), null);
+                    currentClear =
+                            PlotMeCoreManager.getGenManager(world)
+                                    .clear(world, getPlotToClear().getPlotId(), plugin.getServerBridge().getConfig().getInt("NbBlocksPerClearStep"),
+                                           null);
                 } else {
-                    currentClear = PlotMeCoreManager.getGenManager(world).clear(world, getPlotToClear().getPlotId(), plugin.getServerBridge().getConfig().getInt("NbBlocksPerClearStep"), currentClear);
+                    currentClear =
+                            PlotMeCoreManager.getGenManager(world)
+                                    .clear(world, getPlotToClear().getPlotId(), plugin.getServerBridge().getConfig().getInt("NbBlocksPerClearStep"),
+                                           currentClear);
                 }
 
                 showProgress();
@@ -61,7 +67,8 @@ public class PlotMeSpool implements Runnable {
                     plugin.getPlotMeCoreManager().removeLWC(world, getPlotToClear().getPlotId());
                     PlotMeCoreManager.getGenManager(world).refreshPlotChunks(world, getPlotToClear().getPlotId());
 
-                    plugin.getLogger().info(plugin.getUtil().C("WordPlot") + " " + getPlotToClear().getPlotId() + " " + plugin.getUtil().C("WordCleared"));
+                    plugin.getLogger()
+                            .info(plugin.getUtil().C("WordPlot") + " " + getPlotToClear().getPlotId() + " " + plugin.getUtil().C("WordCleared"));
 
                     plugin.removePlotToClear(getPlotToClear(), taskid);
                     plottoclear = null;
@@ -69,6 +76,7 @@ public class PlotMeSpool implements Runnable {
             } else {
                 plugin.removePlotToClear(getPlotToClear(), taskid);
                 plottoclear = null;
+
             }
         }
     }
@@ -78,15 +86,15 @@ public class PlotMeSpool implements Runnable {
         long total = getTotalPlotBlocks();
         double percent = (done / total * 100);
         plugin.getLogger().info(plugin.getUtil().C("WordPlot") + " §a" + getPlotToClear().getPlotId() + "§r " + plugin.getUtil().C("WordIn") + " "
-                + "§a" + getPlotToClear().getWorld() + "§r " + plugin.getUtil().C("WordIs") + " §a" + Math.round(percent * 10) / 10 +
-                "% §r" + plugin.getUtil().C("WordCleared") + " (§a" + format(done) + "§r/§a" + format(total) +
-                "§r " + plugin.getUtil().C("WordBlocks") + ")");
+                                + "§a" + getPlotToClear().getWorld() + "§r " + plugin.getUtil().C("WordIs") + " §a" + Math.round(percent * 10) / 10 +
+                                "% §r" + plugin.getUtil().C("WordCleared") + " (§a" + format(done) + "§r/§a" + format(total) +
+                                "§r " + plugin.getUtil().C("WordBlocks") + ")");
     }
 
     private long getTotalPlotBlocks() {
         World world = plugin.getServerBridge().getWorld(getPlotToClear().getWorld());
-        ILocation bottom = PlotMeCoreManager.getGenManager(world).getPlotBottomLoc(world, getPlotToClear().getPlotId());
-        ILocation top = PlotMeCoreManager.getGenManager(world).getPlotTopLoc(world, getPlotToClear().getPlotId());
+        Location bottom = PlotMeCoreManager.getGenManager(world).getPlotBottomLoc(world, getPlotToClear().getPlotId());
+        Location top = PlotMeCoreManager.getGenManager(world).getPlotTopLoc(world, getPlotToClear().getPlotId());
 
         return (top.getBlockX() - bottom.getBlockX() + 1) * (top.getBlockY() - bottom.getBlockY() + 1) * (top.getBlockZ() - bottom.getBlockZ() + 1);
     }

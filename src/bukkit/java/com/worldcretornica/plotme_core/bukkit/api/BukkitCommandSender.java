@@ -1,13 +1,12 @@
 package com.worldcretornica.plotme_core.bukkit.api;
 
-import com.worldcretornica.plotme_core.api.ICommandSender;
-import org.bukkit.command.CommandSender;
+import com.worldcretornica.plotme_core.api.CommandSender;
 
-public class BukkitCommandSender implements ICommandSender {
+public class BukkitCommandSender implements CommandSender {
 
-    private final CommandSender commandsender;
+    private final org.bukkit.command.CommandSender commandsender;
 
-    public BukkitCommandSender(CommandSender sender) {
+    public BukkitCommandSender(org.bukkit.command.CommandSender sender) {
         commandsender = sender;
     }
 
@@ -16,12 +15,16 @@ public class BukkitCommandSender implements ICommandSender {
         commandsender.sendMessage(message);
     }
 
-    public CommandSender getCommandSender() {
+    public org.bukkit.command.CommandSender getCommandSender() {
         return commandsender;
     }
 
-    @Override
     public String getName() {
         return commandsender.getName();
+    }
+
+    @Override
+    public boolean hasPermission(String node) {
+        return true;
     }
 }

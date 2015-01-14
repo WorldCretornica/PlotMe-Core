@@ -2,24 +2,23 @@ package com.worldcretornica.plotme_core.bukkit.event;
 
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.api.Player;
 import com.worldcretornica.plotme_core.api.World;
 import com.worldcretornica.plotme_core.api.event.InternalPlotRemoveAllowedEvent;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitWorld;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 
 public class PlotRemoveAllowedEvent extends PlotEvent implements Cancellable {
 
     private final InternalPlotRemoveAllowedEvent event;
 
-    public PlotRemoveAllowedEvent(PlotMe_Core instance, org.bukkit.World world, Plot plot, Player player, String removed) {
+    public PlotRemoveAllowedEvent(PlotMe_Core instance, org.bukkit.World world, Plot plot, org.bukkit.entity.Player player, String removed) {
         super(instance, plot, world);
         event = new InternalPlotRemoveAllowedEvent(instance, new BukkitWorld(world), plot, new BukkitPlayer(player), removed);
     }
 
-    public PlotRemoveAllowedEvent(PlotMe_Core instance, World world, Plot plot, IPlayer player, String removed) {
+    public PlotRemoveAllowedEvent(PlotMe_Core instance, World world, Plot plot, Player player, String removed) {
         super(instance, plot, world);
         event = new InternalPlotRemoveAllowedEvent(instance, world, plot, player, removed);
     }
@@ -34,7 +33,7 @@ public class PlotRemoveAllowedEvent extends PlotEvent implements Cancellable {
         event.setCanceled(cancel);
     }
 
-    public Player getPlayer() {
+    public org.bukkit.entity.Player getPlayer() {
         return ((BukkitPlayer) event.getPlayer()).getPlayer();
     }
 

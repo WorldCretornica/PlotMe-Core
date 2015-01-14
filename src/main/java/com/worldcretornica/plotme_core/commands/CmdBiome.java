@@ -1,7 +1,11 @@
 package com.worldcretornica.plotme_core.commands;
 
-import com.worldcretornica.plotme_core.*;
-import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.PermissionNames;
+import com.worldcretornica.plotme_core.Plot;
+import com.worldcretornica.plotme_core.PlotMapInfo;
+import com.worldcretornica.plotme_core.PlotMeCoreManager;
+import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.api.Player;
 import com.worldcretornica.plotme_core.api.World;
 import com.worldcretornica.plotme_core.api.event.InternalPlotBiomeChangeEvent;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitBiome;
@@ -13,7 +17,7 @@ public class CmdBiome extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(IPlayer player, String[] args) {
+    public boolean exec(Player player, String[] args) {
         if (player.hasPermission(PermissionNames.USER_BIOME)) {
             World world = player.getWorld();
             PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
@@ -58,7 +62,8 @@ public class CmdBiome extends PlotCommand {
                                         }
                                     }
                                 } else {
-                                    player.sendMessage("§c" + C("MsgNotEnoughBiome") + " " + C("WordMissing") + " §r" + Util().moneyFormat(price - balance, false));
+                                    player.sendMessage("§c" + C("MsgNotEnoughBiome") + " " + C("WordMissing") + " §r" + Util()
+                                            .moneyFormat(price - balance, false));
                                     return true;
                                 }
                             } else {
@@ -73,12 +78,13 @@ public class CmdBiome extends PlotCommand {
                                 player.sendMessage(C("MsgBiomeSet") + " §9" + biomeName + " " + Util().moneyFormat(price1, true));
 
                                 if (isAdvancedLogging()) {
-                                    if (price == 0)
+                                    if (price == 0) {
                                         serverBridge.getLogger().info(playerName + " " + C("MsgChangedBiome") + " " + id + " " + C("WordTo") + " "
-                                                + biomeName);
-                                    else
+                                                                      + biomeName);
+                                    } else {
                                         serverBridge.getLogger().info(playerName + " " + C("MsgChangedBiome") + " " + id + " " + C("WordTo") + " "
-                                                + biomeName + (" " + C("WordFor") + " " + price));
+                                                                      + biomeName + (" " + C("WordFor") + " " + price));
+                                    }
                                 }
                             }
                         } else {

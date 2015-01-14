@@ -1,8 +1,13 @@
 package com.worldcretornica.plotme_core.commands;
 
-import com.worldcretornica.plotme_core.*;
+import com.worldcretornica.plotme_core.ClearReason;
+import com.worldcretornica.plotme_core.PermissionNames;
+import com.worldcretornica.plotme_core.Plot;
+import com.worldcretornica.plotme_core.PlotMapInfo;
+import com.worldcretornica.plotme_core.PlotMeCoreManager;
+import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IOfflinePlayer;
-import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.api.Player;
 import com.worldcretornica.plotme_core.api.World;
 import com.worldcretornica.plotme_core.api.event.InternalPlotResetEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
@@ -13,7 +18,7 @@ public class CmdReset extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(IPlayer player) {
+    public boolean exec(Player player) {
         if (player.hasPermission(PermissionNames.ADMIN_RESET) || player.hasPermission("PlotMe.use.reset")) {
             World world = player.getWorld();
             PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
@@ -57,9 +62,11 @@ public class CmdReset extends PlotCommand {
                                     EconomyResponse er = serverBridge.depositPlayer(playerowner, pmi.getClaimPrice());
 
                                     if (er.transactionSuccess()) {
-                                        IPlayer playerOwner = serverBridge.getPlayer(playerowner.getUniqueId());
+                                        Player playerOwner = serverBridge.getPlayer(playerowner.getUniqueId());
                                         if (playerOwner.getName().equalsIgnoreCase(plot.getOwner())) {
-                                            playerOwner.sendMessage(C("WordPlot") + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner() + " " + C("MsgWasReset") + " " + Util().moneyFormat(pmi.getClaimPrice(), true));
+                                            playerOwner.sendMessage(
+                                                    C("WordPlot") + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner() + " " + C("MsgWasReset")
+                                                    + " " + Util().moneyFormat(pmi.getClaimPrice(), true));
                                         }
                                     } else {
                                         player.sendMessage("§c" + er.errorMessage);

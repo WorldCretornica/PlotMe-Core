@@ -1,8 +1,12 @@
 package com.worldcretornica.plotme_core.commands;
 
-import com.worldcretornica.plotme_core.*;
+import com.worldcretornica.plotme_core.PermissionNames;
+import com.worldcretornica.plotme_core.Plot;
+import com.worldcretornica.plotme_core.PlotMapInfo;
+import com.worldcretornica.plotme_core.PlotMeCoreManager;
+import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IOfflinePlayer;
-import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.api.Player;
 import com.worldcretornica.plotme_core.api.World;
 import com.worldcretornica.plotme_core.api.event.InternalPlotAuctionEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
@@ -13,7 +17,7 @@ public class CmdAuction extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(IPlayer player, String[] args) {
+    public boolean exec(Player player, String[] args) {
         World world = player.getWorld();
         PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
         if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
@@ -38,10 +42,11 @@ public class CmdAuction extends PlotCommand {
                                             EconomyResponse er = serverBridge.depositPlayer(playercurrentbidder, plot.getCurrentBid());
 
                                             if (er.transactionSuccess()) {
-                                                for (IPlayer onlinePlayers : serverBridge.getOnlinePlayers()) {
+                                                for (Player onlinePlayers : serverBridge.getOnlinePlayers()) {
                                                     if (onlinePlayers.getName().equalsIgnoreCase(plot.getCurrentBidder())) {
                                                         onlinePlayers.sendMessage(C("MsgAuctionCancelledOnPlot")
-                                                                + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner() + ". " + Util().moneyFormat(plot.getCurrentBid(), true));
+                                                                                  + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner() + ". "
+                                                                                  + Util().moneyFormat(plot.getCurrentBid(), true));
                                                         break;
                                                     }
                                                 }
@@ -98,7 +103,9 @@ public class CmdAuction extends PlotCommand {
                                         player.sendMessage("§c" + C("MsgInvalidAmount"));
                                     } else {
 
-                                        InternalPlotAuctionEvent event = serverBridge.getEventFactory().callPlotAuctionEvent(plugin, world, plot, player, bid);
+                                        InternalPlotAuctionEvent
+                                                event =
+                                                serverBridge.getEventFactory().callPlotAuctionEvent(plugin, world, plot, player, bid);
 
                                         if (!event.isCancelled()) {
                                             plot.setCurrentBid(bid);
@@ -112,7 +119,8 @@ public class CmdAuction extends PlotCommand {
                                             player.sendMessage(C("MsgAuctionStarted"));
 
                                             if (isAdvancedLogging()) {
-                                                serverBridge.getLogger().info(name + " " + C("MsgStartedAuctionOnPlot") + " " + id + " " + C("WordAt") + " " + bid);
+                                                serverBridge.getLogger()
+                                                        .info(name + " " + C("MsgStartedAuctionOnPlot") + " " + id + " " + C("WordAt") + " " + bid);
                                             }
                                         }
                                     }

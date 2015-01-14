@@ -1,7 +1,11 @@
 package com.worldcretornica.plotme_core.commands;
 
-import com.worldcretornica.plotme_core.*;
-import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.PermissionNames;
+import com.worldcretornica.plotme_core.Plot;
+import com.worldcretornica.plotme_core.PlotMapInfo;
+import com.worldcretornica.plotme_core.PlotMeCoreManager;
+import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.api.Player;
 import com.worldcretornica.plotme_core.api.World;
 import com.worldcretornica.plotme_core.api.event.InternalPlotRemoveAllowedEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
@@ -14,7 +18,7 @@ public class CmdRemove extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(IPlayer player, String[] args) {
+    public boolean exec(Player player, String[] args) {
         if (player.hasPermission(PermissionNames.ADMIN_REMOVE) || player.hasPermission(PermissionNames.USER_REMOVE)) {
             World world = player.getWorld();
             PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
@@ -56,7 +60,8 @@ public class CmdRemove extends PlotCommand {
                                             }
                                         }
                                     } else {
-                                        player.sendMessage("§c" + C("MsgNotEnoughRemove") + " " + C("WordMissing") + " §r" + Util().moneyFormat(price - balance, false));
+                                        player.sendMessage("§c" + C("MsgNotEnoughRemove") + " " + C("WordMissing") + " §r" + Util()
+                                                .moneyFormat(price - balance, false));
                                         return true;
                                     }
                                 } else {
@@ -67,10 +72,13 @@ public class CmdRemove extends PlotCommand {
                                     plot.removeAllowed(allowed);
 
                                     double price1 = -price;
-                                    player.sendMessage(C("WordPlayer") + " §c" + allowed + "§r " + C("WordRemoved") + ". " + Util().moneyFormat(price1, true));
+                                    player.sendMessage(
+                                            C("WordPlayer") + " §c" + allowed + "§r " + C("WordRemoved") + ". " + Util().moneyFormat(price1, true));
 
                                     if (isAdvancedLogging()) {
-                                        serverBridge.getLogger().info(allowed + " " + C("MsgRemovedPlayer") + " " + allowed + " " + C("MsgFromPlot") + " " + id + (price != 0 ? " " + C("WordFor") + " " + price : ""));
+                                        serverBridge.getLogger()
+                                                .info(allowed + " " + C("MsgRemovedPlayer") + " " + allowed + " " + C("MsgFromPlot") + " " + id + (
+                                                        price != 0 ? " " + C("WordFor") + " " + price : ""));
                                     }
                                 }
                             } else {

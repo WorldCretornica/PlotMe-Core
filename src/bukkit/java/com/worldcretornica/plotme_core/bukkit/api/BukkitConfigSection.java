@@ -2,6 +2,7 @@ package com.worldcretornica.plotme_core.bukkit.api;
 
 import com.worldcretornica.plotme_core.api.IConfigSection;
 import com.worldcretornica.plotme_core.bukkit.PlotMe_CorePlugin;
+import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -53,8 +54,8 @@ public class BukkitConfigSection implements IConfigSection {
      * <p/>
      * Some implementations may have limitations on what you may store. See
      * their individual javadocs for details. No implementations should allow
-     * you to store {@link org.bukkit.configuration.Configuration}s or {@link ConfigurationSection}s,
-     * please use {@link #createSection(java.lang.String)} for that.
+     * you to store {@link Configuration}s or {@link ConfigurationSection}s,
+     * please use {@link #createSection(String)} for that.
      *
      * @param path  Path of the object to set.
      * @param value New value to set the path to.

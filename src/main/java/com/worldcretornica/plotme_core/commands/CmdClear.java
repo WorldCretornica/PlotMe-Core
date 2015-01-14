@@ -1,7 +1,12 @@
 package com.worldcretornica.plotme_core.commands;
 
-import com.worldcretornica.plotme_core.*;
-import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.ClearReason;
+import com.worldcretornica.plotme_core.PermissionNames;
+import com.worldcretornica.plotme_core.Plot;
+import com.worldcretornica.plotme_core.PlotMapInfo;
+import com.worldcretornica.plotme_core.PlotMeCoreManager;
+import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.api.Player;
 import com.worldcretornica.plotme_core.api.World;
 import com.worldcretornica.plotme_core.api.event.InternalPlotClearEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
@@ -12,7 +17,7 @@ public class CmdClear extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(IPlayer player) {
+    public boolean exec(Player player) {
         if (player.hasPermission(PermissionNames.ADMIN_CLEAR) || player.hasPermission(PermissionNames.USER_CLEAR)) {
             World world = player.getWorld();
             PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
@@ -29,7 +34,6 @@ public class CmdClear extends PlotCommand {
                         String playerName = player.getName();
 
                         if (plot.getOwner().equalsIgnoreCase(playerName) || player.hasPermission(PermissionNames.ADMIN_CLEAR)) {
-
 
                             double price = 0.0;
 
@@ -54,7 +58,9 @@ public class CmdClear extends PlotCommand {
                                         }
                                     }
                                 } else {
-                                    player.sendMessage("§c" + C("MsgNotEnoughClear") + " " + C("WordMissing") + " §r" + (price - balance) + "§c " + serverBridge.getEconomy().currencyNamePlural());
+                                    player.sendMessage(
+                                            "§c" + C("MsgNotEnoughClear") + " " + C("WordMissing") + " §r" + (price - balance) + "§c " + serverBridge
+                                                    .getEconomy().currencyNamePlural());
                                     return true;
                                 }
                             } else {
@@ -65,10 +71,12 @@ public class CmdClear extends PlotCommand {
                                 plugin.getPlotMeCoreManager().clear(world, plot, player, ClearReason.Clear);
 
                                 if (isAdvancedLogging()) {
-                                    if (price == 0)
+                                    if (price == 0) {
                                         serverBridge.getLogger().info(playerName + " " + C("MsgClearedPlot") + " " + id);
-                                    else
-                                        serverBridge.getLogger().info(playerName + " " + C("MsgClearedPlot") + " " + id + (" " + C("WordFor") + " " + price));
+                                    } else {
+                                        serverBridge.getLogger()
+                                                .info(playerName + " " + C("MsgClearedPlot") + " " + id + (" " + C("WordFor") + " " + price));
+                                    }
                                 }
                             }
                         } else {

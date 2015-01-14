@@ -5,7 +5,7 @@ import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IOfflinePlayer;
-import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.api.Player;
 import com.worldcretornica.plotme_core.api.World;
 import com.worldcretornica.plotme_core.api.event.InternalPlotBidEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
@@ -16,7 +16,7 @@ public class CmdBid extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(IPlayer player, String[] args) {
+    public boolean exec(Player player, String[] args) {
         World world = player.getWorld();
         if (plugin.getPlotMeCoreManager().isEconomyEnabled(world)) {
             if (player.hasPermission(PermissionNames.PLOT_ME_USE_BID)) {
@@ -41,7 +41,8 @@ public class CmdBid extends PlotCommand {
 
                             if (bid == currentbid) {
                                 if (currentbidder != null) {
-                                    player.sendMessage("§c" + C("MsgInvalidBidMustBeAbove") + " §r" + Util().moneyFormat(plot.getCurrentBid(), false));
+                                    player.sendMessage(
+                                            "§c" + C("MsgInvalidBidMustBeAbove") + " §r" + Util().moneyFormat(plot.getCurrentBid(), false));
                                 }
                             } else {
                                 double balance = serverBridge.getBalance(player);
@@ -50,7 +51,9 @@ public class CmdBid extends PlotCommand {
                                     if (!currentbidder.equals(bidder) || bid > balance + currentbid) {
                                         player.sendMessage("§c" + C("MsgNotEnoughBid"));
                                     } else {
-                                        InternalPlotBidEvent event = serverBridge.getEventFactory().callPlotBidEvent(plugin, player.getWorld(), plot, player, bid);
+                                        InternalPlotBidEvent
+                                                event =
+                                                serverBridge.getEventFactory().callPlotBidEvent(plugin, player.getWorld(), plot, player, bid);
 
                                         if (!event.isCancelled()) {
                                             EconomyResponse er = serverBridge.withdrawPlayer(player, bid);
@@ -60,9 +63,11 @@ public class CmdBid extends PlotCommand {
                                                     EconomyResponse er2 = serverBridge.depositPlayer(playercurrentbidder, currentbid);
 
                                                     if (er2.transactionSuccess()) {
-                                                        for (IPlayer onlinePlayers : serverBridge.getOnlinePlayers()) {
+                                                        for (Player onlinePlayers : serverBridge.getOnlinePlayers()) {
                                                             if (onlinePlayers.getName().equalsIgnoreCase(currentbidder)) {
-                                                                onlinePlayers.sendMessage(C("MsgOutbidOnPlot") + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner() + ". " + Util().moneyFormat(bid, true));
+                                                                onlinePlayers.sendMessage(
+                                                                        C("MsgOutbidOnPlot") + " " + id + " " + C("MsgOwnedBy") + " " + plot
+                                                                                .getOwner() + ". " + Util().moneyFormat(bid, true));
                                                                 break;
                                                             }
                                                         }
@@ -95,7 +100,9 @@ public class CmdBid extends PlotCommand {
                                 } else if (currentbidder.equals(bidder) && bid > balance + currentbid) {
                                     player.sendMessage("§c" + C("MsgNotEnoughBid"));
                                 } else {
-                                    InternalPlotBidEvent event = serverBridge.getEventFactory().callPlotBidEvent(plugin, player.getWorld(), plot, player, bid);
+                                    InternalPlotBidEvent
+                                            event =
+                                            serverBridge.getEventFactory().callPlotBidEvent(plugin, player.getWorld(), plot, player, bid);
 
                                     if (!event.isCancelled()) {
                                         EconomyResponse er = serverBridge.withdrawPlayer(player, bid);
@@ -105,9 +112,11 @@ public class CmdBid extends PlotCommand {
                                                 EconomyResponse er2 = serverBridge.depositPlayer(playercurrentbidder, currentbid);
 
                                                 if (er2.transactionSuccess()) {
-                                                    for (IPlayer onlinePlayers : serverBridge.getOnlinePlayers()) {
+                                                    for (Player onlinePlayers : serverBridge.getOnlinePlayers()) {
                                                         if (onlinePlayers.getName().equalsIgnoreCase(currentbidder)) {
-                                                            onlinePlayers.sendMessage(C("MsgOutbidOnPlot") + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner() + ". " + Util().moneyFormat(bid, true));
+                                                            onlinePlayers.sendMessage(
+                                                                    C("MsgOutbidOnPlot") + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner()
+                                                                    + ". " + Util().moneyFormat(bid, true));
                                                             break;
                                                         }
                                                     }
@@ -139,7 +148,8 @@ public class CmdBid extends PlotCommand {
                                 }
                             }
                         } else {
-                            player.sendMessage(C("WordUsage") + ": §c/plotme bid <" + C("WordAmount") + "> §r" + C("WordExample") + ": §c/plotme bid 100");
+                            player.sendMessage(
+                                    C("WordUsage") + ": §c/plotme bid <" + C("WordAmount") + "> §r" + C("WordExample") + ": §c/plotme bid 100");
                         }
                     } else {
                         player.sendMessage("§c" + C("MsgPlotNotAuctionned"));

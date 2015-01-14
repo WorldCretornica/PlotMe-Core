@@ -1,6 +1,10 @@
 package com.worldcretornica.plotme_core.bukkit.listener;
 
-import com.worldcretornica.plotme_core.*;
+import com.worldcretornica.plotme_core.PermissionNames;
+import com.worldcretornica.plotme_core.Plot;
+import com.worldcretornica.plotme_core.PlotMeCoreManager;
+import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.PlotWorldEdit;
 import com.worldcretornica.plotme_core.bukkit.PlotMe_CorePlugin;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitLocation;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitMaterial;
@@ -10,7 +14,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.*;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerPortalEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 
 public class BukkitPlotWorldEditListener implements Listener {
 
@@ -141,8 +150,9 @@ public class BukkitPlotWorldEditListener implements Listener {
 
         if (api.getPlotMeCoreManager().isPlotWorld(location)) {
             if (!player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE) &&
-                    !api.getPlotMeCoreManager().isPlayerIgnoringWELimit(player) &&
-                    (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK) && ((BukkitMaterial) player.getItemInHand().getType()).getMaterial() != Material.AIR) {
+                !api.getPlotMeCoreManager().isPlayerIgnoringWELimit(player) &&
+                (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK)
+                && ((BukkitMaterial) player.getItemInHand().getType()).getMaterial() != Material.AIR) {
                 String id = PlotMeCoreManager.getPlotId(location);
                 Plot plot = api.getPlotMeCoreManager().getMap(location).getPlot(id);
 

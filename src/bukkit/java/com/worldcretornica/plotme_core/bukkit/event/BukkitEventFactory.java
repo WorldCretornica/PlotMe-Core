@@ -2,8 +2,35 @@ package com.worldcretornica.plotme_core.bukkit.event;
 
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.*;
-import com.worldcretornica.plotme_core.api.event.*;
+import com.worldcretornica.plotme_core.api.CommandSender;
+import com.worldcretornica.plotme_core.api.IBiome;
+import com.worldcretornica.plotme_core.api.Location;
+import com.worldcretornica.plotme_core.api.Player;
+import com.worldcretornica.plotme_core.api.World;
+import com.worldcretornica.plotme_core.api.event.IEventFactory;
+import com.worldcretornica.plotme_core.api.event.InternalPlotAddAllowedEvent;
+import com.worldcretornica.plotme_core.api.event.InternalPlotAddDeniedEvent;
+import com.worldcretornica.plotme_core.api.event.InternalPlotAuctionEvent;
+import com.worldcretornica.plotme_core.api.event.InternalPlotBidEvent;
+import com.worldcretornica.plotme_core.api.event.InternalPlotBiomeChangeEvent;
+import com.worldcretornica.plotme_core.api.event.InternalPlotBuyEvent;
+import com.worldcretornica.plotme_core.api.event.InternalPlotClearEvent;
+import com.worldcretornica.plotme_core.api.event.InternalPlotCreateEvent;
+import com.worldcretornica.plotme_core.api.event.InternalPlotDisposeEvent;
+import com.worldcretornica.plotme_core.api.event.InternalPlotDoneChangeEvent;
+import com.worldcretornica.plotme_core.api.event.InternalPlotLoadEvent;
+import com.worldcretornica.plotme_core.api.event.InternalPlotMoveEvent;
+import com.worldcretornica.plotme_core.api.event.InternalPlotOwnerChangeEvent;
+import com.worldcretornica.plotme_core.api.event.InternalPlotProtectChangeEvent;
+import com.worldcretornica.plotme_core.api.event.InternalPlotReloadEvent;
+import com.worldcretornica.plotme_core.api.event.InternalPlotRemoveAllowedEvent;
+import com.worldcretornica.plotme_core.api.event.InternalPlotRemoveDeniedEvent;
+import com.worldcretornica.plotme_core.api.event.InternalPlotResetEvent;
+import com.worldcretornica.plotme_core.api.event.InternalPlotSellChangeEvent;
+import com.worldcretornica.plotme_core.api.event.InternalPlotTeleportEvent;
+import com.worldcretornica.plotme_core.api.event.InternalPlotTeleportHomeEvent;
+import com.worldcretornica.plotme_core.api.event.InternalPlotWorldCreateEvent;
+import com.worldcretornica.plotme_core.api.event.InternalPlotWorldLoadEvent;
 import org.bukkit.Bukkit;
 
 import java.util.Map;
@@ -11,14 +38,14 @@ import java.util.Map;
 public class BukkitEventFactory implements IEventFactory {
 
     @Override
-    public InternalPlotCreateEvent callPlotCreatedEvent(PlotMe_Core plugin, World world, String plotId, IPlayer creator) {
+    public InternalPlotCreateEvent callPlotCreatedEvent(PlotMe_Core plugin, World world, String plotId, Player creator) {
         PlotCreateEvent event = new PlotCreateEvent(plugin, world, plotId, creator);
         Bukkit.getPluginManager().callEvent(event);
         return event.getInternal();
     }
 
     @Override
-    public InternalPlotClearEvent callPlotClearEvent(PlotMe_Core plugin, World world, Plot plot, IPlayer clearer) {
+    public InternalPlotClearEvent callPlotClearEvent(PlotMe_Core plugin, World world, Plot plot, Player clearer) {
         PlotClearEvent event = new PlotClearEvent(plugin, world, plot, clearer);
         Bukkit.getPluginManager().callEvent(event);
         return event.getInternal();
@@ -32,42 +59,42 @@ public class BukkitEventFactory implements IEventFactory {
     }
 
     @Override
-    public InternalPlotMoveEvent callPlotMoveEvent(PlotMe_Core plugin, World world, String idFrom, String idTo, IPlayer mover) {
+    public InternalPlotMoveEvent callPlotMoveEvent(PlotMe_Core plugin, World world, String idFrom, String idTo, Player mover) {
         PlotMoveEvent event = new PlotMoveEvent(plugin, world, idFrom, idTo, mover);
         Bukkit.getPluginManager().callEvent(event);
         return event.getInternal();
     }
 
     @Override
-    public InternalPlotResetEvent callPlotResetEvent(PlotMe_Core plugin, World world, Plot plot, ICommandSender cs) {
+    public InternalPlotResetEvent callPlotResetEvent(PlotMe_Core plugin, World world, Plot plot, CommandSender cs) {
         PlotResetEvent event = new PlotResetEvent(plugin, world, plot, cs);
         Bukkit.getPluginManager().callEvent(event);
         return event.getInternal();
     }
 
     @Override
-    public InternalPlotBidEvent callPlotBidEvent(PlotMe_Core plugin, World world, Plot plot, IPlayer bidder, double bid) {
+    public InternalPlotBidEvent callPlotBidEvent(PlotMe_Core plugin, World world, Plot plot, Player bidder, double bid) {
         PlotBidEvent event = new PlotBidEvent(plugin, world, plot, bidder, bid);
         Bukkit.getPluginManager().callEvent(event);
         return event.getInternal();
     }
 
     @Override
-    public InternalPlotAuctionEvent callPlotAuctionEvent(PlotMe_Core plugin, World world, Plot plot, IPlayer player, double minimumbid) {
+    public InternalPlotAuctionEvent callPlotAuctionEvent(PlotMe_Core plugin, World world, Plot plot, Player player, double minimumbid) {
         PlotAuctionEvent event = new PlotAuctionEvent(plugin, world, plot, player, minimumbid);
         Bukkit.getPluginManager().callEvent(event);
         return event.getInternal();
     }
 
     @Override
-    public InternalPlotBiomeChangeEvent callPlotBiomeChangeEvent(PlotMe_Core plugin, World world, Plot plot, IPlayer player, IBiome biome) {
+    public InternalPlotBiomeChangeEvent callPlotBiomeChangeEvent(PlotMe_Core plugin, World world, Plot plot, Player player, IBiome biome) {
         PlotBiomeChangeEvent event = new PlotBiomeChangeEvent(plugin, world, plot, player, biome);
         Bukkit.getPluginManager().callEvent(event);
         return event.getInternal();
     }
 
     @Override
-    public InternalPlotBuyEvent callPlotBuyEvent(PlotMe_Core plugin, World world, Plot plot, IPlayer player, double price) {
+    public InternalPlotBuyEvent callPlotBuyEvent(PlotMe_Core plugin, World world, Plot plot, Player player, double price) {
         PlotBuyEvent event = new PlotBuyEvent(plugin, world, plot, player, price);
         Bukkit.getPluginManager().callEvent(event);
         return event.getInternal();
@@ -81,28 +108,28 @@ public class BukkitEventFactory implements IEventFactory {
     }
 
     @Override
-    public InternalPlotDisposeEvent callPlotDisposeEvent(PlotMe_Core plugin, World world, Plot plot, IPlayer disposer) {
+    public InternalPlotDisposeEvent callPlotDisposeEvent(PlotMe_Core plugin, World world, Plot plot, Player disposer) {
         PlotDisposeEvent event = new PlotDisposeEvent(plugin, world, plot, disposer);
         Bukkit.getPluginManager().callEvent(event);
         return event.getInternal();
     }
 
     @Override
-    public InternalPlotDoneChangeEvent callPlotDoneEvent(PlotMe_Core plugin, World world, Plot plot, IPlayer player, boolean done) {
+    public InternalPlotDoneChangeEvent callPlotDoneEvent(PlotMe_Core plugin, World world, Plot plot, Player player, boolean done) {
         PlotDoneChangeEvent event = new PlotDoneChangeEvent(plugin, world, plot, player, done);
         Bukkit.getPluginManager().callEvent(event);
         return event.getInternal();
     }
 
     @Override
-    public InternalPlotTeleportHomeEvent callPlotTeleportHomeEvent(PlotMe_Core plugin, World world, Plot plot, IPlayer player) {
+    public InternalPlotTeleportHomeEvent callPlotTeleportHomeEvent(PlotMe_Core plugin, World world, Plot plot, Player player) {
         PlotTeleportHomeEvent event = new PlotTeleportHomeEvent(plugin, world, plot, player);
         Bukkit.getPluginManager().callEvent(event);
         return event.getInternal();
     }
 
     @Override
-    public InternalPlotProtectChangeEvent callPlotProtectChangeEvent(PlotMe_Core plugin, World world, Plot plot, IPlayer player, boolean protect) {
+    public InternalPlotProtectChangeEvent callPlotProtectChangeEvent(PlotMe_Core plugin, World world, Plot plot, Player player, boolean protect) {
         PlotProtectChangeEvent event = new PlotProtectChangeEvent(plugin, world, plot, player, protect);
         Bukkit.getPluginManager().callEvent(event);
         return event.getInternal();
@@ -116,49 +143,51 @@ public class BukkitEventFactory implements IEventFactory {
     }
 
     @Override
-    public InternalPlotAddAllowedEvent callPlotAddAllowedEvent(PlotMe_Core plugin, World world, Plot plot, IPlayer player, String allowed) {
+    public InternalPlotAddAllowedEvent callPlotAddAllowedEvent(PlotMe_Core plugin, World world, Plot plot, Player player, String allowed) {
         PlotAddAllowedEvent event = new PlotAddAllowedEvent(plugin, world, plot, player, allowed);
         Bukkit.getPluginManager().callEvent(event);
         return event.getInternal();
     }
 
     @Override
-    public InternalPlotRemoveAllowedEvent callPlotRemoveAllowedEvent(PlotMe_Core plugin, World world, Plot plot, IPlayer player, String allowed) {
+    public InternalPlotRemoveAllowedEvent callPlotRemoveAllowedEvent(PlotMe_Core plugin, World world, Plot plot, Player player, String allowed) {
         PlotRemoveAllowedEvent event = new PlotRemoveAllowedEvent(plugin, world, plot, player, allowed);
         Bukkit.getPluginManager().callEvent(event);
         return event.getInternal();
     }
 
     @Override
-    public InternalPlotAddDeniedEvent callPlotAddDeniedEvent(PlotMe_Core plugin, World world, Plot plot, IPlayer player, String denied) {
+    public InternalPlotAddDeniedEvent callPlotAddDeniedEvent(PlotMe_Core plugin, World world, Plot plot, Player player, String denied) {
         PlotAddDeniedEvent event = new PlotAddDeniedEvent(plugin, world, plot, player, denied);
         Bukkit.getPluginManager().callEvent(event);
         return event.getInternal();
     }
 
     @Override
-    public InternalPlotRemoveDeniedEvent callPlotRemoveDeniedEvent(PlotMe_Core plugin, World world, Plot plot, IPlayer player, String denied) {
+    public InternalPlotRemoveDeniedEvent callPlotRemoveDeniedEvent(PlotMe_Core plugin, World world, Plot plot, Player player, String denied) {
         PlotRemoveDeniedEvent event = new PlotRemoveDeniedEvent(plugin, world, plot, player, denied);
         Bukkit.getPluginManager().callEvent(event);
         return event.getInternal();
     }
 
     @Override
-    public InternalPlotSellChangeEvent callPlotSellChangeEvent(PlotMe_Core plugin, World world, Plot plot, IPlayer seller, double price, boolean isForSale) {
+    public InternalPlotSellChangeEvent callPlotSellChangeEvent(PlotMe_Core plugin, World world, Plot plot, Player seller, double price,
+                                                               boolean isForSale) {
         PlotSellChangeEvent event = new PlotSellChangeEvent(plugin, world, plot, seller, price, isForSale);
         Bukkit.getPluginManager().callEvent(event);
         return event.getInternal();
     }
 
     @Override
-    public InternalPlotOwnerChangeEvent callPlotOwnerChangeEvent(PlotMe_Core plugin, World world, Plot plot, IPlayer player, String newowner) {
+    public InternalPlotOwnerChangeEvent callPlotOwnerChangeEvent(PlotMe_Core plugin, World world, Plot plot, Player player, String newowner) {
         PlotOwnerChangeEvent event = new PlotOwnerChangeEvent(plugin, world, plot, player, newowner);
         Bukkit.getPluginManager().callEvent(event);
         return event.getInternal();
     }
 
     @Override
-    public InternalPlotTeleportEvent callPlotTeleportEvent(PlotMe_Core plugin, World world, Plot plot, IPlayer player, ILocation location, String plotId) {
+    public InternalPlotTeleportEvent callPlotTeleportEvent(PlotMe_Core plugin, World world, Plot plot, Player player, Location location,
+                                                           String plotId) {
         PlotTeleportEvent event = new PlotTeleportEvent(plugin, world, plot, player, location, plotId);
         Bukkit.getPluginManager().callEvent(event);
         return event.getInternal();

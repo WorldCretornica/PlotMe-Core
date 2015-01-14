@@ -1,7 +1,11 @@
 package com.worldcretornica.plotme_core.commands;
 
-import com.worldcretornica.plotme_core.*;
-import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.PermissionNames;
+import com.worldcretornica.plotme_core.Plot;
+import com.worldcretornica.plotme_core.PlotMapInfo;
+import com.worldcretornica.plotme_core.PlotMeCoreManager;
+import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.api.Player;
 import com.worldcretornica.plotme_core.api.World;
 import com.worldcretornica.plotme_core.api.event.InternalPlotAddAllowedEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
@@ -12,7 +16,7 @@ public class CmdAdd extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(IPlayer player, String[] args) {
+    public boolean exec(Player player, String[] args) {
         if (player.hasPermission(PermissionNames.ADMIN_ADD) || player.hasPermission(PermissionNames.USER_ADD)) {
             World world = player.getWorld();
             PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
@@ -32,7 +36,6 @@ public class CmdAdd extends PlotCommand {
                             if (plot.isAllowedConsulting(allowed) || plot.isGroupAllowed(allowed)) {
                                 player.sendMessage(C("WordPlayer") + " §c" + allowed + "§r " + C("MsgAlreadyAllowed"));
                             } else {
-
 
                                 InternalPlotAddAllowedEvent event;
                                 double advancedPrice = 0.0;
@@ -56,7 +59,8 @@ public class CmdAdd extends PlotCommand {
                                             }
                                         }
                                     } else {
-                                        player.sendMessage("§c" + C("MsgNotEnoughAdd") + " " + C("WordMissing") + " §r" + Util().moneyFormat(price - balance, false));
+                                        player.sendMessage("§c" + C("MsgNotEnoughAdd") + " " + C("WordMissing") + " §r" + Util()
+                                                .moneyFormat(price - balance, false));
                                         return true;
                                     }
                                 } else {
@@ -64,7 +68,7 @@ public class CmdAdd extends PlotCommand {
                                 }
 
                                 if (!event.isCancelled()) {
-                                    IPlayer allowed2 = plugin.getServerBridge().getPlayerExact(allowed);
+                                    Player allowed2 = plugin.getServerBridge().getPlayerExact(allowed);
                                     if (allowed2 != null) {
                                         plot.addAllowed(allowed, allowed2.getUniqueId());
                                         plot.removeDenied(allowed2.getUniqueId());
@@ -76,10 +80,13 @@ public class CmdAdd extends PlotCommand {
 
                                     if (isAdvancedLogging()) {
                                         if (advancedPrice == 0) {
-                                            serverBridge.getLogger().info(player.getName() + " " + C("MsgAddedPlayer") + " " + allowed + " " + C("MsgToPlot") + " " + id);
+                                            serverBridge.getLogger()
+                                                    .info(player.getName() + " " + C("MsgAddedPlayer") + " " + allowed + " " + C("MsgToPlot") + " "
+                                                          + id);
                                         } else {
-                                            serverBridge.getLogger().info(player.getName() + " " + C("MsgAddedPlayer") + " " + allowed + " " + C("MsgToPlot") + " "
-                                                    + id + (" " + C("WordFor") + " " + advancedPrice));
+                                            serverBridge.getLogger()
+                                                    .info(player.getName() + " " + C("MsgAddedPlayer") + " " + allowed + " " + C("MsgToPlot") + " "
+                                                          + id + (" " + C("WordFor") + " " + advancedPrice));
                                         }
                                     }
                                 }

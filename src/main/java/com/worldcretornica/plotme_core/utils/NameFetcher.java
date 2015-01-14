@@ -14,6 +14,7 @@ import java.util.UUID;
 import java.util.concurrent.Callable;
 
 public class NameFetcher implements Callable<Map<UUID, String>> {
+
     private static final String PROFILE_URL = "https://sessionserver.mojang.com/session/minecraft/profile/";
     private final JSONParser jsonParser = new JSONParser();
     private final List<UUID> uuids;

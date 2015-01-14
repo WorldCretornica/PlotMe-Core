@@ -2,24 +2,23 @@ package com.worldcretornica.plotme_core.bukkit.event;
 
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.api.Player;
 import com.worldcretornica.plotme_core.api.World;
 import com.worldcretornica.plotme_core.api.event.InternalPlotBuyEvent;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitWorld;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 
 public class PlotBuyEvent extends PlotEvent implements Cancellable {
 
     private final InternalPlotBuyEvent event;
 
-    public PlotBuyEvent(PlotMe_Core instance, org.bukkit.World world, Plot plot, Player buyer, double price) {
+    public PlotBuyEvent(PlotMe_Core instance, org.bukkit.World world, Plot plot, org.bukkit.entity.Player buyer, double price) {
         super(instance, plot, world);
         event = new InternalPlotBuyEvent(instance, new BukkitWorld(world), plot, new BukkitPlayer(buyer), price);
     }
 
-    public PlotBuyEvent(PlotMe_Core instance, World world, Plot plot, IPlayer buyer, double price) {
+    public PlotBuyEvent(PlotMe_Core instance, World world, Plot plot, Player buyer, double price) {
         super(instance, plot, world);
         event = new InternalPlotBuyEvent(instance, world, plot, buyer, price);
     }
@@ -34,7 +33,7 @@ public class PlotBuyEvent extends PlotEvent implements Cancellable {
         event.setCanceled(cancel);
     }
 
-    public Player getPlayer() {
+    public org.bukkit.entity.Player getPlayer() {
         return ((BukkitPlayer) event.getPlayer()).getPlayer();
     }
 

@@ -5,6 +5,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 public class PlotWorldLoadEvent extends Event {
+
     protected static final HandlerList handlers = new HandlerList();
     private final InternalPlotWorldLoadEvent event;
 

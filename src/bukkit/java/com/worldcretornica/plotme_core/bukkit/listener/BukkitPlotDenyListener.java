@@ -82,7 +82,7 @@ public class BukkitPlotDenyListener implements Listener {
                 Plot plot = api.getPlotMeCoreManager().getPlotById(id, player);
 
                 if (plot != null && plot.isDeniedInternal(player.getName(), player.getUniqueId())) {
-                    player.teleport(PlotMeCoreManager.getPlotHome(player.getWorld(), plot.getId()));
+                    player.setLocation(PlotMeCoreManager.getPlotHome(player.getWorld(), plot.getId()));
                 }
             }
         }

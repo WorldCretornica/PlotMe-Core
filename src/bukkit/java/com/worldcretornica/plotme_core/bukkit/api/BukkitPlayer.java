@@ -1,13 +1,15 @@
 package com.worldcretornica.plotme_core.bukkit.api;
 
-import com.worldcretornica.plotme_core.api.*;
-import org.bukkit.entity.Player;
+import com.worldcretornica.plotme_core.api.IItemStack;
+import com.worldcretornica.plotme_core.api.Location;
+import com.worldcretornica.plotme_core.api.Player;
+import com.worldcretornica.plotme_core.api.World;
 
-public class BukkitPlayer extends BukkitOfflinePlayer implements IPlayer {
+public class BukkitPlayer extends BukkitOfflinePlayer implements Player {
 
-    private final Player player;
+    private final org.bukkit.entity.Player player;
 
-    public BukkitPlayer(Player player) {
+    public BukkitPlayer(org.bukkit.entity.Player player) {
         super(player);
         this.player = player;
     }
@@ -34,16 +36,16 @@ public class BukkitPlayer extends BukkitOfflinePlayer implements IPlayer {
     }
 
     @Override
-    public ILocation getLocation() {
+    public Location getLocation() {
         return new BukkitLocation(player.getLocation());
     }
 
     @Override
-    public void teleport(ILocation location) {
+    public void setLocation(Location location) {
         player.teleport(((BukkitLocation) location).getLocation());
     }
 
-    public Player getPlayer() {
+    public org.bukkit.entity.Player getPlayer() {
         return player;
     }
 
@@ -57,8 +59,4 @@ public class BukkitPlayer extends BukkitOfflinePlayer implements IPlayer {
         player.remove();
     }
 
-    @Override
-    public IEntityType getType() {
-        return new BukkitEntityType(player.getType());
-    }
 }

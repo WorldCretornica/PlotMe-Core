@@ -15,7 +15,6 @@ public class PlotMe_Core {
 
     public static final String CAPTION_FILE = "captions.yml";
     public static final String WORLDS_CONFIG_SECTION = "worlds";
-    private static final String DEFAULT_GENERATOR_URL = "";
     //Bridge
     private final IServerBridge serverBridge;
     private World worldcurrentlyprocessingexpired;
@@ -99,7 +98,6 @@ public class PlotMe_Core {
             if (getGenManager(worldname) == null) {
                 getLogger().log(Level.SEVERE, "The world {0} either does not exist or not using a PlotMe generator", world);
                 getLogger().log(Level.SEVERE, "Please ensure that {0} is set up and that it is using a PlotMe generator", world);
-                getLogger().log(Level.SEVERE, "The default generator can be downloaded from " + DEFAULT_GENERATOR_URL);
             } else {
                 PlotMapInfo pmi = new PlotMapInfo(this, worldname);
                 //Lets just hide a bit of code to clean up the config in here.

@@ -1,6 +1,7 @@
 package com.worldcretornica.plotme_core;
 
 public class PermissionNames {
+
     public static final String ADMIN_UNDENY = "PlotMe.admin.undeny";
     public static final String USER_UNDENY = "PlotMe.use.undeny";
     public static final String ADMIN_RESET = "PlotMe.admin.reset";

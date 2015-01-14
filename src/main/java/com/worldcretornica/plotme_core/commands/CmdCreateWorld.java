@@ -4,6 +4,7 @@ import com.worldcretornica.plotme_core.PlotMe_Core;
 
 @SuppressWarnings("ALL")
 public class CmdCreateWorld extends PlotCommand {
+
     public CmdCreateWorld(PlotMe_Core instance) {
         super(instance);
     }

@@ -3,7 +3,7 @@ package com.worldcretornica.plotme_core.commands;
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.api.Player;
 import com.worldcretornica.plotme_core.api.World;
 
 import java.util.Calendar;
@@ -16,7 +16,7 @@ public class CmdPlotList extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(IPlayer player, String[] args) {
+    public boolean exec(Player player, String[] args) {
         if (player.hasPermission(PermissionNames.USER_LIST)) {
             if (plugin.getPlotMeCoreManager().isPlotWorld(player)) {
                 String name;
@@ -62,10 +62,12 @@ public class CmdPlotList extends PlotCommand {
 
                     // Is it auctionned?
                     if (plot.isAuctioned()) {
-                        if (plot.getCurrentBidder() != null)
-                            addition.append(" " + C("WordAuction") + ": §a" + Math.round(plot.getCurrentBid()) + "§r" + (" " + plot.getCurrentBidder()));
-                        else
+                        if (plot.getCurrentBidder() != null) {
+                            addition.append(
+                                    " " + C("WordAuction") + ": §a" + Math.round(plot.getCurrentBid()) + "§r" + (" " + plot.getCurrentBidder()));
+                        } else {
                             addition.append(" " + C("WordAuction") + ": §a" + Math.round(plot.getCurrentBid()) + "§r");
+                        }
                     }
 
                     // Is it for sale?
@@ -85,9 +87,13 @@ public class CmdPlotList extends PlotCommand {
                         } else {
                             // Is the owner the current player?
                             if (plot.getOwner().equalsIgnoreCase(player.getName())) {
-                                player.sendMessage("  " + plot.getId() + " -> §b§o" + C("WordYours") + "§r" + addition + ", " + C("WordHelpers") + ": §b" + plot.getAllowed().replace(",", "§r,§b"));
+                                player.sendMessage(
+                                        "  " + plot.getId() + " -> §b§o" + C("WordYours") + "§r" + addition + ", " + C("WordHelpers") + ": §b" + plot
+                                                .getAllowed().replace(",", "§r,§b"));
                             } else {
-                                player.sendMessage("  " + plot.getId() + " -> §b§o" + plot.getOwner() + "§r" + addition + ", " + C("WordHelpers") + ": §b" + plot.getAllowed().replace(",", "§r,§b"));
+                                player.sendMessage(
+                                        "  " + plot.getId() + " -> §b§o" + plot.getOwner() + "§r" + addition + ", " + C("WordHelpers") + ": §b" + plot
+                                                .getAllowed().replace(",", "§r,§b"));
                             }
                         }
 
@@ -110,9 +116,12 @@ public class CmdPlotList extends PlotCommand {
                         }
 
                         if (plot.getOwner().equalsIgnoreCase(player.getName())) {
-                            player.sendMessage("  " + plot.getId() + " -> §b" + C("WordYours") + "§r" + addition + ", " + C("WordHelpers") + ": " + helpers);
+                            player.sendMessage(
+                                    "  " + plot.getId() + " -> §b" + C("WordYours") + "§r" + addition + ", " + C("WordHelpers") + ": " + helpers);
                         } else {
-                            player.sendMessage("  " + plot.getId() + " -> §b" + plot.getOwner() + C("WordPossessive") + "§r" + addition + ", " + C("WordHelpers") + ": " + helpers);
+                            player.sendMessage(
+                                    "  " + plot.getId() + " -> §b" + plot.getOwner() + C("WordPossessive") + "§r" + addition + ", " + C("WordHelpers")
+                                    + ": " + helpers);
                         }
                     }
                 }

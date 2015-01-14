@@ -10,11 +10,16 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.ByteBuffer;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.Callable;
 
 public class UUIDFetcher implements Callable<Map<String, UUID>> {
-    private static final double PROFILES_PER_REQUEST = 500.0;
+
+    private static final double PROFILES_PER_REQUEST = 100;
     private static final String PROFILE_URL = "https://api.mojang.com/profiles/minecraft";
     private final JSONParser jsonParser = new JSONParser();
     private final List<String> names;
@@ -48,7 +53,8 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
     }
 
     public static UUID getUUID(String id) {
-        return UUID.fromString(id.substring(0, 8) + "-" + id.substring(8, 12) + "-" + id.substring(12, 16) + "-" + id.substring(16, 20) + "-" + id.substring(20, 32));
+        return UUID.fromString(id.substring(0, 8) + "-" + id.substring(8, 12) + "-" + id.substring(12, 16) + "-" + id.substring(16, 20) + "-" + id
+                .substring(20, 32));
     }
 
     public static byte[] toBytes(UUID uuid) {
@@ -89,7 +95,7 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
                 uuidMap.put(name.toLowerCase(), uuid);
             }
             if (rateLimiting && i != requests - 1) {
-                Thread.sleep(1100L);
+                Thread.sleep(100L);
             }
         }
         return uuidMap;

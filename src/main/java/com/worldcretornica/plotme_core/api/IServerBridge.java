@@ -11,15 +11,17 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Logger;
 
-public interface IServerBridge {
+public abstract class IServerBridge {
 
-    IPlotMe_ChunkGenerator getPlotMeGenerator(String pluginname, String worldname);
+    private boolean usinglwc;
 
-    IPlotMe_ChunkGenerator getPlotMeGenerator(String worldname);
+    public abstract IPlotMe_ChunkGenerator getPlotMeGenerator(String pluginname, String worldname);
 
-    IOfflinePlayer getOfflinePlayer(UUID uuid);
+    public abstract IPlotMe_ChunkGenerator getPlotMeGenerator(String worldname);
 
-    IOfflinePlayer getOfflinePlayer(String player);
+    public abstract IOfflinePlayer getOfflinePlayer(UUID uuid);
+
+    public abstract IOfflinePlayer getOfflinePlayer(String player);
 
     /**
      * Gets the player from the given UUID.
@@ -27,23 +29,23 @@ public interface IServerBridge {
      * @param uuid UUID of the player to retrieve
      * @return a player if one was found, null otherwise
      */
-    IPlayer getPlayer(UUID uuid);
+    public abstract Player getPlayer(UUID uuid);
 
-    IPlayer getPlayerExact(String name);
+    public abstract Player getPlayerExact(String name);
 
-    List<IPlayer> getOnlinePlayers();
+    public abstract List<Player> getOnlinePlayers();
 
-    Logger getLogger();
+    public abstract Logger getLogger();
 
-    void scheduleSyncRepeatingTask(Runnable func, long l, long l2);
+    public abstract int scheduleSyncRepeatingTask(Runnable func, long l, long l2);
 
-    void cancelTask(int taskid);
+    public abstract void cancelTask(int taskid);
 
-    void scheduleSyncDelayedTask(Runnable task, int i);
+    public abstract int scheduleSyncDelayedTask(Runnable task, int i);
 
-    void setupHooks();
+    public abstract void setupHooks();
 
-    Economy getEconomy();
+    public abstract Economy getEconomy();
 
     /**
      * Gets balance of a player
@@ -51,60 +53,70 @@ public interface IServerBridge {
      * @param player of the player
      * @return Amount currently held in players account
      */
-    double getBalance(IPlayer player);
+    public abstract double getBalance(Player player);
 
-    EconomyResponse withdrawPlayer(IPlayer player, double price);
+    public abstract EconomyResponse withdrawPlayer(Player player, double price);
 
-    EconomyResponse depositPlayer(IOfflinePlayer playercurrentbidder, double currentBid);
+    public abstract EconomyResponse depositPlayer(IOfflinePlayer playercurrentbidder, double currentBid);
 
-    PlotWorldEdit getPlotWorldEdit();
+    public abstract PlotWorldEdit getPlotWorldEdit();
 
-    boolean getUsinglwc();
+    public boolean getUsinglwc() {
+        return usinglwc;
+    }
+
+    public void setUsinglwc(boolean usinglwc) {
+        this.usinglwc = usinglwc;
+    }
 
     /**
      * Gets the world with the given name.
      *
-     * @param name the name of the world to retrieve. Converted to lowercase in Bukkit/Spigot
+     * @param worldName the name of the world
      * @return a world with the given name, or null if none exists
      */
-    World getWorld(String name);
+    public abstract World getWorld(String worldName);
 
-    void setupCommands();
+    public abstract void setupCommands();
 
-    void unHook();
+    public abstract void unHook();
 
-    void setupListeners();
+    public abstract void setupListeners();
 
-    void runTaskAsynchronously(Runnable runnable);
+    public abstract void runTaskAsynchronously(Runnable runnable);
 
-    IBiome getBiome(String name);
+    public abstract IBiome getBiome(String name);
 
-    IEventFactory getEventFactory();
+    public abstract IEventFactory getEventFactory();
 
-    InputStream getResource(String path);
+    public abstract InputStream getResource(String path);
 
-    String getDataFolder();
+    public abstract String getDataFolder();
 
-    void reloadConfig();
+    public abstract void reloadConfig();
 
-    IConfigSection getConfig();
+    public abstract IConfigSection getConfig();
 
-    IConfigSection getConfig(String file);
+    public abstract IConfigSection getConfig(String file);
 
-    void saveResource(String fileName, boolean replace);
+    public abstract void saveResource(String fileName, boolean replace);
 
-    boolean addMultiverseWorld(String worldname, String environment, String seed, String worldtype, boolean bool, String generator);
+    public abstract boolean addMultiverseWorld(String worldname, String environment, String seed, String worldtype, boolean bool, String generator);
 
-    List<String> getBiomes();
+    public abstract List<String> getBiomes();
 
-    List<World> getWorlds();
+    /**
+     * Get all Existing Plotworlds.
+     * @return all plotworlds on the server
+     */
+    public abstract List<World> getWorlds();
 
-    boolean createPlotWorld(String worldname, String generator, Map<String, String> args);
+    public abstract boolean createPlotWorld(String worldname, String generator, Map<String, String> args);
 
-    IMaterial getMaterial(String string);
+    public abstract IMaterial getMaterial(String string);
 
-    IEntityType getEntityType(String string);
+    public abstract IEntityType getEntityType(String string);
 
-    IConfigSection loadDefaultConfig(String string);
+    public abstract IConfigSection loadDefaultConfig(String string);
 
 }

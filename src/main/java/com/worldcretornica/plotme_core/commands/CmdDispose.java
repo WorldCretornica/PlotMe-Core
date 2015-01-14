@@ -1,8 +1,12 @@
 package com.worldcretornica.plotme_core.commands;
 
-import com.worldcretornica.plotme_core.*;
+import com.worldcretornica.plotme_core.PermissionNames;
+import com.worldcretornica.plotme_core.Plot;
+import com.worldcretornica.plotme_core.PlotMapInfo;
+import com.worldcretornica.plotme_core.PlotMeCoreManager;
+import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IOfflinePlayer;
-import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.api.Player;
 import com.worldcretornica.plotme_core.api.World;
 import com.worldcretornica.plotme_core.api.event.InternalPlotDisposeEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
@@ -13,7 +17,7 @@ public class CmdDispose extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(IPlayer player) {
+    public boolean exec(Player player) {
         if (player.hasPermission(PermissionNames.ADMIN_DISPOSE) || player.hasPermission(PermissionNames.USER_DISPOSE)) {
             World world = player.getWorld();
             PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
@@ -62,9 +66,11 @@ public class CmdDispose extends PlotCommand {
                                             EconomyResponse er2 = serverBridge.depositPlayer(playercurrentbidder, plot.getCurrentBid());
 
                                             if (er2.transactionSuccess()) {
-                                                IPlayer currentBidder = serverBridge.getPlayer(playercurrentbidder.getUniqueId());
+                                                Player currentBidder = serverBridge.getPlayer(playercurrentbidder.getUniqueId());
                                                 if (currentBidder != null) {
-                                                    currentBidder.sendMessage(C("WordPlot") + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner() + " " + C("MsgWasDisposed") + " " + Util().moneyFormat(cost, true));
+                                                    currentBidder.sendMessage(
+                                                            C("WordPlot") + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner() + " " + C(
+                                                                    "MsgWasDisposed") + " " + Util().moneyFormat(cost, true));
                                                 }
                                             } else {
                                                 player.sendMessage("§c" + er2.errorMessage);

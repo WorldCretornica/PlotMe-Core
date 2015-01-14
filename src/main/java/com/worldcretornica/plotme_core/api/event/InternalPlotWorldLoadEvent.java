@@ -4,6 +4,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 public class InternalPlotWorldLoadEvent extends Event {
+
     private static final HandlerList handlers = new HandlerList();
     private final String world;
     private final int nbPlots;

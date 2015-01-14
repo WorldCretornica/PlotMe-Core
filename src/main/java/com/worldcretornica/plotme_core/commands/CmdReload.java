@@ -1,6 +1,7 @@
 package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.api.CommandSender;
 
 @SuppressWarnings("SameReturnValue")
 public class CmdReload extends PlotCommand {
@@ -9,13 +10,17 @@ public class CmdReload extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec() {
+    public boolean exec(CommandSender sender) {
 
-        serverBridge.getEventFactory().callPlotReloadEvent();
+        if (sender.hasPermission("plotme.admin.reload")) {
+            serverBridge.getEventFactory().callPlotReloadEvent();
 
-        plugin.reload();
-        serverBridge.getLogger().info(C("MsgReloadedSuccess"));
+            plugin.reload();
+            serverBridge.getLogger().info(C("MsgReloadedSuccess"));
 
-        return true;
+            return true;
+        } else {
+            return false;
+        }
     }
 }

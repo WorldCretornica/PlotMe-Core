@@ -4,7 +4,7 @@ import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.api.Player;
 import com.worldcretornica.plotme_core.api.World;
 import com.worldcretornica.plotme_core.api.event.InternalPlotTeleportHomeEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
@@ -17,7 +17,7 @@ public class CmdHome extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(IPlayer player, String[] args) {
+    public boolean exec(Player player, String[] args) {
         if (player.hasPermission(PermissionNames.USE_HOME) || player.hasPermission(PermissionNames.ADMIN_HOME_OTHER)) {
             if (plugin.getPlotMeCoreManager().isPlotWorld(player) || serverBridge.getConfig().getBoolean("allowWorldTeleport")) {
                 String playerName = player.getName();
@@ -104,7 +104,8 @@ public class CmdHome extends PlotCommand {
                                                 }
                                             }
                                         } else {
-                                            player.sendMessage("§c" + C("MsgNotEnoughTp") + " " + C("WordMissing") + " §r" + Util().moneyFormat(price - balance, false));
+                                            player.sendMessage("§c" + C("MsgNotEnoughTp") + " " + C("WordMissing") + " §r" + Util()
+                                                    .moneyFormat(price - balance, false));
                                             return true;
                                         }
                                     } else {
@@ -112,7 +113,7 @@ public class CmdHome extends PlotCommand {
                                     }
 
                                     if (!event.isCancelled()) {
-                                        player.teleport(event.getHomeLocation());
+                                        player.setLocation(event.getHomeLocation());
 
                                         if (price != 0) {
                                             double price1 = -price;
@@ -147,7 +148,8 @@ public class CmdHome extends PlotCommand {
                                             }
                                         }
                                     } else {
-                                        player.sendMessage("§c" + C("MsgNotEnoughTp") + " " + C("WordMissing") + " §r" + Util().moneyFormat(price - balance, false));
+                                        player.sendMessage("§c" + C("MsgNotEnoughTp") + " " + C("WordMissing") + " §r" + Util()
+                                                .moneyFormat(price - balance, false));
                                         return true;
                                     }
                                 } else {
@@ -155,7 +157,7 @@ public class CmdHome extends PlotCommand {
                                 }
 
                                 if (!event.isCancelled()) {
-                                    player.teleport(event.getHomeLocation());
+                                    player.setLocation(event.getHomeLocation());
 
                                     if (price != 0) {
                                         double price1 = -price;
