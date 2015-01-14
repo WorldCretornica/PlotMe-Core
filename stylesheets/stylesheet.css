@@ -45,7 +45,7 @@ code {padding: 7px 10px;margin: 0 3px;box-shadow: 0 0 10px rgba(0,0,0,.1);backgr
 pre code {display: block;box-shadow: none;}
 
 /* Contributors class compacted*/
-.contributors {height: 250px;width: auto;margin: 3px;padding: 15px;border: 4px inset #848484;border-radius: 10px;background-color: #D8D8D8;}
+.contributors {height: 250px;width: auto;margin: 3px;padding: 15px;border: 6px inset #848484;border-radius: 10px;background-color: #E6E6E6;}
 .contributors h2 {float:center;text-align:center;}
 .contributors p {float:center;text-align:center;}
 .contributors img {float:left;height:250px;width:250px;}
