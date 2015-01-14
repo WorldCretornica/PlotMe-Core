@@ -1,86 +1,26 @@
-/*******************************************************************************
-Slate Theme for GitHub Pages
-by Jason Costello, @jsncostello
-*******************************************************************************/
-
 @import url(pygment_trac.css);
-
-/*******************************************************************************
-MeyerWeb Reset
-*******************************************************************************/
-
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure,
-footer, header, hgroup, menu, nav, section {
-  display: block;
-}
+footer, header, hgroup, menu, nav, section {display:block;}
+ol, ul {list-style:none;}
 
-ol, ul {
-  list-style: none;
-}
+/*--------------------------------*/
+/*	  Markus Styles :)	  */
+/*-------------vvvvvv-------------*/
 
-/*******************************************************************************
-Markus Styles :)
-*******************************************************************************/
+/* Dropdown Menu (navigator) function compacted*/
+#nav {background-color:#222;}
+#nav_wrapper {width:1125px;margin:0 auto;text-align:left;}
+#nav ul {list-style-type:none;padding:0;margin:0;position: relative;min-width:140px;}
+#nav ul li {display: inline-block;}
+#nav ul li:hover {background-color: #333;}
+#nav ul li a, visited {color:#CCC;display:block;padding:15px;text-decoration:none;}
+#nav ul li:hover ul {display:block;}
+#nav ul ul {display:none;position: absolute;background-color:#333;border:5px solid #222;border-top:0;margin-left:-5px;}
+#nav ul ul li {display:block;}
+#nav ul ul li a:hover {color:#699;}
 
-/* Edit page */
-.admin {
-    text-decoration: underline;
-    color: #585858;
-    padding: 5px;
-}
-.admin:hover {
-    text-decoration: underline;
-    color: gray;
-}
-
-/* Dropdown Menu (navigator) function */
-#nav {
-    background-color: #222;
-}
-#nav_wrapper {
-    width: 1125px;
-    margin: 0 auto;
-    text-align: left;
-}
-#nav ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-    position: relative;
-    min-width: 140px;
-}
-#nav ul li {
-    display: inline-block;
-}
-#nav ul li:hover {
-    background-color: #333;
-}
-#nav ul li a, visited {
-    color: #CCC;
-    display: block;
-    padding: 15px;
-    text-decoration: none;
-}
-#nav ul li:hover ul {
-    display: block;
-}
-#nav ul ul {
-    display: none;
-    position: absolute;
-    background-color: #333;
-    border: 5px solid #222;
-    border-top: 0;
-    margin-left: -5px;
-}
-#nav ul ul li {
-    display: block;
-}
-#nav ul ul li a:hover {
-    color: #699;
-}
-
-/* Back to Top button function */
+/* Back to Top button function partly compacted*/
 .back-to-top {
     position: fixed;
     bottom: 2em;
@@ -93,64 +33,19 @@ Markus Styles :)
     display: none;
     border-radius: 10px;
 }
-.back-to-top:hover {    
-    background-color: #6E6E6E;
-    text-decoration: none;
-}
+.back-to-top:hover {background-color: #6E6E6E;text-decoration: none;}
 
-/* Spoiler Function */
-.spoilerbutton {
-	-moz-box-shadow:inset 0px 1px 0px -50px #ffffff;
-	-webkit-box-shadow:inset 0px 1px 0px -50px #ffffff;
-	box-shadow:inset 0px 1px 0px -50px #ffffff;
-	background-color:transparent;
-	-moz-border-radius:42px;
-	-webkit-border-radius:42px;
-	border-radius:42px;
-	border:3px solid #dcdcdc;
-	display:block;
-	cursor:pointer;
-	color:#777777;
-	font-family:Georgia;
-	font-size:12px;
-	font-weight:bold;
-	padding:6px 18px;
-	text-decoration:none;
-}
-.spoilerbutton:hover {
-	background-color:transparent;
-}
-.spoilerbutton:active {
-	position:relative;
-	top:1px;
-}
-.spoiler {
-  overflow:hidden;
-  background: #f5f5f5;
-}
-.spoiler > div {
-  -webkit-transition: all 0.2s ease;
-  -moz-transition: margin 0.2s ease;
-  -o-transition: all 0.2s ease;
-  transition: margin 0.2s ease;
-}
-.spoilerbutton[value="Show"] + .spoiler > div {
-  margin-top:-100%;
-}
-.spoilerbutton[value="Hide"] + .spoiler {
-  padding:5px;
-}
-.insidespoiler {
-	background-color:transparent;
-	-webkit-border-radius:6px;
-	-moz-border-radius:6px;
-	border-radius:5px;
-	border:1px solid #b6b6b6;
-/*	text-align: center;  Remove comment and this text to align the text in the middle of the spoiler*/
-	padding: 6px 18px;
-}
+/* Spoiler Function COMPACTED */
+.spoilerbutton {-moz-box-shadow:inset 0px 1px 0px -50px #ffffff;-webkit-box-shadow:inset 0px 1px 0px -50px #ffffff;box-shadow:inset 0px 1px 0px -50px #ffffff;background-color:transparent;-moz-border-radius:42px;-webkit-border-radius:42px;border-radius:42px;border:3px solid #dcdcdc;display:block;cursor:pointer;color:#777777;font-family:Georgia;font-size:12px;font-weight:bold;padding:6px 18px;text-decoration:none;}
+.spoilerbutton:hover {background-color:transparent;}
+.spoilerbutton:active {position:relative;top:1px;}
+.spoiler {overflow:hidden;background: #f5f5f5;}
+.spoiler > div {-webkit-transition: all 0.2s ease;-moz-transition: margin 0.2s ease;-o-transition: all 0.2s ease;transition: margin 0.2s ease;}
+.spoilerbutton[value="Show"] + .spoiler > div {margin-top:-100%;}
+.spoilerbutton[value="Hide"] + .spoiler {padding:5px;}
+.insidespoiler {background-color:transparent;-webkit-border-radius:6px;-moz-border-radius:6px;border-radius:5px;border:1px solid #b6b6b6;padding: 6px 18px;}
 
-/* Table Function */
+/* Table Function partly compacted*/
 table.tftable {
 	font-size:15px;
 	color: #555555;
@@ -164,77 +59,31 @@ table.tftable {
 	border-radius: 15px;
 	text-align:center;
 }
-table.tftable th {
-	font-size:20px;
-	background-color:#DFDFDF;
-	color:#555555;
-	padding: 10px;
-	min-width:100px;
-}
-table.tftable tr {
-	background-color:#F2F2F2;
-}
-table.tftable td {
-	font-size:15px;
-	padding: 10px;
-	color: #1B1B1B;
-}
+table.tftable th {font-size:20px;background-color:#DFDFDF;color:#555555;padding:10px;min-width:100px;}
+table.tftable tr {background-color:#F2F2F2;}
+table.tftable td {font-size:15px;padding:10px;color:#1B1B1B;}
 
-/* Code styles */
-pre, code {
-  width: 100%;
-  color: #222;
-  background-color: #fff;
-  font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
-  font-size: 14px;
-  border-radius: 2px;
-  -moz-border-radius: 2px;
-  -webkit-border-radius: 2px;
-}
-pre {
-  width: 100%;
-  padding: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,.1);
-  overflow: auto;
-  color:##A4A4A4;
-}
-code {
-  padding: 7px 10px;
-  margin: 0 3px;
-  box-shadow: 0 0 10px rgba(0,0,0,.1);
-  background-color:#D5D5D5;
-  font-style:italic;
-  color:#151515;
-}
-pre code {
-  display: block;
-  box-shadow: none;
-}
+/* Code & Pre tags style compacted*/
+pre, code {width: 100%;color: #222;background-color: #fff;font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;font-size: 14px;border-radius: 2px;-moz-border-radius: 2px;-webkit-border-radius: 2px;}
+pre {width: 100%;padding: 10px;box-shadow: 0 0 10px rgba(0,0,0,.1);overflow: auto;color:##A4A4A4;}
+code {padding: 7px 10px;margin: 0 3px;box-shadow: 0 0 10px rgba(0,0,0,.1);background-color:#D5D5D5;font-style:italic;color:#151515;}
+pre code {display: block;box-shadow: none;}
 
+/* Contributors page partly compacted*/
 .contributors {
   height: 250px;
   width: auto;
   margin: 5px;
   padding: 20px;
   border: 5px solid #A4A4A4;
+  border-radius: 15px;
 }
-.contributors h2 {
-  float:center;
-  text-align:center;
-}
-.contributors p {
-  float:center;
-  text-align:center;
-}
-.contributors img {
-  float:left;
-  height:250px;
-  width:250px;
-}
+.contributors h2 {float:center;text-align:center;}
+.contributors p {float:center;text-align:center;}
+.contributors img {float:left;height:250px;width:250px;}
 /*******************************************************************************
-Theme Styles
+Original styles (almost untouched)
 *******************************************************************************/
-
 body {
   color:#373737;
   background: #212121;
