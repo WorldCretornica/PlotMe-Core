@@ -6,7 +6,7 @@ import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
-import com.worldcretornica.plotme_core.api.World;
+import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitBiome;
 
 public class CmdInfo extends PlotCommand {
@@ -17,7 +17,7 @@ public class CmdInfo extends PlotCommand {
 
     public boolean exec(IPlayer player) {
         if (player.hasPermission(PermissionNames.USER_INFO)) {
-            World world = player.getWorld();
+            IWorld world = player.getWorld();
             if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
                 String id = PlotMeCoreManager.getPlotId(player);
 

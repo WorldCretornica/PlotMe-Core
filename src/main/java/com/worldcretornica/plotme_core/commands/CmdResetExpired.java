@@ -3,7 +3,7 @@ package com.worldcretornica.plotme_core.commands;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.PlotRunnableDeleteExpire;
 import com.worldcretornica.plotme_core.api.ICommandSender;
-import com.worldcretornica.plotme_core.api.World;
+import com.worldcretornica.plotme_core.api.IWorld;
 
 @SuppressWarnings("SameReturnValue")
 public class CmdResetExpired extends PlotCommand {
@@ -19,7 +19,7 @@ public class CmdResetExpired extends PlotCommand {
         } else if (plugin.getWorldCurrentlyProcessingExpired() != null) {
             serverBridge.getLogger().info(C("MsgAlreadyProcessingPlots"));
         } else {
-            World world = serverBridge.getWorld(args[1]);
+            IWorld world = serverBridge.getWorld(args[1]);
 
             if (!plugin.getPlotMeCoreManager().isPlotWorld(world)) {
                 serverBridge.getLogger().info("§c" + C("MsgNotPlotWorld"));

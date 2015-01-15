@@ -1,7 +1,7 @@
 package com.worldcretornica.plotme_core.api;
 
 
-public interface World {
+public interface IWorld {
 
     boolean isPlotMeGenerator();
 

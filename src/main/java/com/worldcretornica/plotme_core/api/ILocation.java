@@ -2,7 +2,7 @@ package com.worldcretornica.plotme_core.api;
 
 public interface ILocation {
 
-    World getWorld();
+    IWorld getWorld();
 
     int getBlockX();
 

@@ -1,7 +1,7 @@
 package com.worldcretornica.plotme_core;
 
 import com.worldcretornica.plotme_core.api.ICommandSender;
-import com.worldcretornica.plotme_core.api.World;
+import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotResetEvent;
 
 import java.util.List;
@@ -22,7 +22,7 @@ public class PlotRunnableDeleteExpire implements Runnable {
         PlotMeCoreManager plotMeCoreManager = plugin.getPlotMeCoreManager();
 
         if (plugin.getWorldCurrentlyProcessingExpired() != null) {
-            World world = plugin.getWorldCurrentlyProcessingExpired();
+            IWorld world = plugin.getWorldCurrentlyProcessingExpired();
             List<Plot> expiredplots = sqlmanager.getExpiredPlots(world.getName(), 1, 5);
 
             if (expiredplots.isEmpty()) {

@@ -24,7 +24,7 @@ public interface IEntity extends IActor {
      *
      * @return the world the entity is in
      */
-    World getWorld();
+    IWorld getWorld();
 
     /**
      * Mark the entity's removal.

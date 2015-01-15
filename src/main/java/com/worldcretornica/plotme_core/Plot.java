@@ -2,7 +2,8 @@ package com.worldcretornica.plotme_core;
 
 import com.worldcretornica.plotme_core.api.IBiome;
 import com.worldcretornica.plotme_core.api.IPlayer;
-import com.worldcretornica.plotme_core.api.World;
+import com.worldcretornica.plotme_core.api.IWorld;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
@@ -13,6 +14,7 @@ import java.util.UUID;
 public class Plot implements Comparable<Plot> {
 
     //TODO look into removing reference to plugin
+    @NotNull
     private final PlotMe_Core plugin;
 
     private String owner;
@@ -33,7 +35,7 @@ public class Plot implements Comparable<Plot> {
     private double currentbid;
     private UUID currentbidderId;
 
-    public Plot(PlotMe_Core plugin) {
+    public Plot(@NotNull PlotMe_Core plugin) {
         this.plugin = plugin;
         setOwner("");
         setOwnerId(null);
@@ -57,7 +59,7 @@ public class Plot implements Comparable<Plot> {
         setCurrentBid(0.0);
     }
 
-    public Plot(PlotMe_Core plugin, String owner, UUID uuid, World world, String plotid, int days) {
+    public Plot(@NotNull PlotMe_Core plugin, @NotNull String owner, UUID uuid, @NotNull IWorld world, @NotNull String plotid, int days) {
         this.plugin = plugin;
         setOwner(owner);
         setOwnerId(uuid);
@@ -86,8 +88,9 @@ public class Plot implements Comparable<Plot> {
         setCurrentBid(0.0);
     }
 
-    public Plot(PlotMe_Core plugin, String owner, UUID ownerId, String world, String biome, Date expiredDate, boolean finished,
-                PlayerList allowed, String id, double customPrice, boolean sale, String finishedDate,
+    public Plot(@NotNull PlotMe_Core plugin, @NotNull String owner, UUID ownerId, @NotNull String world, String biome, Date expiredDate,
+                boolean finished,
+                PlayerList allowed, @NotNull String id, double customPrice, boolean sale, String finishedDate,
                 boolean protect, String bidder, UUID bidderId, double bid, boolean isAuctioned, PlayerList denied) {
         this.plugin = plugin;
         setOwner(owner);
@@ -435,7 +438,7 @@ public class Plot implements Comparable<Plot> {
         return world;
     }
 
-    public final void setWorld(String world) {
+    public final void setWorld(@NotNull String world) {
         this.world = world.toLowerCase();
     }
 

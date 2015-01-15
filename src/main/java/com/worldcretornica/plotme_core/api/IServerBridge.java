@@ -75,7 +75,7 @@ public abstract class IServerBridge {
      * @param worldName the name of the world
      * @return a world with the given name, or null if none exists
      */
-    public abstract World getWorld(String worldName);
+    public abstract IWorld getWorld(String worldName);
 
     public abstract void setupCommands();
 
@@ -101,7 +101,7 @@ public abstract class IServerBridge {
 
     public abstract void saveResource(String fileName, boolean replace);
 
-    public abstract boolean addMultiverseWorld(String worldname, String environment, String seed, String worldtype, boolean bool, String generator);
+    public abstract boolean addMultiverseWorld(String worldname, String environment, String seed, String generator);
 
     public abstract List<String> getBiomes();
 
@@ -109,13 +109,11 @@ public abstract class IServerBridge {
      * Get all Existing Plotworlds.
      * @return all plotworlds on the server
      */
-    public abstract List<World> getWorlds();
+    public abstract List<IWorld> getWorlds();
 
     public abstract boolean createPlotWorld(String worldname, String generator, Map<String, String> args);
 
     public abstract IMaterial getMaterial(String string);
-
-    public abstract IEntityType getEntityType(String string);
 
     public abstract IConfigSection loadDefaultConfig(String string);
 

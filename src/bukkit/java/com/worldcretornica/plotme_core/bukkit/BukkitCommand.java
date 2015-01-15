@@ -129,7 +129,7 @@ public class BukkitCommand implements CommandExecutor {
                 }
             }
         } else {
-            BukkitPlayer player = plugin.wrapPlayer((Player) sender);
+            BukkitPlayer player = (BukkitPlayer) plugin.wrapPlayer((Player) sender);
 
             if (args.length == 0) {
                 return showhelp.exec(player, 1);

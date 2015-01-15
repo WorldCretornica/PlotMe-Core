@@ -6,17 +6,15 @@ import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.PlotWorldEdit;
 import com.worldcretornica.plotme_core.api.IBiome;
 import com.worldcretornica.plotme_core.api.IConfigSection;
-import com.worldcretornica.plotme_core.api.IEntityType;
 import com.worldcretornica.plotme_core.api.IMaterial;
 import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IPlotMe_ChunkGenerator;
 import com.worldcretornica.plotme_core.api.IServerBridge;
-import com.worldcretornica.plotme_core.api.World;
+import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.IEventFactory;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitBiome;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitConfigSection;
-import com.worldcretornica.plotme_core.bukkit.api.BukkitEntityType;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitMaterial;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitOfflinePlayer;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
@@ -31,19 +29,19 @@ import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.World;
 import org.bukkit.World.Environment;
-import org.bukkit.WorldType;
 import org.bukkit.block.Biome;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -66,7 +64,7 @@ public class BukkitServerBridge extends IServerBridge {
     private PlotWorldEdit plotworldedit;
     private MultiverseWrapper multiverse;
 
-    public BukkitServerBridge(PlotMe_CorePlugin instance) {
+    public BukkitServerBridge(@NotNull PlotMe_CorePlugin instance) {
         plugin = instance;
         eventfactory = new BukkitEventFactory();
     }
@@ -94,6 +92,7 @@ public class BukkitServerBridge extends IServerBridge {
      * @return logger
      */
     @Override
+    @NotNull
     public Logger getLogger() {
         return plugin.getLogger();
     }
@@ -137,7 +136,7 @@ public class BukkitServerBridge extends IServerBridge {
                 setPlotWorldEdit(null);
             }
 
-            pluginManager.registerEvents(new BukkitPlotWorldEditListener(plugin, we, plugin), plugin);
+            pluginManager.registerEvents(new BukkitPlotWorldEditListener(we, plugin), plugin);
         }
 
         setUsinglwc(pluginManager.getPlugin("LWC") != null);
@@ -172,8 +171,8 @@ public class BukkitServerBridge extends IServerBridge {
     }
 
     @Override
-    public World getWorld(String worldName) {
-        org.bukkit.World world = Bukkit.getWorld(worldName);
+    public IWorld getWorld(@NotNull String worldName) {
+        World world = Bukkit.getWorld(worldName);
         if (world == null) {
             return null;
         }
@@ -251,17 +250,15 @@ public class BukkitServerBridge extends IServerBridge {
     }
 
     @Override
+    @NotNull
     public IOfflinePlayer getOfflinePlayer(String player) {
         @SuppressWarnings("deprecation")
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(player);
-        if (offlinePlayer == null) {
-            return null;
-        } else {
-            return new BukkitOfflinePlayer(offlinePlayer);
-        }
+        return new BukkitOfflinePlayer(offlinePlayer);
     }
 
     @Override
+    @NotNull
     public IEventFactory getEventFactory() {
         return eventfactory;
     }
@@ -277,6 +274,7 @@ public class BukkitServerBridge extends IServerBridge {
     }
 
     @Override
+    @NotNull
     public IConfigSection getConfig() {
         return new BukkitConfigSection(plugin);
     }
@@ -321,9 +319,8 @@ public class BukkitServerBridge extends IServerBridge {
     }
 
     @Override
-    public boolean addMultiverseWorld(String worldname, String environment, String seed, String worldtype, boolean bool, String generator) {
-        return getMultiverseWrapper().getMVWorldManager()
-                .addWorld(worldname, Environment.valueOf(environment), seed, WorldType.valueOf(worldtype), bool, generator);
+    public boolean addMultiverseWorld(String worldname, String environment, String seed, String generator) {
+        return getMultiverseWrapper().getMVWorldManager().addWorld(worldname, Environment.valueOf(environment), seed, generator);
     }
 
     @Override
@@ -337,6 +334,7 @@ public class BukkitServerBridge extends IServerBridge {
     }
 
     @Override
+    @NotNull
     public EconomyResponse depositPlayer(IOfflinePlayer player, double currentBid) {
         return getEconomy().depositPlayer(((BukkitOfflinePlayer) player).getOfflinePlayer(), currentBid);
     }
@@ -363,7 +361,7 @@ public class BukkitServerBridge extends IServerBridge {
 
     @Override
     public IPlotMe_ChunkGenerator getPlotMeGenerator(String worldname) {
-        org.bukkit.World world = Bukkit.getWorld(worldname);
+        World world = Bukkit.getWorld(worldname);
         if (world != null) {
             ChunkGenerator generator = world.getGenerator();
             if (generator instanceof IPlotMe_ChunkGenerator) {
@@ -374,18 +372,25 @@ public class BukkitServerBridge extends IServerBridge {
     }
 
     @Override
-    public List<World> getWorlds() {
-        List<World> worlds = new ArrayList<>();
+    public List<IWorld> getWorlds() {
+        List<IWorld> worlds = new ArrayList<>();
 
-        for (org.bukkit.World world : Bukkit.getWorlds()) {
+        for (World world : Bukkit.getWorlds()) {
             worlds.add(new BukkitWorld(world));
         }
 
         return worlds;
     }
 
+    /**
+     * Please do not use this method if you need to create a plotworld
+     * @param worldname Name of the Plotworld
+     * @param generator PlotMe Generator
+     * @param args
+     * @return
+     */
     @Override
-    public boolean createPlotWorld(String worldname, String generator, Map<String, String> args) {
+    public boolean createPlotWorld(@NotNull String worldname, @NotNull String generator, Map<String, String> args) {
         //Get a seed
         Long seed = new Random().nextLong();
 
@@ -420,7 +425,7 @@ public class BukkitServerBridge extends IServerBridge {
 
         tempPlotInfo.setPlotAutoLimit(Integer.parseInt(args.get("PlotAutoLimit")));
         tempPlotInfo.setDaysToExpiration(Integer.parseInt(args.get("DaysToExpiration")));
-        tempPlotInfo.setAutoLinkPlots(Boolean.parseBoolean(args.get("AutoLinkPlots")));
+        //tempPlotInfo.setAutoLinkPlots(Boolean.parseBoolean(args.get("AutoLinkPlots")));
         tempPlotInfo.setDisableExplosion(Boolean.parseBoolean(args.get("DisableExplosion")));
         tempPlotInfo.setDisableIgnition(Boolean.parseBoolean(args.get("DisableIgnition")));
         tempPlotInfo.setUseProgressiveClear(Boolean.parseBoolean(args.get("UseProgressiveClear")));
@@ -440,13 +445,13 @@ public class BukkitServerBridge extends IServerBridge {
         tempPlotInfo.setProtectPrice(Double.parseDouble(args.get("ProtectPrice")));
         tempPlotInfo.setDisposePrice(Double.parseDouble(args.get("DisposePrice")));
 
-        plugin.getAPI().getPlotMeCoreManager().addPlotMap(worldname.toLowerCase(), tempPlotInfo);
+        plugin.getAPI().getPlotMeCoreManager().addPlotMap(worldname, tempPlotInfo);
 
         //Are we using multiverse?
         if (getMultiverse() != null) {
             boolean success = false;
             if (getMultiverse().isEnabled()) {
-                success = plugin.getServerObjectBuilder().addMultiverseWorld(worldname, "NORMAL", seed.toString(), "NORMAL", true, generator);
+                success = plugin.getServerObjectBuilder().addMultiverseWorld(worldname, "NORMAL", seed.toString(), generator);
 
                 if (!success) {
                     getLogger().info(plugin.getAPI().getUtil().C("ErrCannotCreateMV"));
@@ -471,11 +476,6 @@ public class BukkitServerBridge extends IServerBridge {
     @Override
     public IMaterial getMaterial(String string) {
         return new BukkitMaterial(Material.valueOf(string));
-    }
-
-    @Override
-    public IEntityType getEntityType(String string) {
-        return new BukkitEntityType(EntityType.valueOf(string));
     }
 
     @Override

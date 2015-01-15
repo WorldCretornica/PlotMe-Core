@@ -3,8 +3,9 @@ package com.worldcretornica.plotme_core.bukkit.api;
 import com.worldcretornica.plotme_core.api.IItemStack;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
-import com.worldcretornica.plotme_core.api.World;
+import com.worldcretornica.plotme_core.api.IWorld;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 public class BukkitPlayer extends BukkitOfflinePlayer implements IPlayer {
 
@@ -27,12 +28,12 @@ public class BukkitPlayer extends BukkitOfflinePlayer implements IPlayer {
     }
 
     @Override
-    public boolean hasPermission(String node) {
+    public boolean hasPermission(@NotNull String node) {
         return player.hasPermission(node);
     }
 
     @Override
-    public World getWorld() {
+    public IWorld getWorld() {
         return new BukkitWorld(player.getWorld());
     }
 

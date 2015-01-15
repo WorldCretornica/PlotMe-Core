@@ -4,7 +4,7 @@ import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IPlayer;
-import com.worldcretornica.plotme_core.api.World;
+import com.worldcretornica.plotme_core.api.IWorld;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -130,7 +130,7 @@ public class CmdShowHelp extends PlotCommand {
                 int maxplots = getPlotLimit(player);
                 if (plugin.getPlotMeCoreManager().isPlotWorld(player)) {
 
-                    World world = player.getWorld();
+                    IWorld world = player.getWorld();
 
                     int ownedplots = plugin.getSqlManager().getPlotCount(world.getName().toLowerCase(), player.getUniqueId(), player.getName());
 
@@ -142,7 +142,7 @@ public class CmdShowHelp extends PlotCommand {
                     }
                 } else if (serverBridge.getConfig().getBoolean("allowWorldTeleport")) {
 
-                    World world = plugin.getPlotMeCoreManager().getFirstWorld();
+                    IWorld world = plugin.getPlotMeCoreManager().getFirstWorld();
 
                     int ownedplots = plugin.getSqlManager().getPlotCount(world.getName().toLowerCase(), player.getUniqueId(), player.getName());
 

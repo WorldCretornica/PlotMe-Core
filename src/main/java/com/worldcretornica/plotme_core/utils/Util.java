@@ -3,6 +3,7 @@ package com.worldcretornica.plotme_core.utils;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.ChatColor;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.logging.Level;
 
@@ -30,6 +31,7 @@ public class Util {
         return ret;
     }
 
+    @NotNull
     public String C(String caption) {
         if (plugin.getCaptionConfig().contains(caption)) {
             return addColor(plugin.getCaptionConfig().getString(caption));
@@ -39,6 +41,7 @@ public class Util {
         }
     }
 
+    @NotNull
     public String moneyFormat(double price, boolean showsign) {
         if (price == 0) {
             return "";

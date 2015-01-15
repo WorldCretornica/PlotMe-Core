@@ -6,7 +6,7 @@ import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IPlayer;
-import com.worldcretornica.plotme_core.api.World;
+import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotSellChangeEvent;
 
 public class CmdSell extends PlotCommand {
@@ -16,7 +16,7 @@ public class CmdSell extends PlotCommand {
     }
 
     public boolean exec(IPlayer player, String[] args) {
-        World world = player.getWorld();
+        IWorld world = player.getWorld();
         if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
             PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
             if (plugin.getPlotMeCoreManager().isEconomyEnabled(pmi)) {

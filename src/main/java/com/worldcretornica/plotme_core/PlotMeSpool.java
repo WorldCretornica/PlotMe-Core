@@ -1,21 +1,25 @@
 package com.worldcretornica.plotme_core;
 
 import com.worldcretornica.plotme_core.api.ILocation;
-import com.worldcretornica.plotme_core.api.World;
+import com.worldcretornica.plotme_core.api.IWorld;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class PlotMeSpool implements Runnable {
 
     private final PlotMe_Core plugin;
     private Long[] currentClear;
+    @Nullable
     private PlotToClear plottoclear;
     private int taskid;
 
-    public PlotMeSpool(PlotMe_Core instance, PlotToClear plotToClear) {
+    public PlotMeSpool(PlotMe_Core instance, @NotNull PlotToClear plotToClear) {
         plugin = instance;
 
         plottoclear = plotToClear;
     }
 
+    @NotNull
     private static String format(long count) {
         double buffer;
 
@@ -45,7 +49,7 @@ public class PlotMeSpool implements Runnable {
     @Override
     public void run() {
         if (getPlotToClear() != null) {
-            World world = plugin.getServerBridge().getWorld(getPlotToClear().getWorld());
+            IWorld world = plugin.getServerBridge().getWorld(getPlotToClear().getWorld());
 
             if (world != null) {
                 if (currentClear == null) {
@@ -92,7 +96,7 @@ public class PlotMeSpool implements Runnable {
     }
 
     private long getTotalPlotBlocks() {
-        World world = plugin.getServerBridge().getWorld(getPlotToClear().getWorld());
+        IWorld world = plugin.getServerBridge().getWorld(getPlotToClear().getWorld());
         ILocation bottom = PlotMeCoreManager.getGenManager(world).getPlotBottomLoc(world, getPlotToClear().getPlotId());
         ILocation top = PlotMeCoreManager.getGenManager(world).getPlotTopLoc(world, getPlotToClear().getPlotId());
 
@@ -103,6 +107,7 @@ public class PlotMeSpool implements Runnable {
         return currentClear[3];
     }
 
+    @Nullable
     public PlotToClear getPlotToClear() {
         return plottoclear;
     }

@@ -1,9 +1,10 @@
 package com.worldcretornica.plotme_core;
 
 import com.worldcretornica.plotme_core.api.IPlayer;
-import com.worldcretornica.plotme_core.api.World;
+import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitBiome;
 import com.worldcretornica.plotme_core.utils.UUIDFetcher;
+import org.jetbrains.annotations.NonNls;
 
 import java.io.File;
 import java.sql.Connection;
@@ -26,30 +27,30 @@ import java.util.regex.Pattern;
 
 public class SqlManager {
 
+    @NonNls
+    public static final String SQLITE_DRIVER = "org.sqlite.JDBC";
     private static final Pattern COMPILE = Pattern.compile("^[a-zA-Z0-9_]{1,16}$");
     private final PlotMe_Core plugin;
-    private final boolean usemySQL;
     private final String mySQLuname;
     private final String mySQLpass;
     private final String mySQLconn;
     private Connection conn;
 
-    public SqlManager(PlotMe_Core plugin, boolean usemysql, String sqlusername, String sqlpassword, String sqlconnection) {
+    public SqlManager(PlotMe_Core plugin, String sqlusername, String sqlpassword, String sqlconnection) {
         this.plugin = plugin;
         mySQLconn = sqlconnection;
         mySQLpass = sqlpassword;
         mySQLuname = sqlusername;
-        usemySQL = usemysql;
     }
 
     public Connection initialize() {
         try {
-            if (usemySQL) {
+            if (isUsingMySQL()) {
                 Class.forName("com.mysql.jdbc.Driver");
                 conn = DriverManager.getConnection(mySQLconn, mySQLuname, mySQLpass);
                 conn.setAutoCommit(false);
             } else {
-                Class.forName("org.sqlite.JDBC");
+                Class.forName(SQLITE_DRIVER);
                 conn = DriverManager.getConnection("jdbc:sqlite:" + plugin.getServerBridge().getDataFolder() + "/plots.db");
                 conn.setAutoCommit(false);
             }
@@ -82,9 +83,8 @@ public class SqlManager {
 
             statement = conn.createStatement();
 
-            String schema = getSchema();
-
-            if (usemySQL) {
+            if (isUsingMySQL()) {
+                String schema = getSchema();
                 /*** START Version 0.13d changes ***/
 
                 // OwnerId
@@ -227,7 +227,7 @@ public class SqlManager {
         if (conn == null) {
             conn = initialize();
         }
-        if (usemySQL) {
+        if (isUsingMySQL()) {
             try {
                 if (!conn.isValid(10)) {
                     conn = initialize();
@@ -243,7 +243,7 @@ public class SqlManager {
     public void closeConnection() {
         if (conn != null) {
             try {
-                if (usemySQL) {
+                if (isUsingMySQL()) {
                     if (conn.isValid(10)) {
                         conn.close();
                     }
@@ -346,14 +346,14 @@ public class SqlManager {
 
             UpdateTables();
 
-            if (usemySQL) {
+            if (isUsingMySQL()) {
                 plugin.getLogger().info("Modifying database for MySQL support");
 
                 String sqlitedb = "plots.db";
                 File sqlitefile = new File(plugin.getServerBridge().getDataFolder(), sqlitedb);
                 if (sqlitefile.exists()) {
                     plugin.getLogger().info("Trying to import plots from plots.db");
-                    Class.forName("org.sqlite.JDBC");
+                    Class.forName(SQLITE_DRIVER);
                     Connection sqliteconn = DriverManager.getConnection("jdbc:sqlite:" + sqlitefile.getPath());
 
                     sqliteconn.setAutoCommit(false);
@@ -482,7 +482,7 @@ public class SqlManager {
         }
     }
 
-    public void addPlot(Plot plot, int idX, int idZ, World world) {
+    public void addPlot(Plot plot, int idX, int idZ, IWorld world) {
         addPlot(plot, idX, idZ,
                 PlotMeCoreManager.topX(plot.getId(), world),
                 PlotMeCoreManager.bottomX(plot.getId(), world),
@@ -2004,6 +2004,10 @@ public class SqlManager {
                 }
             }
         });
+    }
+
+    public boolean isUsingMySQL() {
+        return plugin.getServerBridge().getConfig().getBoolean("usemySQL", false);
     }
 
     public void updatePlotsNewUUID(final UUID uuid, final String newname) {

@@ -1,8 +1,12 @@
 package com.worldcretornica.plotme_core.bukkit;
 
 import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.api.IEntity;
+import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IServerBridge;
+import com.worldcretornica.plotme_core.bukkit.api.BukkitEntity;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.Metrics;
@@ -61,9 +65,9 @@ public class PlotMe_CorePlugin extends JavaPlugin {
                         int totalplotsize = 0;
 
                         for (String plotter : getAPI().getPlotMeCoreManager().getPlotMaps().keySet()) {
-                            if (getAPI().getPlotMeCoreManager().getGenMan(plotter) != null) {
-                                if (getAPI().getPlotMeCoreManager().getGenMan(plotter).getPlotSize(plotter) != 0) {
-                                    totalplotsize += getAPI().getPlotMeCoreManager().getGenMan(plotter).getPlotSize(plotter);
+                            if (getAPI().getGenManager(plotter) != null) {
+                                if (getAPI().getGenManager(plotter).getPlotSize(plotter) != 0) {
+                                    totalplotsize += getAPI().getGenManager(plotter).getPlotSize(plotter);
                                 }
                             }
                         }
@@ -94,7 +98,14 @@ public class PlotMe_CorePlugin extends JavaPlugin {
         }
     }
 
-    public BukkitPlayer wrapPlayer(Player player) {
+    public IPlayer wrapPlayer(Player player) {
         return new BukkitPlayer(player);
+    }
+
+    public IEntity wrapEntity(Entity entity) {
+        if (entity instanceof Player) {
+            return wrapPlayer((Player) entity);
+        }
+        return new BukkitEntity(entity);
     }
 }

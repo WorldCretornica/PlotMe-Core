@@ -1,7 +1,7 @@
 package com.worldcretornica.plotme_core.bukkit.api;
 
 import com.worldcretornica.plotme_core.api.IBlockState;
-import com.worldcretornica.plotme_core.api.World;
+import com.worldcretornica.plotme_core.api.IWorld;
 import org.bukkit.block.BlockState;
 
 public class BukkitBlockState implements IBlockState {
@@ -13,7 +13,7 @@ public class BukkitBlockState implements IBlockState {
     }
 
     @Override
-    public World getWorld() {
+    public IWorld getWorld() {
         return new BukkitWorld(blockstate.getWorld());
     }
 }

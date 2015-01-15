@@ -4,7 +4,7 @@ import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IPlayer;
-import com.worldcretornica.plotme_core.api.World;
+import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.utils.MinecraftFontWidthCalculator;
 import com.worldcretornica.plotme_core.utils.Util;
 
@@ -18,7 +18,7 @@ public class CmdExpired extends PlotCommand {
 
     public boolean exec(IPlayer player, String[] args) {
         if (player.hasPermission(PermissionNames.ADMIN_EXPIRED)) {
-            World world = player.getWorld();
+            IWorld world = player.getWorld();
             if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
                 int page = 1;
 

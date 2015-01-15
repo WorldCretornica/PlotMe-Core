@@ -1,14 +1,16 @@
 package com.worldcretornica.plotme_core.bukkit.api;
 
 import com.worldcretornica.plotme_core.api.IPlotMe_ChunkGenerator;
-import com.worldcretornica.plotme_core.api.World;
+import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.bukkit.BukkitPlotMe_ChunkGeneratorBridge;
+import org.bukkit.World;
+import org.jetbrains.annotations.NotNull;
 
-public class BukkitWorld implements World {
+public class BukkitWorld implements IWorld {
 
-    private final org.bukkit.World world;
+    private final World world;
 
-    public BukkitWorld(org.bukkit.World world) {
+    public BukkitWorld(@NotNull World world) {
         this.world = world;
     }
 
@@ -32,7 +34,7 @@ public class BukkitWorld implements World {
         return world.getName();
     }
 
-    public org.bukkit.World getWorld() {
+    public World getWorld() {
         return world;
     }
 

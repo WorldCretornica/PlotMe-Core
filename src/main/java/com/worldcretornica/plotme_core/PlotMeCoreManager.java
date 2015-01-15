@@ -5,12 +5,15 @@ import com.griefcraft.model.Protection;
 import com.worldcretornica.plotme_core.api.IBiome;
 import com.worldcretornica.plotme_core.api.IBlock;
 import com.worldcretornica.plotme_core.api.ICommandSender;
+import com.worldcretornica.plotme_core.api.IEntity;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IPlotMe_GeneratorManager;
-import com.worldcretornica.plotme_core.api.World;
+import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitBiome;
 import com.worldcretornica.plotme_core.utils.Util;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -70,7 +73,7 @@ public class PlotMeCoreManager {
      * @return
      */
 
-    public static Plot getPlotById(IPlayer player, PlotMapInfo pmi) {
+    public static Plot getPlotById(@NotNull IPlayer player, PlotMapInfo pmi) {
         String id = getPlotId(player);
         return getPlotById(id, pmi);
     }
@@ -81,7 +84,7 @@ public class PlotMeCoreManager {
         }
     }
 
-    public static void setOwnerSign(World world, Plot plot) {
+    public static void setOwnerSign(@NotNull IWorld world, Plot plot) {
         String id = plot.getId();
         String line1 = "ID: " + id;
         String line2 = "";
@@ -95,7 +98,8 @@ public class PlotMeCoreManager {
         return pmi != null && pmi.getPlot(id) == null;
     }
 
-    public static String getPlotId(ILocation location) {
+    @NotNull
+    public static String getPlotId(@NotNull ILocation location) {
         if (getGenManager(location.getWorld()) == null) {
             return "";
         } else {
@@ -104,7 +108,8 @@ public class PlotMeCoreManager {
 
     }
 
-    public static String getPlotId(IPlayer player) {
+    @NotNull
+    public static String getPlotId(@NotNull IPlayer player) {
         if (getGenManager(player.getWorld()) == null) {
             return "";
         } else {
@@ -113,55 +118,56 @@ public class PlotMeCoreManager {
 
     }
 
-    public static ILocation getPlotBottomLoc(World world, String id) {
+    public static ILocation getPlotBottomLoc(IWorld world, String id) {
         return getGenManager(world).getPlotBottomLoc(world, id);
     }
 
-    public static ILocation getPlotTopLoc(World world, String id) {
+    public static ILocation getPlotTopLoc(IWorld world, String id) {
         return getGenManager(world).getPlotTopLoc(world, id);
     }
 
-    public static void removeOwnerSign(World world, String id) {
+    public static void removeOwnerSign(IWorld world, String id) {
         getGenManager(world).removeOwnerDisplay(world, id);
     }
 
-    public static void removeSellSign(World world, String id) {
+    public static void removeSellSign(IWorld world, String id) {
         getGenManager(world).removeSellerDisplay(world, id);
     }
 
-    public static void removeAuctionSign(World world, String id) {
+    public static void removeAuctionSign(IWorld world, String id) {
         getGenManager(world).removeAuctionDisplay(world, id);
     }
 
-    public static boolean isValidId(World world, String id) {
+    public static boolean isValidId(@NotNull IWorld world, String id) {
         return getGenManager(world).isValidId(id);
     }
 
-    public static int bottomX(String id, World world) {
+    public static int bottomX(String id, IWorld world) {
         return getGenManager(world).bottomX(id, world);
     }
 
-    public static int topX(String id, World world) {
+    public static int topX(String id, IWorld world) {
         return getGenManager(world).topX(id, world);
     }
 
-    public static int bottomZ(String id, World world) {
+    public static int bottomZ(String id, IWorld world) {
         return getGenManager(world).bottomZ(id, world);
     }
 
-    public static int topZ(String id, World world) {
+    public static int topZ(String id, IWorld world) {
         return getGenManager(world).topZ(id, world);
     }
 
-    public static ILocation getPlotHome(World world, String id) {
+    public static ILocation getPlotHome(IWorld world, String id) {
         return getGenManager(world).getPlotHome(world, id);
     }
 
-    public static List<IPlayer> getPlayersInPlot(World world, String id) {
+    public static List<IPlayer> getPlayersInPlot(IWorld world, String id) {
         return getGenManager(world).getPlayersInPlot(id);
     }
 
-    public static IPlotMe_GeneratorManager getGenManager(World world) {
+    @Nullable
+    public static IPlotMe_GeneratorManager getGenManager(@NotNull IWorld world) {
         if (world.isPlotMeGenerator()) {
             return world.getGenerator().getManager();
         } else {
@@ -210,29 +216,26 @@ public class PlotMeCoreManager {
      * @return true if economy enabled
      */
 
-    public boolean isEconomyEnabled(World world) {
+    public boolean isEconomyEnabled(IWorld world) {
         return isEconomyEnabled(world.getName().toLowerCase());
     }
 
-    public PlotMapInfo getMap(World world) {
-        if (world == null) {
-            return null;
-        } else {
-            String worldname = world.getName().toLowerCase();
-            return getMap(worldname);
-        }
+
+    public PlotMapInfo getMap(@NotNull IWorld world) {
+        String worldname = world.getName().toLowerCase();
+        return getMap(worldname);
     }
 
     public PlotMapInfo getMap(String world) {
         return getPlotMaps().get(world.toLowerCase());
     }
 
-    public PlotMapInfo getMap(ILocation location) {
+    public PlotMapInfo getMap(@NotNull ILocation location) {
         String worldname = location.getWorld().getName().toLowerCase();
         return getMap(worldname);
     }
 
-    public PlotMapInfo getMap(IPlayer player) {
+    public PlotMapInfo getMap(@NotNull IEntity player) {
         String world = player.getWorld().getName().toLowerCase();
         return getMap(world);
     }
@@ -307,7 +310,7 @@ public class PlotMeCoreManager {
     }
 */
 
-    public Plot getPlotById(String id, World world) {
+    public Plot getPlotById(String id, @NotNull IWorld world) {
         return getPlotById(id, world.getName());
     }
 
@@ -321,17 +324,11 @@ public class PlotMeCoreManager {
         return pmi.getPlot(id);
     }
 
-    public Plot getPlotById(String id, IPlayer player) {
-        PlotMapInfo pmi = getMap(player.getWorld());
-
-        if (pmi == null) {
-            return null;
-        }
-
-        return pmi.getPlot(id);
+    public Plot getPlotById(String id, @NotNull IPlayer player) {
+        return getPlotById(id, player.getWorld());
     }
 
-    public Plot getPlotById(IPlayer player) {
+    public Plot getPlotById(@NotNull IPlayer player) {
         PlotMapInfo pmi = getMap(player);
         String id = getPlotId(player);
 
@@ -342,7 +339,13 @@ public class PlotMeCoreManager {
         return pmi.getPlot(id);
     }
 
-    public void removePlot(World world, String id) {
+    /**
+     * Plot to remove from plotmap.
+     * @param world world
+     * @param id ID
+     */
+
+    public void removePlot(@NotNull IWorld world, String id) {
         PlotMapInfo pmi = getMap(world);
 
         if (pmi != null) {
@@ -356,7 +359,7 @@ public class PlotMeCoreManager {
      * @param id ID
      * @param plot Plot to be added
      */
-    public void addPlot(World world, String id, Plot plot) {
+    public void addPlot(@NotNull IWorld world, String id, @NotNull Plot plot) {
         PlotMapInfo pmi = getMap(world);
 
         if (pmi != null) {
@@ -365,7 +368,7 @@ public class PlotMeCoreManager {
         }
     }
 
-    public void addPlot(World world, String id, Plot plot, PlotMapInfo pmi) {
+    public void addPlot(@NotNull IWorld world, String id, Plot plot, PlotMapInfo pmi) {
         if (pmi != null) {
             pmi.addPlot(id, plot);
             plugin.getServerBridge().getEventFactory().callPlotLoadedEvent(plugin, world, plot);
@@ -376,7 +379,8 @@ public class PlotMeCoreManager {
      * Get the first plotworld defined in config
      * @return plotworld
      */
-    public World getFirstWorld() {
+    @NotNull
+    public IWorld getFirstWorld() {
         String firstWorld = null;
         try {
             firstWorld = (String) getPlotMaps().keySet().toArray()[0];
@@ -392,8 +396,8 @@ public class PlotMeCoreManager {
      * @param world world to be checked
      * @return true if world is plotworld, false otherwise
      */
-    public boolean isPlotWorld(World world) {
-        if (world == null || getGenManager(world) == null) {
+    public boolean isPlotWorld(@NotNull IWorld world) {
+        if (getGenManager(world) == null) {
             return false;
         }
         return getPlotMaps().containsKey(world.getName().toLowerCase());
@@ -405,19 +409,20 @@ public class PlotMeCoreManager {
      * @param location location to be checked
      * @return true if world is plotworld, false otherwise
      */
-    public boolean isPlotWorld(ILocation location) {
+    public boolean isPlotWorld(@NotNull ILocation location) {
         return isPlotWorld(location.getWorld());
     }
 
-    public boolean isPlotWorld(IPlayer player) {
+    public boolean isPlotWorld(@NotNull IEntity player) {
         return isPlotWorld(player.getWorld());
     }
 
-    public boolean isPlotWorld(IBlock block) {
+    public boolean isPlotWorld(@NotNull IBlock block) {
         return isPlotWorld(block.getWorld());
     }
 
-    public Plot createPlot(World world, String id, String owner, UUID uuid, PlotMapInfo pmi) {
+    @Nullable
+    public Plot createPlot(@NotNull IWorld world, String id, @NotNull String owner, UUID uuid, PlotMapInfo pmi) {
         if (isPlotAvailable(id, pmi) && !id.isEmpty()) {
             Plot plot = new Plot(plugin, owner, uuid, world, id, pmi.getDaysToExpiration());
 
@@ -432,7 +437,7 @@ public class PlotMeCoreManager {
         }
     }
 
-    public boolean movePlot(World world, String idFrom, String idTo) {
+    public boolean movePlot(@NotNull IWorld world, String idFrom, String idTo) {
 
         if (!getGenManager(world).movePlot(world, idFrom, idTo)) {
             return false;
@@ -525,7 +530,7 @@ public class PlotMeCoreManager {
      * @param world Plotworld
      * @param id Plot ID
      */
-    public void removeLWC(World world, String id) {
+    public void removeLWC(@NotNull IWorld world, String id) {
         ILocation bottom = getGenManager(world).getBottom(world, id);
         ILocation top = getGenManager(world).getTop(world, id);
         final int x1 = bottom.getBlockX();
@@ -549,7 +554,7 @@ public class PlotMeCoreManager {
         });
     }
 
-    public void setSellSign(World world, Plot plot) {
+    public void setSellSign(@NotNull IWorld world, @NotNull Plot plot) {
         String id = plot.getId();
 
         getGenManager(world).removeSellerDisplay(world, id);
@@ -596,7 +601,7 @@ public class PlotMeCoreManager {
         }
     }
 
-    public void clear(World world, Plot plot, ICommandSender sender, ClearReason reason) {
+    public void clear(@NotNull IWorld world, Plot plot, @NotNull ICommandSender sender, ClearReason reason) {
         String id = plot.getId();
 
         String worldName = world.getName().toLowerCase();
@@ -615,11 +620,11 @@ public class PlotMeCoreManager {
         }
     }
 
-    public boolean isPlotAvailable(String id, World world) {
+    public boolean isPlotAvailable(String id, @NotNull IWorld world) {
         return isPlotAvailable(id, world.getName().toLowerCase());
     }
 
-    public boolean isPlotAvailable(String id, IPlayer player) {
+    public boolean isPlotAvailable(String id, @NotNull IPlayer player) {
         return isPlotAvailable(id, player.getWorld());
     }
 
@@ -629,23 +634,25 @@ public class PlotMeCoreManager {
         return pmi != null && pmi.getPlot(id) == null;
     }
 
+    @Deprecated
     public IPlotMe_GeneratorManager getGenMan(String name) {
         return plugin.getGenManager(name);
     }
 
-    public void adjustWall(IPlayer player) {
-        World world = player.getWorld();
+    public void adjustWall(@NotNull IPlayer player) {
+        IWorld world = player.getWorld();
         String id = getPlotId(player);
         Plot plot = getPlotById(id, world);
 
         getGenManager(world).adjustPlotFor(world, id, true, plot.isProtect(), plot.isAuctioned(), plot.isForSale());
     }
 
-    public void setBiome(World world, String id, IBiome biome) {
+    public void setBiome(@NotNull IWorld world, String id, IBiome biome) {
         getGenManager(world).setBiome(world, id, biome);
         plugin.getSqlManager().updatePlot(getIdX(id), getIdZ(id), world.getName(), "biome", ((BukkitBiome) biome).getBiome().name());
     }
 
+    @NotNull
     public HashSet<UUID> getPlayersIgnoringWELimit() {
         return playersignoringwelimit;
     }
@@ -654,11 +661,11 @@ public class PlotMeCoreManager {
         this.playersignoringwelimit = playersignoringwelimit;
     }
 
-    public void addPlayerIgnoringWELimit(UUID uuid) {
+    public void addPlayerIgnoringWELimit(@NotNull UUID uuid) {
         getPlayersIgnoringWELimit().add(uuid);
     }
 
-    public void removePlayerIgnoringWELimit(UUID uuid) {
+    public void removePlayerIgnoringWELimit(@NotNull UUID uuid) {
         getPlayersIgnoringWELimit().remove(uuid);
     }
 
@@ -674,11 +681,12 @@ public class PlotMeCoreManager {
         return getPlayersIgnoringWELimit().contains(uuid);
     }
 
+    @NotNull
     public HashMap<String, PlotMapInfo> getPlotMaps() {
         return plotmaps;
     }
 
-    public void addPlotMap(String world, PlotMapInfo map) {
+    public void addPlotMap(@NotNull String world, PlotMapInfo map) {
         getPlotMaps().put(world.toLowerCase(), map);
     }
 
@@ -686,11 +694,12 @@ public class PlotMeCoreManager {
         getPlotMaps().remove(world.toLowerCase());
     }
 
+    @NotNull
     private Util Util() {
         return plugin.getUtil();
     }
 
-    public boolean isPlayerIgnoringWELimit(IPlayer player) {
+    public boolean isPlayerIgnoringWELimit(@NotNull IPlayer player) {
         if (plugin.getServerBridge().getConfig().getBoolean("defaultWEAnywhere")) {
             if (player.hasPermission(PermissionNames.ADMIN_WEANYWHERE)) {
                 return !getPlayersIgnoringWELimit().contains(player.getUniqueId());

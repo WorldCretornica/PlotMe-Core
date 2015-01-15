@@ -4,7 +4,7 @@ public interface IBlock {
 
     ILocation getLocation();
 
-    World getWorld();
+    IWorld getWorld();
 
     int getX();
 
