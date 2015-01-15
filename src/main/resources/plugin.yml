@@ -2,8 +2,8 @@ name: PlotMe
 main: com.worldcretornica.plotme_core.bukkit.PlotMe_CorePlugin
 version: ${project.version}
 author: ZachBora
-authors: [flungo, MattBDev]
-website: http://dev.bukkit.org/server-mods/plotme/
+authors: [MattBDev]
+website: http://worldcretornica.github.io/PlotMe-Core/
 load: POSTWORLD
 softdepend: [WorldEdit, Vault, LWC, Multiverse-Core, PlotMe-DefaultGenerator]
 description: >
