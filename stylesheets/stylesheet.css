@@ -18,7 +18,7 @@ ol, ul {list-style:none;}
 #nav ul ul li {display:block;}
 #nav ul ul li a:hover {color:#699;}
 .quicknav {position:absolute;left:1200px}
-.quicknav ul {list-style-type:none;padding:0;margin:0;position: relative;min-width:250px!important;}
+.quicknav ul {list-style-type:none;padding:0;margin:0;position: relative;min-width:225px!important;}
 .quicknav ul li:hover ul {display:block;bottom:100%;}
 
 /* Back to Top button function compacted*/
