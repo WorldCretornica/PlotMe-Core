@@ -37,7 +37,7 @@ ol, ul {list-style:none;}
 
 /* Table Function compacted*/
 table.tftable {font-size:15px;color: #555555;width:100%;height:100%;border-width: 1px;border-color: #a9a9a9;border-collapse: collapse;-webkit-border-radius: 15px;-moz-border-radius: 15px;border-radius: 15px;text-align:center;}
-table.tftable th {font-size:20px;background-color:#DFDFDF;color:#555555;padding:10px;min-width:100px;position:fixed;}
+table.tftable th {font-size:20px;background-color:#DFDFDF;color:#555555;padding:10px;min-width:100px;}
 table.tftable tr {background-color:#F2F2F2;}
 table.tftable td {font-size:15px;padding:10px;color:#1B1B1B;}
 
