@@ -7,7 +7,7 @@ ol, ul {list-style:none;}
 /*	  Markus Styles :)	  */
 /*-------------vvvvvv-------------*/
 /* Dropdown Menu (navigator) function compacted*/
-#nav {background-color:#222;}
+#nav {background-color:initial;}
 #nav_wrapper {width:1125px;margin:0 auto;text-align:left;}
 #nav ul {list-style-type:none;padding:0;margin:0;position: relative;min-width:140px;}
 #nav ul li {display: inline-block;}
