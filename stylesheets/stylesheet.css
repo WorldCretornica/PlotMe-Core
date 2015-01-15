@@ -17,6 +17,8 @@ ol, ul {list-style:none;}
 #nav ul ul {display:none;position: absolute;background-color:#333;border:5px solid #222;border-top:0;margin-left:-5px;}
 #nav ul ul li {display:block;}
 #nav ul ul li a:hover {color:#699;}
+.quicknav {position:absolute;left:1200px}
+.quicknav ul li:hover ul {display:block;bottom:100%;}
 
 /* Back to Top button function compacted*/
 .back-to-top {position: fixed;bottom: 2em;right: 10px;text-decoration: none;color: #000000;background-color: #848484;font-size: 16px;padding: 1em;display: none;border-radius: 10px;}
