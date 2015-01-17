@@ -70,7 +70,7 @@
                 <version>1.9.1</version>
                 <executions>
                     <execution>
-                        <id>add-bukkit-sources</id>
+                        <id>add-sources</id>
                         <phase>generate-sources</phase>
                         <goals>
                             <goal>add-source</goal>
@@ -78,17 +78,6 @@
                         <configuration>
                             <sources>
                                 <source>src/bukkit/java</source>
-                            </sources>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>add-sponge-sources</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>add-source</goal>
-                        </goals>
-                        <configuration>
-                            <sources>
                                 <source>src/sponge/java</source>
                             </sources>
                         </configuration>
@@ -152,13 +141,18 @@
         <dependency>
             <groupId>org.spongepowered</groupId>
             <artifactId>spongeapi</artifactId>
-            <version>1.0</version>
+            <version>1.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
             <version>1.8-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.flowpowered</groupId>
+            <artifactId>flow-math</artifactId>
+            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>com.onarandombox.multiversecore</groupId>

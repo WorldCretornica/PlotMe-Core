@@ -4,7 +4,6 @@ import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitBiome;
@@ -115,11 +114,13 @@ public class CmdInfo extends PlotCommand {
                             }
                         }
                     }
-                    ILocation bottom = PlotMeCoreManager.getPlotBottomLoc(world, id);
-                    ILocation top = PlotMeCoreManager.getPlotTopLoc(world, id);
+                    int bottomX = PlotMeCoreManager.bottomX(id, world);
+                    int bottomZ = PlotMeCoreManager.bottomZ(id, world);
+                    int topX = PlotMeCoreManager.topX(id, world);
+                    int topZ = PlotMeCoreManager.topZ(id, world);
 
-                    player.sendMessage("§b" + C("WordBottom") + ": §r" + bottom.getBlockX() + "§9,§r" + bottom.getBlockZ());
-                    player.sendMessage("§b" + C("WordTop") + ": §r" + top.getBlockX() + "§9,§r" + top.getBlockZ());
+                    player.sendMessage("§b" + C("WordBottom") + ": §r" + bottomX + "§9,§r" + bottomZ);
+                    player.sendMessage("§b" + C("WordTop") + ": §r" + topX + "§9,§r" + topZ);
 
                 } else {
                     player.sendMessage("§c" + C("MsgThisPlot") + " (" + id + ") " + C("MsgHasNoOwner"));
