@@ -41,7 +41,6 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -64,7 +63,7 @@ public class BukkitServerBridge extends IServerBridge {
     private PlotWorldEdit plotworldedit;
     private MultiverseWrapper multiverse;
 
-    public BukkitServerBridge(@NotNull PlotMe_CorePlugin instance) {
+    public BukkitServerBridge(PlotMe_CorePlugin instance) {
         plugin = instance;
         eventfactory = new BukkitEventFactory();
     }
@@ -92,7 +91,7 @@ public class BukkitServerBridge extends IServerBridge {
      * @return logger
      */
     @Override
-    @NotNull
+
     public Logger getLogger() {
         return plugin.getLogger();
     }
@@ -171,7 +170,7 @@ public class BukkitServerBridge extends IServerBridge {
     }
 
     @Override
-    public IWorld getWorld(@NotNull String worldName) {
+    public IWorld getWorld(String worldName) {
         World world = Bukkit.getWorld(worldName);
         if (world == null) {
             return null;
@@ -250,7 +249,7 @@ public class BukkitServerBridge extends IServerBridge {
     }
 
     @Override
-    @NotNull
+
     public IOfflinePlayer getOfflinePlayer(String player) {
         @SuppressWarnings("deprecation")
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(player);
@@ -258,7 +257,7 @@ public class BukkitServerBridge extends IServerBridge {
     }
 
     @Override
-    @NotNull
+
     public IEventFactory getEventFactory() {
         return eventfactory;
     }
@@ -274,7 +273,7 @@ public class BukkitServerBridge extends IServerBridge {
     }
 
     @Override
-    @NotNull
+
     public IConfigSection getConfig() {
         return new BukkitConfigSection(plugin);
     }
@@ -334,7 +333,7 @@ public class BukkitServerBridge extends IServerBridge {
     }
 
     @Override
-    @NotNull
+
     public EconomyResponse depositPlayer(IOfflinePlayer player, double currentBid) {
         return getEconomy().depositPlayer(((BukkitOfflinePlayer) player).getOfflinePlayer(), currentBid);
     }
@@ -390,7 +389,7 @@ public class BukkitServerBridge extends IServerBridge {
      * @return
      */
     @Override
-    public boolean createPlotWorld(@NotNull String worldname, @NotNull String generator, Map<String, String> args) {
+    public boolean createPlotWorld(String worldname, String generator, Map<String, String> args) {
         //Get a seed
         Long seed = new Random().nextLong();
 

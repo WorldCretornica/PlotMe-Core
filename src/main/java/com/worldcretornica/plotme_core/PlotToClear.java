@@ -1,7 +1,5 @@
 package com.worldcretornica.plotme_core;
 
-import org.jetbrains.annotations.NotNull;
-
 public class PlotToClear {
 
     private String world;
@@ -14,25 +12,25 @@ public class PlotToClear {
         setReason(reason);
     }
 
-    @NotNull
+
     public final String getWorld() {
         return world;
     }
 
-    public final void setWorld(@NotNull String world) {
+    public final void setWorld(String world) {
         this.world = world;
     }
 
-    @NotNull
+
     public final String getPlotId() {
         return plotid;
     }
 
-    public final void setPlotId(@NotNull String plotid) {
+    public final void setPlotId(String plotid) {
         this.plotid = plotid;
     }
 
-    @NotNull
+
     public final ClearReason getReason() {
         return reason;
     }

@@ -4,13 +4,12 @@ import com.worldcretornica.plotme_core.api.IPlotMe_ChunkGenerator;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.bukkit.BukkitPlotMe_ChunkGeneratorBridge;
 import org.bukkit.World;
-import org.jetbrains.annotations.NotNull;
 
 public class BukkitWorld implements IWorld {
 
     private final World world;
 
-    public BukkitWorld(@NotNull World world) {
+    public BukkitWorld(World world) {
         this.world = world;
     }
 

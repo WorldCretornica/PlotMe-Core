@@ -1,8 +1,6 @@
 package com.worldcretornica.plotme_core;
 
 import com.worldcretornica.plotme_core.api.IConfigSection;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -27,7 +25,6 @@ public class PlotMapInfo {
         return (short) plots.size();
     }
 
-    @Nullable
     public Plot getPlot(String id) {
         if (id.isEmpty()) {
             return null;
@@ -44,7 +41,6 @@ public class PlotMapInfo {
         return plots.get(id);
     }
 
-    @Nullable
     public ConcurrentHashMap<String, Plot> getLoadedPlots() {
         return plots;
     }
@@ -91,7 +87,6 @@ public class PlotMapInfo {
         config.saveConfig();
     }
 
-    @NotNull
     private IConfigSection getEconomySection() {
         return config.getConfigurationSection("economy");
     }

@@ -2,24 +2,22 @@ package com.worldcretornica.plotme_core;
 
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IWorld;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class PlotMeSpool implements Runnable {
 
     private final PlotMe_Core plugin;
     private Long[] currentClear;
-    @Nullable
+
     private PlotToClear plottoclear;
     private int taskid;
 
-    public PlotMeSpool(PlotMe_Core instance, @NotNull PlotToClear plotToClear) {
+    public PlotMeSpool(PlotMe_Core instance, PlotToClear plotToClear) {
         plugin = instance;
 
         plottoclear = plotToClear;
     }
 
-    @NotNull
+
     private static String format(long count) {
         double buffer;
 
@@ -107,7 +105,7 @@ public class PlotMeSpool implements Runnable {
         return currentClear[3];
     }
 
-    @Nullable
+
     public PlotToClear getPlotToClear() {
         return plottoclear;
     }

@@ -5,8 +5,6 @@ import com.worldcretornica.plotme_core.api.IPlotMe_GeneratorManager;
 import com.worldcretornica.plotme_core.api.IServerBridge;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.utils.Util;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -15,9 +13,9 @@ import java.util.logging.Logger;
 
 public class PlotMe_Core {
 
-    @NotNull
+
     public static final String CAPTION_FILE = "captions.yml";
-    @NotNull
+
     public static final String WORLDS_CONFIG_SECTION = "worlds";
     //Bridge
     private final IServerBridge serverBridge;
@@ -68,7 +66,7 @@ public class PlotMe_Core {
         setupWorlds();
     }
 
-    @NotNull
+
     public Logger getLogger() {
         return serverBridge.getLogger();
     }
@@ -118,7 +116,7 @@ public class PlotMe_Core {
         }
     }
 
-    @NotNull
+
     public IConfigSection getCaptionConfig() {
         return serverBridge.getConfig(CAPTION_FILE);
     }
@@ -171,7 +169,7 @@ public class PlotMe_Core {
         plotsToClear = new ConcurrentLinkedQueue<>();
     }
 
-    @Nullable
+
     public IPlotMe_GeneratorManager getGenManager(String name) {
         IWorld world = serverBridge.getWorld(name.toLowerCase());
         if (world == null) {
@@ -219,7 +217,7 @@ public class PlotMe_Core {
         serverBridge.cancelTask(taskid);
     }
 
-    @Nullable
+
     public PlotToClear getPlotLocked(String world, String id) {
         for (PlotToClear ptc : plotsToClear.toArray(new PlotToClear[plotsToClear.size()])) {
             if (ptc.getWorld().equalsIgnoreCase(world) && ptc.getPlotId().equalsIgnoreCase(id)) {
@@ -230,35 +228,35 @@ public class PlotMe_Core {
         return null;
     }
 
-    @NotNull
+
     public PlotMeCoreManager getPlotMeCoreManager() {
         return plotMeCoreManager;
     }
 
-    private void setPlotMeCoreManager(@NotNull PlotMeCoreManager plotMeCoreManager) {
+    private void setPlotMeCoreManager(PlotMeCoreManager plotMeCoreManager) {
         this.plotMeCoreManager = plotMeCoreManager;
     }
 
-    @NotNull
+
     public IServerBridge getServerBridge() {
         return serverBridge;
     }
 
-    @NotNull
+
     public SqlManager getSqlManager() {
         return sqlManager;
     }
 
-    private void setSqlManager(@NotNull SqlManager sqlManager) {
+    private void setSqlManager(SqlManager sqlManager) {
         this.sqlManager = sqlManager;
     }
 
-    @NotNull
+
     public Util getUtil() {
         return util;
     }
 
-    private void setUtil(@NotNull Util util) {
+    private void setUtil(Util util) {
         this.util = util;
     }
 
