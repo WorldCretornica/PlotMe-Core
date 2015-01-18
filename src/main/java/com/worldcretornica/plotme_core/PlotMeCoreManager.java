@@ -365,6 +365,13 @@ public class PlotMeCoreManager {
         }
     }
 
+    /**
+     * Plot to add to loaded plotmap.
+     * @param world world
+     * @param id ID
+     * @param plot Plot to be added
+     * @param pmi Plot Map to add the plot to
+     */
     public void addPlot(IWorld world, String id, Plot plot, PlotMapInfo pmi) {
         if (pmi != null) {
             pmi.addPlot(id, plot);
@@ -390,7 +397,7 @@ public class PlotMeCoreManager {
     /**
      * Checks if world is a PlotWorld
      *
-     * @param world world to be checked
+     * @param world object to get the location from
      * @return true if world is plotworld, false otherwise
      */
     public boolean isPlotWorld(IWorld world) {
@@ -410,9 +417,22 @@ public class PlotMeCoreManager {
         return isPlotWorld(location.getWorld());
     }
 
-    public boolean isPlotWorld(IEntity player) {
-        return isPlotWorld(player.getWorld());
+    /**
+     * Checks if the entity is in a plotworld
+     *
+     * @param entity entity to get the location from
+     * @return true if world is plotworld, false otherwise
+     */
+    public boolean isPlotWorld(IEntity entity) {
+        return isPlotWorld(entity.getWorld());
     }
+
+    /**
+     * Checks if the block is in a plotworld
+     *
+     * @param block block to get the location from
+     * @return true if world is plotworld, false otherwise
+     */
 
     public boolean isPlotWorld(IBlock block) {
         return isPlotWorld(block.getWorld());

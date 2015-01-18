@@ -150,11 +150,6 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.flowpowered</groupId>
-            <artifactId>flow-math</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-        <dependency>
             <groupId>com.onarandombox.multiversecore</groupId>
             <artifactId>Multiverse-Core</artifactId>
             <version>2.5</version>
