@@ -11,8 +11,8 @@ description: >
 commands:
     plotme:
       description: List PlotMe commands
-      usage: /plotme
       aliases: [p,plot]
+      permission-message: "You do not have the required permissions to use this PlotMe Command."
 permissions:
     plotme.use:
       description: Gives default user commands
