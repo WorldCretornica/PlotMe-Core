@@ -156,3 +156,5 @@ permissions:
       description: Gives the expired command
     plotme.admin.buildanywhere:
       description: Allows to build anywhere in the plot world
+    plotme.group.*:
+      description: Group of players

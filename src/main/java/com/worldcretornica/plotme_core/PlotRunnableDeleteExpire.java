@@ -37,7 +37,7 @@ public class PlotRunnableDeleteExpire implements Runnable {
                         plotMeCoreManager.clear(world, expiredplot, sender, ClearReason.Expired);
 
                         String id = expiredplot.getId();
-                        ids += "§c" + id + "§r, ";
+                        ids += id + ", ";
 
                         plotMeCoreManager.removePlot(world, id);
                         PlotMeCoreManager.removeOwnerSign(world, id);

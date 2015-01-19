@@ -6,6 +6,7 @@ import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.PlotToClear;
+import com.worldcretornica.plotme_core.bukkit.PlotMe_CorePlugin;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitBlock;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitEntity;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitLocation;
@@ -50,9 +51,11 @@ import java.util.List;
 public class BukkitPlotListener implements Listener {
 
     private final PlotMe_Core api;
+    private final PlotMe_CorePlugin plugin;
 
-    public BukkitPlotListener(PlotMe_Core instance) {
-        api = instance;
+    public BukkitPlotListener(PlotMe_CorePlugin instance) {
+        api = instance.getAPI();
+        this.plugin = instance;
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = false)
@@ -633,7 +636,7 @@ public class BukkitPlotListener implements Listener {
     public void onHangingBreakByEntity(HangingBreakByEntityEvent event) {
 
         if (event.getRemover() instanceof Player) {
-            BukkitPlayer player = new BukkitPlayer((Player) event.getRemover());
+            BukkitPlayer player = (BukkitPlayer) plugin.wrapPlayer((Player) event.getRemover());
 
             boolean canbuild = !player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE);
 
@@ -779,7 +782,7 @@ public class BukkitPlotListener implements Listener {
                 event.setCancelled(true);
             } else {
                 Player player = (Player) event.getDamager();
-                BukkitPlayer bukkitPlayer = new BukkitPlayer(player);
+                BukkitPlayer bukkitPlayer = (BukkitPlayer) plugin.wrapPlayer(player);
                 boolean cantbuild = !player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE);
                 String id = PlotMeCoreManager.getPlotId(entity.getLocation());
                 if (id.isEmpty()) {

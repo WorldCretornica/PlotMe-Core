@@ -36,9 +36,6 @@ public class BukkitPlotWorldEditListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onPlayerMove(PlayerMoveEvent event) {
-        if (event.getTo() == null || event.getFrom() == null) {
-            return;
-        }
         BukkitLocation from = new BukkitLocation(event.getFrom());
         BukkitLocation to = new BukkitLocation(event.getTo());
 
@@ -86,9 +83,6 @@ public class BukkitPlotWorldEditListener implements Listener {
         BukkitPlayer player = (BukkitPlayer) plugin.wrapPlayer(event.getPlayer());
         BukkitLocation from = new BukkitLocation(event.getFrom());
         BukkitLocation to = new BukkitLocation(event.getTo());
-        if (event.getTo() == null) {
-            return;
-        }
         if (api.getPlotMeCoreManager().isPlotWorld(from)) {
             if (api.getPlotMeCoreManager().isPlotWorld(to)) {
                 worldEdit.setMask(player);
@@ -103,14 +97,8 @@ public class BukkitPlotWorldEditListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onPlayerPortal(PlayerPortalEvent event) {
         BukkitPlayer player = (BukkitPlayer) plugin.wrapPlayer(event.getPlayer());
-        if (event.getFrom() == null || event.getTo() == null) {
-            return;
-        }
         BukkitLocation from = new BukkitLocation(event.getFrom());
         BukkitLocation to = new BukkitLocation(event.getTo());
-        if (event.getTo() == null) {
-            return;
-        }
         if (api.getPlotMeCoreManager().isPlotWorld(from)) {
             if (api.getPlotMeCoreManager().isPlotWorld(to)) {
                 worldEdit.setMask(player);

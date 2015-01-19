@@ -31,10 +31,9 @@ public class CmdDeny extends PlotCommand {
                         player.sendMessage(C("WordUsage") + " §c/plotme deny <" + C("WordPlayer") + ">");
                     } else {
                         Plot plot = PlotMeCoreManager.getPlotById(id, pmi);
-                        String playername = player.getName();
                         String denied = args[1];
 
-                        if (plot.getOwner().equalsIgnoreCase(playername) || player.hasPermission(PermissionNames.ADMIN_DENY)) {
+                        if (plot.getOwner().equalsIgnoreCase(player.getName()) || player.hasPermission(PermissionNames.ADMIN_DENY)) {
                             if (plot.getOwner().equalsIgnoreCase(denied)) {
                                 //TODO output something using a caption that says like "Cannot deny owner"
                                 return true;
@@ -108,10 +107,12 @@ public class CmdDeny extends PlotCommand {
                                     if (isAdvancedLogging()) {
                                         if (price == 0) {
                                             serverBridge.getLogger()
-                                                    .info(playername + " " + C("MsgDeniedPlayer") + " " + denied + " " + C("MsgToPlot") + " " + id);
+                                                    .info(player.getName() + " " + C("MsgDeniedPlayer") + " " + denied + " " + C("MsgToPlot") + " "
+                                                          + id);
                                         } else {
                                             serverBridge.getLogger()
-                                                    .info(playername + " " + C("MsgDeniedPlayer") + " " + denied + " " + C("MsgToPlot") + " " + id + (
+                                                    .info(player.getName() + " " + C("MsgDeniedPlayer") + " " + denied + " " + C("MsgToPlot") + " "
+                                                          + id + (
                                                             " " + C("WordFor") + " " + price));
                                         }
                                     }

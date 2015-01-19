@@ -68,10 +68,15 @@ public class CmdAdd extends PlotCommand {
                                 }
 
                                 if (!event.isCancelled()) {
-                                    IPlayer allowed2 = plugin.getServerBridge().getPlayerExact(allowed);
-                                    if (allowed2 != null) {
-                                        plot.addAllowed(allowed, allowed2.getUniqueId());
-                                        plot.removeDenied(allowed2.getUniqueId());
+                                    if (!allowed.toLowerCase().startsWith("group:")) {
+                                        IPlayer allowed2 = plugin.getServerBridge().getPlayerExact(allowed);
+                                        if (allowed2 != null) {
+                                            plot.addAllowed(allowed, allowed2.getUniqueId());
+                                            plot.removeDenied(allowed2.getUniqueId());
+                                        } else {
+                                            plot.addAllowed(allowed);
+                                            plot.removeDenied(allowed);
+                                        }
                                     } else {
                                         plot.addAllowed(allowed);
                                         plot.removeDenied(allowed);

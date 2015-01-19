@@ -54,7 +54,7 @@ public class PlotMeCoreManager {
      * Gets the plot by the id and pmi
      * @param id Plot ID
      * @param pmi PlotMapInfo
-     * @return
+     * @return plot
      */
     public static Plot getPlotById(String id, PlotMapInfo pmi) {
         if (pmi == null) {
@@ -68,7 +68,7 @@ public class PlotMeCoreManager {
      * Gets the plot with the player and pmi. The player has its location checked to retrieve the plotID.
      * @param player player standing in the plot
      * @param pmi PlotMapInfo
-     * @return
+     * @return plot
      */
 
     public static Plot getPlotById(IPlayer player, PlotMapInfo pmi) {
@@ -584,11 +584,7 @@ public class PlotMeCoreManager {
             if (plot.isForSale()) {
                 line1 = Util().C("SignForSale");
                 line2 = Util().C("SignPrice");
-                if (plot.getCustomPrice() % 1 == 0) {
-                    line3 = Util().C("SignPriceColor") + Math.round(plot.getCustomPrice());
-                } else {
-                    line3 = Util().C("SignPriceColor") + plot.getCustomPrice();
-                }
+                line3 = String.valueOf(plot.getCustomPrice());
                 line4 = "/plotme " + Util().C("CommandBuy");
             }
 
@@ -606,11 +602,7 @@ public class PlotMeCoreManager {
                 } else {
                     line2 = Util().C("SignCurrentBid");
                 }
-                if (plot.getCurrentBid() % 1 == 0) {
-                    line3 = Util().C("SignCurrentBidColor") + Math.round(plot.getCurrentBid());
-                } else {
-                    line3 = Util().C("SignCurrentBidColor") + plot.getCurrentBid();
-                }
+                line3 = String.valueOf(plot.getCurrentBid());
                 line4 = "/plotme " + Util().C("CommandBid") + " <x>";
             }
 
