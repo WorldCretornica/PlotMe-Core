@@ -30,7 +30,6 @@ public class PlotToClear {
         this.plotid = plotid;
     }
 
-
     public final ClearReason getReason() {
         return reason;
     }

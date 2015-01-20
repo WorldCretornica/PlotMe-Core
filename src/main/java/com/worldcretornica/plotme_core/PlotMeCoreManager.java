@@ -444,8 +444,8 @@ public class PlotMeCoreManager {
             Plot plot = new Plot(plugin, owner, uuid, world, id, pmi.getDaysToExpiration());
 
             setOwnerSign(world, plot);
-
             addPlot(world, id, plot, pmi);
+            adjustWall(world, id, true);
 
             plugin.getSqlManager().addPlot(plot, getIdX(id), getIdZ(id), world);
             return plot;
@@ -654,6 +654,12 @@ public class PlotMeCoreManager {
         Plot plot = getPlotById(id, world);
 
         getGenManager(world).adjustPlotFor(world, id, true, plot.isProtect(), plot.isAuctioned(), plot.isForSale());
+    }
+
+    public void adjustWall(IWorld world, String id, boolean claimed) {
+        Plot plot = getPlotById(id, world);
+
+        getGenManager(world).adjustPlotFor(world, id, claimed, plot.isProtect(), plot.isAuctioned(), plot.isForSale());
     }
 
     public void setBiome(IWorld world, String id, IBiome biome) {

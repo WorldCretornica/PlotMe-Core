@@ -110,7 +110,7 @@ public class CmdAuction extends PlotCommand {
                                         if (!event.isCancelled()) {
                                             plot.setCurrentBid(bid);
                                             plot.setAuctioned(true);
-                                            plugin.getPlotMeCoreManager().adjustWall(player);
+                                            plugin.getPlotMeCoreManager().adjustWall(world, plot.getId(), true);
                                             plugin.getPlotMeCoreManager().setSellSign(world, plot);
 
                                             plot.updateField("currentbid", bid);

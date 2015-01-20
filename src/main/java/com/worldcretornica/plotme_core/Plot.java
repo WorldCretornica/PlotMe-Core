@@ -321,10 +321,6 @@ public class Plot implements Cloneable {
 
     private boolean isAllowedInternal(String name, UUID uuid, boolean checkStar, boolean checkGroup) {
 
-        if (checkStar && "*".equals(getOwner())) {
-            return true;
-        }
-
         IPlayer player = plugin.getServerBridge().getPlayer(uuid);
         if (getOwnerId() != null && getOwnerId().equals(uuid)) {
             return true;
