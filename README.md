@@ -1,8 +1,4 @@
-#PlotMe Wiki
-
-Latest changes
-* Code cleanup
-* Different title for each page
-* Adding a download link to PlotMe in the footer
-* Changed projecttitle and tagline (header)
-* Changed content on the homepage
+#PlotMe
+* The wiki > http://worldcretornica.github.io/PlotMe-Core
+* Download > http://spigotmc.org/resources/plotme.2131/
+* Problems > https://github.com/WorldCretornica/PlotMe-Core/issues/
