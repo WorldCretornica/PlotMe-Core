@@ -58,7 +58,7 @@ public class BukkitPlotListener implements Listener {
         this.plugin = instance;
     }
 
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = false)
+    @EventHandler(priority = EventPriority.HIGH)
     public void onBlockBreak(BlockBreakEvent event) {
         BukkitBlock block = new BukkitBlock(event.getBlock());
 
@@ -104,7 +104,7 @@ public class BukkitPlotListener implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGH)
     public void onBlockPlace(BlockPlaceEvent event) {
         Player player = event.getPlayer();
         BukkitLocation location = new BukkitLocation(event.getBlockPlaced().getLocation());
