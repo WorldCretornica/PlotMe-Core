@@ -1116,11 +1116,11 @@ public class SqlManager {
 
             if (ownerId == null) {
                 ps = conn.prepareStatement("SELECT Count(*) as NbPlot FROM plotmePlots WHERE LOWER(world) = ? AND owner = ?");
-                ps.setString(1, world);
+                ps.setString(1, world.toLowerCase());
                 ps.setString(2, owner);
             } else {
                 ps = conn.prepareStatement("SELECT Count(*) as NbPlot FROM plotmePlots WHERE LOWER(world) = ? AND ownerId = ?");
-                ps.setString(1, world);
+                ps.setString(1, world.toLowerCase());
                 ps.setBytes(2, UUIDFetcher.toBytes(ownerId));
             }
 
