@@ -39,7 +39,7 @@ public class Util {
         }
     }
 
-    public String moneyFormat(double price, boolean showsign) {
+    public String moneyFormat(double price, boolean showSign) {
         if (price == 0) {
             return "";
         }
@@ -56,7 +56,7 @@ public class Util {
             }
         }
 
-        if (showsign) {
+        if (showSign) {
             if (price > 0.0) {
                 return "§a" + ("+" + format);
             } else {

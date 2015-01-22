@@ -23,20 +23,20 @@ public class PlotRunnableDeleteExpire implements Runnable {
 
         if (plugin.getWorldCurrentlyProcessingExpired() != null) {
             IWorld world = plugin.getWorldCurrentlyProcessingExpired();
-            List<Plot> expiredplots = sqlmanager.getExpiredPlots(world.getName(), 1, 5);
+            List<Plot> expiredPlots = sqlmanager.getExpiredPlots(world.getName(), 1, 5);
 
-            if (expiredplots.isEmpty()) {
+            if (expiredPlots.isEmpty()) {
                 plugin.setCounterExpired((short) 0);
             } else {
                 String ids = "";
 
-                for (Plot expiredplot : expiredplots) {
-                    InternalPlotResetEvent event = plugin.getServerBridge().getEventFactory().callPlotResetEvent(plugin, world, expiredplot, sender);
+                for (Plot expiredPlot : expiredPlots) {
+                    InternalPlotResetEvent event = plugin.getServerBridge().getEventFactory().callPlotResetEvent(plugin, world, expiredPlot, sender);
 
                     if (!event.isCancelled()) {
-                        plotMeCoreManager.clear(world, expiredplot, sender, ClearReason.Expired);
+                        plotMeCoreManager.clear(world, expiredPlot, sender, ClearReason.Expired);
 
-                        String id = expiredplot.getId();
+                        String id = expiredPlot.getId();
                         ids += id + ", ";
 
                         plotMeCoreManager.removePlot(world, id);

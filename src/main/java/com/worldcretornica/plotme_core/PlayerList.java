@@ -8,18 +8,18 @@ import java.util.UUID;
 public class PlayerList {
 
     private PlotMe_Core api;
-    private HashMap<String, UUID> playerlist;
+    private HashMap<String, UUID> playerList;
 
     public PlayerList(PlotMe_Core api) {
         this.api = api;
     }
 
     public PlayerList() {
-        playerlist = new HashMap<>();
+        playerList = new HashMap<>();
     }
 
     public PlayerList(HashMap<String, UUID> players) {
-        playerlist = players;
+        playerList = players;
     }
 
     public void put(String name) {
@@ -27,34 +27,34 @@ public class PlayerList {
     }
 
     public void put(String name, UUID uuid) {
-        playerlist.put(name, uuid);
+        playerList.put(name, uuid);
     }
 
     public String put(UUID uuid) {
         String name = api.getServerBridge().getOfflinePlayer(uuid).getName();
-        playerlist.put(name, uuid);
+        playerList.put(name, uuid);
         return name;
     }
 
     public UUID remove(String name) {
         String found = "";
-        for (String key : playerlist.keySet()) {
+        for (String key : playerList.keySet()) {
             if (key.equalsIgnoreCase(name)) {
                 found = key;
             }
         }
         UUID uuid = null;
         if (!found.isEmpty()) {
-            uuid = playerlist.get(found);
-            playerlist.remove(found);
+            uuid = playerList.get(found);
+            playerList.remove(found);
         }
         return uuid;
     }
 
     public String remove(UUID uuid) {
-        for (String name : playerlist.keySet()) {
-            if (playerlist.get(name).equals(uuid)) {
-                playerlist.remove(name);
+        for (String name : playerList.keySet()) {
+            if (playerList.get(name).equals(uuid)) {
+                playerList.remove(name);
                 return name;
             }
         }
@@ -62,13 +62,13 @@ public class PlayerList {
     }
 
     public Set<String> getPlayers() {
-        return playerlist.keySet();
+        return playerList.keySet();
     }
 
     public String getPlayerList() {
         StringBuilder list = new StringBuilder();
 
-        for (String s : playerlist.keySet()) {
+        for (String s : playerList.keySet()) {
             list = list.append(s + ", ");
         }
         if (list.length() > 1) {
@@ -78,7 +78,7 @@ public class PlayerList {
     }
 
     public boolean contains(String name) {
-        for (String key : playerlist.keySet()) {
+        for (String key : playerList.keySet()) {
             if (key.equalsIgnoreCase(name)) {
                 return true;
             }
@@ -87,31 +87,31 @@ public class PlayerList {
     }
 
     public boolean contains(UUID uuid) {
-        return playerlist.values().contains(uuid);
+        return playerList.values().contains(uuid);
     }
 
     public HashMap<String, UUID> getAllPlayers() {
-        return playerlist;
+        return playerList;
     }
 
     public void clear() {
-        playerlist.clear();
+        playerList.clear();
     }
 
     public int size() {
-        return playerlist.size();
+        return playerList.size();
     }
 
-    public void replace(UUID uuid, String newname) {
-        if (uuid != null && playerlist != null) {
+    public void replace(UUID uuid, String newName) {
+        if (uuid != null && playerList != null) {
             if (contains(uuid)) {
-                Iterator<String> it = playerlist.keySet().iterator();
+                Iterator<String> it = playerList.keySet().iterator();
                 while (it.hasNext()) {
                     String name = it.next();
 
-                    if (playerlist.get(name) != null && playerlist.get(name).equals(uuid)) {
-                        playerlist.remove(name);
-                        playerlist.put(newname, uuid);
+                    if (playerList.get(name) != null && playerList.get(name).equals(uuid)) {
+                        playerList.remove(name);
+                        playerList.put(newName, uuid);
                         return;
                     }
                 }
@@ -119,16 +119,16 @@ public class PlayerList {
         }
     }
 
-    public void replace(String name, UUID newuuid) {
-        if (newuuid != null && playerlist != null) {
+    public void replace(String name, UUID newUuid) {
+        if (newUuid != null && playerList != null) {
             if (contains(name)) {
-                Iterator<String> it = playerlist.keySet().iterator();
+                Iterator<String> it = playerList.keySet().iterator();
                 while (it.hasNext()) {
                     String key = it.next();
 
                     if (key.equalsIgnoreCase(name)) {
-                        playerlist.remove(key);
-                        playerlist.put(name, newuuid);
+                        playerList.remove(key);
+                        playerList.put(name, newUuid);
                         return;
                     }
                 }

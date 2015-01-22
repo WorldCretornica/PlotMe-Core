@@ -9,7 +9,7 @@ public class PlotMeSpool implements Runnable {
     private Long[] currentClear;
 
     private PlotToClear plottoclear;
-    private int taskid;
+    private int taskId;
 
     public PlotMeSpool(PlotMe_Core instance, PlotToClear plotToClear) {
         plugin = instance;
@@ -72,11 +72,11 @@ public class PlotMeSpool implements Runnable {
                     plugin.getLogger()
                             .info(plugin.getUtil().C("WordPlot") + " " + getPlotToClear().getPlotId() + " " + plugin.getUtil().C("WordCleared"));
 
-                    plugin.removePlotToClear(getPlotToClear(), taskid);
+                    plugin.removePlotToClear(getPlotToClear(), taskId);
                     plottoclear = null;
                 }
             } else {
-                plugin.removePlotToClear(getPlotToClear(), taskid);
+                plugin.removePlotToClear(getPlotToClear(), taskId);
                 plottoclear = null;
 
             }
@@ -110,7 +110,7 @@ public class PlotMeSpool implements Runnable {
         return plottoclear;
     }
 
-    public void setTaskid(int taskid) {
-        this.taskid = taskid;
+    public void setTaskId(int taskId) {
+        this.taskId = taskId;
     }
 }

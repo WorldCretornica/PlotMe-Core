@@ -4,12 +4,12 @@ import java.util.Map;
 
 public class InternalPlotWorldCreateEvent implements ICancellable {
 
-    private final String worldname;
+    private final String worldName;
     private final Map<String, String> parameters;
     private boolean canceled;
 
-    public InternalPlotWorldCreateEvent(String worldname, Map<String, String> parameters) {
-        this.worldname = worldname;
+    public InternalPlotWorldCreateEvent(String worldName, Map<String, String> parameters) {
+        this.worldName = worldName;
         this.parameters = parameters;
     }
 
@@ -24,7 +24,7 @@ public class InternalPlotWorldCreateEvent implements ICancellable {
     }
 
     public String getWorldName() {
-        return worldname;
+        return worldName;
     }
 
 

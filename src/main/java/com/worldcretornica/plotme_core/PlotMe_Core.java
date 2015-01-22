@@ -20,7 +20,7 @@ public class PlotMe_Core {
     //Bridge
     private final IServerBridge serverBridge;
     private IWorld worldcurrentlyprocessingexpired;
-    private short counterexpired;
+    private short counterExpired;
     //Spool stuff
     private ConcurrentLinkedQueue<PlotToClear> plotsToClear;
     //Global variables
@@ -97,17 +97,17 @@ public class PlotMe_Core {
     private void setupWorlds() {
         IConfigSection worldsCS = serverBridge.getConfig().getConfigurationSection(WORLDS_CONFIG_SECTION);
         for (String world : worldsCS.getKeys(false)) {
-            String worldname = world.toLowerCase();
-            if (getGenManager(worldname) == null) {
+            String worldName = world.toLowerCase();
+            if (getGenManager(worldName) == null) {
                 getLogger().log(Level.SEVERE, "The world {0} either does not exist or not using a PlotMe generator", world);
                 getLogger().log(Level.SEVERE, "Please ensure that {0} is set up and that it is using a PlotMe generator", world);
             } else {
-                PlotMapInfo pmi = new PlotMapInfo(this, worldname);
+                PlotMapInfo pmi = new PlotMapInfo(this, worldName);
                 //Lets just hide a bit of code to clean up the config in here.
                 IConfigSection config = getServerBridge().loadDefaultConfig("worlds." + world);
                 config.set("BottomBlockId", null);
                 config.set("AutoLinkPlots", null);
-                plotMeCoreManager.addPlotMap(worldname, pmi);
+                plotMeCoreManager.addPlotMap(worldName, pmi);
             }
         }
         if (getPlotMeCoreManager().getPlotMaps().isEmpty()) {
@@ -197,11 +197,11 @@ public class PlotMe_Core {
     }
 
     public short getCounterExpired() {
-        return counterexpired;
+        return counterExpired;
     }
 
-    public void setCounterExpired(short counterexpired) {
-        this.counterexpired = counterexpired;
+    public void setCounterExpired(short counterExpired) {
+        this.counterExpired = counterExpired;
     }
 
     public void addPlotToClear(PlotToClear plotToClear) {
@@ -211,10 +211,10 @@ public class PlotMe_Core {
         serverBridge.scheduleSyncRepeatingTask(pms, 0L, 200L);
     }
 
-    public void removePlotToClear(PlotToClear plotToClear, int taskid) {
+    public void removePlotToClear(PlotToClear plotToClear, int taskId) {
         plotsToClear.remove(plotToClear);
 
-        serverBridge.cancelTask(taskid);
+        serverBridge.cancelTask(taskId);
     }
 
 

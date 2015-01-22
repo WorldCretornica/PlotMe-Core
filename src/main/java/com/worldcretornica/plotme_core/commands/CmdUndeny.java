@@ -29,10 +29,10 @@ public class CmdUndeny extends PlotCommand {
                         player.sendMessage(C("WordUsage") + ": §c/plotme undeny <" + C("WordPlayer") + ">");
                     } else {
                         Plot plot = PlotMeCoreManager.getPlotById(id, pmi);
-                        String playername = player.getName();
+                        String playerName = player.getName();
                         String denied = args[1];
 
-                        if (plot.getOwner().equalsIgnoreCase(playername) || player.hasPermission(PermissionNames.ADMIN_UNDENY)) {
+                        if (plot.getOwner().equalsIgnoreCase(playerName) || player.hasPermission(PermissionNames.ADMIN_UNDENY)) {
                             if (plot.isDeniedConsulting(denied) || plot.isGroupDenied(denied)) {
 
                                 double price = 0.0;
@@ -76,11 +76,11 @@ public class CmdUndeny extends PlotCommand {
                                     if (isAdvancedLogging()) {
                                         if (price != 0) {
                                             serverBridge.getLogger()
-                                                    .info(playername + " " + C("MsgUndeniedPlayer") + " " + denied + " " + C("MsgFromPlot") + " " + id
+                                                    .info(playerName + " " + C("MsgUndeniedPlayer") + " " + denied + " " + C("MsgFromPlot") + " " + id
                                                           + (" " + C("WordFor") + " " + price));
                                         } else {
                                             serverBridge.getLogger()
-                                                    .info(playername + " " + C("MsgUndeniedPlayer") + " " + denied + " " + C("MsgFromPlot") + " "
+                                                    .info(playerName + " " + C("MsgUndeniedPlayer") + " " + denied + " " + C("MsgFromPlot") + " "
                                                           + id);
                                         }
                                     }

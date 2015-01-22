@@ -31,10 +31,10 @@ public class CmdRemove extends PlotCommand {
                         player.sendMessage(C("WordUsage") + ": §c/plotme remove <" + C("WordPlayer") + ">");
                     } else {
                         Plot plot = PlotMeCoreManager.getPlotById(id, pmi);
-                        UUID playeruuid = player.getUniqueId();
+                        UUID playerUniqueId = player.getUniqueId();
                         String allowed = args[1];
 
-                        if (plot.getOwnerId().equals(playeruuid) || player.hasPermission(PermissionNames.ADMIN_REMOVE)) {
+                        if (plot.getOwnerId().equals(playerUniqueId) || player.hasPermission(PermissionNames.ADMIN_REMOVE)) {
                             if (plot.isAllowedConsulting(allowed) || plot.isGroupAllowed(allowed)) {
 
                                 double price = 0.0;

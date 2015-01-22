@@ -34,11 +34,11 @@ public class CmdBuy extends PlotCommand {
                             if (plot.getOwner().equalsIgnoreCase(buyer)) {
                                 player.sendMessage("§c" + C("MsgCannotBuyOwnPlot"));
                             } else {
-                                int plotlimit = getPlotLimit(player);
+                                int plotLimit = getPlotLimit(player);
 
-                                if (plotlimit != -1
+                                if (plotLimit != -1
                                     && plugin.getSqlManager().getPlotCount(world.getName().toLowerCase(), player.getUniqueId(), player.getName())
-                                       >= plotlimit) {
+                                       >= plotLimit) {
                                     player.sendMessage(C("MsgAlreadyReachedMaxPlots") + " ("
                                                        + plugin.getSqlManager()
                                             .getPlotCount(world.getName().toLowerCase(), player.getUniqueId(), player.getName()) + "/" + getPlotLimit(
@@ -60,19 +60,19 @@ public class CmdBuy extends PlotCommand {
                                             EconomyResponse er = serverBridge.withdrawPlayer(player, cost);
 
                                             if (er.transactionSuccess()) {
-                                                String oldowner = plot.getOwner();
-                                                IOfflinePlayer playercurrentbidder = null;
+                                                String oldOwner = plot.getOwner();
+                                                IOfflinePlayer currentbidder = null;
 
                                                 if (plot.getOwnerId() != null) {
-                                                    playercurrentbidder = serverBridge.getOfflinePlayer(plot.getOwnerId());
+                                                    currentbidder = serverBridge.getOfflinePlayer(plot.getOwnerId());
                                                 }
 
-                                                if (playercurrentbidder != null) {
-                                                    EconomyResponse er2 = serverBridge.depositPlayer(playercurrentbidder, cost);
+                                                if (currentbidder != null) {
+                                                    EconomyResponse er2 = serverBridge.depositPlayer(currentbidder, cost);
 
                                                     if (er2.transactionSuccess()) {
                                                         for (IPlayer onlinePlayers : serverBridge.getOnlinePlayers()) {
-                                                            if (onlinePlayers.getName().equalsIgnoreCase(oldowner)) {
+                                                            if (onlinePlayers.getName().equalsIgnoreCase(oldOwner)) {
                                                                 onlinePlayers.sendMessage(C("WordPlot") + " " + id + " "
                                                                                           + C("MsgSoldTo") + " " + buyer + ". " + Util()
                                                                         .moneyFormat(cost, true));

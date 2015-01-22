@@ -22,17 +22,17 @@ public class Plot implements Cloneable {
     private PlayerList allowed;
     private PlayerList denied;
     private IBiome biome;
-    private Date expireddate;
+    private Date expiredDate;
     private boolean finished;
     private String id;
     private double customPrice;
-    private boolean forsale;
-    private String finisheddate;
+    private boolean forSale;
+    private String finishedDate;
     private boolean protect;
     private boolean auctioned;
-    private String currentbidder;
-    private double currentbid;
-    private UUID currentbidderId;
+    private String currentBidder;
+    private double currentBid;
+    private UUID currentBidderId;
 
     public Plot(PlotMe_Core plugin) {
         this.plugin = plugin;
@@ -58,7 +58,7 @@ public class Plot implements Cloneable {
         setCurrentBid(0.0);
     }
 
-    public Plot(PlotMe_Core plugin, String owner, UUID uuid, IWorld world, String plotid, int days) {
+    public Plot(PlotMe_Core plugin, String owner, UUID uuid, IWorld world, String plotId, int days) {
         this.plugin = plugin;
         setOwner(owner);
         setOwnerId(uuid);
@@ -66,7 +66,7 @@ public class Plot implements Cloneable {
         allowed = new PlayerList();
         denied = new PlayerList();
         setBiome(this.plugin.getServerBridge().getBiome("PLAINS"));
-        setId(plotid);
+        setId(plotId);
 
         if (days == 0) {
             setExpiredDate(null);
@@ -439,11 +439,11 @@ public class Plot implements Cloneable {
     }
 
     public final Date getExpiredDate() {
-        return expireddate;
+        return expiredDate;
     }
 
-    public final void setExpiredDate(Date expireddate) {
-        this.expireddate = expireddate;
+    public final void setExpiredDate(Date expiredDate) {
+        this.expiredDate = expiredDate;
     }
 
     public final boolean isFinished() {
@@ -471,19 +471,19 @@ public class Plot implements Cloneable {
     }
 
     public final boolean isForSale() {
-        return forsale;
+        return forSale;
     }
 
     public final void setForSale(boolean forSale) {
-        this.forsale = forSale;
+        this.forSale = forSale;
     }
 
     public final String getFinishedDate() {
-        return finisheddate;
+        return finishedDate;
     }
 
     public final void setFinishedDate(String finishedDate) {
-        this.finisheddate = finishedDate;
+        this.finishedDate = finishedDate;
     }
 
     public final boolean isProtect() {
@@ -503,27 +503,27 @@ public class Plot implements Cloneable {
     }
 
     public final String getCurrentBidder() {
-        return currentbidder;
+        return currentBidder;
     }
 
     public final void setCurrentBidder(String currentBidder) {
-        this.currentbidder = currentBidder;
+        this.currentBidder = currentBidder;
     }
 
     public final UUID getCurrentBidderId() {
-        return currentbidderId;
+        return currentBidderId;
     }
 
     public final void setCurrentBidderId(UUID uuid) {
-        currentbidderId = uuid;
+        currentBidderId = uuid;
     }
 
     public final double getCurrentBid() {
-        return currentbid;
+        return currentBid;
     }
 
-    public final void setCurrentBid(double currentbid) {
-        this.currentbid = currentbid;
+    public final void setCurrentBid(double currentBid) {
+        this.currentBid = currentBid;
     }
 
     @Override

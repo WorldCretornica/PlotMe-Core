@@ -15,9 +15,9 @@ public abstract class IServerBridge {
 
     private boolean usinglwc;
 
-    public abstract IPlotMe_ChunkGenerator getPlotMeGenerator(String pluginname, String worldname);
+    public abstract IPlotMe_ChunkGenerator getPlotMeGenerator(String pluginName, String worldName);
 
-    public abstract IPlotMe_ChunkGenerator getPlotMeGenerator(String worldname);
+    public abstract IPlotMe_ChunkGenerator getPlotMeGenerator(String worldName);
 
     public abstract IOfflinePlayer getOfflinePlayer(UUID uuid);
 
@@ -65,8 +65,8 @@ public abstract class IServerBridge {
         return usinglwc;
     }
 
-    public void setUsinglwc(boolean usinglwc) {
-        this.usinglwc = usinglwc;
+    public void setUsinglwc(boolean usingLwc) {
+        this.usinglwc = usingLwc;
     }
 
     /**
@@ -101,7 +101,7 @@ public abstract class IServerBridge {
 
     public abstract void saveResource(String fileName, boolean replace);
 
-    public abstract boolean addMultiverseWorld(String worldname, String environment, String seed, String generator);
+    public abstract boolean addMultiverseWorld(String worldName, String environment, String seed, String generator);
 
     public abstract List<String> getBiomes();
 
@@ -111,7 +111,7 @@ public abstract class IServerBridge {
      */
     public abstract List<IWorld> getWorlds();
 
-    public abstract boolean createPlotWorld(String worldname, String generator, Map<String, String> args);
+    public abstract boolean createPlotWorld(String worldName, String generator, Map<String, String> args);
 
     public abstract IMaterial getMaterial(String string);
 

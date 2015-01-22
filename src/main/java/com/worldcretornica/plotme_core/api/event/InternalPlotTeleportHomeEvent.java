@@ -41,7 +41,7 @@ public class InternalPlotTeleportHomeEvent extends InternalPlotEvent implements 
         }
     }
 
-    public void setHomeLocation(ILocation homelocation) {
-        location = homelocation;
+    public void setHomeLocation(ILocation homeLocation) {
+        location = homeLocation;
     }
 }

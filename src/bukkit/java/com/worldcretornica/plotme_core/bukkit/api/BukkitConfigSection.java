@@ -66,8 +66,8 @@ public class BukkitConfigSection implements IConfigSection {
     }
 
     @Override
-    public List<String> getStringList(String configpath) {
-        return section.getStringList(configpath);
+    public List<String> getStringList(String configPath) {
+        return section.getStringList(configPath);
     }
 
     @Override
@@ -76,8 +76,8 @@ public class BukkitConfigSection implements IConfigSection {
     }
 
     @Override
-    public String getString(String string, String defaultvalue) {
-        return section.getString(string, defaultvalue);
+    public String getString(String string, String defaultValue) {
+        return section.getString(string, defaultValue);
     }
 
     @Override

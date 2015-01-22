@@ -66,8 +66,8 @@ public class BukkitEventFactory implements IEventFactory {
     }
 
     @Override
-    public InternalPlotResetEvent callPlotResetEvent(PlotMe_Core plugin, IWorld world, Plot plot, ICommandSender cs) {
-        PlotResetEvent event = new PlotResetEvent(plugin, world, plot, cs);
+    public InternalPlotResetEvent callPlotResetEvent(PlotMe_Core plugin, IWorld world, Plot plot, ICommandSender commandSender) {
+        PlotResetEvent event = new PlotResetEvent(plugin, world, plot, commandSender);
         Bukkit.getPluginManager().callEvent(event);
         return event.getInternal();
     }
@@ -80,8 +80,8 @@ public class BukkitEventFactory implements IEventFactory {
     }
 
     @Override
-    public InternalPlotAuctionEvent callPlotAuctionEvent(PlotMe_Core plugin, IWorld world, Plot plot, IPlayer player, double minimumbid) {
-        PlotAuctionEvent event = new PlotAuctionEvent(plugin, world, plot, player, minimumbid);
+    public InternalPlotAuctionEvent callPlotAuctionEvent(PlotMe_Core plugin, IWorld world, Plot plot, IPlayer player, double minimumBid) {
+        PlotAuctionEvent event = new PlotAuctionEvent(plugin, world, plot, player, minimumBid);
         Bukkit.getPluginManager().callEvent(event);
         return event.getInternal();
     }
@@ -101,8 +101,8 @@ public class BukkitEventFactory implements IEventFactory {
     }
 
     @Override
-    public InternalPlotWorldCreateEvent callPlotWorldCreateEvent(String worldname, Map<String, String> parameters) {
-        PlotWorldCreateEvent event = new PlotWorldCreateEvent(worldname, parameters);
+    public InternalPlotWorldCreateEvent callPlotWorldCreateEvent(String worldName, Map<String, String> parameters) {
+        PlotWorldCreateEvent event = new PlotWorldCreateEvent(worldName, parameters);
         Bukkit.getPluginManager().callEvent(event);
         return event.getInternal();
     }
@@ -179,8 +179,8 @@ public class BukkitEventFactory implements IEventFactory {
     }
 
     @Override
-    public InternalPlotOwnerChangeEvent callPlotOwnerChangeEvent(PlotMe_Core plugin, IWorld world, Plot plot, IPlayer player, String newowner) {
-        PlotOwnerChangeEvent event = new PlotOwnerChangeEvent(plugin, world, plot, player, newowner);
+    public InternalPlotOwnerChangeEvent callPlotOwnerChangeEvent(PlotMe_Core plugin, IWorld world, Plot plot, IPlayer player, String newOwner) {
+        PlotOwnerChangeEvent event = new PlotOwnerChangeEvent(plugin, world, plot, player, newOwner);
         Bukkit.getPluginManager().callEvent(event);
         return event.getInternal();
     }
@@ -194,8 +194,8 @@ public class BukkitEventFactory implements IEventFactory {
     }
 
     @Override
-    public InternalPlotWorldLoadEvent callPlotWorldLoadEvent(String worldname, int nbPlots) {
-        PlotWorldLoadEvent event = new PlotWorldLoadEvent(worldname, nbPlots);
+    public InternalPlotWorldLoadEvent callPlotWorldLoadEvent(String worldName, int nbPlots) {
+        PlotWorldLoadEvent event = new PlotWorldLoadEvent(worldName, nbPlots);
         Bukkit.getPluginManager().callEvent(event);
         return event.getInternal();
     }

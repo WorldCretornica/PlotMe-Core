@@ -33,14 +33,14 @@ public class CmdBid extends PlotCommand {
                         if (plot.getOwner().equalsIgnoreCase(bidder)) {
                             player.sendMessage("§c" + C("MsgCannotBidOwnPlot"));
                         } else if (args.length == 2) {
-                            double currentbid = plot.getCurrentBid();
-                            String currentbidder = plot.getCurrentBidder();
+                            double currentBid = plot.getCurrentBid();
+                            String currentBidder = plot.getCurrentBidder();
                             IOfflinePlayer playercurrentbidder = serverBridge.getOfflinePlayer(plot.getCurrentBidderId());
 
                             double bid = Double.parseDouble(args[1]);
 
-                            if (bid == currentbid) {
-                                if (currentbidder != null) {
+                            if (bid == currentBid) {
+                                if (currentBidder != null) {
                                     player.sendMessage(
                                             "§c" + C("MsgInvalidBidMustBeAbove") + " §r" + Util().moneyFormat(plot.getCurrentBid(), false));
                                 }
@@ -48,7 +48,7 @@ public class CmdBid extends PlotCommand {
                                 double balance = serverBridge.getBalance(player);
 
                                 if (bid >= balance) {
-                                    if (!currentbidder.equals(bidder) || bid > balance + currentbid) {
+                                    if (!currentBidder.equals(bidder) || bid > balance + currentBid) {
                                         player.sendMessage("§c" + C("MsgNotEnoughBid"));
                                     } else {
                                         InternalPlotBidEvent
@@ -60,11 +60,11 @@ public class CmdBid extends PlotCommand {
 
                                             if (er.transactionSuccess()) {
                                                 if (playercurrentbidder != null) {
-                                                    EconomyResponse er2 = serverBridge.depositPlayer(playercurrentbidder, currentbid);
+                                                    EconomyResponse er2 = serverBridge.depositPlayer(playercurrentbidder, currentBid);
 
                                                     if (er2.transactionSuccess()) {
                                                         for (IPlayer onlinePlayers : serverBridge.getOnlinePlayers()) {
-                                                            if (onlinePlayers.getName().equalsIgnoreCase(currentbidder)) {
+                                                            if (onlinePlayers.getName().equalsIgnoreCase(currentBidder)) {
                                                                 onlinePlayers.sendMessage(
                                                                         C("MsgOutbidOnPlot") + " " + id + " " + C("MsgOwnedBy") + " " + plot
                                                                                 .getOwner() + ". " + Util().moneyFormat(bid, true));
@@ -97,7 +97,7 @@ public class CmdBid extends PlotCommand {
                                             }
                                         }
                                     }
-                                } else if (currentbidder.equals(bidder) && bid > balance + currentbid) {
+                                } else if (currentBidder.equals(bidder) && bid > balance + currentBid) {
                                     player.sendMessage("§c" + C("MsgNotEnoughBid"));
                                 } else {
                                     InternalPlotBidEvent
@@ -109,11 +109,11 @@ public class CmdBid extends PlotCommand {
 
                                         if (er.transactionSuccess()) {
                                             if (playercurrentbidder != null) {
-                                                EconomyResponse er2 = serverBridge.depositPlayer(playercurrentbidder, currentbid);
+                                                EconomyResponse er2 = serverBridge.depositPlayer(playercurrentbidder, currentBid);
 
                                                 if (er2.transactionSuccess()) {
                                                     for (IPlayer onlinePlayers : serverBridge.getOnlinePlayers()) {
-                                                        if (onlinePlayers.getName().equalsIgnoreCase(currentbidder)) {
+                                                        if (onlinePlayers.getName().equalsIgnoreCase(currentBidder)) {
                                                             onlinePlayers.sendMessage(
                                                                     C("MsgOutbidOnPlot") + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner()
                                                                     + ". " + Util().moneyFormat(bid, true));

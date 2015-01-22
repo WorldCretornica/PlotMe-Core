@@ -30,10 +30,10 @@ public class CmdReset extends PlotCommand {
                 } else if (plot.isProtect()) {
                     player.sendMessage("§c" + C("MsgPlotProtectedCannotReset"));
                 } else {
-                    String playername = player.getName();
+                    String playerName = player.getName();
                     String id = plot.getId();
 
-                    if (plot.getOwner().equalsIgnoreCase(playername) || player.hasPermission(PermissionNames.ADMIN_RESET)) {
+                    if (plot.getOwner().equalsIgnoreCase(playerName) || player.hasPermission(PermissionNames.ADMIN_RESET)) {
 
                         InternalPlotResetEvent event = serverBridge.getEventFactory().callPlotResetEvent(plugin, world, plot, player);
 

@@ -179,7 +179,7 @@ public class PlotMeCoreManager {
 
     /**
      * Checks if the plotworld has economy features enabled
-     * @param world worldname
+     * @param world world name
      * @return true if economy enabled
      */
     private boolean isEconomyEnabled(String world) {
@@ -199,11 +199,8 @@ public class PlotMeCoreManager {
         }
         if (pmi == null) {
             return false;
-        } else if (pmi.isUseEconomy() && plugin.getServerBridge().getConfig().getBoolean("globalUseEconomy")
-                   && plugin.getServerBridge().getEconomy() != null) {
-            return true;
         } else {
-            return false;
+            return pmi.isUseEconomy();
         }
     }
 
@@ -219,8 +216,8 @@ public class PlotMeCoreManager {
 
 
     public PlotMapInfo getMap(IWorld world) {
-        String worldname = world.getName().toLowerCase();
-        return getMap(worldname);
+        String worldName = world.getName().toLowerCase();
+        return getMap(worldName);
     }
 
     public PlotMapInfo getMap(String world) {
@@ -228,8 +225,8 @@ public class PlotMeCoreManager {
     }
 
     public PlotMapInfo getMap(ILocation location) {
-        String worldname = location.getWorld().getName().toLowerCase();
-        return getMap(worldname);
+        String worldName = location.getWorld().getName().toLowerCase();
+        return getMap(worldName);
     }
 
     public PlotMapInfo getMap(IEntity player) {

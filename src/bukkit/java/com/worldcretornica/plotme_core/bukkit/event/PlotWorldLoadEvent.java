@@ -9,8 +9,8 @@ public class PlotWorldLoadEvent extends Event {
     protected static final HandlerList handlers = new HandlerList();
     private final InternalPlotWorldLoadEvent event;
 
-    public PlotWorldLoadEvent(String world, int nbplots) {
-        event = new InternalPlotWorldLoadEvent(world, nbplots);
+    public PlotWorldLoadEvent(String world, int nbPlots) {
+        event = new InternalPlotWorldLoadEvent(world, nbPlots);
     }
 
     public static HandlerList getHandlerList() {

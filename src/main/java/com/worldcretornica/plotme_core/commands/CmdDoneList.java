@@ -26,27 +26,27 @@ public class CmdDoneList extends PlotCommand {
                     page = Integer.parseInt(args[1]);
                 }
 
-                int maxpage = (int) Math.ceil(plugin.getSqlManager().getFinishedPlotCount(player.getWorld().getName()) / 8F);
+                int maxPage = (int) Math.ceil(plugin.getSqlManager().getFinishedPlotCount(player.getWorld().getName()) / 8F);
 
                 if (page < 1) {
                     page = 1;
-                } else if (page > maxpage) {
-                    page = maxpage;
+                } else if (page > maxPage) {
+                    page = maxPage;
                 }
 
-                List<Plot> finishedplots = plugin.getSqlManager().getDonePlots(player.getWorld().getName(), page, 8);
+                List<Plot> donePlots = plugin.getSqlManager().getDonePlots(player.getWorld().getName(), page, 8);
 
-                if (finishedplots.isEmpty()) {
+                if (donePlots.isEmpty()) {
                     player.sendMessage(C("MsgNoPlotsFinished"));
                 } else {
-                    player.sendMessage(C("MsgFinishedPlotsPage") + " " + page + "/" + maxpage);
+                    player.sendMessage(C("MsgFinishedPlotsPage") + " " + page + "/" + maxPage);
 
-                    for (Plot plot : finishedplots) {
-                        String starttext = "  §b" + plot.getId() + "§r -> " + plot.getOwner();
+                    for (Plot plot : donePlots) {
+                        String startText = "  §b" + plot.getId() + "§r -> " + plot.getOwner();
 
-                        int textLength = MinecraftFontWidthCalculator.getStringWidth(starttext);
+                        int textLength = MinecraftFontWidthCalculator.getStringWidth(startText);
 
-                        String line = starttext + whitespace(550 - textLength) + "@" + plot.getFinishedDate();
+                        String line = startText + whitespace(550 - textLength) + "@" + plot.getFinishedDate();
 
                         player.sendMessage(line);
                     }

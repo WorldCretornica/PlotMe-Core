@@ -58,14 +58,14 @@ import java.util.logging.Logger;
 public class BukkitServerBridge extends IServerBridge {
 
     private final PlotMe_CorePlugin plugin;
-    private final IEventFactory eventfactory;
+    private final IEventFactory eventFactory;
     private Economy economy;
     private PlotWorldEdit plotworldedit;
     private MultiverseWrapper multiverse;
 
     public BukkitServerBridge(PlotMe_CorePlugin instance) {
         plugin = instance;
-        eventfactory = new BukkitEventFactory();
+        eventFactory = new BukkitEventFactory();
     }
 
     private static MultiverseWrapper getMultiverseWrapper() {
@@ -102,8 +102,8 @@ public class BukkitServerBridge extends IServerBridge {
     }
 
     @Override
-    public void cancelTask(int taskid) {
-        Bukkit.getScheduler().cancelTask(taskid);
+    public void cancelTask(int taskId) {
+        Bukkit.getScheduler().cancelTask(taskId);
     }
 
     @Override
@@ -131,7 +131,7 @@ public class BukkitServerBridge extends IServerBridge {
                 we = new PlotWorldEdit(plotMeCore, worldEdit);
                 setPlotWorldEdit(we);
             } catch (SecurityException | IllegalArgumentException unused) {
-                getLogger().warning("Unable to hook to WorldEdit properly, please contact the developper of plotme with your WorldEdit version.");
+                getLogger().warning("Unable to hook to WorldEdit properly, please contact the developer of plotme with your WorldEdit version.");
                 setPlotWorldEdit(null);
             }
 
@@ -258,7 +258,7 @@ public class BukkitServerBridge extends IServerBridge {
     @Override
 
     public IEventFactory getEventFactory() {
-        return eventfactory;
+        return eventFactory;
     }
 
     @Override
@@ -280,11 +280,11 @@ public class BukkitServerBridge extends IServerBridge {
     @Override
     public IConfigSection getConfig(String file) {
 
-        File configfile = new File(plugin.getDataFolder().getAbsolutePath(), file);
+        File configFile = new File(plugin.getDataFolder().getAbsolutePath(), file);
         YamlConfiguration config = new YamlConfiguration();
 
         try {
-            config.load(configfile);
+            config.load(configFile);
         } catch (FileNotFoundException ignored) {
         } catch (IOException e) {
             plugin.getLogger().severe("Can't read configuration file");
@@ -303,11 +303,11 @@ public class BukkitServerBridge extends IServerBridge {
     }
 
     @Override
-    public IPlotMe_ChunkGenerator getPlotMeGenerator(String pluginname, String worldname) {
-        if (Bukkit.getPluginManager().isPluginEnabled(pluginname)) {
-            Plugin genplugin = Bukkit.getPluginManager().getPlugin(pluginname);
-            if (genplugin != null) {
-                ChunkGenerator gen = genplugin.getDefaultWorldGenerator(worldname, "");
+    public IPlotMe_ChunkGenerator getPlotMeGenerator(String pluginName, String worldName) {
+        if (Bukkit.getPluginManager().isPluginEnabled(pluginName)) {
+            Plugin genPlugin = Bukkit.getPluginManager().getPlugin(pluginName);
+            if (genPlugin != null) {
+                ChunkGenerator gen = genPlugin.getDefaultWorldGenerator(worldName, "");
                 if (gen instanceof IBukkitPlotMe_ChunkGenerator) {
                     return new BukkitPlotMe_ChunkGeneratorBridge((IBukkitPlotMe_ChunkGenerator) gen);
                 }
@@ -317,8 +317,8 @@ public class BukkitServerBridge extends IServerBridge {
     }
 
     @Override
-    public boolean addMultiverseWorld(String worldname, String environment, String seed, String generator) {
-        return getMultiverseWrapper().getMVWorldManager().addWorld(worldname, Environment.valueOf(environment), seed, generator);
+    public boolean addMultiverseWorld(String worldName, String environment, String seed, String generator) {
+        return getMultiverseWrapper().getMVWorldManager().addWorld(worldName, Environment.valueOf(environment), seed, generator);
     }
 
     @Override
@@ -358,8 +358,8 @@ public class BukkitServerBridge extends IServerBridge {
     }
 
     @Override
-    public IPlotMe_ChunkGenerator getPlotMeGenerator(String worldname) {
-        World world = Bukkit.getWorld(worldname);
+    public IPlotMe_ChunkGenerator getPlotMeGenerator(String worldName) {
+        World world = Bukkit.getWorld(worldName);
         if (world != null) {
             ChunkGenerator generator = world.getGenerator();
             if (generator instanceof IPlotMe_ChunkGenerator) {
@@ -382,13 +382,13 @@ public class BukkitServerBridge extends IServerBridge {
 
     /**
      * Please do not use this method if you need to create a plotworld
-     * @param worldname Name of the Plotworld
+     * @param worldName Name of the Plotworld
      * @param generator PlotMe Generator
      * @param args
      * @return
      */
     @Override
-    public boolean createPlotWorld(String worldname, String generator, Map<String, String> args) {
+    public boolean createPlotWorld(String worldName, String generator, Map<String, String> args) {
         //Get a seed
         Long seed = new Random().nextLong();
 
@@ -406,20 +406,20 @@ public class BukkitServerBridge extends IServerBridge {
         }
 
         //Find generator
-        IPlotMe_ChunkGenerator plotMeGenerator = plugin.getServerObjectBuilder().getPlotMeGenerator(generator, worldname);
+        IPlotMe_ChunkGenerator plotMeGenerator = plugin.getServerObjectBuilder().getPlotMeGenerator(generator, worldName);
 
         //Make generator create settings
         if (plotMeGenerator == null) {
             getLogger().info(plugin.getAPI().getUtil().C("ErrCannotFindWorldGen") + " '" + generator + "'");
             return false;
         }
-        if (!plotMeGenerator.getManager().createConfig(worldname, args)) { //Create the generator configurations
+        if (!plotMeGenerator.getManager().createConfig(worldName, args)) { //Create the generator configurations
             getLogger().info(plugin.getAPI().getUtil().C("ErrCannotCreateGen1") + " '" + generator + "' " + plugin.getAPI().getUtil()
                     .C("ErrCannotCreateGen2"));
             return false;
         }
 
-        PlotMapInfo tempPlotInfo = new PlotMapInfo(plugin.getAPI(), worldname);
+        PlotMapInfo tempPlotInfo = new PlotMapInfo(plugin.getAPI(), worldName);
 
         tempPlotInfo.setPlotAutoLimit(Integer.parseInt(args.get("PlotAutoLimit")));
         tempPlotInfo.setDaysToExpiration(Integer.parseInt(args.get("DaysToExpiration")));
@@ -443,13 +443,13 @@ public class BukkitServerBridge extends IServerBridge {
         tempPlotInfo.setProtectPrice(Double.parseDouble(args.get("ProtectPrice")));
         tempPlotInfo.setDisposePrice(Double.parseDouble(args.get("DisposePrice")));
 
-        plugin.getAPI().getPlotMeCoreManager().addPlotMap(worldname, tempPlotInfo);
+        plugin.getAPI().getPlotMeCoreManager().addPlotMap(worldName, tempPlotInfo);
 
         //Are we using multiverse?
         if (getMultiverse() != null) {
             boolean success = false;
             if (getMultiverse().isEnabled()) {
-                success = plugin.getServerObjectBuilder().addMultiverseWorld(worldname, "NORMAL", seed.toString(), generator);
+                success = plugin.getServerObjectBuilder().addMultiverseWorld(worldName, "NORMAL", seed.toString(), generator);
 
                 if (!success) {
                     getLogger().info(plugin.getAPI().getUtil().C("ErrCannotCreateMV"));
