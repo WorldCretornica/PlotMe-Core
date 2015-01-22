@@ -4,7 +4,6 @@ import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitBiome;
 import com.worldcretornica.plotme_core.utils.UUIDFetcher;
-import org.jetbrains.annotations.NonNls;
 
 import java.io.File;
 import java.sql.Connection;
@@ -27,7 +26,6 @@ import java.util.regex.Pattern;
 
 public class SqlManager {
 
-    @NonNls
     public static final String SQLITE_DRIVER = "org.sqlite.JDBC";
     private static final Pattern COMPILE = Pattern.compile("^[a-zA-Z0-9_]{1,16}$");
     private final PlotMe_Core plugin;
