@@ -141,13 +141,13 @@ public class BukkitPlotMe_GeneratorManagerBridge implements IPlotMe_GeneratorMan
     }
 
     @Override
-    public void adjustPlotFor(IWorld world, String id, boolean claimed, boolean protect, boolean auctionned, boolean forSale) {
-        generatorManager.adjustPlotFor(((BukkitWorld) world).getWorld(), id, claimed, protect, auctionned, forSale);
+    public void adjustPlotFor(IWorld world, String id, boolean claimed, boolean protect, boolean auctioned, boolean forSale) {
+        generatorManager.adjustPlotFor(((BukkitWorld) world).getWorld(), id, claimed, protect, auctioned, forSale);
     }
 
     @Override
-    public boolean isBlockInPlot(String id, ILocation location) {
-        return generatorManager.isBlockInPlot(id, ((BukkitLocation) location).getLocation());
+    public boolean isBlockInPlot(String id, ILocation blockLocation) {
+        return generatorManager.isBlockInPlot(id, ((BukkitLocation) blockLocation).getLocation());
     }
 
     @Override
@@ -186,8 +186,8 @@ public class BukkitPlotMe_GeneratorManagerBridge implements IPlotMe_GeneratorMan
     }
 
     @Override
-    public boolean createConfig(String worldname, Map<String, String> args) {
-        return generatorManager.createConfig(worldname, args);
+    public boolean createConfig(String worldName, Map<String, String> args) {
+        return generatorManager.createConfig(worldName, args);
     }
 
     @Override
@@ -196,13 +196,13 @@ public class BukkitPlotMe_GeneratorManagerBridge implements IPlotMe_GeneratorMan
     }
 
     @Override
-    public int getPlotSize(String worldname) {
-        return generatorManager.getPlotSize(worldname);
+    public int getPlotSize(String worldName) {
+        return generatorManager.getPlotSize(worldName);
     }
 
     @Override
-    public int getRoadHeight(String worldname) {
-        return generatorManager.getRoadHeight(worldname);
+    public int getRoadHeight(String worldName) {
+        return generatorManager.getRoadHeight(worldName);
     }
 
 }

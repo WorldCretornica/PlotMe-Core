@@ -79,22 +79,22 @@ public class CmdDeny extends PlotCommand {
                                     plot.removeAllowed(denied);
 
                                     if ("*".equals(denied)) {
-                                        List<IPlayer> deniedplayers = PlotMeCoreManager.getPlayersInPlot(world, id);
+                                        List<IPlayer> playersInPlot = PlotMeCoreManager.getPlayersInPlot(world, id);
 
-                                        for (IPlayer deniedplayer : deniedplayers) {
-                                            if (!plot.isAllowed(deniedplayer.getName(), deniedplayer.getUniqueId())) {
-                                                deniedplayer.setLocation(PlotMeCoreManager.getPlotHome(world, plot.getId()));
+                                        for (IPlayer iPlayer : playersInPlot) {
+                                            if (!plot.isAllowed(iPlayer.getName(), iPlayer.getUniqueId())) {
+                                                iPlayer.setLocation(PlotMeCoreManager.getPlotHome(world, plot.getId()));
                                             }
                                         }
                                     } else {
-                                        IPlayer deniedplayer = serverBridge.getPlayerExact(denied);
+                                        IPlayer deniedPlayer = serverBridge.getPlayerExact(denied);
 
-                                        if (deniedplayer != null) {
-                                            if (deniedplayer.getWorld().equals(world)) {
-                                                String deniedid = PlotMeCoreManager.getPlotId(deniedplayer);
+                                        if (deniedPlayer != null) {
+                                            if (deniedPlayer.getWorld().equals(world)) {
+                                                String plotId = PlotMeCoreManager.getPlotId(deniedPlayer);
 
-                                                if (deniedid.equalsIgnoreCase(id)) {
-                                                    deniedplayer.setLocation(PlotMeCoreManager.getPlotHome(world, plot.getId()));
+                                                if (plotId.equalsIgnoreCase(id)) {
+                                                    deniedPlayer.setLocation(PlotMeCoreManager.getPlotHome(world, plot.getId()));
                                                 }
                                             }
                                         }

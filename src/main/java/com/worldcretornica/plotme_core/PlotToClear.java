@@ -3,7 +3,7 @@ package com.worldcretornica.plotme_core;
 public class PlotToClear {
 
     private String world;
-    private String plotid;
+    private String plotId;
     private ClearReason reason;
 
     public PlotToClear(String world, String id, ClearReason reason) {
@@ -23,11 +23,11 @@ public class PlotToClear {
 
 
     public final String getPlotId() {
-        return plotid;
+        return plotId;
     }
 
     public final void setPlotId(String plotid) {
-        this.plotid = plotid;
+        this.plotId = plotid;
     }
 
     public final ClearReason getReason() {

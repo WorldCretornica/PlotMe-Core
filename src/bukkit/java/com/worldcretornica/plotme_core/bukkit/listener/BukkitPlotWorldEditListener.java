@@ -43,19 +43,19 @@ public class BukkitPlotWorldEditListener implements Listener {
 
         String idTo = "";
 
-        boolean changemask = false;
+        boolean changeMask = false;
         if (!from.getWorld().getName().equalsIgnoreCase(to.getWorld().getName())) {
-            changemask = true;
+            changeMask = true;
         } else if (from.getLocation() != to.getLocation()) {
             String idFrom = PlotMeCoreManager.getPlotId(from);
             idTo = PlotMeCoreManager.getPlotId(to);
 
             if (!idFrom.equals(idTo)) {
-                changemask = true;
+                changeMask = true;
             }
         }
 
-        if (changemask && api.getPlotMeCoreManager().isPlotWorld(to.getWorld())) {
+        if (changeMask && api.getPlotMeCoreManager().isPlotWorld(to.getWorld())) {
             if (api.getPlotMeCoreManager().isPlayerIgnoringWELimit(player)) {
                 worldEdit.removeMask(player);
             } else {

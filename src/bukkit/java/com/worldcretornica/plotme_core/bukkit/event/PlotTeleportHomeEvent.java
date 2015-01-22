@@ -50,8 +50,8 @@ public class PlotTeleportHomeEvent extends PlotEvent implements Cancellable {
         }
     }
 
-    public void setHomeLocation(Location homelocation) {
-        event.setHomeLocation(new BukkitLocation(homelocation));
+    public void setHomeLocation(Location homeLocation) {
+        event.setHomeLocation(new BukkitLocation(homeLocation));
     }
 
     public InternalPlotTeleportHomeEvent getInternal() {

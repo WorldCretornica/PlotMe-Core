@@ -35,14 +35,14 @@ public class CmdAuto extends PlotCommand {
                 }
 
                 PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
-                int playerlimit = getPlotLimit(player);
+                int playerLimit = getPlotLimit(player);
 
-                if (playerlimit != -1
-                    && plugin.getSqlManager().getPlotCount(world.getName().toLowerCase(), player.getUniqueId(), player.getName()) >= playerlimit
+                if (playerLimit != -1
+                    && plugin.getSqlManager().getPlotCount(world.getName().toLowerCase(), player.getUniqueId(), player.getName()) >= playerLimit
                     && !player.hasPermission("PlotMe.admin")) {
                     player.sendMessage("§c" + C("MsgAlreadyReachedMaxPlots") + " ("
                                        + plugin.getSqlManager().getPlotCount(world.getName().toLowerCase(), player.getUniqueId(), player.getName())
-                                       + "/" + playerlimit + "). " + C("WordUse") + " §c/plotme home§r " + C("MsgToGetToIt"));
+                                       + "/" + playerLimit + "). " + C("WordUse") + " §c/plotme home§r " + C("MsgToGetToIt"));
                 } else {
                     int limit = pmi.getPlotAutoLimit();
 

@@ -26,23 +26,23 @@ public class CmdExpired extends PlotCommand {
                     page = Integer.parseInt(args[1]);
                 }
 
-                int maxpage = (int) Math.ceil(plugin.getSqlManager().getExpiredPlotCount(world.getName()) / 8);
+                int maxPage = (int) Math.ceil(plugin.getSqlManager().getExpiredPlotCount(world.getName()) / 8);
 
-                List<Plot> expiredplots = plugin.getSqlManager().getExpiredPlots(world.getName(), page, 8);
+                List<Plot> expiredPlots = plugin.getSqlManager().getExpiredPlots(world.getName(), page, 8);
 
-                if (expiredplots.isEmpty()) {
+                if (expiredPlots.isEmpty()) {
                     player.sendMessage(C("MsgNoPlotExpired"));
                 } else {
-                    player.sendMessage(C("MsgExpiredPlotsPage") + " " + page + "/" + maxpage);
+                    player.sendMessage(C("MsgExpiredPlotsPage") + " " + page + "/" + maxPage);
 
-                    for (int i = (page - 1) * 8; i < expiredplots.size() && i < page * 8; i++) {
-                        Plot plot = expiredplots.get(i);
+                    for (int i = (page - 1) * 8; i < expiredPlots.size() && i < page * 8; i++) {
+                        Plot plot = expiredPlots.get(i);
 
-                        String starttext = "  §b" + plot.getId() + "§r -> " + plot.getOwner();
+                        String startText = "  §b" + plot.getId() + "§r -> " + plot.getOwner();
 
-                        int textLength = MinecraftFontWidthCalculator.getStringWidth(starttext);
+                        int textLength = MinecraftFontWidthCalculator.getStringWidth(startText);
 
-                        String line = starttext + Util.whitespace(550 - textLength) + "@" + plot.getExpiredDate();
+                        String line = startText + Util.whitespace(550 - textLength) + "@" + plot.getExpiredDate();
 
                         player.sendMessage(line);
                     }

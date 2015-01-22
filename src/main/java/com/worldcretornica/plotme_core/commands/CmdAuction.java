@@ -38,8 +38,8 @@ public class CmdAuction extends PlotCommand {
                                 if (plot.isAuctioned()) {
                                     if (plot.getCurrentBidderId() != null) {
                                         if (player.hasPermission(PermissionNames.ADMIN_AUCTION)) {
-                                            IOfflinePlayer playercurrentbidder = serverBridge.getOfflinePlayer(plot.getCurrentBidderId());
-                                            EconomyResponse er = serverBridge.depositPlayer(playercurrentbidder, plot.getCurrentBid());
+                                            IOfflinePlayer currentBidder = serverBridge.getOfflinePlayer(plot.getCurrentBidderId());
+                                            EconomyResponse er = serverBridge.depositPlayer(currentBidder, plot.getCurrentBid());
 
                                             if (er.transactionSuccess()) {
                                                 for (IPlayer onlinePlayers : serverBridge.getOnlinePlayers()) {

@@ -49,9 +49,9 @@ public interface IPlotMe_GeneratorManager {
 
     Long[] clear(IWorld world, String id, long maxBlocks, Long[] start);
 
-    void adjustPlotFor(IWorld world, String id, boolean claimed, boolean protect, boolean auctionned, boolean forSale);
+    void adjustPlotFor(IWorld world, String id, boolean claimed, boolean protect, boolean auctioned, boolean forSale);
 
-    boolean isBlockInPlot(String id, ILocation blocklocation);
+    boolean isBlockInPlot(String id, ILocation blockLocation);
 
     boolean movePlot(IWorld world, String idFrom, String idTo);
 
@@ -67,11 +67,11 @@ public interface IPlotMe_GeneratorManager {
 
     boolean isValidId(String id);
 
-    boolean createConfig(String worldname, Map<String, String> args);
+    boolean createConfig(String worldName, Map<String, String> args);
 
     Map<String, String> getDefaultGenerationConfig();
 
-    int getPlotSize(String worldname);
+    int getPlotSize(String worldName);
 
-    int getRoadHeight(String worldname);
+    int getRoadHeight(String worldName);
 }

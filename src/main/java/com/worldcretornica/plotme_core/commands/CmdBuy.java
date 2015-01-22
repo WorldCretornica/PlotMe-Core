@@ -60,19 +60,19 @@ public class CmdBuy extends PlotCommand {
                                             EconomyResponse er = serverBridge.withdrawPlayer(player, cost);
 
                                             if (er.transactionSuccess()) {
-                                                String oldowner = plot.getOwner();
-                                                IOfflinePlayer playercurrentbidder = null;
+                                                String oldOwner = plot.getOwner();
+                                                IOfflinePlayer currentbidder = null;
 
                                                 if (plot.getOwnerId() != null) {
-                                                    playercurrentbidder = serverBridge.getOfflinePlayer(plot.getOwnerId());
+                                                    currentbidder = serverBridge.getOfflinePlayer(plot.getOwnerId());
                                                 }
 
-                                                if (playercurrentbidder != null) {
-                                                    EconomyResponse er2 = serverBridge.depositPlayer(playercurrentbidder, cost);
+                                                if (currentbidder != null) {
+                                                    EconomyResponse er2 = serverBridge.depositPlayer(currentbidder, cost);
 
                                                     if (er2.transactionSuccess()) {
                                                         for (IPlayer onlinePlayers : serverBridge.getOnlinePlayers()) {
-                                                            if (onlinePlayers.getName().equalsIgnoreCase(oldowner)) {
+                                                            if (onlinePlayers.getName().equalsIgnoreCase(oldOwner)) {
                                                                 onlinePlayers.sendMessage(C("WordPlot") + " " + id + " "
                                                                                           + C("MsgSoldTo") + " " + buyer + ". " + Util()
                                                                         .moneyFormat(cost, true));

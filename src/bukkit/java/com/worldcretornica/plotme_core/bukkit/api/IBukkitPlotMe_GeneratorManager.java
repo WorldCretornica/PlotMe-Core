@@ -72,12 +72,12 @@ public interface IBukkitPlotMe_GeneratorManager {
 
     boolean isValidId(String id);
 
-    boolean createConfig(String worldname, Map<String, String> args);
+    boolean createConfig(String worldName, Map<String, String> args);
 
     Map<String, String> getDefaultGenerationConfig();
 
-    int getPlotSize(String worldname);
+    int getPlotSize(String worldName);
 
-    int getRoadHeight(String worldname);
+    int getRoadHeight(String worldName);
 
 }

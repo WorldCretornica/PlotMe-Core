@@ -9,9 +9,9 @@ public class InternalPlotWorldLoadEvent extends Event {
     private final String world;
     private final int nbPlots;
 
-    public InternalPlotWorldLoadEvent(String world, int nbplots) {
+    public InternalPlotWorldLoadEvent(String world, int nbPlots) {
         this.world = world;
-        nbPlots = nbplots;
+        this.nbPlots = nbPlots;
     }
 
     public static HandlerList getHandlerList() {
