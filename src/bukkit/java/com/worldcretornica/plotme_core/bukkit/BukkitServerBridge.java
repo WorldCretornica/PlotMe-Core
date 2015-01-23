@@ -9,7 +9,6 @@ import com.worldcretornica.plotme_core.api.IConfigSection;
 import com.worldcretornica.plotme_core.api.IMaterial;
 import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import com.worldcretornica.plotme_core.api.IPlayer;
-import com.worldcretornica.plotme_core.api.IPlotMe_ChunkGenerator;
 import com.worldcretornica.plotme_core.api.IServerBridge;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.IEventFactory;
@@ -19,7 +18,6 @@ import com.worldcretornica.plotme_core.bukkit.api.BukkitMaterial;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitOfflinePlayer;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitWorld;
-import com.worldcretornica.plotme_core.bukkit.api.IBukkitPlotMe_ChunkGenerator;
 import com.worldcretornica.plotme_core.bukkit.event.BukkitEventFactory;
 import com.worldcretornica.plotme_core.bukkit.listener.BukkitPlotDenyListener;
 import com.worldcretornica.plotme_core.bukkit.listener.BukkitPlotListener;
@@ -36,8 +34,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.generator.ChunkGenerator;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -303,20 +299,6 @@ public class BukkitServerBridge extends IServerBridge {
     }
 
     @Override
-    public IPlotMe_ChunkGenerator getPlotMeGenerator(String pluginName, String worldName) {
-        if (Bukkit.getPluginManager().isPluginEnabled(pluginName)) {
-            Plugin genPlugin = Bukkit.getPluginManager().getPlugin(pluginName);
-            if (genPlugin != null) {
-                ChunkGenerator gen = genPlugin.getDefaultWorldGenerator(worldName, "");
-                if (gen instanceof IBukkitPlotMe_ChunkGenerator) {
-                    return new BukkitPlotMe_ChunkGeneratorBridge((IBukkitPlotMe_ChunkGenerator) gen);
-                }
-            }
-        }
-        return null;
-    }
-
-    @Override
     public boolean addMultiverseWorld(String worldName, String environment, String seed, String generator) {
         return getMultiverseWrapper().getMVWorldManager().addWorld(worldName, Environment.valueOf(environment), seed, generator);
     }
@@ -358,18 +340,6 @@ public class BukkitServerBridge extends IServerBridge {
     }
 
     @Override
-    public IPlotMe_ChunkGenerator getPlotMeGenerator(String worldName) {
-        World world = Bukkit.getWorld(worldName);
-        if (world != null) {
-            ChunkGenerator generator = world.getGenerator();
-            if (generator instanceof IPlotMe_ChunkGenerator) {
-                return (IPlotMe_ChunkGenerator) generator;
-            }
-        }
-        return null;
-    }
-
-    @Override
     public List<IWorld> getWorlds() {
         List<IWorld> worlds = new ArrayList<>();
 
@@ -406,7 +376,7 @@ public class BukkitServerBridge extends IServerBridge {
         }
 
         //Find generator
-        IPlotMe_ChunkGenerator plotMeGenerator = plugin.getServerObjectBuilder().getPlotMeGenerator(generator, worldName);
+       /* IPlotMe_ChunkGenerator plotMeGenerator = plugin.getServerObjectBuilder().getPlotMeGenerator(generator, worldName);
 
         //Make generator create settings
         if (plotMeGenerator == null) {
@@ -417,7 +387,7 @@ public class BukkitServerBridge extends IServerBridge {
             getLogger().info(plugin.getAPI().getUtil().C("ErrCannotCreateGen1") + " '" + generator + "' " + plugin.getAPI().getUtil()
                     .C("ErrCannotCreateGen2"));
             return false;
-        }
+        }*/
 
         PlotMapInfo tempPlotInfo = new PlotMapInfo(plugin.getAPI(), worldName);
 

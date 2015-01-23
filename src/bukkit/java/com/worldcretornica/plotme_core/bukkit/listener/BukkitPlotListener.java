@@ -816,7 +816,7 @@ public class BukkitPlotListener implements Listener {
         api.getLogger().info("Done loading " + event.getNbPlots() + " plots for world " + event.getWorldName());
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    /*@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onServerCommand(ServerCommandEvent event) {
         if ("reload".equalsIgnoreCase(event.getCommand())) {
             api.getLogger().warning("Using the reload command does not properly reload a server");
@@ -834,5 +834,5 @@ public class BukkitPlotListener implements Listener {
             event.getPlayer().sendMessage("The command will not execute.");
             event.setCancelled(true);
         }
-    }
+    }*/
 }

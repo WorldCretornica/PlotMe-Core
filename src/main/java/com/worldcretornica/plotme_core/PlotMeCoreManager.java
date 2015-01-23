@@ -165,11 +165,12 @@ public class PlotMeCoreManager {
     }
 
     public static IPlotMe_GeneratorManager getGenManager(IWorld world) {
-        if (world.isPlotMeGenerator()) {
+        /*if (world.isPlotMeGenerator()) {
             return world.getGenerator().getManager();
         } else {
             return null;
-        }
+        }*/
+        return PlotMe_Core.getGenManager(world.getName());
     }
 
     @Deprecated

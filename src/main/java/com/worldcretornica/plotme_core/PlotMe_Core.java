@@ -7,6 +7,7 @@ import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.utils.Util;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,9 +28,11 @@ public class PlotMe_Core {
     private PlotMeCoreManager plotMeCoreManager;
     private SqlManager sqlManager;
     private Util util;
+    private static HashMap<String, IPlotMe_GeneratorManager> managers;
 
     public PlotMe_Core(IServerBridge serverObjectBuilder) {
         serverBridge = serverObjectBuilder;
+        managers = new HashMap<>();
     }
 
     public void disable() {
@@ -39,6 +42,8 @@ public class PlotMe_Core {
         setWorldCurrentlyProcessingExpired(null);
         plotsToClear.clear();
         plotsToClear = null;
+        managers.clear();
+        managers = null;
     }
 
     public void enable() {
@@ -46,7 +51,7 @@ public class PlotMe_Core {
         setupConfig();
         setupDefaultCaptions();
         setPlotMeCoreManager(new PlotMeCoreManager(this));
-        setupWorlds(); // TODO: Remove concept of pmi so this is not needed
+        //setupWorlds(); // TODO: Remove concept of pmi so this is not needed
         serverBridge.setupCommands();
         setUtil(new Util(this));
         serverBridge.setupHooks();
@@ -63,7 +68,7 @@ public class PlotMe_Core {
         setupDefaultCaptions();
         setupMySQL();
         getPlotMeCoreManager().getPlotMaps().clear();
-        setupWorlds();
+        //setupWorlds();
     }
 
 
@@ -94,7 +99,7 @@ public class PlotMe_Core {
         config.saveConfig();
     }
 
-    private void setupWorlds() {
+    /*private void setupWorlds() {
         IConfigSection worldsCS = serverBridge.getConfig().getConfigurationSection(WORLDS_CONFIG_SECTION);
         for (String world : worldsCS.getKeys(false)) {
             String worldName = world.toLowerCase();
@@ -110,6 +115,25 @@ public class PlotMe_Core {
                 plotMeCoreManager.addPlotMap(worldName, pmi);
             }
         }
+        if (getPlotMeCoreManager().getPlotMaps().isEmpty()) {
+            getLogger().severe("Uh oh. There are no plotworlds setup.");
+            getLogger().severe("Is that a mistake? Try making sure you setup PlotMe Correctly PlotMe to stay safe.");
+        }
+    }*/
+    
+    private void setupWorld(String worldname) {
+        if (getGenManager(worldname) == null) {
+            getLogger().log(Level.SEVERE, "The world {0} either does not exist or not using a PlotMe generator", worldname);
+            getLogger().log(Level.SEVERE, "Please ensure that {0} is set up and that it is using a PlotMe generator", worldname);
+        } else {
+            PlotMapInfo pmi = new PlotMapInfo(this, worldname);
+            //Lets just hide a bit of code to clean up the config in here.
+            IConfigSection config = getServerBridge().loadDefaultConfig("worlds." + worldname);
+            config.set("BottomBlockId", null);
+            config.set("AutoLinkPlots", null);
+            plotMeCoreManager.addPlotMap(worldname, pmi);
+        }
+        
         if (getPlotMeCoreManager().getPlotMaps().isEmpty()) {
             getLogger().severe("Uh oh. There are no plotworlds setup.");
             getLogger().severe("Is that a mistake? Try making sure you setup PlotMe Correctly PlotMe to stay safe.");
@@ -170,15 +194,24 @@ public class PlotMe_Core {
     }
 
 
-    public IPlotMe_GeneratorManager getGenManager(String name) {
-        IWorld world = serverBridge.getWorld(name.toLowerCase());
+    public static IPlotMe_GeneratorManager getGenManager(String name) {
+        /*IWorld world = serverBridge.getWorld(name.toLowerCase());
         if (world == null) {
             return null;
         } else {
             return PlotMeCoreManager.getGenManager(world);
-        }
+        }*/
+        return managers.get(name);
     }
-
+    
+    public void addManager(String world, IPlotMe_GeneratorManager manager) {
+        managers.put(world, manager);
+        setupWorld(world);
+    }
+    
+    public IPlotMe_GeneratorManager removeManager(String world) {
+        return managers.remove(world);
+    }
 
     public void scheduleTask(Runnable task) {
         getLogger().info(util.C("MsgStartDeleteSession"));

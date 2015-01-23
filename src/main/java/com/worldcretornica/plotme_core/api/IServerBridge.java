@@ -15,10 +15,6 @@ public abstract class IServerBridge {
 
     private boolean usinglwc;
 
-    public abstract IPlotMe_ChunkGenerator getPlotMeGenerator(String pluginName, String worldName);
-
-    public abstract IPlotMe_ChunkGenerator getPlotMeGenerator(String worldName);
-
     public abstract IOfflinePlayer getOfflinePlayer(UUID uuid);
 
     public abstract IOfflinePlayer getOfflinePlayer(String player);
