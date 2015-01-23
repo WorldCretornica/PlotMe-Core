@@ -1,6 +1,5 @@
 package com.worldcretornica.plotme_core;
 
-import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IWorld;
 
 public class PlotMeSpool implements Runnable {
@@ -13,12 +12,10 @@ public class PlotMeSpool implements Runnable {
 
     public PlotMeSpool(PlotMe_Core instance, PlotToClear plotToClear) {
         plugin = instance;
-
         plottoclear = plotToClear;
     }
 
-
-    private static String format(long count) {
+    /*private static String format(long count) {
         double buffer;
 
         if (count > 1000000000000L) {
@@ -42,7 +39,7 @@ public class PlotMeSpool implements Runnable {
             return buffer + "k";
         }
         return String.valueOf(count);
-    }
+    }*/
 
     @Override
     public void run() {
@@ -62,15 +59,16 @@ public class PlotMeSpool implements Runnable {
                                            currentClear);
                 }
 
-                showProgress();
+                //showProgress();
 
                 if (currentClear == null) {
                     PlotMeCoreManager.getGenManager(world).adjustPlotFor(world, getPlotToClear().getPlotId(), true, false, false, false);
-                    plugin.getPlotMeCoreManager().removeLWC(world, getPlotToClear().getPlotId());
+                    if (plugin.getServerBridge().getUsinglwc()) {
+                        plugin.getPlotMeCoreManager().removeLWC(world, getPlotToClear().getPlotId());
+                    }
                     PlotMeCoreManager.getGenManager(world).refreshPlotChunks(world, getPlotToClear().getPlotId());
 
-                    plugin.getLogger()
-                            .info(plugin.getUtil().C("WordPlot") + " " + getPlotToClear().getPlotId() + " " + plugin.getUtil().C("WordCleared"));
+                    plottoclear.getRequester().sendMessage(plugin.getUtil().C("WordPlot") + " " + getPlotToClear().getPlotId() + " " + plugin.getUtil().C("WordCleared"));
 
                     plugin.removePlotToClear(getPlotToClear(), taskId);
                     plottoclear = null;
@@ -78,11 +76,11 @@ public class PlotMeSpool implements Runnable {
             } else {
                 plugin.removePlotToClear(getPlotToClear(), taskId);
                 plottoclear = null;
-
             }
         }
     }
 
+    /*
     private void showProgress() {
         long done = getDoneBlocks();
         long total = getTotalPlotBlocks();
@@ -103,7 +101,7 @@ public class PlotMeSpool implements Runnable {
 
     private long getDoneBlocks() {
         return currentClear[3];
-    }
+    }*/
 
 
     public PlotToClear getPlotToClear() {

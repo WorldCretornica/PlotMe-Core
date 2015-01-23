@@ -617,7 +617,7 @@ public class PlotMeCoreManager {
         ILocation top = getGenManager(world).getTop(world, id);
 
         if (getMap(worldName).isUseProgressiveClear()) {
-            plugin.addPlotToClear(new PlotToClear(worldName, id, reason));
+            plugin.addPlotToClear(new PlotToClear(worldName, id, reason, sender));
         } else {
             getGenManager(world).clear(bottom, top);
             if (plugin.getServerBridge().getUsinglwc()) {
