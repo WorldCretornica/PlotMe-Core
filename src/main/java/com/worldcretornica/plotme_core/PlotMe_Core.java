@@ -18,6 +18,7 @@ public class PlotMe_Core {
     public static final String CAPTION_FILE = "captions.yml";
 
     public static final String WORLDS_CONFIG_SECTION = "worlds";
+    private static HashMap<String, IPlotMe_GeneratorManager> managers;
     //Bridge
     private final IServerBridge serverBridge;
     private IWorld worldcurrentlyprocessingexpired;
@@ -28,11 +29,20 @@ public class PlotMe_Core {
     private PlotMeCoreManager plotMeCoreManager;
     private SqlManager sqlManager;
     private Util util;
-    private static HashMap<String, IPlotMe_GeneratorManager> managers;
 
     public PlotMe_Core(IServerBridge serverObjectBuilder) {
         serverBridge = serverObjectBuilder;
         managers = new HashMap<>();
+    }
+
+    public static IPlotMe_GeneratorManager getGenManager(String name) {
+        /*IWorld world = serverBridge.getWorld(name.toLowerCase());
+        if (world == null) {
+            return null;
+        } else {
+            return PlotMeCoreManager.getGenManager(world);
+        }*/
+        return managers.get(name);
     }
 
     public void disable() {
@@ -71,10 +81,31 @@ public class PlotMe_Core {
         //setupWorlds();
     }
 
-
     public Logger getLogger() {
         return serverBridge.getLogger();
     }
+
+    /*private void setupWorlds() {
+        IConfigSection worldsCS = serverBridge.getConfig().getConfigurationSection(WORLDS_CONFIG_SECTION);
+        for (String world : worldsCS.getKeys(false)) {
+            String worldName = world.toLowerCase();
+            if (getGenManager(worldName) == null) {
+                getLogger().log(Level.SEVERE, "The world {0} either does not exist or not using a PlotMe generator", world);
+                getLogger().log(Level.SEVERE, "Please ensure that {0} is set up and that it is using a PlotMe generator", world);
+            } else {
+                PlotMapInfo pmi = new PlotMapInfo(this, worldName);
+                //Lets just hide a bit of code to clean up the config in here.
+                IConfigSection config = getServerBridge().loadDefaultConfig("worlds." + world);
+                config.set("BottomBlockId", null);
+                config.set("AutoLinkPlots", null);
+                plotMeCoreManager.addPlotMap(worldName, pmi);
+            }
+        }
+        if (getPlotMeCoreManager().getPlotMaps().isEmpty()) {
+            getLogger().severe("Uh oh. There are no plotworlds setup.");
+            getLogger().severe("Is that a mistake? Try making sure you setup PlotMe Correctly PlotMe to stay safe.");
+        }
+    }*/
 
     private void setupConfig() {
         // Get the config we will be working with
@@ -99,28 +130,6 @@ public class PlotMe_Core {
         config.saveConfig();
     }
 
-    /*private void setupWorlds() {
-        IConfigSection worldsCS = serverBridge.getConfig().getConfigurationSection(WORLDS_CONFIG_SECTION);
-        for (String world : worldsCS.getKeys(false)) {
-            String worldName = world.toLowerCase();
-            if (getGenManager(worldName) == null) {
-                getLogger().log(Level.SEVERE, "The world {0} either does not exist or not using a PlotMe generator", world);
-                getLogger().log(Level.SEVERE, "Please ensure that {0} is set up and that it is using a PlotMe generator", world);
-            } else {
-                PlotMapInfo pmi = new PlotMapInfo(this, worldName);
-                //Lets just hide a bit of code to clean up the config in here.
-                IConfigSection config = getServerBridge().loadDefaultConfig("worlds." + world);
-                config.set("BottomBlockId", null);
-                config.set("AutoLinkPlots", null);
-                plotMeCoreManager.addPlotMap(worldName, pmi);
-            }
-        }
-        if (getPlotMeCoreManager().getPlotMaps().isEmpty()) {
-            getLogger().severe("Uh oh. There are no plotworlds setup.");
-            getLogger().severe("Is that a mistake? Try making sure you setup PlotMe Correctly PlotMe to stay safe.");
-        }
-    }*/
-    
     private void setupWorld(String worldname) {
         if (getGenManager(worldname) == null) {
             getLogger().log(Level.SEVERE, "The world {0} either does not exist or not using a PlotMe generator", worldname);
@@ -133,13 +142,12 @@ public class PlotMe_Core {
             config.set("AutoLinkPlots", null);
             plotMeCoreManager.addPlotMap(worldname, pmi);
         }
-        
+
         if (getPlotMeCoreManager().getPlotMaps().isEmpty()) {
             getLogger().severe("Uh oh. There are no plotworlds setup.");
             getLogger().severe("Is that a mistake? Try making sure you setup PlotMe Correctly PlotMe to stay safe.");
         }
     }
-
 
     public IConfigSection getCaptionConfig() {
         return serverBridge.getConfig(CAPTION_FILE);
@@ -192,21 +200,10 @@ public class PlotMe_Core {
     private void setupClearSpools() {
         plotsToClear = new ConcurrentLinkedQueue<>();
     }
-
-
-    public static IPlotMe_GeneratorManager getGenManager(String name) {
-        /*IWorld world = serverBridge.getWorld(name.toLowerCase());
-        if (world == null) {
-            return null;
-        } else {
-            return PlotMeCoreManager.getGenManager(world);
-        }*/
-        return managers.get(name);
-    }
     
     public void addManager(String world, IPlotMe_GeneratorManager manager) {
-        managers.put(world, manager);
-        setupWorld(world);
+        managers.put(world.toLowerCase(), manager);
+        setupWorld(world.toLowerCase());
     }
     
     public IPlotMe_GeneratorManager removeManager(String world) {
