@@ -9,11 +9,11 @@ import org.spongepowered.api.block.BlockLoc;
 /**
  * Created by Matthew on 1/15/2015.
  */
-public class SpongeBlock implements IBlock {
+public class SpongeBlockLoc implements IBlock {
 
     private final BlockLoc block;
 
-    public SpongeBlock(BlockLoc block) {
+    public SpongeBlockLoc(BlockLoc block) {
         this.block = block;
     }
 
@@ -24,7 +24,7 @@ public class SpongeBlock implements IBlock {
 
     @Override
     public IWorld getWorld() {
-        return null;
+        return new SpongeWorld(null); //TODO
     }
 
     @Override
@@ -34,8 +34,7 @@ public class SpongeBlock implements IBlock {
 
     @Override
     public int getY() {
-        return block.getY()
-                ;
+        return block.getY();
     }
 
     @Override
@@ -45,7 +44,7 @@ public class SpongeBlock implements IBlock {
 
     @Override
     public int getTypeId() {
-        return 0;
+        return 0; //block.getType().getId();
     }
 
     @Override
