@@ -1,14 +1,20 @@
 package com.worldcretornica.plotme_core.sponge;
 
-import org.spongepowered.api.event.block.*;
+import com.worldcretornica.plotme_core.PlotMe_Core;
+import org.spongepowered.api.event.block.BlockBurnEvent;
+import org.spongepowered.api.event.block.BlockChangeEvent;
+import org.spongepowered.api.event.block.BlockDispenseEvent;
+import org.spongepowered.api.event.block.BlockIgniteEvent;
+import org.spongepowered.api.event.block.BlockInteractEvent;
+import org.spongepowered.api.event.block.BlockMoveEvent;
+import org.spongepowered.api.event.block.BlockUpdateEvent;
+import org.spongepowered.api.event.block.BulkBlockEvent;
+import org.spongepowered.api.event.block.FloraGrowEvent;
+import org.spongepowered.api.event.block.FluidSpreadEvent;
+import org.spongepowered.api.event.block.LeafDecayEvent;
 import org.spongepowered.api.event.player.PlayerInteractEvent;
 import org.spongepowered.api.util.event.Subscribe;
 
-import com.worldcretornica.plotme_core.PlotMe_Core;
-
-/**
- * Created by Matthew on 1/7/2015.
- */
 public class SpongePlotListener {
 
     private final PlotMe_Sponge plugin;
@@ -20,62 +26,62 @@ public class SpongePlotListener {
     }
 
     @Subscribe
-    public void onBlockBreak(final BlockChangeEvent event) {
+    public void onBlockBreak(BlockChangeEvent event) {
         //TODO
     }
     
     @Subscribe
-    public void onBlockBurnEvent(final BlockBurnEvent event) {
+    public void onBlockBurnEvent(BlockBurnEvent event) {
         //TODO
     }
     
     @Subscribe
-    public void onBlockDispenseEvent(final BlockDispenseEvent event) {
+    public void onBlockDispenseEvent(BlockDispenseEvent event) {
         //TODO
     }
     
     @Subscribe
-    public void onBlockIgniteEvent(final BlockIgniteEvent event) {
+    public void onBlockIgniteEvent(BlockIgniteEvent event) {
         //TODO
     }
     
     @Subscribe
-    public void onBlockInteractEvent(final BlockInteractEvent event) {
+    public void onBlockInteractEvent(BlockInteractEvent event) {
         //TODO
     }
     
     @Subscribe
-    public void onBlockMoveEvent(final BlockMoveEvent event) {
+    public void onBlockMoveEvent(BlockMoveEvent event) {
         //TODO
     }
     
     @Subscribe
-    public void onBlockUpdateEvent(final BlockUpdateEvent event) {
+    public void onBlockUpdateEvent(BlockUpdateEvent event) {
         //TODO
     }
     
     @Subscribe
-    public void onBulkBlockEvent(final BulkBlockEvent event) {
+    public void onBulkBlockEvent(BulkBlockEvent event) {
         //TODO
     }
     
     @Subscribe
-    public void onFloraGrowEvent(final FloraGrowEvent event) {
+    public void onFloraGrowEvent(FloraGrowEvent event) {
         //TODO
     }
     
     @Subscribe
-    public void onFluidSpreadEvent(final FluidSpreadEvent event) {
+    public void onFluidSpreadEvent(FluidSpreadEvent event) {
         //TODO
     }
     
     @Subscribe
-    public void onLeafDecayEvent(final LeafDecayEvent event) {
+    public void onLeafDecayEvent(LeafDecayEvent event) {
         //TODO
     }
 
     @Subscribe
-    public void onPlayerInteract(final PlayerInteractEvent event) {
+    public void onPlayerInteract(PlayerInteractEvent event) {
         //TODO
     }
 }

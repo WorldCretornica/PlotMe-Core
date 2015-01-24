@@ -35,17 +35,17 @@ public class SpongeLocation implements ILocation {
 
     @Override
     public double getX() {
-        return 0;
+        return location.getPosition().getX();
     }
 
     @Override
     public double getY() {
-        return 0;
+        return location.getPosition().getY();
     }
 
     @Override
     public double getZ() {
-        return 0;
+        return location.getPosition().getZ();
     }
 
     @Override

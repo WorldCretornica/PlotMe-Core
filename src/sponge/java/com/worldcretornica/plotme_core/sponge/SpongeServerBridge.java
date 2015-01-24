@@ -1,18 +1,23 @@
 package com.worldcretornica.plotme_core.sponge;
 
+import com.worldcretornica.plotme_core.PlotWorldEdit;
+import com.worldcretornica.plotme_core.api.IBiome;
+import com.worldcretornica.plotme_core.api.IConfigSection;
+import com.worldcretornica.plotme_core.api.IMaterial;
+import com.worldcretornica.plotme_core.api.IOfflinePlayer;
+import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.api.IServerBridge;
+import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.api.event.IEventFactory;
+import com.worldcretornica.plotme_core.bukkit.event.BukkitEventFactory;
+import net.milkbowl.vault.economy.Economy;
+import net.milkbowl.vault.economy.EconomyResponse;
+
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Logger;
-
-import net.milkbowl.vault.economy.Economy;
-import net.milkbowl.vault.economy.EconomyResponse;
-
-import com.worldcretornica.plotme_core.PlotWorldEdit;
-import com.worldcretornica.plotme_core.api.*;
-import com.worldcretornica.plotme_core.api.event.IEventFactory;
-import com.worldcretornica.plotme_core.bukkit.event.BukkitEventFactory;
 
 public class SpongeServerBridge extends IServerBridge {
 
@@ -193,7 +198,7 @@ public class SpongeServerBridge extends IServerBridge {
     }
 
     @Override
-    public boolean addMultiverseWorld(String worldName, String environment, String seed, String generator) {
+    public boolean addMultiverseWorld(String worldName, String seed, String generator) {
         // TODO Auto-generated method stub
         return false;
     }

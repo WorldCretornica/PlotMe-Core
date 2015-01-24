@@ -1,5 +1,7 @@
 package com.worldcretornica.plotme_core.sponge;
 
+import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.api.IServerBridge;
 import org.slf4j.Logger;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.event.state.PreInitializationEvent;
@@ -8,12 +10,6 @@ import org.spongepowered.api.event.state.ServerStoppingEvent;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.util.event.Subscribe;
 
-import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.IServerBridge;
-
-/**
- * Created by Matthew on 12/30/2014.
- */
 @Plugin(id = "plotme", name = "PlotMe", version = "0.16")
 public class PlotMe_Sponge {
 
