@@ -38,11 +38,9 @@ import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
-import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.server.ServerCommandEvent;
 import org.bukkit.event.world.StructureGrowEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -816,23 +814,4 @@ public class BukkitPlotListener implements Listener {
         api.getLogger().info("Done loading " + event.getNbPlots() + " plots for world " + event.getWorldName());
     }
 
-    /*@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onServerCommand(ServerCommandEvent event) {
-        if ("reload".equalsIgnoreCase(event.getCommand())) {
-            api.getLogger().warning("Using the reload command does not properly reload a server");
-            api.getLogger().warning("It generates many bugs and with PlotMe, the plugin won't function");
-            api.getLogger().warning("The server is being shut down so it can be properly restarted");
-            event.setCommand("stop");
-        }
-    }
-
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onPlayerCommand(PlayerCommandPreprocessEvent event) {
-        if ("/reload".equalsIgnoreCase(event.getMessage()) && event.getPlayer().hasPermission("bukkit.command.reload")) {
-            event.getPlayer().sendMessage("Using the reload command does not properly reload a server");
-            event.getPlayer().sendMessage("It generates many bugs and with PlotMe, the plugin won't function");
-            event.getPlayer().sendMessage("The command will not execute.");
-            event.setCancelled(true);
-        }
-    }*/
 }

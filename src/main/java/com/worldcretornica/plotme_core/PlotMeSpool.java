@@ -15,32 +15,6 @@ public class PlotMeSpool implements Runnable {
         plottoclear = plotToClear;
     }
 
-    /*private static String format(long count) {
-        double buffer;
-
-        if (count > 1000000000000L) {
-            buffer = count / 1000000000000L;
-            buffer = Math.round(buffer * 10) / 10;
-            return buffer + "T";
-        }
-        if (count > 1000000000) {
-            buffer = count / 1000000000;
-            buffer = Math.round(buffer * 10) / 10;
-            return buffer + "G";
-        }
-        if (count > 1000000) {
-            buffer = count / 1000000;
-            buffer = Math.round(buffer * 10) / 10;
-            return buffer + "M";
-        }
-        if (count > 1000) {
-            buffer = count / 1000;
-            buffer = Math.round(buffer * 10) / 10;
-            return buffer + "k";
-        }
-        return String.valueOf(count);
-    }*/
-
     @Override
     public void run() {
         if (getPlotToClear() != null) {
@@ -62,13 +36,18 @@ public class PlotMeSpool implements Runnable {
                 //showProgress();
 
                 if (currentClear == null) {
-                    PlotMeCoreManager.getGenManager(world).adjustPlotFor(world, getPlotToClear().getPlotId(), true, false, false, false);
+                    if (getPlotToClear().getReason() == ClearReason.Clear) {
+                        PlotMeCoreManager.getGenManager(world).adjustPlotFor(world, getPlotToClear().getPlotId(), false, false, false, false);
+                    } else {
+                        PlotMeCoreManager.getGenManager(world).adjustPlotFor(world, getPlotToClear().getPlotId(), true, false, false, false);
+                    }
                     if (plugin.getServerBridge().getUsinglwc()) {
                         plugin.getPlotMeCoreManager().removeLWC(world, getPlotToClear().getPlotId());
                     }
                     PlotMeCoreManager.getGenManager(world).refreshPlotChunks(world, getPlotToClear().getPlotId());
 
-                    plottoclear.getRequester().sendMessage(plugin.getUtil().C("WordPlot") + " " + getPlotToClear().getPlotId() + " " + plugin.getUtil().C("WordCleared"));
+                    plottoclear.getRequester().sendMessage(
+                            plugin.getUtil().C("WordPlot") + " " + getPlotToClear().getPlotId() + " " + plugin.getUtil().C("WordCleared"));
 
                     plugin.removePlotToClear(getPlotToClear(), taskId);
                     plottoclear = null;

@@ -42,7 +42,7 @@ public class PlotMe_Core {
         } else {
             return PlotMeCoreManager.getGenManager(world);
         }*/
-        return managers.get(name);
+        return managers.get(name.toLowerCase());
     }
 
     public void disable() {
@@ -131,16 +131,16 @@ public class PlotMe_Core {
     }
 
     private void setupWorld(String worldname) {
-        if (getGenManager(worldname) == null) {
+        if (getGenManager(worldname.toLowerCase()) == null) {
             getLogger().log(Level.SEVERE, "The world {0} either does not exist or not using a PlotMe generator", worldname);
             getLogger().log(Level.SEVERE, "Please ensure that {0} is set up and that it is using a PlotMe generator", worldname);
         } else {
             PlotMapInfo pmi = new PlotMapInfo(this, worldname);
             //Lets just hide a bit of code to clean up the config in here.
-            IConfigSection config = getServerBridge().loadDefaultConfig("worlds." + worldname);
+            IConfigSection config = getServerBridge().loadDefaultConfig("worlds." + worldname.toLowerCase());
             config.set("BottomBlockId", null);
             config.set("AutoLinkPlots", null);
-            plotMeCoreManager.addPlotMap(worldname, pmi);
+            plotMeCoreManager.addPlotMap(worldname.toLowerCase(), pmi);
         }
 
         if (getPlotMeCoreManager().getPlotMaps().isEmpty()) {

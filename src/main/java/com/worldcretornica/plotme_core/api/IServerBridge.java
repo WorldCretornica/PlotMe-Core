@@ -97,7 +97,7 @@ public abstract class IServerBridge {
 
     public abstract void saveResource(String fileName, boolean replace);
 
-    public abstract boolean addMultiverseWorld(String worldName, String environment, String seed, String generator);
+    public abstract boolean addMultiverseWorld(String worldName, String seed, String generator);
 
     public abstract List<String> getBiomes();
 

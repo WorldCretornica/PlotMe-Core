@@ -28,7 +28,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
-import org.bukkit.World.Environment;
 import org.bukkit.block.Biome;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -299,8 +298,8 @@ public class BukkitServerBridge extends IServerBridge {
     }
 
     @Override
-    public boolean addMultiverseWorld(String worldName, String environment, String seed, String generator) {
-        return getMultiverseWrapper().getMVWorldManager().addWorld(worldName, Environment.valueOf(environment), seed, generator);
+    public boolean addMultiverseWorld(String worldName, String seed, String generator) {
+        return getMultiverseWrapper().getMVWorldManager().addWorld(worldName, seed, generator);
     }
 
     @Override
@@ -419,7 +418,7 @@ public class BukkitServerBridge extends IServerBridge {
         if (getMultiverse() != null) {
             boolean success = false;
             if (getMultiverse().isEnabled()) {
-                success = plugin.getServerObjectBuilder().addMultiverseWorld(worldName, "NORMAL", seed.toString(), generator);
+                success = plugin.getServerObjectBuilder().addMultiverseWorld(worldName, seed.toString(), generator);
 
                 if (!success) {
                     getLogger().info(plugin.getAPI().getUtil().C("ErrCannotCreateMV"));

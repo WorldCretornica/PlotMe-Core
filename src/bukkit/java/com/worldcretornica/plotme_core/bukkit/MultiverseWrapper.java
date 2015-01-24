@@ -43,8 +43,8 @@ public class MultiverseWrapper implements Delegate<MultiverseCore> {
             return worldManager;
         }
 
-        public boolean addWorld(String name, World.Environment environment, String seedString, String generator) {
-            return worldManager.addWorld(name, environment, seedString, WorldType.FLAT, false, generator);
+        public boolean addWorld(String name, String seedString, String generator) {
+            return worldManager.addWorld(name, World.Environment.NORMAL, seedString, WorldType.FLAT, false, generator);
         }
 
     }
