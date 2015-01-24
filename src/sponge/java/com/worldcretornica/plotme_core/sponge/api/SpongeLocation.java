@@ -9,7 +9,7 @@ public class SpongeLocation implements ILocation {
 
     private final Location location;
 
-    SpongeLocation(Location location) {
+    public SpongeLocation(Location location) {
         this.location = location;
     }
 
@@ -50,11 +50,15 @@ public class SpongeLocation implements ILocation {
 
     @Override
     public IBlock getBlock() {
-        return new SpongeBlock(location.getBlock());
+        return new SpongeBlockLoc(location.getBlock());
     }
 
     @Override
     public ILocation add(double x, double y, double z) {
         return new SpongeLocation(location.add(x, y, z));
+    }
+    
+    public Location getLocation() {
+        return location;
     }
 }
