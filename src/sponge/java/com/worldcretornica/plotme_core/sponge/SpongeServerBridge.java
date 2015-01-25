@@ -10,10 +10,14 @@ import com.worldcretornica.plotme_core.api.IServerBridge;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.IEventFactory;
 import com.worldcretornica.plotme_core.bukkit.event.BukkitEventFactory;
+import com.worldcretornica.plotme_core.sponge.api.SpongePlayer;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
+import org.spongepowered.api.entity.player.Player;
 
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -43,20 +47,32 @@ public class SpongeServerBridge extends IServerBridge {
 
     @Override
     public IPlayer getPlayer(UUID uuid) {
-        // TODO Auto-generated method stub
-        return null;
+        Player player = plugin.getGame().getServer().get().getPlayer(uuid).orNull();
+        if (player != null) {
+            return new SpongePlayer(player);
+        } else {
+            return null;
+        }
     }
 
     @Override
     public IPlayer getPlayerExact(String name) {
-        // TODO Auto-generated method stub
-        return null;
+        Player player = plugin.getGame().getServer().get().getPlayer(name).orNull();
+        if (player != null) {
+            return new SpongePlayer(player);
+        } else {
+            return null;
+        }
     }
 
     @Override
-    public List<IPlayer> getOnlinePlayers() {
-        // TODO Auto-generated method stub
-        return null;
+    public Collection<IPlayer> getOnlinePlayers() {
+        Collection<IPlayer> players = new ArrayList<>();
+
+        for (Player player : plugin.getGame().getServer().get().getOnlinePlayers()) {
+            players.add(new SpongePlayer(player));
+        }
+        return players;
     }
 
     @Override
@@ -72,7 +88,7 @@ public class SpongeServerBridge extends IServerBridge {
     }
 
     @Override
-    public void cancelTask(int taskid) {
+    public void cancelTask(int taskId) {
         // TODO Auto-generated method stub
         
     }
@@ -108,7 +124,7 @@ public class SpongeServerBridge extends IServerBridge {
     }
 
     @Override
-    public EconomyResponse depositPlayer(IOfflinePlayer playercurrentbidder, double currentBid) {
+    public EconomyResponse depositPlayer(IOfflinePlayer currentBidder, double currentBid) {
         // TODO Auto-generated method stub
         return null;
     }

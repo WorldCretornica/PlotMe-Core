@@ -1,18 +1,17 @@
 package com.worldcretornica.plotme_core.sponge.api;
 
-import org.spongepowered.api.world.biome.BiomeType;
-
 import com.worldcretornica.plotme_core.api.IBiome;
+import org.spongepowered.api.world.biome.BiomeType;
 
 public class SpongeBiomeType implements IBiome {
 
-    private final BiomeType biometype;
+    private final BiomeType biomeType;
 
-    public SpongeBiomeType(BiomeType biometype) {
-        this.biometype = biometype;
+    public SpongeBiomeType(BiomeType biomeType) {
+        this.biomeType = biomeType;
     }
 
     public BiomeType getBiomeType() {
-        return biometype;
+        return biomeType;
     }
 }

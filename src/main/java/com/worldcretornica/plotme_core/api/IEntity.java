@@ -32,14 +32,6 @@ public interface IEntity extends IActor {
     void remove();
 
     /**
-     * Returns the entity name
-     *
-     * @return entity name
-     */
-    @Override
-    String getName();
-
-    /**
      * Returns the entity UUID
      *
      * @return entity UUID

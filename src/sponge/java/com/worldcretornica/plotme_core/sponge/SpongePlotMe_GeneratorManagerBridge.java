@@ -1,13 +1,20 @@
 package com.worldcretornica.plotme_core.sponge;
 
+import com.worldcretornica.plotme_core.api.IBiome;
+import com.worldcretornica.plotme_core.api.ILocation;
+import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.api.IPlotMe_GeneratorManager;
+import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.sponge.api.ISpongePlotMe_GeneratorManager;
+import com.worldcretornica.plotme_core.sponge.api.SpongeBiomeType;
+import com.worldcretornica.plotme_core.sponge.api.SpongeLocation;
+import com.worldcretornica.plotme_core.sponge.api.SpongePlayer;
+import com.worldcretornica.plotme_core.sponge.api.SpongeWorld;
+import org.spongepowered.api.entity.player.Player;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import org.spongepowered.api.entity.player.Player;
-
-import com.worldcretornica.plotme_core.api.*;
-import com.worldcretornica.plotme_core.sponge.api.*;
 
 public class SpongePlotMe_GeneratorManagerBridge implements IPlotMe_GeneratorManager {
 
@@ -39,12 +46,12 @@ public class SpongePlotMe_GeneratorManagerBridge implements IPlotMe_GeneratorMan
     }
 
     @Override
-    public void fillroad(String id1, String id2, IWorld world) {
+    public void fillRoad(String id1, String id2, IWorld world) {
         generatorManager.fillroad(id1, id2, ((SpongeWorld) world).getWorld());
     }
 
     @Override
-    public void fillmiddleroad(String id1, String id2, IWorld world) {
+    public void fillMiddleRoad(String id1, String id2, IWorld world) {
         generatorManager.fillmiddleroad(id1, id2, ((SpongeWorld) world).getWorld());
     }
 

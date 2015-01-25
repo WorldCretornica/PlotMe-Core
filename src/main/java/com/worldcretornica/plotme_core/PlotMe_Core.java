@@ -62,7 +62,6 @@ public class PlotMe_Core {
         setupConfig();
         setupDefaultCaptions();
         setPlotMeCoreManager(new PlotMeCoreManager(this));
-        //setupWorlds(); // TODO: Remove concept of pmi so this is not needed
         serverBridge.setupCommands();
         setUtil(new Util(this));
         serverBridge.setupHooks();

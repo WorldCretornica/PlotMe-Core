@@ -37,8 +37,8 @@ public class BukkitConfigSection implements IConfigSection {
 
 
     @Override
-    public List<Integer> getIntegerList(String configpath) {
-        return section.getIntegerList(configpath);
+    public List<Integer> getIntegerList(String configPath) {
+        return section.getIntegerList(configPath);
     }
 
     @Override
@@ -86,8 +86,8 @@ public class BukkitConfigSection implements IConfigSection {
     }
 
     @Override
-    public int getInt(String string, int defaultvalue) {
-        return section.getInt(string, defaultvalue);
+    public int getInt(String string, int defaultValue) {
+        return section.getInt(string, defaultValue);
     }
 
     @Override
@@ -105,8 +105,8 @@ public class BukkitConfigSection implements IConfigSection {
     }
 
     @Override
-    public boolean getBoolean(String string, boolean defaultvalue) {
-        return section.getBoolean(string, defaultvalue);
+    public boolean getBoolean(String string, boolean defaultValue) {
+        return section.getBoolean(string, defaultValue);
     }
 
     @Override

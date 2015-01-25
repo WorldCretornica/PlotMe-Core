@@ -1,12 +1,12 @@
 package com.worldcretornica.plotme_core.sponge.api;
 
-import java.util.List;
-import java.util.Map;
-
 import org.spongepowered.api.entity.player.Player;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.biome.BiomeType;
+
+import java.util.List;
+import java.util.Map;
 
 public interface ISpongePlotMe_GeneratorManager {
 
@@ -22,9 +22,9 @@ public interface ISpongePlotMe_GeneratorManager {
 
     void setOwnerDisplay(World world, String id, String line1, String line2, String line3, String line4);
 
-    void setSellerDisplay(World world, String id, String line1, String line2, String Line3, String line4);
+    void setSellerDisplay(World world, String id, String line1, String line2, String line3, String line4);
 
-    void setAuctionDisplay(World world, String id, String line1, String line2, String Line3, String line4);
+    void setAuctionDisplay(World world, String id, String line1, String line2, String line3, String line4);
 
     void removeOwnerDisplay(World world, String id);
 

@@ -46,13 +46,13 @@ public class BukkitPlotMe_GeneratorManagerBridge implements IPlotMe_GeneratorMan
     }
 
     @Override
-    public void fillroad(String id1, String id2, IWorld world) {
-        generatorManager.fillroad(id1, id2, ((BukkitWorld) world).getWorld());
+    public void fillRoad(String id1, String id2, IWorld world) {
+        generatorManager.fillRoad(id1, id2, ((BukkitWorld) world).getWorld());
     }
 
     @Override
-    public void fillmiddleroad(String id1, String id2, IWorld world) {
-        generatorManager.fillmiddleroad(id1, id2, ((BukkitWorld) world).getWorld());
+    public void fillMiddleRoad(String id1, String id2, IWorld world) {
+        generatorManager.fillMiddleRoad(id1, id2, ((BukkitWorld) world).getWorld());
     }
 
     @Override

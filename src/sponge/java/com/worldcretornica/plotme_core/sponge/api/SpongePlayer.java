@@ -1,13 +1,12 @@
 package com.worldcretornica.plotme_core.sponge.api;
 
-import org.spongepowered.api.entity.player.Player;
-import org.spongepowered.api.item.inventory.ItemStack;
-
 import com.google.common.base.Optional;
 import com.worldcretornica.plotme_core.api.IItemStack;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
+import org.spongepowered.api.entity.player.Player;
+import org.spongepowered.api.item.inventory.ItemStack;
 
 public class SpongePlayer extends SpongeUser implements IPlayer {
 
@@ -25,7 +24,7 @@ public class SpongePlayer extends SpongeUser implements IPlayer {
     
     @Override
     public boolean hasPermission(String node) {
-        return false; //TODO
+        return player.hasPermission(node);
     }
     
     @Override
@@ -40,7 +39,7 @@ public class SpongePlayer extends SpongeUser implements IPlayer {
     
     @Override
     public void setLocation(ILocation location) {
-        player.teleport(((SpongeLocation) location).getLocation());
+        player.setLocation(((SpongeLocation) location).getLocation());
     }
     
     public Player getPlayer() {
@@ -49,10 +48,10 @@ public class SpongePlayer extends SpongeUser implements IPlayer {
     
     @Override
     public IItemStack getItemInHand() {
-        Optional<ItemStack> itemstack = player.getItemInHand();
-        if (itemstack.isPresent())
-            return new SpongeItemStack(itemstack.get());
-        else
+        Optional<ItemStack> itemInHand = player.getItemInHand();
+        if (itemInHand.isPresent()) {
+            return new SpongeItemStack(itemInHand.get());
+        } else
             return null;
     }
     

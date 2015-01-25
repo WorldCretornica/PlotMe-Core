@@ -65,9 +65,9 @@ public class PlotMe_CorePlugin extends JavaPlugin {
                         int totalPlotSize = 0;
 
                         for (String plotter : getAPI().getPlotMeCoreManager().getPlotMaps().keySet()) {
-                            if (getAPI().getGenManager(plotter) != null) {
-                                if (getAPI().getGenManager(plotter).getPlotSize(plotter) != 0) {
-                                    totalPlotSize += getAPI().getGenManager(plotter).getPlotSize(plotter);
+                            if (PlotMe_Core.getGenManager(plotter) != null) {
+                                if (PlotMe_Core.getGenManager(plotter).getPlotSize(plotter) != 0) {
+                                    totalPlotSize += PlotMe_Core.getGenManager(plotter).getPlotSize(plotter);
                                 }
                             }
                         }
@@ -82,13 +82,13 @@ public class PlotMe_CorePlugin extends JavaPlugin {
             graphNbWorlds.addPlotter(new Metrics.Plotter("Number of plots") {
                 @Override
                 public int getValue() {
-                    int nbplot = 0;
+                    int nbPlot = 0;
 
                     for (String map : getAPI().getPlotMeCoreManager().getPlotMaps().keySet()) {
-                        nbplot += (int) getAPI().getSqlManager().getPlotCount(map);
+                        nbPlot += (int) getAPI().getSqlManager().getPlotCount(map);
                     }
 
-                    return nbplot;
+                    return nbPlot;
                 }
             });
 

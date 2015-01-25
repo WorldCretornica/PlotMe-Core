@@ -1,16 +1,12 @@
 package com.worldcretornica.plotme_core.sponge.api;
 
-import java.util.UUID;
-
-import org.spongepowered.api.entity.Entity;
-
 import com.worldcretornica.plotme_core.api.IEntity;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IWorld;
+import org.spongepowered.api.entity.Entity;
 
-/**
- * Created by Matthew on 1/15/2015.
- */
+import java.util.UUID;
+
 public class SpongeEntity implements IEntity {
 
     public final Entity entity;
@@ -31,7 +27,7 @@ public class SpongeEntity implements IEntity {
             loc = (SpongeLocation) location;
         }
         if (loc != null) {
-            entity.teleport(loc.getLocation());
+            entity.setLocation(loc.getLocation());
         }
     }
 
@@ -43,11 +39,6 @@ public class SpongeEntity implements IEntity {
     @Override
     public void remove() {
         entity.remove();
-    }
-
-    @Override
-    public String getName() {
-        return ""; //TODO
     }
 
     @Override

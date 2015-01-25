@@ -44,6 +44,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -133,7 +134,7 @@ public class BukkitServerBridge extends IServerBridge {
             pluginManager.registerEvents(new BukkitPlotWorldEditListener(we, plugin), plugin);
         }
 
-        setUsinglwc(pluginManager.getPlugin("LWC") != null);
+        setUsingLwc(pluginManager.getPlugin("LWC") != null);
     }
 
     /**
@@ -314,13 +315,13 @@ public class BukkitServerBridge extends IServerBridge {
 
     @Override
 
-    public EconomyResponse depositPlayer(IOfflinePlayer player, double currentBid) {
-        return getEconomy().depositPlayer(((BukkitOfflinePlayer) player).getOfflinePlayer(), currentBid);
+    public EconomyResponse depositPlayer(IOfflinePlayer currentBidder, double currentBid) {
+        return getEconomy().depositPlayer(((BukkitOfflinePlayer) currentBidder).getOfflinePlayer(), currentBid);
     }
 
     @Override
-    public List<IPlayer> getOnlinePlayers() {
-        List<IPlayer> players = new ArrayList<>();
+    public Collection<IPlayer> getOnlinePlayers() {
+        Collection<IPlayer> players = new ArrayList<>();
 
         for (Player player : Bukkit.getOnlinePlayers()) {
             players.add(new BukkitPlayer(player));

@@ -6,6 +6,7 @@ import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 
 import java.io.InputStream;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -13,7 +14,7 @@ import java.util.logging.Logger;
 
 public abstract class IServerBridge {
 
-    private boolean usinglwc;
+    private boolean usingLwc;
 
     public abstract IOfflinePlayer getOfflinePlayer(UUID uuid);
 
@@ -29,13 +30,13 @@ public abstract class IServerBridge {
 
     public abstract IPlayer getPlayerExact(String name);
 
-    public abstract List<IPlayer> getOnlinePlayers();
+    public abstract Collection<IPlayer> getOnlinePlayers();
 
     public abstract Logger getLogger();
 
     public abstract int scheduleSyncRepeatingTask(Runnable func, long l, long l2);
 
-    public abstract void cancelTask(int taskid);
+    public abstract void cancelTask(int taskId);
 
     public abstract int scheduleSyncDelayedTask(Runnable task, int i);
 
@@ -53,16 +54,16 @@ public abstract class IServerBridge {
 
     public abstract EconomyResponse withdrawPlayer(IPlayer player, double price);
 
-    public abstract EconomyResponse depositPlayer(IOfflinePlayer playercurrentbidder, double currentBid);
+    public abstract EconomyResponse depositPlayer(IOfflinePlayer currentBidder, double currentBid);
 
     public abstract PlotWorldEdit getPlotWorldEdit();
 
-    public boolean getUsinglwc() {
-        return usinglwc;
+    public boolean getUsingLwc() {
+        return usingLwc;
     }
 
-    public void setUsinglwc(boolean usingLwc) {
-        this.usinglwc = usingLwc;
+    public void setUsingLwc(boolean usingLwc) {
+        this.usingLwc = usingLwc;
     }
 
     /**

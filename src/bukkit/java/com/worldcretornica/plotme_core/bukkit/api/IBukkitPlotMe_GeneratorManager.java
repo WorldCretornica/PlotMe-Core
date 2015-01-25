@@ -16,9 +16,9 @@ public interface IBukkitPlotMe_GeneratorManager {
 
     List<Player> getPlayersInPlot(String id);
 
-    void fillroad(String id1, String id2, World world);
+    void fillRoad(String id1, String id2, World world);
 
-    void fillmiddleroad(String id1, String id2, World world);
+    void fillMiddleRoad(String id1, String id2, World world);
 
     void setOwnerDisplay(World world, String id, String line1, String line2, String line3, String line4);
 

@@ -40,7 +40,7 @@ public class PlotMeSpool implements Runnable {
                     } else {
                         PlotMeCoreManager.getGenManager(world).adjustPlotFor(world, getPlotToClear().getPlotId(), true, false, false, false);
                     }
-                    if (plugin.getServerBridge().getUsinglwc()) {
+                    if (plugin.getServerBridge().getUsingLwc()) {
                         plugin.getPlotMeCoreManager().removeLWC(world, getPlotToClear().getPlotId());
                     }
                     PlotMeCoreManager.getGenManager(world).refreshPlotChunks(world, getPlotToClear().getPlotId());

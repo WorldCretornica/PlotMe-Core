@@ -258,47 +258,47 @@ public class PlotMeCoreManager {
             Plot p22 = plots.get((x + 1) + ";" + (z + 1));
 
             if (p01 != null && p01.getOwner().equalsIgnoreCase(p11.getOwner())) {
-                genMan.fillroad(p01.getId(), p11.getId(), world);
+                genMan.fillRoad(p01.getId(), p11.getId(), world);
             }
 
             if (p10 != null && p10.getOwner().equalsIgnoreCase(p11.getOwner())) {
-                genMan.fillroad(p10.getId(), p11.getId(), world);
+                genMan.fillRoad(p10.getId(), p11.getId(), world);
             }
 
             if (p12 != null && p12.getOwner().equalsIgnoreCase(p11.getOwner())) {
-                genMan.fillroad(p12.getId(), p11.getId(), world);
+                genMan.fillRoad(p12.getId(), p11.getId(), world);
             }
 
             if (p21 != null && p21.getOwner().equalsIgnoreCase(p11.getOwner())) {
-                genMan.fillroad(p21.getId(), p11.getId(), world);
+                genMan.fillRoad(p21.getId(), p11.getId(), world);
             }
 
             if (p00 != null && p10 != null && p01 != null
                         && p00.getOwner().equalsIgnoreCase(p11.getOwner())
                         && p11.getOwner().equalsIgnoreCase(p10.getOwner())
                         && p10.getOwner().equalsIgnoreCase(p01.getOwner())) {
-                genMan.fillmiddleroad(p00.getId(), p11.getId(), world);
+                genMan.fillMiddleRoad(p00.getId(), p11.getId(), world);
             }
 
             if (p10 != null && p20 != null && p21 != null
                         && p10.getOwner().equalsIgnoreCase(p11.getOwner())
                         && p11.getOwner().equalsIgnoreCase(p20.getOwner())
                         && p20.getOwner().equalsIgnoreCase(p21.getOwner())) {
-                genMan.fillmiddleroad(p20.getId(), p11.getId(), world);
+                genMan.fillMiddleRoad(p20.getId(), p11.getId(), world);
             }
 
             if (p01 != null && p02 != null && p12 != null
                         && p01.getOwner().equalsIgnoreCase(p11.getOwner())
                         && p11.getOwner().equalsIgnoreCase(p02.getOwner())
                         && p02.getOwner().equalsIgnoreCase(p12.getOwner())) {
-                genMan.fillmiddleroad(p02.getId(), p11.getId(), world);
+                genMan.fillMiddleRoad(p02.getId(), p11.getId(), world);
             }
 
             if (p12 != null && p21 != null && p22 != null
                         && p12.getOwner().equalsIgnoreCase(p11.getOwner())
                         && p11.getOwner().equalsIgnoreCase(p21.getOwner())
                         && p21.getOwner().equalsIgnoreCase(p22.getOwner())) {
-                genMan.fillmiddleroad(p22.getId(), p11.getId(), world);
+                genMan.fillMiddleRoad(p22.getId(), p11.getId(), world);
             }
 
         }
@@ -620,7 +620,7 @@ public class PlotMeCoreManager {
             plugin.addPlotToClear(new PlotToClear(worldName, id, reason, sender));
         } else {
             getGenManager(world).clear(bottom, top);
-            if (plugin.getServerBridge().getUsinglwc()) {
+            if (plugin.getServerBridge().getUsingLwc()) {
                 removeLWC(world, id);
             }
             sender.sendMessage(Util().C("MsgPlotCleared"));
@@ -643,7 +643,7 @@ public class PlotMeCoreManager {
 
     @Deprecated
     public IPlotMe_GeneratorManager getGenMan(String name) {
-        return plugin.getGenManager(name);
+        return PlotMe_Core.getGenManager(name);
     }
 
     public void adjustWall(IPlayer player) {

@@ -47,16 +47,6 @@ public class BukkitEntity implements IEntity {
     }
 
     /**
-     * Gets the name of the actor
-     *
-     * @return name of the actor
-     */
-    @Override
-    public String getName() {
-        return entity.getName();
-    }
-
-    /**
      * Gets the UUID of the actor
      *
      * @return UUID of the actor

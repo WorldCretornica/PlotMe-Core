@@ -1,12 +1,12 @@
 package com.worldcretornica.plotme_core.sponge.api;
 
+import com.worldcretornica.plotme_core.api.IConfigSection;
+import com.worldcretornica.plotme_core.sponge.PlotMe_Sponge;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
-
-import com.worldcretornica.plotme_core.api.IConfigSection;
-import com.worldcretornica.plotme_core.sponge.PlotMe_Sponge;
 
 public class SpongeConfigSection implements IConfigSection {
 
@@ -17,7 +17,7 @@ public class SpongeConfigSection implements IConfigSection {
     }
 
     @Override
-    public List<Integer> getIntegerList(String configpath) {
+    public List<Integer> getIntegerList(String configPath) {
         // TODO Auto-generated method stub
         return null;
     }
@@ -35,7 +35,7 @@ public class SpongeConfigSection implements IConfigSection {
     }
 
     @Override
-    public List<String> getStringList(String configpath) {
+    public List<String> getStringList(String configPath) {
         // TODO Auto-generated method stub
         return null;
     }

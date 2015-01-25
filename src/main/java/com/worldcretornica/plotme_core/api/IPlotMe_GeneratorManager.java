@@ -11,9 +11,9 @@ public interface IPlotMe_GeneratorManager {
 
     List<IPlayer> getPlayersInPlot(String id);
 
-    void fillroad(String id1, String id2, IWorld world);
+    void fillRoad(String id1, String id2, IWorld world);
 
-    void fillmiddleroad(String id1, String id2, IWorld world);
+    void fillMiddleRoad(String id1, String id2, IWorld world);
 
     void setOwnerDisplay(IWorld world, String id, String line1, String line2, String line3, String line4);
 

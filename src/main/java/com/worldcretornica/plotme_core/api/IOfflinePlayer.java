@@ -17,7 +17,6 @@ public interface IOfflinePlayer extends IActor {
      *
      * @return player name or in rare cases, null
      */
-    @Override
     String getName();
 
     /**

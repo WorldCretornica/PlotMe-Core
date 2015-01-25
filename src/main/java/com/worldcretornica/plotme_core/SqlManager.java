@@ -823,26 +823,26 @@ public class SqlManager {
             if (setPlots.next()) {
                 String owner = setPlots.getString("owner");
                 String biome = setPlots.getString("biome");
-                Date expireddate = null;
+                Date expiredDate = null;
                 try {
-                    expireddate = setPlots.getDate("expireddate");
+                    expiredDate = setPlots.getDate("expireddate");
                 } catch (SQLException ignored) {
                 }
                 boolean finished = setPlots.getBoolean("finished");
                 PlayerList allowed = new PlayerList();
                 PlayerList denied = new PlayerList();
-                double customprice = setPlots.getDouble("customprice");
-                boolean forsale = setPlots.getBoolean("forsale");
-                String finisheddate;
+                double customPrice = setPlots.getDouble("customprice");
+                boolean forSale = setPlots.getBoolean("forsale");
+                String finishedDate;
                 if (finished) {
-                    finisheddate = setPlots.getString("finisheddate");
+                    finishedDate = setPlots.getString("finisheddate");
                 } else {
-                    finisheddate = null;
+                    finishedDate = null;
                 }
                 boolean protect = setPlots.getBoolean("protected");
-                String currentbidder = setPlots.getString("currentbidder");
-                double currentbid = setPlots.getDouble("currentbid");
-                boolean auctionned = setPlots.getBoolean("auctionned");
+                String currentBidder = setPlots.getString("currentbidder");
+                double currentBid = setPlots.getDouble("currentbid");
+                boolean auctioned = setPlots.getBoolean("auctionned");
 
                 byte[] byOwner = setPlots.getBytes("ownerId");
                 byte[] byBidder = setPlots.getBytes("currentbidderid");
@@ -852,9 +852,9 @@ public class SqlManager {
                 if (byOwner != null) {
                     ownerId = UUIDFetcher.fromBytes(byOwner);
                 }
-                UUID currentbidderid = null;
+                UUID currentBidderId = null;
                 if (byBidder != null) {
-                    currentbidderid = UUIDFetcher.fromBytes(byBidder);
+                    currentBidderId = UUIDFetcher.fromBytes(byBidder);
                 }
 
                 statementAllowed = conn.prepareStatement("SELECT * FROM plotmeAllowed WHERE LOWER(world) = ? AND idX = ? AND idZ = ?");
@@ -892,9 +892,9 @@ public class SqlManager {
                 }
                 setDenied.close();
 
-                plot = new Plot(plugin, owner, ownerId, world, biome, expireddate, finished, allowed,
-                                idX + ";" + idZ, customprice, forsale, finisheddate, protect,
-                                currentbidder, currentbidderid, currentbid, auctionned, denied);
+                plot = new Plot(plugin, owner, ownerId, world, biome, expiredDate, finished, allowed,
+                                idX + ";" + idZ, customPrice, forSale, finishedDate, protect,
+                                currentBidder, currentBidderId, currentBid, auctioned, denied);
             }
         } catch (SQLException ex) {
             plugin.getLogger().severe("Plot load Exception :");
@@ -928,26 +928,26 @@ public class SqlManager {
     }
 
     public void loadPlotsAsynchronously(String world) {
-        final String worldname = world;
+        final String worldName = world;
 
         plugin.getServerBridge().runTaskAsynchronously(new Runnable() {
             @Override
             public void run() {
-                plugin.getLogger().info("Starting to load plots for world " + worldname);
+                plugin.getLogger().info("Starting to load plots for world " + worldName);
 
-                HashMap<String, Plot> plots = getPlots(worldname);
+                HashMap<String, Plot> plots = getPlots(worldName);
 
-                PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(worldname);
+                PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(worldName);
 
                 for (String id : plots.keySet()) {
                     pmi.addPlot(id, plots.get(id));
                     plugin.getServerBridge().getEventFactory()
-                            .callPlotLoadedEvent(plugin, plugin.getServerBridge().getWorld(worldname), plots.get(id));
+                            .callPlotLoadedEvent(plugin, plugin.getServerBridge().getWorld(worldName), plots.get(id));
                 }
 
                 // plugin.getLogger().info("Done loading " + pmi.getNbPlots() +
                 // " plots for world " + worldname);
-                plugin.getServerBridge().getEventFactory().callPlotWorldLoadEvent(worldname, pmi.getNbPlots());
+                plugin.getServerBridge().getEventFactory().callPlotWorldLoadEvent(worldName, pmi.getNbPlots());
             }
         });
     }
@@ -973,21 +973,21 @@ public class SqlManager {
                 int idZ = setPlots.getInt("idZ");
                 String owner = setPlots.getString("owner");
                 String biome = setPlots.getString("biome");
-                Date expireddate = null;
+                Date expiredDate = null;
                 try {
-                    expireddate = setPlots.getDate("expireddate");
+                    expiredDate = setPlots.getDate("expireddate");
                 } catch (SQLException ignored) {
                 }
                 boolean finished = setPlots.getBoolean("finished");
                 PlayerList allowed = new PlayerList();
                 PlayerList denied = new PlayerList();
-                double customprice = setPlots.getDouble("customprice");
-                boolean forsale = setPlots.getBoolean("forsale");
-                String finisheddate = setPlots.getString("finisheddate");
+                double customPrice = setPlots.getDouble("customprice");
+                boolean forSale = setPlots.getBoolean("forsale");
+                String finishedDate = setPlots.getString("finisheddate");
                 boolean protect = setPlots.getBoolean("protected");
-                String currentbidder = setPlots.getString("currentbidder");
-                double currentbid = setPlots.getDouble("currentbid");
-                boolean auctionned = setPlots.getBoolean("auctionned");
+                String currentBidder = setPlots.getString("currentbidder");
+                double currentBid = setPlots.getDouble("currentbid");
+                boolean auctioned = setPlots.getBoolean("auctionned");
 
                 byte[] byOwner = setPlots.getBytes("ownerId");
                 byte[] byBidder = setPlots.getBytes("currentbidderid");
@@ -997,9 +997,9 @@ public class SqlManager {
                 if (byOwner != null) {
                     ownerId = UUIDFetcher.fromBytes(byOwner);
                 }
-                UUID currentbidderid = null;
+                UUID currentBidderId = null;
                 if (byBidder != null) {
-                    currentbidderid = UUIDFetcher.fromBytes(byBidder);
+                    currentBidderId = UUIDFetcher.fromBytes(byBidder);
                 }
 
                 statementAllowed = conn.createStatement();
@@ -1034,8 +1034,8 @@ public class SqlManager {
 
                 setDenied.close();
 
-                Plot plot = new Plot(plugin, owner, ownerId, world, biome, expireddate, finished, allowed, idX + ";" + idZ,
-                                     customprice, forsale, finisheddate, protect, currentbidder, currentbidderid, currentbid, auctionned, denied);
+                Plot plot = new Plot(plugin, owner, ownerId, world, biome, expiredDate, finished, allowed, idX + ";" + idZ,
+                                     customPrice, forSale, finishedDate, protect, currentBidder, currentBidderId, currentBid, auctioned, denied);
                 ret.put(idX + ";" + idZ, plot);
             }
         } catch (SQLException ex) {
