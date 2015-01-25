@@ -1,44 +1,113 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="IE=10; IE=9; IE=8; IE=7; IE=EDGE" />
+    <meta http-equiv="X-UA-Compatible" content="IE=10; IE=9; IE=8; IE=7; IE=EDGE"/>
     <meta name="description" content="PlotMe : A Minecraft Plot Management Plugin">
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
-    <link rel="shortcut icon" type="image/x-icon" href="images/favicon.ico" />
+    <link rel="shortcut icon" type="image/x-icon" href="images/favicon.ico"/>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
     <title>PlotMe | Config</title>
-  </head>
-  <body>
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/WorldCretornica/PlotMe-Core">View on GitHub</a>
-          <h1 id="project_title">Minecraft PlotMe Plugin</h1>
-          <h3 id="project_tagline">Welcome to the official PlotMe wiki</h3>
-        </header>
-    </div>
+</head>
+<body>
+<div id="header_wrap" class="outer">
+    <header class="inner">
+        <h1 id="project_title">Minecraft PlotMe Plugin</h1>
+
+        <h3 id="project_tagline">Welcome to the official PlotMe wiki</h3>
+    </header>
+</div>
 <div align="left" id="nav">
     <div align="left" id="nav_wrapper">
         <ul>
             <li><a href="index.html">Home</a></li>
-            <li><a href="#">Info</a><ul><li><a href="plotme.html">What is PlotMe</a></li><li><a href="team.html">Contributors</a></li></ul></li>
-            <li><a href="#">Support</a><ul><li><a href="https://github.com/WorldCretornica/PlotMe-Core/issues/new" target="_blank">Open an issue</a></li><li><a href="https://github.com/WorldCretornica/PlotMe-Core/issues/" target="_blank">View issues</a></li><li><a href="irc.html">IRC</a></li></ul></li>
+            <li><a href="#">Info</a>
+                <ul>
+                    <li><a href="plotme.html">What is PlotMe</a></li>
+                    <li><a href="team.html">Contributors</a></li>
+                </ul>
+            </li>
+            <li><a href="#">Support</a>
+                <ul>
+                    <li><a href="https://github.com/WorldCretornica/PlotMe-Core/issues/new" target="_blank">Open an issue</a></li>
+                    <li><a href="https://github.com/WorldCretornica/PlotMe-Core/issues/" target="_blank">View issues</a></li>
+                    <li><a href="irc.html">IRC</a></li>
+                </ul>
+            </li>
             <li><a href="cp.html">Commands and Permissions</a></li>
-            <li><a href="#">Configuration</a><ul><li><a href="core-config.html">PlotMe Core</a></li><li><a href="defgen-config.html">Default Generator</a></li></ul></li>
-            <li><a href="#">Setting up PlotMe</a><ul><li><a href="setup.html">Setup</a></li><li><a href="upgrading.html">Upgrading</a></li></ul></li>
+            <li><a href="#">Configuration</a>
+                <ul>
+                    <li><a href="core-config.html">PlotMe Core</a></li>
+                    <li><a href="defgen-config.html">Default Generator</a></li>
+                </ul>
+            </li>
+            <li><a href="#">Setting up PlotMe</a>
+                <ul>
+                    <li><a href="setup.html">Setup</a></li>
+                    <li><a href="upgrading.html">Upgrading</a></li>
+                </ul>
+            </li>
         </ul>
     </div>
 </div>
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
+<div id="main_content_wrap" class="outer">
+    <section id="main_content" class="inner">
         <h3>
-<a id="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages" aria-hidden="true"><span class="octicon octicon-link"></span></a>Welcome to PlotMe wiki.</h3>
-	<p>PlotMe Core configuration .. Under Construct!</p>
-<table id="header-fixed" class="tftable" border="2">
-	<tr><th>Config</th><th>Explanation</th></tr>
-		<tr><td><code>plotworld</code></td><td>The name of your plotworld, in lowercase</td></tr>
-</table>
-<h4>Example PlotMe Configuration File</h4>
+            <a id="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages" aria-hidden="true"><span
+                    class="octicon octicon-link"></span></a>Welcome to PlotMe wiki.</h3>
+
+        <p>PlotMe Core configuration .. Under Construct!</p>
+        <table class="tftable" border="2">
+            <tr>
+                <th>Config</th>
+                <th>Explanation</th>
+            </tr>
+            <tr>
+                <td><code>plotworld</code></td>
+                <td>The name of your plotworld, in lowercase</td>
+            </tr>
+            <tr>
+                <td><code>usemySQL</code></td>
+                <td>Set to true if you have a MySQL database, otherwise leave it as false</td>
+            </tr>
+            <tr>
+                <td><code>mySQLconn</code></td>
+                <td>Set your connection to your MySQL Database. Only to be used if <code>usemySQL</code> is true.</td>
+            </tr>
+            <tr>
+                <td><code>mySQLuname</code></td>
+                <td>The username for your MySQL Database. Only to be used if <code>usemySQL</code> is true.</td>
+            </tr>
+            <tr>
+                <td><code>mySQLpass</code></td>
+                <td>The password for your MySQL Database. Only to be used if <code>usemySQL</code> is true.</td>
+            </tr>
+            <tr>
+                <td><code>globalUseEconomy</code></td>
+                <td>This needs to be set to true if you want to use economy features in any plotworld.</td>
+            </tr>
+            <tr>
+                <td><code>allowWorldTeleport</code></td>
+                <td>Allow teleportation to plotworlds from non-plotworlds</td>
+            </tr>
+            <tr>
+                <td><code>defaultWEAnywhere</code></td>
+                <td>Enables the use of WorldEdit Anywhere in plotworld. This is only avaliable to users with the WorldEdit Plugin and have WorldEdit Permissions.</td>
+            </tr>
+            <tr>
+                <td><code>NbClearSpools</code></td>
+                <td>Description coming soon</td>
+            </tr>
+            <tr>
+                <td><code>NbBlocksPerClearStep</code></td>
+                <td>Description coming soon</td>
+            </tr>
+            <tr>
+                <td><code>AdvancedLogging</code></td>
+                <td>Enables more output results in console and to the player</td>
+            </tr>
+        </table>
+        <h4>Example PlotMe Configuration File</h4>
 <pre>
 usemySQL: false
 mySQLconn: jdbc:mysql://localhost:3306/minecraft
@@ -152,51 +221,55 @@ worlds:
     UseProgressiveClear: false
     NextFreed: -1;0
 </pre>
-      </section>
-    </div>
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-<div id="nav" class="quicknav">
-    <div align="left" class="quicknav_wrapper">
-        <ul>
-            <li><a href="#"><b>Quick Nav</b></a><ul>
-              <li><a href="index.html">Home</a></li>
-              <li><a href="plotme.html">What is PlotMe</a></li>
-              <li><a href="team.html">Contributors</a></li>
-              <li><a href="https://github.com/WorldCretornica/PlotMe-Core/issues/new" target="_blank">Open an issue</a></li>
-              <li><a href="https://github.com/WorldCretornica/PlotMe-Core/issues/" target="_blank">View issues</a></li>
-              <li><a href="irc.html">IRC</a></li>
-              <li><a href="cp.html">Commands and Permissions</a></li>
-              <li><a href="core-config.html">PlotMe Core</a></li>
-              <li><a href="defgen-config.html">Default Generator</a></li>
-              <li><a href="setup.html">Setup</a></li>
-              <li><a href="upgrading.html">Upgrading</a></li>
-            </ul></li>
-    </div>
+    </section>
 </div>
+<div id="footer_wrap" class="outer">
+    <footer class="inner">
+        <div id="nav" class="quicknav">
+            <div align="left" class="quicknav_wrapper">
+                <ul>
+                    <li><a href="#"><b>Quick Nav</b></a>
+                        <ul>
+                            <li><a href="index.html">Home</a></li>
+                            <li><a href="plotme.html">What is PlotMe</a></li>
+                            <li><a href="team.html">Contributors</a></li>
+                            <li><a href="https://github.com/WorldCretornica/PlotMe-Core/issues/new" target="_blank">Open an issue</a></li>
+                            <li><a href="https://github.com/WorldCretornica/PlotMe-Core/issues/" target="_blank">View issues</a></li>
+                            <li><a href="irc.html">IRC</a></li>
+                            <li><a href="cp.html">Commands and Permissions</a></li>
+                            <li><a href="core-config.html">PlotMe Core</a></li>
+                            <li><a href="defgen-config.html">Default Generator</a></li>
+                            <li><a href="setup.html">Setup</a></li>
+                            <li><a href="upgrading.html">Upgrading</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
         <p class="copyright">PlotMe maintained by <a href="https://github.com/WorldCretornica">WorldCretornica</a></p>
+
         <p>Download PlotMe <a href="http://spigotmc.org/resources/plotme-official.2131/">here</a></p>
-      </footer>
-      <a href="#" class="back-to-top" style="display: none;text-decoration:none;">Top</a>
-          <script>            
-			jQuery(document).ready(function() {
-				var offset = 220;
-				var duration = 500;
-				jQuery(window).scroll(function() {
-					if (jQuery(this).scrollTop() > offset) {
-						jQuery('.back-to-top').fadeIn(duration);
-					} else {
-						jQuery('.back-to-top').fadeOut(duration);
-					}
-				});
-				
-				jQuery('.back-to-top').click(function(event) {
-					event.preventDefault();
-					jQuery('html, body').animate({scrollTop: 0}, duration);
-					return false;
-				})
-			});
-		</script>
-  </div>
-  </body>
+    </footer>
+    <a href="#" class="back-to-top" style="display: none;text-decoration:none;">Top</a>
+    <script>
+        jQuery(document).ready(function () {
+            var offset = 220;
+            var duration = 500;
+            jQuery(window).scroll(function () {
+                if (jQuery(this).scrollTop() > offset) {
+                    jQuery('.back-to-top').fadeIn(duration);
+                } else {
+                    jQuery('.back-to-top').fadeOut(duration);
+                }
+            });
+
+            jQuery('.back-to-top').click(function (event) {
+                event.preventDefault();
+                jQuery('html, body').animate({scrollTop: 0}, duration);
+                return false;
+            })
+        });
+    </script>
+</div>
+</body>
 </html>
