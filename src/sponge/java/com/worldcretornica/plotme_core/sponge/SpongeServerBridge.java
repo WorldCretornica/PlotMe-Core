@@ -27,12 +27,12 @@ public class SpongeServerBridge extends IServerBridge {
 
     private final PlotMe_Sponge plugin;
     private final IEventFactory eventFactory;
-    
+
     public SpongeServerBridge(PlotMe_Sponge instance) {
         plugin = instance;
         eventFactory = new BukkitEventFactory();
     }
-    
+
     @Override
     public IOfflinePlayer getOfflinePlayer(UUID uuid) {
         // TODO Auto-generated method stub
@@ -90,7 +90,7 @@ public class SpongeServerBridge extends IServerBridge {
     @Override
     public void cancelTask(int taskId) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
@@ -102,7 +102,7 @@ public class SpongeServerBridge extends IServerBridge {
     @Override
     public void setupHooks() {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
@@ -144,25 +144,25 @@ public class SpongeServerBridge extends IServerBridge {
     @Override
     public void setupCommands() {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
     public void unHook() {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
     public void setupListeners() {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
     public void runTaskAsynchronously(Runnable runnable) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
@@ -192,7 +192,7 @@ public class SpongeServerBridge extends IServerBridge {
     @Override
     public void reloadConfig() {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
@@ -210,7 +210,7 @@ public class SpongeServerBridge extends IServerBridge {
     @Override
     public void saveResource(String fileName, boolean replace) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override

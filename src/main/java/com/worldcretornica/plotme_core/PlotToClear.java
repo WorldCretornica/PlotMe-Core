@@ -39,12 +39,12 @@ public class PlotToClear {
     public final void setReason(ClearReason reason) {
         this.reason = reason;
     }
-    
-    public final void setRequester(ICommandSender requester) {
-        this.requester = requester;
-    }
-    
+
     public final ICommandSender getRequester() {
         return requester;
+    }
+
+    public final void setRequester(ICommandSender requester) {
+        this.requester = requester;
     }
 }

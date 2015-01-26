@@ -10,7 +10,7 @@ public class BukkitWorld implements IWorld {
     public BukkitWorld(World world) {
         this.world = world;
     }
-    
+
     /**
      * Get the name of the world
      *

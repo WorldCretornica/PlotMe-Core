@@ -1,15 +1,14 @@
 package com.worldcretornica.plotme_core.sponge.api;
 
-import java.util.UUID;
-
+import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import org.spongepowered.api.entity.player.User;
 
-import com.worldcretornica.plotme_core.api.IOfflinePlayer;
+import java.util.UUID;
 
 public class SpongeUser implements IOfflinePlayer {
 
     private final User user;
-    
+
     public SpongeUser(User user) {
         this.user = user;
     }
@@ -27,5 +26,5 @@ public class SpongeUser implements IOfflinePlayer {
     @Override
     public UUID getUniqueId() {
         return user.getUniqueId();
-    }    
+    }
 }

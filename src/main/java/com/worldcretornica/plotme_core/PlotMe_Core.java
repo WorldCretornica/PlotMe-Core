@@ -200,12 +200,12 @@ public class PlotMe_Core {
     private void setupClearSpools() {
         plotsToClear = new ConcurrentLinkedQueue<>();
     }
-    
+
     public void addManager(String world, IPlotMe_GeneratorManager manager) {
         managers.put(world.toLowerCase(), manager);
         setupWorld(world.toLowerCase());
     }
-    
+
     public IPlotMe_GeneratorManager removeManager(String world) {
         return managers.remove(world);
     }

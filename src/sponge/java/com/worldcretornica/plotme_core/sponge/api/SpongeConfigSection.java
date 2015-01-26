@@ -11,7 +11,7 @@ import java.util.Set;
 public class SpongeConfigSection implements IConfigSection {
 
     private final PlotMe_Sponge plugin;
-    
+
     public SpongeConfigSection(PlotMe_Sponge instance) {
         this.plugin = instance;
     }
@@ -25,13 +25,13 @@ public class SpongeConfigSection implements IConfigSection {
     @Override
     public void saveConfig() {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
     public void set(String string, Object value) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
@@ -109,7 +109,7 @@ public class SpongeConfigSection implements IConfigSection {
     @Override
     public void copyDefaults(boolean b) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
@@ -121,19 +121,19 @@ public class SpongeConfigSection implements IConfigSection {
     @Override
     public void reloadConfig() {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
     public void setDefaults(IConfigSection defConfig) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
     public void save(File configFile) throws IOException {
         // TODO Auto-generated method stub
-        
+
     }
-    
+
 }

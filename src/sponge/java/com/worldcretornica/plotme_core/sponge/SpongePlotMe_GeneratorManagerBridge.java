@@ -19,7 +19,7 @@ import java.util.Map;
 public class SpongePlotMe_GeneratorManagerBridge implements IPlotMe_GeneratorManager {
 
     private final ISpongePlotMe_GeneratorManager generatorManager;
-    
+
     public SpongePlotMe_GeneratorManagerBridge(ISpongePlotMe_GeneratorManager generatorManager) {
         this.generatorManager = generatorManager;
     }
@@ -37,11 +37,11 @@ public class SpongePlotMe_GeneratorManagerBridge implements IPlotMe_GeneratorMan
     @Override
     public List<IPlayer> getPlayersInPlot(String id) {
         List<IPlayer> players = new ArrayList<>();
-        
+
         for (Player player : generatorManager.getPlayersInPlot(id)) {
             players.add(new SpongePlayer(player));
         }
-        
+
         return players;
     }
 
@@ -204,6 +204,6 @@ public class SpongePlotMe_GeneratorManagerBridge implements IPlotMe_GeneratorMan
     public int getRoadHeight(String worldName) {
         return generatorManager.getRoadHeight(worldName);
     }
-    
-    
+
+
 }
