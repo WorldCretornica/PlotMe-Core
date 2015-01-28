@@ -177,6 +177,10 @@ public class PlotMeCoreManager {
     public short getNbOwnedPlot(UUID uuid, String name, String world) {
         return plugin.getSqlManager().getPlotCount(world, uuid, name);
     }
+    
+    public short getNbOwnedPlot(UUID uuid, String world) {
+        return plugin.getSqlManager().getPlotCount(world, uuid, null);
+    }
 
     /**
      * Checks if the plotworld has economy features enabled
