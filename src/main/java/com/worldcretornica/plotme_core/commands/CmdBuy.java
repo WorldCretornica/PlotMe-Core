@@ -36,13 +36,11 @@ public class CmdBuy extends PlotCommand {
                             } else {
                                 int plotLimit = getPlotLimit(player);
 
-                                if (plotLimit != -1
-                                    && plugin.getSqlManager().getPlotCount(world.getName().toLowerCase(), player.getUniqueId(), player.getName())
-                                       >= plotLimit) {
+                                short plotsOwned = plugin.getPlotMeCoreManager().getNbOwnedPlot(player.getUniqueId(), world.getName().toLowerCase());
+                                
+                                if (plotLimit != -1 && plotsOwned >= plotLimit) {
                                     player.sendMessage(C("MsgAlreadyReachedMaxPlots") + " ("
-                                                       + plugin.getSqlManager()
-                                            .getPlotCount(world.getName().toLowerCase(), player.getUniqueId(), player.getName()) + "/" + getPlotLimit(
-                                            player) + "). "
+                                                       + plotsOwned + "/" + getPlotLimit(player) + "). "
                                                        + C("WordUse") + " §c/plotme home§r " + C("MsgToGetToIt"));
                                 } else {
 
