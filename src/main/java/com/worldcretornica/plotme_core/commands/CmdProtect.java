@@ -3,7 +3,6 @@ package com.worldcretornica.plotme_core.commands;
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
-import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
@@ -19,14 +18,14 @@ public class CmdProtect extends PlotCommand {
     public boolean exec(IPlayer player) {
         if (player.hasPermission(PermissionNames.ADMIN_PROTECT) || player.hasPermission(PermissionNames.USER_PROTECT)) {
             IWorld world = player.getWorld();
-            PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
-            if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
-                String id = PlotMeCoreManager.getPlotId(player);
+            PlotMapInfo pmi = manager.getMap(world);
+            if (manager.isPlotWorld(world)) {
+                String id = manager.getPlotId(player);
 
                 if (id.isEmpty()) {
                     player.sendMessage("§c" + C("MsgNoPlotFound"));
-                } else if (!PlotMeCoreManager.isPlotAvailable(id, pmi)) {
-                    Plot plot = PlotMeCoreManager.getPlotById(id, pmi);
+                } else if (!manager.isPlotAvailable(id, pmi)) {
+                    Plot plot = manager.getPlotById(id, pmi);
 
                     String name = player.getName();
 
@@ -38,7 +37,7 @@ public class CmdProtect extends PlotCommand {
 
                             if (!event.isCancelled()) {
                                 plot.setProtect(false);
-                                plugin.getPlotMeCoreManager().adjustWall(player);
+                                manager.adjustWall(player);
 
                                 plot.updateField("protected", false);
 
@@ -52,7 +51,7 @@ public class CmdProtect extends PlotCommand {
 
                             double cost = 0.0;
 
-                            if (plugin.getPlotMeCoreManager().isEconomyEnabled(pmi)) {
+                            if (manager.isEconomyEnabled(pmi)) {
                                 cost = pmi.getProtectPrice();
 
                                 if (serverBridge.getBalance(player) < cost) {
@@ -80,7 +79,7 @@ public class CmdProtect extends PlotCommand {
 
                             if (!event.isCancelled()) {
                                 plot.setProtect(true);
-                                plugin.getPlotMeCoreManager().adjustWall(player);
+                                manager.adjustWall(player);
 
                                 plot.updateField("protected", true);
 

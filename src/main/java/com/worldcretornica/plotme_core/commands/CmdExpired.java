@@ -19,7 +19,7 @@ public class CmdExpired extends PlotCommand {
     public boolean exec(IPlayer player, String[] args) {
         if (player.hasPermission(PermissionNames.ADMIN_EXPIRED)) {
             IWorld world = player.getWorld();
-            if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
+            if (manager.isPlotWorld(world)) {
                 int page = 1;
 
                 if (args.length == 2) {

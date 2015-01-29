@@ -2,7 +2,6 @@ package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.PlotMapInfo;
-import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
@@ -17,16 +16,16 @@ public class CmdAuto extends PlotCommand {
 
     public boolean exec(IPlayer player, String[] args) {
         if (player.hasPermission(PermissionNames.USER_AUTO)) {
-            if (plugin.getPlotMeCoreManager().isPlotWorld(player) || serverBridge.getConfig().getBoolean("allowWorldTeleport")) {
+            if (manager.isPlotWorld(player) || serverBridge.getConfig().getBoolean("allowWorldTeleport")) {
                 IWorld world;
-                if (!plugin.getPlotMeCoreManager().isPlotWorld(player) && serverBridge.getConfig().getBoolean("allowWorldTeleport")) {
+                if (!manager.isPlotWorld(player) && serverBridge.getConfig().getBoolean("allowWorldTeleport")) {
                     if (args.length == 2) {
                         world = serverBridge.getWorld(args[1]);
                     } else {
-                        world = plugin.getPlotMeCoreManager().getFirstWorld();
+                        world = manager.getFirstWorld();
                     }
 
-                    if (!plugin.getPlotMeCoreManager().isPlotWorld(world)) {
+                    if (!manager.isPlotWorld(world)) {
                         player.sendMessage("§c" + world + " " + C("MsgWorldNotPlot"));
                         return true;
                     }
@@ -34,10 +33,10 @@ public class CmdAuto extends PlotCommand {
                     world = player.getWorld();
                 }
 
-                PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
+                PlotMapInfo pmi = manager.getMap(world);
                 int playerLimit = getPlotLimit(player);
 
-                short plotsOwned = plugin.getPlotMeCoreManager().getNbOwnedPlot(player.getUniqueId(), world.getName().toLowerCase());
+                short plotsOwned = manager.getNbOwnedPlot(player.getUniqueId(), world.getName().toLowerCase());
                 
                 if (playerLimit != -1 && plotsOwned >= playerLimit && !player.hasPermission("PlotMe.admin")) {
                     player.sendMessage("§c" + C("MsgAlreadyReachedMaxPlots") + " (" + plotsOwned + "/" + playerLimit + "). " + C("WordUse") + " §c/plotme home§r " + C("MsgToGetToIt"));
@@ -54,12 +53,12 @@ public class CmdAuto extends PlotCommand {
                     for (int i = 0; i < maxPlots; i++) {
                         if ((-limit / 2 <= x) && (x <= limit / 2) && (-limit / 2 <= z) && (z <= limit / 2)) {
                             String id = "" + x + ";" + z;
-                            if (PlotMeCoreManager.isPlotAvailable(id, pmi)) {
+                            if (manager.isPlotAvailable(id, pmi)) {
                                 double price = 0.0;
 
                                 InternalPlotCreateEvent event;
 
-                                if (plugin.getPlotMeCoreManager().isEconomyEnabled(pmi)) {
+                                if (manager.isEconomyEnabled(pmi)) {
                                     price = pmi.getClaimPrice();
                                     double balance = serverBridge.getBalance(player);
 
@@ -86,9 +85,9 @@ public class CmdAuto extends PlotCommand {
                                     event = serverBridge.getEventFactory().callPlotCreatedEvent(plugin, world, id, player);
                                 }
                                 if (!event.isCancelled()) {
-                                    plugin.getPlotMeCoreManager().createPlot(world, id, player.getName(), player.getUniqueId(), pmi);
+                                    manager.createPlot(world, id, player.getName(), player.getUniqueId(), pmi);
 
-                                    player.setLocation(PlotMeCoreManager.getPlotHome(world, id));
+                                    player.setLocation(manager.getPlotHome(world, id));
 
                                     player.sendMessage(C("MsgThisPlotYours") + " " + C("WordUse") + " §c/plotme home§r " + C("MsgToGetToIt"));
 
@@ -96,9 +95,7 @@ public class CmdAuto extends PlotCommand {
                                         if (price == 0) {
                                             serverBridge.getLogger().info(player.getName() + " " + C("MsgClaimedPlot") + " " + id);
                                         } else {
-                                            serverBridge.getLogger()
-                                                    .info(player.getName() + " " + C("MsgClaimedPlot") + " " + id + (" " + C("WordFor") + " "
-                                                                                                                     + price));
+                                            serverBridge.getLogger().info(player.getName() + " " + C("MsgClaimedPlot") + " " + id + (" " + C("WordFor") + " " + price));
                                         }
                                     }
                                     return true;

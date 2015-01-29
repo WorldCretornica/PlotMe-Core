@@ -1,11 +1,14 @@
 package com.worldcretornica.plotme_core.bukkit;
 
+import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IEntity;
 import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.api.IPlotMe_GeneratorManager;
 import com.worldcretornica.plotme_core.api.IServerBridge;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitEntity;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
+
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -47,13 +50,14 @@ public class PlotMe_CorePlugin extends JavaPlugin {
     private void doMetric() {
         try {
             Metrics metrics = new Metrics(this);
+            final PlotMeCoreManager manager = PlotMeCoreManager.getInstance();
 
             Graph graphNbWorlds = metrics.createGraph("Plot worlds");
 
             graphNbWorlds.addPlotter(new Metrics.Plotter("Number of plot worlds") {
                 @Override
                 public int getValue() {
-                    return getAPI().getPlotMeCoreManager().getPlotMaps().size();
+                    return manager.getPlotMaps().size();
                 }
             });
 
@@ -61,18 +65,19 @@ public class PlotMe_CorePlugin extends JavaPlugin {
                 @Override
                 public int getValue() {
 
-                    if (!getAPI().getPlotMeCoreManager().getPlotMaps().isEmpty()) {
+                    if (!manager.getPlotMaps().isEmpty()) {
                         int totalPlotSize = 0;
 
-                        for (String plotter : getAPI().getPlotMeCoreManager().getPlotMaps().keySet()) {
-                            if (PlotMe_Core.getGenManager(plotter) != null) {
-                                if (PlotMe_Core.getGenManager(plotter).getPlotSize(plotter) != 0) {
-                                    totalPlotSize += PlotMe_Core.getGenManager(plotter).getPlotSize(plotter);
+                        for (String plotter : manager.getPlotMaps().keySet()) {
+                            IPlotMe_GeneratorManager genmanager = plotme.getGenManager(plotter);
+                            if (genmanager != null) {
+                                if (genmanager.getPlotSize(plotter) != 0) {
+                                    totalPlotSize += genmanager.getPlotSize(plotter);
                                 }
                             }
                         }
 
-                        return totalPlotSize / getAPI().getPlotMeCoreManager().getPlotMaps().size();
+                        return totalPlotSize / manager.getPlotMaps().size();
                     } else {
                         return 0;
                     }
@@ -84,7 +89,7 @@ public class PlotMe_CorePlugin extends JavaPlugin {
                 public int getValue() {
                     int nbPlot = 0;
 
-                    for (String map : getAPI().getPlotMeCoreManager().getPlotMaps().keySet()) {
+                    for (String map : manager.getPlotMaps().keySet()) {
                         nbPlot += (int) getAPI().getSqlManager().getPlotCount(map);
                     }
 

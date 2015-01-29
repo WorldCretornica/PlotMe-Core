@@ -80,7 +80,7 @@ public abstract class PlotEvent extends Event {
      */
     public Location getUpperBound() {
         if (event.getPlot() != null) {
-            return ((BukkitLocation) PlotMeCoreManager.getPlotTopLoc(event.getWorld(), event.getPlot().getId())).getLocation();
+            return ((BukkitLocation) PlotMeCoreManager.getInstance().getPlotTopLoc(event.getWorld(), event.getPlot().getId())).getLocation();
         } else {
             return null;
         }
@@ -93,7 +93,7 @@ public abstract class PlotEvent extends Event {
      */
     public Location getLowerBound() {
         if (event.getPlot() != null) {
-            return ((BukkitLocation) PlotMeCoreManager.getPlotBottomLoc(event.getWorld(), event.getPlot().getId())).getLocation();
+            return ((BukkitLocation) PlotMeCoreManager.getInstance().getPlotBottomLoc(event.getWorld(), event.getPlot().getId())).getLocation();
         } else {
             return null;
         }
@@ -163,7 +163,7 @@ public abstract class PlotEvent extends Event {
      */
     public Location getHomeLocation() {
         if (event.getPlot() != null) {
-            return ((BukkitLocation) PlotMeCoreManager.getPlotHome(event.getWorld(), event.getPlot().getId())).getLocation();
+            return ((BukkitLocation) PlotMeCoreManager.getInstance().getPlotHome(event.getWorld(), event.getPlot().getId())).getLocation();
         } else {
             return null;
         }

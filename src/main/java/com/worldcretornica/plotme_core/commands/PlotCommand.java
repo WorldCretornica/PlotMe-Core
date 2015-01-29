@@ -1,5 +1,6 @@
 package com.worldcretornica.plotme_core.commands;
 
+import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IServerBridge;
@@ -10,10 +11,13 @@ public abstract class PlotCommand {
     protected final PlotMe_Core plugin;
 
     protected final IServerBridge serverBridge;
+    
+    protected final PlotMeCoreManager manager;
 
     public PlotCommand(PlotMe_Core instance) {
         plugin = instance;
         serverBridge = plugin.getServerBridge();
+        manager = PlotMeCoreManager.getInstance();
     }
 
     Util Util() {

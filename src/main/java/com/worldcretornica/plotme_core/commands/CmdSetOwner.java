@@ -3,7 +3,6 @@ package com.worldcretornica.plotme_core.commands;
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
-import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import com.worldcretornica.plotme_core.api.IPlayer;
@@ -19,10 +18,10 @@ public class CmdSetOwner extends PlotCommand {
 
     public boolean exec(IPlayer player, String[] args) {
         IWorld world = player.getWorld();
-        PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
+        PlotMapInfo pmi = manager.getMap(world);
         if (player.hasPermission(PermissionNames.ADMIN_SETOWNER)) {
-            if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
-                String id = PlotMeCoreManager.getPlotId(player);
+            if (manager.isPlotWorld(world)) {
+                String id = manager.getPlotId(player);
                 if (id.isEmpty()) {
                     player.sendMessage("§c" + C("MsgNoPlotFound"));
                 } else {
@@ -30,14 +29,14 @@ public class CmdSetOwner extends PlotCommand {
                     String oldowner = "<" + C("WordNotApplicable") + ">";
                     String playerName = player.getName();
 
-                    if (!PlotMeCoreManager.isPlotAvailable(id, pmi)) {
-                        Plot plot = PlotMeCoreManager.getPlotById(id, pmi);
+                    if (!manager.isPlotAvailable(id, pmi)) {
+                        Plot plot = manager.getPlotById(id, pmi);
 
                         oldowner = plot.getOwner();
 
                         InternalPlotOwnerChangeEvent event;
 
-                        if (plugin.getPlotMeCoreManager().isEconomyEnabled(world)) {
+                        if (manager.isEconomyEnabled(world)) {
                             if (pmi.isRefundClaimPriceOnSetOwner() && !newOwner.equals(oldowner)) {
                                 event = serverBridge.getEventFactory().callPlotOwnerChangeEvent(plugin, world, plot, player, newOwner);
 
@@ -91,7 +90,7 @@ public class CmdSetOwner extends PlotCommand {
                             plot.setAuctioned(false);
                             plot.setForSale(false);
 
-                            plugin.getPlotMeCoreManager().setSellSign(world, plot);
+                            manager.setSellSign(world, plot);
 
                             plot.updateField("currentbidder", null);
                             plot.updateField("currentbid", 0);
@@ -101,12 +100,12 @@ public class CmdSetOwner extends PlotCommand {
 
                             plot.setOwner(newOwner);
 
-                            PlotMeCoreManager.setOwnerSign(world, plot);
+                            manager.setOwnerSign(world, plot);
 
                             plot.updateField("owner", newOwner);
                         }
                     } else {
-                        plugin.getPlotMeCoreManager().createPlot(world, id, newOwner, null, pmi);
+                        manager.createPlot(world, id, newOwner, null, pmi);
                     }
 
                     player.sendMessage(C("MsgOwnerChangedTo") + " §c" + newOwner);

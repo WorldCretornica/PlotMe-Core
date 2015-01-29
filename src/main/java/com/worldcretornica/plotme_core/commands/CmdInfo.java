@@ -2,7 +2,6 @@ package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
-import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
@@ -17,13 +16,13 @@ public class CmdInfo extends PlotCommand {
     public boolean exec(IPlayer player) {
         if (player.hasPermission(PermissionNames.USER_INFO)) {
             IWorld world = player.getWorld();
-            if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
-                String id = PlotMeCoreManager.getPlotId(player);
+            if (manager.isPlotWorld(world)) {
+                String id = manager.getPlotId(player);
 
                 if (id.isEmpty()) {
                     player.sendMessage("§c" + C("MsgNoPlotFound"));
-                } else if (!plugin.getPlotMeCoreManager().isPlotAvailable(id, world)) {
-                    Plot plot = plugin.getPlotMeCoreManager().getPlotById(id, world);
+                } else if (!manager.isPlotAvailable(id, world)) {
+                    Plot plot = manager.getPlotById(id, world);
 
                     player.sendMessage("§aID: §b" + id + "§a " + C("InfoOwner") + ": §b" + plot.getOwner()
                                        + "§a " + C("InfoBiome") + ": §b" + ((BukkitBiome) plot.getBiome()).getBiome().name());
@@ -76,7 +75,7 @@ public class CmdInfo extends PlotCommand {
                         player.sendMessage("§a" + C("InfoDenied") + ": §b" + plot.getDenied());
                     }
 
-                    if (plugin.getPlotMeCoreManager().isEconomyEnabled(world)) {
+                    if (manager.isEconomyEnabled(world)) {
                         if (plot.getCurrentBidder() == null) {
                             if (plot.isAuctioned()) {
                                 if (plot.isForSale()) {
@@ -114,10 +113,10 @@ public class CmdInfo extends PlotCommand {
                             }
                         }
                     }
-                    int bottomX = PlotMeCoreManager.bottomX(id, world);
-                    int bottomZ = PlotMeCoreManager.bottomZ(id, world);
-                    int topX = PlotMeCoreManager.topX(id, world);
-                    int topZ = PlotMeCoreManager.topZ(id, world);
+                    int bottomX = manager.bottomX(id, world);
+                    int bottomZ = manager.bottomZ(id, world);
+                    int topX = manager.topX(id, world);
+                    int topZ = manager.topZ(id, world);
 
                     player.sendMessage("§b" + C("WordBottom") + ": §r" + bottomX + "§9,§r" + bottomZ);
                     player.sendMessage("§b" + C("WordTop") + ": §r" + topX + "§9,§r" + topZ);

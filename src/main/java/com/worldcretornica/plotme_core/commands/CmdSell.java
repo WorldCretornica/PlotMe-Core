@@ -3,7 +3,6 @@ package com.worldcretornica.plotme_core.commands;
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
-import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
@@ -17,18 +16,18 @@ public class CmdSell extends PlotCommand {
 
     public boolean exec(IPlayer player, String[] args) {
         IWorld world = player.getWorld();
-        if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
-            PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
-            if (plugin.getPlotMeCoreManager().isEconomyEnabled(pmi)) {
+        if (manager.isPlotWorld(world)) {
+            PlotMapInfo pmi = manager.getMap(world);
+            if (manager.isEconomyEnabled(pmi)) {
 
                 if (pmi.isCanPutOnSale()) {
                     if (player.hasPermission(PermissionNames.USER_SELL) || player.hasPermission(PermissionNames.ADMIN_SELL)) {
-                        String id = PlotMeCoreManager.getPlotId(player);
+                        String id = manager.getPlotId(player);
 
                         if (id.isEmpty()) {
                             player.sendMessage("§c" + C("MsgNoPlotFound"));
-                        } else if (!PlotMeCoreManager.isPlotAvailable(id, pmi)) {
-                            Plot plot = PlotMeCoreManager.getPlotById(id, pmi);
+                        } else if (!manager.isPlotAvailable(id, pmi)) {
+                            Plot plot = manager.getPlotById(id, pmi);
 
                             if (plot.getOwnerId().equals(player.getUniqueId()) || player.hasPermission(PermissionNames.ADMIN_SELL)) {
 
@@ -46,8 +45,8 @@ public class CmdSell extends PlotCommand {
                                         plot.updateField("customprice", 0);
                                         plot.updateField("forsale", false);
 
-                                        plugin.getPlotMeCoreManager().adjustWall(player);
-                                        plugin.getPlotMeCoreManager().setSellSign(world, plot);
+                                        manager.adjustWall(player);
+                                        manager.setSellSign(world, plot);
 
                                         player.sendMessage(C("MsgPlotNoLongerSale"));
 
@@ -88,8 +87,8 @@ public class CmdSell extends PlotCommand {
                                             plot.updateField("customprice", price);
                                             plot.updateField("forsale", true);
 
-                                            plugin.getPlotMeCoreManager().adjustWall(player);
-                                            plugin.getPlotMeCoreManager().setSellSign(world, plot);
+                                            manager.adjustWall(player);
+                                            manager.setSellSign(world, plot);
 
                                             player.sendMessage(C("MsgPlotForSale"));
 

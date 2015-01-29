@@ -19,15 +19,15 @@ public class CmdHome extends PlotCommand {
 
     public boolean exec(IPlayer player, String[] args) {
         if (player.hasPermission(PermissionNames.USE_HOME) || player.hasPermission(PermissionNames.ADMIN_HOME_OTHER)) {
-            if (plugin.getPlotMeCoreManager().isPlotWorld(player) || serverBridge.getConfig().getBoolean("allowWorldTeleport")) {
+            if (manager.isPlotWorld(player) || serverBridge.getConfig().getBoolean("allowWorldTeleport")) {
                 String playerName = player.getName();
                 UUID uuid = player.getUniqueId();
                 IWorld world;
 
-                if (plugin.getPlotMeCoreManager().isPlotWorld(player)) {
+                if (manager.isPlotWorld(player)) {
                     world = player.getWorld();
                 } else {
-                    world = plugin.getPlotMeCoreManager().getFirstWorld();
+                    world = manager.getFirstWorld();
                 }
 
                 String worldName = null;
@@ -73,8 +73,8 @@ public class CmdHome extends PlotCommand {
                 if (world == null) {
                     return true;
                 }
-                PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
-                if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
+                PlotMapInfo pmi = manager.getMap(world);
+                if (manager.isPlotWorld(world)) {
                     int i = nb - 1;
 
                     for (Plot plot : plugin.getSqlManager().getOwnedPlots(world.getName(), uuid, playerName)) {
@@ -86,7 +86,7 @@ public class CmdHome extends PlotCommand {
 
                                     InternalPlotTeleportHomeEvent event;
 
-                                    if (plugin.getPlotMeCoreManager().isEconomyEnabled(pmi)) {
+                                    if (manager.isEconomyEnabled(pmi)) {
                                         price = pmi.getPlotHomePrice();
                                         double balance = serverBridge.getBalance(player);
 
@@ -132,7 +132,7 @@ public class CmdHome extends PlotCommand {
 
                                 InternalPlotTeleportHomeEvent event;
 
-                                if (plugin.getPlotMeCoreManager().isEconomyEnabled(pmi)) {
+                                if (manager.isEconomyEnabled(pmi)) {
                                     price = pmi.getPlotHomePrice();
                                     double balance = serverBridge.getBalance(player);
 
