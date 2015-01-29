@@ -9,16 +9,14 @@ import com.sk89q.worldedit.function.mask.RegionMask;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.world.World;
 import com.worldcretornica.plotme_core.api.IPlayer;
-import com.worldcretornica.plotme_core.bukkit.api.BukkitLocation;
-import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
-import com.worldcretornica.plotme_core.bukkit.api.BukkitWorld;
-import org.bukkit.Location;
+import com.worldcretornica.plotme_core.bukkit.api.*;
+import org.bukkit.*;
 
 public class PlotWorldEdit {
 
     private final WorldEditPlugin worldEdit;
 
-    public PlotWorldEdit(PlotMe_Core instance, WorldEditPlugin worldEditPlugin) {
+    public PlotWorldEdit(WorldEditPlugin worldEditPlugin) {
         this.worldEdit = worldEditPlugin;
     }
 

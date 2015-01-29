@@ -13,7 +13,7 @@ public class CmdTime extends PlotCommand {
 
     public boolean exec(IPlayer player, String[] args) {
         if (player.hasPermission("plotme.user.time")) {
-            if (plugin.getPlotMeCoreManager().isPlotWorld(player.getWorld())) {
+            if (manager.isPlotWorld(player.getWorld())) {
                 return true;
             } else {
                 player.sendMessage(C("MsgNotPlotWorld"));

@@ -31,9 +31,9 @@ public class PlotMeSpool implements Runnable {
 
                 if (currentClear == null) {
                     if (getPlotToClear().getReason() == ClearReason.Clear) {
-                        plotMeCoreManager.getGenManager(world).adjustPlotFor(world, getPlotToClear().getPlotId(), false, false, false, false);
-                    } else {
                         plotMeCoreManager.getGenManager(world).adjustPlotFor(world, getPlotToClear().getPlotId(), true, false, false, false);
+                    } else {
+                        plotMeCoreManager.getGenManager(world).adjustPlotFor(world, getPlotToClear().getPlotId(), false, false, false, false);
                     }
                     if (plugin.getServerBridge().getUsingLwc()) {
                         plotMeCoreManager.removeLWC(world, getPlotToClear().getPlotId());

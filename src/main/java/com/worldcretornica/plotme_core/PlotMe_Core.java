@@ -6,7 +6,7 @@ import com.worldcretornica.plotme_core.api.IServerBridge;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.utils.Util;
 
-import java.io.File;
+import java.io.*;
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Level;
@@ -14,12 +14,12 @@ import java.util.logging.Logger;
 
 public class PlotMe_Core {
 
-    public final static String CAPTION_FILE = "captions.yml";
+    public static final String CAPTION_FILE = "captions.yml";
 
-    public final static String WORLDS_CONFIG_SECTION = "worlds";
-    private HashMap<String, IPlotMe_GeneratorManager> managers;
+    public static final String WORLDS_CONFIG_SECTION = "worlds";
     //Bridge
     private final IServerBridge serverBridge;
+    private HashMap<String, IPlotMe_GeneratorManager> managers;
     private IWorld worldcurrentlyprocessingexpired;
     private short counterExpired;
     //Spool stuff

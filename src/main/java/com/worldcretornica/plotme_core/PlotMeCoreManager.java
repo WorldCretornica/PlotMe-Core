@@ -10,7 +10,7 @@ import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IPlotMe_GeneratorManager;
 import com.worldcretornica.plotme_core.api.IWorld;
-import com.worldcretornica.plotme_core.bukkit.api.BukkitBiome;
+import com.worldcretornica.plotme_core.bukkit.api.*;
 import com.worldcretornica.plotme_core.utils.Util;
 
 import java.util.HashMap;
@@ -18,12 +18,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
+import javax.inject.Singleton;
+
+@Singleton
 public class PlotMeCoreManager {
 
+    private static PlotMeCoreManager INSTANCE = new PlotMeCoreManager();
     private PlotMe_Core plugin;
     private HashSet<UUID> playersignoringwelimit;
     private HashMap<String, PlotMapInfo> plotmaps;
-    private static PlotMeCoreManager INSTANCE = new PlotMeCoreManager();
         
     private PlotMeCoreManager() { 
         setPlayersIgnoringWELimit(new HashSet<UUID>());

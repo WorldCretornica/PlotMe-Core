@@ -13,39 +13,20 @@ import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IServerBridge;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.IEventFactory;
-import com.worldcretornica.plotme_core.bukkit.api.BukkitBiome;
-import com.worldcretornica.plotme_core.bukkit.api.BukkitConfigSection;
-import com.worldcretornica.plotme_core.bukkit.api.BukkitMaterial;
-import com.worldcretornica.plotme_core.bukkit.api.BukkitOfflinePlayer;
-import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
-import com.worldcretornica.plotme_core.bukkit.api.BukkitWorld;
-import com.worldcretornica.plotme_core.bukkit.event.BukkitEventFactory;
-import com.worldcretornica.plotme_core.bukkit.listener.BukkitPlotDenyListener;
-import com.worldcretornica.plotme_core.bukkit.listener.BukkitPlotListener;
-import com.worldcretornica.plotme_core.bukkit.listener.BukkitPlotWorldEditListener;
-
+import com.worldcretornica.plotme_core.bukkit.api.*;
+import com.worldcretornica.plotme_core.bukkit.event.*;
+import com.worldcretornica.plotme_core.bukkit.listener.*;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
+import org.bukkit.*;
+import org.bukkit.block.*;
+import org.bukkit.configuration.*;
+import org.bukkit.configuration.file.*;
+import org.bukkit.entity.*;
+import org.bukkit.plugin.*;
+import org.bukkit.plugin.java.*;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.World;
-import org.bukkit.block.Biome;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.RegisteredServiceProvider;
-import org.bukkit.plugin.java.JavaPlugin;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -127,7 +108,7 @@ public class BukkitServerBridge extends IServerBridge {
             WorldEditPlugin worldEdit = (WorldEditPlugin) pluginManager.getPlugin("WorldEdit");
             PlotWorldEdit we = null;
             try {
-                we = new PlotWorldEdit(plotMeCore, worldEdit);
+                we = new PlotWorldEdit(worldEdit);
                 setPlotWorldEdit(we);
             } catch (SecurityException | IllegalArgumentException unused) {
                 getLogger().warning("Unable to hook to WorldEdit properly, please contact the developer of plotme with your WorldEdit version.");
