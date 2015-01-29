@@ -40,11 +40,11 @@ public class PlotMoveEvent extends PlotEvent implements Cancellable {
 
     @Override
     public Plot getPlot() {
-        return plugin.getPlotMeCoreManager().getPlotById(event.getId(), event.getWorld());
+        return PlotMeCoreManager.getInstance().getPlotById(event.getId(), event.getWorld());
     }
 
     public Plot getPlotTo() {
-        return plugin.getPlotMeCoreManager().getPlotById(event.getIdTo(), event.getWorld());
+        return PlotMeCoreManager.getInstance().getPlotById(event.getIdTo(), event.getWorld());
     }
 
     public Player getPlayer() {
@@ -61,20 +61,20 @@ public class PlotMoveEvent extends PlotEvent implements Cancellable {
 
     @Override
     public Location getUpperBound() {
-        return ((BukkitLocation) PlotMeCoreManager.getPlotTopLoc(event.getWorld(), event.getId())).getLocation();
+        return ((BukkitLocation) PlotMeCoreManager.getInstance().getPlotTopLoc(event.getWorld(), event.getId())).getLocation();
     }
 
     @Override
     public Location getLowerBound() {
-        return ((BukkitLocation) PlotMeCoreManager.getPlotBottomLoc(event.getWorld(), event.getId())).getLocation();
+        return ((BukkitLocation) PlotMeCoreManager.getInstance().getPlotBottomLoc(event.getWorld(), event.getId())).getLocation();
     }
 
     public Location getUpperBoundTo() {
-        return ((BukkitLocation) PlotMeCoreManager.getPlotTopLoc(event.getWorld(), event.getIdTo())).getLocation();
+        return ((BukkitLocation) PlotMeCoreManager.getInstance().getPlotTopLoc(event.getWorld(), event.getIdTo())).getLocation();
     }
 
     public Location getLowerBoundTo() {
-        return ((BukkitLocation) PlotMeCoreManager.getPlotBottomLoc(event.getWorld(), event.getIdTo())).getLocation();
+        return ((BukkitLocation) PlotMeCoreManager.getInstance().getPlotBottomLoc(event.getWorld(), event.getIdTo())).getLocation();
     }
 
     public String getOwnerTo() {

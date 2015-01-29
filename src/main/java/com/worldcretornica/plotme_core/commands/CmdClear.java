@@ -4,7 +4,6 @@ import com.worldcretornica.plotme_core.ClearReason;
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
-import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
@@ -20,13 +19,13 @@ public class CmdClear extends PlotCommand {
     public boolean exec(IPlayer player) {
         if (player.hasPermission(PermissionNames.ADMIN_CLEAR) || player.hasPermission(PermissionNames.USER_CLEAR)) {
             IWorld world = player.getWorld();
-            PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
-            if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
-                String id = PlotMeCoreManager.getPlotId(player);
+            PlotMapInfo pmi = manager.getMap(world);
+            if (manager.isPlotWorld(world)) {
+                String id = manager.getPlotId(player);
                 if (id.isEmpty()) {
                     player.sendMessage("§c" + C("MsgNoPlotFound"));
-                } else if (!PlotMeCoreManager.isPlotAvailable(id, pmi)) {
-                    Plot plot = PlotMeCoreManager.getPlotById(id, pmi);
+                } else if (!manager.isPlotAvailable(id, pmi)) {
+                    Plot plot = manager.getPlotById(id, pmi);
 
                     if (plot.isProtect()) {
                         player.sendMessage("§c" + C("MsgPlotProtectedCannotClear"));
@@ -39,7 +38,7 @@ public class CmdClear extends PlotCommand {
 
                             InternalPlotClearEvent event;
 
-                            if (plugin.getPlotMeCoreManager().isEconomyEnabled(pmi)) {
+                            if (manager.isEconomyEnabled(pmi)) {
                                 price = pmi.getClearPrice();
                                 double balance = serverBridge.getBalance(player);
 
@@ -68,7 +67,7 @@ public class CmdClear extends PlotCommand {
                             }
 
                             if (!event.isCancelled()) {
-                                plugin.getPlotMeCoreManager().clear(world, plot, player, ClearReason.Clear);
+                                manager.clear(world, plot, player, ClearReason.Clear);
 
                                 if (isAdvancedLogging()) {
                                     if (price == 0) {

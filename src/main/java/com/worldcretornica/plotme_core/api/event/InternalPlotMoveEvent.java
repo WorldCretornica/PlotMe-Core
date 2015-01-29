@@ -35,11 +35,11 @@ public class InternalPlotMoveEvent extends InternalPlotEvent implements ICancell
 
     @Override
     public Plot getPlot() {
-        return plugin.getPlotMeCoreManager().getPlotById(fromId, world);
+        return PlotMeCoreManager.getInstance().getPlotById(fromId, world);
     }
 
     public Plot getPlotTo() {
-        return plugin.getPlotMeCoreManager().getPlotById(toId, world);
+        return PlotMeCoreManager.getInstance().getPlotById(toId, world);
     }
 
     public IPlayer getPlayer() {
@@ -56,20 +56,20 @@ public class InternalPlotMoveEvent extends InternalPlotEvent implements ICancell
 
     @Override
     public ILocation getUpperBound() {
-        return PlotMeCoreManager.getPlotTopLoc(world, fromId);
+        return PlotMeCoreManager.getInstance().getPlotTopLoc(world, fromId);
     }
 
     @Override
     public ILocation getLowerBound() {
-        return PlotMeCoreManager.getPlotBottomLoc(world, fromId);
+        return PlotMeCoreManager.getInstance().getPlotBottomLoc(world, fromId);
     }
 
     public ILocation getUpperBoundTo() {
-        return PlotMeCoreManager.getPlotTopLoc(world, toId);
+        return PlotMeCoreManager.getInstance().getPlotTopLoc(world, toId);
     }
 
     public ILocation getLowerBoundTo() {
-        return PlotMeCoreManager.getPlotBottomLoc(world, toId);
+        return PlotMeCoreManager.getInstance().getPlotBottomLoc(world, toId);
     }
 
     public String getOwnerTo() {

@@ -18,14 +18,14 @@ public class CmdWEAnywhere extends PlotCommand {
             String name = player.getName();
             UUID uuid = player.getUniqueId();
 
-            if (plugin.getPlotMeCoreManager().isPlayerIgnoringWELimit(player)) {
+            if (manager.isPlayerIgnoringWELimit(player)) {
                 if (!defaultWEAnywhere) {
-                    plugin.getPlotMeCoreManager().removePlayerIgnoringWELimit(uuid);
-                    if (plugin.getPlotMeCoreManager().isPlotWorld(player)) {
+                    manager.removePlayerIgnoringWELimit(uuid);
+                    if (manager.isPlotWorld(player)) {
                         serverBridge.getPlotWorldEdit().setMask(player);
                     }
                 } else {
-                    plugin.getPlotMeCoreManager().addPlayerIgnoringWELimit(uuid);
+                    manager.addPlayerIgnoringWELimit(uuid);
                     serverBridge.getPlotWorldEdit().setMask(player);
                 }
 
@@ -36,11 +36,11 @@ public class CmdWEAnywhere extends PlotCommand {
                 }
             } else {
                 if (defaultWEAnywhere) {
-                    plugin.getPlotMeCoreManager().removePlayerIgnoringWELimit(uuid);
+                    manager.removePlayerIgnoringWELimit(uuid);
                     serverBridge.getPlotWorldEdit().removeMask(player);
                 } else {
-                    plugin.getPlotMeCoreManager().addPlayerIgnoringWELimit(uuid);
-                    if (plugin.getPlotMeCoreManager().isPlotWorld(player)) {
+                    manager.addPlayerIgnoringWELimit(uuid);
+                    if (manager.isPlotWorld(player)) {
                         serverBridge.getPlotWorldEdit().removeMask(player);
                     }
                 }

@@ -47,12 +47,12 @@ public class PlotCreateEvent extends PlotEvent implements Cancellable {
 
     @Override
     public Location getUpperBound() {
-        return ((BukkitLocation) PlotMeCoreManager.getPlotTopLoc(event.getWorld(), event.getPlotId())).getLocation();
+        return ((BukkitLocation) PlotMeCoreManager.getInstance().getPlotTopLoc(event.getWorld(), event.getPlotId())).getLocation();
     }
 
     @Override
     public Location getLowerBound() {
-        return ((BukkitLocation) PlotMeCoreManager.getPlotBottomLoc(event.getWorld(), event.getPlotId())).getLocation();
+        return ((BukkitLocation) PlotMeCoreManager.getInstance().getPlotBottomLoc(event.getWorld(), event.getPlotId())).getLocation();
     }
 
     public InternalPlotCreateEvent getInternal() {

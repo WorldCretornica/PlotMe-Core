@@ -14,11 +14,10 @@ import java.util.logging.Logger;
 
 public class PlotMe_Core {
 
+    public final static String CAPTION_FILE = "captions.yml";
 
-    public static final String CAPTION_FILE = "captions.yml";
-
-    public static final String WORLDS_CONFIG_SECTION = "worlds";
-    private static HashMap<String, IPlotMe_GeneratorManager> managers;
+    public final static String WORLDS_CONFIG_SECTION = "worlds";
+    private HashMap<String, IPlotMe_GeneratorManager> managers;
     //Bridge
     private final IServerBridge serverBridge;
     private IWorld worldcurrentlyprocessingexpired;
@@ -26,7 +25,6 @@ public class PlotMe_Core {
     //Spool stuff
     private ConcurrentLinkedQueue<PlotToClear> plotsToClear;
     //Global variables
-    private PlotMeCoreManager plotMeCoreManager;
     private SqlManager sqlManager;
     private Util util;
     private int clearTaskID;
@@ -36,20 +34,14 @@ public class PlotMe_Core {
         managers = new HashMap<>();
     }
 
-    public static IPlotMe_GeneratorManager getGenManager(String name) {
-        /*IWorld world = serverBridge.getWorld(name.toLowerCase());
-        if (world == null) {
-            return null;
-        } else {
-            return PlotMeCoreManager.getGenManager(world);
-        }*/
+    public IPlotMe_GeneratorManager getGenManager(String name) {
         return managers.get(name.toLowerCase());
     }
 
     public void disable() {
         getSqlManager().closeConnection();
         serverBridge.unHook();
-        plotMeCoreManager.setPlayersIgnoringWELimit(null);
+        PlotMeCoreManager.getInstance().setPlayersIgnoringWELimit(null);
         setWorldCurrentlyProcessingExpired(null);
         plotsToClear.clear();
         plotsToClear = null;
@@ -58,10 +50,10 @@ public class PlotMe_Core {
     }
 
     public void enable() {
+        PlotMeCoreManager.getInstance().setPlugin(this);
         setupMySQL();
         setupConfig();
-        setupDefaultCaptions();
-        setPlotMeCoreManager(new PlotMeCoreManager(this));
+        setupDefaultCaptions();        
         serverBridge.setupCommands();
         setUtil(new Util(this));
         serverBridge.setupHooks();
@@ -77,7 +69,7 @@ public class PlotMe_Core {
         reloadCaptionConfig();
         setupDefaultCaptions();
         setupMySQL();
-        getPlotMeCoreManager().getPlotMaps().clear();
+        PlotMeCoreManager.getInstance().getPlotMaps().clear();
         //setupWorlds();
     }
 
@@ -140,10 +132,10 @@ public class PlotMe_Core {
             IConfigSection config = getServerBridge().loadDefaultConfig("worlds." + worldname.toLowerCase());
             config.set("BottomBlockId", null);
             config.set("AutoLinkPlots", null);
-            plotMeCoreManager.addPlotMap(worldname.toLowerCase(), pmi);
+            PlotMeCoreManager.getInstance().addPlotMap(worldname.toLowerCase(), pmi);
         }
 
-        if (getPlotMeCoreManager().getPlotMaps().isEmpty()) {
+        if (PlotMeCoreManager.getInstance().getPlotMaps().isEmpty()) {
             getLogger().severe("Uh oh. There are no plotworlds setup.");
             getLogger().severe("Is that a mistake? Try making sure you setup PlotMe Correctly PlotMe to stay safe.");
         }
@@ -247,7 +239,6 @@ public class PlotMe_Core {
         serverBridge.cancelTask(taskId);
     }
 
-
     public PlotToClear getPlotLocked(String world, String id) {
         for (PlotToClear ptc : plotsToClear.toArray(new PlotToClear[plotsToClear.size()])) {
             if (ptc.getWorld().equalsIgnoreCase(world) && ptc.getPlotId().equalsIgnoreCase(id)) {
@@ -258,20 +249,9 @@ public class PlotMe_Core {
         return null;
     }
 
-
-    public PlotMeCoreManager getPlotMeCoreManager() {
-        return plotMeCoreManager;
-    }
-
-    private void setPlotMeCoreManager(PlotMeCoreManager plotMeCoreManager) {
-        this.plotMeCoreManager = plotMeCoreManager;
-    }
-
-
     public IServerBridge getServerBridge() {
         return serverBridge;
     }
-
 
     public SqlManager getSqlManager() {
         return sqlManager;
@@ -280,7 +260,6 @@ public class PlotMe_Core {
     private void setSqlManager(SqlManager sqlManager) {
         this.sqlManager = sqlManager;
     }
-
 
     public Util getUtil() {
         return util;
@@ -296,5 +275,10 @@ public class PlotMe_Core {
 
     public void setClearTaskID(int clearTaskID) {
         this.clearTaskID = clearTaskID;
+    }
+    
+    @Deprecated
+    public PlotMeCoreManager getPlotMeCoreManager() {
+        return PlotMeCoreManager.getInstance();
     }
 }

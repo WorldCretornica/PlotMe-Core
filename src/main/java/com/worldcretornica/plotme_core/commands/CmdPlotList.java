@@ -18,7 +18,7 @@ public class CmdPlotList extends PlotCommand {
 
     public boolean exec(IPlayer player, String[] args) {
         if (player.hasPermission(PermissionNames.USER_LIST)) {
-            if (plugin.getPlotMeCoreManager().isPlotWorld(player)) {
+            if (manager.isPlotWorld(player)) {
                 String name;
                 UUID uuid;
 
@@ -38,7 +38,7 @@ public class CmdPlotList extends PlotCommand {
                 for (Plot plot : plugin.getSqlManager().getPlayerPlots(name, uuid)) {
                     IWorld world = serverBridge.getWorld(plot.getWorld());
                     if (world != null) {
-                        plugin.getPlotMeCoreManager().getMap(world).addPlot(plot.getId(), plot);
+                        manager.getMap(world).addPlot(plot.getId(), plot);
                     }
 
                     StringBuilder addition = new StringBuilder();

@@ -3,7 +3,6 @@ package com.worldcretornica.plotme_core.bukkit.listener;
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
-import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.bukkit.PlotMe_CorePlugin;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitLocation;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
@@ -17,25 +16,25 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 
 public class BukkitPlotDenyListener implements Listener {
 
-    private final PlotMe_Core api;
     private final PlotMe_CorePlugin plugin;
-
+    private final PlotMeCoreManager manager;
+    
     public BukkitPlotDenyListener(PlotMe_CorePlugin instance) {
-        api = instance.getAPI();
         plugin = instance;
+        manager = PlotMeCoreManager.getInstance();
     }
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerMove(PlayerMoveEvent event) {
         BukkitPlayer player = (BukkitPlayer) plugin.wrapPlayer(event.getPlayer());
 
-        if (api.getPlotMeCoreManager().isPlotWorld(player) && !player.hasPermission(PermissionNames.ADMIN_BYPASSDENY)) {
+        if (PlotMeCoreManager.getInstance().isPlotWorld(player) && !player.hasPermission(PermissionNames.ADMIN_BYPASSDENY)) {
             BukkitLocation to = new BukkitLocation(event.getTo());
 
-            String idTo = PlotMeCoreManager.getPlotId(to);
+            String idTo = manager.getPlotId(to);
 
             if (!idTo.isEmpty()) {
-                Plot plot = api.getPlotMeCoreManager().getPlotById(idTo, player);
+                Plot plot = manager.getPlotById(idTo, player);
 
                 if (plot != null && plot.isDeniedInternal(player.getName(), player.getUniqueId())) {
                     Location t = event.getFrom().clone();
@@ -51,16 +50,16 @@ public class BukkitPlotDenyListener implements Listener {
     public void onPlayerTeleport(PlayerTeleportEvent event) {
         BukkitPlayer player = (BukkitPlayer) plugin.wrapPlayer(event.getPlayer());
 
-        if (api.getPlotMeCoreManager().isPlotWorld(player) && !player.hasPermission(PermissionNames.ADMIN_BYPASSDENY)) {
+        if (manager.isPlotWorld(player) && !player.hasPermission(PermissionNames.ADMIN_BYPASSDENY)) {
             BukkitLocation to = new BukkitLocation(event.getTo());
 
-            String idTo = PlotMeCoreManager.getPlotId(to);
+            String idTo = manager.getPlotId(to);
 
             if (!idTo.isEmpty()) {
-                Plot plot = api.getPlotMeCoreManager().getPlotById(idTo, player);
+                Plot plot = manager.getPlotById(idTo, player);
 
                 if (plot != null && plot.isDeniedInternal(player.getName(), player.getUniqueId())) {
-                    BukkitLocation location = (BukkitLocation) PlotMeCoreManager.getPlotHome(player.getWorld(), plot.getId());
+                    BukkitLocation location = (BukkitLocation) manager.getPlotHome(player.getWorld(), plot.getId());
                     event.setTo(location.getLocation());
                 }
             }
@@ -71,14 +70,14 @@ public class BukkitPlotDenyListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         BukkitPlayer player = (BukkitPlayer) plugin.wrapPlayer(event.getPlayer());
 
-        if (api.getPlotMeCoreManager().isPlotWorld(player) && !player.hasPermission(PermissionNames.ADMIN_BYPASSDENY)) {
-            String id = PlotMeCoreManager.getPlotId(player);
+        if (manager.isPlotWorld(player) && !player.hasPermission(PermissionNames.ADMIN_BYPASSDENY)) {
+            String id = manager.getPlotId(player);
 
             if (!id.isEmpty()) {
-                Plot plot = api.getPlotMeCoreManager().getPlotById(id, player);
+                Plot plot = manager.getPlotById(id, player);
 
                 if (plot != null && plot.isDenied(player.getUniqueId())) {
-                    player.setLocation(PlotMeCoreManager.getPlotHome(player.getWorld(), plot.getId()));
+                    player.setLocation(manager.getPlotHome(player.getWorld(), plot.getId()));
                 }
             }
         }

@@ -3,7 +3,6 @@ package com.worldcretornica.plotme_core.commands;
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
-import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
@@ -20,10 +19,10 @@ public class CmdBiome extends PlotCommand {
     public boolean exec(IPlayer player, String[] args) {
         if (player.hasPermission(PermissionNames.USER_BIOME)) {
             IWorld world = player.getWorld();
-            PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
-            if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
-                String id = PlotMeCoreManager.getPlotId(player);
-                if (!PlotMeCoreManager.isPlotAvailable(id, pmi)) {
+            PlotMapInfo pmi = manager.getMap(world);
+            if (manager.isPlotWorld(world)) {
+                String id = manager.getPlotId(player);
+                if (!manager.isPlotAvailable(id, pmi)) {
 
                     if (args.length == 2) {
 
@@ -35,7 +34,7 @@ public class CmdBiome extends PlotCommand {
                         }
                         String biomeName = biome.getBiome().name();
 
-                        Plot plot = PlotMeCoreManager.getPlotById(id, pmi);
+                        Plot plot = manager.getPlotById(id, pmi);
                         String playerName = player.getName();
 
                         if (plot.getOwner().equalsIgnoreCase(playerName) || player.hasPermission("PlotMe.admin")) {
@@ -44,7 +43,7 @@ public class CmdBiome extends PlotCommand {
 
                             InternalPlotBiomeChangeEvent event;
 
-                            if (plugin.getPlotMeCoreManager().isEconomyEnabled(pmi)) {
+                            if (manager.isEconomyEnabled(pmi)) {
                                 price = pmi.getBiomeChangePrice();
                                 double balance = serverBridge.getBalance(player);
 
@@ -72,7 +71,7 @@ public class CmdBiome extends PlotCommand {
 
                             if (!event.isCancelled()) {
                                 plot.setBiome(biome);
-                                plugin.getPlotMeCoreManager().setBiome(world, id, biome);
+                                manager.setBiome(world, id, biome);
 
                                 double price1 = -price;
                                 player.sendMessage(C("MsgBiomeSet") + " §9" + biomeName + " " + Util().moneyFormat(price1, true));

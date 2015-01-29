@@ -19,7 +19,7 @@ public class PlotRunnableDeleteExpire implements Runnable {
     @Override
     public void run() {
         SqlManager sqlmanager = plugin.getSqlManager();
-        PlotMeCoreManager plotMeCoreManager = plugin.getPlotMeCoreManager();
+        PlotMeCoreManager plotMeCoreManager = PlotMeCoreManager.getInstance();
 
         if (plugin.getWorldCurrentlyProcessingExpired() != null) {
             IWorld world = plugin.getWorldCurrentlyProcessingExpired();
@@ -40,10 +40,10 @@ public class PlotRunnableDeleteExpire implements Runnable {
                         ids += id + ", ";
 
                         plotMeCoreManager.removePlot(world, id);
-                        PlotMeCoreManager.removeOwnerSign(world, id);
-                        PlotMeCoreManager.removeSellSign(world, id);
+                        plotMeCoreManager.removeOwnerSign(world, id);
+                        plotMeCoreManager.removeSellSign(world, id);
 
-                        sqlmanager.deletePlot(PlotMeCoreManager.getIdX(id), PlotMeCoreManager.getIdZ(id), world.getName());
+                        sqlmanager.deletePlot(plotMeCoreManager.getIdX(id), plotMeCoreManager.getIdZ(id), world.getName());
 
                         //noinspection NumericCastThatLosesPrecision
                         plugin.setCounterExpired((short) (plugin.getCounterExpired() - 1));

@@ -4,7 +4,6 @@ import com.worldcretornica.plotme_core.ClearReason;
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
-import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import com.worldcretornica.plotme_core.api.IPlayer;
@@ -21,9 +20,9 @@ public class CmdReset extends PlotCommand {
     public boolean exec(IPlayer player) {
         if (player.hasPermission(PermissionNames.ADMIN_RESET) || player.hasPermission("PlotMe.use.reset")) {
             IWorld world = player.getWorld();
-            PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
-            if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
-                Plot plot = PlotMeCoreManager.getPlotById(player, pmi);
+            PlotMapInfo pmi = manager.getMap(world);
+            if (manager.isPlotWorld(world)) {
+                Plot plot = manager.getPlotById(player, pmi);
 
                 if (plot == null) {
                     player.sendMessage("§c" + C("MsgNoPlotFound"));
@@ -38,10 +37,10 @@ public class CmdReset extends PlotCommand {
                         InternalPlotResetEvent event = serverBridge.getEventFactory().callPlotResetEvent(plugin, world, plot, player);
 
                         if (!event.isCancelled()) {
-                            plugin.getPlotMeCoreManager().setBiome(world, id, serverBridge.getBiome("PLAINS"));
-                            plugin.getPlotMeCoreManager().clear(world, plot, player, ClearReason.Reset);
+                            manager.setBiome(world, id, serverBridge.getBiome("PLAINS"));
+                            manager.clear(world, plot, player, ClearReason.Reset);
 
-                            if (plugin.getPlotMeCoreManager().isEconomyEnabled(pmi)) {
+                            if (manager.isEconomyEnabled(pmi)) {
                                 if (plot.isAuctioned()) {
                                     if (plot.getCurrentBidderId() != null) {
                                         IOfflinePlayer offlinePlayer = serverBridge.getOfflinePlayer(plot.getCurrentBidderId());
@@ -76,13 +75,13 @@ public class CmdReset extends PlotCommand {
                                 }
                             }
 
-                            if (!PlotMeCoreManager.isPlotAvailable(id, pmi)) {
-                                PlotMeCoreManager.removePlot(pmi, id);
+                            if (!manager.isPlotAvailable(id, pmi)) {
+                                manager.removePlot(pmi, id);
                             }
 
-                            PlotMeCoreManager.removeOwnerSign(world, id);
-                            PlotMeCoreManager.removeSellSign(world, id);
-                            plugin.getSqlManager().deletePlot(PlotMeCoreManager.getIdX(id), PlotMeCoreManager.getIdZ(id), world.getName());
+                            manager.removeOwnerSign(world, id);
+                            manager.removeSellSign(world, id);
+                            plugin.getSqlManager().deletePlot(manager.getIdX(id), manager.getIdZ(id), world.getName());
 
                             if (isAdvancedLogging()) {
                                 serverBridge.getLogger().info(player.getName() + " " + C("MsgResetPlot") + " " + id);

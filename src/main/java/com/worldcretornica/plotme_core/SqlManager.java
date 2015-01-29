@@ -481,11 +481,13 @@ public class SqlManager {
     }
 
     public void addPlot(Plot plot, int idX, int idZ, IWorld world) {
+        PlotMeCoreManager manager = PlotMeCoreManager.getInstance();
+        
         addPlot(plot, idX, idZ,
-                PlotMeCoreManager.topX(plot.getId(), world),
-                PlotMeCoreManager.bottomX(plot.getId(), world),
-                PlotMeCoreManager.topZ(plot.getId(), world),
-                PlotMeCoreManager.bottomZ(plot.getId(), world));
+                manager.topX(plot.getId(), world),
+                manager.bottomX(plot.getId(), world),
+                manager.topZ(plot.getId(), world),
+                manager.bottomZ(plot.getId(), world));
     }
 
     public void addPlot(Plot plot, int idX, int idZ, int topX, int bottomX, int topZ, int bottomZ) {
@@ -807,8 +809,8 @@ public class SqlManager {
         ResultSet setAllowed = null;
         ResultSet setDenied = null;
 
-        int idX = PlotMeCoreManager.getIdX(id);
-        int idZ = PlotMeCoreManager.getIdZ(id);
+        int idX = PlotMeCoreManager.getInstance().getIdX(id);
+        int idZ = PlotMeCoreManager.getInstance().getIdZ(id);
 
         try {
             Connection conn = getConnection();
@@ -937,7 +939,7 @@ public class SqlManager {
 
                 HashMap<String, Plot> plots = getPlots(worldName);
 
-                PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(worldName);
+                PlotMapInfo pmi = PlotMeCoreManager.getInstance().getMap(worldName);
 
                 for (String id : plots.keySet()) {
                     pmi.addPlot(id, plots.get(id));
@@ -1800,7 +1802,7 @@ public class SqlManager {
                                 psDeniedPlayerId.close();
 
                                 //Update plot information
-                                for (PlotMapInfo pmi : plugin.getPlotMeCoreManager().getPlotMaps().values()) {
+                                for (PlotMapInfo pmi : PlotMeCoreManager.getInstance().getPlotMaps().values()) {
                                     for (Plot plot : pmi.getLoadedPlots().values()) {
                                         for (Entry<String, UUID> player : response.entrySet()) {
                                             //Owner
@@ -1963,7 +1965,7 @@ public class SqlManager {
                     ps.close();
 
                     if (uuid != null) {
-                        Plot plot = plugin.getPlotMeCoreManager().getPlotById(idX + ";" + idZ, world);
+                        Plot plot = PlotMeCoreManager.getInstance().getPlotById(idX + ";" + idZ, world);
 
                         if (plot != null) {
                             switch (property) {

@@ -178,49 +178,49 @@ public class Plot implements Cloneable {
     public void addAllowed(String name, UUID uuid) {
         if (!isAllowedConsulting(name)) {
             allowed().put(name, uuid);
-            plugin.getSqlManager().addPlotAllowed(name, uuid, PlotMeCoreManager.getIdX(getId()), PlotMeCoreManager.getIdZ(getId()), getWorld());
+            plugin.getSqlManager().addPlotAllowed(name, uuid, PlotMeCoreManager.getInstance().getIdX(getId()), PlotMeCoreManager.getInstance().getIdZ(getId()), getWorld());
         }
     }
 
     public void addAllowed(String name) {
         if (!isAllowedConsulting(name)) {
             allowed().put(name);
-            plugin.getSqlManager().addPlotAllowed(name, null, PlotMeCoreManager.getIdX(getId()), PlotMeCoreManager.getIdZ(getId()), getWorld());
+            plugin.getSqlManager().addPlotAllowed(name, null, PlotMeCoreManager.getInstance().getIdX(getId()), PlotMeCoreManager.getInstance().getIdZ(getId()), getWorld());
         }
     }
 
     public void addAllowed(UUID uuid) {
         if (!isAllowed(uuid)) {
             String name = allowed().put(uuid);
-            plugin.getSqlManager().addPlotAllowed(name, uuid, PlotMeCoreManager.getIdX(getId()), PlotMeCoreManager.getIdZ(getId()), getWorld());
+            plugin.getSqlManager().addPlotAllowed(name, uuid, PlotMeCoreManager.getInstance().getIdX(getId()), PlotMeCoreManager.getInstance().getIdZ(getId()), getWorld());
         }
     }
 
     public void addDenied(String name) {
         if (!isDeniedConsulting(name)) {
             denied().put(name);
-            plugin.getSqlManager().addPlotDenied(name, null, PlotMeCoreManager.getIdX(getId()), PlotMeCoreManager.getIdZ(getId()), getWorld());
+            plugin.getSqlManager().addPlotDenied(name, null, PlotMeCoreManager.getInstance().getIdX(getId()), PlotMeCoreManager.getInstance().getIdZ(getId()), getWorld());
         }
     }
 
     public void addDenied(UUID uuid) {
         if (!isDenied(uuid)) {
             String name = denied().put(uuid);
-            plugin.getSqlManager().addPlotDenied(name, uuid, PlotMeCoreManager.getIdX(getId()), PlotMeCoreManager.getIdZ(getId()), getWorld());
+            plugin.getSqlManager().addPlotDenied(name, uuid, PlotMeCoreManager.getInstance().getIdX(getId()), PlotMeCoreManager.getInstance().getIdZ(getId()), getWorld());
         }
     }
 
     public void removeAllowed(String name) {
         if (allowed().contains(name)) {
             UUID uuid = allowed().remove(name);
-            plugin.getSqlManager().deletePlotAllowed(PlotMeCoreManager.getIdX(getId()), PlotMeCoreManager.getIdZ(getId()), name, uuid, getWorld());
+            plugin.getSqlManager().deletePlotAllowed(PlotMeCoreManager.getInstance().getIdX(getId()), PlotMeCoreManager.getInstance().getIdZ(getId()), name, uuid, getWorld());
 
             if (plugin.getServerBridge().getPlotWorldEdit() != null) {
                 IPlayer player = plugin.getServerBridge().getPlayer(uuid);
 
                 if (player != null) {
-                    if (plugin.getPlotMeCoreManager().isPlotWorld(player.getWorld())) {
-                        if (plugin.getPlotMeCoreManager().isPlayerIgnoringWELimit(player)) {
+                    if (PlotMeCoreManager.getInstance().isPlotWorld(player.getWorld())) {
+                        if (PlotMeCoreManager.getInstance().isPlayerIgnoringWELimit(player)) {
                             plugin.getServerBridge().getPlotWorldEdit().removeMask(player);
                         } else {
                             plugin.getServerBridge().getPlotWorldEdit().setMask(player);
@@ -234,21 +234,21 @@ public class Plot implements Cloneable {
     public void removeAllowedGroup(String name) {
         if (allowed().contains(name)) {
             allowed().remove(name);
-            plugin.getSqlManager().deletePlotAllowed(PlotMeCoreManager.getIdX(getId()), PlotMeCoreManager.getIdZ(getId()), name, null, getWorld());
+            plugin.getSqlManager().deletePlotAllowed(PlotMeCoreManager.getInstance().getIdX(getId()), PlotMeCoreManager.getInstance().getIdZ(getId()), name, null, getWorld());
         }
     }
 
     public void removeAllowed(UUID uuid) {
         if (allowed().contains(uuid)) {
             String name = allowed().remove(uuid);
-            plugin.getSqlManager().deletePlotAllowed(PlotMeCoreManager.getIdX(getId()), PlotMeCoreManager.getIdZ(getId()), name, uuid, getWorld());
+            plugin.getSqlManager().deletePlotAllowed(PlotMeCoreManager.getInstance().getIdX(getId()), PlotMeCoreManager.getInstance().getIdZ(getId()), name, uuid, getWorld());
 
             if (plugin.getServerBridge().getPlotWorldEdit() != null) {
                 IPlayer player = plugin.getServerBridge().getPlayer(uuid);
 
                 if (player != null) {
-                    if (plugin.getPlotMeCoreManager().isPlotWorld(player.getWorld())) {
-                        if (plugin.getPlotMeCoreManager().isPlayerIgnoringWELimit(player)) {
+                    if (PlotMeCoreManager.getInstance().isPlotWorld(player.getWorld())) {
+                        if (PlotMeCoreManager.getInstance().isPlayerIgnoringWELimit(player)) {
                             plugin.getServerBridge().getPlotWorldEdit().removeMask(player);
                         } else {
                             plugin.getServerBridge().getPlotWorldEdit().setMask(player);
@@ -262,21 +262,21 @@ public class Plot implements Cloneable {
     public void removeDenied(String name) {
         if (denied().contains(name)) {
             UUID uuid = denied().remove(name);
-            plugin.getSqlManager().deletePlotDenied(PlotMeCoreManager.getIdX(getId()), PlotMeCoreManager.getIdZ(getId()), name, uuid, getWorld());
+            plugin.getSqlManager().deletePlotDenied(PlotMeCoreManager.getInstance().getIdX(getId()), PlotMeCoreManager.getInstance().getIdZ(getId()), name, uuid, getWorld());
         }
     }
 
     public void removeDeniedGroup(String name) {
         if (denied().contains(name)) {
             denied().remove(name);
-            plugin.getSqlManager().deletePlotDenied(PlotMeCoreManager.getIdX(getId()), PlotMeCoreManager.getIdZ(getId()), name, null, getWorld());
+            plugin.getSqlManager().deletePlotDenied(PlotMeCoreManager.getInstance().getIdX(getId()), PlotMeCoreManager.getInstance().getIdZ(getId()), name, null, getWorld());
         }
     }
 
     public void removeDenied(UUID uuid) {
         if (denied().contains(uuid)) {
             String name = denied().remove(uuid);
-            plugin.getSqlManager().deletePlotDenied(PlotMeCoreManager.getIdX(getId()), PlotMeCoreManager.getIdZ(getId()), name, uuid, getWorld());
+            plugin.getSqlManager().deletePlotDenied(PlotMeCoreManager.getInstance().getIdX(getId()), PlotMeCoreManager.getInstance().getIdZ(getId()), name, uuid, getWorld());
         }
     }
 
@@ -284,7 +284,7 @@ public class Plot implements Cloneable {
         HashMap<String, UUID> list = allowed().getAllPlayers();
         for (String n : list.keySet()) {
             UUID uuid = list.get(n);
-            plugin.getSqlManager().deletePlotAllowed(PlotMeCoreManager.getIdX(getId()), PlotMeCoreManager.getIdZ(getId()), n, uuid, getWorld());
+            plugin.getSqlManager().deletePlotAllowed(PlotMeCoreManager.getInstance().getIdX(getId()), PlotMeCoreManager.getInstance().getIdZ(getId()), n, uuid, getWorld());
         }
         allowed().clear();
     }
@@ -293,7 +293,7 @@ public class Plot implements Cloneable {
         HashMap<String, UUID> list = denied().getAllPlayers();
         for (String n : list.keySet()) {
             UUID uuid = list.get(n);
-            plugin.getSqlManager().deletePlotDenied(PlotMeCoreManager.getIdX(getId()), PlotMeCoreManager.getIdZ(getId()), n, uuid, getWorld());
+            plugin.getSqlManager().deletePlotDenied(PlotMeCoreManager.getInstance().getIdX(getId()), PlotMeCoreManager.getInstance().getIdZ(getId()), n, uuid, getWorld());
         }
         denied().clear();
     }
@@ -427,7 +427,7 @@ public class Plot implements Cloneable {
     }
 
     public void updateField(String field, Object value) {
-        plugin.getSqlManager().updatePlot(PlotMeCoreManager.getIdX(getId()), PlotMeCoreManager.getIdZ(getId()), getWorld(), field, value);
+        plugin.getSqlManager().updatePlot(PlotMeCoreManager.getInstance().getIdX(getId()), PlotMeCoreManager.getInstance().getIdZ(getId()), getWorld(), field, value);
     }
 
     public final String getWorld() {

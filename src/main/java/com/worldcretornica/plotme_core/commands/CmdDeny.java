@@ -3,7 +3,6 @@ package com.worldcretornica.plotme_core.commands;
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
-import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
@@ -21,16 +20,16 @@ public class CmdDeny extends PlotCommand {
     public boolean exec(IPlayer player, String[] args) {
         if (player.hasPermission(PermissionNames.ADMIN_DENY) || player.hasPermission(PermissionNames.USER_DENY)) {
             IWorld world = player.getWorld();
-            PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
-            if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
-                String id = PlotMeCoreManager.getPlotId(player);
+            PlotMapInfo pmi = manager.getMap(world);
+            if (manager.isPlotWorld(world)) {
+                String id = manager.getPlotId(player);
                 if (id.isEmpty()) {
                     player.sendMessage("§c" + C("MsgNoPlotFound"));
-                } else if (!PlotMeCoreManager.isPlotAvailable(id, pmi)) {
+                } else if (!manager.isPlotAvailable(id, pmi)) {
                     if (args.length < 2 || args[1].isEmpty()) {
                         player.sendMessage(C("WordUsage") + " §c/plotme deny <" + C("WordPlayer") + ">");
                     } else {
-                        Plot plot = PlotMeCoreManager.getPlotById(id, pmi);
+                        Plot plot = manager.getPlotById(id, pmi);
                         String denied = args[1];
 
                         if (plot.getOwner().equalsIgnoreCase(player.getName()) || player.hasPermission(PermissionNames.ADMIN_DENY)) {
@@ -47,7 +46,7 @@ public class CmdDeny extends PlotCommand {
 
                                 InternalPlotAddDeniedEvent event;
 
-                                if (plugin.getPlotMeCoreManager().isEconomyEnabled(pmi)) {
+                                if (manager.isEconomyEnabled(pmi)) {
                                     price = pmi.getDenyPlayerPrice();
                                     double balance = serverBridge.getBalance(player);
 
@@ -79,11 +78,11 @@ public class CmdDeny extends PlotCommand {
                                     plot.removeAllowed(denied);
 
                                     if ("*".equals(denied)) {
-                                        List<IPlayer> playersInPlot = PlotMeCoreManager.getPlayersInPlot(world, id);
+                                        List<IPlayer> playersInPlot = manager.getPlayersInPlot(world, id);
 
                                         for (IPlayer iPlayer : playersInPlot) {
                                             if (!plot.isAllowed(iPlayer.getName(), iPlayer.getUniqueId())) {
-                                                iPlayer.setLocation(PlotMeCoreManager.getPlotHome(world, plot.getId()));
+                                                iPlayer.setLocation(manager.getPlotHome(world, plot.getId()));
                                             }
                                         }
                                     } else {
@@ -91,10 +90,10 @@ public class CmdDeny extends PlotCommand {
 
                                         if (deniedPlayer != null) {
                                             if (deniedPlayer.getWorld().equals(world)) {
-                                                String plotId = PlotMeCoreManager.getPlotId(deniedPlayer);
+                                                String plotId = manager.getPlotId(deniedPlayer);
 
                                                 if (plotId.equalsIgnoreCase(id)) {
-                                                    deniedPlayer.setLocation(PlotMeCoreManager.getPlotHome(world, plot.getId()));
+                                                    deniedPlayer.setLocation(manager.getPlotHome(world, plot.getId()));
                                                 }
                                             }
                                         }

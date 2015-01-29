@@ -17,7 +17,7 @@ public class CmdDoneList extends PlotCommand {
     }
 
     public boolean exec(IPlayer player, String[] args) {
-        if (plugin.getPlotMeCoreManager().isPlotWorld(player)) {
+        if (manager.isPlotWorld(player)) {
             if (player.hasPermission(PermissionNames.ADMIN_DONE)) {
 
                 int page = 1;

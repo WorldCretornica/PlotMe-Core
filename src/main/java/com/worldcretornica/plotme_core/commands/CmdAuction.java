@@ -3,7 +3,6 @@ package com.worldcretornica.plotme_core.commands;
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
-import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import com.worldcretornica.plotme_core.api.IPlayer;
@@ -19,17 +18,17 @@ public class CmdAuction extends PlotCommand {
 
     public boolean exec(IPlayer player, String[] args) {
         IWorld world = player.getWorld();
-        PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
-        if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
-            if (plugin.getPlotMeCoreManager().isEconomyEnabled(pmi)) {
+        PlotMapInfo pmi = manager.getMap(world);
+        if (manager.isPlotWorld(world)) {
+            if (manager.isEconomyEnabled(pmi)) {
                 if (pmi.isCanPutOnSale()) {
                     if (player.hasPermission(PermissionNames.USE_AUCTION) || player.hasPermission(PermissionNames.ADMIN_AUCTION)) {
-                        String id = PlotMeCoreManager.getPlotId(player);
+                        String id = manager.getPlotId(player);
 
                         if (id.isEmpty()) {
                             player.sendMessage("§c" + C("MsgNoPlotFound"));
-                        } else if (!PlotMeCoreManager.isPlotAvailable(id, pmi)) {
-                            Plot plot = PlotMeCoreManager.getPlotById(id, pmi);
+                        } else if (!manager.isPlotAvailable(id, pmi)) {
+                            Plot plot = manager.getPlotById(id, pmi);
 
                             String name = player.getName();
 
@@ -56,8 +55,8 @@ public class CmdAuction extends PlotCommand {
                                             }
 
                                             plot.setAuctioned(false);
-                                            plugin.getPlotMeCoreManager().adjustWall(player);
-                                            plugin.getPlotMeCoreManager().setSellSign(world, plot);
+                                            manager.adjustWall(player);
+                                            manager.setSellSign(world, plot);
                                             plot.setCurrentBid(0.0);
                                             plot.setCurrentBidder(null);
 
@@ -76,8 +75,8 @@ public class CmdAuction extends PlotCommand {
                                         }
                                     } else {
                                         plot.setAuctioned(false);
-                                        plugin.getPlotMeCoreManager().adjustWall(player);
-                                        plugin.getPlotMeCoreManager().setSellSign(world, plot);
+                                        manager.adjustWall(player);
+                                        manager.setSellSign(world, plot);
                                         plot.setCurrentBid(0.0);
                                         plot.setCurrentBidder(null);
 
@@ -110,8 +109,8 @@ public class CmdAuction extends PlotCommand {
                                         if (!event.isCancelled()) {
                                             plot.setCurrentBid(bid);
                                             plot.setAuctioned(true);
-                                            plugin.getPlotMeCoreManager().adjustWall(player);
-                                            plugin.getPlotMeCoreManager().setSellSign(world, plot);
+                                            manager.adjustWall(player);
+                                            manager.setSellSign(world, plot);
 
                                             plot.updateField("currentbid", bid);
                                             plot.updateField("auctionned", true);

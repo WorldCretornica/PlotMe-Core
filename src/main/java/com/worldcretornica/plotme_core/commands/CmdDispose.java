@@ -3,7 +3,6 @@ package com.worldcretornica.plotme_core.commands;
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
-import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import com.worldcretornica.plotme_core.api.IPlayer;
@@ -20,13 +19,13 @@ public class CmdDispose extends PlotCommand {
     public boolean exec(IPlayer player) {
         if (player.hasPermission(PermissionNames.ADMIN_DISPOSE) || player.hasPermission(PermissionNames.USER_DISPOSE)) {
             IWorld world = player.getWorld();
-            PlotMapInfo pmi = plugin.getPlotMeCoreManager().getMap(world);
-            if (plugin.getPlotMeCoreManager().isPlotWorld(world)) {
-                String id = PlotMeCoreManager.getPlotId(player);
+            PlotMapInfo pmi = manager.getMap(world);
+            if (manager.isPlotWorld(world)) {
+                String id = manager.getPlotId(player);
                 if (id.isEmpty()) {
                     player.sendMessage("§c" + C("MsgNoPlotFound"));
-                } else if (!PlotMeCoreManager.isPlotAvailable(id, pmi)) {
-                    Plot plot = PlotMeCoreManager.getPlotById(id, pmi);
+                } else if (!manager.isPlotAvailable(id, pmi)) {
+                    Plot plot = manager.getPlotById(id, pmi);
 
                     if (plot.isProtect()) {
                         player.sendMessage("§c" + C("MsgPlotProtectedNotDisposed"));
@@ -39,7 +38,7 @@ public class CmdDispose extends PlotCommand {
 
                             InternalPlotDisposeEvent event;
 
-                            if (plugin.getPlotMeCoreManager().isEconomyEnabled(pmi)) {
+                            if (manager.isEconomyEnabled(pmi)) {
                                 if (cost != 0 && serverBridge.getBalance(player) < cost) {
                                     player.sendMessage("§c" + C("MsgNotEnoughDispose"));
                                     return true;
@@ -84,15 +83,15 @@ public class CmdDispose extends PlotCommand {
                             }
 
                             if (!event.isCancelled()) {
-                                if (!PlotMeCoreManager.isPlotAvailable(id, pmi)) {
-                                    PlotMeCoreManager.removePlot(pmi, id);
+                                if (!manager.isPlotAvailable(id, pmi)) {
+                                    manager.removePlot(pmi, id);
                                 }
 
-                                PlotMeCoreManager.removeOwnerSign(world, id);
-                                PlotMeCoreManager.removeSellSign(world, id);
-                                PlotMeCoreManager.removeAuctionSign(world, id);
+                                manager.removeOwnerSign(world, id);
+                                manager.removeSellSign(world, id);
+                                manager.removeAuctionSign(world, id);
 
-                                plugin.getSqlManager().deletePlot(PlotMeCoreManager.getIdX(id), PlotMeCoreManager.getIdZ(id), world.getName());
+                                plugin.getSqlManager().deletePlot(manager.getIdX(id), manager.getIdZ(id), world.getName());
 
                                 player.sendMessage(C("MsgPlotDisposedAnyoneClaim"));
 
