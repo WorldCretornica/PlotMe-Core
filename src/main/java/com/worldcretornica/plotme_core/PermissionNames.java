@@ -8,7 +8,7 @@ public class PermissionNames {
     public static final String ADMIN_AUCTION = "PlotMe.admin.auction";
     public static final String USE_AUCTION = "PlotMe.use.auction";
     public static final String ADMIN_ADDTIME = "PlotMe.admin.addtime";
-    public static final String USE_HOME = "PlotMe.use.home";
+    public static final String USER_HOME = "PlotMe.use.home";
     public static final String USER_AUTO = "PlotMe.use.auto";
     public static final String USER_CLAIM = "PlotMe.use.claim";
     public static final String USER_LIST = "PlotMe.use.list";
@@ -42,4 +42,6 @@ public class PermissionNames {
     public static final String ADMIN_DENY = "PlotMe.admin.deny";
     public static final String ADMIN_REMOVE = "PlotMe.admin.remove";
     public static final String USER_PROTECT = "PlotMe.use.protect";
+    public static final String USER_MIDDLE = "PlotMe.use.middle";
+    public static final String ADMIN_MIDDLE_OTHER = "PlotMe.admin.middle.other";
 }

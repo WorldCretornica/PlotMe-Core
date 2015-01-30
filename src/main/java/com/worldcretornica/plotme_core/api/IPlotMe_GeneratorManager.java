@@ -74,4 +74,6 @@ public interface IPlotMe_GeneratorManager {
     int getPlotSize(String worldName);
 
     int getRoadHeight(String worldName);
+    
+    ILocation getPlotMiddle(IWorld world, String id);
 }

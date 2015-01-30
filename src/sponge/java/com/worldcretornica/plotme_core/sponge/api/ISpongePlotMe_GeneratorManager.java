@@ -79,4 +79,6 @@ public interface ISpongePlotMe_GeneratorManager {
     int getPlotSize(String worldName);
 
     int getRoadHeight(String worldName);
+    
+    Location getPlotMiddle(World world, String id);
 }

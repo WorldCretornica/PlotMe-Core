@@ -732,4 +732,14 @@ public class PlotMeCoreManager {
             return getPlayersIgnoringWELimit().contains(player.getUniqueId());
         }
     }
+    
+    public ILocation getPlotMiddle(IWorld world, String id) {
+        /*ILocation bottom = getPlotBottomLoc(world, id);
+        ILocation top = getPlotTopLoc(world, id);
+        
+        ILocation middle = bottom.clone().add(top.getX() - bottom.getX(), 0, top.getZ() - bottom.getZ());
+        middle.setY(getGenManager(world).getRoadHeight(world.getName()) + 1);*/
+        
+        return getGenManager(world).getPlotMiddle(world, id);
+    }
 }

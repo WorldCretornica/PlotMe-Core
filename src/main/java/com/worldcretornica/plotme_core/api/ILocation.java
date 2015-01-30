@@ -19,5 +19,15 @@ public interface ILocation {
     IBlock getBlock();
 
     ILocation add(double x, double y, double z);
+    
+    ILocation subtract(double x, double y, double z);
+    
+    ILocation clone();
+    
+    void setX(double x);
+    
+    void setY(double y);
+    
+    void setZ(double z);
 
 }

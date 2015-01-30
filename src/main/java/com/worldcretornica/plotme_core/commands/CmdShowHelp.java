@@ -29,7 +29,7 @@ public class CmdShowHelp extends PlotCommand {
         if (player.hasPermission(PermissionNames.USER_AUTO)) {
             allowed_commands.add("auto");
         }
-        if (player.hasPermission(PermissionNames.USE_HOME)) {
+        if (player.hasPermission(PermissionNames.USER_HOME)) {
             allowed_commands.add("home");
         }
         if (player.hasPermission("PlotMe.use.home.other")) {

@@ -18,7 +18,7 @@ public class CmdHome extends PlotCommand {
     }
 
     public boolean exec(IPlayer player, String[] args) {
-        if (player.hasPermission(PermissionNames.USE_HOME) || player.hasPermission(PermissionNames.ADMIN_HOME_OTHER)) {
+        if (player.hasPermission(PermissionNames.USER_HOME) || player.hasPermission(PermissionNames.ADMIN_HOME_OTHER)) {
             if (manager.isPlotWorld(player) || serverBridge.getConfig().getBoolean("allowWorldTeleport")) {
                 String playerName = player.getName();
                 UUID uuid = player.getUniqueId();

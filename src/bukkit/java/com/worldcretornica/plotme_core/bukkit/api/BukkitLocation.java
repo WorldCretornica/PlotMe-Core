@@ -66,4 +66,29 @@ public class BukkitLocation implements ILocation {
     public ILocation add(double x, double y, double z) {
         return new BukkitLocation(location.add(x, y, z));
     }
+    
+    @Override
+    public ILocation subtract(double x, double y, double z) {
+        return new BukkitLocation(location.subtract(x, y, z));
+    }
+    
+    @Override
+    public ILocation clone() {
+        return new BukkitLocation(location.clone());
+    }
+    
+    @Override
+    public void setX(double x) {
+        this.location.setX(x);
+    }
+    
+    @Override
+    public void setY(double y) {
+        this.location.setY(y);
+    }
+    
+    @Override
+    public void setZ(double z) {
+        this.location.setZ(z);
+    }
 }

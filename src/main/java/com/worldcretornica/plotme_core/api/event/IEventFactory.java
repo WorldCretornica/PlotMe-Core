@@ -37,6 +37,8 @@ public interface IEventFactory {
     InternalPlotDoneChangeEvent callPlotDoneEvent(PlotMe_Core plugin, IWorld world, Plot plot, IPlayer player, boolean done);
 
     InternalPlotTeleportHomeEvent callPlotTeleportHomeEvent(PlotMe_Core plugin, IWorld world, Plot plot, IPlayer player);
+    
+    InternalPlotTeleportMiddleEvent callPlotTeleportMiddleEvent(PlotMe_Core plugin, IWorld world, Plot plot, IPlayer player, ILocation location);
 
     InternalPlotProtectChangeEvent callPlotProtectChangeEvent(PlotMe_Core plugin, IWorld world, Plot plot, IPlayer player, boolean protect);
 

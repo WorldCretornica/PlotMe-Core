@@ -205,5 +205,8 @@ public class SpongePlotMe_GeneratorManagerBridge implements IPlotMe_GeneratorMan
         return generatorManager.getRoadHeight(worldName);
     }
 
-
+    @Override
+    public ILocation getPlotMiddle(IWorld world, String id) {
+        return new SpongeLocation(generatorManager.getPlotMiddle(((SpongeWorld) world).getWorld(), id));
+    }
 }

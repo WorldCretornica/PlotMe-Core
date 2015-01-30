@@ -20,6 +20,7 @@ import com.worldcretornica.plotme_core.commands.CmdDoneList;
 import com.worldcretornica.plotme_core.commands.CmdExpired;
 import com.worldcretornica.plotme_core.commands.CmdHome;
 import com.worldcretornica.plotme_core.commands.CmdInfo;
+import com.worldcretornica.plotme_core.commands.CmdMiddle;
 import com.worldcretornica.plotme_core.commands.CmdMove;
 import com.worldcretornica.plotme_core.commands.CmdPlotList;
 import com.worldcretornica.plotme_core.commands.CmdProtect;
@@ -33,6 +34,7 @@ import com.worldcretornica.plotme_core.commands.CmdShowHelp;
 import com.worldcretornica.plotme_core.commands.CmdTP;
 import com.worldcretornica.plotme_core.commands.CmdUndeny;
 import com.worldcretornica.plotme_core.commands.CmdWEAnywhere;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -71,6 +73,7 @@ public class BukkitCommand implements CommandExecutor {
     private final CmdTP tp;
     private final CmdUndeny undeny;
     private final CmdWEAnywhere weAnywhere;
+    private final CmdMiddle middle;
     private final PlotMe_CorePlugin plugin;
 
     public BukkitCommand(PlotMe_CorePlugin instance) {
@@ -105,6 +108,7 @@ public class BukkitCommand implements CommandExecutor {
         showHelp = new CmdShowHelp(api);
         tp = new CmdTP(api);
         undeny = new CmdUndeny(api);
+        middle = new CmdMiddle(api);
         weAnywhere = new CmdWEAnywhere(api);
     }
 
@@ -241,6 +245,9 @@ public class BukkitCommand implements CommandExecutor {
                     }
                     if ("bid".equalsIgnoreCase(args[0])) {
                         return bid.exec(player, args);
+                    }
+                    if ("middle".equalsIgnoreCase(args[0])) {
+                        return middle.exec(player, args);
                     }
                     // arg can be "home" or "home:n"
                     if ((args[0].toLowerCase() + ":").startsWith("home:") || (args[0].toLowerCase() + ":").startsWith("h:")) {

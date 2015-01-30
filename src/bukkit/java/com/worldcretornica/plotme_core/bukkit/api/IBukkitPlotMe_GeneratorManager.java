@@ -80,4 +80,5 @@ public interface IBukkitPlotMe_GeneratorManager {
 
     int getRoadHeight(String worldName);
 
+    Location getPlotMiddle(World world, String id);
 }

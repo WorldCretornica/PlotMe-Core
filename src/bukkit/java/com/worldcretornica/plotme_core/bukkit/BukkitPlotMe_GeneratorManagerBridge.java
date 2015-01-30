@@ -205,4 +205,8 @@ public class BukkitPlotMe_GeneratorManagerBridge implements IPlotMe_GeneratorMan
         return generatorManager.getRoadHeight(worldName);
     }
 
+    @Override
+    public ILocation getPlotMiddle(IWorld world, String id) {
+        return new BukkitLocation(generatorManager.getPlotMiddle(((BukkitWorld) world).getWorld(), id));
+    }
 }
