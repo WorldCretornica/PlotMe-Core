@@ -33,6 +33,7 @@ permissions:
         plotme.use.deny: true
         plotme.use.undeny: true
         plotme.use.reset: true
+        plotme.use.middle: true
         plotme.limit.1: true
     plotme.admin:
       description: Gives default administrator commands
@@ -60,9 +61,12 @@ permissions:
         plotme.admin.bypassdeny: true
         plotme.admin.buildanywhere: true
         plotme.admin.reload: true
+        plotme.admin.middle: true
     plotme.unblock.*:
       default: true
       description: Unblocks a certain item that was blocked in the config
+    plotme.use.middle:
+      description: Gives the middle command
     plotme.use.buy:
       description: Gives the buy command
     plotme.use.sell:
@@ -115,6 +119,8 @@ permissions:
       description: Gives the claim command for any player
     plotme.admin.home.other:
       description: Gives the home command for any players
+    plotme.admin.middle:
+      description: Gives the middle command for any plots
     plotme.admin.tp:
       description: Gives the tp command
     plotme.admin.clear:

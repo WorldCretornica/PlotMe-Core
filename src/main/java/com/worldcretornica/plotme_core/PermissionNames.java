@@ -43,5 +43,5 @@ public class PermissionNames {
     public static final String ADMIN_REMOVE = "PlotMe.admin.remove";
     public static final String USER_PROTECT = "PlotMe.use.protect";
     public static final String USER_MIDDLE = "PlotMe.use.middle";
-    public static final String ADMIN_MIDDLE_OTHER = "PlotMe.admin.middle.other";
+    public static final String ADMIN_MIDDLE_OTHER = "PlotMe.admin.middle";
 }
