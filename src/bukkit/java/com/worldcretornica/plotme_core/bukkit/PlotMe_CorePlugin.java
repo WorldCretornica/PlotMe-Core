@@ -22,7 +22,6 @@ public class PlotMe_CorePlugin extends JavaPlugin {
     private final HashMap<UUID, BukkitPlayer> bukkitPlayerMap = new HashMap<>();
     private PlotMe_Core plotme;
     private IServerBridge serverObjectBuilder;
-    private Player player;
 
     @Override
     public void onDisable() {
@@ -112,7 +111,6 @@ public class PlotMe_CorePlugin extends JavaPlugin {
      * @return a BukkitPlayer for the player given
      */
     public IPlayer wrapPlayer(Player player) {
-        this.player = player;
         if (bukkitPlayerMap.containsKey(player.getUniqueId())) {
             return bukkitPlayerMap.get(player.getUniqueId());
         } else {
