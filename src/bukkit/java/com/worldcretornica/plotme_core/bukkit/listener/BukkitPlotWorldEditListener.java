@@ -60,6 +60,7 @@ public class BukkitPlotWorldEditListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onPlayerJoin(PlayerJoinEvent event) {
         BukkitPlayer player = (BukkitPlayer) plugin.wrapPlayer(event.getPlayer());
+
         if (manager.isPlotWorld(player)) {
             if (manager.isPlayerIgnoringWELimit(player)) {
                 worldEdit.removeMask(player);

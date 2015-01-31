@@ -1413,35 +1413,101 @@ public class SqlManager {
     }
 
     /**
-     * Get plots where the player is allowed or owns.
+     * Get plots where the player is allowed
      *
      * @param playername
      * @param playerId
+     * @param ownedonly Only get the plots he is owner of
      *
      * @return
      */
     public List<Plot> getPlayerPlots(String playername, UUID playerId) {
+        return getPlayerPlots(playername, playerId, "", false);
+    }
+    
+    /**
+     * Get plots where the player is allowed
+     *
+     * @param playername
+     * @param playerId
+     * @param ownedonly Only get the plots he is owner of
+     *
+     * @return
+     */
+    public List<Plot> getOwnedPlots(String world, UUID playerId, String playername) {
+        return getPlayerPlots(playername, playerId, world, true);
+    }
+    
+    /**
+     * Get plots where the player is allowed or owns.
+     *
+     * @param playername
+     * @param playerId
+     * @param world
+     * @param ownedonly Only get the plots he is owner of
+     *
+     * @return
+     */
+    private List<Plot> getPlayerPlots(final String playername, final UUID playerId, final String world, final boolean ownedonly) {
         List<Plot> ret = new ArrayList<>();
         PreparedStatement statementPlot = null;
+        PreparedStatement statementAllowed = null;
+        PreparedStatement statementDenied = null;
+        PreparedStatement statementComments = null;
         ResultSet setPlots = null;
 
         try {
             Connection conn = getConnection();
 
-            if (playerId == null) {
-                statementPlot =
-                        conn.prepareStatement(
-                                "SELECT DISTINCT A.* FROM plotmePlots A LEFT JOIN plotmeAllowed B ON A.idX = B.idX AND A.idZ = B.idZ AND A.world = B.world "
-                                + " WHERE owner = ? OR B.player = ? ORDER BY A.world");
-                statementPlot.setString(1, playername);
-                statementPlot.setString(2, playername);
+            String query = "SELECT DISTINCT A.*";
+            if (ownedonly) {
+                query += "FROM plotmePlots A ";
             } else {
-                statementPlot =
-                        conn.prepareStatement(
-                                "SELECT DISTINCT A.* FROM plotmePlots A LEFT JOIN plotmeAllowed B ON A.idX = B.idX AND A.idZ = B.idZ AND A.world = B.world "
-                                + " WHERE ownerId = ? OR B.playerId = ? ORDER BY A.world");
+                query += "FROM plotmePlots A LEFT JOIN plotmeAllowed B ON A.idX = B.idX AND A.idZ = B.idZ AND A.world = B.world ";
+            }
+            
+            query += "WHERE ";
+            
+            if (playerId == null) {
+                if (ownedonly) {
+                    query += "A.owner = ? ";
+                } else {
+                    query += "(A.owner = ? OR B.player = ?) ";
+                }
+            } else {
+                if (ownedonly) {
+                    query += "A.ownerId = ? ";
+                } else {
+                    query += "(A.ownerId = ? OR B.playerId = ?) ";
+                }
+            }
+            
+            if (!world.isEmpty()) {
+                query += "AND world = ?";
+            }
+            
+            statementPlot = conn.prepareStatement(query);
+            
+            if (playerId == null) {
+                statementPlot.setString(1, playername);
+                if (!ownedonly) {
+                    statementPlot.setString(2, playername);
+                    if (!world.isEmpty()) {
+                        statementPlot.setString(3, world);
+                    }
+                } else if (!world.isEmpty()) {
+                    statementPlot.setString(2, world);
+                }
+            } else {
                 statementPlot.setBytes(1, UUIDFetcher.toBytes(playerId));
-                statementPlot.setBytes(2, UUIDFetcher.toBytes(playerId));
+                if (!ownedonly) {
+                    statementPlot.setBytes(2, UUIDFetcher.toBytes(playerId));
+                    if (!world.isEmpty()) {
+                        statementPlot.setString(3, world);
+                    }
+                } else if (!world.isEmpty()) {
+                    statementPlot.setString(2, world);
+                }
             }
 
             setPlots = statementPlot.executeQuery();
@@ -1465,7 +1531,7 @@ public class SqlManager {
                 String currentbidder = setPlots.getString("currentbidder");
                 double currentbid = setPlots.getDouble("currentbid");
                 boolean auctionned = setPlots.getBoolean("auctionned");
-                String world = setPlots.getString("world");
+                String currworld = setPlots.getString("world");
                 String owner = setPlots.getString("owner");
 
                 byte[] byBidder = setPlots.getBytes("currentbidderid");
@@ -1482,10 +1548,8 @@ public class SqlManager {
                     ownerId = UUIDFetcher.fromBytes(byOwner);
                 }
 
-                PreparedStatement
-                        statementAllowed =
-                        conn.prepareStatement("SELECT * FROM plotmeAllowed WHERE LOWER(world) = ? AND idX = ? AND idZ = ?");
-                statementAllowed.setString(1, world);
+                statementAllowed = conn.prepareStatement("SELECT * FROM plotmeAllowed WHERE LOWER(world) = ? AND idX = ? AND idZ = ?");
+                statementAllowed.setString(1, currworld);
                 statementAllowed.setInt(2, idX);
                 statementAllowed.setInt(3, idZ);
 
@@ -1502,10 +1566,8 @@ public class SqlManager {
 
                 setAllowed.close();
 
-                PreparedStatement
-                        statementDenied =
-                        conn.prepareStatement("SELECT * FROM plotmeDenied WHERE LOWER(world) = ? AND idX = ? AND idZ = ?");
-                statementDenied.setString(1, world);
+                statementDenied = conn.prepareStatement("SELECT * FROM plotmeDenied WHERE LOWER(world) = ? AND idX = ? AND idZ = ?");
+                statementDenied.setString(1, currworld);
                 statementDenied.setInt(2, idX);
                 statementDenied.setInt(3, idZ);
 
@@ -1521,8 +1583,8 @@ public class SqlManager {
                 }
 
                 setDenied.close();
-
-                Plot plot = new Plot(plugin, owner, ownerId, world, biome, expireddate, finished, allowed,
+                
+                Plot plot = new Plot(plugin, owner, ownerId, currworld, biome, expireddate, finished, allowed,
                                      idX + ";" + idZ, customprice, forsale, finisheddate, protect,
                                      currentbidder, currentbidderid, currentbid, auctionned, denied);
 
@@ -1536,6 +1598,15 @@ public class SqlManager {
                 if (statementPlot != null) {
                     statementPlot.close();
                 }
+                if (statementAllowed != null) {
+                    statementAllowed.close();
+                }
+                if (statementDenied != null) {
+                    statementDenied.close();
+                }
+                if (statementComments != null) {
+                    statementComments.close();
+                }
                 if (setPlots != null) {
                     setPlots.close();
                 }
@@ -1547,135 +1618,8 @@ public class SqlManager {
         return ret;
     }
 
-    /**
-     * Get plots that the player owns.
-     *
-     * @param world
-     * @param ownerId
-     * @param owner
-     * @return
-     */
-    public List<Plot> getOwnedPlots(String world, UUID ownerId, String owner) {
-        List<Plot> ret = new ArrayList<>();
-        PreparedStatement statementPlot = null;
-        ResultSet setPlots = null;
-
-        try {
-            Connection conn = getConnection();
-
-            if (ownerId == null) {
-                statementPlot = conn.prepareStatement("SELECT * FROM plotmePlots WHERE world LIKE ? AND owner LIKE ? ORDER BY world");
-                statementPlot.setString(1, world);
-                statementPlot.setString(2, owner);
-            } else {
-                statementPlot = conn.prepareStatement("SELECT * FROM plotmePlots WHERE world LIKE ? AND ownerId = ? ORDER BY world");
-                statementPlot.setString(1, world);
-                statementPlot.setBytes(2, UUIDFetcher.toBytes(ownerId));
-            }
-
-            setPlots = statementPlot.executeQuery();
-
-            while (setPlots.next()) {
-                int idX = setPlots.getInt("idX");
-                int idZ = setPlots.getInt("idZ");
-                String biome = setPlots.getString("biome");
-                Date expireddate = null;
-                try {
-                    expireddate = setPlots.getDate("expireddate");
-                } catch (SQLException ignored) {
-                }
-                boolean finished = setPlots.getBoolean("finished");
-                PlayerList allowed = new PlayerList();
-                PlayerList denied = new PlayerList();
-                double customprice = setPlots.getDouble("customprice");
-                boolean forsale = setPlots.getBoolean("forsale");
-                String finisheddate = setPlots.getString("finisheddate");
-                boolean protect = setPlots.getBoolean("protected");
-                String currentbidder = setPlots.getString("currentbidder");
-                double currentbid = setPlots.getDouble("currentbid");
-                boolean auctionned = setPlots.getBoolean("auctionned");
-                String world1 = setPlots.getString("world");
-
-                byte[] byBidder = setPlots.getBytes("currentbidderid");
-                byte[] byOwner = setPlots.getBytes("ownerid");
-
-                UUID currentbidderid = null;
-
-                if (byBidder != null) {
-                    currentbidderid = UUIDFetcher.fromBytes(byBidder);
-                }
-
-                if (byOwner != null) {
-                    ownerId = UUIDFetcher.fromBytes(byOwner);
-                }
-
-                PreparedStatement
-                        statementAllowed =
-                        conn.prepareStatement("SELECT * FROM plotmeAllowed WHERE LOWER(world) = ? AND idX = ? AND idZ = ?");
-                statementAllowed.setString(1, world1);
-                statementAllowed.setInt(2, idX);
-                statementAllowed.setInt(3, idZ);
-
-                ResultSet setAllowed = statementAllowed.executeQuery();
-
-                while (setAllowed.next()) {
-                    byte[] byPlayerId = setAllowed.getBytes("playerid");
-                    if (byPlayerId == null) {
-                        allowed.put(setAllowed.getString("player"));
-                    } else {
-                        allowed.put(setAllowed.getString("player"), UUIDFetcher.fromBytes(byPlayerId));
-                    }
-                }
-
-                setAllowed.close();
-
-                PreparedStatement
-                        statementDenied =
-                        conn.prepareStatement("SELECT * FROM plotmeDenied WHERE LOWER(world) = ? AND idX = ? AND idZ = ?");
-                statementDenied.setString(1, world1);
-                statementDenied.setInt(2, idX);
-                statementDenied.setInt(3, idZ);
-
-                ResultSet setDenied = statementDenied.executeQuery();
-
-                while (setDenied.next()) {
-                    byte[] byPlayerId = setDenied.getBytes("playerid");
-                    if (byPlayerId == null) {
-                        denied.put(setDenied.getString("player"));
-                    } else {
-                        denied.put(setDenied.getString("player"), UUIDFetcher.fromBytes(byPlayerId));
-                    }
-                }
-
-                setDenied.close();
-
-                Plot plot = new Plot(plugin, owner, ownerId, world1, biome, expireddate, finished, allowed,
-                                     idX + ";" + idZ, customprice, forsale, finisheddate, protect,
-                                     currentbidder, currentbidderid, currentbid, auctionned, denied);
-
-                ret.add(plot);
-            }
-        } catch (SQLException ex) {
-            plugin.getLogger().severe("DonePlots Exception :");
-            plugin.getLogger().severe(ex.getMessage());
-        } finally {
-            try {
-                if (statementPlot != null) {
-                    statementPlot.close();
-                }
-                if (setPlots != null) {
-                    setPlots.close();
-                }
-            } catch (SQLException ex) {
-                plugin.getLogger().severe("DonePlots Exception (on close) :");
-                plugin.getLogger().severe(ex.getMessage());
-            }
-        }
-        return ret;
-    }
-
     public void plotConvertToUUIDAsynchronously() {
-        plugin.getServerBridge().runTaskAsynchronously(new Runnable() {
+        plugin.getServerBridge().runTaskLaterAsynchronously(new Runnable() {
             @Override
             public void run() {
                 plugin.getLogger().info("Checking if conversion to UUID needed...");
@@ -1698,15 +1642,10 @@ public class SqlManager {
                     // Get all the players
                     statementPlayers = conn.createStatement();
                     // Exclude groups and names with * or missing
-                    String
-                            sql =
-                            "SELECT LOWER(owner) as Name FROM plotmePlots WHERE NOT owner IS NULL AND Not owner LIKE 'group:%' AND Not owner LIKE '%*%' AND ownerid IS NULL GROUP BY LOWER(owner) ";
-                    sql +=
-                            "UNION SELECT LOWER(currentbidder) as Name FROM plotmePlots WHERE NOT currentbidder IS NULL AND currentbidderid IS NULL GROUP BY LOWER(currentbidder) ";
-                    sql +=
-                            "UNION SELECT LOWER(player) as Name FROM plotmeAllowed WHERE NOT player IS NULL AND Not player LIKE 'group:%' AND Not player LIKE '%*%' AND playerid IS NULL GROUP BY LOWER(player) ";
-                    sql +=
-                            "UNION SELECT LOWER(player) as Name FROM plotmeDenied WHERE NOT player IS NULL AND Not player LIKE 'group:%' AND Not player LIKE '%*%' AND playerid IS NULL GROUP BY LOWER(player) ";
+                    String sql = "SELECT LOWER(owner) as Name FROM plotmePlots WHERE NOT owner IS NULL AND Not owner LIKE 'group:%' AND Not owner LIKE '%*%' AND ownerid IS NULL GROUP BY LOWER(owner) ";
+                    sql += "UNION SELECT LOWER(currentbidder) as Name FROM plotmePlots WHERE NOT currentbidder IS NULL AND currentbidderid IS NULL GROUP BY LOWER(currentbidder) ";
+                    sql += "UNION SELECT LOWER(player) as Name FROM plotmeAllowed WHERE NOT player IS NULL AND Not player LIKE 'group:%' AND Not player LIKE '%*%' AND playerid IS NULL GROUP BY LOWER(player) ";
+                    sql += "UNION SELECT LOWER(player) as Name FROM plotmeDenied WHERE NOT player IS NULL AND Not player LIKE 'group:%' AND Not player LIKE '%*%' AND playerid IS NULL GROUP BY LOWER(player) ";
 
                     setPlayers = statementPlayers.executeQuery(sql);
                     boolean boConversion = false;
@@ -1761,9 +1700,8 @@ public class SqlManager {
                             if (!response.isEmpty()) {
                                 plugin.getLogger().info("Finished fetching " + response.size() + " UUIDs. Starting database update.");
                                 psOwnerId = conn.prepareStatement("UPDATE plotmePlots SET ownerid = ? WHERE LOWER(owner) = ? AND ownerid IS NULL");
-                                psCurrentBidderId =
-                                        conn.prepareStatement(
-                                                "UPDATE plotmePlots SET currentbidderid = ? WHERE LOWER(currentbidder) = ? AND currentbidderid IS NULL");
+                                psCurrentBidderId = conn.prepareStatement(
+                                        "UPDATE plotmePlots SET currentbidderid = ? WHERE LOWER(currentbidder) = ? AND currentbidderid IS NULL");
                                 psAllowedPlayerId =
                                         conn.prepareStatement("UPDATE plotmeAllowed SET playerid = ? WHERE LOWER(player) = ? AND playerid IS NULL");
                                 psDeniedPlayerId =
@@ -1888,7 +1826,7 @@ public class SqlManager {
                     }
                 }
             }
-        });
+        }, 20L);
     }
 
     private void fetchUUIDAsync(final int idX, final int idZ, final String world, final String property, final String name) {
@@ -1922,26 +1860,22 @@ public class SqlManager {
 
                     switch (property) {
                         case "owner":
-                            ps =
-                                    conn.prepareStatement(
+                            ps = conn.prepareStatement(
                                             "UPDATE plotmePlots SET ownerid = ?, owner = ? WHERE LOWER(owner) = ? AND idX = '" + idX + "' AND idZ = '"
                                             + idZ + "' AND LOWER(world) = '" + world + "'");
                             break;
                         case "bidder":
-                            ps =
-                                    conn.prepareStatement(
+                            ps = conn.prepareStatement(
                                             "UPDATE plotmePlots SET currentbidderid = ?, currentbidder = ? WHERE LOWER(currentbidder) = ? AND idX = '"
                                             + idX + "' AND idZ = '" + idZ + "' AND LOWER(world) = '" + world + "'");
                             break;
                         case "allowed":
-                            ps =
-                                    conn.prepareStatement(
+                            ps = conn.prepareStatement(
                                             "UPDATE plotmeAllowed SET playerid = ?, player = ? WHERE LOWER(player) = ? AND idX = '" + idX
                                             + "' AND idZ = '" + idZ + "' AND LOWER(world) = '" + world + "'");
                             break;
                         case "denied":
-                            ps =
-                                    conn.prepareStatement("UPDATE plotmeDenied SET playerid = ?, player = ? WHERE LOWER(player) = ? AND idX = '" + idX
+                            ps = conn.prepareStatement("UPDATE plotmeDenied SET playerid = ?, player = ? WHERE LOWER(player) = ? AND idX = '" + idX
                                                           + "' AND idZ = '" + idZ + "' AND LOWER(world) = '" + world + "'");
                             break;
                         default:

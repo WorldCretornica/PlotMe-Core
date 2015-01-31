@@ -114,7 +114,9 @@ public class PlotMe_CorePlugin extends JavaPlugin {
         if (bukkitPlayerMap.containsKey(player.getUniqueId())) {
             return bukkitPlayerMap.get(player.getUniqueId());
         } else {
-            return bukkitPlayerMap.put(player.getUniqueId(), new BukkitPlayer(player));
+            BukkitPlayer bukkitplayer = new BukkitPlayer(player);
+            bukkitPlayerMap.put(player.getUniqueId(), bukkitplayer);
+            return bukkitplayer;
         }
     }
 

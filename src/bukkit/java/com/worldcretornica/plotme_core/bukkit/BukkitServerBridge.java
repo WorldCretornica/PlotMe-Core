@@ -182,6 +182,11 @@ public class BukkitServerBridge extends IServerBridge {
     }
 
     @Override
+    public void runTaskLaterAsynchronously(Runnable runnable, long delay) {
+        Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, runnable, delay);
+    }
+
+    @Override
     public IBiome getBiome(String name) {
         Biome biome = null;
 

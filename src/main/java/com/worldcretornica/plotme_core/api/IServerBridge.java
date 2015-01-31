@@ -2,6 +2,7 @@ package com.worldcretornica.plotme_core.api;
 
 import com.worldcretornica.plotme_core.PlotWorldEdit;
 import com.worldcretornica.plotme_core.api.event.IEventFactory;
+
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 
@@ -81,6 +82,8 @@ public abstract class IServerBridge {
     public abstract void setupListeners();
 
     public abstract void runTaskAsynchronously(Runnable runnable);
+    
+    public abstract void runTaskLaterAsynchronously(Runnable runnable, long delay);
 
     public abstract IBiome getBiome(String name);
 
@@ -113,5 +116,4 @@ public abstract class IServerBridge {
     public abstract IMaterial getMaterial(String string);
 
     public abstract IConfigSection loadDefaultConfig(String string);
-
 }

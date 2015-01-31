@@ -11,8 +11,10 @@ import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.IEventFactory;
 import com.worldcretornica.plotme_core.bukkit.event.*;
 import com.worldcretornica.plotme_core.sponge.api.*;
+
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
+
 import org.spongepowered.api.entity.player.Player;
 import org.spongepowered.api.service.command.CommandService;
 import org.spongepowered.api.world.World;
@@ -258,6 +260,12 @@ public class SpongeServerBridge extends IServerBridge {
     public IConfigSection loadDefaultConfig(String string) {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public void runTaskLaterAsynchronously(Runnable runnable, long delay) {
+        // TODO Auto-generated method stub
+        
     }
 
 }
