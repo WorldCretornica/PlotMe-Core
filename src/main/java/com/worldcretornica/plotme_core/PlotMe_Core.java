@@ -70,7 +70,10 @@ public class PlotMe_Core {
         setupDefaultCaptions();
         setupMySQL();
         PlotMeCoreManager.getInstance().getPlotMaps().clear();
-        //setupWorlds();
+        
+        for (String worldname : managers.keySet()) {
+            setupWorld(worldname.toLowerCase());
+        }
     }
 
     public Logger getLogger() {
