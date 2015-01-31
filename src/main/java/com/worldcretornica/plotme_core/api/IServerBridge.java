@@ -5,7 +5,7 @@ import com.worldcretornica.plotme_core.api.event.IEventFactory;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 
-import java.io.InputStream;
+import java.io.*;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -106,7 +106,7 @@ public abstract class IServerBridge {
      * Get all Existing Plotworlds.
      * @return all plotworlds on the server
      */
-    public abstract List<IWorld> getWorlds();
+    public abstract Collection<IWorld> getWorlds();
 
     public abstract boolean createPlotWorld(String worldName, String generator, Map<String, String> args);
 

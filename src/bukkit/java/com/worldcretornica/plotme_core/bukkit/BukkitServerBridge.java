@@ -322,7 +322,7 @@ public class BukkitServerBridge extends IServerBridge {
     }
 
     @Override
-    public List<IWorld> getWorlds() {
+    public Collection<IWorld> getWorlds() {
         List<IWorld> worlds = new ArrayList<>();
 
         for (World world : Bukkit.getWorlds()) {
