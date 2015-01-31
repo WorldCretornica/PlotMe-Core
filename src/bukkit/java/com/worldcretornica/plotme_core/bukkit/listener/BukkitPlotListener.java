@@ -9,6 +9,7 @@ import com.worldcretornica.plotme_core.PlotToClear;
 import com.worldcretornica.plotme_core.bukkit.*;
 import com.worldcretornica.plotme_core.bukkit.api.*;
 import com.worldcretornica.plotme_core.bukkit.event.*;
+
 import org.bukkit.block.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.*;
@@ -442,6 +443,7 @@ public class BukkitPlotListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onBlockPistonRetract(BlockPistonRetractEvent event) {
+        @SuppressWarnings("deprecation")
         BukkitBlock block = new BukkitBlock(event.getRetractLocation().getBlock());
 
         if (manager.isPlotWorld(block.getWorld())) {

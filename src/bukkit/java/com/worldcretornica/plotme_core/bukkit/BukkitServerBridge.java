@@ -3,7 +3,6 @@ package com.worldcretornica.plotme_core.bukkit;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
-import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.PlotWorldEdit;
 import com.worldcretornica.plotme_core.api.IBiome;
 import com.worldcretornica.plotme_core.api.IConfigSection;
@@ -104,7 +103,6 @@ public class BukkitServerBridge extends IServerBridge {
 
         if (pluginManager.getPlugin("WorldEdit") != null) {
 
-            PlotMe_Core plotMeCore = plugin.getAPI();
             WorldEditPlugin worldEdit = (WorldEditPlugin) pluginManager.getPlugin("WorldEdit");
             PlotWorldEdit we = null;
             try {
