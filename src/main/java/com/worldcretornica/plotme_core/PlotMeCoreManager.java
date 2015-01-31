@@ -196,7 +196,7 @@ public class PlotMeCoreManager {
      * @return true if economy enabled
      */
     private boolean isEconomyEnabled(String world) {
-        PlotMapInfo pmi = getMap(world.toLowerCase());
+        PlotMapInfo pmi = getMap(world);
         return isEconomyEnabled(pmi);
     }
 
@@ -229,7 +229,7 @@ public class PlotMeCoreManager {
 
 
     public PlotMapInfo getMap(IWorld world) {
-        String worldName = world.getName().toLowerCase();
+        String worldName = world.getName();
         return getMap(worldName);
     }
 
@@ -243,7 +243,7 @@ public class PlotMeCoreManager {
     }
 
     public PlotMapInfo getMap(IEntity player) {
-        String world = player.getWorld().getName().toLowerCase();
+        String world = player.getWorld().getName();
         return getMap(world);
     }
 
@@ -322,7 +322,7 @@ public class PlotMeCoreManager {
     }
 
     public Plot getPlotById(String id, String name) {
-        PlotMapInfo pmi = getMap(name.toLowerCase());
+        PlotMapInfo pmi = getMap(name);
 
         if (pmi == null) {
             return null;
@@ -638,7 +638,7 @@ public class PlotMeCoreManager {
     }
 
     public boolean isPlotAvailable(String id, IWorld world) {
-        return isPlotAvailable(id, world.getName().toLowerCase());
+        return isPlotAvailable(id, world.getName());
     }
 
     public boolean isPlotAvailable(String id, IPlayer player) {

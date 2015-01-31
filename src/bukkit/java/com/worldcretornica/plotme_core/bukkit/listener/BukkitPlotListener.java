@@ -702,7 +702,7 @@ public class BukkitPlotListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onProjectileLaunchEvent(ProjectileLaunchEvent event) {
         if (event.getEntity() instanceof Player) {
-            PlotMapInfo pmi = manager.getMap(event.getEntity().getWorld().getName().toLowerCase());
+            PlotMapInfo pmi = manager.getMap(event.getEntity().getWorld().getName());
             if (pmi != null && !pmi.canUseProjectiles()) {
                 event.getEntity().sendMessage(api.getUtil().C("ErrCannotUseEggs"));
             /* Player player = event.getPlayer();
