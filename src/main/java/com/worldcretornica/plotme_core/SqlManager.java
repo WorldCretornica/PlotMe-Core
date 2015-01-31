@@ -1071,6 +1071,11 @@ public class SqlManager {
         return ret;
     }
 
+    /**
+     * Get the number of plots in the world
+     * @param world plotworld to check
+     * @return number of plots in the world
+     */
     public short getPlotCount(String world) {
         PreparedStatement ps = null;
         ResultSet setNbPlots = null;

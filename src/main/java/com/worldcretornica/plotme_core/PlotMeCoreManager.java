@@ -23,7 +23,7 @@ import javax.inject.Singleton;
 @Singleton
 public class PlotMeCoreManager {
 
-    private static PlotMeCoreManager INSTANCE = new PlotMeCoreManager();
+    private static final PlotMeCoreManager INSTANCE = new PlotMeCoreManager();
     private PlotMe_Core plugin;
     private HashSet<UUID> playersignoringwelimit;
     private HashMap<String, PlotMapInfo> plotmaps;
@@ -106,6 +106,11 @@ public class PlotMeCoreManager {
         return pmi != null && pmi.getPlot(id) == null;
     }
 
+    /**
+     * Get the id of the plot based on the location
+     * @param location location in the plotworld
+     * @return Plot ID or an empty string if not found
+     */
     public String getPlotId(ILocation location) {
         if (getGenManager(location.getWorld()) == null) {
             return "";
@@ -115,6 +120,11 @@ public class PlotMeCoreManager {
 
     }
 
+    /**
+     * Get the id of the plot the player is standing on
+     * @param player player in the plotworld
+     * @return Plot ID or an empty string if not found
+     */
     public String getPlotId(IPlayer player) {
         if (getGenManager(player.getWorld()) == null) {
             return "";
@@ -185,7 +195,13 @@ public class PlotMeCoreManager {
     public short getNbOwnedPlot(UUID uuid, String name, String world) {
         return plugin.getSqlManager().getPlotCount(world, uuid, name);
     }
-    
+
+    /**
+     * Get the number of plots the player owns
+     * @param uuid player UUID
+     * @param world plotworld
+     * @return number of plots the player owns
+     */
     public short getNbOwnedPlot(UUID uuid, String world) {
         return plugin.getSqlManager().getPlotCount(world, uuid, null);
     }
