@@ -2,10 +2,10 @@ package com.worldcretornica.plotme_core;
 
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
-import com.worldcretornica.plotme_core.bukkit.api.BukkitBiome;
+import com.worldcretornica.plotme_core.bukkit.api.*;
 import com.worldcretornica.plotme_core.utils.UUIDFetcher;
 
-import java.io.File;
+import java.io.*;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.Date;
@@ -1413,12 +1413,10 @@ public class SqlManager {
     }
 
     /**
-     * Get plots where the player is allowed
+     * Get plots the player owns or is allowed
      *
      * @param playername
      * @param playerId
-     * @param ownedonly Only get the plots he is owner of
-     *
      * @return
      */
     public List<Plot> getPlayerPlots(String playername, UUID playerId) {
@@ -1426,11 +1424,11 @@ public class SqlManager {
     }
     
     /**
-     * Get plots where the player is allowed
+     * Get plots the player owns
      *
      * @param playername
      * @param playerId
-     * @param ownedonly Only get the plots he is owner of
+     * @param world
      *
      * @return
      */
@@ -1444,16 +1442,15 @@ public class SqlManager {
      * @param playername
      * @param playerId
      * @param world
-     * @param ownedonly Only get the plots he is owner of
+     * @param ownedonly Only get the plots the player owns
      *
      * @return
      */
-    private List<Plot> getPlayerPlots(final String playername, final UUID playerId, final String world, final boolean ownedonly) {
+    private List<Plot> getPlayerPlots(String playername, UUID playerId, String world, boolean ownedonly) {
         List<Plot> ret = new ArrayList<>();
         PreparedStatement statementPlot = null;
         PreparedStatement statementAllowed = null;
         PreparedStatement statementDenied = null;
-        PreparedStatement statementComments = null;
         ResultSet setPlots = null;
 
         try {
@@ -1604,9 +1601,6 @@ public class SqlManager {
                 if (statementDenied != null) {
                     statementDenied.close();
                 }
-                if (statementComments != null) {
-                    statementComments.close();
-                }
                 if (setPlots != null) {
                     setPlots.close();
                 }
@@ -1642,10 +1636,15 @@ public class SqlManager {
                     // Get all the players
                     statementPlayers = conn.createStatement();
                     // Exclude groups and names with * or missing
-                    String sql = "SELECT LOWER(owner) as Name FROM plotmePlots WHERE NOT owner IS NULL AND Not owner LIKE 'group:%' AND Not owner LIKE '%*%' AND ownerid IS NULL GROUP BY LOWER(owner) ";
-                    sql += "UNION SELECT LOWER(currentbidder) as Name FROM plotmePlots WHERE NOT currentbidder IS NULL AND currentbidderid IS NULL GROUP BY LOWER(currentbidder) ";
-                    sql += "UNION SELECT LOWER(player) as Name FROM plotmeAllowed WHERE NOT player IS NULL AND Not player LIKE 'group:%' AND Not player LIKE '%*%' AND playerid IS NULL GROUP BY LOWER(player) ";
-                    sql += "UNION SELECT LOWER(player) as Name FROM plotmeDenied WHERE NOT player IS NULL AND Not player LIKE 'group:%' AND Not player LIKE '%*%' AND playerid IS NULL GROUP BY LOWER(player) ";
+                    String
+                            sql =
+                            "SELECT LOWER(owner) as Name FROM plotmePlots WHERE NOT owner IS NULL AND Not owner LIKE 'group:%' AND Not owner LIKE '%*%' AND ownerid IS NULL GROUP BY LOWER(owner) ";
+                    sql +=
+                            "UNION SELECT LOWER(currentbidder) as Name FROM plotmePlots WHERE NOT currentbidder IS NULL AND currentbidderid IS NULL GROUP BY LOWER(currentbidder) ";
+                    sql +=
+                            "UNION SELECT LOWER(player) as Name FROM plotmeAllowed WHERE NOT player IS NULL AND Not player LIKE 'group:%' AND Not player LIKE '%*%' AND playerid IS NULL GROUP BY LOWER(player) ";
+                    sql +=
+                            "UNION SELECT LOWER(player) as Name FROM plotmeDenied WHERE NOT player IS NULL AND Not player LIKE 'group:%' AND Not player LIKE '%*%' AND playerid IS NULL GROUP BY LOWER(player) ";
 
                     setPlayers = statementPlayers.executeQuery(sql);
                     boolean boConversion = false;
