@@ -100,6 +100,15 @@ public class PlotMapInfo {
         config.saveConfig();
     }
 
+    public boolean canUseProjectiles() {
+        return config.getBoolean("Projectiles");
+    }
+
+    public void setUseProjectiles(boolean allowed) {
+        config.set("Projectiles", allowed);
+        config.saveConfig();
+    }
+
     public boolean isCanPutOnSale() {
         return getEconomySection().getBoolean("CanPutOnSale");
     }

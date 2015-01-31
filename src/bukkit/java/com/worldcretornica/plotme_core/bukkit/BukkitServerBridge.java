@@ -206,7 +206,7 @@ public class BukkitServerBridge extends IServerBridge {
         if (player == null) {
             return null;
         } else {
-            return new BukkitPlayer(player);
+            return plugin.wrapPlayer(player);
         }
     }
 
@@ -223,7 +223,7 @@ public class BukkitServerBridge extends IServerBridge {
         if (player == null) {
             return null;
         } else {
-            return new BukkitPlayer(player);
+            return plugin.wrapPlayer(player);
         }
     }
 
@@ -308,7 +308,7 @@ public class BukkitServerBridge extends IServerBridge {
         Collection<IPlayer> players = new ArrayList<>();
 
         for (Player player : Bukkit.getOnlinePlayers()) {
-            players.add(new BukkitPlayer(player));
+            players.add(plugin.wrapPlayer(player));
         }
 
         return players;
@@ -456,5 +456,9 @@ public class BukkitServerBridge extends IServerBridge {
             isr = new InputStreamReader(defConfigStream);
         }
         return YamlConfiguration.loadConfiguration(isr);
+    }
+
+    public void clearBukkitPlayerMap() {
+        plugin.getBukkitPlayerMap().clear();
     }
 }

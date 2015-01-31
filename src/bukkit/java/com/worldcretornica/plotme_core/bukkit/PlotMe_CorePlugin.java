@@ -6,26 +6,28 @@ import com.worldcretornica.plotme_core.api.IEntity;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IPlotMe_GeneratorManager;
 import com.worldcretornica.plotme_core.api.IServerBridge;
-import com.worldcretornica.plotme_core.bukkit.api.BukkitEntity;
-import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
-
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
+import com.worldcretornica.plotme_core.bukkit.api.*;
+import org.bukkit.entity.*;
+import org.bukkit.plugin.java.*;
 import org.mcstats.Metrics;
 import org.mcstats.Metrics.Graph;
 
-import java.io.IOException;
+import java.io.*;
+import java.util.HashMap;
+import java.util.UUID;
 
 
 public class PlotMe_CorePlugin extends JavaPlugin {
 
+    private final HashMap<UUID, BukkitPlayer> bukkitPlayerMap = new HashMap<>();
     private PlotMe_Core plotme;
     private IServerBridge serverObjectBuilder;
+    private Player player;
 
     @Override
     public void onDisable() {
         getAPI().disable();
+        getBukkitPlayerMap().clear();
     }
 
     @Override
@@ -103,8 +105,19 @@ public class PlotMe_CorePlugin extends JavaPlugin {
         }
     }
 
+
+    /**
+     * Gets a cache of BukkitPlayers for use in commands. Reducing the number of BukkitPlayer Objects being created. Players are removed on logoff.
+     * @param player {@link Player} from Bukkit
+     * @return a BukkitPlayer for the player given
+     */
     public IPlayer wrapPlayer(Player player) {
-        return new BukkitPlayer(player);
+        this.player = player;
+        if (bukkitPlayerMap.containsKey(player.getUniqueId())) {
+            return bukkitPlayerMap.get(player.getUniqueId());
+        } else {
+            return bukkitPlayerMap.put(player.getUniqueId(), new BukkitPlayer(player));
+        }
     }
 
     public IEntity wrapEntity(Entity entity) {
@@ -113,4 +126,13 @@ public class PlotMe_CorePlugin extends JavaPlugin {
         }
         return new BukkitEntity(entity);
     }
+
+    public void removePlayer(UUID playerUUID) {
+        bukkitPlayerMap.remove(playerUUID);
+    }
+
+    public HashMap<UUID, BukkitPlayer> getBukkitPlayerMap() {
+        return bukkitPlayerMap;
+    }
+
 }

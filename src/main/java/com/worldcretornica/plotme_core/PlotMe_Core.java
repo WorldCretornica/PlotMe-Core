@@ -108,7 +108,6 @@ public class PlotMe_Core {
         if (!(config.contains(WORLDS_CONFIG_SECTION) && !config.getConfigurationSection(WORLDS_CONFIG_SECTION).getKeys(false).isEmpty())) {
             new PlotMapInfo(this, "plotworld");
         }
-
         // Do any config validation
         if (config.getInt("NbClearSpools") > 100) {
             getLogger().warning("Having more than 100 clear spools seems drastic, changing to 100");
@@ -130,8 +129,10 @@ public class PlotMe_Core {
             PlotMapInfo pmi = new PlotMapInfo(this, worldname);
             //Lets just hide a bit of code to clean up the config in here.
             IConfigSection config = getServerBridge().loadDefaultConfig("worlds." + worldname.toLowerCase());
+            config.set("Projectiles", true);
             config.set("BottomBlockId", null);
             config.set("AutoLinkPlots", null);
+            config.saveConfig();
             PlotMeCoreManager.getInstance().addPlotMap(worldname.toLowerCase(), pmi);
         }
 

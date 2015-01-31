@@ -1,6 +1,11 @@
 package com.worldcretornica.plotme_core.sponge;
 
+import com.worldcretornica.plotme_core.PlotMapInfo;
+import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.sponge.api.*;
+import org.spongepowered.api.entity.player.Player;
+import org.spongepowered.api.entity.projectile.source.ProjectileSource;
 import org.spongepowered.api.event.block.BlockBurnEvent;
 import org.spongepowered.api.event.block.BlockChangeEvent;
 import org.spongepowered.api.event.block.BlockDispenseEvent;
@@ -12,6 +17,7 @@ import org.spongepowered.api.event.block.BulkBlockEvent;
 import org.spongepowered.api.event.block.FloraGrowEvent;
 import org.spongepowered.api.event.block.FluidSpreadEvent;
 import org.spongepowered.api.event.block.LeafDecayEvent;
+import org.spongepowered.api.event.entity.ProjectileLaunchEvent;
 import org.spongepowered.api.event.entity.living.player.PlayerInteractEvent;
 import org.spongepowered.api.util.event.Subscribe;
 
@@ -83,5 +89,21 @@ public class SpongePlotListener {
     @Subscribe
     public void onPlayerInteract(PlayerInteractEvent event) {
         //TODO
+    }
+
+    @Subscribe
+    public void onProjectileEvent(ProjectileLaunchEvent event) {
+        SpongeWorld world = new SpongeWorld(event.getEntity().getWorld());
+        PlotMapInfo pmi = PlotMeCoreManager.getInstance().getMap(world);
+        if (!pmi.canUseProjectiles()) {
+            ProjectileSource source = event.getSource().orNull();
+            if (source != null) {
+                if (source instanceof Player) {
+                    //TODO Send message to player
+                }
+            }
+        } else {
+            return;
+        }
     }
 }
