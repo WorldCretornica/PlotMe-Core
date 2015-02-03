@@ -9,7 +9,6 @@ import com.worldcretornica.plotme_core.PlotToClear;
 import com.worldcretornica.plotme_core.bukkit.*;
 import com.worldcretornica.plotme_core.bukkit.api.*;
 import com.worldcretornica.plotme_core.bukkit.event.*;
-
 import org.bukkit.block.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.*;
@@ -508,9 +507,9 @@ public class BukkitPlotListener implements Listener {
         if (event.getIgnitingEntity() == null) {
             return;
         }
-        BukkitEntity entity = new BukkitEntity(event.getIgnitingEntity());
+        BukkitLocation location = new BukkitLocation(event.getBlock().getLocation());
 
-        PlotMapInfo pmi = manager.getMap(entity);
+        PlotMapInfo pmi = manager.getMap(location);
 
         if (pmi == null) {
             return;
@@ -518,12 +517,12 @@ public class BukkitPlotListener implements Listener {
         if (pmi.isDisableIgnition()) {
             event.setCancelled(true);
         } else {
-            String id = manager.getPlotId(entity.getLocation());
+            String id = manager.getPlotId(location);
 
             if (id.isEmpty()) {
                 event.setCancelled(true);
             } else {
-                PlotToClear ptc = api.getPlotLocked(entity.getWorld().getName(), id);
+                PlotToClear ptc = api.getPlotLocked(location.getWorld().getName(), id);
 
                 Player player = null;
                 if (ptc != null) {
