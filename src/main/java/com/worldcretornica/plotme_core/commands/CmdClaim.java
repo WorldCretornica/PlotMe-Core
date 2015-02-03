@@ -88,14 +88,12 @@ public class CmdClaim extends PlotCommand {
                                 player.sendMessage("§c" + C("ErrCreatingPlotAt") + " " + id);
                             } else {
                                 if (playerName.equalsIgnoreCase(player.getName())) {
-                                    double price1 = -price;
                                     player.sendMessage(
                                             C("MsgThisPlotYours") + " " + C("WordUse") + " §c/plotme home§r " + C("MsgToGetToIt") + " " + Util()
-                                                    .moneyFormat(price1, true));
+                                                    .moneyFormat(-price, true));
                                 } else {
-                                    double price1 = -price;
                                     player.sendMessage(C("MsgThisPlotIsNow") + " " + playerName + C("WordPossessive") + ". " + C("WordUse")
-                                                       + " §c/plotme home§r " + C("MsgToGetToIt") + " " + Util().moneyFormat(price1, true));
+                                                       + " §c/plotme home§r " + C("MsgToGetToIt") + " " + Util().moneyFormat(-price, true));
                                 }
 
                                 if (isAdvancedLogging()) {

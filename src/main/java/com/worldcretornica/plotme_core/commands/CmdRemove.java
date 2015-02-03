@@ -70,9 +70,8 @@ public class CmdRemove extends PlotCommand {
                                 if (!event.isCancelled()) {
                                     plot.removeAllowed(allowed);
 
-                                    double price1 = -price;
                                     player.sendMessage(
-                                            C("WordPlayer") + " §c" + allowed + "§r " + C("WordRemoved") + ". " + Util().moneyFormat(price1, true));
+                                            C("WordPlayer") + " §c" + allowed + "§r " + C("WordRemoved") + ". " + Util().moneyFormat(-price, true));
 
                                     if (isAdvancedLogging()) {
                                         serverBridge.getLogger()

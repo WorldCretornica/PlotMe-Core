@@ -116,8 +116,7 @@ public class CmdHome extends PlotCommand {
                                         player.setLocation(event.getHomeLocation());
 
                                         if (price != 0) {
-                                            double price1 = -price;
-                                            player.sendMessage(Util().moneyFormat(price1, true));
+                                            player.sendMessage(Util().moneyFormat(-price, true));
                                         }
                                     }
                                     return true;
@@ -160,8 +159,7 @@ public class CmdHome extends PlotCommand {
                                     player.setLocation(event.getHomeLocation());
 
                                     if (price != 0) {
-                                        double price1 = -price;
-                                        player.sendMessage(Util().moneyFormat(price1, true));
+                                        player.sendMessage(Util().moneyFormat(-price, true));
                                     }
                                 }
                                 return true;

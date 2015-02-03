@@ -68,9 +68,8 @@ public class CmdUndeny extends PlotCommand {
                                 if (!event.isCancelled()) {
                                     plot.removeDenied(denied);
 
-                                    double price1 = -price;
                                     player.sendMessage(
-                                            C("WordPlayer") + " §c" + denied + "§r " + C("MsgNowUndenied") + " " + Util().moneyFormat(price1, true));
+                                            C("WordPlayer") + " §c" + denied + "§r " + C("MsgNowUndenied") + " " + Util().moneyFormat(-price, true));
 
                                     if (isAdvancedLogging()) {
                                         if (price != 0) {
