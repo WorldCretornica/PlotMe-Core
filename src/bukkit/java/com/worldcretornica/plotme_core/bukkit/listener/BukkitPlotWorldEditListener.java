@@ -29,6 +29,9 @@ public class BukkitPlotWorldEditListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onPlayerMove(PlayerMoveEvent event) {
+        if (event.getTo() == null || event.getFrom() == null) {
+            return;
+        }
         BukkitLocation from = new BukkitLocation(event.getFrom());
         BukkitLocation to = new BukkitLocation(event.getTo());
 
@@ -93,6 +96,9 @@ public class BukkitPlotWorldEditListener implements Listener {
         BukkitPlayer player = (BukkitPlayer) plugin.wrapPlayer(event.getPlayer());
         BukkitLocation from = new BukkitLocation(event.getFrom());
         BukkitLocation to = new BukkitLocation(event.getTo());
+        if (event.getFrom() == null || event.getTo() == null) {
+            return;
+        }
         if (manager.isPlotWorld(from)) {
             if (manager.isPlotWorld(to)) {
                 worldEdit.setMask(player);
