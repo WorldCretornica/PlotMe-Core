@@ -3,16 +3,11 @@ package com.worldcretornica.plotme_core.bukkit.listener;
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
-import com.worldcretornica.plotme_core.bukkit.PlotMe_CorePlugin;
-import com.worldcretornica.plotme_core.bukkit.api.BukkitLocation;
-import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
-import org.bukkit.Location;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
+import com.worldcretornica.plotme_core.bukkit.*;
+import com.worldcretornica.plotme_core.bukkit.api.*;
+import org.bukkit.*;
+import org.bukkit.event.*;
+import org.bukkit.event.player.*;
 
 public class BukkitPlotDenyListener implements Listener {
 
@@ -28,7 +23,7 @@ public class BukkitPlotDenyListener implements Listener {
     public void onPlayerMove(PlayerMoveEvent event) {
         BukkitPlayer player = (BukkitPlayer) plugin.wrapPlayer(event.getPlayer());
 
-        if (PlotMeCoreManager.getInstance().isPlotWorld(player) && !player.hasPermission(PermissionNames.ADMIN_BYPASSDENY)) {
+        if (manager.isPlotWorld(player) && !player.hasPermission(PermissionNames.ADMIN_BYPASSDENY)) {
             BukkitLocation to = new BukkitLocation(event.getTo());
 
             String idTo = manager.getPlotId(to);

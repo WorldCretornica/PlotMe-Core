@@ -5,6 +5,7 @@ author: ZachBora
 authors: [MattBDev]
 website: http://worldcretornica.github.io/PlotMe-Core/
 load: STARTUP
+softdepend: [Vault]
 description: >
              Handles plot management and protection
 commands:
