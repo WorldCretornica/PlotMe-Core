@@ -178,6 +178,7 @@ public class PlotMe_Core {
         if (!newCaptionFile.exists()) {
             getServerBridge().saveResource(CAPTION_FILE, true);
         }
+        serverBridge.getConfig(CAPTION_FILE).set("MsgCannotDenyOwner", "You can''t deny the owner of the plot.");
     }
 
     /**

@@ -34,7 +34,7 @@ public class CmdDeny extends PlotCommand {
 
                         if (plot.getOwner().equalsIgnoreCase(player.getName()) || player.hasPermission(PermissionNames.ADMIN_DENY)) {
                             if (plot.getOwner().equalsIgnoreCase(denied)) {
-                                player.sendMessage("Cannot deny owner");
+                                player.sendMessage(C("MsgCannotDenyOwner"));
                                 return true;
                             }
 
