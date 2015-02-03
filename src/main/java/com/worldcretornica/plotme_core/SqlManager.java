@@ -1498,20 +1498,20 @@ public class SqlManager {
                 if (!ownedonly) {
                     statementPlot.setString(2, playername);
                     if (!world.isEmpty()) {
-                        statementPlot.setString(3, world);
+                        statementPlot.setString(3, world.toLowerCase());
                     }
                 } else if (!world.isEmpty()) {
-                    statementPlot.setString(2, world);
+                    statementPlot.setString(2, world.toLowerCase());
                 }
             } else {
                 statementPlot.setBytes(1, UUIDFetcher.toBytes(playerId));
                 if (!ownedonly) {
                     statementPlot.setBytes(2, UUIDFetcher.toBytes(playerId));
                     if (!world.isEmpty()) {
-                        statementPlot.setString(3, world);
+                        statementPlot.setString(3, world.toLowerCase());
                     }
                 } else if (!world.isEmpty()) {
-                    statementPlot.setString(2, world);
+                    statementPlot.setString(2, world.toLowerCase());
                 }
             }
 
@@ -1554,7 +1554,7 @@ public class SqlManager {
                 }
 
                 statementAllowed = conn.prepareStatement("SELECT * FROM plotmeAllowed WHERE LOWER(world) = ? AND idX = ? AND idZ = ?");
-                statementAllowed.setString(1, currworld);
+                statementAllowed.setString(1, currworld.toLowerCase());
                 statementAllowed.setInt(2, idX);
                 statementAllowed.setInt(3, idZ);
 
@@ -1572,7 +1572,7 @@ public class SqlManager {
                 setAllowed.close();
 
                 statementDenied = conn.prepareStatement("SELECT * FROM plotmeDenied WHERE LOWER(world) = ? AND idX = ? AND idZ = ?");
-                statementDenied.setString(1, currworld);
+                statementDenied.setString(1, currworld.toLowerCase());
                 statementDenied.setInt(2, idX);
                 statementDenied.setInt(3, idZ);
 
