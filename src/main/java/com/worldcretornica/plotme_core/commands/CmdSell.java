@@ -46,7 +46,7 @@ public class CmdSell extends PlotCommand {
                                         plot.updateField("forsale", false);
 
                                         manager.adjustWall(player);
-                                        manager.setSellSign(world, plot);
+                                        manager.removeSellSign(world, id);
 
                                         player.sendMessage(C("MsgPlotNoLongerSale"));
 
@@ -57,25 +57,19 @@ public class CmdSell extends PlotCommand {
                                     }
                                 } else {
                                     double price = pmi.getSellToPlayerPrice();
-                                    boolean bank = false;
 
                                     if (args.length == 2) {
-                                        if ("bank".equalsIgnoreCase(args[1])) {
-                                            bank = true;
-                                        } else {
-                                            try {
-                                                price = Double.parseDouble(args[1]);
-                                            } catch (Exception e) {
-                                                player.sendMessage(
-                                                        C("WordUsage") + ": §c /plotme sell <" + C("WordAmount") + ">§r " + C("WordExample")
-                                                        + ": §c/plotme sell 200");
-                                            }
+                                        try {
+                                            price = Double.parseDouble(args[1]);
+                                        } catch (Exception e) {
+                                            player.sendMessage(
+                                                    C("WordUsage") + ": §c /plotme sell <" + C("WordAmount") + ">§r " + C("WordExample")
+                                                    + ": §c/plotme sell 200");
+                                            return true;
                                         }
                                     }
 
-                                    if (bank) {
-                                        player.sendMessage("§c" + C("MsgCannotSellToBank"));
-                                    } else if (price < 0.0) {
+                                    if (price < 0.0) {
                                         player.sendMessage("§c" + C("MsgInvalidAmount"));
                                     } else {
                                         event = serverBridge.getEventFactory().callPlotSellChangeEvent(plugin, world, plot, player, price, true);

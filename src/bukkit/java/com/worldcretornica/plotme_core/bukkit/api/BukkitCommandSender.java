@@ -1,7 +1,7 @@
 package com.worldcretornica.plotme_core.bukkit.api;
 
 import com.worldcretornica.plotme_core.api.ICommandSender;
-import org.bukkit.command.CommandSender;
+import org.bukkit.command.*;
 
 public class BukkitCommandSender implements ICommandSender {
 
@@ -25,7 +25,7 @@ public class BukkitCommandSender implements ICommandSender {
     }
 
     @Override
-    public boolean hasPermission(String node) {
+    public boolean hasPermission(String permission) {
         return true;
     }
 }

@@ -82,10 +82,9 @@ public class CmdBid extends PlotCommand {
                                                 plot.updateField("currentbidder", bidder);
                                                 plot.updateField("currentbid", bid);
 
-                                                manager.setSellSign(player.getWorld(), plot);
+                                                manager.setAuctionSign(player.getWorld(), plot);
 
-                                                double price = -bid;
-                                                player.sendMessage(C("MsgBidAccepted") + " " + Util().moneyFormat(price, true));
+                                                player.sendMessage(C("MsgBidAccepted") + " " + Util().moneyFormat(-bid, true));
 
                                                 if (isAdvancedLogging()) {
                                                     serverBridge.getLogger().info(bidder + " bid " + bid + " on plot " + id);
@@ -131,10 +130,9 @@ public class CmdBid extends PlotCommand {
                                             plot.updateField("currentbidder", bidder);
                                             plot.updateField("currentbid", bid);
 
-                                            manager.setSellSign(player.getWorld(), plot);
+                                            manager.setAuctionSign(player.getWorld(), plot);
 
-                                            double price = -bid;
-                                            player.sendMessage(C("MsgBidAccepted") + " " + Util().moneyFormat(price, true));
+                                            player.sendMessage(C("MsgBidAccepted") + " " + Util().moneyFormat(-bid, true));
 
                                             if (isAdvancedLogging()) {
                                                 serverBridge.getLogger().info(bidder + " bid " + bid + " on plot " + id);

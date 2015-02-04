@@ -4,7 +4,7 @@ import com.worldcretornica.plotme_core.api.IItemStack;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 
 public class BukkitPlayer extends BukkitOfflinePlayer implements IPlayer {
 
@@ -27,8 +27,8 @@ public class BukkitPlayer extends BukkitOfflinePlayer implements IPlayer {
     }
 
     @Override
-    public boolean hasPermission(String node) {
-        return player.hasPermission(node);
+    public boolean hasPermission(String permission) {
+        return player.hasPermission(permission);
     }
 
     @Override

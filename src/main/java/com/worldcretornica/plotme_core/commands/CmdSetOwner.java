@@ -42,12 +42,13 @@ public class CmdSetOwner extends PlotCommand {
 
                                 if (event.isCancelled()) {
                                     return true;
-                                } else if (plot.getOwnerId() != null) {
+                                }
+                                if (plot.getOwnerId() != null) {
                                     IOfflinePlayer playeroldowner = serverBridge.getOfflinePlayer(plot.getOwnerId());
                                     EconomyResponse er = serverBridge.depositPlayer(playeroldowner, pmi.getClaimPrice());
 
                                     if (er.transactionSuccess()) {
-                                        IPlayer oldOwner = serverBridge.getPlayer(playeroldowner.getUniqueId());
+                                        IPlayer oldOwner = serverBridge.getPlayer(plot.getOwnerId());
                                         if (oldOwner != null) {
                                             oldOwner.sendMessage(
                                                     C("MsgYourPlot") + " " + id + " " + C("MsgNowOwnedBy") + " " + newOwner + ". " + Util()
@@ -90,7 +91,8 @@ public class CmdSetOwner extends PlotCommand {
                             plot.setAuctioned(false);
                             plot.setForSale(false);
 
-                            manager.setSellSign(world, plot);
+                            manager.removeAuctionSign(world, id);
+                            manager.removeSellSign(world, id);
 
                             plot.updateField("currentbidder", null);
                             plot.updateField("currentbid", 0);

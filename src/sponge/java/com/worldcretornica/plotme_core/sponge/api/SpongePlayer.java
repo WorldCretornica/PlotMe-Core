@@ -23,8 +23,8 @@ public class SpongePlayer extends SpongeUser implements IPlayer {
     }
 
     @Override
-    public boolean hasPermission(String node) {
-        return player.hasPermission(node);
+    public boolean hasPermission(String permission) {
+        return player.hasPermission(permission);
     }
 
     @Override

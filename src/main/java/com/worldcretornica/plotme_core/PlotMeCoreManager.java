@@ -154,6 +154,27 @@ public class PlotMeCoreManager {
         getGenManager(world).removeAuctionDisplay(world, id);
     }
 
+    public void setAuctionSign(IWorld world, Plot plot) {
+        String line1 = Util().C("SignOnAuction");
+        String line2;
+        if (plot.getCurrentBidder() == null) {
+            line2 = Util().C("SignMinimumBid");
+        } else {
+            line2 = Util().C("SignCurrentBid");
+        }
+        String line3 = String.valueOf(plot.getCurrentBid());
+        String line4 = "/plotme " + Util().C("CommandBid") + " <x>";
+        getGenManager(world).setAuctionDisplay(world,plot.getId(),line1,line2,line3,line4);
+    }
+    public void setSellSign(IWorld world, Plot plot) {
+        String line1 = Util().C("SignForSale");
+        String line2 = Util().C("SignPrice");
+        String line3 = String.valueOf(plot.getCustomPrice());
+        String line4 = "/plotme " + Util().C("CommandBuy");
+
+        getGenManager(world).setSellerDisplay(world, plot.getId(), line1, line2, line3, line4);
+    }
+
     public boolean isValidId(IWorld world, String id) {
         return getGenManager(world).isValidId(id);
     }
@@ -593,45 +614,6 @@ public class PlotMeCoreManager {
                 }
             }
         });
-    }
-
-    public void setSellSign(IWorld world, Plot plot) {
-        String id = plot.getId();
-
-        getGenManager(world).removeSellerDisplay(world, id);
-
-        if (plot.isForSale() || plot.isAuctioned()) {
-            String line1 = "";
-            String line2 = "";
-            String line3 = "";
-            String line4 = "";
-            if (plot.isForSale()) {
-                line1 = Util().C("SignForSale");
-                line2 = Util().C("SignPrice");
-                line3 = String.valueOf(plot.getCustomPrice());
-                line4 = "/plotme " + Util().C("CommandBuy");
-            }
-
-            getGenManager(world).setSellerDisplay(world, plot.getId(), line1, line2, line3, line4);
-
-            line1 = "";
-            line2 = "";
-            line3 = "";
-            line4 = "";
-
-            if (plot.isAuctioned()) {
-                line1 = Util().C("SignOnAuction");
-                if (plot.getCurrentBidder() == null) {
-                    line2 = Util().C("SignMinimumBid");
-                } else {
-                    line2 = Util().C("SignCurrentBid");
-                }
-                line3 = String.valueOf(plot.getCurrentBid());
-                line4 = "/plotme " + Util().C("CommandBid") + " <x>";
-            }
-
-            getGenManager(world).setAuctionDisplay(world, plot.getId(), line1, line2, line3, line4);
-        }
     }
 
     public void clear(IWorld world, Plot plot, ICommandSender sender, ClearReason reason) {

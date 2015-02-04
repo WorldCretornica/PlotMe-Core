@@ -91,11 +91,10 @@ public class CmdBuy extends PlotCommand {
                                                 plot.updateField("forsale", false);
 
                                                 manager.adjustWall(player);
-                                                manager.setSellSign(world, plot);
+                                                manager.removeSellSign(world, id);
                                                 manager.setOwnerSign(world, plot);
 
-                                                double price = -cost;
-                                                player.sendMessage(C("MsgPlotBought") + " " + Util().moneyFormat(price, true));
+                                                player.sendMessage(C("MsgPlotBought") + " " + Util().moneyFormat(-cost, true));
 
                                                 if (isAdvancedLogging()) {
                                                     plugin.getLogger()

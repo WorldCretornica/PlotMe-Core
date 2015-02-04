@@ -17,8 +17,8 @@ public class SpongeCommandSource implements ICommandSender {
     }
 
     @Override
-    public boolean hasPermission(String node) {
-        return commandSource.hasPermission(node);
+    public boolean hasPermission(String permission) {
+        return commandSource.hasPermission(permission);
     }
 
 }

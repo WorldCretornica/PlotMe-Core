@@ -12,22 +12,20 @@ public interface ILocation {
 
     double getX();
 
+    void setX(double x);
+
     double getY();
 
+    void setY(double y);
+
     double getZ();
+    
+    void setZ(double z);
 
     IBlock getBlock();
-
+    
     ILocation add(double x, double y, double z);
     
     ILocation subtract(double x, double y, double z);
-    
-    ILocation clone();
-    
-    void setX(double x);
-    
-    void setY(double y);
-    
-    void setZ(double z);
 
 }

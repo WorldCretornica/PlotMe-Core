@@ -11,9 +11,9 @@ public interface ICommandSender {
     void sendMessage(String message);
 
     /**
-     * Checks if the sender has the given permission node.
-     * @param node permission
+     * Checks if the sender has the given permission.
+     * @param permission The permission string
      * @return true if sender has permission
      */
-    boolean hasPermission(String node);
+    boolean hasPermission(String permission);
 }
