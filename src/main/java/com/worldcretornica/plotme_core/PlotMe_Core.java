@@ -205,10 +205,9 @@ public class PlotMe_Core {
         plotsToClear = new ConcurrentLinkedQueue<>();
     }
 
-    public AbstractSchematicUtil addManager(String world, IPlotMe_GeneratorManager manager) {
+    public void addManager(String world, IPlotMe_GeneratorManager manager) {
         managers.put(world.toLowerCase(), manager);
         setupWorld(world.toLowerCase());
-        return schematicutil;
     }
 
     public IPlotMe_GeneratorManager removeManager(String world) {
