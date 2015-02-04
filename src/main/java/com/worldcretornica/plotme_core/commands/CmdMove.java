@@ -25,6 +25,7 @@ public class CmdMove extends PlotCommand {
                 if(plot1.equals(plot2)) {
                     player.sendMessage(C("WordUsage") + ": §c/plotme move <" + C("WordIdFrom") + "> <" + C("WordIdTo") + "> §r" + C("WordExample")
                                        + ": §c/plotme move 0;1 2;-1");
+                    return true;
                 }
                 IWorld world = player.getWorld();
 
