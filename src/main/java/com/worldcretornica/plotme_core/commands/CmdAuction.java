@@ -29,6 +29,10 @@ public class CmdAuction extends PlotCommand {
                             player.sendMessage("§c" + C("MsgNoPlotFound"));
                         } else if (!manager.isPlotAvailable(id, pmi)) {
                             Plot plot = manager.getPlotById(id, pmi);
+                            if (plot.isForSale()) {
+                                player.sendMessage(C("You cannot auction a plot that is for sale"));
+                                return true;
+                            }
 
                             String name = player.getName();
 

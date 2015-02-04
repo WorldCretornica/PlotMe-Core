@@ -22,6 +22,10 @@ public class CmdMove extends PlotCommand {
             } else {
                 String plot1 = args[1];
                 String plot2 = args[2];
+                if(plot1.equals(plot2)) {
+                    player.sendMessage(C("WordUsage") + ": §c/plotme move <" + C("WordIdFrom") + "> <" + C("WordIdTo") + "> §r" + C("WordExample")
+                                       + ": §c/plotme move 0;1 2;-1");
+                }
                 IWorld world = player.getWorld();
 
                 if (!manager.isValidId(world, plot1) || !manager.isValidId(world, plot2)) {

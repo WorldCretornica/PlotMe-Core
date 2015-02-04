@@ -551,9 +551,11 @@ public class PlotMeCoreManager {
                 }
 
                 setOwnerSign(world, plot1);
-                setSellSign(world, plot1);
+                removeSellSign(world, plot1.getId());
+                removeAuctionSign(world, plot1.getId());
                 setOwnerSign(world, plot2);
-                setSellSign(world, plot2);
+                removeSellSign(world, plot2.getId());
+                removeAuctionSign(world, plot2.getId());
 
             }
         } else if (plot2 != null) {
@@ -581,7 +583,8 @@ public class PlotMeCoreManager {
             setOwnerSign(world, plot2);
             setSellSign(world, plot2);
             removeOwnerSign(world, idTo);
-            getGenManager(world).removeSellerDisplay(world, idTo);
+            removeSellSign(world, idTo);
+            removeAuctionSign(world, idTo);
         }
 
         return true;
