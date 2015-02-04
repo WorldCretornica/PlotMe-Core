@@ -10,6 +10,8 @@ import com.worldcretornica.plotme_core.sponge.api.SpongeBiomeType;
 import com.worldcretornica.plotme_core.sponge.api.SpongeLocation;
 import com.worldcretornica.plotme_core.sponge.api.SpongePlayer;
 import com.worldcretornica.plotme_core.sponge.api.SpongeWorld;
+import com.worldcretornica.schematic.Schematic;
+
 import org.spongepowered.api.entity.player.Player;
 
 import java.util.ArrayList;
@@ -208,5 +210,10 @@ public class SpongePlotMe_GeneratorManagerBridge implements IPlotMe_GeneratorMan
     @Override
     public ILocation getPlotMiddle(IWorld world, String id) {
         return new SpongeLocation(generatorManager.getPlotMiddle(((SpongeWorld) world).getWorld(), id));
+    }
+    
+    @Override
+    public Schematic getPlotSchematic(IWorld world, String id) {
+        return generatorManager.getPlotSchematic(((SpongeWorld) world).getWorld(), id);
     }
 }

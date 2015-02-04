@@ -5,6 +5,8 @@ import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.biome.BiomeType;
 
+import com.worldcretornica.schematic.Schematic;
+
 import java.util.List;
 import java.util.Map;
 
@@ -81,4 +83,6 @@ public interface ISpongePlotMe_GeneratorManager {
     int getRoadHeight(String worldName);
     
     Location getPlotMiddle(World world, String id);
+    
+    Schematic getPlotSchematic(World world, String id);
 }

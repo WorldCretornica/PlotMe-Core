@@ -3,6 +3,8 @@ package com.worldcretornica.plotme_core.api;
 import java.util.List;
 import java.util.Map;
 
+import com.worldcretornica.schematic.Schematic;
+
 public interface IPlotMe_GeneratorManager {
 
     String getPlotId(ILocation location);
@@ -76,4 +78,6 @@ public interface IPlotMe_GeneratorManager {
     int getRoadHeight(String worldName);
     
     ILocation getPlotMiddle(IWorld world, String id);
+    
+    Schematic getPlotSchematic(IWorld world, String id);
 }

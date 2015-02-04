@@ -5,6 +5,8 @@ import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.entity.Player;
 
+import com.worldcretornica.schematic.Schematic;
+
 import java.util.List;
 import java.util.Map;
 
@@ -81,4 +83,6 @@ public interface IBukkitPlotMe_GeneratorManager {
     int getRoadHeight(String worldName);
 
     Location getPlotMiddle(World world, String id);
+    
+    Schematic getPlotSchematic(World world, String id);
 }
