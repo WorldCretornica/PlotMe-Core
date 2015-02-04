@@ -557,9 +557,14 @@ public class PlotMeCoreManager {
                 removeSellSign(world, plot2.getId());
                 removeAuctionSign(world, plot2.getId());
 
+            } else {
+                movePlotToEmpty(world, plot1, idTo);
             }
         } else if (plot2 != null) {
-            int idX = getIdX(idTo);
+            
+            movePlotToEmpty(world, plot2, idFrom);
+            
+            /*int idX = getIdX(idTo);
             int idZ = getIdZ(idTo);
             plugin.getSqlManager().deletePlot(idX, idZ, world.getName());
             removePlot(world, idTo);
@@ -584,10 +589,40 @@ public class PlotMeCoreManager {
             setSellSign(world, plot2);
             removeOwnerSign(world, idTo);
             removeSellSign(world, idTo);
-            removeAuctionSign(world, idTo);
+            removeAuctionSign(world, idTo);*/
         }
 
         return true;
+    }
+    
+    private void movePlotToEmpty(IWorld world, Plot filledPlot, String idDestination) {
+        String idFrom = filledPlot.getId();
+        int idX = getIdX(idFrom);
+        int idZ = getIdZ(idFrom);
+        plugin.getSqlManager().deletePlot(idX, idZ, world.getName());
+        removePlot(world, idFrom);
+
+        idX = getIdX(idDestination);
+        idZ = getIdZ(idDestination);
+        filledPlot.setId(idDestination);
+        plugin.getSqlManager().addPlot(filledPlot, idX, idZ, topX(idDestination, world), bottomX(idDestination, world), topZ(idDestination, world), bottomZ(idDestination, world));
+        addPlot(world, idDestination, filledPlot);
+
+        HashMap<String, UUID> allowed = filledPlot.allowed().getAllPlayers();
+        for (String player : allowed.keySet()) {
+            plugin.getSqlManager().addPlotAllowed(player, allowed.get(player), idX, idZ, world.getName());
+        }
+
+        HashMap<String, UUID> denied = filledPlot.denied().getAllPlayers();
+        for (String player : denied.keySet()) {
+            plugin.getSqlManager().addPlotDenied(player, denied.get(player), idX, idZ, world.getName());
+        }
+
+        setOwnerSign(world, filledPlot);
+        setSellSign(world, filledPlot);
+        removeOwnerSign(world, idFrom);
+        removeSellSign(world, idFrom);
+        removeAuctionSign(world, idFrom);
     }
 
     /**

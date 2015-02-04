@@ -4,6 +4,7 @@ import com.worldcretornica.plotme_core.api.IConfigSection;
 import com.worldcretornica.plotme_core.api.IPlotMe_GeneratorManager;
 import com.worldcretornica.plotme_core.api.IServerBridge;
 import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.bukkit.AbstractSchematicUtil;
 import com.worldcretornica.plotme_core.utils.Util;
 
 import java.io.*;
@@ -28,14 +29,20 @@ public class PlotMe_Core {
     private SqlManager sqlManager;
     private Util util;
     private int clearTaskID;
+    private AbstractSchematicUtil schematicutil;
 
-    public PlotMe_Core(IServerBridge serverObjectBuilder) {
-        serverBridge = serverObjectBuilder;
+    public PlotMe_Core(IServerBridge serverObjectBuilder, AbstractSchematicUtil schematicutil) {
+        this.serverBridge = serverObjectBuilder;
+        this.schematicutil = schematicutil;
         managers = new HashMap<>();
     }
 
     public IPlotMe_GeneratorManager getGenManager(String name) {
         return managers.get(name.toLowerCase());
+    }
+    
+    public AbstractSchematicUtil getSchematicUtil() {
+        return this.schematicutil;
     }
 
     public void disable() {
@@ -198,9 +205,10 @@ public class PlotMe_Core {
         plotsToClear = new ConcurrentLinkedQueue<>();
     }
 
-    public void addManager(String world, IPlotMe_GeneratorManager manager) {
+    public AbstractSchematicUtil addManager(String world, IPlotMe_GeneratorManager manager) {
         managers.put(world.toLowerCase(), manager);
         setupWorld(world.toLowerCase());
+        return schematicutil;
     }
 
     public IPlotMe_GeneratorManager removeManager(String world) {
