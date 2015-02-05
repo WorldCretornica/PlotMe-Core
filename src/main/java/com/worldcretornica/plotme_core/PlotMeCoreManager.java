@@ -778,4 +778,34 @@ public class PlotMeCoreManager {
         
         return getGenManager(world).getPlotMiddle(world, id);
     }
+    
+    public void UpdatePlayerNameFromId(final UUID uuid, final String name) {
+        plugin.getSqlManager().updatePlotsNewUUID(uuid, name);
+        
+        plugin.getServerBridge().runTaskAsynchronously(new Runnable() {
+            @Override
+            public void run() {
+                for (PlotMapInfo pmi : plotmaps.values()) {
+                    for(Plot plot : pmi.getLoadedPlots().values()) {
+
+                        //Owner
+                        if(plot.getOwnerId() != null && plot.getOwnerId().equals(uuid)) {
+                            plot.setOwner(name);
+                        }
+                        
+                        //Bidder
+                        if(plot.getCurrentBidderId() != null && plot.getCurrentBidderId().equals(uuid)) {
+                            plot.setCurrentBidder(name);
+                        }
+                        
+                        //Allowed
+                        plot.allowed().replace(name, name, uuid);
+                        
+                        //Denied
+                        plot.denied().replace(name, name, uuid);
+                    }
+                }
+            }
+        });
+    }
 }

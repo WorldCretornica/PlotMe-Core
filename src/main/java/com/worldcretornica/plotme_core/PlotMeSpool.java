@@ -1,5 +1,6 @@
 package com.worldcretornica.plotme_core;
 
+import com.worldcretornica.plotme_core.api.IPlotMe_GeneratorManager;
 import com.worldcretornica.plotme_core.api.IWorld;
 
 public class PlotMeSpool implements Runnable {
@@ -8,6 +9,7 @@ public class PlotMeSpool implements Runnable {
     private Long[] currentClear;
 
     private PlotToClear plottoclear;
+    private int taskId;
 
     public PlotMeSpool(PlotMe_Core instance, PlotToClear plotToClear) {
         plugin = instance;
@@ -17,39 +19,48 @@ public class PlotMeSpool implements Runnable {
     @Override
     public void run() {
         if (getPlotToClear() != null) {
+            plugin.getLogger().info("1");
             IWorld world = plugin.getServerBridge().getWorld(getPlotToClear().getWorld());
             PlotMeCoreManager plotMeCoreManager = PlotMeCoreManager.getInstance();
+            IPlotMe_GeneratorManager genmanager = plotMeCoreManager.getGenManager(world);
 
             if (world != null) {
                 if (currentClear == null) {
-                    currentClear = plotMeCoreManager.getGenManager(world)
-                                    .clear(world, getPlotToClear().getPlotId(), plugin.getServerBridge().getConfig().getInt("NbBlocksPerClearStep"), null);
+                    plugin.getLogger().info("2 id = " + getPlotToClear().getPlotId());
+                    currentClear = genmanager.clear(world, getPlotToClear().getPlotId(), plugin.getServerBridge().getConfig().getInt("NbBlocksPerClearStep"), null);
                 } else {
-                    currentClear = plotMeCoreManager.getGenManager(world)
-                                    .clear(world, getPlotToClear().getPlotId(), plugin.getServerBridge().getConfig().getInt("NbBlocksPerClearStep"), currentClear);
+                    plugin.getLogger().info("3");
+                    currentClear = genmanager.clear(world, getPlotToClear().getPlotId(), plugin.getServerBridge().getConfig().getInt("NbBlocksPerClearStep"), currentClear);
                 }
 
                 if (currentClear == null) {
+                    plugin.getLogger().info("99");
                     if (getPlotToClear().getReason() == ClearReason.Clear) {
-                        plotMeCoreManager.getGenManager(world).adjustPlotFor(world, getPlotToClear().getPlotId(), true, false, false, false);
+                        genmanager.adjustPlotFor(world, getPlotToClear().getPlotId(), true, false, false, false);
                     } else {
-                        plotMeCoreManager.getGenManager(world).adjustPlotFor(world, getPlotToClear().getPlotId(), false, false, false, false);
+                        genmanager.adjustPlotFor(world, getPlotToClear().getPlotId(), false, false, false, false);
                     }
                     if (plugin.getServerBridge().getUsingLwc()) {
                         plotMeCoreManager.removeLWC(world, getPlotToClear().getPlotId());
                     }
-                    plotMeCoreManager.getGenManager(world).refreshPlotChunks(world, getPlotToClear().getPlotId());
+                    genmanager.refreshPlotChunks(world, getPlotToClear().getPlotId());
 
                     plottoclear.getRequester().sendMessage(plugin.getUtil().C("WordPlot") + " " + getPlotToClear().getPlotId() + " " + plugin.getUtil().C("WordCleared"));
 
-                    plugin.removePlotToClear(getPlotToClear(), plugin.getClearTaskID());
+                    plugin.removePlotToClear(getPlotToClear(), taskId);
                     plottoclear = null;
                 }
             } else {
-                plugin.removePlotToClear(getPlotToClear(), plugin.getClearTaskID());
+                plugin.getLogger().info("100");
+                plugin.removePlotToClear(getPlotToClear(), taskId);
                 plottoclear = null;
+                currentClear = null;
             }
         }
+    }
+    
+    public void setTaskId(int taskId) {
+        this.taskId = taskId;
     }
 
     public PlotToClear getPlotToClear() {

@@ -9,6 +9,7 @@ import com.worldcretornica.plotme_core.PlotToClear;
 import com.worldcretornica.plotme_core.bukkit.*;
 import com.worldcretornica.plotme_core.bukkit.api.*;
 import com.worldcretornica.plotme_core.bukkit.event.*;
+
 import org.bukkit.block.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.*;
@@ -788,5 +789,14 @@ public class BukkitPlotListener implements Listener {
     public void onPlayerQuit(PlayerQuitEvent event) {
         UUID playerUUID = event.getPlayer().getUniqueId();
         plugin.removePlayer(playerUUID);
+    }
+    
+    @EventHandler(ignoreCancelled = true)
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        Player p = event.getPlayer();
+        
+        if(p != null) {
+            PlotMeCoreManager.getInstance().UpdatePlayerNameFromId(p.getUniqueId(), p.getName());
+        }
     }
 }

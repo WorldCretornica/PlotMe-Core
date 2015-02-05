@@ -28,7 +28,6 @@ public class PlotMe_Core {
     //Global variables
     private SqlManager sqlManager;
     private Util util;
-    private int clearTaskID;
     private AbstractSchematicUtil schematicutil;
 
     public PlotMe_Core(IServerBridge serverObjectBuilder, AbstractSchematicUtil schematicutil) {
@@ -240,15 +239,16 @@ public class PlotMe_Core {
 
     public void addPlotToClear(PlotToClear plotToClear) {
         plotsToClear.offer(plotToClear);
-
-        Runnable pms = new PlotMeSpool(this, plotToClear);
-        setClearTaskID(serverBridge.scheduleSyncRepeatingTask(pms, 0L, 60L));
+        getLogger().info("plot to clear add " + plotToClear.getPlotId());
+        PlotMeSpool pms = new PlotMeSpool(this, plotToClear);
+        pms.setTaskId(serverBridge.scheduleSyncRepeatingTask(pms, 0L, 60L));
     }
 
     public void removePlotToClear(PlotToClear plotToClear, int taskId) {
         plotsToClear.remove(plotToClear);
 
         serverBridge.cancelTask(taskId);
+        getLogger().info("removed taskid " + taskId);
     }
 
     public PlotToClear getPlotLocked(String world, String id) {
@@ -279,14 +279,6 @@ public class PlotMe_Core {
 
     private void setUtil(Util util) {
         this.util = util;
-    }
-
-    public int getClearTaskID() {
-        return clearTaskID;
-    }
-
-    public void setClearTaskID(int clearTaskID) {
-        this.clearTaskID = clearTaskID;
     }
     
     @Deprecated
