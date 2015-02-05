@@ -1,7 +1,8 @@
 PlotMe-Core
 ===========
-
 Bukkit Plugin for managing plots. The plugin is able to operate on worlds which are generated using a class that implement the IPlotMe_ChunkGenerator. PlotMe-DefaultGenerator is the first plugin that implement that generator.
+
+Dev Builds: http://ci.worldcretornica.com:8080/
 
 Other plugins can be created into which PlotMe-Core can interact. Look at the PlotMe-DefaultGenerator source to see how it can be done.
 
