@@ -14,7 +14,7 @@ public class CmdMiddle extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(IPlayer player, String[] args) {
+    public boolean exec(IPlayer player) {
         if (player.hasPermission(PermissionNames.USER_MIDDLE) || player.hasPermission(PermissionNames.ADMIN_MIDDLE_OTHER)) {
             if (manager.isPlotWorld(player)) {
                 IWorld world = player.getWorld();

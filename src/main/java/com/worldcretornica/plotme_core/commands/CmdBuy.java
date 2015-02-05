@@ -30,7 +30,7 @@ public class CmdBuy extends PlotCommand {
                         if (plot.isForSale()) {
                             String buyer = player.getName();
 
-                            if (plot.getOwner().equalsIgnoreCase(buyer)) {
+                            if (plot.getOwnerId() == player.getUniqueId()) {
                                 player.sendMessage("§c" + C("MsgCannotBuyOwnPlot"));
                             } else {
                                 int plotLimit = getPlotLimit(player);

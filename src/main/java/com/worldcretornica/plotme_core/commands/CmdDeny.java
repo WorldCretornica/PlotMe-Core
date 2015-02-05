@@ -32,7 +32,7 @@ public class CmdDeny extends PlotCommand {
                         Plot plot = manager.getPlotById(id, pmi);
                         String denied = args[1];
 
-                        if (plot.getOwner().equalsIgnoreCase(player.getName()) || player.hasPermission(PermissionNames.ADMIN_DENY)) {
+                        if (plot.getOwnerId() == player.getUniqueId() || player.hasPermission(PermissionNames.ADMIN_DENY)) {
                             if (plot.getOwner().equalsIgnoreCase(denied)) {
                                 player.sendMessage(C("MsgCannotDenyOwner"));
                                 return true;

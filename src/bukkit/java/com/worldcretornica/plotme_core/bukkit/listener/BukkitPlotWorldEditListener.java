@@ -96,7 +96,7 @@ public class BukkitPlotWorldEditListener implements Listener {
         BukkitPlayer player = (BukkitPlayer) plugin.wrapPlayer(event.getPlayer());
         BukkitLocation from = new BukkitLocation(event.getFrom());
         BukkitLocation to = new BukkitLocation(event.getTo());
-        if (event.getFrom() == null || event.getTo() == null) {
+        if (event.getFrom() == null|| event.getTo() == null) {
             return;
         }
         if (manager.isPlotWorld(from)) {
@@ -140,7 +140,7 @@ public class BukkitPlotWorldEditListener implements Listener {
             if (!player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE) &&
                 !manager.isPlayerIgnoringWELimit(player) &&
                 (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK)
-                && ((BukkitMaterial) player.getItemInHand().getType()).getMaterial() != Material.AIR) {
+                && event.getItem().getType() != Material.AIR) {
                 String id = manager.getPlotId(location);
                 Plot plot = manager.getMap(location).getPlot(id);
 

@@ -31,7 +31,7 @@ public class CmdAdd extends PlotCommand {
 
                         String allowed = args[1];
 
-                        if (plot.getOwner().equalsIgnoreCase(player.getName()) || player.hasPermission(PermissionNames.ADMIN_ADD)) {
+                        if (plot.getOwnerId() == player.getUniqueId() || player.hasPermission(PermissionNames.ADMIN_ADD)) {
                             if (plot.isAllowedConsulting(allowed) || plot.isGroupAllowed(allowed)) {
                                 player.sendMessage(C("WordPlayer") + " §c" + allowed + "§r " + C("MsgAlreadyAllowed"));
                             } else {

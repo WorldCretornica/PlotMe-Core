@@ -215,9 +215,7 @@ public class BukkitPlotListener implements Listener {
         if (manager.isPlotWorld(block.getWorld())) {
             Player player = event.getPlayer();
 
-            String id = manager.getPlotId(block.getLocation());
-
-            PlotToClear ptc = api.getPlotLocked(block.getWorld().getName(), id);
+            PlotToClear ptc = api.getPlotLocked(block.getWorld().getName(), manager.getPlotId(block.getLocation()));
 
             if (ptc != null) {
                 switch (ptc.getReason()) {
@@ -236,9 +234,9 @@ public class BukkitPlotListener implements Listener {
                 boolean canBuild = !player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE);
                 PlotMapInfo pmi = manager.getMap(block.getWorld());
 
+                String id = manager.getPlotId(block.getLocation());
+                Plot plot = manager.getPlotById(id, pmi);
                 if (event.isBlockInHand() && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-
-                    id = manager.getPlotId(block.getLocation());
 
                     if (id.isEmpty()) {
                         if (canBuild) {
@@ -246,7 +244,6 @@ public class BukkitPlotListener implements Listener {
                             event.setCancelled(true);
                         }
                     } else {
-                        Plot plot = manager.getPlotById(id, pmi);
 
                         if (plot == null || !plot.isAllowed(player.getName(), player.getUniqueId())) {
                             if (canBuild) {
@@ -281,8 +278,6 @@ public class BukkitPlotListener implements Listener {
                     }
 
                     if (blocked) {
-                        id = manager.getPlotId(block.getLocation());
-
                         if (id.isEmpty()) {
                             if (canBuild) {
                                 if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
@@ -290,15 +285,11 @@ public class BukkitPlotListener implements Listener {
                                 }
                                 event.setCancelled(true);
                             }
-                        } else {
-                            Plot plot = manager.getPlotById(id, pmi);
-
-                            if ((plot == null || !plot.isAllowed(player.getName(), player.getUniqueId())) && canBuild) {
-                                if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-                                    player.sendMessage(api.getUtil().C("ErrCannotUse"));
-                                }
-                                event.setCancelled(true);
+                        } else if ((plot == null || !plot.isAllowed(player.getName(), player.getUniqueId())) && canBuild) {
+                            if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+                                player.sendMessage(api.getUtil().C("ErrCannotUse"));
                             }
+                            event.setCancelled(true);
                         }
                     }
                 }

@@ -29,7 +29,7 @@ public class CmdBid extends PlotCommand {
                     if (plot.isAuctioned()) {
                         String bidder = player.getName();
 
-                        if (plot.getOwner().equalsIgnoreCase(bidder)) {
+                        if (plot.getOwnerId().equals(player.getUniqueId())) {
                             player.sendMessage("§c" + C("MsgCannotBidOwnPlot"));
                         } else if (args.length == 2) {
                             double currentBid = plot.getCurrentBid();
