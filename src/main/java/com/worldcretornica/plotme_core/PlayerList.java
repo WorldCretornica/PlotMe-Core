@@ -119,16 +119,16 @@ public class PlayerList {
         }
     }
 
-    public void replace(String name, UUID newUuid) {
+    public void replace(String oldname, String newname, UUID newUuid) {
         if (newUuid != null && playerList != null) {
-            if (contains(name)) {
+            if (contains(oldname)) {
                 Iterator<String> it = playerList.keySet().iterator();
                 while (it.hasNext()) {
                     String key = it.next();
 
-                    if (key.equalsIgnoreCase(name)) {
+                    if (key.equalsIgnoreCase(oldname)) {
                         playerList.remove(key);
-                        playerList.put(name, newUuid);
+                        playerList.put(newname, newUuid);
                         return;
                     }
                 }

@@ -1,6 +1,8 @@
 package com.worldcretornica.plotme_core.utils;
 
 import com.google.common.collect.ImmutableList;
+
+import org.bukkit.Bukkit;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -10,6 +12,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +24,7 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
 
     private static final double PROFILES_PER_REQUEST = 100;
     private static final String PROFILE_URL = "https://api.mojang.com/profiles/minecraft";
+    private static final String PROFILE_AT_TIME_URL = "https://api.mojang.com/users/profiles/minecraft/@USERNAME@?at=1420156800";
     private final JSONParser jsonParser = new JSONParser();
     private final List<String> names;
     private final boolean rateLimiting;
@@ -51,6 +55,17 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
         connection.setDoOutput(true);
         return connection;
     }
+    
+    private static HttpURLConnection createAtTimeConnection(String username) throws Exception {
+        URL url = new URL(PROFILE_AT_TIME_URL.replace("@USERNAME@", username));
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+        connection.setRequestProperty("Content-Type", "application/json");
+        connection.setUseCaches(false);
+        connection.setDoInput(true);
+        connection.setDoOutput(false);
+        return connection;
+    }
 
     public static UUID getUUID(String id) {
         return UUID.fromString(id.substring(0, 8) + "-" + id.substring(8, 12) + "-" + id.substring(12, 16) + "-" + id.substring(16, 20) + "-" + id
@@ -79,24 +94,106 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
     }
 
     @Override
-    public Map<String, UUID> call() throws Exception {
+    public Map<String, UUID> call() {
         Map<String, UUID> uuidMap = new HashMap<>();
         int requests = (int) Math.ceil(names.size() / PROFILES_PER_REQUEST);
+        boolean success = false;
+        int retries = 0;
+        
         for (int i = 0; i < requests; i++) {
-            HttpURLConnection connection = createConnection();
-            String body = JSONArray.toJSONString(names.subList(i * 100, Math.min((i + 1) * 100, names.size())));
-            writeBody(connection, body);
-            JSONArray array = (JSONArray) jsonParser.parse(new InputStreamReader(connection.getInputStream()));
-            for (Object profile : array) {
-                JSONObject jsonProfile = (JSONObject) profile;
-                String id = (String) jsonProfile.get("id");
-                String name = (String) jsonProfile.get("name");
-                UUID uuid = UUIDFetcher.getUUID(id);
-                uuidMap.put(name.toLowerCase(), uuid);
+            
+            List<String> missinguuid = new ArrayList<>();
+            
+            //First step, get people that didn't change name
+            success = false;
+            while (!success) {
+                try {
+                    HttpURLConnection connection = createConnection();
+                    List<String> sublist = names.subList(i * 100, Math.min((i + 1) * 100, names.size()));
+                    String body = JSONArray.toJSONString(sublist);
+                    writeBody(connection, body);
+                    JSONArray array = (JSONArray) jsonParser.parse(new InputStreamReader(connection.getInputStream()));
+                    for (Object profile : array) {
+                        JSONObject jsonProfile = (JSONObject) profile;
+                        String id = (String) jsonProfile.get("id");
+                        String name = (String) jsonProfile.get("name");
+                        UUID uuid = UUIDFetcher.getUUID(id);
+                        uuidMap.put(name.toLowerCase(), uuid);
+                    }
+                    
+                    for(String name : sublist) {
+                        if (!uuidMap.containsKey(name)) {
+                            missinguuid.add(name);
+                        }
+                    }
+                    
+                    success = true;
+                } catch(Exception ex) {
+                    ex.printStackTrace();
+                    try {
+                        //If we got an exception, retry in 30 seconds
+                        Thread.sleep(30000L);
+                    } catch (InterruptedException unused) {
+                        
+                    }
+                    if (retries > 0 && retries % 10 == 0) {
+                        Bukkit.getLogger().warning("The UUID fetcher has been trying for " + retries + " times to get UUIDs.");
+                    }
+                    retries += 1;
+                }
             }
+            
+            //Step 2, check people that changed name since Febuary 2nd
+            if (!missinguuid.isEmpty()) {
+                for (String name : missinguuid) {
+                    success = false;
+                    while (!success) {
+                        HttpURLConnection connection = null;
+                        
+                        try {
+                            connection = createAtTimeConnection(name);
+                        } catch(Exception ex) {
+                            ex.printStackTrace();
+                            try {
+                                //If we got an exception, retry in 30 seconds
+                                Thread.sleep(30000L);
+                            } catch (InterruptedException unused) {
+                                
+                            }
+                            if (retries > 0 && retries % 20 == 0) {
+                                Bukkit.getLogger().warning("The UUID fetcher has been trying for " + retries + " times to get UUIDs.");
+                            }
+                            retries += 1;
+                        }
+                        
+                        if (connection != null) {
+                            try {
+                                JSONObject jsonProfile = (JSONObject) jsonParser.parse(new InputStreamReader(connection.getInputStream()));
+                                String id = (String) jsonProfile.get("id");
+                                String newname = (String) jsonProfile.get("name");
+                                UUID uuid = UUIDFetcher.getUUID(id);
+                                uuidMap.put(name.toLowerCase() + ";" + newname, uuid);
+                            } catch(Exception ex) {
+                                //Unable to find name at mojang...
+                                uuidMap.put(name.toLowerCase() + ";", null);
+                            }
+                            success = true;
+                        } else {
+                            //Unable to find name at mojang...
+                            uuidMap.put(name.toLowerCase() + ";", null);
+                        }
+                    }
+                }
+            }
+            
             if (rateLimiting && i != requests - 1) {
-                Thread.sleep(100L);
+                try {
+                    Thread.sleep(1100L);
+                } catch (InterruptedException unused) {
+                }
             }
+            
+            retries = 0;
         }
         return uuidMap;
     }
