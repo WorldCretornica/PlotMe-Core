@@ -140,7 +140,7 @@ public class BukkitPlotWorldEditListener implements Listener {
             if (!player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE) &&
                 !manager.isPlayerIgnoringWELimit(player) &&
                 (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK)
-                && event.getItem().getType() != Material.AIR) {
+                && event.getItem() != null && event.getItem().getType() != Material.AIR) {
                 String id = manager.getPlotId(location);
                 Plot plot = manager.getMap(location).getPlot(id);
 
