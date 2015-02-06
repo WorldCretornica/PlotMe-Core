@@ -15,7 +15,7 @@ public class CmdReload extends PlotCommand {
             serverBridge.getEventFactory().callPlotReloadEvent();
 
             plugin.reload();
-            serverBridge.getLogger().info(C("MsgReloadedSuccess"));
+            sender.sendMessage(C("MsgReloadedSuccess"));
 
             return true;
         } else {
