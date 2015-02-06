@@ -64,7 +64,6 @@ permissions:
         plotme.admin.reload: true
         plotme.admin.middle: true
     plotme.unblock.*:
-      default: true
       description: Unblocks a certain item that was blocked in the config
     plotme.use.middle:
       description: Gives the middle command
