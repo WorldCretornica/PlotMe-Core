@@ -105,8 +105,7 @@ function Point(x, y, z, size, color) {
 
         this.targetPos.z = d / 100 + 1;
         var dz = this.targetPos.z - this.curPos.z;
-        var az = dz * this.springStrength;
-        this.velocity.z += az;
+        this.velocity.z += dz * this.springStrength;
         this.velocity.z *= this.friction;
         this.curPos.z += this.velocity.z;
 
