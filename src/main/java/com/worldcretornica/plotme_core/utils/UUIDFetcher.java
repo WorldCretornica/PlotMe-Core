@@ -1,7 +1,7 @@
 package com.worldcretornica.plotme_core.utils;
 
 import com.google.common.collect.ImmutableList;
-import org.bukkit.*;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -133,7 +133,7 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
                     } catch (InterruptedException ignored) {
                     }
                     if (retries > 0 && retries % 10 == 0) {
-                        Bukkit.getLogger().warning("The UUID fetcher has been trying for " + retries + " times to get UUIDs.");
+                        //Bukkit.getLogger().warning("The UUID fetcher has been trying for " + retries + " times to get UUIDs.");
                     }
                     retries += 1;
                 }
@@ -156,7 +156,7 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
                             } catch (InterruptedException ignored) {
                             }
                             if (retries > 0 && retries % 20 == 0) {
-                                Bukkit.getLogger().warning("The UUID fetcher has been trying for " + retries + " times to get UUIDs.");
+                                //Bukkit.getLogger().warning("The UUID fetcher has been trying for " + retries + " times to get UUIDs.");
                             }
                             retries += 1;
                         }
