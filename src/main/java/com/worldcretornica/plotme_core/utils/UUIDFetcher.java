@@ -149,7 +149,7 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
                         try {
                             connection = createAtTimeConnection(name);
                         } catch(Exception ex) {
-                            ex.printStackTrace();
+                            //ex.printStackTrace();
                             try {
                                 //If we got an exception, retry in 30 seconds
                                 Thread.sleep(30000L);
