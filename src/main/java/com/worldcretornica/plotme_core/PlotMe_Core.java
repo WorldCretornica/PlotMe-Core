@@ -138,7 +138,6 @@ public class PlotMe_Core {
             PlotMapInfo pmi = new PlotMapInfo(this, worldname);
             //Lets just hide a bit of code to clean up the config in here.
             IConfigSection config = getServerBridge().loadDefaultConfig("worlds." + worldname.toLowerCase());
-            config.set("Projectiles", true);
             config.set("BottomBlockId", null);
             config.set("AutoLinkPlots", null);
             config.saveConfig();

@@ -725,6 +725,24 @@ public class BukkitPlotListener implements Listener {
             }
         }
     }
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onBowEvent(EntityShootBowEvent event) {
+        if (event.getEntity() instanceof Player) {
+            PlotMapInfo pmi = manager.getMap(event.getEntity().getWorld().getName());
+            if (pmi != null && !pmi.canUseProjectiles()) {
+                event.getEntity().sendMessage(api.getUtil().C("ErrCannotUseEggs"));
+                event.setCancelled(true);
+            }
+        }
+    }
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onEggEvent(PlayerEggThrowEvent event) {
+        PlotMapInfo pmi = manager.getMap(event.getEgg().getWorld().getName());
+        if (pmi != null && !pmi.canUseProjectiles()) {
+            event.getPlayer().sendMessage(api.getUtil().C("ErrCannotUseEggs"));
+            event.setHatching(false);
+        }
+    }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onCreatureSpawn(CreatureSpawnEvent event) {
