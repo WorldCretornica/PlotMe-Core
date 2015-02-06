@@ -9,7 +9,6 @@ import com.worldcretornica.plotme_core.PlotToClear;
 import com.worldcretornica.plotme_core.bukkit.*;
 import com.worldcretornica.plotme_core.bukkit.api.*;
 import com.worldcretornica.plotme_core.bukkit.event.*;
-
 import org.bukkit.block.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.*;
@@ -698,6 +697,7 @@ public class BukkitPlotListener implements Listener {
             PlotMapInfo pmi = manager.getMap(event.getEntity().getWorld().getName());
             if (pmi != null && !pmi.canUseProjectiles()) {
                 event.getEntity().sendMessage(api.getUtil().C("ErrCannotUseEggs"));
+                event.setCancelled(true);
             /* Player player = event.getPlayer();
             BukkitLocation location = new BukkitLocation(event.getEgg().getLocation());
 
