@@ -170,7 +170,7 @@ public class PlotMeCoreManager {
         String line1 = Util().C("SignForSale");
         String line2 = Util().C("SignPrice");
         String line3 = String.valueOf(plot.getCustomPrice());
-        String line4 = "/plotme " + Util().C("CommandBuy");
+        String line4 = "/plotme buy";
 
         getGenManager(world).setSellerDisplay(world, plot.getId(), line1, line2, line3, line4);
     }
