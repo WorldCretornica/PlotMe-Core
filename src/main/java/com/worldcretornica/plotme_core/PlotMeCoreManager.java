@@ -16,6 +16,7 @@ import com.worldcretornica.plotme_core.utils.Util;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.inject.Singleton;
@@ -500,14 +501,14 @@ public class PlotMeCoreManager {
     }
 
     public boolean movePlot(IWorld world, String idFrom, String idTo) {
-
+        
         if (!getGenManager(world).movePlot(world, idFrom, idTo)) {
             return false;
         }
-
+        
         Plot plot1 = getPlotById(idFrom, world);
         Plot plot2 = getPlotById(idTo, world);
-
+        
         if (plot1 != null) {
             if (plot2 != null) {
                 int idX = getIdX(idTo);
@@ -520,36 +521,17 @@ public class PlotMeCoreManager {
                 plugin.getSqlManager().deletePlot(idX, idZ, world.getName());
 
                 plot2.setId(idFrom);
-                plugin.getSqlManager()
-                        .addPlot(plot2, idX, idZ, topX(idFrom, world), bottomX(idFrom, world), topZ(idFrom, world), bottomZ(idFrom, world));
+                plugin.getSqlManager().addPlot(plot2, idX, idZ, topX(idFrom, world), 
+                        bottomX(idFrom, world), topZ(idFrom, world), bottomZ(idFrom, world));
                 addPlot(world, idFrom, plot2);
-
-                HashMap<String, UUID> allowed = plot2.allowed().getAllPlayers();
-                for (String player : allowed.keySet()) {
-                    plugin.getSqlManager().addPlotAllowed(player, allowed.get(player), idX, idZ, world.getName());
-                }
-
-                HashMap<String, UUID> denied = plot2.denied().getAllPlayers();
-                for (String player : denied.keySet()) {
-                    plugin.getSqlManager().addPlotDenied(player, denied.get(player), idX, idZ, world.getName());
-                }
 
                 idX = getIdX(idTo);
                 idZ = getIdZ(idTo);
                 plot1.setId(idTo);
-                plugin.getSqlManager().addPlot(plot1, idX, idZ, topX(idTo, world), bottomX(idTo, world), topZ(idTo, world), bottomZ(idTo, world));
+                plugin.getSqlManager().addPlot(plot1, idX, idZ, topX(idTo, world), 
+                        bottomX(idTo, world), topZ(idTo, world), bottomZ(idTo, world));
                 addPlot(world, idTo, plot1);
-
-                allowed = plot1.allowed().getAllPlayers();
-                for (String player : allowed.keySet()) {
-                    plugin.getSqlManager().addPlotAllowed(player, allowed.get(player), idX, idZ, world.getName());
-                }
-
-                denied = plot1.denied().getAllPlayers();
-                for (String player : denied.keySet()) {
-                    plugin.getSqlManager().addPlotDenied(player, denied.get(player), idX, idZ, world.getName());
-                }
-
+                
                 setOwnerSign(world, plot1);
                 removeSellSign(world, plot1.getId());
                 removeAuctionSign(world, plot1.getId());
@@ -561,35 +543,7 @@ public class PlotMeCoreManager {
                 movePlotToEmpty(world, plot1, idTo);
             }
         } else if (plot2 != null) {
-            
             movePlotToEmpty(world, plot2, idFrom);
-            
-            /*int idX = getIdX(idTo);
-            int idZ = getIdZ(idTo);
-            plugin.getSqlManager().deletePlot(idX, idZ, world.getName());
-            removePlot(world, idTo);
-
-            idX = getIdX(idFrom);
-            idZ = getIdZ(idFrom);
-            plot2.setId(idFrom);
-            plugin.getSqlManager().addPlot(plot2, idX, idZ, topX(idFrom, world), bottomX(idFrom, world), topZ(idFrom, world), bottomZ(idFrom, world));
-            addPlot(world, idFrom, plot2);
-
-            HashMap<String, UUID> allowed = plot2.allowed().getAllPlayers();
-            for (String player : allowed.keySet()) {
-                plugin.getSqlManager().addPlotAllowed(player, allowed.get(player), idX, idZ, world.getName());
-            }
-
-            HashMap<String, UUID> denied = plot2.denied().getAllPlayers();
-            for (String player : denied.keySet()) {
-                plugin.getSqlManager().addPlotDenied(player, denied.get(player), idX, idZ, world.getName());
-            }
-
-            setOwnerSign(world, plot2);
-            setSellSign(world, plot2);
-            removeOwnerSign(world, idTo);
-            removeSellSign(world, idTo);
-            removeAuctionSign(world, idTo);*/
         }
 
         return true;
@@ -607,16 +561,6 @@ public class PlotMeCoreManager {
         filledPlot.setId(idDestination);
         plugin.getSqlManager().addPlot(filledPlot, idX, idZ, topX(idDestination, world), bottomX(idDestination, world), topZ(idDestination, world), bottomZ(idDestination, world));
         addPlot(world, idDestination, filledPlot);
-
-        HashMap<String, UUID> allowed = filledPlot.allowed().getAllPlayers();
-        for (String player : allowed.keySet()) {
-            plugin.getSqlManager().addPlotAllowed(player, allowed.get(player), idX, idZ, world.getName());
-        }
-
-        HashMap<String, UUID> denied = filledPlot.denied().getAllPlayers();
-        for (String player : denied.keySet()) {
-            plugin.getSqlManager().addPlotDenied(player, denied.get(player), idX, idZ, world.getName());
-        }
 
         setOwnerSign(world, filledPlot);
         setSellSign(world, filledPlot);
@@ -807,5 +751,55 @@ public class PlotMeCoreManager {
                 }
             }
         });
+    }
+    
+    /**
+     * Gets the value of that plot property
+     * @param id PlotID
+     * @param world World the plot is in
+     * @param pluginname Name of the plugin owning this property
+     * @param property Name of the property to get the value of
+     * @return Value of the property
+     */
+    public String getPlotProperty(String id, String world, String pluginname, String property) {
+        Plot plot = getPlotById(id, world);
+        return getPlotProperty(plot, pluginname, property);
+    }
+    
+    /**
+     * Gets the value of that plot property
+     * @param plot Plot to get the property from
+     * @param pluginname Name of the plugin owning this property
+     * @param property Name of the property to get the value of
+     * @return Value of the property
+     */
+    public String getPlotProperty(Plot plot, String pluginname, String property) {
+        return plot.getPlotProperty(pluginname, property);
+    }
+    
+    /**
+     * Sets the value of that plot property
+     * @param id PlotID
+     * @param world World the plot is in
+     * @param pluginname Name of the plugin owning this property
+     * @param property Name of the property
+     * @param value Value of the property
+     * @return If the property was set successfully
+     */
+    public boolean setPlotProperty(String id, String world, String pluginname, String property, String value) {
+        Plot plot = getPlotById(id, world);
+        return plot.setPlotProperty(pluginname, property, value);
+    }
+    
+    /**
+     * Sets the value of that plot property
+     * @param plot Plot to set the property
+     * @param pluginname Name of the plugin owning this property
+     * @param property Name of the property
+     * @param value Value of the property
+     * @return If the property was set successfully
+     */
+    public boolean setPlotProperty(Plot plot, String pluginname, String property, String value) {
+        return plot.setPlotProperty(pluginname, property, value);
     }
 }
