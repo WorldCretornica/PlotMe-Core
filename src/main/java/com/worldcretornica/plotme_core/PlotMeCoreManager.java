@@ -436,6 +436,7 @@ public class PlotMeCoreManager {
             firstWorld = (String) getPlotMaps().keySet().toArray()[0];
         } catch (ArrayIndexOutOfBoundsException error) {
             plugin.getLogger().warning("Uh oh. You don't have any plotworlds so plotme isn't working properly.");
+            return null;
         }
         return plugin.getServerBridge().getWorld(firstWorld);
     }
