@@ -19,22 +19,18 @@ public class PlotMeSpool implements Runnable {
     @Override
     public void run() {
         if (getPlotToClear() != null) {
-            plugin.getLogger().info("1");
             IWorld world = plugin.getServerBridge().getWorld(getPlotToClear().getWorld());
             PlotMeCoreManager plotMeCoreManager = PlotMeCoreManager.getInstance();
             IPlotMe_GeneratorManager genmanager = plotMeCoreManager.getGenManager(world);
 
             if (world != null) {
                 if (currentClear == null) {
-                    plugin.getLogger().info("2 id = " + getPlotToClear().getPlotId());
                     currentClear = genmanager.clear(world, getPlotToClear().getPlotId(), plugin.getServerBridge().getConfig().getInt("NbBlocksPerClearStep"), null);
                 } else {
-                    plugin.getLogger().info("3");
                     currentClear = genmanager.clear(world, getPlotToClear().getPlotId(), plugin.getServerBridge().getConfig().getInt("NbBlocksPerClearStep"), currentClear);
                 }
 
                 if (currentClear == null) {
-                    plugin.getLogger().info("99");
                     if (getPlotToClear().getReason() == ClearReason.Clear) {
                         genmanager.adjustPlotFor(world, getPlotToClear().getPlotId(), true, false, false, false);
                     } else {
@@ -51,7 +47,6 @@ public class PlotMeSpool implements Runnable {
                     plottoclear = null;
                 }
             } else {
-                plugin.getLogger().info("100");
                 plugin.removePlotToClear(getPlotToClear(), taskId);
                 plottoclear = null;
                 currentClear = null;
