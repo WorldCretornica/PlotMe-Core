@@ -66,10 +66,6 @@
                 <th>Explanation</th>
             </tr>
             <tr>
-                <td><code>plotworld</code></td>
-                <td>The name of your plotworld, in lowercase</td>
-            </tr>
-            <tr>
                 <td><code>usemySQL</code></td>
                 <td>Set to true if you have a MySQL database, otherwise leave it as false</td>
             </tr>
@@ -101,15 +97,148 @@
             </tr>
             <tr>
                 <td><code>NbClearSpools</code></td>
-                <td>Description coming soon</td>
+                <td>The number of plots that can be cleared at a time. If you set this to X then X number of clears can
+                    take place at a time. If you have X+1 clear requests, the X+1 request will run once the other X are
+                    finished.
+                </td>
             </tr>
             <tr>
                 <td><code>NbBlocksPerClearStep</code></td>
-                <td>Description coming soon</td>
+                <td>The number of blocks to clear per spool in async plot clearing/resetting</td>
             </tr>
             <tr>
                 <td><code>AdvancedLogging</code></td>
                 <td>Enables more output results in console and to the player</td>
+            </tr>
+            <tr>
+                <td><code>worlds</code></td>
+                <td>The beginning of world settings</td>
+            </tr>
+            <tr>
+                <td><code>plotworld</code></td>
+                <td>The name of your plotworld, in lowercase. You can customize this to any name you want as long as it
+                    is lowercase.
+                </td>
+            </tr>
+            <tr>
+                <td><code>PlotAutoLimit</code></td>
+                <td>The maximum number of plots to check starting at spawn until a free plot is found.
+                </td>
+            </tr>
+            <tr>
+                <td><code>DaysToExpiration</code></td>
+                <td>The number of days until a plot expires. Setting this to zero means it will never expire
+                </td>
+            </tr>
+            <tr>
+                <td><code>ProtectedBlocks</code></td>
+                <td>Information on this feature coming soon.
+                </td>
+            </tr>
+            <tr>
+                <td><code>PreventedItems</code></td>
+                <td>Information on this feature coming soon.
+                </td>
+            </tr>
+            <tr>
+                <td><code>economy</code></td>
+                <td>The start of the economy features, if enabled.
+                </td>
+            </tr>
+            <tr>
+                <td><code>UseEconomy</code></td>
+                <td>True if you want to use economy features or false if you do not.
+                </td>
+            </tr>
+            <tr>
+                <td><code>CanPutOnSale</code></td>
+                <td>True if you want to be able to sell plots, false if you do not.
+                </td>
+            </tr>
+            <tr>
+                <td><code>RefundClaimPriceOnReset</code></td>
+                <td>Refunds the price paid to claim the plot if a user resets it.
+                </td>
+            </tr>
+            <tr>
+                <td><code>RefundClaimPriceOnSetOwner</code></td>
+                <td>Refunds the price paid to claim the plot to the original owner if a new owner is set.
+                </td>
+            </tr>
+            <tr>
+                <td><code>ClaimPrice</code></td>
+                <td>The cost to claim a plot.
+                </td>
+            </tr>
+            <tr>
+                <td><code>ClearPricePrice</code></td>
+                <td>The cost to clear a plot.
+                </td>
+            </tr>
+            <tr>
+                <td><code>AddPlayerPrice</code></td>
+                <td>The cost to add a player to a plot.
+                </td>
+            </tr>
+            <tr>
+                <td><code>DenyPlayerPrice</code></td>
+                <td>The cost to deny a player from a plot.
+                </td>
+            </tr>
+            <tr>
+                <td><code>RemovePlayerPrice</code></td>
+                <td>The cost to remove a player from a plot.
+                </td>
+            </tr>
+            <tr>
+                <td><code>UndenyPlayerPrice</code></td>
+                <td>The cost to undeny a player from a plot.
+                </td>
+            </tr>
+            <tr>
+                <td><code>PlotHomePrice</code></td>
+                <td>The cost to teleport a player to their home plot.
+                </td>
+            </tr>
+            <tr>
+                <td><code>SellToPlayerPrice</code></td>
+                <td>The price to sell a plot to a player.
+                </td>
+            </tr>
+            <tr>
+                <td><code>BiomeChangePrice</code></td>
+                <td>The price to change the biome of a plot.
+                </td>
+            </tr>
+            <tr>
+                <td><code>ProtectPrice</code></td>
+                <td>The price to protect a plot.
+                </td>
+            </tr>
+            <tr>
+                <td><code>DisposePrice</code></td>
+                <td>The price to dispose a plot.
+                </td>
+            </tr>
+            <tr>
+                <td><code>DisableExplosion</code></td>
+                <td>True if explosions are disabled in the world.
+                </td>
+            </tr>
+            <tr>
+                <td><code>DisableIgnition</code></td>
+                <td>True if fire is disabled in the world.
+                </td>
+            </tr>
+            <tr>
+                <td><code>UseProgressiveClear</code></td>
+                <td>A lag free gradual plot clearing and resetting process.
+                </td>
+            </tr>
+            <tr>
+                <td><code>Projectiles</code></td>
+                <td>True if projectiles are enabled in the world.
+                </td>
             </tr>
         </table>
         <h4>Example PlotMe Configuration File</h4>
@@ -220,11 +349,10 @@ worlds:
       BiomeChangePrice: 0.0
       ProtectPrice: 0.0
       DisposePrice: 0.0
-    AutoLinkPlots: true
     DisableExplosion: true
     DisableIgnition: true
     UseProgressiveClear: false
-    NextFreed: -1;0
+    Projectiles: true
 </pre>
     </section>
 </div>
