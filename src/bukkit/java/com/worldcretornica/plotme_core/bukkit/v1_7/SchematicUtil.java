@@ -1,17 +1,15 @@
 package com.worldcretornica.plotme_core.bukkit.v1_7;
 
-import com.worldcretornica.plotme_core.bukkit.AbstractSchematicUtil;
+import com.worldcretornica.plotme_core.bukkit.*;
 import com.worldcretornica.schematic.*;
 import com.worldcretornica.schematic.Entity;
 import com.worldcretornica.schematic.Item;
 import com.worldcretornica.schematic.jnbt.*;
-
 import org.bukkit.*;
 import org.bukkit.block.*;
 import org.bukkit.enchantments.*;
 import org.bukkit.entity.*;
-import org.bukkit.entity.Horse.Style;
-import org.bukkit.entity.Horse.Variant;
+import org.bukkit.entity.Horse.*;
 import org.bukkit.entity.Skeleton.*;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.*;
@@ -29,7 +27,7 @@ import java.util.UUID;
 
 public class SchematicUtil extends AbstractSchematicUtil {
 
-    protected Plugin plugin;
+    protected final Plugin plugin;
     
     @SuppressWarnings("deprecation")
     public SchematicUtil(Plugin instance) {
@@ -872,18 +870,6 @@ public class SchematicUtil extends AbstractSchematicUtil {
         }
     }
     
-    private class LastBlock {
-        Block block;
-        int id;
-        byte data;
-        
-        public LastBlock(Block block, int id, byte data) {
-            this.block = block;
-            this.id = id;
-            this.data = data;
-        }
-    }
-
     @SuppressWarnings("deprecation")
     protected void pasteSchematicEntities(Location loc, Schematic schematic) {
         World world = loc.getWorld();
@@ -1200,26 +1186,26 @@ public class SchematicUtil extends AbstractSchematicUtil {
                 etloc.setZ(Math.floor(etloc.getZ()));
 
                 ent = world.spawnEntity(etloc, EntityType.PAINTING);
-                
+
                 Painting painting = (Painting) ent;
-                
+
                 BlockFace bf = BlockFace.SOUTH;
-                
+
                 switch(facing) {
                     case 0: bf = BlockFace.SOUTH; break;
                     case 1: bf = BlockFace.WEST; break;
                     case 2: bf = BlockFace.NORTH; break;
                     case 3: bf = BlockFace.EAST; break;
                 }
-                
+
                 painting.setFacingDirection(bf, true);
                 painting.setArt(Art.getByName(motive), true);
-                
-            } else if (entitytype == EntityType.LEASH_HITCH) {                        
+
+            } else if (entitytype == EntityType.LEASH_HITCH) {
                 /*etloc.setX(Math.floor(etloc.getX()));
                 etloc.setY(Math.floor(etloc.getY()));
                 etloc.setZ(Math.floor(etloc.getZ()));
-                
+
                 ent = world.spawnEntity(etloc, entitytype);*/
                 return null;
             } else if (entitytype == EntityType.DROPPED_ITEM) {
@@ -1340,7 +1326,7 @@ public class SchematicUtil extends AbstractSchematicUtil {
                 if (headarmor != null) {
                     entityequipment.setHelmet(getItemStack(headarmor));
                 }
-                
+
                 if (livingentity instanceof Ageable) {
                     Ageable ageable = (Ageable) livingentity;
                     if (age != null) {
@@ -1357,7 +1343,7 @@ public class SchematicUtil extends AbstractSchematicUtil {
                         }
                     }
                 }
-                
+
                 if (livingentity instanceof Tameable) {
                     Tameable tameable = (Tameable) livingentity;
                     if (owneruuid != null) tameable.setOwner(Bukkit.getOfflinePlayer(UUID.fromString(owneruuid)));
@@ -1367,18 +1353,18 @@ public class SchematicUtil extends AbstractSchematicUtil {
                 if (livingentity instanceof Skeleton && skeletontype != null) {
                     Skeleton skeleton = (Skeleton) livingentity;
                     SkeletonType st = null;
-                    
+
                     switch(skeletontype) {
-                        case 0: 
-                            st = SkeletonType.NORMAL; 
+                        case 0:
+                            st = SkeletonType.NORMAL;
                             break;
-                        default: 
-                            st = SkeletonType.WITHER; 
+                        default:
+                            st = SkeletonType.WITHER;
                             break;
                     }
-                    
+
                     skeleton.setSkeletonType(st);
-                    
+
                 } else if (livingentity instanceof Sheep) {
                     Sheep sheep = (Sheep) livingentity;
                     if (sheared != null) {
@@ -1390,10 +1376,10 @@ public class SchematicUtil extends AbstractSchematicUtil {
                             sheep.setColor(dyecolor);
                         }
                     }
-                    
+
                 } else if (livingentity instanceof Horse) {
                     Horse horse = (Horse) livingentity;
-                    
+
                     if (attributes != null) {
                         for (Attribute attribute : attributes) {
                             if ("horse.jumpStrength".equalsIgnoreCase(attribute.getName())) {
@@ -1401,10 +1387,10 @@ public class SchematicUtil extends AbstractSchematicUtil {
                             }
                         }
                     }
-                    
+
                     if (chestedhorse != null) horse.setCarryingChest(chestedhorse != 0);
                     if (temper != null) horse.setDomestication(temper);
-                    
+
                     if (variant != null) {
                         switch(variant) {
                             case 0: horse.setVariant(Variant.HORSE); break;
@@ -1414,7 +1400,7 @@ public class SchematicUtil extends AbstractSchematicUtil {
                             case 4: horse.setVariant(Variant.SKELETON_HORSE); break;
                         }
                     }
-                    
+
                     if (type != null) {
                         if (type < 256) {
                             horse.setStyle(Style.NONE);
@@ -1427,15 +1413,15 @@ public class SchematicUtil extends AbstractSchematicUtil {
                         } else {
                             horse.setStyle(Style.BLACK_DOTS);
                         }
-                        
+
                         switch((int) ((double) type) % 256) {
-                            case 0 : horse.setColor(org.bukkit.entity.Horse.Color.WHITE); break;
-                            case 1 : horse.setColor(org.bukkit.entity.Horse.Color.CREAMY); break;
-                            case 2 : horse.setColor(org.bukkit.entity.Horse.Color.CHESTNUT); break;
-                            case 3 : horse.setColor(org.bukkit.entity.Horse.Color.BROWN); break;
-                            case 4 : horse.setColor(org.bukkit.entity.Horse.Color.BLACK); break;
-                            case 5 : horse.setColor(org.bukkit.entity.Horse.Color.GRAY); break;
-                            case 6 : horse.setColor(org.bukkit.entity.Horse.Color.DARK_BROWN); break;
+                            case 0 : horse.setColor(Horse.Color.WHITE); break;
+                            case 1 : horse.setColor(Horse.Color.CREAMY); break;
+                            case 2 : horse.setColor(Horse.Color.CHESTNUT); break;
+                            case 3 : horse.setColor(Horse.Color.BROWN); break;
+                            case 4 : horse.setColor(Horse.Color.BLACK); break;
+                            case 5 : horse.setColor(Horse.Color.GRAY); break;
+                            case 6 : horse.setColor(Horse.Color.DARK_BROWN); break;
                         }
                     }
                 }
@@ -1768,6 +1754,18 @@ public class SchematicUtil extends AbstractSchematicUtil {
             return attributes;
         } else {
             return null;
+        }
+    }
+
+    private class LastBlock {
+        Block block;
+        int id;
+        byte data;
+
+        public LastBlock(Block block, int id, byte data) {
+            this.block = block;
+            this.id = id;
+            this.data = data;
         }
     }
 }

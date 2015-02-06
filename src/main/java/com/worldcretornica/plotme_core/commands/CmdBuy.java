@@ -30,7 +30,7 @@ public class CmdBuy extends PlotCommand {
                         if (plot.isForSale()) {
                             String buyer = player.getName();
 
-                            if (plot.getOwnerId() == player.getUniqueId()) {
+                            if (plot.getOwnerId().equals(player.getUniqueId())) {
                                 player.sendMessage("§c" + C("MsgCannotBuyOwnPlot"));
                             } else {
                                 int plotLimit = getPlotLimit(player);
@@ -90,7 +90,7 @@ public class CmdBuy extends PlotCommand {
                                                 plot.updateField("customprice", 0);
                                                 plot.updateField("forsale", false);
 
-                                                manager.adjustWall(player);
+                                                manager.adjustWall(world, id, true);
                                                 manager.removeSellSign(world, id);
                                                 manager.setOwnerSign(world, plot);
 

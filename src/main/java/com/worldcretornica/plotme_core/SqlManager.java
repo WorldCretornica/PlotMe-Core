@@ -26,7 +26,7 @@ import java.util.regex.Pattern;
 
 public class SqlManager {
 
-    public static final String SQLITE_DRIVER = "org.sqlite.JDBC";
+    private static final String SQLITE_DRIVER = "org.sqlite.JDBC";
     private static final Pattern COMPILE = Pattern.compile("^[a-zA-Z0-9_]{1,16}$");
     private final PlotMe_Core plugin;
     private final String mySQLuname;
@@ -1529,7 +1529,7 @@ public class SqlManager {
      *
      * @param playername
      * @param playerId
-     * @return
+     * @return plot list of owned or allowed plots
      */
     public List<Plot> getPlayerPlots(String playername, UUID playerId) {
         return getPlayerPlots(playername, playerId, "", false);
@@ -1542,7 +1542,7 @@ public class SqlManager {
      * @param playerId
      * @param world
      *
-     * @return
+     * @return plot list of owned plots
      */
     public List<Plot> getOwnedPlots(String world, UUID playerId, String playername) {
         return getPlayerPlots(playername, playerId, world, true);
@@ -1556,7 +1556,7 @@ public class SqlManager {
      * @param world
      * @param ownedonly Only get the plots the player owns
      *
-     * @return
+     * @return plot list of owned or allowed plots
      */
     private List<Plot> getPlayerPlots(String playername, UUID playerId, String world, boolean ownedonly) {
         List<Plot> ret = new ArrayList<>();

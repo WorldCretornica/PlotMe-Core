@@ -104,16 +104,20 @@ public class BukkitServerBridge extends IServerBridge {
         if (pluginManager.getPlugin("WorldEdit") != null) {
 
             WorldEditPlugin worldEdit = (WorldEditPlugin) pluginManager.getPlugin("WorldEdit");
-            PlotWorldEdit we = null;
-            try {
-                we = new PlotWorldEdit(worldEdit);
-                setPlotWorldEdit(we);
-            } catch (SecurityException | IllegalArgumentException unused) {
-                getLogger().warning("Unable to hook to WorldEdit properly, please contact the developer of plotme with your WorldEdit version.");
-                setPlotWorldEdit(null);
-            }
+            if (worldEdit.getDescription().getVersion().startsWith("6")) {
+                PlotWorldEdit we = null;
+                try {
+                    we = new PlotWorldEdit(worldEdit);
+                    setPlotWorldEdit(we);
+                } catch (SecurityException | IllegalArgumentException unused) {
+                    getLogger().warning("Unable to hook to WorldEdit properly, please contact the developer of plotme with your WorldEdit version.");
+                    setPlotWorldEdit(null);
+                }
 
-            pluginManager.registerEvents(new BukkitPlotWorldEditListener(we, plugin), plugin);
+                pluginManager.registerEvents(new BukkitPlotWorldEditListener(we, plugin), plugin);
+            } else {
+                getLogger().warning("You are using an unsupported version of worldedit. The PlotMe WorldEdit Listener not be enabled.");
+            }
         }
 
         setUsingLwc(pluginManager.getPlugin("LWC") != null);

@@ -143,13 +143,17 @@ public class CmdShowHelp extends PlotCommand {
 
                     IWorld world = manager.getFirstWorld();
 
-                    short ownedPlots = manager.getNbOwnedPlot(player.getUniqueId(), world.getName().toLowerCase());
+                    if (world != null) {
+                        short ownedPlots = manager.getNbOwnedPlot(player.getUniqueId(), world.getName().toLowerCase());
 
-                    if (plotLimit == -1) {
-                        player.sendMessage(
-                                "§a" + C("HelpYourPlotLimitWorld") + " : §b" + ownedPlots + "§a " + C("HelpUsedOf") + " §b" + C("WordInfinite"));
+                        if (plotLimit == -1) {
+                            player.sendMessage(
+                                    "§a" + C("HelpYourPlotLimitWorld") + " : §b" + ownedPlots + "§a " + C("HelpUsedOf") + " §b" + C("WordInfinite"));
+                        } else {
+                            player.sendMessage("§a" + C("HelpYourPlotLimitWorld") + " : §b" + ownedPlots + "§a " + C("HelpUsedOf") + " §b" + plotLimit);
+                        }
                     } else {
-                        player.sendMessage("§a" + C("HelpYourPlotLimitWorld") + " : §b" + ownedPlots + "§a " + C("HelpUsedOf") + " §b" + plotLimit);
+                        player.sendMessage("PlotMe can't find any plotworlds. Make sure you configured it correctly.");
                     }
                 } else {
                     player.sendMessage("§a" + C("HelpYourPlotLimitWorld") + " : §b" + C("MsgNotPlotWorld"));

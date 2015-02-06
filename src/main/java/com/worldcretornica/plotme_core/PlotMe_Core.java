@@ -4,7 +4,7 @@ import com.worldcretornica.plotme_core.api.IConfigSection;
 import com.worldcretornica.plotme_core.api.IPlotMe_GeneratorManager;
 import com.worldcretornica.plotme_core.api.IServerBridge;
 import com.worldcretornica.plotme_core.api.IWorld;
-import com.worldcretornica.plotme_core.bukkit.AbstractSchematicUtil;
+import com.worldcretornica.plotme_core.bukkit.*;
 import com.worldcretornica.plotme_core.utils.Util;
 
 import java.io.*;
@@ -20,6 +20,7 @@ public class PlotMe_Core {
     public static final String WORLDS_CONFIG_SECTION = "worlds";
     //Bridge
     private final IServerBridge serverBridge;
+    private final AbstractSchematicUtil schematicutil;
     private HashMap<String, IPlotMe_GeneratorManager> managers;
     private IWorld worldcurrentlyprocessingexpired;
     private short counterExpired;
@@ -28,7 +29,6 @@ public class PlotMe_Core {
     //Global variables
     private SqlManager sqlManager;
     private Util util;
-    private AbstractSchematicUtil schematicutil;
 
     public PlotMe_Core(IServerBridge serverObjectBuilder, AbstractSchematicUtil schematicutil) {
         this.serverBridge = serverObjectBuilder;
@@ -138,7 +138,6 @@ public class PlotMe_Core {
             PlotMapInfo pmi = new PlotMapInfo(this, worldname);
             //Lets just hide a bit of code to clean up the config in here.
             IConfigSection config = getServerBridge().loadDefaultConfig("worlds." + worldname.toLowerCase());
-            config.set("Projectiles", true);
             config.set("BottomBlockId", null);
             config.set("AutoLinkPlots", null);
             config.saveConfig();

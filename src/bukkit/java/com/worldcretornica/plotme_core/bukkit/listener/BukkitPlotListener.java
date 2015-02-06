@@ -9,7 +9,6 @@ import com.worldcretornica.plotme_core.PlotToClear;
 import com.worldcretornica.plotme_core.bukkit.*;
 import com.worldcretornica.plotme_core.bukkit.api.*;
 import com.worldcretornica.plotme_core.bukkit.event.*;
-
 import org.bukkit.block.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.*;
@@ -698,6 +697,7 @@ public class BukkitPlotListener implements Listener {
             PlotMapInfo pmi = manager.getMap(event.getEntity().getWorld().getName());
             if (pmi != null && !pmi.canUseProjectiles()) {
                 event.getEntity().sendMessage(api.getUtil().C("ErrCannotUseEggs"));
+                event.setCancelled(true);
             /* Player player = event.getPlayer();
             BukkitLocation location = new BukkitLocation(event.getEgg().getLocation());
 
@@ -723,6 +723,24 @@ public class BukkitPlotListener implements Listener {
             }
             */
             }
+        }
+    }
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onBowEvent(EntityShootBowEvent event) {
+        if (event.getEntity() instanceof Player) {
+            PlotMapInfo pmi = manager.getMap(event.getEntity().getWorld().getName());
+            if (pmi != null && !pmi.canUseProjectiles()) {
+                event.getEntity().sendMessage(api.getUtil().C("ErrCannotUseEggs"));
+                event.setCancelled(true);
+            }
+        }
+    }
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onEggEvent(PlayerEggThrowEvent event) {
+        PlotMapInfo pmi = manager.getMap(event.getEgg().getWorld().getName());
+        if (pmi != null && !pmi.canUseProjectiles()) {
+            event.getPlayer().sendMessage(api.getUtil().C("ErrCannotUseEggs"));
+            event.setHatching(false);
         }
     }
 

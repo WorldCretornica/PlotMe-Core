@@ -5,13 +5,11 @@ import com.worldcretornica.schematic.Entity;
 import com.worldcretornica.schematic.Item;
 import com.worldcretornica.schematic.Pattern;
 import com.worldcretornica.schematic.jnbt.*;
-
 import org.bukkit.*;
 import org.bukkit.block.*;
 import org.bukkit.block.banner.*;
 import org.bukkit.entity.*;
-import org.bukkit.entity.Horse.Style;
-import org.bukkit.entity.Horse.Variant;
+import org.bukkit.entity.Horse.*;
 import org.bukkit.entity.Rabbit.*;
 import org.bukkit.entity.Skeleton.*;
 import org.bukkit.inventory.*;
@@ -299,6 +297,7 @@ public class SchematicUtil extends com.worldcretornica.plotme_core.bukkit.v1_7.S
         return schem;
     }
 
+    @Override
     @SuppressWarnings("deprecation")
     protected Entity getEntity(org.bukkit.entity.Entity bukkitentity, int minX, int minY, int minZ) {
 
@@ -1399,13 +1398,13 @@ public class SchematicUtil extends com.worldcretornica.plotme_core.bukkit.v1_7.S
                             }
                             
                             switch((int) ((double) type) % 256) {
-                                case 0 : horse.setColor(org.bukkit.entity.Horse.Color.WHITE); break;
-                                case 1 : horse.setColor(org.bukkit.entity.Horse.Color.CREAMY); break;
-                                case 2 : horse.setColor(org.bukkit.entity.Horse.Color.CHESTNUT); break;
-                                case 3 : horse.setColor(org.bukkit.entity.Horse.Color.BROWN); break;
-                                case 4 : horse.setColor(org.bukkit.entity.Horse.Color.BLACK); break;
-                                case 5 : horse.setColor(org.bukkit.entity.Horse.Color.GRAY); break;
-                                case 6 : horse.setColor(org.bukkit.entity.Horse.Color.DARK_BROWN); break;
+                                case 0 : horse.setColor(Horse.Color.WHITE); break;
+                                case 1 : horse.setColor(Horse.Color.CREAMY); break;
+                                case 2 : horse.setColor(Horse.Color.CHESTNUT); break;
+                                case 3 : horse.setColor(Horse.Color.BROWN); break;
+                                case 4 : horse.setColor(Horse.Color.BLACK); break;
+                                case 5 : horse.setColor(Horse.Color.GRAY); break;
+                                case 6 : horse.setColor(Horse.Color.DARK_BROWN); break;
                             }
                         }
                     }

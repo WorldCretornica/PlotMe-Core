@@ -32,7 +32,7 @@ public class CmdClear extends PlotCommand {
                     } else {
                         String playerName = player.getName();
 
-                        if (plot.getOwnerId() == player.getUniqueId() || player.hasPermission(PermissionNames.ADMIN_CLEAR)) {
+                        if (plot.getOwnerId().equals(player.getUniqueId()) || player.hasPermission(PermissionNames.ADMIN_CLEAR)) {
 
                             double price = 0.0;
 

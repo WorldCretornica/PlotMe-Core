@@ -37,7 +37,7 @@ public class CmdBiome extends PlotCommand {
                         Plot plot = manager.getPlotById(id, pmi);
                         String playerName = player.getName();
 
-                        if (plot.getOwnerId() == player.getUniqueId() || player.hasPermission("PlotMe.admin")) {
+                        if (plot.getOwnerId().equals(player.getUniqueId()) || player.hasPermission("PlotMe.admin")) {
 
                             double price = 0.0;
 
