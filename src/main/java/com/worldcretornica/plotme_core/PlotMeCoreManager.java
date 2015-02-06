@@ -10,13 +10,12 @@ import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IPlotMe_GeneratorManager;
 import com.worldcretornica.plotme_core.api.IWorld;
-import com.worldcretornica.plotme_core.bukkit.api.*;
+import com.worldcretornica.plotme_core.bukkit.api.BukkitBiome;
 import com.worldcretornica.plotme_core.utils.Util;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import javax.inject.Singleton;
@@ -25,9 +24,9 @@ import javax.inject.Singleton;
 public class PlotMeCoreManager {
 
     private static final PlotMeCoreManager INSTANCE = new PlotMeCoreManager();
+    private final HashMap<String, PlotMapInfo> plotmaps;
     private PlotMe_Core plugin;
     private HashSet<UUID> playersignoringwelimit;
-    private HashMap<String, PlotMapInfo> plotmaps;
         
     private PlotMeCoreManager() { 
         setPlayersIgnoringWELimit(new HashSet<UUID>());
@@ -49,7 +48,7 @@ public class PlotMeCoreManager {
      * @return X Coordinate
      */
     public int getIdX(String id) {
-        return Integer.parseInt(id.substring(0, id.indexOf(";")));
+        return Integer.parseInt(id.substring(0, id.indexOf(';')));
     }
 
     /**
@@ -59,7 +58,7 @@ public class PlotMeCoreManager {
      * @return Z Coordinate
      */
     public int getIdZ(String id) {
-        return Integer.parseInt(id.substring(id.indexOf(";") + 1));
+        return Integer.parseInt(id.substring(id.indexOf(';') + 1));
     }
 
     /**
@@ -606,7 +605,11 @@ public class PlotMeCoreManager {
 
         ILocation bottom = getGenManager(world).getBottom(world, id);
         ILocation top = getGenManager(world).getTop(world, id);
-
+        if(reason.equals(ClearReason.Clear)) {
+            adjustWall(world, plot.getId(), true);
+        } else {
+            adjustWall(world, plot.getId(), false);
+        }
         if (getMap(worldName).isUseProgressiveClear()) {
             plugin.addPlotToClear(new PlotToClear(worldName, id, reason, sender));
         } else {
