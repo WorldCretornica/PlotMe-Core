@@ -32,7 +32,7 @@ public class CmdDispose extends PlotCommand {
                     } else {
                         String name = player.getName();
 
-                        if (plot.getOwnerId() == player.getUniqueId() || player.hasPermission(PermissionNames.ADMIN_DISPOSE)) {
+                        if (plot.getOwnerId().equals(player.getUniqueId()) || player.hasPermission(PermissionNames.ADMIN_DISPOSE)) {
 
                             double cost = pmi.getDisposePrice();
 

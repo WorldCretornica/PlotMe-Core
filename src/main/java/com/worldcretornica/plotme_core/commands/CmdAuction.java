@@ -59,7 +59,7 @@ public class CmdAuction extends PlotCommand {
                                             }
 
                                             plot.setAuctioned(false);
-                                            manager.adjustWall(player);
+                                            manager.adjustWall(world, id, true);
                                             manager.removeAuctionSign(world, id);
                                             plot.setCurrentBid(0.0);
                                             plot.setCurrentBidder(null);
@@ -113,7 +113,7 @@ public class CmdAuction extends PlotCommand {
                                         if (!event.isCancelled()) {
                                             plot.setCurrentBid(bid);
                                             plot.setAuctioned(true);
-                                            manager.adjustWall(player);
+                                            manager.adjustWall(world, id, true);
                                             manager.setAuctionSign(world, plot);
 
                                             plot.updateField("currentbid", bid);

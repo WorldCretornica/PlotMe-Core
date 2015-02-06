@@ -2,8 +2,6 @@ package com.worldcretornica.plotme_core.sponge;
 
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IServerBridge;
-import com.worldcretornica.plotme_core.bukkit.AbstractSchematicUtil;
-
 import org.spongepowered.api.Game;
 import org.spongepowered.api.event.state.PreInitializationEvent;
 import org.spongepowered.api.event.state.ServerStartedEvent;
@@ -31,8 +29,8 @@ public class PlotMe_Sponge {
 
         serverObjectBuilder = new SpongeServerBridge(this);
         
-        AbstractSchematicUtil schematicutil = null; //TODO
-        plotme = new PlotMe_Core(serverObjectBuilder, schematicutil);
+        SpongeAbstractSchematicUtil schematicutil = new SchematicUtil(this); //TODO
+        plotme = new PlotMe_Core(serverObjectBuilder, null);
     }
 
     @Subscribe

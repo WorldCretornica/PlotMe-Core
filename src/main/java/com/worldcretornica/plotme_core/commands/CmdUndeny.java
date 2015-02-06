@@ -31,7 +31,7 @@ public class CmdUndeny extends PlotCommand {
                         String playerName = player.getName();
                         String denied = args[1];
 
-                        if (plot.getOwnerId() == player.getUniqueId() || player.hasPermission(PermissionNames.ADMIN_UNDENY)) {
+                        if (plot.getOwnerId().equals(player.getUniqueId()) || player.hasPermission(PermissionNames.ADMIN_UNDENY)) {
                             if (plot.isDeniedConsulting(denied) || plot.isGroupDenied(denied)) {
 
                                 double price = 0.0;

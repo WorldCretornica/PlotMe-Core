@@ -7,8 +7,8 @@ import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IPlotMe_GeneratorManager;
 import com.worldcretornica.plotme_core.api.IServerBridge;
 import com.worldcretornica.plotme_core.bukkit.api.*;
-
-import org.bukkit.Bukkit;
+import com.worldcretornica.plotme_core.bukkit.v1_8.*;
+import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.plugin.java.*;
 import org.mcstats.Metrics;
@@ -35,15 +35,15 @@ public class PlotMe_CorePlugin extends JavaPlugin {
     public void onEnable() {
         serverObjectBuilder = new BukkitServerBridge(this);
         
-        AbstractSchematicUtil schematicutil = null;
+        AbstractSchematicUtil schematicutil;
                 
         if (Bukkit.getVersion().contains("1.7")) {
-            schematicutil = new com.worldcretornica.plotme_core.bukkit.v1_7.SchematicUtil(this);
+            schematicutil = new SchematicUtil(this);
         } else if (Bukkit.getVersion().contains("1.8")) {
-            schematicutil = new com.worldcretornica.plotme_core.bukkit.v1_8.SchematicUtil(this);
+            schematicutil = new SchematicUtil(this);
         } else {
             getLogger().warning("This MC version is not supported yet, trying latest version!");
-            schematicutil = new com.worldcretornica.plotme_core.bukkit.v1_8.SchematicUtil(this);
+            schematicutil = new SchematicUtil(this);
         }
         
         plotme = new PlotMe_Core(serverObjectBuilder, schematicutil);

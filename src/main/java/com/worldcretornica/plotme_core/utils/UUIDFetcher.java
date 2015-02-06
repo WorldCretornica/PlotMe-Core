@@ -1,14 +1,12 @@
 package com.worldcretornica.plotme_core.utils;
 
 import com.google.common.collect.ImmutableList;
-
-import org.bukkit.Bukkit;
+import org.bukkit.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.ByteBuffer;
@@ -89,7 +87,7 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
         return new UUID(mostSignificant, leastSignificant);
     }
 
-    public static UUID getUUIDOf(String name) throws Exception {
+    public static UUID getUUIDOf(String name) {
         return new UUIDFetcher(Arrays.asList(name)).call().get(name.toLowerCase());
     }
 
@@ -97,7 +95,6 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
     public Map<String, UUID> call() {
         Map<String, UUID> uuidMap = new HashMap<>();
         int requests = (int) Math.ceil(names.size() / PROFILES_PER_REQUEST);
-        boolean success = false;
         int retries = 0;
         
         for (int i = 0; i < requests; i++) {
@@ -105,7 +102,7 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
             List<String> missinguuid = new ArrayList<>();
             
             //First step, get people that didn't change name
-            success = false;
+            boolean success = false;
             while (!success) {
                 try {
                     HttpURLConnection connection = createConnection();
@@ -133,8 +130,7 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
                     try {
                         //If we got an exception, retry in 30 seconds
                         Thread.sleep(30000L);
-                    } catch (InterruptedException unused) {
-                        
+                    } catch (InterruptedException ignored) {
                     }
                     if (retries > 0 && retries % 10 == 0) {
                         Bukkit.getLogger().warning("The UUID fetcher has been trying for " + retries + " times to get UUIDs.");
@@ -157,8 +153,7 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
                             try {
                                 //If we got an exception, retry in 30 seconds
                                 Thread.sleep(30000L);
-                            } catch (InterruptedException unused) {
-                                
+                            } catch (InterruptedException ignored) {
                             }
                             if (retries > 0 && retries % 20 == 0) {
                                 Bukkit.getLogger().warning("The UUID fetcher has been trying for " + retries + " times to get UUIDs.");
@@ -189,7 +184,7 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
             if (rateLimiting && i != requests - 1) {
                 try {
                     Thread.sleep(1100L);
-                } catch (InterruptedException unused) {
+                } catch (InterruptedException ignored) {
                 }
             }
             
