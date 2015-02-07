@@ -1757,12 +1757,14 @@ public class SqlManager {
                 Statement statementPlayers = null;
                 PreparedStatement psOwnerId = null;
                 PreparedStatement psCurrentBidderId = null;
-                PreparedStatement psAllowedPlayerId = null;
+                PreparedStatement psAllowedPlayerId0 = null;
+                PreparedStatement psAllowedPlayerId1 = null;
                 PreparedStatement psAllowedPlayerId2 = null;
                 PreparedStatement psAllowedPlayerId3 = null;
                 PreparedStatement psAllowedPlayerId4 = null;
                 PreparedStatement psAllowedPlayerId5 = null;
-                PreparedStatement psDeniedPlayerId = null;
+                PreparedStatement psDeniedPlayerId0 = null;
+                PreparedStatement psDeniedPlayerId1 = null;
                 PreparedStatement psDeniedPlayerId2 = null;
                 PreparedStatement psDeniedPlayerId3 = null;
                 PreparedStatement psDeniedPlayerId4 = null;
@@ -1795,10 +1797,10 @@ public class SqlManager {
                             List<String> names = new ArrayList<>();
     
                             //Prepare delete statements
-                            psDeleteOwner = conn.prepareStatement("UPDATE plotmePlots SET owner = '' WHERE owner = ? ");
-                            psDeleteCurrentBidder = conn.prepareStatement("UPDATE plotmePlots SET currentbidder = null WHERE currentbidder = ? ");
-                            psDeleteAllowed = conn.prepareStatement("DELETE FROM plotmeAllowed WHERE player = ? ");
-                            psDeleteDenied = conn.prepareStatement("DELETE FROM plotmeDenied WHERE player = ? ");
+                            psDeleteOwner = conn.prepareStatement("UPDATE plotmePlots SET owner = '' WHERE LOWER(owner) = ? ");
+                            psDeleteCurrentBidder = conn.prepareStatement("UPDATE plotmePlots SET currentbidder = null WHERE LOWER(currentbidder = ?) ");
+                            psDeleteAllowed = conn.prepareStatement("DELETE FROM plotmeAllowed WHERE LOWER(player) = ? ");
+                            psDeleteDenied = conn.prepareStatement("DELETE FROM plotmeDenied WHERE LOWER(player) = ? ");
     
                             do {
                                 String name = setPlayers.getString("Name");
@@ -1844,32 +1846,62 @@ public class SqlManager {
                                     psCurrentBidderId = conn.prepareStatement(sqlUpdate);
                                     
                                     
-                                    sqlUpdate = "CREATE TEMPORARY TABLE IF NOT EXISTS TEMPPLOTMEALLOWED(idX INT, idZ INT, world varchar(34));";
-                                    psAllowedPlayerId = conn.prepareStatement(sqlUpdate);
+                                    if (!tableExists("TEMPPLOTMEALLOWED")) {
+                                        sqlUpdate = "CREATE TABLE `TEMPPLOTMEALLOWED` (`idX` INTEGER, `idZ` INTEGER, `world` varchar(32));";
+                                        psAllowedPlayerId0 = conn.prepareStatement(sqlUpdate);
+                                        psAllowedPlayerId0.execute();
+                                        psAllowedPlayerId0.close();
+                                    }
+                                    
+                                    sqlUpdate = "DELETE FROM TEMPPLOTMEALLOWED;";
+                                    psAllowedPlayerId1 = conn.prepareStatement(sqlUpdate);
                                     sqlUpdate = "INSERT INTO TEMPPLOTMEALLOWED SELECT idX, idZ, world FROM plotmeAllowed " +
                                            "WHERE LOWER(player) = ? OR LOWER(player) = ? GROUP BY idX, idZ, world HAVING Count(*) = 2;";
                                     psAllowedPlayerId2 = conn.prepareStatement(sqlUpdate);
-                                    sqlUpdate = "DELETE A1.* FROM plotmeAllowed A1 INNER JOIN TEMPPLOTMEALLOWED as A2 ON A1.idX = A2.idX AND A1.idZ = A2.idZ AND A1.world = A2.world " +
-                                           "WHERE LOWER(A1.player) = ?;";
+                                    
+                                    if (isUsingMySQL()) {
+                                        sqlUpdate = "DELETE A1.* FROM plotmeAllowed A1 INNER JOIN TEMPPLOTMEALLOWED as A2 ON A1.idX = A2.idX AND A1.idZ = A2.idZ AND A1.world = A2.world " +
+                                                "WHERE LOWER(A1.player) = ?;";
+                                    } else {
+                                        sqlUpdate = "DELETE FROM plotmeAllowed " +
+                                            "WHERE idX || ';' || idZ || ';' || world IN(" +
+                                            "SELECT A1.idX || ';' || A1.idZ || ';' || A1.world " +
+                                            "FROM plotmeAllowed A1 INNER JOIN TEMPPLOTMEALLOWED as A2 ON A1.idX = A2.idX AND A1.idZ = A2.idZ AND A1.world = A2.world " + 
+                                            "WHERE LOWER(A1.player) = ?)";
+                                    }
+                                    
                                     psAllowedPlayerId3 = conn.prepareStatement(sqlUpdate);
-                                    sqlUpdate = "DROP TABLE TEMPPLOTMEALLOWED;";
-                                    psAllowedPlayerId4 = conn.prepareStatement(sqlUpdate);
                                     sqlUpdate = "UPDATE plotmeAllowed SET playerid = ?, player = ? WHERE LOWER(player) = ? AND playerid IS NULL";
-                                    psAllowedPlayerId5 = conn.prepareStatement(sqlUpdate);
+                                    psAllowedPlayerId4 = conn.prepareStatement(sqlUpdate);
                                     
                                     
-                                    sqlUpdate = "CREATE TEMPORARY TABLE IF NOT EXISTS TEMPPLOTMEDENIED(idX INT, idZ INT, world varchar(34));";
-                                    psDeniedPlayerId = conn.prepareStatement(sqlUpdate);
+                                    if (!tableExists("TEMPPLOTMEDENIED")) {
+                                        sqlUpdate = "CREATE TABLE `TEMPPLOTMEDENIED` (`idX` INTEGER, `idZ` INTEGER, `world` varchar(32));";
+                                        psDeniedPlayerId0 = conn.prepareStatement(sqlUpdate);
+                                        psDeniedPlayerId0.execute();
+                                        psDeniedPlayerId0.close();
+                                    }                                   
+                                    
+                                    sqlUpdate = "DELETE FROM TEMPPLOTMEDENIED;";
+                                    psDeniedPlayerId1 = conn.prepareStatement(sqlUpdate);
                                     sqlUpdate = "INSERT INTO TEMPPLOTMEDENIED SELECT idX, idZ, world FROM plotmeDenied " +
                                            "WHERE LOWER(player) = ? OR LOWER(player) = ? GROUP BY idX, idZ, world HAVING Count(*) = 2;";
                                     psDeniedPlayerId2 = conn.prepareStatement(sqlUpdate);
-                                    sqlUpdate = "DELETE D1.* FROM plotmeDenied D1 INNER JOIN TEMPPLOTMEDENIED as D2 ON D1.idX = D2.idX AND D1.idZ = D2.idZ AND D1.world = D2.world " +
-                                           "WHERE LOWER(D1.player) = ?;";
+                                    
+                                    if (isUsingMySQL()) {
+                                        sqlUpdate = "DELETE D1.* FROM plotmeDenied D1 INNER JOIN TEMPPLOTMEDENIED as D2 ON D1.idX = D2.idX AND D1.idZ = D2.idZ AND D1.world = D2.world " +
+                                                "WHERE LOWER(D1.player) = ?;";
+                                    } else {
+                                        sqlUpdate = "DELETE FROM plotmeDenied " +
+                                            "WHERE idX || ';' || idZ || ';' || world IN(" +
+                                            "SELECT A1.idX || ';' || A1.idZ || ';' || A1.world " +
+                                            "FROM plotmeDenied A1 INNER JOIN TEMPPLOTMEDENIED as A2 ON A1.idX = A2.idX AND A1.idZ = A2.idZ AND A1.world = A2.world " + 
+                                            "WHERE LOWER(A1.player) = ?)";
+                                    }
+                                    
                                     psDeniedPlayerId3 = conn.prepareStatement(sqlUpdate);
-                                    sqlUpdate = "DROP TABLE TEMPPLOTMEDENIED;";
-                                    psDeniedPlayerId4 = conn.prepareStatement(sqlUpdate);
                                     sqlUpdate = "UPDATE plotmeDenied SET playerid = ?, player = ? WHERE LOWER(player) = ? AND playerid IS NULL";
-                                    psDeniedPlayerId5 = conn.prepareStatement(sqlUpdate);
+                                    psDeniedPlayerId4 = conn.prepareStatement(sqlUpdate);
     
                                     //int nbConverted = 0;
                                     for (String keyname : response.keySet()) {
@@ -1901,29 +1933,27 @@ public class SqlManager {
                                             psCurrentBidderId.setString(3, oldname.toLowerCase());
                                             count += psCurrentBidderId.executeUpdate();
                                             // Allowed
-                                            psAllowedPlayerId.execute();
+                                            psAllowedPlayerId1.execute();
                                             psAllowedPlayerId2.setString(1, oldname.toLowerCase());
                                             psAllowedPlayerId2.setString(2, newname);
                                             psAllowedPlayerId2.executeUpdate();
                                             psAllowedPlayerId3.setString(1, newname);
                                             psAllowedPlayerId3.executeUpdate();
-                                            psAllowedPlayerId4.execute();
-                                            psAllowedPlayerId5.setBytes(1, byteuuid);
-                                            psAllowedPlayerId5.setString(2, newname);
-                                            psAllowedPlayerId5.setString(3, oldname.toLowerCase());
-                                            count += psAllowedPlayerId5.executeUpdate();
+                                            psAllowedPlayerId4.setBytes(1, byteuuid);
+                                            psAllowedPlayerId4.setString(2, newname);
+                                            psAllowedPlayerId4.setString(3, oldname.toLowerCase());
+                                            count += psAllowedPlayerId4.executeUpdate();
                                             // Denied
-                                            psDeniedPlayerId.execute();
+                                            psDeniedPlayerId1.execute();
                                             psDeniedPlayerId2.setString(1, oldname.toLowerCase());
                                             psDeniedPlayerId2.setString(2, newname);
                                             psDeniedPlayerId2.executeUpdate();
                                             psDeniedPlayerId3.setString(1, newname);
                                             psDeniedPlayerId3.executeUpdate();
-                                            psDeniedPlayerId4.execute();
-                                            psDeniedPlayerId5.setBytes(1, byteuuid);
-                                            psDeniedPlayerId5.setString(2, newname);
-                                            psDeniedPlayerId5.setString(3, oldname.toLowerCase());
-                                            count += psDeniedPlayerId5.executeUpdate();
+                                            psDeniedPlayerId4.setBytes(1, byteuuid);
+                                            psDeniedPlayerId4.setString(2, newname);
+                                            psDeniedPlayerId4.setString(3, oldname.toLowerCase());
+                                            count += psDeniedPlayerId4.executeUpdate();
                                             conn.commit();
                                             if (count == 0) {
                                                 plugin.getLogger().warning("Unable to update player '" + keyname + "'");
@@ -1944,10 +1974,17 @@ public class SqlManager {
                                         }
                                     }
     
+                                    
                                     psOwnerId.close();
                                     psCurrentBidderId.close();
-                                    psAllowedPlayerId.close();
-                                    psDeniedPlayerId.close();
+                                    psAllowedPlayerId1.close();
+                                    psDeniedPlayerId1.close();
+                                    psAllowedPlayerId2.close();
+                                    psDeniedPlayerId2.close();
+                                    psAllowedPlayerId3.close();
+                                    psDeniedPlayerId3.close();
+                                    psAllowedPlayerId4.close();
+                                    psDeniedPlayerId4.close();
     
                                     //Update plot information
                                     for (PlotMapInfo pmi : PlotMeCoreManager.getInstance().getPlotMaps().values()) {
@@ -2027,11 +2064,35 @@ public class SqlManager {
                         if (psCurrentBidderId != null) {
                             psCurrentBidderId.close();
                         }
-                        if (psAllowedPlayerId != null) {
-                            psAllowedPlayerId.close();
+                        if (psAllowedPlayerId0 != null) {
+                            psAllowedPlayerId0.close();
                         }
-                        if (psDeniedPlayerId != null) {
-                            psDeniedPlayerId.close();
+                        if (psAllowedPlayerId1 != null) {
+                            psAllowedPlayerId1.close();
+                        }
+                        if (psAllowedPlayerId2 != null) {
+                            psAllowedPlayerId2.close();
+                        }
+                        if (psAllowedPlayerId3 != null) {
+                            psAllowedPlayerId3.close();
+                        }
+                        if (psAllowedPlayerId4 != null) {
+                            psAllowedPlayerId4.close();
+                        }
+                        if (psDeniedPlayerId0 != null) {
+                            psDeniedPlayerId0.close();
+                        }
+                        if (psDeniedPlayerId1 != null) {
+                            psDeniedPlayerId1.close();
+                        }
+                        if (psDeniedPlayerId2 != null) {
+                            psDeniedPlayerId2.close();
+                        }
+                        if (psDeniedPlayerId3 != null) {
+                            psDeniedPlayerId3.close();
+                        }
+                        if (psDeniedPlayerId4 != null) {
+                            psDeniedPlayerId4.close();
                         }
                         if (setPlayers != null) {
                             setPlayers.close();
@@ -2047,6 +2108,27 @@ public class SqlManager {
                         }
                         if (psDeleteDenied != null) {
                             psDeleteDenied.close();
+                        }
+                        
+                        try {
+                            if (tableExists("TEMPPLOTMEALLOWED")) {
+                                psAllowedPlayerId5 = conn.prepareStatement("DROP TABLE TEMPPLOTMEALLOWED;");
+                                psAllowedPlayerId5.execute();
+                            }
+                            if (tableExists("TEMPPLOTMEDENIED")) {
+                                psDeniedPlayerId5 = conn.prepareStatement("DROP TABLE TEMPPLOTMEDENIED;");
+                                psDeniedPlayerId5.execute();
+                            }
+                        } catch(SQLException ee) {
+                            plugin.getLogger().severe(ee.getMessage());
+                        }
+
+                        if (psAllowedPlayerId5 != null) {
+                            psAllowedPlayerId5.close();
+                        }
+
+                        if (psDeniedPlayerId5 != null) {
+                            psDeniedPlayerId5.close();
                         }
                     } catch (SQLException ex) {
                         plugin.getLogger().severe("Conversion to UUID failed (on close) :");
