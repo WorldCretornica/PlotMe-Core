@@ -2,25 +2,14 @@ package com.worldcretornica.plotme_core;
 
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
-import com.worldcretornica.plotme_core.bukkit.api.*;
+import com.worldcretornica.plotme_core.bukkit.api.BukkitBiome;
 import com.worldcretornica.plotme_core.utils.UUIDFetcher;
 
-import java.io.*;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
+import java.io.File;
+import java.sql.*;
 import java.sql.Date;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.UUID;
 import java.util.logging.Level;
 import java.util.regex.Pattern;
 
@@ -2087,6 +2076,11 @@ public class SqlManager {
     
                                                 //Denied
                                                 plot.denied().replace(oldname, newname, uuid);
+
+                                                //Update Plot Sign
+                                                if (plugin.getServerBridge().getWorld(plot.getWorld()) != null) {
+                                                    PlotMeCoreManager.getInstance().setOwnerSign(plugin.getServerBridge().getWorld(plot.getWorld()),plot);
+                                                }
                                             }
                                         }
                                     }
@@ -2377,7 +2371,7 @@ public class SqlManager {
         });
     }
 
-    public boolean savePlotProperty(final int idX, final int idZ, final String world, final String pluginname, final String property, final String value) {
+    public boolean savePlotProperty(int idX, int idZ, String world, String pluginname, String property, String value) {
         PreparedStatement ps = null;
         ResultSet rsProperty = null;
 
