@@ -1,28 +1,28 @@
 package com.worldcretornica.plotme_core.bukkit;
 
-import com.worldcretornica.schematic.*;
-import com.worldcretornica.schematic.jnbt.*;
+import com.worldcretornica.schematic.Schematic;
+import com.worldcretornica.schematic.jnbt.Tag;
+import org.bukkit.Location;
 
-import org.bukkit.*;
-
-import java.io.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
 
 public abstract class AbstractSchematicUtil {
-    
+
     // List of blocks that should be placed last in world generation
     public final Collection<Integer> blockPlacedLast = new HashSet<>();
-    
+
     public abstract void pasteSchematic(Location loc, Schematic schem);
+
     public abstract Schematic loadSchematic(File file) throws IOException, IllegalArgumentException;
+
     public abstract Schematic createCompiledSchematic(Location loc1, Location loc2);
+
     public abstract void saveCompiledSchematic(Schematic schem, String name);
+
     public abstract Schematic loadCompiledSchematic(String name);
-    
+
     protected <T extends Tag, K> K getChildTag(Map<String, Tag> items, String key, Class<T> expected, Class<K> result) {
         if (!items.containsKey(key)) {
             return null;
@@ -38,7 +38,7 @@ public abstract class AbstractSchematicUtil {
         }
         return result.cast(obj);
     }
-    
+
     protected <T extends Tag> T getChildTag(Map<String, Tag> items, String key, Class<T> expected) {
         if (!items.containsKey(key)) {
             return null;
@@ -50,7 +50,7 @@ public abstract class AbstractSchematicUtil {
         }
         return expected.cast(tag);
     }
-    
+
     protected <T> T convert(Object obj, Class<T> expected) {
         if (!(obj instanceof Tag)) {
             return null;
@@ -66,7 +66,7 @@ public abstract class AbstractSchematicUtil {
             return expected.cast(tag.getValue());
         }
     }
-    
+
     protected <T> List<T> convert(List<?> tagList, Class<T> expected) {
         if (tagList != null) {
             List<T> newlist = new ArrayList<>();

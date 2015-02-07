@@ -11,7 +11,7 @@ public abstract class PlotCommand {
     protected final PlotMe_Core plugin;
 
     protected final IServerBridge serverBridge;
-    
+
     protected final PlotMeCoreManager manager;
 
     public PlotCommand(PlotMe_Core instance) {

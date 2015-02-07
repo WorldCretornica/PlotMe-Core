@@ -1,7 +1,5 @@
 package com.worldcretornica.plotme_core.commands;
 
-import static com.worldcretornica.plotme_core.utils.Util.whitespace;
-
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
@@ -9,6 +7,8 @@ import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.utils.MinecraftFontWidthCalculator;
 
 import java.util.List;
+
+import static com.worldcretornica.plotme_core.utils.Util.whitespace;
 
 public class CmdDoneList extends PlotCommand {
 

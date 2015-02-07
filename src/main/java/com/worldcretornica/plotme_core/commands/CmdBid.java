@@ -114,7 +114,7 @@ public class CmdBid extends PlotCommand {
                                                         if (onlinePlayers.getName().equalsIgnoreCase(currentBidder)) {
                                                             onlinePlayers.sendMessage(
                                                                     C("MsgOutbidOnPlot") + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner()
-                                                                    + ". " + Util().moneyFormat(bid, true));
+                                                                            + ". " + Util().moneyFormat(bid, true));
                                                             break;
                                                         }
                                                     }

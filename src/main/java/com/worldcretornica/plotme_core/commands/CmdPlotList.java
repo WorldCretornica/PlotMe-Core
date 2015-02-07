@@ -121,7 +121,7 @@ public class CmdPlotList extends PlotCommand {
                         } else {
                             player.sendMessage(
                                     "  " + plot.getId() + " -> §b" + plot.getOwner() + C("WordPossessive") + "§r" + addition + ", " + C("WordHelpers")
-                                    + ": " + helpers);
+                                            + ": " + helpers);
                         }
                     }
                 }

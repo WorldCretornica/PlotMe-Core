@@ -86,11 +86,11 @@ public class CmdAdd extends PlotCommand {
                                         if (advancedPrice == 0) {
                                             serverBridge.getLogger()
                                                     .info(player.getName() + " " + C("MsgAddedPlayer") + " " + allowed + " " + C("MsgToPlot") + " "
-                                                          + id);
+                                                            + id);
                                         } else {
                                             serverBridge.getLogger()
                                                     .info(player.getName() + " " + C("MsgAddedPlayer") + " " + allowed + " " + C("MsgToPlot") + " "
-                                                          + id + (" " + C("WordFor") + " " + advancedPrice));
+                                                            + id + (" " + C("WordFor") + " " + advancedPrice));
                                         }
                                     }
                                 }

@@ -3,26 +3,27 @@ package com.worldcretornica.plotme_core.bukkit.v1_8;
 import com.worldcretornica.schematic.*;
 import com.worldcretornica.schematic.Entity;
 import com.worldcretornica.schematic.Item;
-import com.worldcretornica.schematic.Pattern;
 import com.worldcretornica.schematic.jnbt.*;
 import org.bukkit.*;
 import org.bukkit.block.*;
-import org.bukkit.block.banner.*;
+import org.bukkit.block.banner.PatternType;
 import org.bukkit.entity.*;
-import org.bukkit.entity.Horse.*;
-import org.bukkit.entity.Rabbit.*;
-import org.bukkit.entity.Skeleton.*;
-import org.bukkit.inventory.*;
-import org.bukkit.plugin.*;
-import org.bukkit.util.*;
+import org.bukkit.entity.Horse.Style;
+import org.bukkit.entity.Horse.Variant;
+import org.bukkit.entity.Rabbit.Type;
+import org.bukkit.entity.Skeleton.SkeletonType;
+import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.util.EulerAngle;
+import org.bukkit.util.Vector;
 
-import java.io.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.*;
 
 public class SchematicUtil extends com.worldcretornica.plotme_core.bukkit.v1_7.SchematicUtil {
 
@@ -269,9 +270,9 @@ public class SchematicUtil extends com.worldcretornica.plotme_core.bukkit.v1_7.S
 
                         if (isTileEntity) {
                             TileEntity te = new TileEntity(x, y, z, customname, id, items, rot, skulltype, delay, maxnearbyentities, maxspawndelay,
-                                                           minspawndelay, requiredplayerrange, spawncount, spawnrange, entityid, burntime, cooktime,
-                                                           text1, text2, text3, text4, note, record, recorditem, brewtime, command, outputsignal,
-                                                           transfercooldown, levels, primary, secondary, patterns, base);
+                                    minspawndelay, requiredplayerrange, spawncount, spawnrange, entityid, burntime, cooktime,
+                                    text1, text2, text3, text4, note, record, recorditem, brewtime, command, outputsignal,
+                                    transfercooldown, levels, primary, secondary, patterns, base);
                             tileentities.add(te);
                         }
                     }
@@ -282,9 +283,9 @@ public class SchematicUtil extends com.worldcretornica.plotme_core.bukkit.v1_7.S
                 Location entloc = bukkitentity.getLocation();
 
                 if (entloc.getX() >= minX && entloc.getX() <= maxX &&
-                    entloc.getY() >= minY && entloc.getY() <= maxY &&
-                    entloc.getZ() >= minZ && entloc.getZ() <= maxZ &&
-                    !(bukkitentity instanceof Player)) {
+                        entloc.getY() >= minY && entloc.getY() <= maxY &&
+                        entloc.getZ() >= minZ && entloc.getZ() <= maxZ &&
+                        !(bukkitentity instanceof Player)) {
                     entities.add(getEntity(bukkitentity, minX, minY, minZ));
                 }
             }
@@ -305,7 +306,7 @@ public class SchematicUtil extends com.worldcretornica.plotme_core.bukkit.v1_7.S
         double x = entLoc.getX() - minX;
         double y = entLoc.getY() - minY;
         double z = entLoc.getZ() - minZ;
-        
+
         Byte dir = null;
         Byte direction = null;
         Byte invulnerable = null;
@@ -435,15 +436,25 @@ public class SchematicUtil extends com.worldcretornica.plotme_core.bukkit.v1_7.S
             Painting painting = (Painting) bukkitentity;
             Art art = painting.getArt();
             motive = art.name();
-                        
-            switch(painting.getFacing()) {
-                case EAST: facing = 3; break;
-                case WEST: facing = 1; break;
-                case NORTH: facing = 2; break;
-                case SOUTH: facing = 0; break;
-                default: facing = 0; break;
+
+            switch (painting.getFacing()) {
+                case EAST:
+                    facing = 3;
+                    break;
+                case WEST:
+                    facing = 1;
+                    break;
+                case NORTH:
+                    facing = 2;
+                    break;
+                case SOUTH:
+                    facing = 0;
+                    break;
+                default:
+                    facing = 0;
+                    break;
             }
-            
+
             if (art.getBlockHeight() == 2 || art.getBlockHeight() == 4) {
                 y -= 1;
             }
@@ -507,7 +518,7 @@ public class SchematicUtil extends com.worldcretornica.plotme_core.bukkit.v1_7.S
                 agelocked = (byte) (ageable.getAgeLock() ? 1 : 0);
                 isbaby = (byte) (ageable.isAdult() ? 0 : 1);
             }
-            
+
             if (livingentity instanceof Tameable) {
                 Tameable tameable = (Tameable) livingentity;
                 if (tameable.getOwner() != null) {
@@ -519,7 +530,7 @@ public class SchematicUtil extends com.worldcretornica.plotme_core.bukkit.v1_7.S
             if (livingentity instanceof Skeleton) {
                 Skeleton skeleton = (Skeleton) livingentity;
 
-                switch(skeleton.getSkeletonType()) {
+                switch (skeleton.getSkeletonType()) {
                     case NORMAL:
                         skeletontype = 0;
                         break;
@@ -605,49 +616,82 @@ public class SchematicUtil extends com.worldcretornica.plotme_core.bukkit.v1_7.S
             } else if (livingentity instanceof Guardian) {
                 Guardian guardian = (Guardian) livingentity;
                 elder = (byte) (guardian.isElder() ? 1 : 0);
-                
+
             } else if (livingentity instanceof Sheep) {
                 Sheep sheep = (Sheep) livingentity;
                 sheared = (byte) (sheep.isSheared() ? 1 : 0);
                 color = sheep.getColor().getWoolData();
-                
+
             } else if (livingentity instanceof Horse) {
                 Horse horse = (Horse) livingentity;
-                
+
                 attributes = new ArrayList<>();
                 attributes.add(new Attribute(horse.getJumpStrength(), "horse.jumpStrength", null));
-                
+
                 temper = horse.getDomestication();
                 chestedhorse = (byte) (horse.isCarryingChest() ? 1 : 0);
-                
-                switch(horse.getVariant()) {
-                    case HORSE: variant = 0; break;
-                    case DONKEY: variant = 1; break;
-                    case MULE: variant = 2; break;
-                    case UNDEAD_HORSE: variant = 3; break;
-                    case SKELETON_HORSE: variant = 4; break;
+
+                switch (horse.getVariant()) {
+                    case HORSE:
+                        variant = 0;
+                        break;
+                    case DONKEY:
+                        variant = 1;
+                        break;
+                    case MULE:
+                        variant = 2;
+                        break;
+                    case UNDEAD_HORSE:
+                        variant = 3;
+                        break;
+                    case SKELETON_HORSE:
+                        variant = 4;
+                        break;
                 }
-                
-                switch(horse.getStyle()) {
-                    case NONE: type = 0; break;
-                    case WHITE: type = 256; break;
-                    case WHITEFIELD: type = 512; break;
-                    case WHITE_DOTS: type = 768; break;
-                    case BLACK_DOTS: type = 1024; break;
+
+                switch (horse.getStyle()) {
+                    case NONE:
+                        type = 0;
+                        break;
+                    case WHITE:
+                        type = 256;
+                        break;
+                    case WHITEFIELD:
+                        type = 512;
+                        break;
+                    case WHITE_DOTS:
+                        type = 768;
+                        break;
+                    case BLACK_DOTS:
+                        type = 1024;
+                        break;
                 }
-                
-                switch(horse.getColor()) {
-                    case CREAMY: type += 1; break;
-                    case CHESTNUT: type += 2; break;
-                    case BROWN: type += 3; break;
-                    case BLACK: type += 4; break;
-                    case GRAY: type += 5; break;
-                    case DARK_BROWN: type += 6; break;
-                    default: break;
+
+                switch (horse.getColor()) {
+                    case CREAMY:
+                        type += 1;
+                        break;
+                    case CHESTNUT:
+                        type += 2;
+                        break;
+                    case BROWN:
+                        type += 3;
+                        break;
+                    case BLACK:
+                        type += 4;
+                        break;
+                    case GRAY:
+                        type += 5;
+                        break;
+                    case DARK_BROWN:
+                        type += 6;
+                        break;
+                    default:
+                        break;
                 }
             }
         }
-        
+
         List<Double> positions = new ArrayList<>();
 
         positions.add(x);
@@ -655,15 +699,15 @@ public class SchematicUtil extends com.worldcretornica.plotme_core.bukkit.v1_7.S
         positions.add(z);
 
         return new Entity(dir, direction, invulnerable, onground, air, fire, dimension, portalcooldown,
-                          tilex, tiley, tilez, falldistance, id, motive, motion, positions, rotation, canpickuploot,
-                          color, customnamevisible, leashed, persistencerequired, sheared, attacktime, deathtime, health,
-                          hurttime, age, inlove, absorptionamount, healf, customname, attributes, dropchances,
-                          itemheld, feetarmor, legarmor, chestarmor, headarmor,
-                          skeletontype, riding, leash, item, isbaby, items, transfercooldown, fuel, pushx, pushz, tntfuse,
-                          itemrotation, itemdropchance, agelocked, invisible, nobaseplate, nogravity, showarms, null, small,
-                          elder, forcedage, hurtbytimestamp, morecarrotsticks, rabbittype, disabledslots, pose, 
-                          bred, chestedhorse, eatinghaystack, hasreproduced, tame, temper, type, variant, owneruuid,
-                          facing);
+                tilex, tiley, tilez, falldistance, id, motive, motion, positions, rotation, canpickuploot,
+                color, customnamevisible, leashed, persistencerequired, sheared, attacktime, deathtime, health,
+                hurttime, age, inlove, absorptionamount, healf, customname, attributes, dropchances,
+                itemheld, feetarmor, legarmor, chestarmor, headarmor,
+                skeletontype, riding, leash, item, isbaby, items, transfercooldown, fuel, pushx, pushz, tntfuse,
+                itemrotation, itemdropchance, agelocked, invisible, nobaseplate, nogravity, showarms, null, small,
+                elder, forcedage, hurtbytimestamp, morecarrotsticks, rabbittype, disabledslots, pose,
+                bred, chestedhorse, eatinghaystack, hasreproduced, tame, temper, type, variant, owneruuid,
+                facing);
     }
 
     @Override
@@ -788,17 +832,17 @@ public class SchematicUtil extends com.worldcretornica.plotme_core.bukkit.v1_7.S
                             }
 
                             tileentities.add(new TileEntity(x, y, z, customname, id, items, rot, skulltype, delay, maxnearbyentities,
-                                                            maxspawndelay, minspawndelay, requiredplayerrange, spawncount, spawnrange, entityid,
-                                                            burntime, cooktime,
-                                                            text1, text2, text3, text4, note, record, recorditem, brewtime, command, outputsignal,
-                                                            transfercooldown, levels, primary, secondary, patterns, base));
+                                    maxspawndelay, minspawndelay, requiredplayerrange, spawncount, spawnrange, entityid,
+                                    burntime, cooktime,
+                                    text1, text2, text3, text4, note, record, recorditem, brewtime, command, outputsignal,
+                                    transfercooldown, levels, primary, secondary, patterns, base));
                         }
                     }
                 }
 
                 schem =
                         new Schematic(blocks, blockData, blockBiomes, materials, width, length, height, entities, tileentities, roomauthor, originx,
-                                      originy, originz);
+                                originy, originz);
 
                 saveCompiledSchematic(schem, file.getName());
             }
@@ -984,7 +1028,7 @@ public class SchematicUtil extends com.worldcretornica.plotme_core.bukkit.v1_7.S
                 double x = positions.get(0) - originX;
                 double y = positions.get(1) - originY;
                 double z = positions.get(2) - originZ;
-                
+
                 //Set properties, unused are commented out
 
                 //Byte dir = e.getDir();
@@ -1086,22 +1130,30 @@ public class SchematicUtil extends com.worldcretornica.plotme_core.bukkit.v1_7.S
                     etloc.setX(Math.floor(etloc.getX()));
                     etloc.setY(Math.floor(etloc.getY()));
                     etloc.setZ(Math.floor(etloc.getZ()));
-                    
+
                     ent = world.spawnEntity(etloc, EntityType.PAINTING);
                     Painting painting = (Painting) ent;
-                    
+
                     BlockFace bf = BlockFace.SOUTH;
-                    
-                    switch(facing) {
-                        case 0: bf = BlockFace.SOUTH; break;
-                        case 1: bf = BlockFace.WEST; break;
-                        case 2: bf = BlockFace.NORTH; break;
-                        case 3: bf = BlockFace.EAST; break;
+
+                    switch (facing) {
+                        case 0:
+                            bf = BlockFace.SOUTH;
+                            break;
+                        case 1:
+                            bf = BlockFace.WEST;
+                            break;
+                        case 2:
+                            bf = BlockFace.NORTH;
+                            break;
+                        case 3:
+                            bf = BlockFace.EAST;
+                            break;
                     }
-                    
+
                     painting.setArt(Art.getByName(motive), true);
                     painting.setFacingDirection(bf, true);
-                    
+
                 } else if (entitytype == EntityType.LEASH_HITCH) {                        
                     /*etloc.setX(Math.floor(etloc.getX()));
                     etloc.setY(Math.floor(etloc.getY()));
@@ -1192,7 +1244,7 @@ public class SchematicUtil extends com.worldcretornica.plotme_core.bukkit.v1_7.S
                     if (customnamevisible != null) {
                         livingentity.setCustomNameVisible(customnamevisible != 0);
                     }
-                    
+
                     if (air != null) {
                         livingentity.setRemainingAir(air);
                     }
@@ -1208,7 +1260,7 @@ public class SchematicUtil extends com.worldcretornica.plotme_core.bukkit.v1_7.S
                     if (hurtbytimestamp != null) {
                         livingentity.setNoDamageTicks(hurtbytimestamp);
                     }
-                    
+
                     if (healf != null) {
                         if (livingentity.getMaxHealth() < healf) {
                             livingentity.setMaxHealth(healf);
@@ -1250,7 +1302,7 @@ public class SchematicUtil extends com.worldcretornica.plotme_core.bukkit.v1_7.S
                             }
                         }
                     }
-                    
+
                     if (livingentity instanceof Tameable) {
                         Tameable tameable = (Tameable) livingentity;
                         if (owneruuid != null) tameable.setOwner(Bukkit.getOfflinePlayer(UUID.fromString(owneruuid)));
@@ -1259,10 +1311,10 @@ public class SchematicUtil extends com.worldcretornica.plotme_core.bukkit.v1_7.S
 
                     if (livingentity instanceof Skeleton && skeletontype != null) {
                         Skeleton skeleton = (Skeleton) livingentity;
-                        
+
                         SkeletonType st = null;
-                        
-                        switch(skeletontype) {
+
+                        switch (skeletontype) {
                             case 0:
                                 st = SkeletonType.NORMAL;
                                 break;
@@ -1270,7 +1322,7 @@ public class SchematicUtil extends com.worldcretornica.plotme_core.bukkit.v1_7.S
                                 st = SkeletonType.WITHER;
                                 break;
                         }
-                        
+
                         skeleton.setSkeletonType(st);
                     } else if (livingentity instanceof Rabbit && rabbittype != null) {
                         Rabbit rabbit = (Rabbit) livingentity;
@@ -1362,7 +1414,7 @@ public class SchematicUtil extends com.worldcretornica.plotme_core.bukkit.v1_7.S
                         }
                     } else if (livingentity instanceof Horse) {
                         Horse horse = (Horse) livingentity;
-                        
+
                         if (attributes != null) {
                             for (Attribute attribute : attributes) {
                                 if ("horse.jumpStrength".equalsIgnoreCase(attribute.getName())) {
@@ -1370,20 +1422,30 @@ public class SchematicUtil extends com.worldcretornica.plotme_core.bukkit.v1_7.S
                                 }
                             }
                         }
-                        
+
                         if (chestedhorse != null) horse.setCarryingChest(chestedhorse != 0);
                         if (temper != null) horse.setDomestication(temper);
-                        
+
                         if (variant != null) {
-                            switch(variant) {
-                                case 0: horse.setVariant(Variant.HORSE); break;
-                                case 1: horse.setVariant(Variant.DONKEY); break;
-                                case 2: horse.setVariant(Variant.MULE); break;
-                                case 3: horse.setVariant(Variant.UNDEAD_HORSE); break;
-                                case 4: horse.setVariant(Variant.SKELETON_HORSE); break;
+                            switch (variant) {
+                                case 0:
+                                    horse.setVariant(Variant.HORSE);
+                                    break;
+                                case 1:
+                                    horse.setVariant(Variant.DONKEY);
+                                    break;
+                                case 2:
+                                    horse.setVariant(Variant.MULE);
+                                    break;
+                                case 3:
+                                    horse.setVariant(Variant.UNDEAD_HORSE);
+                                    break;
+                                case 4:
+                                    horse.setVariant(Variant.SKELETON_HORSE);
+                                    break;
                             }
                         }
-                        
+
                         if (type != null) {
                             if (type < 256) {
                                 horse.setStyle(Style.NONE);
@@ -1396,15 +1458,29 @@ public class SchematicUtil extends com.worldcretornica.plotme_core.bukkit.v1_7.S
                             } else {
                                 horse.setStyle(Style.BLACK_DOTS);
                             }
-                            
-                            switch((int) ((double) type) % 256) {
-                                case 0 : horse.setColor(Horse.Color.WHITE); break;
-                                case 1 : horse.setColor(Horse.Color.CREAMY); break;
-                                case 2 : horse.setColor(Horse.Color.CHESTNUT); break;
-                                case 3 : horse.setColor(Horse.Color.BROWN); break;
-                                case 4 : horse.setColor(Horse.Color.BLACK); break;
-                                case 5 : horse.setColor(Horse.Color.GRAY); break;
-                                case 6 : horse.setColor(Horse.Color.DARK_BROWN); break;
+
+                            switch ((int) ((double) type) % 256) {
+                                case 0:
+                                    horse.setColor(Horse.Color.WHITE);
+                                    break;
+                                case 1:
+                                    horse.setColor(Horse.Color.CREAMY);
+                                    break;
+                                case 2:
+                                    horse.setColor(Horse.Color.CHESTNUT);
+                                    break;
+                                case 3:
+                                    horse.setColor(Horse.Color.BROWN);
+                                    break;
+                                case 4:
+                                    horse.setColor(Horse.Color.BLACK);
+                                    break;
+                                case 5:
+                                    horse.setColor(Horse.Color.GRAY);
+                                    break;
+                                case 6:
+                                    horse.setColor(Horse.Color.DARK_BROWN);
+                                    break;
                             }
                         }
                     }
@@ -1548,16 +1624,16 @@ public class SchematicUtil extends com.worldcretornica.plotme_core.bukkit.v1_7.S
         }
 
         return new Entity(dir, direction, invulnerable, onground, air, fire, dimension, portalcooldown, tilex, tiley, tilez, falldistance, id, motive,
-                          motion, pos, rotation,
-                          canpickuploot, color, customnamevisible, leashed, persistencerequired, sheared, attacktime, deathtime, health, hurttime,
-                          age, inlove, absorptionamount,
-                          healf, customname, attributes, dropchances, itemheld, feetarmor, legarmor, chestarmor, headarmor,
-                          skeletontype, riding, leash, item, isbaby, items, transfercooldown, fuel, pushx, pushz, tntfuse,
-                          itemrotation, itemdropchance, agelocked, invisible, nobaseplate, nogravity, showarms, silent, small, elder, forcedage,
-                          hurtbytimestamp,
-                          morecarrotsticks, rabbittype, disabledslots, pose,
-                          bred, chestedhorse, eatinghaystack, hasreproduced, tame, temper, type, variant, owneruuid,
-                          facing);
+                motion, pos, rotation,
+                canpickuploot, color, customnamevisible, leashed, persistencerequired, sheared, attacktime, deathtime, health, hurttime,
+                age, inlove, absorptionamount,
+                healf, customname, attributes, dropchances, itemheld, feetarmor, legarmor, chestarmor, headarmor,
+                skeletontype, riding, leash, item, isbaby, items, transfercooldown, fuel, pushx, pushz, tntfuse,
+                itemrotation, itemdropchance, agelocked, invisible, nobaseplate, nogravity, showarms, silent, small, elder, forcedage,
+                hurtbytimestamp,
+                morecarrotsticks, rabbittype, disabledslots, pose,
+                bred, chestedhorse, eatinghaystack, hasreproduced, tame, temper, type, variant, owneruuid,
+                facing);
     }
 
     protected Pose getPose(CompoundTag poseelement) {

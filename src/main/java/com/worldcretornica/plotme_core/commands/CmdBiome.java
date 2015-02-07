@@ -7,7 +7,7 @@ import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotBiomeChangeEvent;
-import com.worldcretornica.plotme_core.bukkit.api.*;
+import com.worldcretornica.plotme_core.bukkit.api.BukkitBiome;
 import net.milkbowl.vault.economy.EconomyResponse;
 
 public class CmdBiome extends PlotCommand {
@@ -78,10 +78,10 @@ public class CmdBiome extends PlotCommand {
                                 if (isAdvancedLogging()) {
                                     if (price == 0) {
                                         serverBridge.getLogger().info(playerName + " " + C("MsgChangedBiome") + " " + id + " " + C("WordTo") + " "
-                                                                      + biomeName);
+                                                + biomeName);
                                     } else {
                                         serverBridge.getLogger().info(playerName + " " + C("MsgChangedBiome") + " " + id + " " + C("WordTo") + " "
-                                                                      + biomeName + (" " + C("WordFor") + " " + price));
+                                                + biomeName + (" " + C("WordFor") + " " + price));
                                     }
                                 }
                             }

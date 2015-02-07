@@ -523,11 +523,11 @@ public class Plot implements Cloneable {
     public final void setCurrentBid(double currentBid) {
         this.currentBid = currentBid;
     }
-    
+
     public String getPlotProperty(String pluginname, String property) {
         return metadata.get(pluginname).get(property);
     }
-    
+
     public boolean setPlotProperty(String pluginname, String property, String value) {
         if (!metadata.containsKey(pluginname)) {
             metadata.put(pluginname, new HashMap<String, String>());
@@ -535,7 +535,7 @@ public class Plot implements Cloneable {
         metadata.get(pluginname).put(property, value);
         return plugin.getSqlManager().savePlotProperty(PlotMeCoreManager.getInstance().getIdX(getId()), PlotMeCoreManager.getInstance().getIdZ(getId()), this.world, pluginname, property, value);
     }
-    
+
     public Map<String, Map<String, String>> getAllPlotProperties() {
         return metadata;
     }

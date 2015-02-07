@@ -42,10 +42,10 @@ public class CmdClaim extends PlotCommand {
                     int plotLimit = getPlotLimit(player);
 
                     short plotsOwned = manager.getNbOwnedPlot(player.getUniqueId(), world.getName().toLowerCase());
-                    
+
                     if (playerName.equals(player.getName()) && plotLimit != -1 && plotsOwned >= plotLimit) {
                         player.sendMessage("§c" + C("MsgAlreadyReachedMaxPlots") + " (" + plotsOwned + "/" + getPlotLimit(player)
-                                           + "). " + C("WordUse") + " §c/plotme home§r " + C("MsgToGetToIt"));
+                                + "). " + C("WordUse") + " §c/plotme home§r " + C("MsgToGetToIt"));
                     } else {
 
                         double price = 0.0;
@@ -93,7 +93,7 @@ public class CmdClaim extends PlotCommand {
                                                     .moneyFormat(-price, true));
                                 } else {
                                     player.sendMessage(C("MsgThisPlotIsNow") + " " + playerName + C("WordPossessive") + ". " + C("WordUse")
-                                                       + " §c/plotme home§r " + C("MsgToGetToIt") + " " + Util().moneyFormat(-price, true));
+                                            + " §c/plotme home§r " + C("MsgToGetToIt") + " " + Util().moneyFormat(-price, true));
                                 }
 
                                 if (isAdvancedLogging()) {
