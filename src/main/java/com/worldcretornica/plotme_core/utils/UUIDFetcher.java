@@ -20,7 +20,7 @@ import java.util.concurrent.Callable;
 
 public class UUIDFetcher implements Callable<Map<String, UUID>> {
 
-    private static final double PROFILES_PER_REQUEST = 100;
+    public static final double PROFILES_PER_REQUEST = 100;
     private static final String PROFILE_URL = "https://api.mojang.com/profiles/minecraft";
     private static final String PROFILE_AT_TIME_URL = "https://api.mojang.com/users/profiles/minecraft/@USERNAME@?at=1420156800";
     private final JSONParser jsonParser = new JSONParser();

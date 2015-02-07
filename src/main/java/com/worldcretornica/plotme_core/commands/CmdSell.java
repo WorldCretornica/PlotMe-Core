@@ -33,7 +33,7 @@ public class CmdSell extends PlotCommand {
                                 player.sendMessage(C("You cannot sell a plot that is for auction"));
                                 return true;
                             }
-                            if (plot.getOwnerId().equals(player.getUniqueId()) || player.hasPermission(PermissionNames.ADMIN_SELL)) {
+                            if (player.getUniqueId().equals(plot.getOwnerId()) || player.hasPermission(PermissionNames.ADMIN_SELL)) {
 
                                 InternalPlotSellChangeEvent event;
 

@@ -36,7 +36,7 @@ public class CmdAuction extends PlotCommand {
 
                             String name = player.getName();
 
-                            if (plot.getOwnerId() == player.getUniqueId() || player.hasPermission(PermissionNames.ADMIN_AUCTION)) {
+                            if (player.getUniqueId().equals(plot.getOwnerId()) || player.hasPermission(PermissionNames.ADMIN_AUCTION)) {
 
                                 if (plot.isAuctioned()) {
                                     if (plot.getCurrentBidderId() != null) {

@@ -29,7 +29,7 @@ public class CmdProtect extends PlotCommand {
 
                     String name = player.getName();
 
-                    if (plot.getOwnerId().equals(player.getUniqueId()) || player.hasPermission(PermissionNames.ADMIN_PROTECT)) {
+                    if (player.getUniqueId().equals(plot.getOwnerId()) || player.hasPermission(PermissionNames.ADMIN_PROTECT)) {
                         InternalPlotProtectChangeEvent event;
 
                         if (plot.isProtect()) {
