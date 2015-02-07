@@ -16,12 +16,11 @@ public class Plot implements Cloneable {
     //TODO look into removing reference to plugin
 
     private final PlotMe_Core plugin;
-
+    private final PlayerList allowed;
+    private final PlayerList denied;
     private String owner;
     private UUID ownerId;
     private String world;
-    private PlayerList allowed;
-    private PlayerList denied;
     private IBiome biome;
     private Date expiredDate;
     private boolean finished;
@@ -329,12 +328,6 @@ public class Plot implements Cloneable {
         IPlayer player = plugin.getServerBridge().getPlayer(uuid);
         if (getOwnerId() != null && getOwnerId().equals(uuid)) {
             return true;
-        }
-
-        if (checkGroup && getOwner().toLowerCase().startsWith("group:") && player != null) {
-            if (player.hasPermission("plotme.group." + getOwner().replace("Group:", ""))) {
-                return true;
-            }
         }
 
         HashMap<String, UUID> list = allowed().getAllPlayers();

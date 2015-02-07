@@ -81,12 +81,16 @@ public class PlotMeCoreManager {
      * @param pmi PlotMapInfo
      * @return plot
      */
-
     public Plot getPlotById(IPlayer player, PlotMapInfo pmi) {
         String id = getPlotId(player);
         return getPlotById(id, pmi);
     }
 
+    /**
+     * Removes the plot from the plotmap
+     * @param pmi plotmap
+     * @param id plot id
+     */
     public void removePlot(PlotMapInfo pmi, String id) {
         if (pmi != null) {
             pmi.removePlot(id);
@@ -354,10 +358,22 @@ public class PlotMeCoreManager {
     }
 */
 
+    /**
+     * Gets the plot with the given id in the given world.
+     * @param id plot id
+     * @param world the world the plot is in
+     * @return plot
+     */
     public Plot getPlotById(String id, IWorld world) {
         return getPlotById(id, world.getName());
     }
 
+    /**
+     * Gets the plot with the given id in the given world as a string.
+     * @param id plot id
+     * @param name the world the plot is in
+     * @return plot
+     */
     public Plot getPlotById(String id, String name) {
         PlotMapInfo pmi = getMap(name);
 
@@ -368,10 +384,21 @@ public class PlotMeCoreManager {
         return pmi.getPlot(id);
     }
 
+    /**
+     * Gets the plot with the given id and location based on the given player.
+     * @param id plot id
+     * @param player the player in the plot
+     * @return plot
+     */
     public Plot getPlotById(String id, IPlayer player) {
         return getPlotById(id, player.getWorld());
     }
 
+    /**
+     * Gets the plot with the given player which will have his location checked.
+     * @param player player standing in a plot
+     * @return plot
+     */
     public Plot getPlotById(IPlayer player) {
         PlotMapInfo pmi = getMap(player);
         String id = getPlotId(player);

@@ -26,6 +26,10 @@ public class CmdSetOwner extends PlotCommand {
                     player.sendMessage("§c" + C("MsgNoPlotFound"));
                 } else {
                     String newOwner = args[1];
+                    if (newOwner.startsWith("group:")) {
+                        player.sendMessage("You cannot make a group an owner. Try adding them to the plot instead.");
+                        return true;
+                    }
                     String oldowner = "<" + C("WordNotApplicable") + ">";
                     String playerName = player.getName();
 
