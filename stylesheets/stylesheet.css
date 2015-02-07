@@ -15,13 +15,12 @@ ol, ul {
 /*-------------vvvvvv-------------*/
 /* Dropdown Menu (navigator) function compacted*/
 #nav {
-    background-color: initial;
+    background-color: #111111;
 }
 
 #nav_wrapper {
-    width: 1125px;
-    margin: 0 auto;
-    text-align: left;
+    margin: 0 auto 0 auto;
+    text-align: center;
 }
 
 #nav ul {
@@ -37,7 +36,7 @@ ol, ul {
 }
 
 #nav ul li:hover {
-    background-color: #333;
+    background-color: #525252;
 }
 
 #nav ul li a {
@@ -54,10 +53,7 @@ ol, ul {
 #nav ul ul {
     display: none;
     position: absolute;
-    background-color: #333;
-    border: 5px solid #222;
-    border-top: 0;
-    margin-left: -5px;
+    background-color: #111111;
 }
 
 #nav ul ul li {
@@ -283,12 +279,7 @@ pre code {
 
 /*Header styles*/
 #header_wrap {
-    background: #212121;
-    background: -moz-linear-gradient(top, #373737, #212121);
-    background: -webkit-linear-gradient(top, #373737, #212121);
-    background: -ms-linear-gradient(top, #373737, #212121);
-    background: -o-linear-gradient(top, #373737, #212121);
-    background: linear-gradient(top, #373737, #212121);
+    background: #111111;
 }
 
 /*Main content styles*/
@@ -307,7 +298,7 @@ pre code {
 
 /*Footer styles*/
 #footer_wrap {
-    background: #212121;
+    background: #111111;
 }
 
 /*******************************************************************************
@@ -443,37 +434,21 @@ form {
     padding: 20px;
 }
 
-/* GitHub Forkme Banner */
-#forkme_banner {
-    display: block;
-    position: absolute;
-    top: 0;
-    right: 10px;
-    z-index: 10;
-    padding: 10px 50px 10px 10px;
-    color: #fff;
-    background: url('../images/blacktocat.png') #0090ff no-repeat 95% 50%;
-    font-weight: 700;
-    box-shadow: 0 0 10px rgba(0, 0, 0, .5);
-    border-bottom-left-radius: 2px;
-    border-bottom-right-radius: 2px;
-}
-
 /* Project title, subtitle and downloads style */
 #project_title {
+    text-align: center;
     margin: 0;
     color: #fff;
     font-size: 42px;
     font-weight: 700;
-    text-shadow: #111 0 0 10px;
 }
 
 #project_tagline {
+    text-align: center;
     color: #fff;
     font-size: 24px;
     font-weight: 300;
     background: none;
-    text-shadow: #111 0 0 10px;
 }
 
 #downloads {
