@@ -31,7 +31,7 @@ public class CmdReset extends PlotCommand {
                 } else {
                     String id = plot.getId();
 
-                    if (plot.getOwnerId().equals(player.getUniqueId()) || player.hasPermission(PermissionNames.ADMIN_RESET)) {
+                    if (player.getUniqueId().equals(plot.getOwnerId()) || player.hasPermission(PermissionNames.ADMIN_RESET)) {
 
                         InternalPlotResetEvent event = serverBridge.getEventFactory().callPlotResetEvent(plugin, world, plot, player);
 

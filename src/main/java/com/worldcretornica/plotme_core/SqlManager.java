@@ -1832,7 +1832,7 @@ public class SqlManager {
                                     psAllowedPlayerId = conn.prepareStatement("UPDATE plotmeAllowed SET playerid = ?, player = ? WHERE LOWER(player) = ? AND playerid IS NULL");
                                     psDeniedPlayerId = conn.prepareStatement("UPDATE plotmeDenied SET playerid = ?, player = ? WHERE LOWER(player) = ? AND playerid IS NULL");
     
-                                    int nbConverted = 0;
+                                    //int nbConverted = 0;
                                     for (String keyname : response.keySet()) {
                                         
                                         String oldname;
@@ -1872,7 +1872,7 @@ public class SqlManager {
                                             count += psDeniedPlayerId.executeUpdate();
                                             conn.commit();
                                             if (count > 0) {
-                                                nbConverted++;
+                                                //nbConverted++;
                                             } else {
                                                 plugin.getLogger().warning("Unable to update player '" + keyname + "'");
                                             }

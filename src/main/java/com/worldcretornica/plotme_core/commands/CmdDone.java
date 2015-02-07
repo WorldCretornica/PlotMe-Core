@@ -23,7 +23,7 @@ public class CmdDone extends PlotCommand {
                     Plot plot = manager.getPlotById(id, player);
                     String name = player.getName();
 
-                    if (plot.getOwnerId().equals(player.getUniqueId()) || player.hasPermission(PermissionNames.ADMIN_DONE)) {
+                    if (player.getUniqueId().equals(plot.getOwnerId()) || player.hasPermission(PermissionNames.ADMIN_DONE)) {
                         InternalPlotDoneChangeEvent
                                 event =
                                 serverBridge.getEventFactory().callPlotDoneEvent(plugin, player.getWorld(), plot, player, plot.isFinished());
