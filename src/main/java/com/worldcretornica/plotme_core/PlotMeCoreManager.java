@@ -531,7 +531,7 @@ public class PlotMeCoreManager {
      */
 
     public IWorld getFirstWorld() {
-        String firstWorld = null;
+        String firstWorld;
         try {
             firstWorld = (String) getPlotMaps().keySet().toArray()[0];
         } catch (ArrayIndexOutOfBoundsException error) {
@@ -858,7 +858,7 @@ public class PlotMeCoreManager {
 
     /**
      * Gets the active plotworlds
-     * @return
+     * @return the active plotworlds
      */
     public HashMap<String, PlotMapInfo> getPlotMaps() {
         return plotmaps;
