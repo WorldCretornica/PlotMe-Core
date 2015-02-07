@@ -1748,6 +1748,21 @@ public class SqlManager {
         }
         return ret;
     }
+    
+    private boolean executesql(String sql) {
+        Statement statement = null;
+        boolean result;
+        try {
+            Connection conn = getConnection();
+            statement = conn.createStatement();
+            result = statement.execute(sql);
+            statement.close();
+            conn.commit();
+            return result;
+        } catch (SQLException ex) {
+            return false;
+        }
+    }
 
     public void plotConvertToUUIDAsynchronously() {
         plugin.getServerBridge().runTaskLaterAsynchronously(new Runnable() {
@@ -1780,6 +1795,54 @@ public class SqlManager {
                 try {
                     Connection conn = getConnection();
 
+                    //Remove duplicated names
+                    if (!tableExists("TEMP2PLOTMEALLOWED")) {
+                        executesql("CREATE TABLE `TEMP2PLOTMEALLOWED` ("
+                                   + "`idX` INTEGER,"
+                                   + "`idZ` INTEGER,"
+                                   + "`world` varchar(32) NOT NULL,"
+                                   + "`player` varchar(32) NOT NULL,"
+                                   + "`playerid` blob(16),"
+                                   + "PRIMARY KEY (idX, idZ, world, player) "
+                                   + ");");
+                    }
+                    executesql("INSERT INTO TEMP2PLOTMEALLOWED(idX, idZ, world, player, playerid) " +
+                            "SELECT idX, idZ, world, lower(player), playerid " + 
+                            "FROM plotmeAllowed " +
+                            "GROUP BY idX, idZ, world, lower(player), playerid ");
+                    executesql("DELETE FROM plotmeAllowed");
+                    executesql("INSERT INTO plotmeAllowed(idX, idZ, world, player, playerid) " +
+                            "SELECT idX, idZ, world, player, playerid " +
+                            "FROM TEMP2PLOTMEALLOWED");
+                    
+                    if (tableExists("TEMP2PLOTMEALLOWED")) {
+                        executesql("DROP TABLE TEMP2PLOTMEALLOWED");
+                    }
+                    
+                    if (!tableExists("TEMP2PLOTMEDENIED")) {
+                            executesql("CREATE TABLE `TEMP2PLOTMEDENIED` ("
+                                  + "`idX` INTEGER,"
+                                  + "`idZ` INTEGER,"
+                                  + "`world` varchar(32) NOT NULL,"
+                                  + "`player` varchar(32) NOT NULL,"
+                                  + "`playerid` blob(16),"
+                                  + "PRIMARY KEY (idX, idZ, world, player) "
+                                  + ");");
+                    }
+                    executesql("INSERT INTO TEMP2PLOTMEDENIED(idX, idZ, world, player, playerid) " +
+                            "SELECT idX, idZ, world, lower(player), playerid " + 
+                            "FROM plotmeDenied " +
+                            "GROUP BY idX, idZ, world, lower(player), playerid ");
+                    executesql("DELETE FROM plotmeDenied");
+                    executesql("INSERT INTO plotmeDenied(idX, idZ, world, player, playerid) " +
+                            "SELECT idX, idZ, world, player, playerid " +
+                            "FROM TEMP2PLOTMEDENIED");
+                    
+                    if (tableExists("TEMP2PLOTMEDENIED")) {
+                        executesql("DROP TABLE TEMP2PLOTMEDENIED");
+                    }
+                    
+                    
                     // Get all the players
                     statementPlayers = conn.createStatement();
                     // Exclude groups and names with * or missing
@@ -1935,9 +1998,9 @@ public class SqlManager {
                                             // Allowed
                                             psAllowedPlayerId1.execute();
                                             psAllowedPlayerId2.setString(1, oldname.toLowerCase());
-                                            psAllowedPlayerId2.setString(2, newname);
+                                            psAllowedPlayerId2.setString(2, newname.toLowerCase());
                                             psAllowedPlayerId2.executeUpdate();
-                                            psAllowedPlayerId3.setString(1, newname);
+                                            psAllowedPlayerId3.setString(1, newname.toLowerCase());
                                             psAllowedPlayerId3.executeUpdate();
                                             psAllowedPlayerId4.setBytes(1, byteuuid);
                                             psAllowedPlayerId4.setString(2, newname);
@@ -1946,14 +2009,19 @@ public class SqlManager {
                                             // Denied
                                             psDeniedPlayerId1.execute();
                                             psDeniedPlayerId2.setString(1, oldname.toLowerCase());
-                                            psDeniedPlayerId2.setString(2, newname);
+                                            psDeniedPlayerId2.setString(2, newname.toLowerCase());
                                             psDeniedPlayerId2.executeUpdate();
-                                            psDeniedPlayerId3.setString(1, newname);
+                                            psDeniedPlayerId3.setString(1, newname.toLowerCase());
                                             psDeniedPlayerId3.executeUpdate();
                                             psDeniedPlayerId4.setBytes(1, byteuuid);
                                             psDeniedPlayerId4.setString(2, newname);
                                             psDeniedPlayerId4.setString(3, oldname.toLowerCase());
-                                            count += psDeniedPlayerId4.executeUpdate();
+                                            try {
+                                                count += psDeniedPlayerId4.executeUpdate();
+                                            } catch(Exception t) {
+                                                plugin.getLogger().info("newname : " + newname);
+                                                plugin.getLogger().info("oldname : " + oldname);
+                                            }
                                             conn.commit();
                                             if (count == 0) {
                                                 plugin.getLogger().warning("Unable to update player '" + keyname + "'");
