@@ -2,23 +2,15 @@ package com.worldcretornica.plotme_core;
 
 import com.griefcraft.lwc.LWC;
 import com.griefcraft.model.Protection;
-import com.worldcretornica.plotme_core.api.IBiome;
-import com.worldcretornica.plotme_core.api.IBlock;
-import com.worldcretornica.plotme_core.api.ICommandSender;
-import com.worldcretornica.plotme_core.api.IEntity;
-import com.worldcretornica.plotme_core.api.ILocation;
-import com.worldcretornica.plotme_core.api.IPlayer;
-import com.worldcretornica.plotme_core.api.IPlotMe_GeneratorManager;
-import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.api.*;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitBiome;
 import com.worldcretornica.plotme_core.utils.Util;
 
+import javax.inject.Singleton;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
-
-import javax.inject.Singleton;
 
 @Singleton
 public class PlotMeCoreManager {
@@ -733,17 +725,13 @@ public class PlotMeCoreManager {
     }
 
     public boolean isPlayerIgnoringWELimit(IPlayer player) {
-        if (plugin.getServerBridge().getConfig().getBoolean("defaultWEAnywhere")) {
-            if (player.hasPermission(PermissionNames.ADMIN_WEANYWHERE)) {
-                return !getPlayersIgnoringWELimit().contains(player.getUniqueId());
-            } else {
-                return getPlayersIgnoringWELimit().contains(player.getUniqueId());
-            }
+        if (plugin.getServerBridge().getConfig().getBoolean("defaultWEAnywhere") && player.hasPermission(PermissionNames.ADMIN_WEANYWHERE)) {
+            return !getPlayersIgnoringWELimit().contains(player.getUniqueId());
         } else {
             return getPlayersIgnoringWELimit().contains(player.getUniqueId());
         }
     }
-    
+
     public ILocation getPlotMiddle(IWorld world, String id) {
         /*ILocation bottom = getPlotBottomLoc(world, id);
         ILocation top = getPlotTopLoc(world, id);

@@ -18,36 +18,19 @@ public class CmdWEAnywhere extends PlotCommand {
             String name = player.getName();
             UUID uuid = player.getUniqueId();
 
-            if (manager.isPlayerIgnoringWELimit(player)) {
-                if (!defaultWEAnywhere) {
-                    manager.removePlayerIgnoringWELimit(uuid);
-                    if (manager.isPlotWorld(player)) {
-                        serverBridge.getPlotWorldEdit().setMask(player);
-                    }
-                } else {
-                    manager.addPlayerIgnoringWELimit(uuid);
-                    serverBridge.getPlotWorldEdit().setMask(player);
-                }
-
+            if (manager.isPlayerIgnoringWELimit(player) && !defaultWEAnywhere || !manager.isPlayerIgnoringWELimit(player) && defaultWEAnywhere) {
+                manager.removePlayerIgnoringWELimit(uuid);
+                plugin.getServerBridge().getPlotWorldEdit().setMask(player);
                 player.sendMessage(C("MsgWorldEditInYourPlots"));
-
                 if (isAdvancedLogging()) {
-                    plugin.getLogger().info(name + " disabled WorldEdit anywhere");
+                    plugin.getLogger().info(name + "disabled WorldEdit Anywhere");
                 }
             } else {
-                if (defaultWEAnywhere) {
-                    manager.removePlayerIgnoringWELimit(uuid);
-                    serverBridge.getPlotWorldEdit().removeMask(player);
-                } else {
-                    manager.addPlayerIgnoringWELimit(uuid);
-                    if (manager.isPlotWorld(player)) {
-                        serverBridge.getPlotWorldEdit().removeMask(player);
-                    }
-                }
+                manager.addPlayerIgnoringWELimit(uuid);
+                plugin.getServerBridge().getPlotWorldEdit().removeMask(player);
                 player.sendMessage(C("MsgWorldEditAnywhere"));
-
                 if (isAdvancedLogging()) {
-                    plugin.getLogger().info(name + " enabled WorldEdit anywhere");
+                    plugin.getLogger().info(name + "enabled WorldEdit Anywhere");
                 }
             }
 
