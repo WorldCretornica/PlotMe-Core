@@ -1,6 +1,6 @@
 name: PlotMe
 main: com.worldcretornica.plotme_core.bukkit.PlotMe_CorePlugin
-version: 0.16.1
+version: 0.16.2
 author: ZachBora
 authors: [MattBDev]
 website: http://worldcretornica.github.io/PlotMe-Core/
