@@ -64,10 +64,10 @@ public class BukkitPlotWorldEditListener implements Listener {
         BukkitPlayer player = (BukkitPlayer) plugin.wrapPlayer(event.getPlayer());
 
         if (manager.isPlotWorld(player)) {
-            if (manager.isPlayerIgnoringWELimit(player)) {
-                worldEdit.removeMask(player);
-            } else {
+            if (!manager.isPlayerIgnoringWELimit(player)) {
                 worldEdit.setMask(player);
+            } else {
+                worldEdit.removeMask(player);
             }
         } else {
             worldEdit.removeMask(player);
@@ -79,6 +79,9 @@ public class BukkitPlotWorldEditListener implements Listener {
         BukkitPlayer player = (BukkitPlayer) plugin.wrapPlayer(event.getPlayer());
         BukkitLocation from = new BukkitLocation(event.getFrom());
         BukkitLocation to = new BukkitLocation(event.getTo());
+        if (event.getFrom() == null|| event.getTo() == null) {
+            return;
+        }
         if (manager.isPlotWorld(from)) {
             if (manager.isPlotWorld(to)) {
                 worldEdit.setMask(player);
@@ -95,7 +98,7 @@ public class BukkitPlotWorldEditListener implements Listener {
         BukkitPlayer player = (BukkitPlayer) plugin.wrapPlayer(event.getPlayer());
         BukkitLocation from = new BukkitLocation(event.getFrom());
         BukkitLocation to = new BukkitLocation(event.getTo());
-        if (event.getFrom() == null || event.getTo() == null) {
+        if (event.getFrom() == null|| event.getTo() == null) {
             return;
         }
         if (manager.isPlotWorld(from)) {
@@ -133,15 +136,14 @@ public class BukkitPlotWorldEditListener implements Listener {
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onPlayerInteract(PlayerInteractEvent event) {
         BukkitPlayer player = (BukkitPlayer) plugin.wrapPlayer(event.getPlayer());
-        BukkitLocation location = new BukkitLocation(event.getClickedBlock().getLocation());
 
-        if (manager.isPlotWorld(location)) {
+        if (manager.isPlotWorld(player)) {
             if (!player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE) &&
-                    !manager.isPlayerIgnoringWELimit(player) &&
-                    (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK)
-                    && event.getItem() != null && event.getItem().getType() != Material.AIR) {
-                String id = manager.getPlotId(location);
-                Plot plot = manager.getMap(location).getPlot(id);
+                !manager.isPlayerIgnoringWELimit(player) &&
+                (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK)
+                && event.getItem() != null && event.getItem().getType() != Material.AIR) {
+                String id = manager.getPlotId(player);
+                Plot plot = manager.getMap(player).getPlot(id);
 
                 if (plot != null && plot.isAllowed(player.getName(), player.getUniqueId())) {
                     worldEdit.setMask(player);
