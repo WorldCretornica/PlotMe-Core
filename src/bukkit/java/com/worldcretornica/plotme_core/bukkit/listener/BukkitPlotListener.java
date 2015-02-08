@@ -814,7 +814,7 @@ public class BukkitPlotListener implements Listener {
         plugin.removePlayer(playerUUID);
     }
 
-    @EventHandler
+/*    @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
         //TODO add a config to enable and disable this
         BukkitPlayer player = (BukkitPlayer) plugin.wrapPlayer(event.getPlayer());
@@ -824,7 +824,7 @@ public class BukkitPlotListener implements Listener {
             player.sendMessage("Plot " + plot.getId());
         }
     }
-
+*/
     @EventHandler(ignoreCancelled = true)
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player p = event.getPlayer();
