@@ -131,7 +131,7 @@ public class CmdShowHelp extends PlotCommand {
 
                     IWorld world = player.getWorld();
 
-                    short ownedPlots = manager.getNbOwnedPlot(player.getUniqueId(), world.getName().toLowerCase());
+                    int ownedPlots = manager.getNbOwnedPlot(player.getUniqueId(), world.getName().toLowerCase());
 
                     if (plotLimit == -1) {
                         player.sendMessage(
@@ -144,7 +144,7 @@ public class CmdShowHelp extends PlotCommand {
                     IWorld world = manager.getFirstWorld();
 
                     if (world != null) {
-                        short ownedPlots = manager.getNbOwnedPlot(player.getUniqueId(), world.getName().toLowerCase());
+                        int ownedPlots = manager.getNbOwnedPlot(player.getUniqueId(), world.getName().toLowerCase());
 
                         if (plotLimit == -1) {
                             player.sendMessage(

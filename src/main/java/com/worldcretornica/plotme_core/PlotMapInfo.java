@@ -20,9 +20,8 @@ public class PlotMapInfo {
         plots = new ConcurrentHashMap<>(1000, 0.75f, 5);
     }
 
-    public short getNbPlots() {
-        //noinspection NumericCastThatLosesPrecision
-        return (short) plots.size();
+    public int getNbPlots() {
+        return plots.size();
     }
 
     public Plot getPlot(String id) {

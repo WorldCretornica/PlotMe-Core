@@ -367,7 +367,7 @@ public class SqlManager {
                     Statement slMetadata = sqliteconn.createStatement();
                     ResultSet setMetadata = null;
 
-                    short size = 0;
+                    int size = 0;
                     while (setPlots.next()) {
                         int idX = setPlots.getInt("idX");
                         int idZ = setPlots.getInt("idZ");
@@ -1173,11 +1173,11 @@ public class SqlManager {
      * @param world plotworld to check
      * @return number of plots in the world
      */
-    public short getPlotCount(String world) {
+    public int getPlotCount(String world) {
+
         PreparedStatement ps = null;
         ResultSet setNbPlots = null;
-        short nbplots = 0;
-
+        int nbplots = 0;
         try {
             Connection conn = getConnection();
 
@@ -1187,7 +1187,7 @@ public class SqlManager {
             setNbPlots = ps.executeQuery();
 
             if (setNbPlots.next()) {
-                nbplots = setNbPlots.getShort(1);
+                nbplots = setNbPlots.getInt(1);
             }
         } catch (SQLException ex) {
             plugin.getLogger().severe("PlotCount Exception :");
@@ -1208,10 +1208,10 @@ public class SqlManager {
         return nbplots;
     }
 
-    public short getPlotCount(String world, UUID ownerId, String owner) {
+    public int getPlotCount(String world, UUID ownerId, String owner) {
         PreparedStatement ps = null;
         ResultSet setNbPlots = null;
-        short nbplots = 0;
+        int nbplots = 0;
 
         try {
             Connection conn = getConnection();
@@ -1229,7 +1229,7 @@ public class SqlManager {
             setNbPlots = ps.executeQuery();
 
             if (setNbPlots.next()) {
-                nbplots = setNbPlots.getShort(1);
+                nbplots = setNbPlots.getInt(1);
             }
         } catch (SQLException ex) {
             plugin.getLogger().severe("PlotCount Exception :");
@@ -1250,10 +1250,10 @@ public class SqlManager {
         return nbplots;
     }
 
-    public short getFinishedPlotCount(String world) {
+    public int getFinishedPlotCount(String world) {
         PreparedStatement ps = null;
         ResultSet setNbPlots = null;
-        short nbplots = 0;
+        int nbplots = 0;
 
         try {
             Connection conn = getConnection();
@@ -1264,7 +1264,7 @@ public class SqlManager {
             setNbPlots = ps.executeQuery();
 
             if (setNbPlots.next()) {
-                nbplots = setNbPlots.getShort(1);
+                nbplots = setNbPlots.getInt(1);
             }
         } catch (SQLException ex) {
             plugin.getLogger().severe("FinishedPlotCount Exception :");
@@ -1285,10 +1285,10 @@ public class SqlManager {
         return nbplots;
     }
 
-    public short getExpiredPlotCount(String world) {
+    public int getExpiredPlotCount(String world) {
         PreparedStatement ps = null;
         ResultSet setNbPlots = null;
-        short nbplots = 0;
+        int nbplots = 0;
 
         try {
             Connection conn = getConnection();
@@ -1304,7 +1304,7 @@ public class SqlManager {
             setNbPlots = ps.executeQuery();
 
             if (setNbPlots.next()) {
-                nbplots = setNbPlots.getShort(1);
+                nbplots = setNbPlots.getInt(1);
             }
         } catch (SQLException ex) {
             plugin.getLogger().severe("ExpiredPlotCount Exception :");

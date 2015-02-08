@@ -296,11 +296,6 @@ public class PlotMeCoreManager {
         return plugin.getGenManager(world.getName());
     }
 
-    @Deprecated
-    public short getNbOwnedPlot(UUID uuid, String name, String world) {
-        return plugin.getSqlManager().getPlotCount(world, uuid, name);
-    }
-
     /**
      * Get the number of plots the player owns
      *
@@ -308,7 +303,7 @@ public class PlotMeCoreManager {
      * @param world plotworld
      * @return number of plots the player owns
      */
-    public short getNbOwnedPlot(UUID uuid, String world) {
+    public int getNbOwnedPlot(UUID uuid, String world) {
         return plugin.getSqlManager().getPlotCount(world, uuid, null);
     }
 
