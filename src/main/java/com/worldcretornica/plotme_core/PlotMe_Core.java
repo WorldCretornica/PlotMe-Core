@@ -46,6 +46,7 @@ public class PlotMe_Core {
 
     public void disable() {
         getSqlManager().closeConnection();
+        PlotMeCoreManager.getInstance().getPlotMaps().clear();
         serverBridge.unHook();
         PlotMeCoreManager.getInstance().setPlayersIgnoringWELimit(null);
         setWorldCurrentlyProcessingExpired(null);
@@ -142,6 +143,7 @@ public class PlotMe_Core {
             config.set("AutoLinkPlots", null);
             config.saveConfig();
             PlotMeCoreManager.getInstance().addPlotMap(worldname, pmi);
+            getSqlManager().loadPlotsAsynchronously(worldname);
         }
 
         if (PlotMeCoreManager.getInstance().getPlotMaps().isEmpty()) {

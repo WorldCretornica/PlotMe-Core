@@ -1003,25 +1003,26 @@ public class SqlManager {
         return plot;
     }
 
-    public void loadPlotsAsynchronously(String world) {
-        final String worldName = world;
+    public void loadPlotsAsynchronously(final String world) {
 
         plugin.getServerBridge().runTaskAsynchronously(new Runnable() {
             @Override
             public void run() {
-                plugin.getLogger().info("Starting to load plots for world " + worldName);
+                plugin.getLogger().info("Starting to load plots for world " + world);
 
-                HashMap<String, Plot> plots = getPlots(worldName);
-
-                PlotMapInfo pmi = PlotMeCoreManager.getInstance().getMap(worldName);
+                HashMap<String, Plot> plots = getPlots(world);
+                PlotMapInfo pmi = PlotMeCoreManager.getInstance().getMap(world);
+                if (pmi == null) {
+                    pmi = PlotMeCoreManager.getInstance().getMap(world);
+                }
 
                 for (String id : plots.keySet()) {
                     pmi.addPlot(id, plots.get(id));
                     plugin.getServerBridge().getEventFactory()
-                            .callPlotLoadedEvent(plugin, plugin.getServerBridge().getWorld(worldName), plots.get(id));
+                            .callPlotLoadedEvent(plugin, plugin.getServerBridge().getWorld(world), plots.get(id));
                 }
 
-                plugin.getServerBridge().getEventFactory().callPlotWorldLoadEvent(worldName, pmi.getNbPlots());
+                plugin.getServerBridge().getEventFactory().callPlotWorldLoadEvent(world, pmi.getNbPlots());
             }
         });
     }
@@ -1739,12 +1740,10 @@ public class SqlManager {
     }
     
     private boolean executesql(String sql) {
-        Statement statement = null;
-        boolean result;
         try {
             Connection conn = getConnection();
-            statement = conn.createStatement();
-            result = statement.execute(sql);
+            Statement statement = conn.createStatement();
+            boolean result = statement.execute(sql);
             statement.close();
             conn.commit();
             return result;
@@ -2373,7 +2372,6 @@ public class SqlManager {
 
     public boolean savePlotProperty(int idX, int idZ, String world, String pluginname, String property, String value) {
         PreparedStatement ps = null;
-        ResultSet rsProperty = null;
 
         //Plots
         try {
@@ -2385,8 +2383,8 @@ public class SqlManager {
             ps.setString(4, pluginname);
             ps.setString(5, property);
 
-            rsProperty = ps.executeQuery();
-            
+            ResultSet rsProperty = ps.executeQuery();
+
             if (rsProperty.next()) {
                 rsProperty.close();
                 ps.close();

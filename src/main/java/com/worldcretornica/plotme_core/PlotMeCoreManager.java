@@ -293,11 +293,6 @@ public class PlotMeCoreManager {
     }
 
     public IPlotMe_GeneratorManager getGenManager(IWorld world) {
-        /*if (world.isPlotMeGenerator()) {
-            return world.getGenerator().getManager();
-        } else {
-            return null;
-        }*/
         return plugin.getGenManager(world.getName());
     }
 
