@@ -2075,10 +2075,6 @@ public class SqlManager {
                                                 //Denied
                                                 plot.denied().replace(oldname, newname, uuid);
 
-                                                //Update Plot Sign
-                                                if (plugin.getServerBridge().getWorld(plot.getWorld()) != null) {
-                                                    PlotMeCoreManager.getInstance().setOwnerSign(plugin.getServerBridge().getWorld(plot.getWorld()),plot);
-                                                }
                                             }
                                         }
                                     }
