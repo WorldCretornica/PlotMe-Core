@@ -114,7 +114,7 @@ ol, ul {
     display: block;
     cursor: pointer;
     color: #777;
-    font-family: Georgia, serif;
+    font-family: 'Roboto', sans-serif;
     font-size: 12px;
     font-weight: bold;
     padding: 6px 18px;
@@ -310,22 +310,22 @@ body {
     padding: 0;
     margin: 0;
     font-size: 17px;
-    font-family: 'Myriad Pro', Calibri, Helvetica, Arial, sans-serif;
+    font-family: 'Roboto', sans-serif;
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
 }
 
 h1, h2, h3, h4, h5, h6 {
     margin: 10px 0;
-    font-weight: 700;
+    font-weight: bold;
     color: #222;
-    font-family: 'Lucida Grande', 'Calibri', Helvetica, Arial, sans-serif;
+    font-family: 'Roboto', sans-serif;
     letter-spacing: -1px;
 }
 
 h1 {
     font-size: 36px;
-    font-weight: 700;
+    font-weight: bold;
 }
 
 h2 {
@@ -440,7 +440,7 @@ form {
     margin: 0;
     color: #fff;
     font-size: 42px;
-    font-weight: 700;
+    font-weight: bold;
 }
 
 #project_tagline {
