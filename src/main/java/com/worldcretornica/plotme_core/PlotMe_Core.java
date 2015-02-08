@@ -143,7 +143,6 @@ public class PlotMe_Core {
             config.set("AutoLinkPlots", null);
             config.saveConfig();
             PlotMeCoreManager.getInstance().addPlotMap(worldname, pmi);
-            getSqlManager().loadPlotsAsynchronously(worldname);
         }
 
         if (PlotMeCoreManager.getInstance().getPlotMaps().isEmpty()) {

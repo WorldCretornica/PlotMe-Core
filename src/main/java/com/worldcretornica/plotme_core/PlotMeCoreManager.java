@@ -197,7 +197,7 @@ public class PlotMeCoreManager {
         }
         String line3 = String.valueOf(plot.getCurrentBid());
         String line4 = "/plotme " + Util().C("CommandBid") + " <x>";
-        getGenManager(world).setAuctionDisplay(world,plot.getId(),line1,line2,line3,line4);
+        getGenManager(world).setAuctionDisplay(world, plot.getId(), line1, line2, line3, line4);
     }
 
     /**
