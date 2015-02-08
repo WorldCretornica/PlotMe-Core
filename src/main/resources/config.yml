@@ -8,3 +8,4 @@ defaultWEAnywhere: false
 NbClearSpools: 3
 NbBlocksPerClearStep: 50000
 AdvancedLogging: false
+LoadAllPlotsOnStart: false

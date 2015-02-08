@@ -18,6 +18,9 @@ public class PlotMapInfo {
         this.world = world.toLowerCase();
         config = plugin.getServerBridge().loadDefaultConfig("worlds." + this.world);
         plots = new ConcurrentHashMap<>(1000, 0.75f, 5);
+        if (plugin.getServerBridge().getConfig().getBoolean("LoadAllPlotsOnStart", false)) {
+            plugin.getSqlManager().loadPlotsAsynchronously(world);
+        }
     }
 
     public int getNbPlots() {
