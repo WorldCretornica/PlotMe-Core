@@ -276,7 +276,7 @@ public class SqlManager {
             Connection conn = getConnection();
             st = conn.createStatement();
             String PLOT_TABLE = "CREATE TABLE IF NOT EXISTS `plotmePlots` ("
-                                + "`idX` INTEGER," //1
+                                + "`idX` INTEGER ," //1
                                 + "`idZ` INTEGER," //2
                                 + "`owner` VARCHAR(32) NOT NULL," //3
                                 + "`world` VARCHAR(32) NOT NULL DEFAULT '0'," //4
@@ -329,7 +329,7 @@ public class SqlManager {
                                   + "`world` varchar(32) NOT NULL,"
                                   + "`pluginname` nvarchar(100) NOT NULL,"
                                   + "`propertyname` nvarchar(100) NOT NULL,"
-                                  + "`propertyvalue` nvarchar(255) NULL,"
+                                  + "`propertyvalue` nvarchar(255),"
                                   + "PRIMARY KEY (idX, idZ, world, pluginname, propertyname) "
                                   + ");";
             st.executeUpdate(METADATA_TABLE);
@@ -812,7 +812,7 @@ public class SqlManager {
             }
             ps.setInt(1, idX);
             ps.setInt(2, idZ);
-            ps.setString(4, world);
+            ps.setString(4, world.toLowerCase());
             ps.executeUpdate();
             conn.commit();
 
@@ -831,6 +831,11 @@ public class SqlManager {
         }
     }
 
+    /**
+     * @param world must be lowercase
+     * @param id plot id
+     * @return the plot
+     */
     public Plot getPlot(String world, String id) {
         Plot plot = null;
         PreparedStatement statementPlot = null;
@@ -890,7 +895,7 @@ public class SqlManager {
                 }
 
                 statementAllowed = conn.prepareStatement("SELECT * FROM plotmeAllowed WHERE LOWER(world) = ? AND idX = ? AND idZ = ?");
-                statementAllowed.setString(1, world);
+                statementAllowed.setString(1, world.);
                 statementAllowed.setInt(2, idX);
                 statementAllowed.setInt(3, idZ);
 
