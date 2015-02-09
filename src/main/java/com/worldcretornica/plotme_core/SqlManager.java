@@ -368,11 +368,7 @@ public class SqlManager {
                         int topZ = setPlots.getInt("topZ");
                         int bottomZ = setPlots.getInt("bottomZ");
                         String biome = setPlots.getString("biome");
-                        Date expireddate = null;
-                        try {
-                            expireddate = setPlots.getDate("expireddate");
-                        } catch (SQLException ignored) {
-                        }
+                        Date expireddate = setPlots.getDate("expireddate");
                         boolean finished = setPlots.getBoolean("finished");
                         PlayerList allowed = new PlayerList();
                         PlayerList denied = new PlayerList();
@@ -862,11 +858,7 @@ public class SqlManager {
             if (setPlots.next()) {
                 String owner = setPlots.getString("owner");
                 String biome = setPlots.getString("biome");
-                Date expiredDate = null;
-                try {
-                    expiredDate = setPlots.getDate("expireddate");
-                } catch (SQLException ignored) {
-                }
+                Date expiredDate = setPlots.getDate("expireddate");
                 boolean finished = setPlots.getBoolean("finished");
                 PlayerList allowed = new PlayerList();
                 PlayerList denied = new PlayerList();
@@ -1039,11 +1031,7 @@ public class SqlManager {
                 int idZ = setPlots.getInt("idZ");
                 String owner = setPlots.getString("owner");
                 String biome = setPlots.getString("biome");
-                Date expiredDate = null;
-                try {
-                    expiredDate = setPlots.getDate("expireddate");
-                } catch (SQLException ignored) {
-                }
+                Date expiredDate = setPlots.getDate("expireddate");
                 boolean finished = setPlots.getBoolean("finished");
                 PlayerList allowed = new PlayerList();
                 PlayerList denied = new PlayerList();
@@ -1394,13 +1382,7 @@ public class SqlManager {
                 int idX = setPlots.getInt("idX");
                 int idZ = setPlots.getInt("idZ");
                 String owner = setPlots.getString("owner");
-
-                Date expireddate = null;
-                try {
-                    expireddate = setPlots.getDate("expireddate");
-                } catch (SQLException ignored) {
-                }
-
+                Date expireddate = setPlots.getDate("expireddate");
                 Plot plot = new Plot(plugin);
                 plot.setOwner(owner);
                 plot.setId(idX + ";" + idZ);
@@ -1451,13 +1433,7 @@ public class SqlManager {
                 int idX = setPlots.getInt("idX");
                 int idZ = setPlots.getInt("idZ");
                 String owner = setPlots.getString("owner");
-
-                Date expireddate = null;
-                try {
-                    expireddate = setPlots.getDate("expireddate");
-                } catch (SQLException ignored) {
-                }
-
+                Date expireddate = setPlots.getDate("expireddate");
                 Plot plot = new Plot(plugin);
                 plot.setOwner(owner);
                 plot.setId(idX + ";" + idZ);
@@ -1579,23 +1555,17 @@ public class SqlManager {
             
             if (playerId == null) {
                 statementPlot.setString(1, playername);
-                if (!ownedonly) {
-                    statementPlot.setString(2, playername);
+                if (ownedonly) {
                     if (!world.isEmpty()) {
                         statementPlot.setString(3, world.toLowerCase());
                     }
-                } else if (!world.isEmpty()) {
-                    statementPlot.setString(2, world.toLowerCase());
                 }
             } else {
                 statementPlot.setBytes(1, UUIDFetcher.toBytes(playerId));
-                if (!ownedonly) {
-                    statementPlot.setBytes(2, UUIDFetcher.toBytes(playerId));
+                if (ownedonly) {
                     if (!world.isEmpty()) {
                         statementPlot.setString(3, world.toLowerCase());
                     }
-                } else if (!world.isEmpty()) {
-                    statementPlot.setString(2, world.toLowerCase());
                 }
             }
 
@@ -1605,11 +1575,7 @@ public class SqlManager {
                 int idX = setPlots.getInt("idX");
                 int idZ = setPlots.getInt("idZ");
                 String biome = setPlots.getString("biome");
-                Date expireddate = null;
-                try {
-                    expireddate = setPlots.getDate("expireddate");
-                } catch (SQLException ignored) {
-                }
+                Date expireddate = setPlots.getDate("expireddate");
                 boolean finished = setPlots.getBoolean("finished");
                 PlayerList allowed = new PlayerList();
                 PlayerList denied = new PlayerList();
@@ -1868,17 +1834,14 @@ public class SqlManager {
                                     
                                     sqlUpdate = "DELETE FROM TEMPPLOTMEALLOWED;";
                                     psAllowedPlayerId1 = conn.prepareStatement(sqlUpdate);
-                                    sqlUpdate = "INSERT INTO TEMPPLOTMEALLOWED SELECT idX, idZ, world FROM plotmeAllowed " +
-                                           "WHERE LOWER(player) = ? OR LOWER(player) = ? GROUP BY idX, idZ, world HAVING Count(*) = 2;";
+                                    sqlUpdate = "INSERT INTO TEMPPLOTMEALLOWED SELECT idX, idZ, world FROM plotmeAllowed WHERE LOWER(player) = ? OR LOWER(player) = ? GROUP BY idX, idZ, world HAVING Count(*) = 2;";
                                     psAllowedPlayerId2 = conn.prepareStatement(sqlUpdate);
                                     
                                     if (isUsingMySQL()) {
                                         sqlUpdate = "DELETE A1.* FROM plotmeAllowed A1 INNER JOIN TEMPPLOTMEALLOWED as A2 ON A1.idX = A2.idX AND A1.idZ = A2.idZ AND A1.world = A2.world " +
                                                 "WHERE LOWER(A1.player) = ?;";
                                     } else {
-                                        sqlUpdate = "DELETE FROM plotmeAllowed " +
-                                            "WHERE idX || ';' || idZ || ';' || world IN(" +
-                                            "SELECT A1.idX || ';' || A1.idZ || ';' || A1.world " +
+                                        sqlUpdate = "DELETE FROM plotmeAllowed WHERE idX || ';' || idZ || ';' || world IN( SELECT A1.idX || ';' || A1.idZ || ';' || A1.world " +
                                             "FROM plotmeAllowed A1 INNER JOIN TEMPPLOTMEALLOWED as A2 ON A1.idX = A2.idX AND A1.idZ = A2.idZ AND A1.world = A2.world " + 
                                             "WHERE LOWER(A1.player) = ?)";
                                     }
@@ -1905,9 +1868,7 @@ public class SqlManager {
                                         sqlUpdate = "DELETE D1.* FROM plotmeDenied D1 INNER JOIN TEMPPLOTMEDENIED as D2 ON D1.idX = D2.idX AND D1.idZ = D2.idZ AND D1.world = D2.world " +
                                                 "WHERE LOWER(D1.player) = ?;";
                                     } else {
-                                        sqlUpdate = "DELETE FROM plotmeDenied " +
-                                            "WHERE idX || ';' || idZ || ';' || world IN(" +
-                                            "SELECT A1.idX || ';' || A1.idZ || ';' || A1.world " +
+                                        sqlUpdate = "DELETE FROM plotmeDenied WHERE idX || ';' || idZ || ';' || world IN( SELECT A1.idX || ';' || A1.idZ || ';' || A1.world " +
                                             "FROM plotmeDenied A1 INNER JOIN TEMPPLOTMEDENIED as A2 ON A1.idX = A2.idX AND A1.idZ = A2.idZ AND A1.world = A2.world " + 
                                             "WHERE LOWER(A1.player) = ?)";
                                     }
