@@ -1774,16 +1774,12 @@ public class SqlManager {
                     executesql("CREATE TABLE IF NOT EXISTS `TEMP2PLOTMEALLOWED` (`idX` INTEGER,`idZ` INTEGER,`world` varchar(32) NOT NULL,`player` varchar(32) NOT NULL,`playerid` blob(16),PRIMARY KEY (idX, idZ, world, player) );");
                     executesql("INSERT INTO TEMP2PLOTMEALLOWED(idX, idZ, world, player, playerid) " +
                             "SELECT idX, idZ, world, lower(player), playerid " + 
-                            "FROM plotmeAllowed " +
-                            "GROUP BY idX, idZ, world, lower(player), playerid ");
+                            "FROM plotmeAllowed GROUP BY idX, idZ, world, lower(player), playerid ");
                     executesql("DELETE FROM plotmeAllowed");
                     executesql("INSERT INTO plotmeAllowed(idX, idZ, world, player, playerid) " +
-                            "SELECT idX, idZ, world, player, playerid " +
-                            "FROM TEMP2PLOTMEALLOWED");
-                    
-                    if (tableExists("TEMP2PLOTMEALLOWED")) {
-                        executesql("DROP TABLE TEMP2PLOTMEALLOWED");
-                    }
+                            "SELECT idX, idZ, world, player, playerid FROM TEMP2PLOTMEALLOWED");
+
+                    executesql("DROP TABLE IF EXISTS TEMP2PLOTMEALLOWED");
 
                     executesql("CREATE TABLE IF NOT EXISTS `TEMP2PLOTMEDENIED` (`idX` INTEGER,`idZ` INTEGER,`world` varchar(32) NOT NULL,`player` varchar(32) NOT NULL,`playerid` blob(16),PRIMARY KEY (idX, idZ, world, player) );");
                     executesql("INSERT INTO TEMP2PLOTMEDENIED(idX, idZ, world, player, playerid) " +
@@ -1794,12 +1790,9 @@ public class SqlManager {
                     executesql("INSERT INTO plotmeDenied(idX, idZ, world, player, playerid) " +
                             "SELECT idX, idZ, world, player, playerid " +
                             "FROM TEMP2PLOTMEDENIED");
-                    
-                    if (tableExists("TEMP2PLOTMEDENIED")) {
-                        executesql("DROP TABLE TEMP2PLOTMEDENIED");
-                    }
-                    
-                    
+
+                    executesql("DROP TABLE IF EXISTS TEMP2PLOTMEDENIED");
+
                     // Get all the players
                     statementPlayers = conn.createStatement();
                     // Exclude groups and names with * or missing
@@ -2139,14 +2132,10 @@ public class SqlManager {
                         PreparedStatement psAllowedPlayerId5 = null;
                         PreparedStatement psDeniedPlayerId5 = null;
                         try {
-                            if (tableExists("TEMPPLOTMEALLOWED")) {
-                                psAllowedPlayerId5 = conn.prepareStatement("DROP TABLE TEMPPLOTMEALLOWED;");
-                                psAllowedPlayerId5.execute();
-                            }
-                            if (tableExists("TEMPPLOTMEDENIED")) {
-                                psDeniedPlayerId5 = conn.prepareStatement("DROP TABLE TEMPPLOTMEDENIED;");
-                                psDeniedPlayerId5.execute();
-                            }
+                            psAllowedPlayerId5 = conn.prepareStatement("DROP TABLE IF EXISTS TEMPPLOTMEALLOWED;");
+                            psAllowedPlayerId5.execute();
+                            psDeniedPlayerId5 = conn.prepareStatement("DROP TABLE IF EXISTS TEMPPLOTMEDENIED;");
+                            psDeniedPlayerId5.execute();
                         } catch(SQLException ee) {
                             plugin.getLogger().severe(ee.getMessage());
                         }
