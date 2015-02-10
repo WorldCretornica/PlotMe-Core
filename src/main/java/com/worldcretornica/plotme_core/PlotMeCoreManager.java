@@ -616,7 +616,7 @@ public class PlotMeCoreManager {
             addPlot(world, id, plot, pmi);
             adjustWall(world, id, true);
 
-            plugin.getSqlManager().addPlot(plot, getIdX(id), getIdZ(id), world);
+            plugin.getSqlManager().addPlot(plot,getIdX(id), getIdZ(id), topX(id, world), bottomX(id, world), topZ(id, world), bottomZ(id, world));
             return plot;
         } else {
             return null;
@@ -652,15 +652,13 @@ public class PlotMeCoreManager {
                 plugin.getSqlManager().deletePlot(idX, idZ, world.getName());
 
                 plot2.setId(idFrom);
-                plugin.getSqlManager().addPlot(plot2, idX, idZ, topX(idFrom, world), 
-                        bottomX(idFrom, world), topZ(idFrom, world), bottomZ(idFrom, world));
+                plugin.getSqlManager().addPlot(plot2, idX, idZ, topX(idFrom, world), bottomX(idFrom, world), topZ(idFrom, world), bottomZ(idFrom, world));
                 addPlot(world, idFrom, plot2);
 
                 idX = getIdX(idTo);
                 idZ = getIdZ(idTo);
                 plot1.setId(idTo);
-                plugin.getSqlManager().addPlot(plot1, idX, idZ, topX(idTo, world), 
-                        bottomX(idTo, world), topZ(idTo, world), bottomZ(idTo, world));
+                plugin.getSqlManager().addPlot(plot1, idX, idZ, topX(idTo, world), bottomX(idTo, world), topZ(idTo, world), bottomZ(idTo, world));
                 addPlot(world, idTo, plot1);
                 
                 setOwnerSign(world, plot1);

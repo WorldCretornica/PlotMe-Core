@@ -83,10 +83,12 @@ public class CmdBuy extends PlotCommand {
                                                 }
 
                                                 plot.setOwner(buyer);
+                                                plot.setOwnerId(player.getUniqueId());
                                                 plot.setCustomPrice(0.0);
                                                 plot.setForSale(false);
 
                                                 plot.updateField("owner", buyer);
+                                                plot.updateField("ownerid", player.getUniqueId());
                                                 plot.updateField("customprice", 0);
                                                 plot.updateField("forsale", false);
 
