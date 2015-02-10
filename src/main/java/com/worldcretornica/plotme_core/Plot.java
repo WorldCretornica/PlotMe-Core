@@ -63,7 +63,7 @@ public class Plot implements Cloneable {
         this.plugin = plugin;
         setOwner(owner);
         setOwnerId(uuid);
-        setWorld(world.getName());
+        setWorld(world.getName().toLowerCase());
         allowed = new PlayerList();
         denied = new PlayerList();
         setBiome(this.plugin.getServerBridge().getBiome("PLAINS"));
@@ -543,5 +543,10 @@ public class Plot implements Cloneable {
     @Override
     protected Plot clone() throws CloneNotSupportedException {
         return (Plot) super.clone();
+    }
+
+    public void setCurrentBidder(String bidder, UUID uniqueId) {
+        this.currentBidder = bidder;
+        this.currentBidderId = uniqueId;
     }
 }

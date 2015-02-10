@@ -75,11 +75,12 @@ public class CmdBid extends PlotCommand {
                                                         serverBridge.getLogger().warning(er2.errorMessage);
                                                     }
                                                 }
-
                                                 plot.setCurrentBidder(bidder);
+                                                plot.setCurrentBidderId(player.getUniqueId());
                                                 plot.setCurrentBid(bid);
 
                                                 plot.updateField("currentbidder", bidder);
+                                                plot.updateField("currentbidderid", player.getUniqueId());
                                                 plot.updateField("currentbid", bid);
 
                                                 manager.setAuctionSign(player.getWorld(), plot);
@@ -124,10 +125,10 @@ public class CmdBid extends PlotCommand {
                                                 }
                                             }
 
-                                            plot.setCurrentBidder(bidder);
+                                            plot.setCurrentBidder(player.getName(), player.getUniqueId());
                                             plot.setCurrentBid(bid);
-
                                             plot.updateField("currentbidder", bidder);
+                                            plot.updateField("currentbidderId", player.getUniqueId());
                                             plot.updateField("currentbid", bid);
 
                                             manager.setAuctionSign(player.getWorld(), plot);

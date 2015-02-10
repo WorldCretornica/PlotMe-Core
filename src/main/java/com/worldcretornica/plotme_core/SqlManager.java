@@ -160,7 +160,7 @@ public class SqlManager {
                 set = statement.executeQuery("PRAGMA table_info(`plotmeDenied`)");
 
                 while (set.next() && !found) {
-                    column = set.getString(2);
+                    column = set.getString("playerid");
                     if ("playerid".equalsIgnoreCase(column)) {
                         found = true;
                     }
@@ -241,30 +241,6 @@ public class SqlManager {
                 }
             } catch (SQLException ex) {
                 plugin.getLogger().severe("Error on Connection close :");
-                plugin.getLogger().severe(ex.getMessage());
-            }
-        }
-    }
-
-    private boolean tableExists(String name) {
-        ResultSet rs = null;
-        try {
-            Connection conn = getConnection();
-
-            DatabaseMetaData dbm = conn.getMetaData();
-            rs = dbm.getTables(null, null, name, null);
-            return rs.next();
-        } catch (SQLException ex) {
-            plugin.getLogger().severe("Table Check Exception :");
-            plugin.getLogger().severe(ex.getMessage());
-            return false;
-        } finally {
-            try {
-                if (rs != null) {
-                    rs.close();
-                }
-            } catch (SQLException ex) {
-                plugin.getLogger().severe("Table Check SQL Exception (on closing) :");
                 plugin.getLogger().severe(ex.getMessage());
             }
         }
@@ -406,8 +382,7 @@ public class SqlManager {
                         }
 
                         setAllowed.close();
-                        setDenied = slDenied.executeQuery("SELECT * FROM plotmeDenied WHERE idX = '" + idX + 
-                                "' AND idZ = '" + idZ + "' AND world = '" + world + "'");
+                        setDenied = slDenied.executeQuery("SELECT * FROM plotmeDenied WHERE idX = '" + idX + "' AND idZ = '" + idZ + "' AND world = '" + world + "'");
 
                         while (setDenied.next()) {
                             byte[] byPlayerId = setDenied.getBytes("playerid");
@@ -772,7 +747,7 @@ public class SqlManager {
             }
             ps.setInt(1, idX);
             ps.setInt(2, idZ);
-            ps.setString(4, world);
+            ps.setString(4, world.toLowerCase());
             ps.executeUpdate();
             conn.commit();
 
@@ -1745,22 +1720,20 @@ public class SqlManager {
                     executesql("CREATE TABLE IF NOT EXISTS `TEMP2PLOTMEDENIED` (`idX` INTEGER,`idZ` INTEGER,`world` varchar(32) NOT NULL,`player` varchar(32) NOT NULL,`playerid` blob(16),PRIMARY KEY (idX, idZ, world, player) );");
                     executesql("INSERT INTO TEMP2PLOTMEDENIED(idX, idZ, world, player, playerid) " +
                             "SELECT idX, idZ, world, lower(player), playerid " + 
-                            "FROM plotmeDenied " +
-                            "GROUP BY idX, idZ, world, lower(player), playerid ");
+                            "FROM plotmeDenied GROUP BY idX, idZ, world, lower(player), playerid ");
                     executesql("DELETE FROM plotmeDenied");
                     executesql("INSERT INTO plotmeDenied(idX, idZ, world, player, playerid) " +
-                            "SELECT idX, idZ, world, player, playerid " +
-                            "FROM TEMP2PLOTMEDENIED");
+                            "SELECT idX, idZ, world, player, playerid FROM TEMP2PLOTMEDENIED");
 
                     executesql("DROP TABLE IF EXISTS TEMP2PLOTMEDENIED");
 
                     // Get all the players
                     statementPlayers = conn.createStatement();
                     // Exclude groups and names with * or missing
-                    String sql = "SELECT LOWER(owner) as Name FROM plotmePlots WHERE NOT owner IS NULL AND Not owner = '' AND ownerid IS NULL GROUP BY LOWER(owner) ";
-                    sql += "UNION SELECT LOWER(currentbidder) as Name FROM plotmePlots WHERE NOT currentbidder IS NULL AND Not currentbidder = '' AND currentbidderid IS NULL GROUP BY LOWER(currentbidder) ";
-                    sql += "UNION SELECT LOWER(player) as Name FROM plotmeAllowed WHERE NOT player IS NULL AND Not player = '' AND Not player LIKE 'group:%' AND Not player LIKE '%*%' AND playerid IS NULL GROUP BY LOWER(player) ";
-                    sql += "UNION SELECT LOWER(player) as Name FROM plotmeDenied WHERE NOT player IS NULL AND Not player = '' AND Not player LIKE 'group:%' AND Not player LIKE '%*%' AND playerid IS NULL GROUP BY LOWER(player) ";
+                    String sql = "SELECT LOWER(owner) AS Name FROM plotmePlots WHERE NOT owner IS NULL AND Not owner = '' AND ownerid IS NULL GROUP BY LOWER(owner) ";
+                    sql += "UNION SELECT LOWER(currentbidder) AS Name FROM plotmePlots WHERE NOT currentbidder IS NULL AND Not currentbidder = '' AND currentbidderid IS NULL GROUP BY LOWER(currentbidder) ";
+                    sql += "UNION SELECT LOWER(player) AS Name FROM plotmeAllowed WHERE NOT player IS NULL AND Not player = '' AND Not player LIKE 'group:%' AND Not player LIKE '%*%' AND playerid IS NULL GROUP BY LOWER(player) ";
+                    sql += "UNION SELECT LOWER(player) AS Name FROM plotmeDenied WHERE NOT player IS NULL AND Not player = '' AND Not player LIKE 'group:%' AND Not player LIKE '%*%' AND playerid IS NULL GROUP BY LOWER(player) ";
                     sql += "LIMIT " + ((int) UUIDFetcher.PROFILES_PER_REQUEST);
                     
                     setPlayers = statementPlayers.executeQuery(sql);
@@ -1818,15 +1791,13 @@ public class SqlManager {
                                     
                                     sqlUpdate = "UPDATE plotmePlots SET currentbidderid = ?, currentbidder = ? WHERE LOWER(currentbidder) = ? AND currentbidderid IS NULL";
                                     psCurrentBidderId = conn.prepareStatement(sqlUpdate);
-                                    
-                                    
-                                    if (!tableExists("TEMPPLOTMEALLOWED")) {
-                                        sqlUpdate = "CREATE TABLE IF NOT EXISTS `TEMPPLOTMEALLOWED` (`idX` INTEGER, `idZ` INTEGER, `world` varchar(32));";
-                                        psAllowedPlayerId0 = conn.prepareStatement(sqlUpdate);
-                                        psAllowedPlayerId0.execute();
-                                        psAllowedPlayerId0.close();
-                                    }
-                                    
+
+
+                                    sqlUpdate = "CREATE TABLE IF NOT EXISTS `TEMPPLOTMEALLOWED` (`idX` INTEGER, `idZ` INTEGER, `world` varchar(32));";
+                                    psAllowedPlayerId0 = conn.prepareStatement(sqlUpdate);
+                                    psAllowedPlayerId0.execute();
+                                    psAllowedPlayerId0.close();
+
                                     sqlUpdate = "DELETE FROM TEMPPLOTMEALLOWED;";
                                     psAllowedPlayerId1 = conn.prepareStatement(sqlUpdate);
                                     sqlUpdate = "INSERT INTO TEMPPLOTMEALLOWED SELECT idX, idZ, world FROM plotmeAllowed WHERE LOWER(player) = ? OR LOWER(player) = ? GROUP BY idX, idZ, world HAVING Count(*) = 2;";
@@ -1844,15 +1815,13 @@ public class SqlManager {
                                     psAllowedPlayerId3 = conn.prepareStatement(sqlUpdate);
                                     sqlUpdate = "UPDATE plotmeAllowed SET playerid = ?, player = ? WHERE LOWER(player) = ? AND playerid IS NULL";
                                     psAllowedPlayerId4 = conn.prepareStatement(sqlUpdate);
-                                    
-                                    
-                                    if (!tableExists("TEMPPLOTMEDENIED")) {
-                                        sqlUpdate = "CREATE TABLE IF NOT EXISTS `TEMPPLOTMEDENIED` (`idX` INTEGER, `idZ` INTEGER, `world` varchar(32));";
-                                        psDeniedPlayerId0 = conn.prepareStatement(sqlUpdate);
-                                        psDeniedPlayerId0.execute();
-                                        psDeniedPlayerId0.close();
-                                    }                                   
-                                    
+
+
+                                    sqlUpdate = "CREATE TABLE IF NOT EXISTS `TEMPPLOTMEDENIED` (`idX` INTEGER, `idZ` INTEGER, `world` varchar(32));";
+                                    psDeniedPlayerId0 = conn.prepareStatement(sqlUpdate);
+                                    psDeniedPlayerId0.execute();
+                                    psDeniedPlayerId0.close();
+
                                     sqlUpdate = "DELETE FROM TEMPPLOTMEDENIED;";
                                     psDeniedPlayerId1 = conn.prepareStatement(sqlUpdate);
                                     sqlUpdate = "INSERT INTO TEMPPLOTMEDENIED SELECT idX, idZ, world FROM plotmeDenied " +

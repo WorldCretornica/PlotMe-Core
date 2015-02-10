@@ -52,7 +52,7 @@ public class CmdAuto extends PlotCommand {
 
                     for (int i = 0; i < maxPlots; i++) {
                         if ((-limit / 2 <= x) && (x <= limit / 2) && (-limit / 2 <= z) && (z <= limit / 2)) {
-                            String id = "" + x + ";" + z;
+                            String id = x + ";" + z;
                             if (manager.isPlotAvailable(id, pmi)) {
                                 double price = 0.0;
 

@@ -83,6 +83,7 @@ public class CmdAuction extends PlotCommand {
                                         manager.removeAuctionSign(world, id);
                                         plot.setCurrentBid(0.0);
                                         plot.setCurrentBidder(null);
+                                        plot.setCurrentBidderId(null);
 
                                         plot.updateField("currentbid", 0);
                                         plot.updateField("currentbidder", null);
