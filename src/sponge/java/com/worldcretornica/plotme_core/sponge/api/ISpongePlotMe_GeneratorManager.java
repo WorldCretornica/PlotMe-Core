@@ -1,76 +1,72 @@
 package com.worldcretornica.plotme_core.sponge.api;
 
+import com.worldcretornica.plotme_core.PlotId;
+import com.worldcretornica.schematic.Schematic;
 import org.spongepowered.api.entity.player.Player;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.biome.BiomeType;
-
-import com.worldcretornica.schematic.Schematic;
 
 import java.util.List;
 import java.util.Map;
 
 public interface ISpongePlotMe_GeneratorManager {
 
-    String getPlotId(Location location);
+    PlotId getPlotId(Location location);
 
-    String getPlotId(Player player);
+    PlotId getPlotId(Player player);
 
-    List<Player> getPlayersInPlot(String id);
+    List<Player> getPlayersInPlot(PlotId id);
 
-    void fillroad(String id1, String id2, World world);
+    void fillroad(PlotId id1, PlotId id2, World world);
 
-    void fillmiddleroad(String id1, String id2, World world);
+    void fillmiddleroad(PlotId id1, PlotId id2, World world);
 
-    void setOwnerDisplay(World world, String id, String line1, String line2, String line3, String line4);
+    void setOwnerDisplay(World world, PlotId id, String line1, String line2, String line3, String line4);
 
-    void setSellerDisplay(World world, String id, String line1, String line2, String line3, String line4);
+    void setSellerDisplay(World world, PlotId id, String line1, String line2, String line3, String line4);
 
-    void setAuctionDisplay(World world, String id, String line1, String line2, String line3, String line4);
+    void setAuctionDisplay(World world, PlotId id, String line1, String line2, String line3, String line4);
 
-    void removeOwnerDisplay(World world, String id);
+    void removeOwnerDisplay(World world, PlotId id);
 
-    void removeSellerDisplay(World world, String id);
+    void removeSellerDisplay(World world, PlotId id);
 
-    void removeAuctionDisplay(World world, String id);
+    void removeAuctionDisplay(World world, PlotId id);
 
-    int getIdX(String id);
+    Location getPlotBottomLoc(World world, PlotId id);
 
-    int getIdZ(String id);
+    Location getPlotTopLoc(World world, PlotId id);
 
-    Location getPlotBottomLoc(World world, String id);
+    void setBiome(World world, PlotId id, BiomeType biome);
 
-    Location getPlotTopLoc(World world, String id);
+    void refreshPlotChunks(World world, PlotId id);
 
-    void setBiome(World world, String id, BiomeType biome);
+    Location getTop(World world, PlotId id);
 
-    void refreshPlotChunks(World world, String id);
-
-    Location getTop(World world, String id);
-
-    Location getBottom(World world, String id);
+    Location getBottom(World world, PlotId id);
 
     void clear(Location bottom, Location top);
 
     Long[] clear(Location bottom, Location top, long maxBlocks, Long[] start);
 
-    Long[] clear(World world, String id, long maxBlocks, Long[] start);
+    Long[] clear(World world, PlotId id, long maxBlocks, Long[] start);
 
-    void adjustPlotFor(World world, String id, boolean claimed, boolean protect, boolean auctioned, boolean forSale);
+    void adjustPlotFor(World world, PlotId id, boolean claimed, boolean protect, boolean auctioned, boolean forSale);
 
-    boolean isBlockInPlot(String id, Location location);
+    boolean isBlockInPlot(PlotId id, Location location);
 
-    boolean movePlot(World world, String idFrom, String idTo);
+    boolean movePlot(World world, PlotId idFrom, PlotId idTo);
 
-    int bottomX(String id, World world);
+    int bottomX(PlotId id, World world);
 
-    int bottomZ(String id, World world);
+    int bottomZ(PlotId id, World world);
 
-    int topX(String id, World world);
+    int topX(PlotId id, World world);
 
-    int topZ(String id, World world);
+    int topZ(PlotId id, World world);
 
-    Location getPlotHome(World world, String id);
+    Location getPlotHome(World world, PlotId id);
 
     boolean isValidId(String id);
 
@@ -81,8 +77,8 @@ public interface ISpongePlotMe_GeneratorManager {
     int getPlotSize(String worldName);
 
     int getRoadHeight(String worldName);
-    
-    Location getPlotMiddle(World world, String id);
-    
-    Schematic getPlotSchematic(World world, String id);
+
+    Location getPlotMiddle(World world, PlotId id);
+
+    Schematic getPlotSchematic(World world, PlotId id);
 }

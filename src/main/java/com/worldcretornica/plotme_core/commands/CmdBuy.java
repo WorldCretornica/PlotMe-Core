@@ -2,6 +2,7 @@ package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
+import com.worldcretornica.plotme_core.PlotId;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import com.worldcretornica.plotme_core.api.IPlayer;
@@ -20,9 +21,9 @@ public class CmdBuy extends PlotCommand {
         if (manager.isPlotWorld(world)) {
             if (manager.isEconomyEnabled(world)) {
                 if (player.hasPermission(PermissionNames.USER_BUY) || player.hasPermission("PlotMe.admin.buy")) {
-                    String id = manager.getPlotId(player);
+                    PlotId id = manager.getPlotId(player);
 
-                    if (id.isEmpty()) {
+                    if (id == null) {
                         player.sendMessage("§c" + C("MsgNoPlotFound"));
                     } else if (!manager.isPlotAvailable(id, world)) {
                         Plot plot = manager.getPlotById(id, world);

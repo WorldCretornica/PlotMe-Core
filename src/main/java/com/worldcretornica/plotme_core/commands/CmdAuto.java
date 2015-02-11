@@ -1,6 +1,7 @@
 package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.PermissionNames;
+import com.worldcretornica.plotme_core.PlotId;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IPlayer;
@@ -52,7 +53,7 @@ public class CmdAuto extends PlotCommand {
 
                     for (int i = 0; i < maxPlots; i++) {
                         if ((-limit / 2 <= x) && (x <= limit / 2) && (-limit / 2 <= z) && (z <= limit / 2)) {
-                            String id = x + ";" + z;
+                            PlotId id = new PlotId(x, z);
                             if (manager.isPlotAvailable(id, pmi)) {
                                 double price = 0.0;
 

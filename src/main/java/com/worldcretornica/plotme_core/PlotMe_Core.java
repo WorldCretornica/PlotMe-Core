@@ -250,9 +250,9 @@ public class PlotMe_Core {
         getLogger().info("removed taskid " + taskId);
     }
 
-    public PlotToClear getPlotLocked(String world, String id) {
+    public PlotToClear getPlotLocked(String world, PlotId id) {
         for (PlotToClear ptc : plotsToClear.toArray(new PlotToClear[plotsToClear.size()])) {
-            if (ptc.getWorld().equalsIgnoreCase(world) && ptc.getPlotId().equalsIgnoreCase(id)) {
+            if (ptc.getWorld().equalsIgnoreCase(world) && ptc.getPlotId().equals(id)) {
                 return ptc;
             }
         }

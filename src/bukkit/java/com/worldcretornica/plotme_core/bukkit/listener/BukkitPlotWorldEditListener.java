@@ -36,13 +36,13 @@ public class BukkitPlotWorldEditListener implements Listener {
 
         BukkitPlayer player = (BukkitPlayer) plugin.wrapPlayer(event.getPlayer());
 
-        String idTo = "";
+        PlotId idTo = null;
 
         boolean changeMask = false;
         if (!from.getWorld().getName().equalsIgnoreCase(to.getWorld().getName())) {
             changeMask = true;
         } else if (from.getLocation() != to.getLocation()) {
-            String idFrom = manager.getPlotId(from);
+            PlotId idFrom = manager.getPlotId(from);
             idTo = manager.getPlotId(to);
 
             if (!idFrom.equals(idTo)) {
@@ -142,7 +142,7 @@ public class BukkitPlotWorldEditListener implements Listener {
                 !manager.isPlayerIgnoringWELimit(player) &&
                 (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK)
                 && event.getItem() != null && event.getItem().getType() != Material.AIR) {
-                String id = manager.getPlotId(player);
+                PlotId id = manager.getPlotId(player);
                 Plot plot = manager.getMap(player).getPlot(id);
 
                 if (plot != null && plot.isAllowed(player.getName(), player.getUniqueId())) {

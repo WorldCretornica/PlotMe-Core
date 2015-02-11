@@ -1,9 +1,6 @@
 package com.worldcretornica.plotme_core.commands;
 
-import com.worldcretornica.plotme_core.PermissionNames;
-import com.worldcretornica.plotme_core.Plot;
-import com.worldcretornica.plotme_core.PlotMapInfo;
-import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.*;
 import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
@@ -23,9 +20,9 @@ public class CmdAuction extends PlotCommand {
             if (manager.isEconomyEnabled(pmi)) {
                 if (pmi.isCanPutOnSale()) {
                     if (player.hasPermission(PermissionNames.USE_AUCTION) || player.hasPermission(PermissionNames.ADMIN_AUCTION)) {
-                        String id = manager.getPlotId(player);
+                        PlotId id = manager.getPlotId(player);
 
-                        if (id.isEmpty()) {
+                        if (id == null) {
                             player.sendMessage("§c" + C("MsgNoPlotFound"));
                         } else if (!manager.isPlotAvailable(id, pmi)) {
                             Plot plot = manager.getPlotById(id, pmi);

@@ -2,6 +2,7 @@ package com.worldcretornica.plotme_core.bukkit.listener;
 
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
+import com.worldcretornica.plotme_core.PlotId;
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.bukkit.PlotMe_CorePlugin;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitLocation;
@@ -31,9 +32,9 @@ public class BukkitPlotDenyListener implements Listener {
         if (manager.isPlotWorld(player) && !player.hasPermission(PermissionNames.ADMIN_BYPASSDENY)) {
             BukkitLocation to = new BukkitLocation(event.getTo());
 
-            String idTo = manager.getPlotId(to);
+            PlotId idTo = manager.getPlotId(to);
 
-            if (!idTo.isEmpty()) {
+            if (idTo != null) {
                 Plot plot = manager.getPlotById(idTo, player);
 
                 if (plot != null && plot.isDeniedInternal(player.getName(), player.getUniqueId())) {
@@ -53,9 +54,9 @@ public class BukkitPlotDenyListener implements Listener {
         if (manager.isPlotWorld(player) && !player.hasPermission(PermissionNames.ADMIN_BYPASSDENY)) {
             BukkitLocation to = new BukkitLocation(event.getTo());
 
-            String idTo = manager.getPlotId(to);
+            PlotId idTo = manager.getPlotId(to);
 
-            if (!idTo.isEmpty()) {
+            if (idTo != null) {
                 Plot plot = manager.getPlotById(idTo, player);
 
                 if (plot != null && plot.isDeniedInternal(player.getName(), player.getUniqueId())) {
@@ -71,9 +72,9 @@ public class BukkitPlotDenyListener implements Listener {
         BukkitPlayer player = (BukkitPlayer) plugin.wrapPlayer(event.getPlayer());
 
         if (manager.isPlotWorld(player) && !player.hasPermission(PermissionNames.ADMIN_BYPASSDENY)) {
-            String id = manager.getPlotId(player);
+            PlotId id = manager.getPlotId(player);
 
-            if (!id.isEmpty()) {
+            if (id != null) {
                 Plot plot = manager.getPlotById(id, player);
 
                 if (plot != null && plot.isDenied(player.getUniqueId())) {

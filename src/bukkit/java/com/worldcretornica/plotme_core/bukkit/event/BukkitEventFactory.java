@@ -1,38 +1,10 @@
 package com.worldcretornica.plotme_core.bukkit.event;
 
 import com.worldcretornica.plotme_core.Plot;
+import com.worldcretornica.plotme_core.PlotId;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.IBiome;
-import com.worldcretornica.plotme_core.api.ICommandSender;
-import com.worldcretornica.plotme_core.api.ILocation;
-import com.worldcretornica.plotme_core.api.IPlayer;
-import com.worldcretornica.plotme_core.api.IWorld;
-import com.worldcretornica.plotme_core.api.event.IEventFactory;
-import com.worldcretornica.plotme_core.api.event.InternalPlotAddAllowedEvent;
-import com.worldcretornica.plotme_core.api.event.InternalPlotAddDeniedEvent;
-import com.worldcretornica.plotme_core.api.event.InternalPlotAuctionEvent;
-import com.worldcretornica.plotme_core.api.event.InternalPlotBidEvent;
-import com.worldcretornica.plotme_core.api.event.InternalPlotBiomeChangeEvent;
-import com.worldcretornica.plotme_core.api.event.InternalPlotBuyEvent;
-import com.worldcretornica.plotme_core.api.event.InternalPlotClearEvent;
-import com.worldcretornica.plotme_core.api.event.InternalPlotCreateEvent;
-import com.worldcretornica.plotme_core.api.event.InternalPlotDisposeEvent;
-import com.worldcretornica.plotme_core.api.event.InternalPlotDoneChangeEvent;
-import com.worldcretornica.plotme_core.api.event.InternalPlotLoadEvent;
-import com.worldcretornica.plotme_core.api.event.InternalPlotMoveEvent;
-import com.worldcretornica.plotme_core.api.event.InternalPlotOwnerChangeEvent;
-import com.worldcretornica.plotme_core.api.event.InternalPlotProtectChangeEvent;
-import com.worldcretornica.plotme_core.api.event.InternalPlotReloadEvent;
-import com.worldcretornica.plotme_core.api.event.InternalPlotRemoveAllowedEvent;
-import com.worldcretornica.plotme_core.api.event.InternalPlotRemoveDeniedEvent;
-import com.worldcretornica.plotme_core.api.event.InternalPlotResetEvent;
-import com.worldcretornica.plotme_core.api.event.InternalPlotSellChangeEvent;
-import com.worldcretornica.plotme_core.api.event.InternalPlotTeleportEvent;
-import com.worldcretornica.plotme_core.api.event.InternalPlotTeleportHomeEvent;
-import com.worldcretornica.plotme_core.api.event.InternalPlotTeleportMiddleEvent;
-import com.worldcretornica.plotme_core.api.event.InternalPlotWorldCreateEvent;
-import com.worldcretornica.plotme_core.api.event.InternalPlotWorldLoadEvent;
-
+import com.worldcretornica.plotme_core.api.*;
+import com.worldcretornica.plotme_core.api.event.*;
 import org.bukkit.Bukkit;
 
 import java.util.Map;
@@ -40,8 +12,8 @@ import java.util.Map;
 public class BukkitEventFactory implements IEventFactory {
 
     @Override
-    public InternalPlotCreateEvent callPlotCreatedEvent(PlotMe_Core plugin, IWorld world, String plotId, IPlayer creator) {
-        PlotCreateEvent event = new PlotCreateEvent(plugin, world, plotId, creator);
+    public InternalPlotCreateEvent callPlotCreatedEvent(PlotMe_Core plugin, IWorld world, PlotId id, IPlayer creator) {
+        PlotCreateEvent event = new PlotCreateEvent(plugin, world, id, creator);
         Bukkit.getPluginManager().callEvent(event);
         return event.getInternal();
     }
@@ -61,7 +33,7 @@ public class BukkitEventFactory implements IEventFactory {
     }
 
     @Override
-    public InternalPlotMoveEvent callPlotMoveEvent(PlotMe_Core plugin, IWorld world, String idFrom, String idTo, IPlayer mover) {
+    public InternalPlotMoveEvent callPlotMoveEvent(PlotMe_Core plugin, IWorld world, PlotId idFrom, PlotId idTo, IPlayer mover) {
         PlotMoveEvent event = new PlotMoveEvent(plugin, world, idFrom, idTo, mover);
         Bukkit.getPluginManager().callEvent(event);
         return event.getInternal();

@@ -1,9 +1,6 @@
 package com.worldcretornica.plotme_core.commands;
 
-import com.worldcretornica.plotme_core.PermissionNames;
-import com.worldcretornica.plotme_core.Plot;
-import com.worldcretornica.plotme_core.PlotMapInfo;
-import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.*;
 import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
@@ -21,8 +18,8 @@ public class CmdSetOwner extends PlotCommand {
         PlotMapInfo pmi = manager.getMap(world);
         if (player.hasPermission(PermissionNames.ADMIN_SETOWNER)) {
             if (manager.isPlotWorld(world)) {
-                String id = manager.getPlotId(player);
-                if (id.isEmpty()) {
+                PlotId id = manager.getPlotId(player);
+                if (id == null) {
                     player.sendMessage("§c" + C("MsgNoPlotFound"));
                 } else {
                     String newOwner = args[1];

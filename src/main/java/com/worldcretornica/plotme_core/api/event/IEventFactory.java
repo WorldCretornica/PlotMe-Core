@@ -1,24 +1,21 @@
 package com.worldcretornica.plotme_core.api.event;
 
 import com.worldcretornica.plotme_core.Plot;
+import com.worldcretornica.plotme_core.PlotId;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.IBiome;
-import com.worldcretornica.plotme_core.api.ICommandSender;
-import com.worldcretornica.plotme_core.api.ILocation;
-import com.worldcretornica.plotme_core.api.IPlayer;
-import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.api.*;
 
 import java.util.Map;
 
 public interface IEventFactory {
 
-    InternalPlotCreateEvent callPlotCreatedEvent(PlotMe_Core plugin, IWorld world, String plotId, IPlayer creator);
+    InternalPlotCreateEvent callPlotCreatedEvent(PlotMe_Core plugin, IWorld world, PlotId id, IPlayer creator);
 
     InternalPlotClearEvent callPlotClearEvent(PlotMe_Core plugin, IWorld world, Plot plot, IPlayer clearer);
 
     InternalPlotLoadEvent callPlotLoadedEvent(PlotMe_Core plugin, IWorld world, Plot plot);
 
-    InternalPlotMoveEvent callPlotMoveEvent(PlotMe_Core plugin, IWorld world, String idFrom, String idTo, IPlayer mover);
+    InternalPlotMoveEvent callPlotMoveEvent(PlotMe_Core plugin, IWorld world, PlotId idFrom, PlotId idTo, IPlayer mover);
 
     InternalPlotResetEvent callPlotResetEvent(PlotMe_Core plugin, IWorld world, Plot plot, ICommandSender commandSender);
 

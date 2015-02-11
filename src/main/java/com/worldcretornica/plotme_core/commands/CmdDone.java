@@ -2,6 +2,7 @@ package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
+import com.worldcretornica.plotme_core.PlotId;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.event.InternalPlotDoneChangeEvent;
@@ -15,9 +16,9 @@ public class CmdDone extends PlotCommand {
     public boolean exec(IPlayer player) {
         if (player.hasPermission(PermissionNames.USER_DONE) || player.hasPermission(PermissionNames.ADMIN_DONE)) {
             if (manager.isPlotWorld(player)) {
-                String id = manager.getPlotId(player);
+                PlotId id = manager.getPlotId(player);
 
-                if (id.isEmpty()) {
+                if (id == null) {
                     player.sendMessage("§c" + C("MsgNoPlotFound"));
                 } else if (!manager.isPlotAvailable(id, player)) {
                     Plot plot = manager.getPlotById(id, player);

@@ -17,8 +17,8 @@ public class CmdClear extends PlotCommand {
             IWorld world = player.getWorld();
             PlotMapInfo pmi = manager.getMap(world);
             if (manager.isPlotWorld(world)) {
-                String id = manager.getPlotId(player);
-                if (id.isEmpty()) {
+                PlotId id = manager.getPlotId(player);
+                if (id == null) {
                     player.sendMessage("§c" + C("MsgNoPlotFound"));
                 } else if (!manager.isPlotAvailable(id, pmi)) {
                     Plot plot = manager.getPlotById(id, pmi);

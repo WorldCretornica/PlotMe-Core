@@ -9,7 +9,7 @@ public class PlotMapInfo {
 
     private final PlotMe_Core plugin;
 
-    private final ConcurrentHashMap<String, Plot> plots;
+    private final ConcurrentHashMap<PlotId, Plot> plots;
     private final String world;
     private final IConfigSection config;
 
@@ -27,8 +27,8 @@ public class PlotMapInfo {
         return plots.size();
     }
 
-    public Plot getPlot(String id) {
-        if (id.isEmpty()) {
+    public Plot getPlot(PlotId id) {
+        if (id == null) {
             return null;
         }
         if (!plots.containsKey(id)) {
@@ -43,15 +43,15 @@ public class PlotMapInfo {
         return plots.get(id);
     }
 
-    public ConcurrentHashMap<String, Plot> getLoadedPlots() {
+    public ConcurrentHashMap<PlotId, Plot> getLoadedPlots() {
         return plots;
     }
 
-    public void addPlot(String id, Plot plot) {
+    public void addPlot(PlotId id, Plot plot) {
         plots.putIfAbsent(id, plot);
     }
 
-    public void removePlot(String id) {
+    public void removePlot(PlotId id) {
         plots.remove(id);
     }
 

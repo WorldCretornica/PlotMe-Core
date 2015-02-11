@@ -1,9 +1,6 @@
 package com.worldcretornica.plotme_core.commands;
 
-import com.worldcretornica.plotme_core.PermissionNames;
-import com.worldcretornica.plotme_core.Plot;
-import com.worldcretornica.plotme_core.PlotMapInfo;
-import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.*;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotSellChangeEvent;
@@ -22,9 +19,9 @@ public class CmdSell extends PlotCommand {
 
                 if (pmi.isCanPutOnSale()) {
                     if (player.hasPermission(PermissionNames.USER_SELL) || player.hasPermission(PermissionNames.ADMIN_SELL)) {
-                        String id = manager.getPlotId(player);
+                        PlotId id = manager.getPlotId(player);
 
-                        if (id.isEmpty()) {
+                        if (id == null) {
                             player.sendMessage("§c" + C("MsgNoPlotFound"));
                         } else if (!manager.isPlotAvailable(id, pmi)) {
                             Plot plot = manager.getPlotById(id, pmi);
@@ -67,8 +64,7 @@ public class CmdSell extends PlotCommand {
                                             price = Double.parseDouble(args[1]);
                                         } catch (Exception e) {
                                             player.sendMessage(
-                                                    C("WordUsage") + ": §c /plotme sell <" + C("WordAmount") + ">§r " + C("WordExample")
-                                                            + ": §c/plotme sell 200");
+                                                    C("WordUsage") + ": §c /plotme sell <" + C("WordAmount") + ">§r " + C("WordExample") + ": §c/plotme sell 200");
                                             return true;
                                         }
                                     }

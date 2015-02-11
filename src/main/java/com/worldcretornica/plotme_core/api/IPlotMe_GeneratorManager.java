@@ -1,71 +1,68 @@
 package com.worldcretornica.plotme_core.api;
 
+import com.worldcretornica.plotme_core.PlotId;
+import com.worldcretornica.schematic.Schematic;
+
 import java.util.List;
 import java.util.Map;
 
-import com.worldcretornica.schematic.Schematic;
-
 public interface IPlotMe_GeneratorManager {
 
-    String getPlotId(ILocation location);
+    PlotId getPlotId(ILocation location);
 
-    String getPlotId(IPlayer player);
+    PlotId getPlotId(IPlayer player);
 
-    List<IPlayer> getPlayersInPlot(String id);
+    List<IPlayer> getPlayersInPlot(PlotId id);
 
-    void fillRoad(String id1, String id2, IWorld world);
+    void fillRoad(PlotId id1, PlotId id2, IWorld world);
 
-    void fillMiddleRoad(String id1, String id2, IWorld world);
+    void fillMiddleRoad(PlotId id1, PlotId id2, IWorld world);
 
-    void setOwnerDisplay(IWorld world, String id, String line1, String line2, String line3, String line4);
+    void setOwnerDisplay(IWorld world, PlotId id, String line1, String line2, String line3, String line4);
 
-    void setSellerDisplay(IWorld world, String id, String line1, String line2, String line3, String line4);
+    void setSellerDisplay(IWorld world, PlotId id, String line1, String line2, String line3, String line4);
 
-    void setAuctionDisplay(IWorld world, String id, String line1, String line2, String line3, String line4);
+    void setAuctionDisplay(IWorld world, PlotId id, String line1, String line2, String line3, String line4);
 
-    void removeOwnerDisplay(IWorld world, String id);
+    void removeOwnerDisplay(IWorld world, PlotId id);
 
-    void removeSellerDisplay(IWorld world, String id);
+    void removeSellerDisplay(IWorld world, PlotId id);
 
-    void removeAuctionDisplay(IWorld world, String id);
+    void removeAuctionDisplay(IWorld world, PlotId id);
 
-    int getIdX(String id);
+    ILocation getPlotBottomLoc(IWorld world, PlotId id);
 
-    int getIdZ(String id);
+    ILocation getPlotTopLoc(IWorld world, PlotId id);
 
-    ILocation getPlotBottomLoc(IWorld world, String id);
+    void setBiome(IWorld world, PlotId id, IBiome biome);
 
-    ILocation getPlotTopLoc(IWorld world, String id);
+    void refreshPlotChunks(IWorld world, PlotId id);
 
-    void setBiome(IWorld world, String id, IBiome biome);
+    ILocation getTop(IWorld world, PlotId id);
 
-    void refreshPlotChunks(IWorld world, String id);
-
-    ILocation getTop(IWorld world, String id);
-
-    ILocation getBottom(IWorld world, String id);
+    ILocation getBottom(IWorld world, PlotId id);
 
     void clear(ILocation bottom, ILocation top);
 
     Long[] clear(ILocation bottom, ILocation top, long maxBlocks, Long[] start);
 
-    Long[] clear(IWorld world, String id, long maxBlocks, Long[] start);
+    Long[] clear(IWorld world, PlotId id, long maxBlocks, Long[] start);
 
-    void adjustPlotFor(IWorld world, String id, boolean claimed, boolean protect, boolean auctioned, boolean forSale);
+    void adjustPlotFor(IWorld world, PlotId id, boolean claimed, boolean protect, boolean auctioned, boolean forSale);
 
-    boolean isBlockInPlot(String id, ILocation blockLocation);
+    boolean isBlockInPlot(PlotId id, ILocation blockLocation);
 
-    boolean movePlot(IWorld world, String idFrom, String idTo);
+    boolean movePlot(IWorld world, PlotId idFrom, PlotId idTo);
 
-    int bottomX(String id, IWorld world);
+    int bottomX(PlotId id, IWorld world);
 
-    int bottomZ(String id, IWorld world);
+    int bottomZ(PlotId id, IWorld world);
 
-    int topX(String id, IWorld world);
+    int topX(PlotId id, IWorld world);
 
-    int topZ(String id, IWorld world);
+    int topZ(PlotId id, IWorld world);
 
-    ILocation getPlotHome(IWorld world, String id);
+    ILocation getPlotHome(IWorld world, PlotId id);
 
     boolean isValidId(String id);
 
@@ -76,8 +73,8 @@ public interface IPlotMe_GeneratorManager {
     int getPlotSize(String worldName);
 
     int getRoadHeight(String worldName);
-    
-    ILocation getPlotMiddle(IWorld world, String id);
-    
-    Schematic getPlotSchematic(IWorld world, String id);
+
+    ILocation getPlotMiddle(IWorld world, PlotId id);
+
+    Schematic getPlotSchematic(IWorld world, PlotId id);
 }

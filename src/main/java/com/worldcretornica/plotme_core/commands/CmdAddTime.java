@@ -2,6 +2,7 @@ package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
+import com.worldcretornica.plotme_core.PlotId;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IPlayer;
 
@@ -15,9 +16,9 @@ public class CmdAddTime extends PlotCommand {
         if (player.hasPermission(PermissionNames.ADMIN_ADDTIME)) {
             if (manager.getMap(player).getDaysToExpiration() != 0) {
                 if (manager.isPlotWorld(player)) {
-                    String id = manager.getPlotId(player);
+                    PlotId id = manager.getPlotId(player);
 
-                    if (id.isEmpty()) {
+                    if (id == null) {
                         player.sendMessage("§c" + C("MsgNoPlotFound"));
                     } else if (!manager.isPlotAvailable(id, player)) {
                         Plot plot = manager.getPlotById(id, player);

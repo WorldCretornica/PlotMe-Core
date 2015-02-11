@@ -25,7 +25,7 @@ public class CmdReset extends PlotCommand {
                 } else if (plot.isProtect()) {
                     player.sendMessage("§c" + C("MsgPlotProtectedCannotReset"));
                 } else {
-                    String id = plot.getId();
+                    PlotId id = plot.getId();
 
                     if (player.getUniqueId().equals(plot.getOwnerId()) || player.hasPermission(PermissionNames.ADMIN_RESET)) {
 
@@ -77,7 +77,7 @@ public class CmdReset extends PlotCommand {
                             manager.removeOwnerSign(world, id);
                             manager.removeSellSign(world, id);
                             manager.removeAuctionSign(world, id);
-                            plugin.getSqlManager().deletePlot(manager.getIdX(id), manager.getIdZ(id), world.getName());
+                            plugin.getSqlManager().deletePlot(id, world.getName());
 
                             if (isAdvancedLogging()) {
                                 serverBridge.getLogger().info(player.getName() + " " + C("MsgResetPlot") + " " + id);

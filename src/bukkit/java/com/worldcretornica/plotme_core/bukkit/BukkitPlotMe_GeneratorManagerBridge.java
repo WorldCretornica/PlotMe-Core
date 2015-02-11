@@ -1,5 +1,6 @@
 package com.worldcretornica.plotme_core.bukkit;
 
+import com.worldcretornica.plotme_core.PlotId;
 import com.worldcretornica.plotme_core.api.*;
 import com.worldcretornica.plotme_core.bukkit.api.*;
 import com.worldcretornica.schematic.Schematic;
@@ -18,17 +19,17 @@ public class BukkitPlotMe_GeneratorManagerBridge implements IPlotMe_GeneratorMan
     }
 
     @Override
-    public String getPlotId(ILocation location) {
+    public PlotId getPlotId(ILocation location) {
         return generatorManager.getPlotId(((BukkitLocation) location).getLocation());
     }
 
     @Override
-    public String getPlotId(IPlayer player) {
+    public PlotId getPlotId(IPlayer player) {
         return generatorManager.getPlotId(((BukkitPlayer) player).getPlayer());
     }
 
     @Override
-    public List<IPlayer> getPlayersInPlot(String id) {
+    public List<IPlayer> getPlayersInPlot(PlotId id) {
         List<IPlayer> players = new ArrayList<>();
 
         for (Player player : generatorManager.getPlayersInPlot(id)) {
@@ -39,82 +40,72 @@ public class BukkitPlotMe_GeneratorManagerBridge implements IPlotMe_GeneratorMan
     }
 
     @Override
-    public void fillRoad(String id1, String id2, IWorld world) {
+    public void fillRoad(PlotId id1, PlotId id2, IWorld world) {
         generatorManager.fillRoad(id1, id2, ((BukkitWorld) world).getWorld());
     }
 
     @Override
-    public void fillMiddleRoad(String id1, String id2, IWorld world) {
+    public void fillMiddleRoad(PlotId id1, PlotId id2, IWorld world) {
         generatorManager.fillMiddleRoad(id1, id2, ((BukkitWorld) world).getWorld());
     }
 
     @Override
-    public void setOwnerDisplay(IWorld world, String id, String line1, String line2, String line3, String line4) {
+    public void setOwnerDisplay(IWorld world, PlotId id, String line1, String line2, String line3, String line4) {
         generatorManager.setOwnerDisplay(((BukkitWorld) world).getWorld(), id, line1, line2, line3, line4);
     }
 
     @Override
-    public void setSellerDisplay(IWorld world, String id, String line1, String line2, String line3, String line4) {
+    public void setSellerDisplay(IWorld world, PlotId id, String line1, String line2, String line3, String line4) {
         generatorManager.setSellerDisplay(((BukkitWorld) world).getWorld(), id, line1, line2, line3, line4);
     }
 
     @Override
-    public void setAuctionDisplay(IWorld world, String id, String line1, String line2, String line3, String line4) {
+    public void setAuctionDisplay(IWorld world, PlotId id, String line1, String line2, String line3, String line4) {
         generatorManager.setAuctionDisplay(((BukkitWorld) world).getWorld(), id, line1, line2, line3, line4);
     }
 
     @Override
-    public void removeOwnerDisplay(IWorld world, String id) {
+    public void removeOwnerDisplay(IWorld world, PlotId id) {
         generatorManager.removeOwnerDisplay(((BukkitWorld) world).getWorld(), id);
     }
 
     @Override
-    public void removeSellerDisplay(IWorld world, String id) {
+    public void removeSellerDisplay(IWorld world, PlotId id) {
         generatorManager.removeSellerDisplay(((BukkitWorld) world).getWorld(), id);
     }
 
     @Override
-    public void removeAuctionDisplay(IWorld world, String id) {
+    public void removeAuctionDisplay(IWorld world, PlotId id) {
         generatorManager.removeAuctionDisplay(((BukkitWorld) world).getWorld(), id);
     }
 
     @Override
-    public int getIdX(String id) {
-        return generatorManager.getIdX(id);
-    }
-
-    @Override
-    public int getIdZ(String id) {
-        return generatorManager.getIdZ(id);
-    }
-
-    @Override
-    public ILocation getPlotBottomLoc(IWorld world, String id) {
+    public ILocation getPlotBottomLoc(IWorld world, PlotId id) {
         return new BukkitLocation(generatorManager.getPlotBottomLoc(((BukkitWorld) world).getWorld(), id));
     }
 
     @Override
-    public ILocation getPlotTopLoc(IWorld world, String id) {
+    public ILocation getPlotTopLoc(IWorld world, PlotId id) {
         return new BukkitLocation(generatorManager.getPlotTopLoc(((BukkitWorld) world).getWorld(), id));
     }
 
     @Override
-    public void setBiome(IWorld world, String id, IBiome biome) {
+    public void setBiome(IWorld world, PlotId id, IBiome biome) {
         generatorManager.setBiome(((BukkitWorld) world).getWorld(), id, ((BukkitBiome) biome).getBiome());
     }
 
     @Override
-    public void refreshPlotChunks(IWorld world, String id) {
+    public void refreshPlotChunks(IWorld world, PlotId id) {
         generatorManager.refreshPlotChunks(((BukkitWorld) world).getWorld(), id);
     }
 
     @Override
-    public ILocation getTop(IWorld world, String id) {
+    public ILocation getTop(IWorld world, PlotId id) {
         return new BukkitLocation(generatorManager.getTop(((BukkitWorld) world).getWorld(), id));
     }
 
     @Override
-    public ILocation getBottom(IWorld world, String id) {
+    public ILocation getBottom(IWorld world, PlotId id) {
         return new BukkitLocation(generatorManager.getBottom(((BukkitWorld) world).getWorld(), id));
     }
 
@@ -129,47 +120,47 @@ public class BukkitPlotMe_GeneratorManagerBridge implements IPlotMe_GeneratorMan
     }
 
     @Override
-    public Long[] clear(IWorld world, String id, long maxBlocks, Long[] start) {
+    public Long[] clear(IWorld world, PlotId id, long maxBlocks, Long[] start) {
         return generatorManager.clear(((BukkitWorld) world).getWorld(), id, maxBlocks, start);
     }
 
     @Override
-    public void adjustPlotFor(IWorld world, String id, boolean claimed, boolean protect, boolean auctioned, boolean forSale) {
+    public void adjustPlotFor(IWorld world, PlotId id, boolean claimed, boolean protect, boolean auctioned, boolean forSale) {
         generatorManager.adjustPlotFor(((BukkitWorld) world).getWorld(), id, claimed, protect, auctioned, forSale);
     }
 
     @Override
-    public boolean isBlockInPlot(String id, ILocation blockLocation) {
+    public boolean isBlockInPlot(PlotId id, ILocation blockLocation) {
         return generatorManager.isBlockInPlot(id, ((BukkitLocation) blockLocation).getLocation());
     }
 
     @Override
-    public boolean movePlot(IWorld world, String idFrom, String idTo) {
+    public boolean movePlot(IWorld world, PlotId idFrom, PlotId idTo) {
         return generatorManager.movePlot(((BukkitWorld) world).getWorld(), idFrom, idTo);
     }
 
     @Override
-    public int bottomX(String id, IWorld world) {
+    public int bottomX(PlotId id, IWorld world) {
         return generatorManager.bottomX(id, ((BukkitWorld) world).getWorld());
     }
 
     @Override
-    public int bottomZ(String id, IWorld world) {
+    public int bottomZ(PlotId id, IWorld world) {
         return generatorManager.bottomZ(id, ((BukkitWorld) world).getWorld());
     }
 
     @Override
-    public int topX(String id, IWorld world) {
+    public int topX(PlotId id, IWorld world) {
         return generatorManager.topX(id, ((BukkitWorld) world).getWorld());
     }
 
     @Override
-    public int topZ(String id, IWorld world) {
+    public int topZ(PlotId id, IWorld world) {
         return generatorManager.topZ(id, ((BukkitWorld) world).getWorld());
     }
 
     @Override
-    public ILocation getPlotHome(IWorld world, String id) {
+    public ILocation getPlotHome(IWorld world, PlotId id) {
         return new BukkitLocation(generatorManager.getPlotHome(((BukkitWorld) world).getWorld(), id));
     }
 
@@ -199,12 +190,12 @@ public class BukkitPlotMe_GeneratorManagerBridge implements IPlotMe_GeneratorMan
     }
 
     @Override
-    public ILocation getPlotMiddle(IWorld world, String id) {
+    public ILocation getPlotMiddle(IWorld world, PlotId id) {
         return new BukkitLocation(generatorManager.getPlotMiddle(((BukkitWorld) world).getWorld(), id));
     }
 
     @Override
-    public Schematic getPlotSchematic(IWorld world, String id) {
+    public Schematic getPlotSchematic(IWorld world, PlotId id) {
         return generatorManager.getPlotSchematic(((BukkitWorld) world).getWorld(), id);
     }
 }
