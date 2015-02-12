@@ -89,7 +89,7 @@ public class CmdDispose extends PlotCommand {
                                 manager.removeAuctionSign(world, id);
 
                                 plugin.getSqlManager().deletePlot(id, world.getName());
-
+                                manager.adjustWall(world, id, false);
                                 player.sendMessage(C("MsgPlotDisposedAnyoneClaim"));
 
                                 if (isAdvancedLogging()) {
