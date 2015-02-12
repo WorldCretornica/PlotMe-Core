@@ -2,6 +2,7 @@ package com.worldcretornica.plotme_core.sponge.listener;
 
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
+import com.worldcretornica.plotme_core.PlotId;
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.sponge.PlotMe_Sponge;
 import com.worldcretornica.plotme_core.sponge.api.SpongeLocation;
@@ -26,9 +27,9 @@ public class SpongePlotDenyListener {
         if (manager.isPlotWorld(player) && !player.hasPermission(PermissionNames.ADMIN_BYPASSDENY)) {
             SpongeLocation to = new SpongeLocation(event.getNewLocation());
 
-            String idTo = manager.getPlotId(to);
+            PlotId idTo = manager.getPlotId(to);
 
-            if (!idTo.isEmpty()) {
+            if (idTo != null) {
                 Plot plot = manager.getPlotById(idTo, player);
 
                 if (plot != null && plot.isDeniedInternal(player.getName(), player.getUniqueId())) {

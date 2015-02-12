@@ -29,10 +29,10 @@ public class SpongePlotListener {
     public void onBlockChange(PlayerChangeBlockEvent event) {
         SpongeLocation location = new SpongeLocation(event.getBlock().getLocation());
         if (manager.isPlotWorld(location)) {
-            String id = manager.getPlotId(location);
+            PlotId id = manager.getPlotId(location);
             Player player = event.getPlayer();
             boolean cannotBuild = !player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE);
-            if (id.isEmpty()) {
+            if (id == null) {
                 event.setCancelled(true);
             } else {
                 PlotToClear ptc = api.getPlotLocked(location.getWorld().getName(), id);
@@ -127,6 +127,7 @@ public class SpongePlotListener {
             ProjectileSource source = event.getSource().orNull();
             if (source != null) {
                 if (source instanceof Player) {
+                    //noinspection OverlyStrongTypeCast
                     ((Player) source).sendMessage("");
                     event.getLaunchedProjectile().remove();
                 }
