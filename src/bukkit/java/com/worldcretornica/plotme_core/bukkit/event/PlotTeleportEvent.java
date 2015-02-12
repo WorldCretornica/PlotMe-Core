@@ -17,7 +17,7 @@ public class PlotTeleportEvent extends PlotEvent implements Cancellable {
     private final InternalPlotTeleportEvent event;
 
     public PlotTeleportEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer player, ILocation loc, String plotId) {
-        super(instance, plot, world);
+        super(plot, world);
         event = new InternalPlotTeleportEvent(instance, world, plot, player, loc, plotId);
     }
 

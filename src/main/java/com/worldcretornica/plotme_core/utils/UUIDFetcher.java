@@ -1,21 +1,16 @@
 package com.worldcretornica.plotme_core.utils;
 
 import com.google.common.collect.ImmutableList;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-import java.io.*;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.Callable;
 
 public class UUIDFetcher implements Callable<Map<String, UUID>> {
@@ -88,7 +83,7 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
     }
 
     public static UUID getUUIDOf(String name) {
-        return new UUIDFetcher(Arrays.asList(name)).call().get(name.toLowerCase());
+        return new UUIDFetcher(Collections.singletonList(name)).call().get(name.toLowerCase());
     }
 
     @Override

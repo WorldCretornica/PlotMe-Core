@@ -17,7 +17,7 @@ public class InternalPlotMoveEvent extends InternalPlotEvent implements ICancell
     private boolean canceled;
 
     public InternalPlotMoveEvent(PlotMe_Core instance, IWorld world, PlotId fromId, PlotId toId, IPlayer mover) {
-        super(instance, null, world);
+        super(null, world);
         this.fromId = fromId;
         this.toId = toId;
         this.world = world;

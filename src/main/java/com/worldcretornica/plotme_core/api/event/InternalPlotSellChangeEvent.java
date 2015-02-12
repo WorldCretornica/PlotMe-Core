@@ -13,7 +13,7 @@ public class InternalPlotSellChangeEvent extends InternalPlotEvent implements IC
     private boolean canceled;
 
     public InternalPlotSellChangeEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer seller, double price, boolean isForSale) {
-        super(instance, plot, world);
+        super(plot, world);
         this.seller = seller;
         this.price = price;
         this.isForSale = isForSale;

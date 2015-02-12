@@ -12,7 +12,7 @@ public class InternalPlotAddDeniedEvent extends InternalPlotEvent implements ICa
     private boolean canceled;
 
     public InternalPlotAddDeniedEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer player, String denied) {
-        super(instance, plot, world);
+        super(plot, world);
         this.player = player;
         this.denied = denied;
     }

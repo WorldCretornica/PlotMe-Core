@@ -14,7 +14,7 @@ public class InternalPlotCreateEvent extends InternalPlotEvent implements ICance
     private boolean canceled;
 
     public InternalPlotCreateEvent(PlotMe_Core instance, IWorld world, PlotId plotId, IPlayer creator) {
-        super(instance, null, world);
+        super(null, world);
         this.plotId = plotId;
         this.creator = creator;
     }

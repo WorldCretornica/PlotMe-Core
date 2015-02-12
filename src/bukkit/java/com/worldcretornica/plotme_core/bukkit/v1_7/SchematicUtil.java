@@ -85,7 +85,6 @@ public class SchematicUtil extends AbstractSchematicUtil {
 
     @Override
     public Schematic loadCompiledSchematic(String file) {
-        Schematic schem = null;
 
         File pluginsFolder = plugin.getDataFolder().getParentFile();
         File coreFolder = new File(pluginsFolder, "PlotMe\\PlotSchematic");
@@ -95,6 +94,7 @@ public class SchematicUtil extends AbstractSchematicUtil {
 
         File f = new File(filename);
 
+        Schematic schem = null;
         if (f.exists()) {
             try (ObjectInput input = new ObjectInputStream(new BufferedInputStream(new FileInputStream(filename)))) {
                 schem = (Schematic) input.readObject();
@@ -131,7 +131,6 @@ public class SchematicUtil extends AbstractSchematicUtil {
             World world = loc1.getWorld();
             int[] blocks = new int[length * width * height];
             byte[] blockData = new byte[length * width * height];
-            byte[] biomes = null;
 
             List<Entity> entities = new ArrayList<>();
             List<TileEntity> tileentities = new ArrayList<>();
@@ -343,6 +342,7 @@ public class SchematicUtil extends AbstractSchematicUtil {
                 entities.add(getEntity(bukkitentity, minX, minY, minZ));
             }
 
+            byte[] biomes = null;
             schem = new Schematic(blocks, blockData, biomes, "Alpha", width, length, height, entities, tileentities, "", 0, 0, 0);
         } else {
             schem = null;
@@ -668,9 +668,6 @@ public class SchematicUtil extends AbstractSchematicUtil {
         ItemTag itemtag = null;
 
         if (is.hasItemMeta()) {
-            String author = null;
-            String title = null;
-            List<String> pages = null;
             List<Ench> enchants = null;
 
             ItemMeta im = is.getItemMeta();
@@ -687,6 +684,9 @@ public class SchematicUtil extends AbstractSchematicUtil {
             String name = im.getDisplayName();
             Display display = new Display(name, lore);
 
+            String author = null;
+            String title = null;
+            List<String> pages = null;
             if (im instanceof BookMeta) {
                 BookMeta bm = (BookMeta) im;
                 author = bm.getAuthor();
@@ -1403,7 +1403,7 @@ public class SchematicUtil extends AbstractSchematicUtil {
 
                 if (livingentity instanceof Skeleton && skeletontype != null) {
                     Skeleton skeleton = (Skeleton) livingentity;
-                    SkeletonType st = null;
+                    SkeletonType st;
 
                     switch (skeletontype) {
                         case 0:
@@ -1570,8 +1570,6 @@ public class SchematicUtil extends AbstractSchematicUtil {
         Double pushx = getChildTag(entity, "PushX", DoubleTag.class, Double.class);
         Double pushz = getChildTag(entity, "PushZ", DoubleTag.class, Double.class);
 
-        Entity riding = null;
-
         Float falldistance = getChildTag(entity, "FallDistance", FloatTag.class, Float.class);
         Float absorptionamount = getChildTag(entity, "AbsorptionAmount", FloatTag.class, Float.class);
         Float healf = getChildTag(entity, "HealF", FloatTag.class, Float.class);
@@ -1582,17 +1580,12 @@ public class SchematicUtil extends AbstractSchematicUtil {
         Integer tilex = getChildTag(entity, "TileX", IntTag.class, Integer.class);
         Integer tiley = getChildTag(entity, "TileY", IntTag.class, Integer.class);
         Integer tilez = getChildTag(entity, "TileZ", IntTag.class, Integer.class);
-        Integer age = null; //Handled lower
         Integer inlove = getChildTag(entity, "InLove", IntTag.class, Integer.class);
         Integer transfercooldown = getChildTag(entity, "TransferCooldown", IntTag.class, Integer.class);
         Integer tntfuse = getChildTag(entity, "TNTFuse", IntTag.class, Integer.class);
         Integer temper = getChildTag(entity, "Temper", IntTag.class, Integer.class);
         Integer type = getChildTag(entity, "Type", IntTag.class, Integer.class);
         Integer variant = getChildTag(entity, "Variant", IntTag.class, Integer.class);
-
-        Item item = null;
-
-        Leash leash = null;
 
         Short air = getChildTag(entity, "Air", ShortTag.class, Short.class);
         Short fire = getChildTag(entity, "Fire", ShortTag.class, Short.class);
@@ -1629,6 +1622,7 @@ public class SchematicUtil extends AbstractSchematicUtil {
 
         List<Item> items = getItems(entity);
 
+        Integer age = null; //Handled lower
         try {
             age = getChildTag(entity, "Age", IntTag.class, Integer.class);
         } catch (IllegalArgumentException e) {
@@ -1640,14 +1634,17 @@ public class SchematicUtil extends AbstractSchematicUtil {
         }
 
         CompoundTag itemtag = getChildTag(entity, "Item", CompoundTag.class);
+        Item item = null;
         if (itemtag != null) {
             item = getItem(itemtag);
         }
 
+        Entity riding = null;
         if (entity.containsKey("Riding")) {
             riding = getEntity(getChildTag(entity, "Riding", CompoundTag.class));
         }
 
+        Leash leash = null;
         if (entity.containsKey("Leash")) {
             leash = getLeash(getChildTag(entity, "Leash", CompoundTag.class));
         }

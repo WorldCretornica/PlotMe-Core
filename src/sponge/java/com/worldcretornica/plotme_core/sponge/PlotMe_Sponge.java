@@ -20,7 +20,7 @@ import java.util.UUID;
 public class PlotMe_Sponge {
 
     private final HashMap<UUID, SpongePlayer> spongePlayerMap = new HashMap<>();
-    Game game;
+    private Game game;
     private PlotMe_Core plotme;
     private IServerBridge serverObjectBuilder;
 

@@ -20,12 +20,12 @@ public class PlotMoveEvent extends PlotEvent implements Cancellable {
     private final InternalPlotMoveEvent event;
 
     public PlotMoveEvent(PlotMe_Core instance, World world, PlotId fromId, PlotId toId, Player mover) {
-        super(instance, null, world);
+        super(null, world);
         event = new InternalPlotMoveEvent(instance, new BukkitWorld(world), fromId, toId, new BukkitPlayer(mover));
     }
 
     public PlotMoveEvent(PlotMe_Core instance, IWorld world, PlotId fromId, PlotId toId, IPlayer mover) {
-        super(instance, null, world);
+        super(null, world);
         event = new InternalPlotMoveEvent(instance, world, fromId, toId, mover);
     }
 

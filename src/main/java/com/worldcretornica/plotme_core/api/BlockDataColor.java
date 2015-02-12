@@ -1,8 +1,5 @@
 package com.worldcretornica.plotme_core.api;
 
-/**
- * Created by Matthew on 12/3/2014.
- */
 @SuppressWarnings("MagicNumber")
 public enum BlockDataColor {
     WHITE(0, "white"),

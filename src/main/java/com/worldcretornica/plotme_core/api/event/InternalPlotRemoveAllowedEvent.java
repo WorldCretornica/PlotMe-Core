@@ -12,7 +12,7 @@ public class InternalPlotRemoveAllowedEvent extends InternalPlotEvent implements
     private boolean canceled;
 
     public InternalPlotRemoveAllowedEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer player, String removed) {
-        super(instance, plot, world);
+        super(plot, world);
         this.player = player;
         this.removed = removed;
     }

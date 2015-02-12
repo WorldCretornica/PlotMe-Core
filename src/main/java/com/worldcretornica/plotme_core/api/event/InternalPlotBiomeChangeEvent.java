@@ -13,7 +13,7 @@ public class InternalPlotBiomeChangeEvent extends InternalPlotEvent implements I
     private IBiome biome;
 
     public InternalPlotBiomeChangeEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer player, IBiome biome) {
-        super(instance, plot, world);
+        super(plot, world);
         this.player = player;
         this.biome = biome;
     }

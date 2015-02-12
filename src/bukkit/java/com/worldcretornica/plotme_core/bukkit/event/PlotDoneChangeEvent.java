@@ -14,7 +14,7 @@ public class PlotDoneChangeEvent extends PlotEvent implements Cancellable {
     private final InternalPlotDoneChangeEvent event;
 
     public PlotDoneChangeEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer player, boolean done) {
-        super(instance, plot, world);
+        super(plot, world);
         event = new InternalPlotDoneChangeEvent(instance, world, plot, player, done);
     }
 

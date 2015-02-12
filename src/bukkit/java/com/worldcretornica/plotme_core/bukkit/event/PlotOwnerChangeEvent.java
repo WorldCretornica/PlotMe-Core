@@ -16,12 +16,12 @@ public class PlotOwnerChangeEvent extends PlotEvent implements Cancellable {
     private final InternalPlotOwnerChangeEvent event;
 
     public PlotOwnerChangeEvent(PlotMe_Core instance, World world, Plot plot, Player player, String newOwner) {
-        super(instance, plot, world);
+        super(plot, world);
         event = new InternalPlotOwnerChangeEvent(instance, new BukkitWorld(world), plot, new BukkitPlayer(player), newOwner);
     }
 
     public PlotOwnerChangeEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer player, String newOwner) {
-        super(instance, plot, world);
+        super(plot, world);
         event = new InternalPlotOwnerChangeEvent(instance, world, plot, player, newOwner);
     }
 

@@ -16,12 +16,12 @@ public class PlotProtectChangeEvent extends PlotEvent implements Cancellable {
     private final InternalPlotProtectChangeEvent event;
 
     public PlotProtectChangeEvent(PlotMe_Core instance, World world, Plot plot, Player player, boolean protect) {
-        super(instance, plot, world);
+        super(plot, world);
         event = new InternalPlotProtectChangeEvent(instance, new BukkitWorld(world), plot, new BukkitPlayer(player), protect);
     }
 
     public PlotProtectChangeEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer player, boolean protect) {
-        super(instance, plot, world);
+        super(plot, world);
         event = new InternalPlotProtectChangeEvent(instance, world, plot, player, protect);
     }
 

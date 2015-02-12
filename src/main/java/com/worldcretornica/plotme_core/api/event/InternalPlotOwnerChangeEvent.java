@@ -12,7 +12,7 @@ public class InternalPlotOwnerChangeEvent extends InternalPlotEvent implements I
     private boolean canceled;
 
     public InternalPlotOwnerChangeEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer player, String newOwner) {
-        super(instance, plot, world);
+        super(plot, world);
         this.player = player;
         this.newOwner = newOwner;
     }

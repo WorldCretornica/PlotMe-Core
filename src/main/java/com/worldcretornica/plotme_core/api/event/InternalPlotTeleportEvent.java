@@ -14,7 +14,7 @@ public class InternalPlotTeleportEvent extends InternalPlotEvent implements ICan
     private boolean canceled;
 
     public InternalPlotTeleportEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer player, ILocation location, String plotId) {
-        super(instance, plot, world);
+        super(plot, world);
         this.player = player;
         this.location = location;
         this.plotId = plotId;

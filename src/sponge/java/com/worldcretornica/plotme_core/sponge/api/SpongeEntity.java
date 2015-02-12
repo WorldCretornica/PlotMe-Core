@@ -9,10 +9,14 @@ import java.util.UUID;
 
 public class SpongeEntity implements IEntity {
 
-    public final Entity entity;
+    private final Entity entity;
 
     public SpongeEntity(Entity entity) {
         this.entity = entity;
+    }
+
+    public Entity getEntity() {
+        return entity;
     }
 
     @Override

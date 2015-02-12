@@ -11,7 +11,7 @@ public class InternalPlotResetEvent extends InternalPlotEvent implements ICancel
     private boolean canceled;
 
     public InternalPlotResetEvent(PlotMe_Core instance, IWorld world, Plot plot, ICommandSender reseter) {
-        super(instance, plot, world);
+        super(plot, world);
         this.reseter = reseter;
     }
 

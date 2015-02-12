@@ -12,7 +12,7 @@ public class InternalPlotAddAllowedEvent extends InternalPlotEvent implements IC
     private boolean canceled;
 
     public InternalPlotAddAllowedEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer player, String allowed) {
-        super(instance, plot, world);
+        super(plot, world);
         this.player = player;
         this.allowed = allowed;
     }

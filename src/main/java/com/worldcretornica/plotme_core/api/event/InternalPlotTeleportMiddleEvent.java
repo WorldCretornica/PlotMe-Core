@@ -13,7 +13,7 @@ public class InternalPlotTeleportMiddleEvent extends InternalPlotEvent implement
     private ILocation location;
 
     public InternalPlotTeleportMiddleEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer player, ILocation middlelocation) {
-        super(instance, plot, world);
+        super(plot, world);
         this.player = player;
         location = middlelocation;
     }

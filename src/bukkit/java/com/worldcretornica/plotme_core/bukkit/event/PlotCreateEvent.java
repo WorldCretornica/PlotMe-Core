@@ -19,12 +19,12 @@ public class PlotCreateEvent extends PlotEvent implements Cancellable {
     private final InternalPlotCreateEvent event;
 
     public PlotCreateEvent(PlotMe_Core instance, World world, PlotId plotId, Player creator) {
-        super(instance, null, world);
+        super(null, world);
         event = new InternalPlotCreateEvent(instance, new BukkitWorld(world), plotId, new BukkitPlayer(creator));
     }
 
     public PlotCreateEvent(PlotMe_Core instance, IWorld world, PlotId plotId, IPlayer creator) {
-        super(instance, null, world);
+        super(null, world);
         event = new InternalPlotCreateEvent(instance, world, plotId, creator);
     }
 

@@ -12,7 +12,7 @@ public class InternalPlotBuyEvent extends InternalPlotEvent implements ICancella
     private boolean canceled;
 
     public InternalPlotBuyEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer buyer, double price) {
-        super(instance, plot, world);
+        super(plot, world);
         this.buyer = buyer;
         this.price = price;
     }

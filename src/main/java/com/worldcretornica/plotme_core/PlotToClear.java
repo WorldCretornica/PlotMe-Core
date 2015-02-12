@@ -20,7 +20,7 @@ public class PlotToClear {
         return world;
     }
 
-    public final void setWorld(String world) {
+    private void setWorld(String world) {
         this.world = world;
     }
 
@@ -44,7 +44,7 @@ public class PlotToClear {
         return requester;
     }
 
-    public final void setRequester(ICommandSender requester) {
+    private void setRequester(ICommandSender requester) {
         this.requester = requester;
     }
 }

@@ -2,7 +2,6 @@ package com.worldcretornica.plotme_core.bukkit.event;
 
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
-import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotEvent;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitLocation;
@@ -20,22 +19,18 @@ import java.util.UUID;
 public abstract class PlotEvent extends Event {
 
     private static final HandlerList handlers = new HandlerList();
-    protected final PlotMe_Core plugin;
     private final InternalPlotEvent event;
 
-    public PlotEvent(PlotMe_Core instance, Plot plot, World world) {
-        event = new InternalPlotEvent(instance, plot, new BukkitWorld(world));
-        plugin = instance;
+    public PlotEvent(Plot plot, World world) {
+        event = new InternalPlotEvent(plot, new BukkitWorld(world));
     }
 
-    public PlotEvent(PlotMe_Core instance, Plot plot, IWorld world) {
-        event = new InternalPlotEvent(instance, plot, world);
-        plugin = instance;
+    public PlotEvent(Plot plot, IWorld world) {
+        event = new InternalPlotEvent(plot, world);
     }
 
-    public PlotEvent(PlotMe_Core instance, InternalPlotEvent event) {
+    public PlotEvent(InternalPlotEvent event) {
         this.event = event;
-        plugin = instance;
     }
 
     public static HandlerList getHandlerList() {

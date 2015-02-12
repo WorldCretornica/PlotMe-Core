@@ -11,7 +11,7 @@ public class InternalPlotDisposeEvent extends InternalPlotEvent implements ICanc
     private boolean canceled;
 
     public InternalPlotDisposeEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer disposer) {
-        super(instance, plot, world);
+        super(plot, world);
         this.disposer = disposer;
     }
 

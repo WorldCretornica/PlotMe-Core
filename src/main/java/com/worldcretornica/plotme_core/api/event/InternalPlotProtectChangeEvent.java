@@ -12,7 +12,7 @@ public class InternalPlotProtectChangeEvent extends InternalPlotEvent implements
     private boolean canceled;
 
     public InternalPlotProtectChangeEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer player, boolean protect) {
-        super(instance, plot, world);
+        super(plot, world);
         this.player = player;
         _protected = protect;
     }

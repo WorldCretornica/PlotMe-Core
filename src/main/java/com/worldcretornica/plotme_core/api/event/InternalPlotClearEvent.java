@@ -11,7 +11,7 @@ public class InternalPlotClearEvent extends InternalPlotEvent implements ICancel
     private boolean canceled;
 
     public InternalPlotClearEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer clearer) {
-        super(instance, plot, world);
+        super(plot, world);
         this.clearer = clearer;
     }
 

@@ -12,7 +12,7 @@ public class InternalPlotAuctionEvent extends InternalPlotEvent implements ICanc
     private double minimumBid;
 
     public InternalPlotAuctionEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer player, double minimumBid) {
-        super(instance, plot, world);
+        super(plot, world);
         this.player = player;
         this.minimumBid = minimumBid;
     }

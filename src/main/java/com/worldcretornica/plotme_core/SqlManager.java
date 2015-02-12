@@ -353,6 +353,7 @@ public class SqlManager {
         addPlot(plot, id, manager.topX(plot.getId(), world), manager.bottomX(plot.getId(), world), manager.topZ(plot.getId(), world), manager.bottomZ(plot.getId(), world));
     }
 
+    @SuppressWarnings("SuspiciousNameCombination")
     public void addPlot(Plot plot, PlotId id, int topX, int bottomX, int topZ, int bottomZ) {
         PreparedStatement ps = null;
         StringBuilder strSql = new StringBuilder();

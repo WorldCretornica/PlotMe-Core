@@ -2,7 +2,6 @@ package com.worldcretornica.plotme_core.api.event;
 
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
-import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IWorld;
 
@@ -14,11 +13,9 @@ import java.util.UUID;
 public class InternalPlotEvent {
 
     protected final IWorld world;
-    final PlotMe_Core plugin;
     private final Plot plot;
 
-    public InternalPlotEvent(PlotMe_Core instance, Plot plot, IWorld world) {
-        plugin = instance;
+    public InternalPlotEvent(Plot plot, IWorld world) {
         this.plot = plot;
         this.world = world;
     }

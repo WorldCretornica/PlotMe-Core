@@ -12,7 +12,7 @@ public class InternalPlotDoneChangeEvent extends InternalPlotEvent implements IC
     private boolean canceled;
 
     public InternalPlotDoneChangeEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer player, boolean done) {
-        super(instance, plot, world);
+        super(plot, world);
         this.player = player;
         this.done = done;
     }

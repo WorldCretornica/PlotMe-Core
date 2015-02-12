@@ -7,6 +7,6 @@ import com.worldcretornica.plotme_core.api.IWorld;
 public class InternalPlotLoadEvent extends InternalPlotEvent {
 
     public InternalPlotLoadEvent(PlotMe_Core instance, IWorld world, Plot plot) {
-        super(instance, plot, world);
+        super(plot, world);
     }
 }

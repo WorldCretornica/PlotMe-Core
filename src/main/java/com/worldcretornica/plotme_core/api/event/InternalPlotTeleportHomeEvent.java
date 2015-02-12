@@ -13,7 +13,7 @@ public class InternalPlotTeleportHomeEvent extends InternalPlotEvent implements 
     private ILocation location;
 
     public InternalPlotTeleportHomeEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer player) {
-        super(instance, plot, world);
+        super(plot, world);
         this.player = player;
         location = null;
     }
