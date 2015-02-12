@@ -825,17 +825,6 @@ public class PlotMeCoreManager {
         getPlayersIgnoringWELimit().remove(uuid);
     }
 
-    /**
-     * @deprecated Use {@link #isPlayerIgnoringWELimit(IPlayer)} instead
-     */
-    @Deprecated
-    public boolean isPlayerIgnoringWELimit(UUID uuid) {
-        if (plugin.getServerBridge().getConfig().getBoolean("defaultWEAnywhere")) {
-            return getPlayersIgnoringWELimit().contains(uuid);
-        }
-        return getPlayersIgnoringWELimit().contains(uuid);
-    }
-
 
     /**
      * Gets the active plotworlds

@@ -279,9 +279,5 @@ public class PlotMe_Core {
     private void setUtil(Util util) {
         this.util = util;
     }
-    
-    @Deprecated
-    public PlotMeCoreManager getPlotMeCoreManager() {
-        return PlotMeCoreManager.getInstance();
-    }
+
 }

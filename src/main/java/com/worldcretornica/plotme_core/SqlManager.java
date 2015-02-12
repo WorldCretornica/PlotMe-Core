@@ -71,7 +71,7 @@ public class SqlManager {
             statement = conn.createStatement();
 
             if (isUsingMySQL()) {
-                String schema = getSchema();
+
             } else {
 
             }
@@ -425,8 +425,8 @@ public class SqlManager {
                     }
                 }
             }
-            
-            if (!plot.getOwner().isEmpty() && plot.getOwnerId() == null) {
+
+            if (plot.getOwnerId() == null) {
                 fetchUUIDAsync(id, plot.getWorld().toLowerCase(), "owner", plot.getOwner());
             }
 
@@ -1811,7 +1811,7 @@ public class SqlManager {
                                                 }
                                                 
                                                 //Owner
-                                                if (plot.getOwnerId() == null && plot.getOwner() != null && plot.getOwner().equalsIgnoreCase(oldname)) {
+                                                if (plot.getOwnerId() == null && plot.getOwner().equalsIgnoreCase(oldname)) {
                                                     plot.setOwner(newname);
                                                     plot.setOwnerId(uuid);
                                                 }
