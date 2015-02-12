@@ -45,20 +45,7 @@ public class SqlManager {
             plugin.getLogger().severe("SQL exception on initialize :");
             plugin.getLogger().severe(e.getMessage());
         }
-
-        createTable();
-
         return conn;
-    }
-
-    public String getSchema() {
-        String conn = mySQLconn;
-
-        if (conn.lastIndexOf("/") > 0) {
-            return conn.substring(conn.lastIndexOf("/") + 1);
-        } else {
-            return "";
-        }
     }
 
     public void UpdateTables() {
@@ -129,7 +116,7 @@ public class SqlManager {
         }
     }
 
-    private void createTable() {
+    public void createTables() {
         Statement st = null;
         try {
             Connection conn = getConnection();

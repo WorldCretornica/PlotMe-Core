@@ -66,6 +66,7 @@ public class PlotMe_Core {
         serverBridge.setupHooks();
         serverBridge.setupListeners();
         setupClearSpools();
+        getSqlManager().createTables();
         getSqlManager().plotConvertToUUIDAsynchronously();
     }
 
