@@ -37,7 +37,7 @@ public class BukkitPlotListener implements Listener {
         manager = PlotMeCoreManager.getInstance();
     }
 
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent event) {
         BukkitLocation location = new BukkitLocation(event.getBlock().getLocation());
 

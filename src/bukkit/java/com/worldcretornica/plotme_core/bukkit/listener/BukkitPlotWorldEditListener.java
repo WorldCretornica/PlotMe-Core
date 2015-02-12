@@ -44,8 +44,11 @@ public class BukkitPlotWorldEditListener implements Listener {
         } else if (from.getLocation() != to.getLocation()) {
             PlotId idFrom = manager.getPlotId(from);
             idTo = manager.getPlotId(to);
-
-            if (!idFrom.equals(idTo)) {
+            if (idFrom != null) {
+                if (!idFrom.equals(idTo)) {
+                    changeMask = true;
+                }
+            } else if (idTo != null) {
                 changeMask = true;
             }
         }
