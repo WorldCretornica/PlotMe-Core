@@ -72,124 +72,7 @@ public class SqlManager {
 
             if (isUsingMySQL()) {
                 String schema = getSchema();
-                /*** START Version 0.13d changes ***/
-
-                // OwnerId
-                set =
-                        statement.executeQuery("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '" + schema + "' AND "
-                                               + "TABLE_NAME='plotmePlots' AND column_name='ownerid'");
-                if (!set.next()) {
-                    statement.execute("ALTER TABLE plotmePlots ADD ownerid blob(16) NULL;");
-                    conn.commit();
-                }
-                set.close();
-
-                // Allowed playerid
-                set =
-                        statement.executeQuery("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '" + schema + "' AND "
-                                               + "TABLE_NAME='plotmeAllowed' AND column_name='playerid'");
-                if (!set.next()) {
-                    statement.execute("ALTER TABLE plotmeAllowed ADD playerid blob(16) NULL;");
-                    conn.commit();
-                }
-                set.close();
-
-                // Denied playerid
-                set =
-                        statement.executeQuery("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '" + schema + "' AND "
-                                               + "TABLE_NAME='plotmeDenied' AND column_name='playerid'");
-                if (!set.next()) {
-                    statement.execute("ALTER TABLE plotmeDenied ADD playerid blob(16) NULL;");
-                    conn.commit();
-                }
-                set.close();
-
-                // CurrentBidderId
-                set =
-                        statement.executeQuery("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '" + schema + "' AND "
-                                               + "TABLE_NAME='plotmePlots' AND column_name='currentbidderId'");
-                if (!set.next()) {
-                    statement.execute("ALTER TABLE plotmePlots ADD currentbidderId blob(16) NULL;");
-                    conn.commit();
-                }
-                set.close();
-
-                /*** END Version 0.13d changes ***/
-
             } else {
-
-                /*** START Version 0.13d changes ***/
-
-                // OwnerId
-                set = statement.executeQuery("PRAGMA table_info(`plotmePlots`)");
-
-                String column;
-                boolean found = false;
-                while (set.next() && !found) {
-                    column = set.getString(2);
-                    if ("ownerid".equalsIgnoreCase(column)) {
-                        found = true;
-                    }
-                }
-
-                if (!found) {
-                    statement.execute("ALTER TABLE plotmePlots ADD ownerid blob(16) NULL;");
-                    conn.commit();
-                }
-                set.close();
-                found = false;
-
-                // Allowed id
-                set = statement.executeQuery("PRAGMA table_info(`plotmeAllowed`)");
-
-                while (set.next() && !found) {
-                    column = set.getString(2);
-                    if ("playerid".equalsIgnoreCase(column)) {
-                        found = true;
-                    }
-                }
-
-                if (!found) {
-                    statement.execute("ALTER TABLE plotmeAllowed ADD playerid blob(16) NULL;");
-                    conn.commit();
-                }
-                set.close();
-                found = false;
-
-                // Denied id
-                set = statement.executeQuery("PRAGMA table_info(`plotmeDenied`)");
-
-                while (set.next() && !found) {
-                    column = set.getString("playerid");
-                    if ("playerid".equalsIgnoreCase(column)) {
-                        found = true;
-                    }
-                }
-
-                if (!found) {
-                    statement.execute("ALTER TABLE plotmeDenied ADD playerid blob(16) NULL;");
-                    conn.commit();
-                }
-                set.close();
-                found = false;
-
-                // CurrentBidderId
-                set = statement.executeQuery("PRAGMA table_info(`plotmePlots`)");
-
-                while (set.next() && !found) {
-                    column = set.getString(2);
-                    if ("currentbidderId".equalsIgnoreCase(column)) {
-                        found = true;
-                    }
-                }
-
-                if (!found) {
-                    statement.execute("ALTER TABLE plotmePlots ADD currentbidderId blob(16) NULL;");
-                    conn.commit();
-                }
-                set.close();
-
-                /*** END Version 0.13d changes ***/
 
             }
         } catch (SQLException ex) {
@@ -252,8 +135,8 @@ public class SqlManager {
             Connection conn = getConnection();
             st = conn.createStatement();
             String PLOT_TABLE = "CREATE TABLE IF NOT EXISTS `plotmePlots` ("
-                                + "`idX` INTEGER ," //1
-                                + "`idZ` INTEGER," //2
+                    + "`idX` INTEGER NOT NULL," //1
+                    + "`idZ` INTEGER NOT NULL ," //2
                                 + "`owner` VARCHAR(32) NOT NULL," //3
                                 + "`world` VARCHAR(32) NOT NULL DEFAULT '0'," //4
                                 + "`topX` INTEGER NOT NULL DEFAULT '0'," //5
@@ -278,8 +161,8 @@ public class SqlManager {
             conn.commit();
 
             String ALLOWED_TABLE = "CREATE TABLE IF NOT EXISTS `plotmeAllowed` ("
-                                   + "`idX` INTEGER,"
-                                   + "`idZ` INTEGER,"
+                    + "`idX` INTEGER NOT NULL,"
+                    + "`idZ` INTEGER NOT NULL,"
                                    + "`world` varchar(32) NOT NULL,"
                                    + "`player` varchar(32) NOT NULL,"
                                    + "`playerid` blob(16),"
@@ -289,8 +172,8 @@ public class SqlManager {
             conn.commit();
 
             String DENIED_TABLE = "CREATE TABLE IF NOT EXISTS `plotmeDenied` ("
-                                  + "`idX` INTEGER,"
-                                  + "`idZ` INTEGER,"
+                    + "`idX` INTEGER NOT NULL,"
+                    + "`idZ` INTEGER NOT NULL,"
                                   + "`world` varchar(32) NOT NULL,"
                                   + "`player` varchar(32) NOT NULL,"
                                   + "`playerid` blob(16),"
@@ -300,8 +183,8 @@ public class SqlManager {
             conn.commit();
 
             String METADATA_TABLE = "CREATE TABLE IF NOT EXISTS `plotmeMetadata` ("
-                                  + "`idX` INTEGER,"
-                                  + "`idZ` INTEGER,"
+                    + "`idX` INTEGER NOT NULL,"
+                    + "`idZ` INTEGER NOT NULL,"
                                   + "`world` varchar(32) NOT NULL,"
                                   + "`pluginname` nvarchar(100) NOT NULL,"
                                   + "`propertyname` nvarchar(100) NOT NULL,"
@@ -1665,7 +1548,6 @@ public class SqlManager {
 
     public void plotConvertToUUIDAsynchronously() {
         plugin.getServerBridge().runTaskLaterAsynchronously(new Runnable() {
-            @SuppressWarnings("JpaQueryApiInspection")
             @Override
             public void run() {
                 plugin.getLogger().info("Checking if conversion to UUID needed...");
@@ -1694,7 +1576,7 @@ public class SqlManager {
                     Connection conn = getConnection();
 
                     //Remove duplicated names
-                    executesql("CREATE TABLE IF NOT EXISTS `TEMP2PLOTMEALLOWED` (`idX` INTEGER,`idZ` INTEGER,`world` varchar(32) NOT NULL,`player` varchar(32) NOT NULL,`playerid` blob(16),PRIMARY KEY (idX, idZ, world, player) );");
+                    executesql("CREATE TABLE IF NOT EXISTS `TEMP2PLOTMEALLOWED` (`idX` INTEGER NOT NULL,`idZ` INTEGER NOT NULL ,`world` VARCHAR(32) NOT NULL,`player` VARCHAR(32) NOT NULL,`playerid` BLOB(16),PRIMARY KEY (idX, idZ, world, player) );");
                     executesql("INSERT INTO TEMP2PLOTMEALLOWED(idX, idZ, world, player, playerid) SELECT idX, idZ, world, lower(player), playerid " +
                             "FROM plotmeAllowed GROUP BY idX, idZ, world, lower(player), playerid ");
                     executesql("DELETE FROM plotmeAllowed");
@@ -1702,7 +1584,7 @@ public class SqlManager {
 
                     executesql("DROP TABLE IF EXISTS TEMP2PLOTMEALLOWED");
 
-                    executesql("CREATE TABLE IF NOT EXISTS `TEMP2PLOTMEDENIED` (`idX` INTEGER,`idZ` INTEGER,`world` varchar(32) NOT NULL,`player` varchar(32) NOT NULL,`playerid` blob(16),PRIMARY KEY (idX, idZ, world, player) );");
+                    executesql("CREATE TABLE IF NOT EXISTS `TEMP2PLOTMEDENIED` (`idX` INTEGER NOT NULL,`idZ` INTEGER NOT NULL,`world` varchar(32) NOT NULL,`player` varchar(32) NOT NULL,`playerid` blob(16),PRIMARY KEY (idX, idZ, world, player) );");
                     executesql("INSERT INTO TEMP2PLOTMEDENIED(idX, idZ, world, player, playerid) " +
                             "SELECT idX, idZ, world, lower(player), playerid " + 
                             "FROM plotmeDenied GROUP BY idX, idZ, world, lower(player), playerid ");
