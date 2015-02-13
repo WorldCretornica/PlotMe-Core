@@ -48,7 +48,6 @@ public class BukkitPlotListener implements Listener {
 
             if (id == null) {
                 if (cannotBuild) {
-                    player.sendMessage("You can't build on roads."); //debug message
                     player.sendMessage(api.getUtil().C("ErrCannotBuild"));
                     event.setCancelled(true);
                 }
@@ -73,7 +72,6 @@ public class BukkitPlotListener implements Listener {
 
                     if (plot == null || !plot.isAllowed(player.getName(), player.getUniqueId())) {
                         if (cannotBuild) {
-                            player.sendMessage("You aren't allowed to build on this plot!");
                             player.sendMessage(api.getUtil().C("ErrCannotBuild"));
                             event.setCancelled(true);
                         }
@@ -96,7 +94,6 @@ public class BukkitPlotListener implements Listener {
 
             if (id == null) {
                 if (canBuild) {
-                    player.sendMessage("You can't build on roads."); //debug message
                     player.sendMessage(api.getUtil().C("ErrCannotBuild"));
                     event.setCancelled(true);
                 }
@@ -121,7 +118,6 @@ public class BukkitPlotListener implements Listener {
 
                     if (plot == null || !plot.isAllowed(player.getName(), player.getUniqueId())) {
                         if (canBuild) {
-                            player.sendMessage("You can't build on this plot."); //debug message
                             player.sendMessage(api.getUtil().C("ErrCannotBuild"));
                             event.setCancelled(true);
                         }
@@ -709,30 +705,6 @@ public class BukkitPlotListener implements Listener {
             if (pmi != null && !pmi.canUseProjectiles()) {
                 event.getEntity().sendMessage(api.getUtil().C("ErrCannotUseEggs"));
                 event.setCancelled(true);
-            /* Player player = event.getPlayer();
-            BukkitLocation location = new BukkitLocation(event.getEgg().getLocation());
-
-            if (manager.isPlotWorld(location)) {
-                boolean canBuild = player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE);
-                String id = manager.getPlotId(location);
-
-                if (id.isEmpty()) {
-                    if (!canBuild) {
-                        player.sendMessage(api.getUtil().C("ErrCannotUseEggs"));
-                        event.setHatching(false);
-                    }
-                } else {
-                    Plot plot = pmi.getPlot(id);
-
-                    if (plot == null || !plot.isAllowed(player.getName(), player.getUniqueId())) {
-                        if (!canBuild) {
-                            player.sendMessage(api.getUtil().C("ErrCannotUseEggs"));
-                            event.setHatching(false);
-                        }
-                    }
-                }
-            }
-            */
             }
         }
     }

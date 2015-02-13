@@ -1564,23 +1564,8 @@ public class SqlManager {
                     Connection conn = getConnection();
 
                     //Remove duplicated names
-                    executesql("CREATE TABLE IF NOT EXISTS `TEMP2PLOTMEALLOWED` (`idX` INTEGER NOT NULL,`idZ` INTEGER NOT NULL ,`world` VARCHAR(32) NOT NULL,`player` VARCHAR(32) NOT NULL,`playerid` BLOB(16),PRIMARY KEY (idX, idZ, world, player) );");
-                    executesql("INSERT INTO TEMP2PLOTMEALLOWED(idX, idZ, world, player, playerid) SELECT idX, idZ, world, lower(player), playerid " +
-                            "FROM plotmeAllowed GROUP BY idX, idZ, world, lower(player), playerid ");
-                    executesql("DELETE FROM plotmeAllowed");
-                    executesql("INSERT INTO plotmeAllowed(idX, idZ, world, player, playerid) SELECT idX, idZ, world, player, playerid FROM TEMP2PLOTMEALLOWED");
-
-                    executesql("DROP TABLE IF EXISTS TEMP2PLOTMEALLOWED");
-
-                    executesql("CREATE TABLE IF NOT EXISTS `TEMP2PLOTMEDENIED` (`idX` INTEGER NOT NULL,`idZ` INTEGER NOT NULL,`world` varchar(32) NOT NULL,`player` varchar(32) NOT NULL,`playerid` blob(16),PRIMARY KEY (idX, idZ, world, player) );");
-                    executesql("INSERT INTO TEMP2PLOTMEDENIED(idX, idZ, world, player, playerid) " +
-                            "SELECT idX, idZ, world, lower(player), playerid " + 
-                            "FROM plotmeDenied GROUP BY idX, idZ, world, lower(player), playerid ");
-                    executesql("DELETE FROM plotmeDenied");
-                    executesql("INSERT INTO plotmeDenied(idX, idZ, world, player, playerid) " +
-                            "SELECT idX, idZ, world, player, playerid FROM TEMP2PLOTMEDENIED");
-
-                    executesql("DROP TABLE IF EXISTS TEMP2PLOTMEDENIED");
+                    executesql("UPDATE plotmeAllowed SET player = lower(player)");
+                    executesql("UPDATE plotmeDenied SET player = lower(player)");
 
                     // Get all the players
                     statementPlayers = conn.createStatement();
@@ -1638,8 +1623,7 @@ public class SqlManager {
                                 }
     
                                 if (!response.isEmpty()) {
-                                    //plugin.getLogger().info("Finished fetching " + response.size() + " UUIDs. Starting database update.");
-                                    
+
                                     String sqlUpdate = "UPDATE plotmePlots SET ownerid = ?, owner = ? WHERE LOWER(owner) = ? AND ownerid IS NULL";
                                     psOwnerId = conn.prepareStatement(sqlUpdate);
                                     
@@ -1823,7 +1807,6 @@ public class SqlManager {
                                     }
     
                                     boConversion = true;
-                                    //plugin.getLogger().info("UUID conversion batch finished : " + nbConverted + " players");
                                 }
                             }
                             
