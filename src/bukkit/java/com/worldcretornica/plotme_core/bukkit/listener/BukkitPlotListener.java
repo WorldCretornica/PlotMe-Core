@@ -48,6 +48,7 @@ public class BukkitPlotListener implements Listener {
 
             if (id == null) {
                 if (cannotBuild) {
+                    player.sendMessage("You can't build on roads."); //debug message
                     player.sendMessage(api.getUtil().C("ErrCannotBuild"));
                     event.setCancelled(true);
                 }
@@ -72,6 +73,7 @@ public class BukkitPlotListener implements Listener {
 
                     if (plot == null || !plot.isAllowed(player.getName(), player.getUniqueId())) {
                         if (cannotBuild) {
+                            player.sendMessage("You aren't allowed to build on this plot!");
                             player.sendMessage(api.getUtil().C("ErrCannotBuild"));
                             event.setCancelled(true);
                         }
