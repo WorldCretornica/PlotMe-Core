@@ -156,7 +156,7 @@ public class BukkitPlotListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-    public void onPlayerBucketEmpty(PlayerBucketEvent event) {
+    public void onBucketEvent(PlayerBucketEvent event) {
         Player player = event.getPlayer();
         BukkitLocation location = new BukkitLocation(event.getBlockClicked().getLocation());
 
