@@ -4,7 +4,7 @@ import com.worldcretornica.plotme_core.api.IItemStack;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Player;
 
 public class BukkitPlayer extends BukkitOfflinePlayer implements IPlayer {
 

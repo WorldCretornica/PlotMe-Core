@@ -6,16 +6,17 @@ import com.worldcretornica.plotme_core.api.IEntity;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IPlotMe_GeneratorManager;
 import com.worldcretornica.plotme_core.api.IServerBridge;
-import com.worldcretornica.plotme_core.bukkit.api.*;
-
-import org.bukkit.*;
-import org.bukkit.entity.*;
+import com.worldcretornica.plotme_core.bukkit.api.BukkitEntity;
+import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.java.*;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.Metrics;
 import org.mcstats.Metrics.Graph;
 
-import java.io.*;
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.UUID;
@@ -35,9 +36,9 @@ public class PlotMe_CorePlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         serverObjectBuilder = new BukkitServerBridge(this);
-        
+
         AbstractSchematicUtil schematicutil = null;
-        
+
         if (Bukkit.getVersion().contains("1.7")) {
             try {
                 Constructor<?> constructor = Class.forName("com.worldcretornica.plotme_core.bukkit.v1_7.SchematicUtil").getConstructor(Plugin.class);
@@ -64,7 +65,7 @@ public class PlotMe_CorePlugin extends JavaPlugin {
                 e.printStackTrace();
             }
         }
-        
+
         plotme = new PlotMe_Core(serverObjectBuilder, schematicutil);
         getAPI().enable();
         doMetric();
@@ -124,7 +125,7 @@ public class PlotMe_CorePlugin extends JavaPlugin {
                     int nbPlot = 0;
 
                     for (String map : manager.getPlotMaps().keySet()) {
-                        nbPlot += (int) getAPI().getSqlManager().getPlotCount(map);
+                        nbPlot += getAPI().getSqlManager().getPlotCount(map);
                     }
 
                     return nbPlot;

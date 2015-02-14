@@ -40,7 +40,8 @@ public class CmdAuto extends PlotCommand {
                 int plotsOwned = manager.getNbOwnedPlot(player.getUniqueId(), world.getName().toLowerCase());
 
                 if (playerLimit != -1 && plotsOwned >= playerLimit && !player.hasPermission("PlotMe.admin")) {
-                    player.sendMessage("§c" + C("MsgAlreadyReachedMaxPlots") + " (" + plotsOwned + "/" + playerLimit + "). " + C("WordUse") + " §c/plotme home§r " + C("MsgToGetToIt"));
+                    player.sendMessage("§c" + C("MsgAlreadyReachedMaxPlots") + " (" + plotsOwned + "/" + playerLimit + "). " + C("WordUse")
+                            + " §c/plotme home§r " + C("MsgToGetToIt"));
                 } else {
                     int limit = pmi.getPlotAutoLimit();
 
@@ -96,7 +97,9 @@ public class CmdAuto extends PlotCommand {
                                         if (price == 0) {
                                             serverBridge.getLogger().info(player.getName() + " " + C("MsgClaimedPlot") + " " + id);
                                         } else {
-                                            serverBridge.getLogger().info(player.getName() + " " + C("MsgClaimedPlot") + " " + id + (" " + C("WordFor") + " " + price));
+                                            serverBridge.getLogger()
+                                                    .info(player.getName() + " " + C("MsgClaimedPlot") + " " + id + (" " + C("WordFor") + " "
+                                                            + price));
                                         }
                                     }
                                     return true;

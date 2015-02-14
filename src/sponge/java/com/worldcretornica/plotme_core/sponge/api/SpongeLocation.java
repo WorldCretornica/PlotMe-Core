@@ -61,28 +61,28 @@ public class SpongeLocation implements ILocation {
     public double getZ() {
         return location.getPosition().getZ();
     }
-    
+
     @Override
     public void setZ(double z) {
         Vector3d pos = this.location.getPosition();
         this.location.setPosition(new Vector3d(pos.getX(), pos.getY(), z));
     }
-    
+
     @Override
     public IBlock getBlock() {
         return new SpongeBlockLoc(location.getBlock());
     }
-    
+
     @Override
     public ILocation add(double x, double y, double z) {
         return new SpongeLocation(location.add(x, y, z));
     }
-    
+
     @Override
     public ILocation subtract(double x, double y, double z) {
         return new SpongeLocation(location.add(-x, -y, -z));
     }
-    
+
     @Override
     public ILocation clone() {
         return this; //not sure on this

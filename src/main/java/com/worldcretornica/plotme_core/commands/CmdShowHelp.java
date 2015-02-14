@@ -150,7 +150,8 @@ public class CmdShowHelp extends PlotCommand {
                             player.sendMessage(
                                     "§a" + C("HelpYourPlotLimitWorld") + " : §b" + ownedPlots + "§a " + C("HelpUsedOf") + " §b" + C("WordInfinite"));
                         } else {
-                            player.sendMessage("§a" + C("HelpYourPlotLimitWorld") + " : §b" + ownedPlots + "§a " + C("HelpUsedOf") + " §b" + plotLimit);
+                            player.sendMessage(
+                                    "§a" + C("HelpYourPlotLimitWorld") + " : §b" + ownedPlots + "§a " + C("HelpUsedOf") + " §b" + plotLimit);
                         }
                     } else {
                         player.sendMessage("PlotMe can't find any plotworlds. Make sure you configured it correctly.");

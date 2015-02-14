@@ -39,7 +39,7 @@ public class PlotMe_Core {
     public IPlotMe_GeneratorManager getGenManager(String name) {
         return managers.get(name.toLowerCase());
     }
-    
+
     public AbstractSchematicUtil getSchematicUtil() {
         return this.schematicutil;
     }
@@ -60,7 +60,7 @@ public class PlotMe_Core {
         PlotMeCoreManager.getInstance().setPlugin(this);
         setupMySQL();
         setupConfig();
-        setupDefaultCaptions();        
+        setupDefaultCaptions();
         serverBridge.setupCommands();
         setUtil(new Util(this));
         serverBridge.setupHooks();
@@ -78,7 +78,7 @@ public class PlotMe_Core {
         setupDefaultCaptions();
         setupMySQL();
         PlotMeCoreManager.getInstance().getPlotMaps().clear();
-        
+
         for (String worldname : managers.keySet()) {
             setupWorld(worldname.toLowerCase());
         }

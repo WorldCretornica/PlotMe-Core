@@ -45,14 +45,14 @@ public class TileEntity extends AbstractSchematicElement {
 
     private final List<Item> items;
     // END - PRE 1.8
-    
+
     // START - 1.8
     private final Integer base;
     private final List<Pattern> patterns;
     // END - 1.8
 
-    public TileEntity(Integer x, Integer y, Integer z, String customname, String id, List<Item> items, Byte rot, 
-            Byte skulltype, Short delay, Short maxnearbyentities, Short maxspawndelay, Short minspawndelay, 
+    public TileEntity(Integer x, Integer y, Integer z, String customname, String id, List<Item> items, Byte rot,
+            Byte skulltype, Short delay, Short maxnearbyentities, Short maxspawndelay, Short minspawndelay,
             Short requiredplayerrange, Short spawncount, Short spawnrange, String entityid, Short burntime, Short cooktime,
             String text1, String text2, String text3, String text4, Byte note, Integer record, RecordItem recorditem,
             Short brewtime, String command, Integer outputsignal, Integer transfercooldown, Integer levels,
@@ -93,55 +93,150 @@ public class TileEntity extends AbstractSchematicElement {
         this.base = base;
     }
 
-    public Byte getRot() { return rot; }
-    public Byte getSkullType() { return skulltype; }
-    public Byte getNote() { return note; }
+    public Byte getRot() {
+        return rot;
+    }
 
-    public Integer getX() { return x; }
-    public Integer getY() { return y; }
-    public Integer getZ() { return z; }
-    public Integer getRecord() { return record; }
-    public Integer getOutputSignal() { return outputsignal; }
-    public Integer getTransferCooldown() { return transfercooldown; }
-    public Integer getLevels() { return levels; }
-    public Integer getPrimary() { return primary; }
-    public Integer getSecondary() { return secondary; }
-    public Integer getBase() { return base; }
+    public Byte getSkullType() {
+        return skulltype;
+    }
 
-    public RecordItem getRecordItem() { return recorditem; }
+    public Byte getNote() {
+        return note;
+    }
 
-    public Short getDelay() { return delay; }
-    public Short getMaxNearbyEntities() { return maxnearbyentities; }
-    public Short getMaxSpawnDelay() { return maxspawndelay; }
-    public Short getMinSpawnDelay() { return minspawndelay; }
-    public Short getRequiredPlayerRange() { return requiredplayerrange; }
-    public Short getSpawnCount() { return spawncount; }
-    public Short getSpawnRange() { return spawnrange; }
-    public Short getBurnTime() { return burntime; }
-    public Short getCookTime() { return cooktime; }
-    public Short getBrewTime() { return brewtime; }
+    public Integer getX() {
+        return x;
+    }
 
-    public String getEntityId() { return entityid; }
-    public String getText1() { return text1; }
-    public String getText2() { return text2; }
-    public String getText3() { return text3; }
-    public String getText4() { return text4; }
-    public String getCustomName() { return customname; }
-    public String getId() { return id; }
-    public String getCommand() { return command; }
+    public Integer getY() {
+        return y;
+    }
 
-    public List<Item> getItems() { return items; }
-    
-    public List<Pattern> getPatterns() { return patterns; }
+    public Integer getZ() {
+        return z;
+    }
+
+    public Integer getRecord() {
+        return record;
+    }
+
+    public Integer getOutputSignal() {
+        return outputsignal;
+    }
+
+    public Integer getTransferCooldown() {
+        return transfercooldown;
+    }
+
+    public Integer getLevels() {
+        return levels;
+    }
+
+    public Integer getPrimary() {
+        return primary;
+    }
+
+    public Integer getSecondary() {
+        return secondary;
+    }
+
+    public Integer getBase() {
+        return base;
+    }
+
+    public RecordItem getRecordItem() {
+        return recorditem;
+    }
+
+    public Short getDelay() {
+        return delay;
+    }
+
+    public Short getMaxNearbyEntities() {
+        return maxnearbyentities;
+    }
+
+    public Short getMaxSpawnDelay() {
+        return maxspawndelay;
+    }
+
+    public Short getMinSpawnDelay() {
+        return minspawndelay;
+    }
+
+    public Short getRequiredPlayerRange() {
+        return requiredplayerrange;
+    }
+
+    public Short getSpawnCount() {
+        return spawncount;
+    }
+
+    public Short getSpawnRange() {
+        return spawnrange;
+    }
+
+    public Short getBurnTime() {
+        return burntime;
+    }
+
+    public Short getCookTime() {
+        return cooktime;
+    }
+
+    public Short getBrewTime() {
+        return brewtime;
+    }
+
+    public String getEntityId() {
+        return entityid;
+    }
+
+    public String getText1() {
+        return text1;
+    }
+
+    public String getText2() {
+        return text2;
+    }
+
+    public String getText3() {
+        return text3;
+    }
+
+    public String getText4() {
+        return text4;
+    }
+
+    public String getCustomName() {
+        return customname;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getCommand() {
+        return command;
+    }
+
+    public List<Item> getItems() {
+        return items;
+    }
+
+    public List<Pattern> getPatterns() {
+        return patterns;
+    }
 
     public String toString() {
-        return "{" + this.getClass().getName() + 
+        return "{" + this.getClass().getName() +
                 ": x=" + Sanitize(x) +
                 ", y=" + Sanitize(y) +
                 ", z=" + Sanitize(z) +
                 ", customname=" + Sanitize(customname) +
                 ", id=" + Sanitize(id) +
-                ", items=" + Sanitize(items) + 
+                ", items=" + Sanitize(items) +
                 ", rot=" + Sanitize(rot) +
                 ", skulltype=" + Sanitize(skulltype) +
                 ", delay=" + Sanitize(delay) +
@@ -153,22 +248,22 @@ public class TileEntity extends AbstractSchematicElement {
                 ", spawnrange=" + Sanitize(spawnrange) +
                 ", entityid=" + Sanitize(entityid) +
                 ", burntime=" + Sanitize(burntime) +
-                ", cooktime=" + Sanitize(cooktime) + 
-                ", text1=" + Sanitize(text1) + 
-                ", text2=" + Sanitize(text2) + 
-                ", text3=" + Sanitize(text3) + 
-                ", text4=" + Sanitize(text4) + 
-                ", note=" + Sanitize(note) + 
+                ", cooktime=" + Sanitize(cooktime) +
+                ", text1=" + Sanitize(text1) +
+                ", text2=" + Sanitize(text2) +
+                ", text3=" + Sanitize(text3) +
+                ", text4=" + Sanitize(text4) +
+                ", note=" + Sanitize(note) +
                 ", record=" + Sanitize(record) +
-                ", recorditem=" + Sanitize(recorditem) + 
-                ", brewtime=" + Sanitize(brewtime) + 
-                ", command=" + Sanitize(command) + 
-                ", outputsignal=" + Sanitize(outputsignal) + 
-                ", transfercooldown=" + Sanitize(transfercooldown) + 
-                ", levels=" + Sanitize(levels) + 
-                ", primary=" + Sanitize(primary) + 
-                ", secondary=" + Sanitize(secondary) + 
-                ", patterns=" + Sanitize(patterns) + 
+                ", recorditem=" + Sanitize(recorditem) +
+                ", brewtime=" + Sanitize(brewtime) +
+                ", command=" + Sanitize(command) +
+                ", outputsignal=" + Sanitize(outputsignal) +
+                ", transfercooldown=" + Sanitize(transfercooldown) +
+                ", levels=" + Sanitize(levels) +
+                ", primary=" + Sanitize(primary) +
+                ", secondary=" + Sanitize(secondary) +
+                ", patterns=" + Sanitize(patterns) +
                 ", base=" + Sanitize(base) + "}";
     }
 }

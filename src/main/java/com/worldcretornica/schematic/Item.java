@@ -9,7 +9,7 @@ public class Item extends AbstractSchematicElement {
     private final Short damage;
     private final Short id;
     private final ItemTag tag;
-    
+
     public Item(Byte count, Byte slot, Short damage, Short id, ItemTag tag) {
         this.count = count;
         this.slot = slot;
@@ -17,7 +17,7 @@ public class Item extends AbstractSchematicElement {
         this.id = id;
         this.tag = tag;
     }
-    
+
     public Byte getCount() {
         return count;
     }
@@ -37,14 +37,14 @@ public class Item extends AbstractSchematicElement {
     public ItemTag getTag() {
         return tag;
     }
-    
+
     public String toString() {
-        return "{" + this.getClass().getName() + 
-                ": count=" + Sanitize(count) + 
-                ", slot=" + Sanitize(slot) + 
-                ", damage=" + Sanitize(damage) + 
-                ", id=" + Sanitize(id) + 
+        return "{" + this.getClass().getName() +
+                ": count=" + Sanitize(count) +
+                ", slot=" + Sanitize(slot) +
+                ", damage=" + Sanitize(damage) +
+                ", id=" + Sanitize(id) +
                 ", tag=" + Sanitize(tag) + "}";
-        
+
     }
 }

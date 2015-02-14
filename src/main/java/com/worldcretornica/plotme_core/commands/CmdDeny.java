@@ -1,6 +1,10 @@
 package com.worldcretornica.plotme_core.commands;
 
-import com.worldcretornica.plotme_core.*;
+import com.worldcretornica.plotme_core.PermissionNames;
+import com.worldcretornica.plotme_core.Plot;
+import com.worldcretornica.plotme_core.PlotId;
+import com.worldcretornica.plotme_core.PlotMapInfo;
+import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotAddDeniedEvent;
@@ -102,10 +106,12 @@ public class CmdDeny extends PlotCommand {
                                     if (isAdvancedLogging()) {
                                         if (price == 0) {
                                             serverBridge.getLogger()
-                                                    .info(player.getName() + " " + C("MsgDeniedPlayer") + " " + denied + " " + C("MsgToPlot") + " " + id);
+                                                    .info(player.getName() + " " + C("MsgDeniedPlayer") + " " + denied + " " + C("MsgToPlot") + " "
+                                                            + id);
                                         } else {
                                             serverBridge.getLogger()
-                                                    .info(player.getName() + " " + C("MsgDeniedPlayer") + " " + denied + " " + C("MsgToPlot") + " " + id + (" " + C("WordFor") + " " + price));
+                                                    .info(player.getName() + " " + C("MsgDeniedPlayer") + " " + denied + " " + C("MsgToPlot") + " "
+                                                            + id + (" " + C("WordFor") + " " + price));
                                         }
                                     }
                                 }

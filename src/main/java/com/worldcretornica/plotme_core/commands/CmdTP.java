@@ -42,7 +42,8 @@ public class CmdTP extends PlotCommand {
                         } else if (!manager.isValidId(world, id)) {
                             if (serverBridge.getConfig().getBoolean("allowWorldTeleport")) {
                                 player.sendMessage(
-                                        C("WordUsage") + ": §c/plotme tp <ID> [" + C("WordWorld") + "] §r" + C("WordExample") + ": §c/plotme tp 5;-1 ");
+                                        C("WordUsage") + ": §c/plotme tp <ID> [" + C("WordWorld") + "] §r" + C("WordExample")
+                                                + ": §c/plotme tp 5;-1 ");
                             } else {
                                 player.sendMessage(C("WordUsage") + ": §c/plotme tp <ID> §r" + C("WordExample") + ": §c/plotme tp 5;-1 ");
                             }

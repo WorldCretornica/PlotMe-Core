@@ -25,9 +25,12 @@ public class PlotMeSpool implements Runnable {
 
             if (world != null) {
                 if (currentClear == null) {
-                    currentClear = genmanager.clear(world, getPlotToClear().getPlotId(), plugin.getServerBridge().getConfig().getInt("NbBlocksPerClearStep"), null);
+                    currentClear = genmanager
+                            .clear(world, getPlotToClear().getPlotId(), plugin.getServerBridge().getConfig().getInt("NbBlocksPerClearStep"), null);
                 } else {
-                    currentClear = genmanager.clear(world, getPlotToClear().getPlotId(), plugin.getServerBridge().getConfig().getInt("NbBlocksPerClearStep"), currentClear);
+                    currentClear = genmanager
+                            .clear(world, getPlotToClear().getPlotId(), plugin.getServerBridge().getConfig().getInt("NbBlocksPerClearStep"),
+                                    currentClear);
                 }
 
                 if (currentClear == null) {
@@ -41,7 +44,8 @@ public class PlotMeSpool implements Runnable {
                     }
                     genmanager.refreshPlotChunks(world, getPlotToClear().getPlotId());
 
-                    plottoclear.getRequester().sendMessage(plugin.getUtil().C("WordPlot") + " " + getPlotToClear().getPlotId() + " " + plugin.getUtil().C("WordCleared"));
+                    plottoclear.getRequester().sendMessage(
+                            plugin.getUtil().C("WordPlot") + " " + getPlotToClear().getPlotId() + " " + plugin.getUtil().C("WordCleared"));
 
                     plugin.removePlotToClear(getPlotToClear(), taskId);
                     plottoclear = null;

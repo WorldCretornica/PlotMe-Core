@@ -16,7 +16,7 @@ public class PlotSellChangeEvent extends PlotEvent implements Cancellable {
     private final InternalPlotSellChangeEvent event;
 
     public PlotSellChangeEvent(PlotMe_Core instance, World world, Plot plot, Player seller, double price,
-                               boolean isForSale) {
+            boolean isForSale) {
         super(plot, world);
         event = new InternalPlotSellChangeEvent(instance, new BukkitWorld(world), plot, new BukkitPlayer(seller), price, isForSale);
     }

@@ -1,7 +1,7 @@
 package com.worldcretornica.plotme_core.bukkit.api;
 
 import com.worldcretornica.plotme_core.api.ICommandSender;
-import org.bukkit.command.*;
+import org.bukkit.command.CommandSender;
 
 public class BukkitCommandSender implements ICommandSender {
 

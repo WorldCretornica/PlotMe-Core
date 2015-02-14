@@ -3,7 +3,7 @@ package com.worldcretornica.schematic;
 import java.util.List;
 
 public class Schematic extends AbstractSchematicElement {
- 
+
     private static final long serialVersionUID = 8966082365181590943L;
 
     private final int[] blocks;
@@ -19,8 +19,9 @@ public class Schematic extends AbstractSchematicElement {
     private final Integer originx;
     private final Integer originy;
     private final Integer originz;
- 
-    public Schematic(int[] blocks, byte[] data, byte[] biomes, String materials, Short width, Short length, Short height, List<Entity> entities, List<TileEntity> tileentities, String roomauthor, Integer originx, Integer originy, Integer originz) {
+
+    public Schematic(int[] blocks, byte[] data, byte[] biomes, String materials, Short width, Short length, Short height, List<Entity> entities,
+            List<TileEntity> tileentities, String roomauthor, Integer originx, Integer originy, Integer originz) {
         this.blocks = blocks;
         this.data = data;
         this.biomes = biomes;
@@ -71,37 +72,37 @@ public class Schematic extends AbstractSchematicElement {
     public List<TileEntity> getTileEntities() {
         return tileentities;
     }
-    
+
     public String getAuthor() {
         return schemauthor;
     }
-    
+
     public Integer getOriginX() {
         return originx;
     }
-    
+
     public Integer getOriginY() {
         return originy;
     }
-    
+
     public Integer getOriginZ() {
         return originz;
     }
-        
+
     public String toString() {
-        return "{" + this.getClass().getName() + 
+        return "{" + this.getClass().getName() +
                 ": blocks=" + Sanitize(blocks) +
                 ", data=" + Sanitize(data) +
                 ", biomes=" + Sanitize(biomes) +
                 ", materials=" + Sanitize(materials) +
-                ", width=" + Sanitize(width) + 
+                ", width=" + Sanitize(width) +
                 ", length=" + Sanitize(length) +
                 ", height=" + Sanitize(height) +
-                ", entities=" + Sanitize(entities) + 
-                ", tileentities=" + Sanitize(tileentities) + 
+                ", entities=" + Sanitize(entities) +
+                ", tileentities=" + Sanitize(tileentities) +
                 ", roomauthor=" + Sanitize(schemauthor) +
-                ", originx=" + Sanitize(originx) + 
-                ", originy=" + Sanitize(originy) +  
+                ", originx=" + Sanitize(originx) +
+                ", originy=" + Sanitize(originy) +
                 ", originz=" + Sanitize(originz) + "}";
     }
 }

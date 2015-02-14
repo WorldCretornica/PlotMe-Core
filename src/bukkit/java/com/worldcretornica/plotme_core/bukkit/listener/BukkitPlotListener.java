@@ -1,6 +1,12 @@
 package com.worldcretornica.plotme_core.bukkit.listener;
 
-import com.worldcretornica.plotme_core.*;
+import com.worldcretornica.plotme_core.PermissionNames;
+import com.worldcretornica.plotme_core.Plot;
+import com.worldcretornica.plotme_core.PlotId;
+import com.worldcretornica.plotme_core.PlotMapInfo;
+import com.worldcretornica.plotme_core.PlotMeCoreManager;
+import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.PlotToClear;
 import com.worldcretornica.plotme_core.bukkit.PlotMe_CorePlugin;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitBlock;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitEntity;
@@ -14,11 +20,32 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.*;
-import org.bukkit.event.entity.*;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockDamageEvent;
+import org.bukkit.event.block.BlockFadeEvent;
+import org.bukkit.event.block.BlockFormEvent;
+import org.bukkit.event.block.BlockFromToEvent;
+import org.bukkit.event.block.BlockGrowEvent;
+import org.bukkit.event.block.BlockIgniteEvent;
+import org.bukkit.event.block.BlockPistonExtendEvent;
+import org.bukkit.event.block.BlockPistonRetractEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.block.BlockSpreadEvent;
+import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.entity.EntityShootBowEvent;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingPlaceEvent;
-import org.bukkit.event.player.*;
+import org.bukkit.event.player.PlayerBucketEmptyEvent;
+import org.bukkit.event.player.PlayerBucketFillEvent;
+import org.bukkit.event.player.PlayerEggThrowEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.world.StructureGrowEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -794,17 +821,17 @@ public class BukkitPlotListener implements Listener {
         plugin.removePlayer(playerUUID);
     }
 
-/*    @EventHandler
-    public void onPlayerMove(PlayerMoveEvent event) {
-        //TODO add a config to enable and disable this
-        BukkitPlayer player = (BukkitPlayer) plugin.wrapPlayer(event.getPlayer());
-        Plot plot = manager.getPlotById(player);
-        if (plot != null) {
-            player.sendMessage("Now entering " + plot.getOwner() + "'s plot");
-            player.sendMessage("Plot " + plot.getId());
+    /*    @EventHandler
+        public void onPlayerMove(PlayerMoveEvent event) {
+            //TODO add a config to enable and disable this
+            BukkitPlayer player = (BukkitPlayer) plugin.wrapPlayer(event.getPlayer());
+            Plot plot = manager.getPlotById(player);
+            if (plot != null) {
+                player.sendMessage("Now entering " + plot.getOwner() + "'s plot");
+                player.sendMessage("Plot " + plot.getId());
+            }
         }
-    }
-*/
+    */
     @EventHandler(ignoreCancelled = true)
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player p = event.getPlayer();

@@ -12,7 +12,7 @@ public class Pose extends AbstractSchematicElement {
     private final List<Float> rightarm;
     private final List<Float> leftleg;
     private final List<Float> rightleg;
-    
+
     public Pose(List<Float> body, List<Float> head, List<Float> leftarm, List<Float> rightarm, List<Float> leftleg, List<Float> rightleg) {
         this.body = body;
         this.head = head;
@@ -21,22 +21,39 @@ public class Pose extends AbstractSchematicElement {
         this.leftleg = leftleg;
         this.rightleg = rightleg;
     }
-    
-    public List<Float> getBody() { return body; }
-    public List<Float> getHead() { return head; }
-    public List<Float> getLeftArm() { return leftarm; }
-    public List<Float> getRightArm() { return rightarm; }
-    public List<Float> getLeftLeg() { return leftleg; }
-    public List<Float> getRightLeg() { return rightleg; }
-    
+
+    public List<Float> getBody() {
+        return body;
+    }
+
+    public List<Float> getHead() {
+        return head;
+    }
+
+    public List<Float> getLeftArm() {
+        return leftarm;
+    }
+
+    public List<Float> getRightArm() {
+        return rightarm;
+    }
+
+    public List<Float> getLeftLeg() {
+        return leftleg;
+    }
+
+    public List<Float> getRightLeg() {
+        return rightleg;
+    }
+
     @Override
     public String toString() {
-        return "{" + this.getClass().getName() + 
-                ": body=" + Sanitize(body) + 
-                ", head=" + Sanitize(head) + 
-                ", leftarm=" + Sanitize(leftarm) + 
-                ", rightarm=" + Sanitize(rightarm) + 
-                ", leftleg=" + Sanitize(leftleg) + 
+        return "{" + this.getClass().getName() +
+                ": body=" + Sanitize(body) +
+                ", head=" + Sanitize(head) +
+                ", leftarm=" + Sanitize(leftarm) +
+                ", rightarm=" + Sanitize(rightarm) +
+                ", leftleg=" + Sanitize(leftleg) +
                 ", rightleg=" + Sanitize(rightleg) + "}";
     }
 

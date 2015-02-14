@@ -50,7 +50,8 @@ public class CmdCreateWorld extends PlotCommand {
                 }
 
                 sender.sendMessage(C("WordUsage") + ": ");
-                sender.sendMessage("/plotme createworld " + C("CommandCreateWorld-Setting") + "<" + C("WordConfig") + "> <" + C("WordValue") + "> " + C("MsgCreateWorldParameters4"));
+                sender.sendMessage("/plotme createworld " + C("CommandCreateWorld-Setting") + "<" + C("WordConfig") + "> <" + C("WordValue") + "> "
+                 + C("MsgCreateWorldParameters4"));
                 sender.sendMessage("/plotme createworld " + C("CommandCreateWorld-Cancel") + " " + C("MsgCreateWorldParameters5"));
             }
         } else {
@@ -132,7 +133,8 @@ public class CmdCreateWorld extends PlotCommand {
 
                 parameters.putAll(genparameters);
 
-                sender.sendMessage("/plotme createworld " + C("CommandCreateWorld-Setting") + "<" + C("WordConfig") + "> <" + C("WordValue") + "> " + C("MsgCreateWorldParameters4"));
+                sender.sendMessage("/plotme createworld " + C("CommandCreateWorld-Setting") + "<" + C("WordConfig") + "> <" + C("WordValue") + "> "
+                 + C("MsgCreateWorldParameters4"));
 
                 sender.sendMessage("/plotme createworld " + C("CommandCreateWorld-Cancel") + " " + C("MsgCreateWorldParameters5"));
 

@@ -1,8 +1,16 @@
 package com.worldcretornica.plotme_core.sponge;
 
 import com.worldcretornica.plotme_core.PlotId;
-import com.worldcretornica.plotme_core.api.*;
-import com.worldcretornica.plotme_core.sponge.api.*;
+import com.worldcretornica.plotme_core.api.IBiome;
+import com.worldcretornica.plotme_core.api.ILocation;
+import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.api.IPlotMe_GeneratorManager;
+import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.sponge.api.ISpongePlotMe_GeneratorManager;
+import com.worldcretornica.plotme_core.sponge.api.SpongeBiomeType;
+import com.worldcretornica.plotme_core.sponge.api.SpongeLocation;
+import com.worldcretornica.plotme_core.sponge.api.SpongePlayer;
+import com.worldcretornica.plotme_core.sponge.api.SpongeWorld;
 import com.worldcretornica.schematic.Schematic;
 import org.spongepowered.api.entity.player.Player;
 
@@ -193,7 +201,7 @@ public class SpongePlotMe_GeneratorManagerBridge implements IPlotMe_GeneratorMan
     public ILocation getPlotMiddle(IWorld world, PlotId id) {
         return new SpongeLocation(generatorManager.getPlotMiddle(((SpongeWorld) world).getWorld(), id));
     }
-    
+
     @Override
     public Schematic getPlotSchematic(IWorld world, PlotId id) {
         return generatorManager.getPlotSchematic(((SpongeWorld) world).getWorld(), id);

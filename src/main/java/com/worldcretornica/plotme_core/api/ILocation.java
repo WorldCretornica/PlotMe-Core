@@ -19,13 +19,13 @@ public interface ILocation {
     void setY(double y);
 
     double getZ();
-    
+
     void setZ(double z);
 
     IBlock getBlock();
-    
+
     ILocation add(double x, double y, double z);
-    
+
     ILocation subtract(double x, double y, double z);
 
 }

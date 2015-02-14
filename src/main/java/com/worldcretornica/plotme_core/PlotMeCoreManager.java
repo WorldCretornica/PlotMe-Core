@@ -2,15 +2,23 @@ package com.worldcretornica.plotme_core;
 
 import com.griefcraft.lwc.LWC;
 import com.griefcraft.model.Protection;
-import com.worldcretornica.plotme_core.api.*;
+import com.worldcretornica.plotme_core.api.IBiome;
+import com.worldcretornica.plotme_core.api.IBlock;
+import com.worldcretornica.plotme_core.api.ICommandSender;
+import com.worldcretornica.plotme_core.api.IEntity;
+import com.worldcretornica.plotme_core.api.ILocation;
+import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.api.IPlotMe_GeneratorManager;
+import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitBiome;
 import com.worldcretornica.plotme_core.utils.Util;
 
-import javax.inject.Singleton;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
+
+import javax.inject.Singleton;
 
 @Singleton
 public class PlotMeCoreManager {
@@ -19,8 +27,8 @@ public class PlotMeCoreManager {
     private final HashMap<String, PlotMapInfo> plotmaps;
     private PlotMe_Core plugin;
     private HashSet<UUID> playersignoringwelimit;
-        
-    private PlotMeCoreManager() { 
+
+    private PlotMeCoreManager() {
         setPlayersIgnoringWELimit(new HashSet<UUID>());
         plotmaps = new HashMap<>();
     }
@@ -28,7 +36,7 @@ public class PlotMeCoreManager {
     public static PlotMeCoreManager getInstance() {
         return INSTANCE;
     }
-    
+
     void setPlugin(PlotMe_Core instance) {
         plugin = instance;
     }
@@ -605,14 +613,14 @@ public class PlotMeCoreManager {
      * @return true if successful, false otherwise
      */
     public boolean movePlot(IWorld world, PlotId idFrom, PlotId idTo) {
-        
+
         if (!getGenManager(world).movePlot(world, idFrom, idTo)) {
             return false;
         }
-        
+
         Plot plot1 = getPlotById(idFrom, world);
         Plot plot2 = getPlotById(idTo, world);
-        
+
         if (plot1 != null) {
             if (plot2 != null) {
                 plugin.getSqlManager().deletePlot(idTo, world.getName());
@@ -621,13 +629,14 @@ public class PlotMeCoreManager {
                 plugin.getSqlManager().deletePlot(idFrom, world.getName());
 
                 plot2.setId(idFrom);
-                plugin.getSqlManager().addPlot(plot2, idFrom, topX(idFrom, world), bottomX(idFrom, world), topZ(idFrom, world), bottomZ(idFrom, world));
+                plugin.getSqlManager()
+                        .addPlot(plot2, idFrom, topX(idFrom, world), bottomX(idFrom, world), topZ(idFrom, world), bottomZ(idFrom, world));
                 addPlot(world, idFrom, plot2);
 
                 plot1.setId(idTo);
                 plugin.getSqlManager().addPlot(plot1, idTo, topX(idTo, world), bottomX(idTo, world), topZ(idTo, world), bottomZ(idTo, world));
                 addPlot(world, idTo, plot1);
-                
+
                 setOwnerSign(world, plot1);
                 removeSellSign(world, plot1.getId());
                 removeAuctionSign(world, plot1.getId());
@@ -644,7 +653,7 @@ public class PlotMeCoreManager {
 
         return true;
     }
-    
+
     /**
      * Move a plot to an spot where there is no plot existing
      *  @param world         plotworld
@@ -657,7 +666,9 @@ public class PlotMeCoreManager {
         removePlot(world, idFrom);
 
         filledPlot.setId(idDestination);
-        plugin.getSqlManager().addPlot(filledPlot, idDestination, topX(idDestination, world), bottomX(idDestination, world), topZ(idDestination, world), bottomZ(idDestination, world));
+        plugin.getSqlManager()
+                .addPlot(filledPlot, idDestination, topX(idDestination, world), bottomX(idDestination, world), topZ(idDestination, world),
+                        bottomZ(idDestination, world));
         addPlot(world, idDestination, filledPlot);
 
         setOwnerSign(world, filledPlot);
@@ -711,7 +722,7 @@ public class PlotMeCoreManager {
 
         ILocation bottom = getGenManager(world).getBottom(world, id);
         ILocation top = getGenManager(world).getTop(world, id);
-        if(reason.equals(ClearReason.Clear)) {
+        if (reason.equals(ClearReason.Clear)) {
             adjustWall(world, plot.getId(), true);
         } else {
             adjustWall(world, plot.getId(), false);
@@ -881,32 +892,32 @@ public class PlotMeCoreManager {
         
         ILocation middle = bottom.clone().add(top.getX() - bottom.getX(), 0, top.getZ() - bottom.getZ());
         middle.setY(getGenManager(world).getRoadHeight(world.getName()) + 1);*/
-        
+
         return getGenManager(world).getPlotMiddle(world, id);
     }
-    
+
     public void UpdatePlayerNameFromId(final UUID uuid, final String name) {
         plugin.getSqlManager().updatePlotsNewUUID(uuid, name);
-        
+
         plugin.getServerBridge().runTaskAsynchronously(new Runnable() {
             @Override
             public void run() {
                 for (PlotMapInfo pmi : plotmaps.values()) {
-                    for(Plot plot : pmi.getLoadedPlots().values()) {
+                    for (Plot plot : pmi.getLoadedPlots().values()) {
 
                         //Owner
-                        if(plot.getOwnerId() != null && plot.getOwnerId().equals(uuid)) {
+                        if (plot.getOwnerId() != null && plot.getOwnerId().equals(uuid)) {
                             plot.setOwner(name);
                         }
-                        
+
                         //Bidder
-                        if(plot.getCurrentBidderId() != null && plot.getCurrentBidderId().equals(uuid)) {
+                        if (plot.getCurrentBidderId() != null && plot.getCurrentBidderId().equals(uuid)) {
                             plot.setCurrentBidder(name);
                         }
-                        
+
                         //Allowed
                         plot.allowed().replace(name, name, uuid);
-                        
+
                         //Denied
                         plot.denied().replace(name, name, uuid);
                     }
@@ -914,7 +925,7 @@ public class PlotMeCoreManager {
             }
         });
     }
-    
+
     /**
      * Gets the value of that plot property
      *
@@ -928,7 +939,7 @@ public class PlotMeCoreManager {
         Plot plot = getPlotById(id, world);
         return getPlotProperty(plot, pluginname, property);
     }
-    
+
     /**
      * Gets the value of that plot property
      *
@@ -940,7 +951,7 @@ public class PlotMeCoreManager {
     public String getPlotProperty(Plot plot, String pluginname, String property) {
         return plot.getPlotProperty(pluginname, property);
     }
-    
+
     /**
      * Sets the value of that plot property
      *
@@ -955,7 +966,7 @@ public class PlotMeCoreManager {
         Plot plot = getPlotById(id, world);
         return plot.setPlotProperty(pluginname, property, value);
     }
-    
+
     /**
      * Sets the value of that plot property
      *

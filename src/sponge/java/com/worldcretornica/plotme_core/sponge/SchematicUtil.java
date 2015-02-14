@@ -1,9 +1,10 @@
 package com.worldcretornica.plotme_core.sponge;
 
-import com.worldcretornica.schematic.*;
+import com.worldcretornica.schematic.Schematic;
 import org.spongepowered.api.world.Location;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 
 public class SchematicUtil extends SpongeAbstractSchematicUtil {
 

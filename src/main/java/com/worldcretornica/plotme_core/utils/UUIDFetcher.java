@@ -10,7 +10,12 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.ByteBuffer;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.Callable;
 
 public class UUIDFetcher implements Callable<Map<String, UUID>> {
@@ -48,7 +53,7 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
         connection.setDoOutput(true);
         return connection;
     }
-    
+
     private static HttpURLConnection createAtTimeConnection(String username) throws Exception {
         URL url = new URL(PROFILE_AT_TIME_URL.replace("@USERNAME@", username));
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -91,11 +96,11 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
         Map<String, UUID> uuidMap = new HashMap<>();
         int requests = (int) Math.ceil(names.size() / PROFILES_PER_REQUEST);
         int retries = 0;
-        
+
         for (int i = 0; i < requests; i++) {
-            
+
             List<String> missinguuid = new ArrayList<>();
-            
+
             //First step, get people that didn't change name
             boolean success = false;
             while (!success) {
@@ -112,15 +117,15 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
                         UUID uuid = UUIDFetcher.getUUID(id);
                         uuidMap.put(name.toLowerCase(), uuid);
                     }
-                    
-                    for(String name : sublist) {
+
+                    for (String name : sublist) {
                         if (!uuidMap.containsKey(name)) {
                             missinguuid.add(name);
                         }
                     }
-                    
+
                     success = true;
-                } catch(Exception ex) {
+                } catch (Exception ex) {
                     ex.printStackTrace();
                     try {
                         //If we got an exception, retry in 30 seconds
@@ -133,17 +138,17 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
                     retries += 1;
                 }
             }
-            
+
             //Step 2, check people that changed name since Febuary 2nd
             if (!missinguuid.isEmpty()) {
                 for (String name : missinguuid) {
                     success = false;
                     while (!success) {
                         HttpURLConnection connection = null;
-                        
+
                         try {
                             connection = createAtTimeConnection(name);
-                        } catch(Exception ex) {
+                        } catch (Exception ex) {
                             //ex.printStackTrace();
                             try {
                                 //If we got an exception, retry in 30 seconds
@@ -155,7 +160,7 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
                             }
                             retries += 1;
                         }
-                        
+
                         if (connection != null) {
                             try {
                                 JSONObject jsonProfile = (JSONObject) jsonParser.parse(new InputStreamReader(connection.getInputStream()));
@@ -163,7 +168,7 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
                                 String newname = (String) jsonProfile.get("name");
                                 UUID uuid = UUIDFetcher.getUUID(id);
                                 uuidMap.put(name.toLowerCase() + ";" + newname, uuid);
-                            } catch(Exception ex) {
+                            } catch (Exception ex) {
                                 //Unable to find name at mojang...
                                 uuidMap.put(name.toLowerCase() + ";", null);
                             }
@@ -175,14 +180,14 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
                     }
                 }
             }
-            
+
             if (rateLimiting && i != requests - 1) {
                 try {
                     Thread.sleep(1100L);
                 } catch (InterruptedException ignored) {
                 }
             }
-            
+
             retries = 0;
         }
         return uuidMap;

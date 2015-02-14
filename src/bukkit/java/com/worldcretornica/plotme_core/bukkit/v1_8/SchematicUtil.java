@@ -1,17 +1,64 @@
 package com.worldcretornica.plotme_core.bukkit.v1_8;
 
-import com.worldcretornica.schematic.*;
+import com.worldcretornica.schematic.Attribute;
 import com.worldcretornica.schematic.Entity;
 import com.worldcretornica.schematic.Item;
-import com.worldcretornica.schematic.jnbt.*;
-import org.bukkit.*;
-import org.bukkit.block.*;
+import com.worldcretornica.schematic.ItemTag;
+import com.worldcretornica.schematic.Leash;
+import com.worldcretornica.schematic.Pattern;
+import com.worldcretornica.schematic.Pose;
+import com.worldcretornica.schematic.RecordItem;
+import com.worldcretornica.schematic.Schematic;
+import com.worldcretornica.schematic.TileEntity;
+import com.worldcretornica.schematic.jnbt.ByteArrayTag;
+import com.worldcretornica.schematic.jnbt.ByteTag;
+import com.worldcretornica.schematic.jnbt.CompoundTag;
+import com.worldcretornica.schematic.jnbt.DoubleTag;
+import com.worldcretornica.schematic.jnbt.FloatTag;
+import com.worldcretornica.schematic.jnbt.IntTag;
+import com.worldcretornica.schematic.jnbt.ListTag;
+import com.worldcretornica.schematic.jnbt.NBTInputStream;
+import com.worldcretornica.schematic.jnbt.ShortTag;
+import com.worldcretornica.schematic.jnbt.StringTag;
+import com.worldcretornica.schematic.jnbt.Tag;
+import org.bukkit.Art;
+import org.bukkit.Bukkit;
+import org.bukkit.DyeColor;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Rotation;
+import org.bukkit.SkullType;
+import org.bukkit.World;
+import org.bukkit.block.Banner;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.BrewingStand;
+import org.bukkit.block.CommandBlock;
+import org.bukkit.block.CreatureSpawner;
+import org.bukkit.block.Furnace;
+import org.bukkit.block.Jukebox;
+import org.bukkit.block.NoteBlock;
+import org.bukkit.block.Sign;
+import org.bukkit.block.Skull;
 import org.bukkit.block.banner.PatternType;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Ageable;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Guardian;
+import org.bukkit.entity.Horse;
 import org.bukkit.entity.Horse.Style;
 import org.bukkit.entity.Horse.Variant;
+import org.bukkit.entity.ItemFrame;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Painting;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Rabbit;
 import org.bukkit.entity.Rabbit.Type;
+import org.bukkit.entity.Sheep;
+import org.bukkit.entity.Skeleton;
 import org.bukkit.entity.Skeleton.SkeletonType;
+import org.bukkit.entity.Tameable;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
@@ -23,7 +70,12 @@ import org.bukkit.util.Vector;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 public class SchematicUtil extends com.worldcretornica.plotme_core.bukkit.v1_7.SchematicUtil {
 
@@ -1305,8 +1357,12 @@ public class SchematicUtil extends com.worldcretornica.plotme_core.bukkit.v1_7.S
 
                     if (livingentity instanceof Tameable) {
                         Tameable tameable = (Tameable) livingentity;
-                        if (owneruuid != null) tameable.setOwner(Bukkit.getOfflinePlayer(UUID.fromString(owneruuid)));
-                        if (tame != null) tameable.setTamed(tame != 0);
+                        if (owneruuid != null) {
+                            tameable.setOwner(Bukkit.getOfflinePlayer(UUID.fromString(owneruuid)));
+                        }
+                        if (tame != null) {
+                            tameable.setTamed(tame != 0);
+                        }
                     }
 
                     if (livingentity instanceof Skeleton && skeletontype != null) {
@@ -1423,8 +1479,12 @@ public class SchematicUtil extends com.worldcretornica.plotme_core.bukkit.v1_7.S
                             }
                         }
 
-                        if (chestedhorse != null) horse.setCarryingChest(chestedhorse != 0);
-                        if (temper != null) horse.setDomestication(temper);
+                        if (chestedhorse != null) {
+                            horse.setCarryingChest(chestedhorse != 0);
+                        }
+                        if (temper != null) {
+                            horse.setDomestication(temper);
+                        }
 
                         if (variant != null) {
                             switch (variant) {

@@ -93,15 +93,21 @@ public class Entity extends AbstractSchematicElement {
 
     private final Pose pose;
 
-    public Entity(Byte dir, Byte direction, Byte invulnerable, Byte onground, Short air, Short fire, Integer dimension, Integer portalcooldown, Integer tilex, 
+    public Entity(Byte dir, Byte direction, Byte invulnerable, Byte onground, Short air, Short fire, Integer dimension, Integer portalcooldown,
+            Integer tilex,
             Integer tiley, Integer tilez, Float falldistance, String id, String motive, List<Double> motion, List<Double> pos, List<Float> rotation,
-            Byte canpickuploot, Byte color, Byte customnamevisible, Byte leashed, Byte persistencerequired, Byte sheared, Short attacktime, Short deathtime, 
-            Short health, Short hurttime, Integer age, Integer inlove, Float absorptionamount, Float healf, String customname, List<Attribute> attributes, 
-            List<Float> dropchances, Item itemheld, Item feetarmor, Item headarmor, Item chestarmor, Item legarmor, Byte skeletontype, Entity riding, Leash leash, 
-            Item item, Byte isbaby, List<Item> items, Integer transfercooldown, Short fuel, Double pushx, Double pushz, Integer tntfuse, Byte itemrotation,
+            Byte canpickuploot, Byte color, Byte customnamevisible, Byte leashed, Byte persistencerequired, Byte sheared, Short attacktime,
+            Short deathtime,
+            Short health, Short hurttime, Integer age, Integer inlove, Float absorptionamount, Float healf, String customname,
+            List<Attribute> attributes,
+            List<Float> dropchances, Item itemheld, Item feetarmor, Item headarmor, Item chestarmor, Item legarmor, Byte skeletontype, Entity riding,
+            Leash leash,
+            Item item, Byte isbaby, List<Item> items, Integer transfercooldown, Short fuel, Double pushx, Double pushz, Integer tntfuse,
+            Byte itemrotation,
             Float itemdropchance, Byte agelocked, Byte invisible, Byte nobaseplate, Byte nogravity, Byte showarms, Byte silent, Byte small,
             Byte elder, Integer forcedage, Integer hurtbytimestamp, Integer morecarrotsticks, Integer rabbittype, Integer disabledslots,
-            Pose pose, Byte bred, Byte chestedhorse, Byte eatinghaystack, Byte hasreproduced, Byte tame, Integer temper, Integer type, Integer variant,
+            Pose pose, Byte bred, Byte chestedhorse, Byte eatinghaystack, Byte hasreproduced, Byte tame, Integer temper, Integer type,
+            Integer variant,
             String owneruuid, Byte facing) {
         this.dir = dir;
         this.direction = direction;
@@ -181,172 +187,387 @@ public class Entity extends AbstractSchematicElement {
         this.facing = facing;
     }
 
-    public Byte getDir() { return dir; }
-    public Byte getDirection() { return direction; }
-    public Byte getInvulnerable() { return invulnerable; }
-    public Byte getOnGround() { return onground; }
-    public Byte getCanPickupLoot() { return canpickuploot; }
-    public Byte getColor() { return color; }
-    public Byte getCustomNameVisible() { return customnamevisible; }
-    public Byte getLeashed() { return leashed; }
-    public Byte getPersistenceRequired() { return persistencerequired; }
-    public Byte getSheared() { return sheared; }
-    public Byte getSkeletonType() { return skeletontype; }
-    public Byte getIsBaby() { return isbaby; }
-    public Byte getItemRotation() { return itemrotation; }
-    public Byte getAgeLocked() { return agelocked; }
-    public Byte getInvisible() { return invisible; }
-    public Byte getNoBasePlate() { return nobaseplate; }
-    public Byte getNoGravity() { return nogravity; }
-    public Byte getShowArms() { return showarms; }
-    public Byte getSilent() { return silent; }
-    public Byte getSmall() { return small; }
-    public Byte getElder() { return elder; }
-    public Byte getBred() { return bred; }
-    public Byte getChestedHorse() { return chestedhorse; }
-    public Byte getEatingHaystack() { return eatinghaystack; }
-    public Byte getHasReproduced() { return hasreproduced; }
-    public Byte getTame() { return tame; }
-    public Byte getFacing() { return facing; }
+    public Byte getDir() {
+        return dir;
+    }
 
-    public Double getPushX() { return pushx; }
-    public Double getPushZ() { return pushz; }
+    public Byte getDirection() {
+        return direction;
+    }
 
-    public Entity getRiding() { return riding; }
+    public Byte getInvulnerable() {
+        return invulnerable;
+    }
 
-    public Float getFallDistance() { return falldistance; }
-    public Float getAbsorptionAmount() { return absorptionamount; }
-    public Float getHealF() { return healf; }
-    public Float getItemDropChance() { return itemdropchance; }
+    public Byte getOnGround() {
+        return onground;
+    }
 
-    public Integer getDimension() { return dimension; }
-    public Integer getPortalCooldown() { return portalcooldown; }
-    public Integer getTileX() { return tilex; }
-    public Integer getTileY() { return tiley; }
-    public Integer getTileZ() { return tilez; }
-    public Integer getAge() { return age; }
-    public Integer getInLove() { return inlove; }
-    public Integer getTransferCooldown() { return transfercooldown; }
-    public Integer getTNTFuse() { return tntfuse; }
-    public Integer getForcedAge() { return forcedage; }
-    public Integer getHurtByTimestamp() { return hurtbytimestamp; }
-    public Integer getMoreCarrotSticks() { return morecarrotsticks; }
-    public Integer getRabbitType() { return rabbittype; }
-    public Integer getDisabledSlots() { return disabledslots; }
-    public Integer getTemper() { return temper; }
-    public Integer getType() { return type; }
-    public Integer getVariant() { return variant; }
+    public Byte getCanPickupLoot() {
+        return canpickuploot;
+    }
 
-    public Item getItem() { return item; }
-    
-    public Item getItemHeld() { return itemheld; }
-    public Item getFeetArmor() { return feetarmor; }
-    public Item getLegArmor() { return legarmor; }
-    public Item getHeadArmor() { return headarmor; }
-    public Item getChestArmor() { return chestarmor; }
+    public Byte getColor() {
+        return color;
+    }
 
-    public Leash getLeash() { return leash; }
-    
-    public Pose getPose() { return pose; }
+    public Byte getCustomNameVisible() {
+        return customnamevisible;
+    }
 
-    public Short getAir() { return air; }
-    public Short getFire() { return fire; }
-    public Short getAttackTime() { return attacktime; }
-    public Short getDeathTime() { return deathtime; }
-    public Short getHealth() { return health; }
-    public Short getHurtTime() { return hurttime; }
-    public Short getFuel() { return fuel; }
+    public Byte getLeashed() {
+        return leashed;
+    }
 
-    public String getId() { return id; }
-    public String getMotive() { return motive; }
-    public String getCustomName() { return customname; }
-    public String getOwnerUUID() { return owneruuid; }
+    public Byte getPersistenceRequired() {
+        return persistencerequired;
+    }
 
-    public List<Double> getMotion() { return motion; }
-    public List<Double> getPos() { return pos; }
-    public List<Float> getRotation() { return rotation; }
-    public List<Attribute> getAttributes() { return attributes; }
-    public List<Float> getDropChances() { return dropchances; }
-    public List<Item> getItems() { return items; }
-    
-    public String toString()
-    {
-    	return "{" + this.getClass().getName() + 
-    	        ": dir=" + Sanitize(dir) + 
-    	        ", direction=" + Sanitize(direction) + 
-    	        ", invulnerable=" + Sanitize(invulnerable) +
-    			", onground=" + Sanitize(onground) + 
-    			", air=" + Sanitize(air) + 
-    			", fire=" + Sanitize(fire) + 
-    			", dimension=" + Sanitize(dimension) + 
-    			", portalcooldown=" + Sanitize(portalcooldown) +
-    			", tilex=" + Sanitize(tilex) + 
-    			", tiley=" + Sanitize(tiley) + 
-    			", tilez=" + Sanitize(tilez) + 
-    			", falldistance=" + Sanitize(falldistance) + 
-    			", id=" + Sanitize(id) +
-    			", motive=" + Sanitize(motive) + 
-    			", motion=" + Sanitize(motion) + 
-    			", pos=" + Sanitize(pos) + 
-    			", rotation=" + Sanitize(rotation) + 
-                ", canpickuploot=" + Sanitize(canpickuploot) + 
-                ", color=" + Sanitize(color) + 
-                ", customnamevisible=" + Sanitize(customnamevisible) + 
-                ", leashed=" + Sanitize(leashed) + 
-                ", persistencerequired=" + Sanitize(persistencerequired) + 
-                ", sheared=" + Sanitize(sheared) + 
-                ", attacktime=" + Sanitize(attacktime) + 
-                ", deathtime=" + Sanitize(deathtime) + 
-                ", health=" + Sanitize(health) + 
-                ", hurttime=" + Sanitize(hurttime) + 
-                ", age=" + Sanitize(age) + 
-                ", inlove=" + Sanitize(inlove) + 
-                ", absorptionamount=" + Sanitize(absorptionamount) + 
-                ", healf=" + Sanitize(healf) + 
-                ", customname=" + Sanitize(customname) + 
-                ", attributes=" + Sanitize(attributes) + 
-                ", dropchances=" + Sanitize(dropchances) + 
+    public Byte getSheared() {
+        return sheared;
+    }
+
+    public Byte getSkeletonType() {
+        return skeletontype;
+    }
+
+    public Byte getIsBaby() {
+        return isbaby;
+    }
+
+    public Byte getItemRotation() {
+        return itemrotation;
+    }
+
+    public Byte getAgeLocked() {
+        return agelocked;
+    }
+
+    public Byte getInvisible() {
+        return invisible;
+    }
+
+    public Byte getNoBasePlate() {
+        return nobaseplate;
+    }
+
+    public Byte getNoGravity() {
+        return nogravity;
+    }
+
+    public Byte getShowArms() {
+        return showarms;
+    }
+
+    public Byte getSilent() {
+        return silent;
+    }
+
+    public Byte getSmall() {
+        return small;
+    }
+
+    public Byte getElder() {
+        return elder;
+    }
+
+    public Byte getBred() {
+        return bred;
+    }
+
+    public Byte getChestedHorse() {
+        return chestedhorse;
+    }
+
+    public Byte getEatingHaystack() {
+        return eatinghaystack;
+    }
+
+    public Byte getHasReproduced() {
+        return hasreproduced;
+    }
+
+    public Byte getTame() {
+        return tame;
+    }
+
+    public Byte getFacing() {
+        return facing;
+    }
+
+    public Double getPushX() {
+        return pushx;
+    }
+
+    public Double getPushZ() {
+        return pushz;
+    }
+
+    public Entity getRiding() {
+        return riding;
+    }
+
+    public Float getFallDistance() {
+        return falldistance;
+    }
+
+    public Float getAbsorptionAmount() {
+        return absorptionamount;
+    }
+
+    public Float getHealF() {
+        return healf;
+    }
+
+    public Float getItemDropChance() {
+        return itemdropchance;
+    }
+
+    public Integer getDimension() {
+        return dimension;
+    }
+
+    public Integer getPortalCooldown() {
+        return portalcooldown;
+    }
+
+    public Integer getTileX() {
+        return tilex;
+    }
+
+    public Integer getTileY() {
+        return tiley;
+    }
+
+    public Integer getTileZ() {
+        return tilez;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public Integer getInLove() {
+        return inlove;
+    }
+
+    public Integer getTransferCooldown() {
+        return transfercooldown;
+    }
+
+    public Integer getTNTFuse() {
+        return tntfuse;
+    }
+
+    public Integer getForcedAge() {
+        return forcedage;
+    }
+
+    public Integer getHurtByTimestamp() {
+        return hurtbytimestamp;
+    }
+
+    public Integer getMoreCarrotSticks() {
+        return morecarrotsticks;
+    }
+
+    public Integer getRabbitType() {
+        return rabbittype;
+    }
+
+    public Integer getDisabledSlots() {
+        return disabledslots;
+    }
+
+    public Integer getTemper() {
+        return temper;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public Integer getVariant() {
+        return variant;
+    }
+
+    public Item getItem() {
+        return item;
+    }
+
+    public Item getItemHeld() {
+        return itemheld;
+    }
+
+    public Item getFeetArmor() {
+        return feetarmor;
+    }
+
+    public Item getLegArmor() {
+        return legarmor;
+    }
+
+    public Item getHeadArmor() {
+        return headarmor;
+    }
+
+    public Item getChestArmor() {
+        return chestarmor;
+    }
+
+    public Leash getLeash() {
+        return leash;
+    }
+
+    public Pose getPose() {
+        return pose;
+    }
+
+    public Short getAir() {
+        return air;
+    }
+
+    public Short getFire() {
+        return fire;
+    }
+
+    public Short getAttackTime() {
+        return attacktime;
+    }
+
+    public Short getDeathTime() {
+        return deathtime;
+    }
+
+    public Short getHealth() {
+        return health;
+    }
+
+    public Short getHurtTime() {
+        return hurttime;
+    }
+
+    public Short getFuel() {
+        return fuel;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getMotive() {
+        return motive;
+    }
+
+    public String getCustomName() {
+        return customname;
+    }
+
+    public String getOwnerUUID() {
+        return owneruuid;
+    }
+
+    public List<Double> getMotion() {
+        return motion;
+    }
+
+    public List<Double> getPos() {
+        return pos;
+    }
+
+    public List<Float> getRotation() {
+        return rotation;
+    }
+
+    public List<Attribute> getAttributes() {
+        return attributes;
+    }
+
+    public List<Float> getDropChances() {
+        return dropchances;
+    }
+
+    public List<Item> getItems() {
+        return items;
+    }
+
+    public String toString() {
+        return "{" + this.getClass().getName() +
+                ": dir=" + Sanitize(dir) +
+                ", direction=" + Sanitize(direction) +
+                ", invulnerable=" + Sanitize(invulnerable) +
+                ", onground=" + Sanitize(onground) +
+                ", air=" + Sanitize(air) +
+                ", fire=" + Sanitize(fire) +
+                ", dimension=" + Sanitize(dimension) +
+                ", portalcooldown=" + Sanitize(portalcooldown) +
+                ", tilex=" + Sanitize(tilex) +
+                ", tiley=" + Sanitize(tiley) +
+                ", tilez=" + Sanitize(tilez) +
+                ", falldistance=" + Sanitize(falldistance) +
+                ", id=" + Sanitize(id) +
+                ", motive=" + Sanitize(motive) +
+                ", motion=" + Sanitize(motion) +
+                ", pos=" + Sanitize(pos) +
+                ", rotation=" + Sanitize(rotation) +
+                ", canpickuploot=" + Sanitize(canpickuploot) +
+                ", color=" + Sanitize(color) +
+                ", customnamevisible=" + Sanitize(customnamevisible) +
+                ", leashed=" + Sanitize(leashed) +
+                ", persistencerequired=" + Sanitize(persistencerequired) +
+                ", sheared=" + Sanitize(sheared) +
+                ", attacktime=" + Sanitize(attacktime) +
+                ", deathtime=" + Sanitize(deathtime) +
+                ", health=" + Sanitize(health) +
+                ", hurttime=" + Sanitize(hurttime) +
+                ", age=" + Sanitize(age) +
+                ", inlove=" + Sanitize(inlove) +
+                ", absorptionamount=" + Sanitize(absorptionamount) +
+                ", healf=" + Sanitize(healf) +
+                ", customname=" + Sanitize(customname) +
+                ", attributes=" + Sanitize(attributes) +
+                ", dropchances=" + Sanitize(dropchances) +
                 ", itemheld=" + Sanitize(itemheld) +
                 ", headarmor=" + Sanitize(headarmor) +
                 ", chestarmor=" + Sanitize(chestarmor) +
                 ", legarmor=" + Sanitize(legarmor) +
                 ", feetarmor=" + Sanitize(feetarmor) +
                 ", skeletontype=" + Sanitize(skeletontype) +
-                ", riding=" + Sanitize(riding) + 
-                ", leash=" + Sanitize(leash) + 
-                ", item=" + Sanitize(item) + 
-                ", isbaby=" + Sanitize(isbaby) + 
-                ", items=" + Sanitize(items) + 
-                ", transfercooldown=" + Sanitize(transfercooldown) + 
-                ", fuel=" + Sanitize(fuel) + 
-                ", pushx=" + Sanitize(pushx) + 
-                ", pushz=" + Sanitize(pushz) + 
-                ", tntfuse=" + Sanitize(tntfuse) + 
-                ", itemrotation=" + Sanitize(itemrotation) + 
-                ", itemdropchance=" + Sanitize(itemdropchance) + 
-                ", agelocked=" + Sanitize(agelocked) + 
-                ", invisible=" + Sanitize(invisible) + 
-                ", nobaseplate=" + Sanitize(nobaseplate) + 
-                ", nogravity=" + Sanitize(nogravity) + 
-                ", showarms=" + Sanitize(showarms) + 
-                ", silent=" + Sanitize(silent) + 
-                ", small=" + Sanitize(small) + 
+                ", riding=" + Sanitize(riding) +
+                ", leash=" + Sanitize(leash) +
+                ", item=" + Sanitize(item) +
+                ", isbaby=" + Sanitize(isbaby) +
+                ", items=" + Sanitize(items) +
+                ", transfercooldown=" + Sanitize(transfercooldown) +
+                ", fuel=" + Sanitize(fuel) +
+                ", pushx=" + Sanitize(pushx) +
+                ", pushz=" + Sanitize(pushz) +
+                ", tntfuse=" + Sanitize(tntfuse) +
+                ", itemrotation=" + Sanitize(itemrotation) +
+                ", itemdropchance=" + Sanitize(itemdropchance) +
+                ", agelocked=" + Sanitize(agelocked) +
+                ", invisible=" + Sanitize(invisible) +
+                ", nobaseplate=" + Sanitize(nobaseplate) +
+                ", nogravity=" + Sanitize(nogravity) +
+                ", showarms=" + Sanitize(showarms) +
+                ", silent=" + Sanitize(silent) +
+                ", small=" + Sanitize(small) +
                 ", elder=" + Sanitize(elder) +
-                ", forcedage=" + Sanitize(forcedage) + 
-                ", hurtbytimestamp=" + Sanitize(hurtbytimestamp) + 
-                ", morecarrotsticks=" + Sanitize(morecarrotsticks) + 
-                ", rabbittype=" + Sanitize(rabbittype) + 
-                ", disabledslots=" + Sanitize(disabledslots) + 
-                ", pose=" + Sanitize(pose) + 
-                ", bred=" + Sanitize(bred) + 
-                ", chestedhorse=" + Sanitize(chestedhorse) + 
-                ", eatinghaystack=" + Sanitize(eatinghaystack) + 
-                ", hasreproduced=" + Sanitize(hasreproduced) + 
-                ", tame=" + Sanitize(tame) + 
-                ", temper=" + Sanitize(temper) + 
-                ", type=" + Sanitize(type) + 
-                ", variant=" + Sanitize(variant) + 
-                ", owneruuid=" + Sanitize(owneruuid) + 
+                ", forcedage=" + Sanitize(forcedage) +
+                ", hurtbytimestamp=" + Sanitize(hurtbytimestamp) +
+                ", morecarrotsticks=" + Sanitize(morecarrotsticks) +
+                ", rabbittype=" + Sanitize(rabbittype) +
+                ", disabledslots=" + Sanitize(disabledslots) +
+                ", pose=" + Sanitize(pose) +
+                ", bred=" + Sanitize(bred) +
+                ", chestedhorse=" + Sanitize(chestedhorse) +
+                ", eatinghaystack=" + Sanitize(eatinghaystack) +
+                ", hasreproduced=" + Sanitize(hasreproduced) +
+                ", tame=" + Sanitize(tame) +
+                ", temper=" + Sanitize(temper) +
+                ", type=" + Sanitize(type) +
+                ", variant=" + Sanitize(variant) +
+                ", owneruuid=" + Sanitize(owneruuid) +
                 ", facing=" + Sanitize(facing) + "}";
     }
 }

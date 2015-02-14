@@ -1,6 +1,10 @@
 package com.worldcretornica.plotme_core.commands;
 
-import com.worldcretornica.plotme_core.*;
+import com.worldcretornica.plotme_core.PermissionNames;
+import com.worldcretornica.plotme_core.Plot;
+import com.worldcretornica.plotme_core.PlotId;
+import com.worldcretornica.plotme_core.PlotMapInfo;
+import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotSellChangeEvent;
@@ -64,7 +68,8 @@ public class CmdSell extends PlotCommand {
                                             price = Double.parseDouble(args[1]);
                                         } catch (Exception e) {
                                             player.sendMessage(
-                                                    C("WordUsage") + ": §c /plotme sell <" + C("WordAmount") + ">§r " + C("WordExample") + ": §c/plotme sell 200");
+                                                    C("WordUsage") + ": §c /plotme sell <" + C("WordAmount") + ">§r " + C("WordExample")
+                                                            + ": §c/plotme sell 200");
                                             return true;
                                         }
                                     }

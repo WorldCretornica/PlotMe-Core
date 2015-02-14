@@ -90,10 +90,10 @@ public class Plot implements Cloneable {
     }
 
     public Plot(PlotMe_Core plugin, String owner, UUID ownerId, String world, String biome, Date expiredDate,
-                boolean finished,
-                PlayerList allowed, PlotId id, double customPrice, boolean sale, String finishedDate,
-                boolean protect, String bidder, UUID bidderId, double bid, boolean isAuctioned, PlayerList denied,
-                Map<String, Map<String, String>> metadata) {
+            boolean finished,
+            PlayerList allowed, PlotId id, double customPrice, boolean sale, String finishedDate,
+            boolean protect, String bidder, UUID bidderId, double bid, boolean isAuctioned, PlayerList denied,
+            Map<String, Map<String, String>> metadata) {
         this.plugin = plugin;
         setOwner(owner);
         setOwnerId(ownerId);
