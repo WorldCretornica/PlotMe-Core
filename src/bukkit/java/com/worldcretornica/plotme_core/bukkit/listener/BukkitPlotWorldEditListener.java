@@ -18,7 +18,6 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 public class BukkitPlotWorldEditListener implements Listener {
@@ -89,25 +88,6 @@ public class BukkitPlotWorldEditListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onPlayerTeleport(PlayerTeleportEvent event) {
-        BukkitPlayer player = (BukkitPlayer) plugin.wrapPlayer(event.getPlayer());
-        BukkitLocation from = new BukkitLocation(event.getFrom());
-        BukkitLocation to = new BukkitLocation(event.getTo());
-        if (event.getFrom() == null || event.getTo() == null) {
-            return;
-        }
-        if (manager.isPlotWorld(from)) {
-            if (manager.isPlotWorld(to)) {
-                worldEdit.setMask(player);
-            } else {
-                worldEdit.removeMask(player);
-            }
-        } else if (manager.isPlotWorld(to)) {
-            worldEdit.setMask(player);
-        }
-    }
-
-    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-    public void onPlayerPortal(PlayerPortalEvent event) {
         BukkitPlayer player = (BukkitPlayer) plugin.wrapPlayer(event.getPlayer());
         BukkitLocation from = new BukkitLocation(event.getFrom());
         BukkitLocation to = new BukkitLocation(event.getTo());
