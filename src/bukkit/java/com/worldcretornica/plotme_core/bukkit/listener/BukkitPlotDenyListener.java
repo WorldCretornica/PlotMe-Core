@@ -13,7 +13,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
 
 public class BukkitPlotDenyListener implements Listener {
 
@@ -47,6 +46,7 @@ public class BukkitPlotDenyListener implements Listener {
         }
     }
 
+/*
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerTeleport(PlayerTeleportEvent event) {
         BukkitPlayer player = (BukkitPlayer) plugin.wrapPlayer(event.getPlayer());
@@ -66,6 +66,7 @@ public class BukkitPlotDenyListener implements Listener {
             }
         }
     }
+*/
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerJoin(PlayerJoinEvent event) {
