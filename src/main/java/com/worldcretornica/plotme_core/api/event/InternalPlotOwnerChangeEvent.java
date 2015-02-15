@@ -1,7 +1,6 @@
 package com.worldcretornica.plotme_core.api.event;
 
 import com.worldcretornica.plotme_core.Plot;
-import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 
@@ -11,7 +10,7 @@ public class InternalPlotOwnerChangeEvent extends InternalPlotEvent implements I
     private final String newOwner;
     private boolean canceled;
 
-    public InternalPlotOwnerChangeEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer player, String newOwner) {
+    public InternalPlotOwnerChangeEvent(IWorld world, Plot plot, IPlayer player, String newOwner) {
         super(plot, world);
         this.player = player;
         this.newOwner = newOwner;

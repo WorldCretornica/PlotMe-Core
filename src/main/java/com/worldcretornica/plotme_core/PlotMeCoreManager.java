@@ -164,25 +164,6 @@ public class PlotMeCoreManager {
     }
 
     /**
-     * Set the auction sign on the plot
-     *
-     * @param world plotworld
-     * @param plot  plot to add sign to
-     */
-    public void setAuctionSign(IWorld world, Plot plot) {
-        String line1 = Util().C("SignOnAuction");
-        String line2;
-        if (plot.getCurrentBidder() == null) {
-            line2 = Util().C("SignMinimumBid");
-        } else {
-            line2 = Util().C("SignCurrentBid");
-        }
-        String line3 = String.valueOf(plot.getCurrentBid());
-        String line4 = "/plotme " + Util().C("CommandBid") + " <x>";
-        getGenManager(world).setAuctionDisplay(world, plot.getId(), line1, line2, line3, line4);
-    }
-
-    /**
      * Set the sell sign on the plot
      *
      * @param world plotworld

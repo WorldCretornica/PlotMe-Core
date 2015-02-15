@@ -17,12 +17,12 @@ public class PlotAddDeniedEvent extends PlotEvent implements Cancellable {
 
     public PlotAddDeniedEvent(PlotMe_Core instance, World world, Plot plot, Player player, String denied) {
         super(plot, world);
-        event = new InternalPlotAddDeniedEvent(instance, new BukkitWorld(world), plot, new BukkitPlayer(player), denied);
+        event = new InternalPlotAddDeniedEvent(new BukkitWorld(world), plot, new BukkitPlayer(player), denied);
     }
 
     public PlotAddDeniedEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer player, String denied) {
         super(plot, world);
-        event = new InternalPlotAddDeniedEvent(instance, world, plot, player, denied);
+        event = new InternalPlotAddDeniedEvent(world, plot, player, denied);
     }
 
     @Override

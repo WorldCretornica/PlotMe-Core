@@ -2,7 +2,6 @@ package com.worldcretornica.plotme_core.api.event;
 
 import com.worldcretornica.plotme_core.PlotId;
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
-import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
@@ -13,7 +12,7 @@ public class InternalPlotCreateEvent extends InternalPlotEvent implements ICance
     private final IPlayer creator;
     private boolean canceled;
 
-    public InternalPlotCreateEvent(PlotMe_Core instance, IWorld world, PlotId plotId, IPlayer creator) {
+    public InternalPlotCreateEvent(IWorld world, PlotId plotId, IPlayer creator) {
         super(null, world);
         this.plotId = plotId;
         this.creator = creator;

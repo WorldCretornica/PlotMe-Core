@@ -36,7 +36,6 @@ public class PlotMe_CorePlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         serverObjectBuilder = new BukkitServerBridge(this);
-
         AbstractSchematicUtil schematicutil = null;
 
         if (Bukkit.getVersion().contains("1.7")) {

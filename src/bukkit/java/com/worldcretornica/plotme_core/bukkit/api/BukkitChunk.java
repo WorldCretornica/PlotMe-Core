@@ -19,7 +19,6 @@ public class BukkitChunk implements IChunk {
     @Override
     public List<IEntity> getEntities() {
         List<IEntity> entities = new ArrayList<>();
-
         for (Entity e : chunk.getEntities()) {
             entities.add(new BukkitEntity(e));
         }

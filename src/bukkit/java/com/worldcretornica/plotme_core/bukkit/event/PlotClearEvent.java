@@ -17,12 +17,12 @@ public class PlotClearEvent extends PlotEvent implements Cancellable {
 
     public PlotClearEvent(PlotMe_Core instance, World world, Plot plot, Player clearer) {
         super(plot, world);
-        event = new InternalPlotClearEvent(instance, new BukkitWorld(world), plot, new BukkitPlayer(clearer));
+        event = new InternalPlotClearEvent(new BukkitWorld(world), plot, new BukkitPlayer(clearer));
     }
 
     public PlotClearEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer clearer) {
         super(plot, world);
-        event = new InternalPlotClearEvent(instance, world, plot, clearer);
+        event = new InternalPlotClearEvent(world, plot, clearer);
     }
 
     @Override

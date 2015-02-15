@@ -5,9 +5,7 @@ import com.worldcretornica.plotme_core.bukkit.api.BukkitCommandSender;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
 import com.worldcretornica.plotme_core.commands.CmdAdd;
 import com.worldcretornica.plotme_core.commands.CmdAddTime;
-import com.worldcretornica.plotme_core.commands.CmdAuction;
 import com.worldcretornica.plotme_core.commands.CmdAuto;
-import com.worldcretornica.plotme_core.commands.CmdBid;
 import com.worldcretornica.plotme_core.commands.CmdBiome;
 import com.worldcretornica.plotme_core.commands.CmdBiomes;
 import com.worldcretornica.plotme_core.commands.CmdBuy;
@@ -44,9 +42,7 @@ public class BukkitCommand implements CommandExecutor {
     private final PlotMe_Core api;
     private final CmdAdd add;
     private final CmdAddTime addTime;
-    private final CmdAuction auction;
     private final CmdAuto auto;
-    private final CmdBid bid;
     private final CmdBiome biome;
     private final CmdBiomes biomes;
     private final CmdBuy buy;
@@ -80,9 +76,7 @@ public class BukkitCommand implements CommandExecutor {
         api = instance.getAPI();
         add = new CmdAdd(api);
         addTime = new CmdAddTime(api);
-        auction = new CmdAuction(api);
         auto = new CmdAuto(api);
-        bid = new CmdBid(api);
         biome = new CmdBiome(api);
         biomes = new CmdBiomes(api);
         buy = new CmdBuy(api);
@@ -236,14 +230,8 @@ public class BukkitCommand implements CommandExecutor {
                     if ("dispose".equalsIgnoreCase(args[0])) {
                         return dispose.exec(player);
                     }
-                    if ("auction".equalsIgnoreCase(args[0])) {
-                        return auction.exec(player, args);
-                    }
                     if ("buy".equalsIgnoreCase(args[0])) {
                         return buy.exec(player);
-                    }
-                    if ("bid".equalsIgnoreCase(args[0])) {
-                        return bid.exec(player, args);
                     }
                     if ("middle".equalsIgnoreCase(args[0])) {
                         return middle.exec(player);

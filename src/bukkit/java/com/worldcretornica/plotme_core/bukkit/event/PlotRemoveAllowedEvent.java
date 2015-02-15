@@ -17,12 +17,12 @@ public class PlotRemoveAllowedEvent extends PlotEvent implements Cancellable {
 
     public PlotRemoveAllowedEvent(PlotMe_Core instance, World world, Plot plot, Player player, String removed) {
         super(plot, world);
-        event = new InternalPlotRemoveAllowedEvent(instance, new BukkitWorld(world), plot, new BukkitPlayer(player), removed);
+        event = new InternalPlotRemoveAllowedEvent(new BukkitWorld(world), plot, new BukkitPlayer(player), removed);
     }
 
     public PlotRemoveAllowedEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer player, String removed) {
         super(plot, world);
-        event = new InternalPlotRemoveAllowedEvent(instance, world, plot, player, removed);
+        event = new InternalPlotRemoveAllowedEvent(world, plot, player, removed);
     }
 
     @Override

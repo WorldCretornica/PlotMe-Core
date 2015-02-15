@@ -19,12 +19,12 @@ public class PlotTeleportHomeEvent extends PlotEvent implements Cancellable {
 
     public PlotTeleportHomeEvent(PlotMe_Core instance, World world, Plot plot, Player player) {
         super(plot, world);
-        event = new InternalPlotTeleportHomeEvent(instance, new BukkitWorld(world), plot, new BukkitPlayer(player));
+        event = new InternalPlotTeleportHomeEvent(new BukkitWorld(world), plot, new BukkitPlayer(player));
     }
 
     public PlotTeleportHomeEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer player) {
         super(plot, world);
-        event = new InternalPlotTeleportHomeEvent(instance, world, plot, player);
+        event = new InternalPlotTeleportHomeEvent(world, plot, player);
     }
 
     @Override

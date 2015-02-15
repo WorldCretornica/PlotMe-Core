@@ -3,7 +3,6 @@ package com.worldcretornica.plotme_core.api.event;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotId;
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
-import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
@@ -16,7 +15,7 @@ public class InternalPlotMoveEvent extends InternalPlotEvent implements ICancell
     private final IPlayer mover;
     private boolean canceled;
 
-    public InternalPlotMoveEvent(PlotMe_Core instance, IWorld world, PlotId fromId, PlotId toId, IPlayer mover) {
+    public InternalPlotMoveEvent(IWorld world, PlotId fromId, PlotId toId, IPlayer mover) {
         super(null, world);
         this.fromId = fromId;
         this.toId = toId;

@@ -17,12 +17,12 @@ public class PlotBidEvent extends PlotEvent implements Cancellable {
 
     public PlotBidEvent(PlotMe_Core instance, World world, Plot plot, Player bidder, double bid) {
         super(plot, world);
-        event = new InternalPlotBidEvent(instance, new BukkitWorld(world), plot, new BukkitPlayer(bidder), bid);
+        event = new InternalPlotBidEvent(new BukkitWorld(world), plot, new BukkitPlayer(bidder), bid);
     }
 
     public PlotBidEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer bidder, double bid) {
         super(plot, world);
-        event = new InternalPlotBidEvent(instance, world, plot, bidder, bid);
+        event = new InternalPlotBidEvent(world, plot, bidder, bid);
     }
 
     @Override

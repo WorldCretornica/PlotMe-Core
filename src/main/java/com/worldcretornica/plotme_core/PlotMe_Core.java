@@ -12,12 +12,14 @@ import java.util.HashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 public class PlotMe_Core {
 
     public static final String CAPTION_FILE = "captions.yml";
 
     public static final String WORLDS_CONFIG_SECTION = "worlds";
+    private static final Pattern COMPILE = Pattern.compile("jdbc:", Pattern.LITERAL);
     //Bridge
     private final IServerBridge serverBridge;
     private final AbstractSchematicUtil schematicutil;
@@ -193,11 +195,7 @@ public class PlotMe_Core {
     private void setupMySQL() {
         IConfigSection config = serverBridge.getConfig();
 
-        String mySQLconn = config.getString("mySQLconn", "jdbc:mysql://localhost:3306/minecraft");
-        String mySQLuname = config.getString("mySQLuname", "root");
-        String mySQLpass = config.getString("mySQLpass", "password");
-
-        setSqlManager(new SqlManager(this, mySQLuname, mySQLpass, mySQLconn));
+        setSqlManager(new SqlManager(this));
     }
 
     private void setupClearSpools() {

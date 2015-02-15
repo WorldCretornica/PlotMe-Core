@@ -13,12 +13,12 @@ public class PlotLoadEvent extends PlotEvent {
 
     public PlotLoadEvent(PlotMe_Core instance, World world, Plot plot) {
         super(plot, world);
-        event = new InternalPlotLoadEvent(instance, new BukkitWorld(world), plot);
+        event = new InternalPlotLoadEvent(new BukkitWorld(world), plot);
     }
 
     public PlotLoadEvent(PlotMe_Core instance, IWorld world, Plot plot) {
         super(plot, world);
-        event = new InternalPlotLoadEvent(instance, world, plot);
+        event = new InternalPlotLoadEvent(world, plot);
     }
 
     public InternalPlotLoadEvent getInternal() {

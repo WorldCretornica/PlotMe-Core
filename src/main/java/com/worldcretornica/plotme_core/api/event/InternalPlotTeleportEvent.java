@@ -1,7 +1,6 @@
 package com.worldcretornica.plotme_core.api.event;
 
 import com.worldcretornica.plotme_core.Plot;
-import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
@@ -13,7 +12,7 @@ public class InternalPlotTeleportEvent extends InternalPlotEvent implements ICan
     private final ILocation location;
     private boolean canceled;
 
-    public InternalPlotTeleportEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer player, ILocation location, String plotId) {
+    public InternalPlotTeleportEvent(IWorld world, Plot plot, IPlayer player, ILocation location, String plotId) {
         super(plot, world);
         this.player = player;
         this.location = location;

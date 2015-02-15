@@ -20,12 +20,12 @@ public class PlotBiomeChangeEvent extends PlotEvent implements Cancellable {
 
     public PlotBiomeChangeEvent(PlotMe_Core instance, World world, Plot plot, Player player, Biome biome) {
         super(plot, world);
-        event = new InternalPlotBiomeChangeEvent(instance, new BukkitWorld(world), plot, new BukkitPlayer(player), new BukkitBiome(biome));
+        event = new InternalPlotBiomeChangeEvent(new BukkitWorld(world), plot, new BukkitPlayer(player), new BukkitBiome(biome));
     }
 
     public PlotBiomeChangeEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer player, IBiome biome) {
         super(plot, world);
-        event = new InternalPlotBiomeChangeEvent(instance, world, plot, player, biome);
+        event = new InternalPlotBiomeChangeEvent(world, plot, player, biome);
     }
 
     @Override

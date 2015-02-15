@@ -1,7 +1,6 @@
 package com.worldcretornica.plotme_core.api.event;
 
 import com.worldcretornica.plotme_core.Plot;
-import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 
@@ -10,7 +9,7 @@ public class InternalPlotClearEvent extends InternalPlotEvent implements ICancel
     private final IPlayer clearer;
     private boolean canceled;
 
-    public InternalPlotClearEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer clearer) {
+    public InternalPlotClearEvent(IWorld world, Plot plot, IPlayer clearer) {
         super(plot, world);
         this.clearer = clearer;
     }

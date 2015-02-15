@@ -28,23 +28,20 @@ public class SqlManager {
     private static final String SQLITE_DRIVER = "org.sqlite.JDBC";
     private static final Pattern COMPILE = Pattern.compile("^[a-zA-Z0-9_]{1,16}$");
     private final PlotMe_Core plugin;
-    private final String mySQLuname;
-    private final String mySQLpass;
-    private final String mySQLconn;
     private Connection conn;
 
-    public SqlManager(PlotMe_Core plugin, String sqlusername, String sqlpassword, String sqlconnection) {
+    public SqlManager(PlotMe_Core plugin) {
         this.plugin = plugin;
-        mySQLconn = sqlconnection;
-        mySQLpass = sqlpassword;
-        mySQLuname = sqlusername;
     }
 
     public Connection initialize() {
         try {
             if (isUsingMySQL()) {
                 Class.forName("com.mysql.jdbc.Driver");
-                conn = DriverManager.getConnection(mySQLconn, mySQLuname, mySQLpass);
+                String url = plugin.getServerBridge().getConfig().getString("mySQLconn", "jdbc:mysql://localhost:3306/minecraft");
+                String user = plugin.getServerBridge().getConfig().getString("mySQLuname", "root");
+                String pass = plugin.getServerBridge().getConfig().getString("mySQLpass", "password");
+                conn = DriverManager.getConnection(url, user, pass);
                 conn.setAutoCommit(false);
             } else {
                 Class.forName(SQLITE_DRIVER);
@@ -431,11 +428,6 @@ public class SqlManager {
             if (plot.getOwnerId() == null) {
                 fetchUUIDAsync(id, plot.getWorld().toLowerCase(), "owner", plot.getOwner());
             }
-
-            if (plot.getCurrentBidder() != null && !plot.getCurrentBidder().isEmpty() && plot.getCurrentBidderId() == null) {
-                fetchUUIDAsync(id, plot.getWorld().toLowerCase(), "bidder", plot.getCurrentBidder());
-            }
-
         } catch (SQLException ex) {
             plugin.getLogger().severe("Insert Exception :");
             plugin.getLogger().severe(ex.getMessage());
@@ -469,10 +461,6 @@ public class SqlManager {
 
             if ("owner".equalsIgnoreCase(field)) {
                 fetchUUIDAsync(id, world, "owner", value.toString());
-            } else if ("currentbidder".equalsIgnoreCase(field)) {
-                if (value != null) {
-                    fetchUUIDAsync(id, world, "bidder", value.toString());
-                }
             }
         } catch (SQLException ex) {
             plugin.getLogger().severe("Insert exception :");
@@ -1996,11 +1984,6 @@ public class SqlManager {
                                     "UPDATE plotmePlots SET ownerid = ?, owner = ? WHERE LOWER(owner) = ? AND idX = '" + id.getX() + "' AND idZ = '"
                                             + id.getZ() + "' AND LOWER(world) = '" + world + "'");
                             break;
-                        case "bidder":
-                            ps = conn.prepareStatement(
-                                    "UPDATE plotmePlots SET currentbidderid = ?, currentbidder = ? WHERE LOWER(currentbidder) = ? AND idX = '"
-                                            + id.getX() + "' AND idZ = '" + id.getZ() + "' AND LOWER(world) = '" + world + "'");
-                            break;
                         case "allowed":
                             ps = conn.prepareStatement(
                                     "UPDATE plotmeAllowed SET playerid = ?, player = ? WHERE LOWER(player) = ? AND idX = '" + id.getX()
@@ -2039,10 +2022,6 @@ public class SqlManager {
                                 case "owner":
                                     plot.setOwner(newname);
                                     plot.setOwnerId(uuid);
-                                    break;
-                                case "bidder":
-                                    plot.setCurrentBidder(newname);
-                                    plot.setCurrentBidderId(uuid);
                                     break;
                                 case "allowed":
                                     plot.allowed().remove(name);

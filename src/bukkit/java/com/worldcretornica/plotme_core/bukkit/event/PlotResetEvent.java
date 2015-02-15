@@ -17,12 +17,12 @@ public class PlotResetEvent extends PlotEvent implements Cancellable {
 
     public PlotResetEvent(PlotMe_Core instance, World world, Plot plot, CommandSender reseter) {
         super(plot, world);
-        event = new InternalPlotResetEvent(instance, new BukkitWorld(world), plot, new BukkitCommandSender(reseter));
+        event = new InternalPlotResetEvent(new BukkitWorld(world), plot, new BukkitCommandSender(reseter));
     }
 
     public PlotResetEvent(PlotMe_Core instance, IWorld world, Plot plot, ICommandSender reseter) {
         super(plot, world);
-        event = new InternalPlotResetEvent(instance, world, plot, reseter);
+        event = new InternalPlotResetEvent(world, plot, reseter);
     }
 
     @Override
