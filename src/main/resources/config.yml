@@ -9,3 +9,7 @@ NbClearSpools: 3
 NbBlocksPerClearStep: 50000
 AdvancedLogging: false
 LoadAllPlotsOnStart: false
+#Internal Database Upgrade Settings
+#Don't modify unless you know what you are doing. The plugin will do this for you.
+CoreDatabaseUpdate: true
+mySQLConverter: true

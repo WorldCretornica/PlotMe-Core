@@ -35,4 +35,8 @@ public class MySQLConnector extends Database {
     public void createTables() {
 
     }
+
+    public void mySQLConversion () {
+
+    }
 }
