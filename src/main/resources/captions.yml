@@ -1,7 +1,3 @@
-# PlotMe Default Language file (english)
-# Do not edit this config, any changes will be overwritten.
-# To customise language, copy this file with the name caption-custom.yml
-# and set your language in config.yml to custom
 CommandCreateWorld: 'createworld'
 CommandCreateWorld-Cancel: 'cancel'
 CommandCreateWorld-Setting: 'set'
