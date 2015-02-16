@@ -425,7 +425,7 @@ public class BukkitPlotListener implements Listener {
             if (id == null) {
                 if (event.isSticky() && event.getBlock().getType().equals(Material.SLIME_BLOCK)) {
                     BukkitBlock block2 = new BukkitBlock(event.getBlock().getRelative(event.getDirection(), 3));
-                    PlotId id2 = manager.getPlotId(block.getLocation());
+                    PlotId id2 = manager.getPlotId(block2.getLocation());
                     if (id2 == null) {
                         event.setCancelled(true);
                     }
