@@ -13,6 +13,7 @@ import com.worldcretornica.plotme_core.bukkit.api.BukkitEntity;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitLocation;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
 import com.worldcretornica.plotme_core.bukkit.event.PlotWorldLoadEvent;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
@@ -78,7 +79,7 @@ public class BukkitPlotListener implements Listener {
                     event.setCancelled(true);
                 }
             } else {
-                PlotToClear ptc = api.getPlotLocked(location.getWorld().getName(), id);
+                PlotToClear ptc = api.getPlotLocked(location.getWorld(), id);
 
                 if (ptc != null) {
                     switch (ptc.getReason()) {
@@ -124,7 +125,7 @@ public class BukkitPlotListener implements Listener {
                     event.setCancelled(true);
                 }
             } else {
-                PlotToClear ptc = api.getPlotLocked(location.getWorld().getName(), id);
+                PlotToClear ptc = api.getPlotLocked(location.getWorld(), id);
 
                 if (ptc != null) {
                     switch (ptc.getReason()) {
@@ -168,7 +169,7 @@ public class BukkitPlotListener implements Listener {
                     player.sendMessage(api.getUtil().C("ErrCannotBuild"));
                     event.setCancelled(true);
                 } else {
-                    PlotToClear ptc = api.getPlotLocked(location.getWorld().getName(), id);
+                    PlotToClear ptc = api.getPlotLocked(location.getWorld(), id);
 
                     if (ptc != null) {
                         switch (ptc.getReason()) {
@@ -205,7 +206,7 @@ public class BukkitPlotListener implements Listener {
             Player player = event.getPlayer();
 
             PlotId plotId = manager.getPlotId(block.getLocation());
-            PlotToClear ptc = api.getPlotLocked(block.getWorld().getName(), plotId);
+            PlotToClear ptc = api.getPlotLocked(block.getWorld(), plotId);
 
             if (ptc != null) {
                 switch (ptc.getReason()) {
@@ -289,7 +290,7 @@ public class BukkitPlotListener implements Listener {
             if (id == null) {
                 event.setCancelled(true);
             } else {
-                PlotToClear ptc = api.getPlotLocked(location.getWorld().getName(), id);
+                PlotToClear ptc = api.getPlotLocked(location.getWorld(), id);
 
                 if (ptc != null) {
                     event.setCancelled(true);
@@ -308,7 +309,7 @@ public class BukkitPlotListener implements Listener {
             if (id == null) {
                 event.setCancelled(true);
             } else {
-                PlotToClear ptc = api.getPlotLocked(location.getWorld().getName(), id);
+                PlotToClear ptc = api.getPlotLocked(location.getWorld(), id);
 
                 if (ptc != null) {
                     event.setCancelled(true);
@@ -327,7 +328,7 @@ public class BukkitPlotListener implements Listener {
             if (id == null) {
                 event.setCancelled(true);
             } else {
-                PlotToClear ptc = api.getPlotLocked(location.getWorld().getName(), id);
+                PlotToClear ptc = api.getPlotLocked(location.getWorld(), id);
 
                 if (ptc != null) {
                     event.setCancelled(true);
@@ -346,7 +347,7 @@ public class BukkitPlotListener implements Listener {
             if (id == null) {
                 event.setCancelled(true);
             } else {
-                PlotToClear ptc = api.getPlotLocked(location.getWorld().getName(), id);
+                PlotToClear ptc = api.getPlotLocked(location.getWorld(), id);
 
                 if (ptc != null) {
                     event.setCancelled(true);
@@ -363,7 +364,7 @@ public class BukkitPlotListener implements Listener {
             if (id == null) {
                 event.setCancelled(true);
             } else {
-                PlotToClear ptc = api.getPlotLocked(location.getWorld().getName(), id);
+                PlotToClear ptc = api.getPlotLocked(location.getWorld(), id);
 
                 if (ptc != null) {
                     event.setCancelled(true);
@@ -382,7 +383,7 @@ public class BukkitPlotListener implements Listener {
             if (id == null) {
                 event.setCancelled(true);
             } else {
-                PlotToClear ptc = api.getPlotLocked(location.getWorld().getName(), id);
+                PlotToClear ptc = api.getPlotLocked(location.getWorld(), id);
 
                 if (ptc != null) {
                     event.setCancelled(true);
@@ -403,7 +404,7 @@ public class BukkitPlotListener implements Listener {
                 if (id == null) {
                     event.setCancelled(true);
                 } else {
-                    PlotToClear ptc = api.getPlotLocked(location.getWorld().getName(), id);
+                    PlotToClear ptc = api.getPlotLocked(location.getWorld(), id);
 
                     if (ptc != null) {
                         event.setCancelled(true);
@@ -416,15 +417,22 @@ public class BukkitPlotListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onBlockPistonRetract(BlockPistonRetractEvent event) {
         @SuppressWarnings("deprecation")
-        BukkitBlock block = new BukkitBlock(event.getRetractLocation().getBlock());
+        BukkitBlock block = new BukkitBlock(event.getBlock().getRelative(event.getDirection(), 2));
 
         if (manager.isPlotWorld(block.getWorld())) {
             PlotId id = manager.getPlotId(block.getLocation());
 
             if (id == null) {
+                if (event.isSticky() && event.getBlock().getType().equals(Material.SLIME_BLOCK)) {
+                    BukkitBlock block2 = new BukkitBlock(event.getBlock().getRelative(event.getDirection(), 3));
+                    PlotId id2 = manager.getPlotId(block.getLocation());
+                    if (id2 == null) {
+                        event.setCancelled(true);
+                    }
+                }
                 event.setCancelled(true);
             } else {
-                PlotToClear ptc = api.getPlotLocked(block.getWorld().getName(), id);
+                PlotToClear ptc = api.getPlotLocked(block.getWorld(), id);
 
                 if (ptc != null) {
                     event.setCancelled(true);
@@ -448,7 +456,7 @@ public class BukkitPlotListener implements Listener {
                 blocks.remove(i);
                 i--;
             } else {
-                PlotToClear ptc = api.getPlotLocked(location.getWorld().getName(), id);
+                PlotToClear ptc = api.getPlotLocked(location.getWorld(), id);
 
                 if (ptc != null) {
                     event.setCancelled(true);
@@ -470,7 +478,7 @@ public class BukkitPlotListener implements Listener {
             if (id == null) {
                 event.setCancelled(true);
             } else {
-                PlotToClear ptc = api.getPlotLocked(location.getWorld().getName(), id);
+                PlotToClear ptc = api.getPlotLocked(location.getWorld(), id);
 
                 if (ptc != null) {
                     event.setCancelled(true);
@@ -497,7 +505,7 @@ public class BukkitPlotListener implements Listener {
                 if (id == null) {
                     event.setCancelled(true);
                 } else {
-                    PlotToClear ptc = api.getPlotLocked(location.getWorld().getName(), id);
+                    PlotToClear ptc = api.getPlotLocked(location.getWorld(), id);
 
                     Player player = null;
                     if (ptc != null) {
@@ -546,7 +554,7 @@ public class BukkitPlotListener implements Listener {
                     event.setCancelled(true);
                 }
             } else {
-                PlotToClear ptc = api.getPlotLocked(location.getWorld().getName(), id);
+                PlotToClear ptc = api.getPlotLocked(location.getWorld(), id);
 
                 if (ptc != null) {
                     switch (ptc.getReason()) {
@@ -594,7 +602,7 @@ public class BukkitPlotListener implements Listener {
                         event.setCancelled(true);
                     }
                 } else {
-                    PlotToClear ptc = api.getPlotLocked(player.getWorld().getName(), id);
+                    PlotToClear ptc = api.getPlotLocked(player.getWorld(), id);
 
                     if (ptc != null) {
                         switch (ptc.getReason()) {
@@ -641,7 +649,7 @@ public class BukkitPlotListener implements Listener {
                     event.setCancelled(true);
                 }
             } else {
-                PlotToClear ptc = api.getPlotLocked(location.getWorld().getName(), id);
+                PlotToClear ptc = api.getPlotLocked(location.getWorld(), id);
 
                 if (ptc != null) {
                     switch (ptc.getReason()) {
@@ -710,7 +718,7 @@ public class BukkitPlotListener implements Listener {
         if (manager.isPlotWorld(location)) {
             PlotId id = manager.getPlotId(location);
             if (id != null) {
-                PlotToClear plotLocked = api.getPlotLocked(location.getWorld().getName(), id);
+                PlotToClear plotLocked = api.getPlotLocked(location.getWorld(), id);
 
                 if (plotLocked != null) {
                     event.setCancelled(true);
