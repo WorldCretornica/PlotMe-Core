@@ -7,36 +7,36 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+@SuppressWarnings("resource")
 public class SQLiteConnector extends Database {
 
     public SQLiteConnector(PlotMe_Core plugin) {
         super(plugin);
+        startConnection();
     }
 
     /**
      * Establish a connection to the plotme database
-     * @return true if the connection was established, false otherwise
+     * @return connection established
      */
     @Override
-    public boolean startConnection() {
+    public Connection startConnection() {
         try {
             Class.forName("org.sqlite.JDBC");
             connection = DriverManager.getConnection("jdbc:sqlite:" + plugin.getServerBridge().getDataFolder() + "/plotmecore.db");
             connection.setAutoCommit(false);
-            return true;
+            return connection;
         } catch (ClassNotFoundException | SQLException e) {
             plugin.getLogger().severe("Could not establish a connection to the PlotMe SQLite database:");
             plugin.getLogger().severe(e.getMessage());
-            return false;
+            return connection;
         }
     }
 
     @Override
     public void createTables() {
-        Connection connection = getConnection();
-        Statement statement = null;
-        try {
-            statement = connection.createStatement();
+        try (Connection connection = getConnection()) {
+            Statement statement1 = connection.createStatement();
             String PLOT_TABLES = "CREATE TABLE plotmecore_plots ("
                     + "    id INTEGER PRIMARY KEY UNIQUE,"
                     + "    plotX INTEGER NOT NULL,"
@@ -64,16 +64,6 @@ public class SQLiteConnector extends Database {
                     + ");";
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            try {
-                if (statement != null) {
-                    statement.close();
-                }
-            } catch (SQLException ex) {
-                plugin.getLogger().severe("Could not create the table (on close) :");
-                plugin.getLogger().severe(ex.getMessage());
-            }
-
         }
     }
 

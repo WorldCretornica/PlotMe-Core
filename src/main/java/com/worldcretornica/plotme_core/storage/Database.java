@@ -16,26 +16,21 @@ public abstract class Database {
     }
 
     /**
-     * Closes the connecection to the database
-     * This will return true if the connection is null.
-     * @return true if the connection closed successfully
+     * Closes the connecection to the database.
+     * This will not close the connection if the connection is null.
      */
-    public boolean closeConnection() {
-        if (connection == null) {
-            return true;
-        }
-        try {
-            connection.close();
-            connection = null;
-            return true;
-        } catch (SQLException e) {
-            plugin.getLogger().severe("Error disconnecting from the database:");
-            e.printStackTrace();
-            return false;
+    public void closeConnection() {
+        if (connection != null) {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                plugin.getLogger().severe("Could not close database connection: ");
+                plugin.getLogger().severe(e.getMessage());
+            }
         }
     }
 
-    public abstract boolean startConnection();
+    public abstract Connection startConnection();
 
     /**
      * The database connection
@@ -43,10 +38,7 @@ public abstract class Database {
      */
     public Connection getConnection() {
         if (connection == null) {
-            if (!startConnection()) {
-                plugin.getLogger().severe("Error getting connection.");
-                return null;
-            }
+            return startConnection();
         }
         return connection;
     }
