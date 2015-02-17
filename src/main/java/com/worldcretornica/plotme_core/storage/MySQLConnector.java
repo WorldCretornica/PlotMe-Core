@@ -35,11 +35,6 @@ public class MySQLConnector extends Database {
 
     }
 
-    @Override
-    public void createTables() {
-
-    }
-
     public void mySQLConversion () {
 
     }
