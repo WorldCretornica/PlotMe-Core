@@ -126,10 +126,9 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
 
                     success = true;
                 } catch (Exception ex) {
-                    ex.printStackTrace();
                     try {
                         //If we got an exception, retry in 30 seconds
-                        Thread.sleep(30000L);
+                        Thread.sleep(90000L);
                     } catch (InterruptedException ignored) {
                     }
                     if (retries > 0 && retries % 10 == 0) {
@@ -152,7 +151,7 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
                             //ex.printStackTrace();
                             try {
                                 //If we got an exception, retry in 30 seconds
-                                Thread.sleep(30000L);
+                                Thread.sleep(90000L);
                             } catch (InterruptedException ignored) {
                             }
                             if (retries > 0 && retries % 20 == 0) {
