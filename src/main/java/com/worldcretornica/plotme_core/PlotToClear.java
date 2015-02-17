@@ -1,26 +1,27 @@
 package com.worldcretornica.plotme_core;
 
 import com.worldcretornica.plotme_core.api.ICommandSender;
+import com.worldcretornica.plotme_core.api.IWorld;
 
 public class PlotToClear {
 
-    private String world;
+    private IWorld world;
     private PlotId plotId;
     private ClearReason reason;
     private ICommandSender requester;
 
-    public PlotToClear(String world, PlotId id, ClearReason reason, ICommandSender requester) {
+    public PlotToClear(IWorld world, PlotId id, ClearReason reason, ICommandSender requester) {
         setWorld(world);
         setPlotId(id);
         setReason(reason);
         setRequester(requester);
     }
 
-    public final String getWorld() {
+    public final IWorld getWorld() {
         return world;
     }
 
-    private void setWorld(String world) {
+    private void setWorld(IWorld world) {
         this.world = world;
     }
 
