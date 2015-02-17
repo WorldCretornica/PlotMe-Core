@@ -11,8 +11,6 @@ import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.IEventFactory;
 import com.worldcretornica.plotme_core.api.event.InternalPlotAddAllowedEvent;
 import com.worldcretornica.plotme_core.api.event.InternalPlotAddDeniedEvent;
-import com.worldcretornica.plotme_core.api.event.InternalPlotAuctionEvent;
-import com.worldcretornica.plotme_core.api.event.InternalPlotBidEvent;
 import com.worldcretornica.plotme_core.api.event.InternalPlotBiomeChangeEvent;
 import com.worldcretornica.plotme_core.api.event.InternalPlotBuyEvent;
 import com.worldcretornica.plotme_core.api.event.InternalPlotClearEvent;
@@ -70,20 +68,6 @@ public class BukkitEventFactory implements IEventFactory {
     @Override
     public InternalPlotResetEvent callPlotResetEvent(PlotMe_Core plugin, IWorld world, Plot plot, ICommandSender commandSender) {
         PlotResetEvent event = new PlotResetEvent(plugin, world, plot, commandSender);
-        Bukkit.getPluginManager().callEvent(event);
-        return event.getInternal();
-    }
-
-    @Override
-    public InternalPlotBidEvent callPlotBidEvent(PlotMe_Core plugin, IWorld world, Plot plot, IPlayer bidder, double bid) {
-        PlotBidEvent event = new PlotBidEvent(plugin, world, plot, bidder, bid);
-        Bukkit.getPluginManager().callEvent(event);
-        return event.getInternal();
-    }
-
-    @Override
-    public InternalPlotAuctionEvent callPlotAuctionEvent(PlotMe_Core plugin, IWorld world, Plot plot, IPlayer player, double minimumBid) {
-        PlotAuctionEvent event = new PlotAuctionEvent(plugin, world, plot, player, minimumBid);
         Bukkit.getPluginManager().callEvent(event);
         return event.getInternal();
     }

@@ -23,10 +23,6 @@ public interface IEventFactory {
 
     InternalPlotResetEvent callPlotResetEvent(PlotMe_Core plugin, IWorld world, Plot plot, ICommandSender commandSender);
 
-    InternalPlotBidEvent callPlotBidEvent(PlotMe_Core plugin, IWorld world, Plot plot, IPlayer bidder, double bid);
-
-    InternalPlotAuctionEvent callPlotAuctionEvent(PlotMe_Core plugin, IWorld world, Plot plot, IPlayer player, double minimumBid);
-
     InternalPlotBiomeChangeEvent callPlotBiomeChangeEvent(PlotMe_Core plugin, IWorld world, Plot plot, IPlayer player, IBiome biome);
 
     InternalPlotBuyEvent callPlotBuyEvent(PlotMe_Core plugin, IWorld world, Plot plot, IPlayer player, double price);
