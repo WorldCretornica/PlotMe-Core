@@ -47,6 +47,7 @@ public abstract class Database {
     public void createTables() {
         this.connection = getConnection();
         try (Statement statement = connection.createStatement()) {
+            //Main Plot Storage Table
             String PLOT_TABLE = "CREATE TABLE IF NOT EXISTS `plotmecore_plots` ("
                     + "`id` INTEGER PRIMARY KEY UNIQUE NOT NULL,"
                     + "`plotX` INTEGER NOT NULL,"
@@ -73,6 +74,36 @@ public abstract class Database {
                     + "`homeName` VARCHAR(32)"
                     + ");";
             statement.executeUpdate(PLOT_TABLE);
+            connection.commit();
+            //Plot Allowed table
+            String PLOT_ALLOWED = "CREATE TABLE IF NOT EXISTS `plotmecore_allowed` ("
+                    //Not used yet but included if needed in the future
+                    + "`id` INTEGER PRIMARY KEY UNIQUE NOT NULL,"
+                    /*`plot_id` is the internal plot id that is in the first collumn of the main plot table.
+                    This is not to be confused with the plot id that the user is used to seeing.
+                    */
+                    + "`plot_id` VARCHAR(32) NOT NULL,"
+                    // `allowedID` will be null if we add or deny a group to the plot.
+                    + "`allowedID` BLOB(16),"
+                    //The name of the user or group that is allowed
+                    + "`allowed` VARCHAR(32) NOT NULL"
+                    + ");";
+            statement.executeUpdate(PLOT_ALLOWED);
+            connection.commit();
+            //Plot Denied table
+            String PLOT_DENIED = "CREATE TABLE IF NOT EXISTS `plotmecore_denied` ("
+                    //Not used yet but included if needed in the future
+                    + "`id` INTEGER PRIMARY KEY UNIQUE NOT NULL,"
+                    /*`plot_id` is the internal plot id that is in the first collumn of the main plot table.
+                    This is not to be confused with the plot id that the user is used to seeing.
+                    */
+                    + "`plot_id` VARCHAR(32) NOT NULL,"
+                    // `allowedID` will be null if we add or deny a group to the plot.
+                    + "`deniedID` BLOB(16),"
+                    //The name of the user or group that is allowed
+                    + "`denied` VARCHAR(32) NOT NULL"
+                    + ");";
+            statement.executeUpdate(PLOT_DENIED);
             connection.commit();
         } catch (SQLException e) {
             e.printStackTrace();
