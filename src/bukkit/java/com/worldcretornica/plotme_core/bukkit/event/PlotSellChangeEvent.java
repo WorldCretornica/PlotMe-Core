@@ -1,7 +1,6 @@
 package com.worldcretornica.plotme_core.bukkit.event;
 
 import com.worldcretornica.plotme_core.Plot;
-import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotSellChangeEvent;
@@ -15,13 +14,13 @@ public class PlotSellChangeEvent extends PlotEvent implements Cancellable {
 
     private final InternalPlotSellChangeEvent event;
 
-    public PlotSellChangeEvent(PlotMe_Core instance, World world, Plot plot, Player seller, double price,
+    public PlotSellChangeEvent(World world, Plot plot, Player seller, double price,
             boolean isForSale) {
         super(plot, world);
         event = new InternalPlotSellChangeEvent(new BukkitWorld(world), plot, new BukkitPlayer(seller), price, isForSale);
     }
 
-    public PlotSellChangeEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer seller, double price, boolean isForSale) {
+    public PlotSellChangeEvent(IWorld world, Plot plot, IPlayer seller, double price, boolean isForSale) {
         super(plot, world);
         event = new InternalPlotSellChangeEvent(world, plot, seller, price, isForSale);
     }

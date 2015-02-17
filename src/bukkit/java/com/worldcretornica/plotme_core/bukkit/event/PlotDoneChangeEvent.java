@@ -1,7 +1,6 @@
 package com.worldcretornica.plotme_core.bukkit.event;
 
 import com.worldcretornica.plotme_core.Plot;
-import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotDoneChangeEvent;
@@ -13,7 +12,7 @@ public class PlotDoneChangeEvent extends PlotEvent implements Cancellable {
 
     private final InternalPlotDoneChangeEvent event;
 
-    public PlotDoneChangeEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer player, boolean done) {
+    public PlotDoneChangeEvent(IWorld world, Plot plot, IPlayer player, boolean done) {
         super(plot, world);
         event = new InternalPlotDoneChangeEvent(world, plot, player, done);
     }

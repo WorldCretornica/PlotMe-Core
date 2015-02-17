@@ -1,7 +1,6 @@
 package com.worldcretornica.plotme_core.bukkit.event;
 
 import com.worldcretornica.plotme_core.Plot;
-import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotOwnerChangeEvent;
@@ -15,12 +14,12 @@ public class PlotOwnerChangeEvent extends PlotEvent implements Cancellable {
 
     private final InternalPlotOwnerChangeEvent event;
 
-    public PlotOwnerChangeEvent(PlotMe_Core instance, World world, Plot plot, Player player, String newOwner) {
+    public PlotOwnerChangeEvent(World world, Plot plot, Player player, String newOwner) {
         super(plot, world);
         event = new InternalPlotOwnerChangeEvent(new BukkitWorld(world), plot, new BukkitPlayer(player), newOwner);
     }
 
-    public PlotOwnerChangeEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer player, String newOwner) {
+    public PlotOwnerChangeEvent(IWorld world, Plot plot, IPlayer player, String newOwner) {
         super(plot, world);
         event = new InternalPlotOwnerChangeEvent(world, plot, player, newOwner);
     }

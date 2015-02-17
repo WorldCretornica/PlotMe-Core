@@ -1,7 +1,6 @@
 package com.worldcretornica.plotme_core.bukkit.event;
 
 import com.worldcretornica.plotme_core.Plot;
-import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotRemoveDeniedEvent;
@@ -15,14 +14,14 @@ public class PlotRemoveDeniedEvent extends PlotEvent implements Cancellable {
 
     private final InternalPlotRemoveDeniedEvent event;
 
-    public PlotRemoveDeniedEvent(PlotMe_Core instance, World world, Plot plot, Player player, String denied) {
+    public PlotRemoveDeniedEvent(World world, Plot plot, Player player, String denied) {
         super(plot, world);
-        event = new InternalPlotRemoveDeniedEvent(instance, new BukkitWorld(world), plot, new BukkitPlayer(player), denied);
+        event = new InternalPlotRemoveDeniedEvent(new BukkitWorld(world), plot, new BukkitPlayer(player), denied);
     }
 
-    public PlotRemoveDeniedEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer player, String denied) {
+    public PlotRemoveDeniedEvent(IWorld world, Plot plot, IPlayer player, String denied) {
         super(plot, world);
-        event = new InternalPlotRemoveDeniedEvent(instance, world, plot, player, denied);
+        event = new InternalPlotRemoveDeniedEvent(world, plot, player, denied);
     }
 
     @Override

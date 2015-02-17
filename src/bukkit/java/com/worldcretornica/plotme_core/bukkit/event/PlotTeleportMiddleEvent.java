@@ -1,7 +1,6 @@
 package com.worldcretornica.plotme_core.bukkit.event;
 
 import com.worldcretornica.plotme_core.Plot;
-import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
@@ -18,12 +17,12 @@ public class PlotTeleportMiddleEvent extends PlotEvent implements Cancellable {
 
     private final InternalPlotTeleportMiddleEvent event;
 
-    public PlotTeleportMiddleEvent(PlotMe_Core instance, World world, Plot plot, Player player, Location location) {
+    public PlotTeleportMiddleEvent(World world, Plot plot, Player player, Location location) {
         super(plot, world);
         event = new InternalPlotTeleportMiddleEvent(new BukkitWorld(world), plot, new BukkitPlayer(player), new BukkitLocation(location));
     }
 
-    public PlotTeleportMiddleEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer player, ILocation location) {
+    public PlotTeleportMiddleEvent(IWorld world, Plot plot, IPlayer player, ILocation location) {
         super(plot, world);
         event = new InternalPlotTeleportMiddleEvent(world, plot, player, location);
     }

@@ -1,7 +1,6 @@
 package com.worldcretornica.plotme_core.bukkit.event;
 
 import com.worldcretornica.plotme_core.Plot;
-import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotAddAllowedEvent;
@@ -15,12 +14,12 @@ public class PlotAddAllowedEvent extends PlotEvent implements Cancellable {
 
     private final InternalPlotAddAllowedEvent event;
 
-    public PlotAddAllowedEvent(PlotMe_Core instance, World world, Plot plot, Player player, String allowed) {
+    public PlotAddAllowedEvent(World world, Plot plot, Player player, String allowed) {
         super(plot, world);
         event = new InternalPlotAddAllowedEvent(new BukkitWorld(world), plot, new BukkitPlayer(player), allowed);
     }
 
-    public PlotAddAllowedEvent(PlotMe_Core instance, IWorld world, Plot plot, IPlayer player, String allowed) {
+    public PlotAddAllowedEvent(IWorld world, Plot plot, IPlayer player, String allowed) {
         super(plot, world);
         event = new InternalPlotAddAllowedEvent(world, plot, player, allowed);
     }

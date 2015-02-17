@@ -1,7 +1,6 @@
 package com.worldcretornica.plotme_core.bukkit.event;
 
 import com.worldcretornica.plotme_core.Plot;
-import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotLoadEvent;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitWorld;
@@ -11,12 +10,12 @@ public class PlotLoadEvent extends PlotEvent {
 
     private final InternalPlotLoadEvent event;
 
-    public PlotLoadEvent(PlotMe_Core instance, World world, Plot plot) {
+    public PlotLoadEvent(World world, Plot plot) {
         super(plot, world);
         event = new InternalPlotLoadEvent(new BukkitWorld(world), plot);
     }
 
-    public PlotLoadEvent(PlotMe_Core instance, IWorld world, Plot plot) {
+    public PlotLoadEvent(IWorld world, Plot plot) {
         super(plot, world);
         event = new InternalPlotLoadEvent(world, plot);
     }
