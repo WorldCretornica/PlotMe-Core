@@ -34,8 +34,4 @@ public class MySQLConnector extends Database {
         }
 
     }
-
-    public void mySQLConversion () {
-
-    }
 }

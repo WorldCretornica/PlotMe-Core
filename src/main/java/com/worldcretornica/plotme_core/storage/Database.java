@@ -8,7 +8,7 @@ import java.sql.Statement;
 
 public abstract class Database {
 
-    public PlotMe_Core plugin;
+    public final PlotMe_Core plugin;
 
     public Connection connection;
 
@@ -38,14 +38,19 @@ public abstract class Database {
      * @return the connection to the database
      */
     public Connection getConnection() {
-        if (connection == null) {
-            return startConnection();
+        try {
+            if (connection == null || connection.isClosed()) {
+                return startConnection();
+            }
+        } catch (SQLException e) {
+            plugin.getLogger().severe("Oh no! A connection error occurred:");
+            plugin.getLogger().severe(e.getMessage());
         }
         return connection;
     }
 
     public void createTables() {
-        this.connection = getConnection();
+        Connection connection = getConnection();
         try (Statement statement = connection.createStatement()) {
             //Main Plot Storage Table
             String PLOT_TABLE = "CREATE TABLE IF NOT EXISTS `plotmecore_plots` ("
@@ -105,8 +110,45 @@ public abstract class Database {
                     + ");";
             statement.executeUpdate(PLOT_DENIED);
             connection.commit();
+            String PLOT_LIKES = "CREATE TABLE IF NOT EXISTS `plotmecore_likes` ("
+                    + "`id` INTEGER PRIMARY KEY UNIQUE NOT NULL,"
+                    + "`plot_id` VARCHAR(32) NOT NULL,"
+                    + "`playerID` BLOB(16),"
+                    + "`player` VARCHAR(32) NOT NULL"
+                    + ");";
+            statement.executeUpdate(PLOT_LIKES);
+            connection.commit();
+            String METADATA_TABLE = "CREATE TABLE IF NOT EXISTS `plotmecore_metadata` ("
+                    + "`id` INTEGER PRIMARY KEY UNIQUE NOT NULL,"
+                    + "`plot_id` VARCHAR(32) NOT NULL,"
+                    + "`pluginName` NVARCHAR(100) NOT NULL,"
+                    + "`propertyBame` NVARCHAR(100) NOT NULL,"
+                    + "`propertyValue` NVARCHAR(255)"
+                    + ");";
+            statement.executeUpdate(METADATA_TABLE);
+            connection.commit();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public void legacyConverter() {
+        plugin.getServerBridge().runTaskAsynchronously(new Runnable() {
+            @Override
+            public void run() {
+                Connection connection = getConnection();
+                try (Statement statement = connection.createStatement()) {
+                    statement.executeUpdate("INSERT INTO `plotmecore_plots` (plotX, plotZ, world, ownerID, owner, biome, finished, finishedDate, "
+                            + "forSale, price, protected, expiredDate, topX,topZ, bottomX, bottomZ) SELECT idX,idZ,world,ownerid,owner,biome,"
+                            + "finished,finisheddate,forsale,customprice,protected,expireddate,topX,topZ,bottomX,bottomZ FROM `plotmePlots` WHERE "
+                            + "ownerid IS NOT NULL");
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+
     }
 }
