@@ -23,6 +23,10 @@ public class InternalPlotWorldCreateEvent implements ICancellable {
         this.canceled = canceled;
     }
 
+    /**
+     * Get the name of the world created
+     * @return world name
+     */
     public String getWorldName() {
         return worldName;
     }

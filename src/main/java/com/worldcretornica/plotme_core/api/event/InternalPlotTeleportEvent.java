@@ -30,18 +30,35 @@ public class InternalPlotTeleportEvent extends InternalPlotEvent implements ICan
         canceled = cancel;
     }
 
+
+    /**
+     * Get the {@link IPlayer} that executed the command.
+     * @return internal player that executed the event
+     */
     public IPlayer getPlayer() {
         return player;
     }
 
+    /**
+     * Get the home {@link ILocation} of the plot
+     * @return internal home location of the plot
+     */
     public ILocation getLocation() {
         return location;
     }
 
+    /**
+     * The {@link PlotId} of the plot teleported to
+     * @return plot id of the plot
+     */
     public PlotId getPlotId() {
         return plotId;
     }
 
+    /**
+     * Checks if the plot is claimed. This will always return true.
+     * @return true
+     */
     public boolean isPlotClaimed() {
         return getPlot() != null;
     }

@@ -10,6 +10,9 @@ import com.worldcretornica.plotme_core.api.IWorld;
 
 import java.util.Map;
 
+/**
+ * PlotMe Event Interface.
+ */
 public interface IEventFactory {
 
     InternalPlotCreateEvent callPlotCreatedEvent(IWorld world, PlotId id, IPlayer creator);

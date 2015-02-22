@@ -37,6 +37,10 @@ public class PlotTeleportHomeEvent extends PlotTeleportEvent {
         return event;
     }
 
+    /**
+     * Checks if the plot is claimed. This will always return true.
+     * @return true
+     */
     @Override
     public boolean isPlotClaimed() {
         return true;

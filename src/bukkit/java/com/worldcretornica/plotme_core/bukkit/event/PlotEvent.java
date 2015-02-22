@@ -47,7 +47,7 @@ public abstract class PlotEvent extends Event {
     }
 
     /**
-     * Returns the world used in the event
+     * Returns the world the event is occuring in
      *
      * @return world
      */

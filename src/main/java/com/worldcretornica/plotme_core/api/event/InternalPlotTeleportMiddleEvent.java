@@ -28,6 +28,10 @@ public class InternalPlotTeleportMiddleEvent extends InternalPlotTeleportEvent {
         return getLocation();
     }
 
+    /**
+     * Checks if the plot is claimed. This will always return true.
+     * @return true
+     */
     @Override
     public boolean isPlotClaimed() {
         return true;
