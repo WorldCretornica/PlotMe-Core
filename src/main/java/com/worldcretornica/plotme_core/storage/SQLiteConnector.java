@@ -6,7 +6,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-@SuppressWarnings("resource")
 public class SQLiteConnector extends Database {
 
     public SQLiteConnector(PlotMe_Core plugin) {
