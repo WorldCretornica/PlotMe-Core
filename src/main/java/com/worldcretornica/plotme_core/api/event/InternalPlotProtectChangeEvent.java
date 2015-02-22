@@ -30,7 +30,7 @@ public class InternalPlotProtectChangeEvent extends InternalPlotEvent implements
         return player;
     }
 
-    public boolean getProtected() {
+    public boolean isProtected() {
         return _protected;
     }
 }

@@ -31,8 +31,8 @@ public class PlotDoneChangeEvent extends PlotEvent implements Cancellable {
         return ((BukkitPlayer) event.getPlayer()).getPlayer();
     }
 
-    public boolean getDone() {
-        return event.getDone();
+    public boolean isDone() {
+        return event.isDone();
     }
 
     public InternalPlotDoneChangeEvent getInternal() {

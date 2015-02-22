@@ -38,8 +38,8 @@ public class PlotProtectChangeEvent extends PlotEvent implements Cancellable {
         return ((BukkitPlayer) event.getPlayer()).getPlayer();
     }
 
-    public boolean getProtected() {
-        return event.getProtected();
+    public boolean isProtected() {
+        return event.isProtected();
     }
 
     public InternalPlotProtectChangeEvent getInternal() {

@@ -107,8 +107,8 @@ public class BukkitEventFactory implements IEventFactory {
     }
 
     @Override
-    public InternalPlotTeleportHomeEvent callPlotTeleportHomeEvent(IWorld world, Plot plot, IPlayer player) {
-        PlotTeleportHomeEvent event = new PlotTeleportHomeEvent(world, plot, player);
+    public InternalPlotTeleportHomeEvent callPlotTeleportHomeEvent(IWorld world, Plot plot, IPlayer player, ILocation location) {
+        PlotTeleportHomeEvent event = new PlotTeleportHomeEvent(world, plot, player, location);
         Bukkit.getPluginManager().callEvent(event);
         return event.getInternal();
     }
@@ -180,7 +180,7 @@ public class BukkitEventFactory implements IEventFactory {
 
     @Override
     public InternalPlotTeleportEvent callPlotTeleportEvent(IWorld world, Plot plot, IPlayer player, ILocation location,
-            String plotId) {
+            PlotId plotId) {
         PlotTeleportEvent event = new PlotTeleportEvent(world, plot, player, location, plotId);
         Bukkit.getPluginManager().callEvent(event);
         return event.getInternal();

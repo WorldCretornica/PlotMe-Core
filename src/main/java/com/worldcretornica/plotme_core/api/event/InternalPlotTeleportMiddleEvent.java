@@ -5,16 +5,12 @@ import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 
-public class InternalPlotTeleportMiddleEvent extends InternalPlotEvent implements ICancellable {
+public class InternalPlotTeleportMiddleEvent extends InternalPlotTeleportEvent {
 
-    private final IPlayer player;
     private boolean canceled;
-    private ILocation location;
 
     public InternalPlotTeleportMiddleEvent(IWorld world, Plot plot, IPlayer player, ILocation middlelocation) {
-        super(plot, world);
-        this.player = player;
-        location = middlelocation;
+        super(world, plot, player, middlelocation, plot.getId());
     }
 
     @Override
@@ -27,15 +23,13 @@ public class InternalPlotTeleportMiddleEvent extends InternalPlotEvent implement
         canceled = cancel;
     }
 
-    public IPlayer getPlayer() {
-        return player;
-    }
-
+    @Deprecated
     public ILocation getMiddleLocation() {
-        return location;
+        return getLocation();
     }
 
-    public void setMiddleLocation(ILocation middleLocation) {
-        location = middleLocation;
+    @Override
+    public boolean isPlotClaimed() {
+        return true;
     }
 }

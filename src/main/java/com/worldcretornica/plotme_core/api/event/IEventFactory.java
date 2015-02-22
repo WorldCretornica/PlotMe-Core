@@ -32,7 +32,7 @@ public interface IEventFactory {
 
     InternalPlotDoneChangeEvent callPlotDoneEvent(IWorld world, Plot plot, IPlayer player, boolean done);
 
-    InternalPlotTeleportHomeEvent callPlotTeleportHomeEvent(IWorld world, Plot plot, IPlayer player);
+    InternalPlotTeleportHomeEvent callPlotTeleportHomeEvent(IWorld world, Plot plot, IPlayer player, ILocation location);
 
     InternalPlotTeleportMiddleEvent callPlotTeleportMiddleEvent(IWorld world, Plot plot, IPlayer player, ILocation location);
 
@@ -52,7 +52,7 @@ public interface IEventFactory {
 
     InternalPlotOwnerChangeEvent callPlotOwnerChangeEvent(IWorld world, Plot plot, IPlayer player, String newOwner);
 
-    InternalPlotTeleportEvent callPlotTeleportEvent(IWorld world, Plot plot, IPlayer player, ILocation location, String PlotId);
+    InternalPlotTeleportEvent callPlotTeleportEvent(IWorld world, Plot plot, IPlayer player, ILocation location, PlotId PlotId);
 
     InternalPlotWorldLoadEvent callPlotWorldLoadEvent(String worldName, int nbPlots);
 }

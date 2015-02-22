@@ -5,25 +5,14 @@ import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotTeleportMiddleEvent;
-import com.worldcretornica.plotme_core.bukkit.api.BukkitLocation;
-import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
-import com.worldcretornica.plotme_core.bukkit.api.BukkitWorld;
 import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
-import org.bukkit.event.Cancellable;
 
-public class PlotTeleportMiddleEvent extends PlotEvent implements Cancellable {
+public class PlotTeleportMiddleEvent extends PlotTeleportEvent {
 
     private final InternalPlotTeleportMiddleEvent event;
 
-    public PlotTeleportMiddleEvent(World world, Plot plot, Player player, Location location) {
-        super(plot, world);
-        event = new InternalPlotTeleportMiddleEvent(new BukkitWorld(world), plot, new BukkitPlayer(player), new BukkitLocation(location));
-    }
-
     public PlotTeleportMiddleEvent(IWorld world, Plot plot, IPlayer player, ILocation location) {
-        super(plot, world);
+        super(world, plot, player, location, plot.getId());
         event = new InternalPlotTeleportMiddleEvent(world, plot, player, location);
     }
 
@@ -37,19 +26,24 @@ public class PlotTeleportMiddleEvent extends PlotEvent implements Cancellable {
         event.setCanceled(cancel);
     }
 
-    public Player getPlayer() {
-        return ((BukkitPlayer) event.getPlayer()).getPlayer();
-    }
-
+    @Deprecated
     public Location getMiddleLocation() {
-        return ((BukkitLocation) event.getMiddleLocation()).getLocation();
+        return getLocation();
     }
 
-    public void setMiddleLocation(Location homeLocation) {
-        event.setMiddleLocation(new BukkitLocation(homeLocation));
-    }
-
+    @Override
     public InternalPlotTeleportMiddleEvent getInternal() {
         return event;
     }
+
+    /**
+     * Checks if the plot is claimed. This will always return true.
+     * @return true
+     */
+    @Override
+    public boolean isPlotClaimed() {
+        return true;
+    }
+
+
 }

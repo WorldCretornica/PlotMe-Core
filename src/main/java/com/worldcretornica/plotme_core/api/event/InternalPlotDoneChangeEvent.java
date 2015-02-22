@@ -30,7 +30,7 @@ public class InternalPlotDoneChangeEvent extends InternalPlotEvent implements IC
         return player;
     }
 
-    public boolean getDone() {
+    public boolean isDone() {
         return done;
     }
 }
