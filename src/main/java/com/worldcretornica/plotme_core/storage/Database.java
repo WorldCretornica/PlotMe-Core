@@ -14,6 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -53,7 +54,9 @@ public abstract class Database {
             // `allowedID` will be null if we add or deny a group to the plot.
             + "`allowedID` BLOB(16),"
             //The name of the user or group that is allowed
-            + "`allowed` VARCHAR(32) NOT NULL"
+            + "`allowed` VARCHAR(32) NOT NULL,"
+            //This is true if the player can build even when the plot owner is offline
+            + "`trusted` BOOLEAN NOT NULL DEFAULT '1'"
             + ");";
     public static final String DENIED_TABLE = "CREATE TABLE IF NOT EXISTS plotmecore_denied ("
             //Not used yet but included if needed in the future
@@ -80,6 +83,7 @@ public abstract class Database {
             + "`propertyBame` NVARCHAR(100) NOT NULL,"
             + "`propertyValue` NVARCHAR(255)"
             + ");";
+    public static final String SELECT_INTERNAL_ID = "SELECT id FROM plotmecore_plots WHERE plotX = ? AND plotZ = ?";
     private static final String SELECT_PLOT_COUNT = "SELECT Count(*) as plotCount FROM plotmecore_plots WHERE LOWER(world) = ?";
     public final PlotMe_Core plugin;
 
@@ -130,7 +134,7 @@ public abstract class Database {
             public void run() {
                 Connection connection = getConnection();
                 try (Statement statement = connection.createStatement();
-                        PreparedStatement statement2 = connection.prepareStatement("SELECT id FROM plotmecore_plots WHERE plotX = ? AND plotZ = ?"
+                        PreparedStatement statement2 = connection.prepareStatement(SELECT_INTERNAL_ID
                                 + " AND LOWER(world) = ?"); PreparedStatement statement3 = connection.prepareStatement(
                         "INSERT INTO plotmecore_allowed (plot_id, allowedID, allowed) VALUES (?,?,?)");
                         PreparedStatement statement4 = connection
@@ -251,7 +255,7 @@ public abstract class Database {
             ps.setInt(18, plot.getLikes());
             ps.executeUpdate();
             connection.commit();
-            ResultSet getID = statement.executeQuery("SELECT id FROM plotmecore_plots WHERE plotX = ? AND plotZ = ?");
+            ResultSet getID = statement.executeQuery(SELECT_INTERNAL_ID);
             while (getID.next()) {
                 plot.setInternalID(getID.getInt(1));
             }
@@ -309,5 +313,9 @@ public abstract class Database {
 
     public void updatePlotsNewUUID(UUID uuid, String name) {
 
+    }
+
+    public List<Plot> getOwnedPlots(String name, UUID uuid, String playerName) {
+        return null;
     }
 }
