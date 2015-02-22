@@ -19,6 +19,67 @@ import java.util.UUID;
 
 public abstract class Database {
 
+    public static final String PLOT_TABLE = "CREATE TABLE IF NOT EXISTS plotmecore_plots ("
+            + "`id` INTEGER PRIMARY KEY UNIQUE NOT NULL,"
+            + "`plotX` INTEGER NOT NULL,"
+            + "`plotZ` INTEGER NOT NULL,"
+            + "`world` VARCHAR(32) NOT NULL,"
+            + "`ownerID` BLOB(16) NOT NULL,"
+            + "`owner` VARCHAR(32) NOT NULL,"
+            + "`biome` VARCHAR(32) DEFAULT 'PLAINS' NOT NULL,"
+            + "`finished` BOOLEAN NOT NULL DEFAULT '0',"
+            + "`finishedDate` VARCHAR(16),"
+            + "`forSale` BOOLEAN NOT NULL DEFAULT '0',"
+            + "`price` DOUBLE NOT NULL DEFAULT '0',"
+            + "`protected` BOOLEAN NOT NULL DEFAULT '0',"
+            + "`expiredDate` VARCHAR(16),"
+            + "`topX` INTEGER NOT NULL DEFAULT '0',"
+            + "`topZ` INTEGER NOT NULL DEFAULT '0',"
+            + "`bottomX` INTEGER NOT NULL DEFAULT '0',"
+            + "`bottomZ` INTEGER NOT NULL DEFAULT '0',"
+            + "`plotName` VARCHAR(32) UNIQUE,"
+            + "`plotLikes` INTEGER NOT NULL DEFAULT '0',"
+            + "`homeX` INTEGER NOT NULL,"
+            + "`homeY` INTEGER NOT NULL,"
+            + "`homeZ` INTEGER NOT NULL,"
+            + "`homeName` VARCHAR(32)";
+    public static final String ALLOWED_TABLE = "CREATE TABLE IF NOT EXISTS plotmecore_allowed ("
+            //Not used yet but included if needed in the future
+            + "`id` INTEGER PRIMARY KEY UNIQUE NOT NULL,"
+            /*`plot_id` is the internal plot id that is in the first collumn of the main plot table.
+            This is not to be confused with the plot id that the user is used to seeing.
+            */
+            + "`plot_id` VARCHAR(32) NOT NULL,"
+            // `allowedID` will be null if we add or deny a group to the plot.
+            + "`allowedID` BLOB(16),"
+            //The name of the user or group that is allowed
+            + "`allowed` VARCHAR(32) NOT NULL"
+            + ");";
+    public static final String DENIED_TABLE = "CREATE TABLE IF NOT EXISTS plotmecore_denied ("
+            //Not used yet but included if needed in the future
+            + "`id` INTEGER PRIMARY KEY UNIQUE NOT NULL,"
+            /*`plot_id` is the internal plot id that is in the first collumn of the main plot table.
+            This is not to be confused with the plot id that the user is used to seeing.
+            */
+            + "`plot_id` VARCHAR(32) NOT NULL,"
+            // `allowedID` will be null if we add or deny a group to the plot.
+            + "`deniedID` BLOB(16),"
+            //The name of the user or group that is allowed
+            + "`denied` VARCHAR(32) NOT NULL"
+            + ");";
+    public static final String LIKES_TABLE = "CREATE TABLE IF NOT EXISTS plotmecore_likes ("
+            + "`id` INTEGER PRIMARY KEY UNIQUE NOT NULL,"
+            + "`plot_id` VARCHAR(32) NOT NULL,"
+            + "`playerID` BLOB(16),"
+            + "`player` VARCHAR(32) NOT NULL"
+            + ");";
+    public static final String METADATA_TABLE = "CREATE TABLE IF NOT EXISTS plotmecore_metadata ("
+            + "`id` INTEGER PRIMARY KEY UNIQUE NOT NULL,"
+            + "`plot_id` VARCHAR(32) NOT NULL,"
+            + "`pluginName` NVARCHAR(100) NOT NULL,"
+            + "`propertyBame` NVARCHAR(100) NOT NULL,"
+            + "`propertyValue` NVARCHAR(255)"
+            + ");";
     private static final String SELECT_PLOT_COUNT = "SELECT Count(*) as plotCount FROM plotmecore_plots WHERE LOWER(world) = ?";
     public final PlotMe_Core plugin;
 
@@ -61,88 +122,7 @@ public abstract class Database {
         return connection;
     }
 
-    public void createTables() {
-        Connection connection = getConnection();
-        try (Statement statement = connection.createStatement()) {
-            //Main Plot Storage Table
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS plotmecore_plots ("
-                    + "`id` INTEGER PRIMARY KEY UNIQUE NOT NULL,"
-                    + "`plotX` INTEGER NOT NULL,"
-                    + "`plotZ` INTEGER NOT NULL,"
-                    + "`world` VARCHAR(32) NOT NULL,"
-                    + "`ownerID` BLOB(16) NOT NULL,"
-                    + "`owner` VARCHAR(32) NOT NULL,"
-                    + "`biome` VARCHAR(32) DEFAULT 'PLAINS' NOT NULL,"
-                    + "`finished` BOOLEAN NOT NULL DEFAULT '0',"
-                    + "`finishedDate` VARCHAR(16),"
-                    + "`forSale` BOOLEAN NOT NULL DEFAULT '0',"
-                    + "`price` DOUBLE NOT NULL DEFAULT '0',"
-                    + "`protected` BOOLEAN NOT NULL DEFAULT '0',"
-                    + "`expiredDate` VARCHAR(16),"
-                    + "`topX` INTEGER NOT NULL DEFAULT '0',"
-                    + "`topZ` INTEGER NOT NULL DEFAULT '0',"
-                    + "`bottomX` INTEGER NOT NULL DEFAULT '0',"
-                    + "`bottomZ` INTEGER NOT NULL DEFAULT '0',"
-                    + "`plotName` VARCHAR(32) UNIQUE,"
-                    + "`plotLikes` INTEGER NOT NULL DEFAULT '0',"
-                    + "`homeX` INTEGER NOT NULL,"
-                    + "`homeY` INTEGER NOT NULL,"
-                    + "`homeZ` INTEGER NOT NULL,"
-                    + "`homeName` VARCHAR(32)"
-                    + ");");
-            connection.commit();
-            //Plot Allowed table
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS plotmecore_allowed ("
-                    //Not used yet but included if needed in the future
-                    + "`id` INTEGER PRIMARY KEY UNIQUE NOT NULL,"
-                    /*`plot_id` is the internal plot id that is in the first collumn of the main plot table.
-                    This is not to be confused with the plot id that the user is used to seeing.
-                    */
-                    + "`plot_id` VARCHAR(32) NOT NULL,"
-                    // `allowedID` will be null if we add or deny a group to the plot.
-                    + "`allowedID` BLOB(16),"
-                    //The name of the user or group that is allowed
-                    + "`allowed` VARCHAR(32) NOT NULL"
-                    + ");");
-            connection.commit();
-            //Plot Denied table
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS plotmecore_denied ("
-                    //Not used yet but included if needed in the future
-                    + "`id` INTEGER PRIMARY KEY UNIQUE NOT NULL,"
-                    /*`plot_id` is the internal plot id that is in the first collumn of the main plot table.
-                    This is not to be confused with the plot id that the user is used to seeing.
-                    */
-                    + "`plot_id` VARCHAR(32) NOT NULL,"
-                    // `allowedID` will be null if we add or deny a group to the plot.
-                    + "`deniedID` BLOB(16),"
-                    //The name of the user or group that is allowed
-                    + "`denied` VARCHAR(32) NOT NULL"
-                    + ");");
-            connection.commit();
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS plotmecore_likes ("
-                    + "`id` INTEGER PRIMARY KEY UNIQUE NOT NULL,"
-                    + "`plot_id` VARCHAR(32) NOT NULL,"
-                    + "`playerID` BLOB(16),"
-                    + "`player` VARCHAR(32) NOT NULL"
-                    + ");");
-            connection.commit();
-            String METADATA_TABLE = "CREATE TABLE IF NOT EXISTS plotmecore_metadata ("
-                    + "`id` INTEGER PRIMARY KEY UNIQUE NOT NULL,"
-                    + "`plot_id` VARCHAR(32) NOT NULL,"
-                    + "`pluginName` NVARCHAR(100) NOT NULL,"
-                    + "`propertyBame` NVARCHAR(100) NOT NULL,"
-                    + "`propertyValue` NVARCHAR(255)"
-                    + ");";
-            statement.executeUpdate(METADATA_TABLE);
-            connection.commit();
-            //I'm just going to sneak this in here...
-            statement.executeQuery("DROP TABLE IF EXISTS plotmeComments");
-            connection.commit();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+    public abstract void createTables();
 
     public void legacyConverter() {
         plugin.getServerBridge().runTaskAsynchronously(new Runnable() {
@@ -311,11 +291,11 @@ public abstract class Database {
 
     }
 
-    private void addPlotDenied(String player, UUID uuid, int plotInternalID) {
+    public void addPlotDenied(String player, UUID uuid, int plotInternalID) {
 
     }
 
-    private void addPlotAllowed(String key, UUID uuid, int plotInternalID) {
+    public void addPlotAllowed(String key, UUID uuid, int plotInternalID) {
 
     }
 
@@ -327,4 +307,7 @@ public abstract class Database {
         return new Plot[0];
     }
 
+    public void updatePlotsNewUUID(UUID uuid, String name) {
+
+    }
 }

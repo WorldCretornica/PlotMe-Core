@@ -5,6 +5,7 @@ import com.worldcretornica.plotme_core.PlotMe_Core;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class MySQLConnector extends Database {
 
@@ -33,5 +34,33 @@ public class MySQLConnector extends Database {
             return connection;
         }
 
+    }
+
+    @Override
+    public void createTables() {
+        Connection connection = getConnection();
+        try (Statement statement = connection.createStatement()) {
+            //MySQL specific plot table creation.
+            statement.executeUpdate(PLOT_TABLE + ", "
+                    + "UNIQUE KEY `plotLocation` (`plotX`,`plotZ`,`world`),"
+                    + "UNIQUE KEY `playerHome` (`ownerID`(16), `homeName`)"
+                    + ");");
+            statement.executeQuery("ALTER TABLE plotmecore_plots MODIFY id INTEGER AUTO_INCREMENT");
+            connection.commit();
+            statement.executeUpdate(ALLOWED_TABLE);
+            statement.executeUpdate("ALTER TABLE plotmecore_allowed MODIFY id INTEGER AUTO_INCREMENT");
+            connection.commit();
+            statement.executeUpdate(DENIED_TABLE);
+            statement.executeUpdate("ALTER TABLE plotmecore_denied MODIFY id INTEGER AUTO_INCREMENT");
+            connection.commit();
+            statement.executeUpdate(LIKES_TABLE);
+            statement.executeUpdate("ALTER TABLE plotmecore_likes MODIFY id INTEGER AUTO_INCREMENT");
+            connection.commit();
+            statement.executeUpdate(METADATA_TABLE);
+            statement.executeUpdate("ALTER TABLE plotmecore_metadata MODIFY id INTEGER AUTO_INCREMENT");
+            connection.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
