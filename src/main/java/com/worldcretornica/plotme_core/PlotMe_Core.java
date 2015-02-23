@@ -5,6 +5,9 @@ import com.worldcretornica.plotme_core.api.IPlotMe_GeneratorManager;
 import com.worldcretornica.plotme_core.api.IServerBridge;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.bukkit.AbstractSchematicUtil;
+import com.worldcretornica.plotme_core.storage.Database;
+import com.worldcretornica.plotme_core.storage.MySQLConnector;
+import com.worldcretornica.plotme_core.storage.SQLiteConnector;
 import com.worldcretornica.plotme_core.utils.Util;
 
 import java.io.File;
@@ -12,14 +15,12 @@ import java.util.HashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Pattern;
 
 public class PlotMe_Core {
 
     public static final String CAPTION_FILE = "captions.yml";
 
     public static final String WORLDS_CONFIG_SECTION = "worlds";
-    private static final Pattern COMPILE = Pattern.compile("jdbc:", Pattern.LITERAL);
     //Bridge
     private final IServerBridge serverBridge;
     private final AbstractSchematicUtil schematicutil;
@@ -29,7 +30,7 @@ public class PlotMe_Core {
     //Spool stuff
     private ConcurrentLinkedQueue<PlotToClear> plotsToClear;
     //Global variables
-    private SqlManager sqlManager;
+    private Database sqlManager;
     private Util util;
 
     public PlotMe_Core(IServerBridge serverObjectBuilder, AbstractSchematicUtil schematicutil) {
@@ -52,7 +53,6 @@ public class PlotMe_Core {
         serverBridge.unHook();
         PlotMeCoreManager.getInstance().setPlayersIgnoringWELimit(null);
         setWorldCurrentlyProcessingExpired(null);
-        plotsToClear.clear();
         plotsToClear = null;
         managers.clear();
         managers = null;
@@ -60,7 +60,7 @@ public class PlotMe_Core {
 
     public void enable() {
         PlotMeCoreManager.getInstance().setPlugin(this);
-        setupMySQL();
+        setupSQL();
         setupConfig();
         setupDefaultCaptions();
         serverBridge.setupCommands();
@@ -68,7 +68,13 @@ public class PlotMe_Core {
         serverBridge.setupHooks();
         serverBridge.setupListeners();
         setupClearSpools();
+        if (serverBridge.getConfig().getBoolean("setupDatabase")) {
+
+        }
         getSqlManager().createTables();
+        if (serverBridge.getConfig().getBoolean("coreDatabaseUpdate")) {
+            getSqlManager().coreDatabaseUpdate();
+        }
         getSqlManager().plotConvertToUUIDAsynchronously();
     }
 
@@ -78,7 +84,7 @@ public class PlotMe_Core {
         setupConfig();
         reloadCaptionConfig();
         setupDefaultCaptions();
-        setupMySQL();
+        setupSQL();
         PlotMeCoreManager.getInstance().getPlotMaps().clear();
 
         for (String worldname : managers.keySet()) {
@@ -190,12 +196,19 @@ public class PlotMe_Core {
     }
 
     /**
-     * Setup MySQL Database
+     * Setup SQL Database
      */
-    private void setupMySQL() {
+    private void setupSQL() {
         IConfigSection config = serverBridge.getConfig();
-
-        setSqlManager(new SqlManager(this));
+        if (config.getBoolean("usemySQL", false)) {
+            String url = config.getString("mySQLconn");
+            String user = config.getString("mySQLuname");
+            String pass = config.getString("mySQLpass");
+            setSqlManager(new MySQLConnector(this, url, user, pass));
+        } else {
+            setSqlManager(new SQLiteConnector(this));
+            getSqlManager().createTables();
+        }
     }
 
     private void setupClearSpools() {
@@ -249,9 +262,12 @@ public class PlotMe_Core {
         getLogger().info("removed taskid " + taskId);
     }
 
-    public PlotToClear getPlotLocked(String world, PlotId id) {
+    public PlotToClear getPlotLocked(IWorld world, PlotId id) {
+        if (plotsToClear.isEmpty()) {
+            return null;
+        }
         for (PlotToClear ptc : plotsToClear.toArray(new PlotToClear[plotsToClear.size()])) {
-            if (ptc.getWorld().equalsIgnoreCase(world) && ptc.getPlotId().equals(id)) {
+            if (ptc.getWorld() == world && ptc.getPlotId().equals(id)) {
                 return ptc;
             }
         }
@@ -263,11 +279,11 @@ public class PlotMe_Core {
         return serverBridge;
     }
 
-    public SqlManager getSqlManager() {
+    public Database getSqlManager() {
         return sqlManager;
     }
 
-    private void setSqlManager(SqlManager sqlManager) {
+    private void setSqlManager(Database sqlManager) {
         this.sqlManager = sqlManager;
     }
 

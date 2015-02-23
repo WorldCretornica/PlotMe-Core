@@ -1039,7 +1039,7 @@ public class SchematicUtil extends com.worldcretornica.plotme_core.bukkit.v1_7.S
                 Banner banner = (Banner) bs;
                 banner.setBaseColor(DyeColor.getByDyeData(te.getBase().byteValue()));
                 for (Pattern pattern : te.getPatterns()) {
-                    DyeColor dc = DyeColor.getByDyeData((pattern.getColor()).byteValue());
+                    DyeColor dc = DyeColor.getByDyeData(pattern.getColor().byteValue());
                     PatternType pt = PatternType.getByIdentifier(pattern.getPattern());
                     org.bukkit.block.banner.Pattern pat = new org.bukkit.block.banner.Pattern(dc, pt);
                     banner.addPattern(pat);

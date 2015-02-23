@@ -22,7 +22,9 @@ public class CmdInfo extends PlotCommand {
 
                 if (id == null) {
                     player.sendMessage("§c" + C("MsgNoPlotFound"));
-                } else if (!manager.isPlotAvailable(id, world)) {
+                    return true;
+                }
+                if (!manager.isPlotAvailable(id, world)) {
                     Plot plot = manager.getPlotById(id, world);
 
                     player.sendMessage("§aID: §b" + id + "§a " + C("InfoOwner") + ": §b" + plot.getOwner()
@@ -77,41 +79,10 @@ public class CmdInfo extends PlotCommand {
                     }
 
                     if (manager.isEconomyEnabled(world)) {
-                        if (plot.getCurrentBidder() == null) {
-                            if (plot.isAuctioned()) {
-                                if (plot.isForSale()) {
-                                    player.sendMessage("§a" + C("InfoAuctionned") + ": §b" + (C("WordYes")
-                                            + "§a " + C("InfoMinimumBid") + ": §b" + Math
-                                            .round(plot.getCurrentBid()))
-                                            + "§a " + C("InfoForSale") + ": §b" + ("§b" + Math.round(plot.getCustomPrice())));
-                                } else {
-                                    player.sendMessage("§a" + C("InfoAuctionned") + ": §b" + (C("WordYes")
-                                            + "§a " + C("InfoMinimumBid") + ": §b" + Math
-                                            .round(plot.getCurrentBid()))
-                                            + "§a " + C("InfoForSale") + ": §b" + C("WordNo"));
-                                }
-                            } else if (plot.isForSale()) {
-                                player.sendMessage("§a" + C("InfoAuctionned") + ": §b" + C("WordNo")
-                                        + "§a " + C("InfoForSale") + ": §b" + ("§b" + Math.round(plot.getCustomPrice())));
-                            } else {
-                                player.sendMessage("§a" + C("InfoAuctionned") + ": §b" + C("WordNo")
-                                        + "§a " + C("InfoForSale") + ": §b" + C("WordNo"));
-                            }
+                        if (plot.isForSale()) {
+                            player.sendMessage("§a " + C("InfoForSale") + ": §b" + ("§b" + Math.round(plot.getPrice())));
                         } else {
-                            if (plot.isAuctioned()) {
-                                player.sendMessage("§a" + C("InfoAuctionned") + ": §b" + (C("WordYes")
-                                        + "§a " + C("InfoBidder") + ": §b" + plot.getCurrentBidder()
-                                        + "§a " + C("InfoBid") + ": §b" + Math
-                                        .round(plot.getCurrentBid()))
-                                        + "§a " + C("InfoForSale") + ": §b" + (plot.isForSale() ? "§b" + Math.round(plot.getCustomPrice())
-                                        : C("WordNo")));
-                            } else if (plot.isForSale()) {
-                                player.sendMessage("§a" + C("InfoAuctionned") + ": §b" + C("WordNo")
-                                        + "§a " + C("InfoForSale") + ": §b" + ("§b" + Math.round(plot.getCustomPrice())));
-                            } else {
-                                player.sendMessage("§a" + C("InfoAuctionned") + ": §b" + C("WordNo")
-                                        + "§a " + C("InfoForSale") + ": §b" + C("WordNo"));
-                            }
+                            player.sendMessage("§a " + C("InfoForSale") + ": §b" + C("WordNo"));
                         }
                     }
                     int bottomX = manager.bottomX(id, world);

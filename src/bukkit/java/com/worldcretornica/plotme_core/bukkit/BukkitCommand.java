@@ -112,138 +112,137 @@ public class BukkitCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)) {
-            if (args.length == 0) {
-                sender.sendMessage(C("ConsoleHelpMain"));
-                sender.sendMessage("- /plotme reload");
-                sender.sendMessage(C("ConsoleHelpReload"));
-                return true;
-            } else {
-                if ("reload".equalsIgnoreCase(args[0])) {
-                    return reload.exec(new BukkitCommandSender(sender));
-                }
-                if ("resetexpired".equalsIgnoreCase(args[0])) {
-                    return resetExpired.exec(new BukkitCommandSender(sender), args);
-                }
-            }
-        } else {
-            BukkitPlayer player = (BukkitPlayer) plugin.wrapPlayer((Player) sender);
+            return handleConsoleCommands(sender, args);
+        }
+        BukkitPlayer player = (BukkitPlayer) plugin.wrapPlayer((Player) sender);
 
-            if (args.length == 0) {
-                return showHelp.exec(player, 1);
-            } else {
-                int page = -1;
+        if (args.length == 0) {
+            return showHelp.exec(player, 1);
+        }
+        int page = -1;
 
-                try {
-                    page = Integer.parseInt(args[0]);
-                } catch (NumberFormatException ignored) {
+        try {
+            page = Integer.parseInt(args[0]);
+        } catch (NumberFormatException ignored) {
+        }
+
+        if (page == -1) {
+            if ("help".equalsIgnoreCase(args[0])) {
+                if (args.length > 1) {
+                    String a1 = args[1];
+                    page = -1;
+
+                    try {
+                        page = Integer.parseInt(a1);
+                    } catch (NumberFormatException ignored) {
+                    }
                 }
 
                 if (page == -1) {
-                    if ("help".equalsIgnoreCase(args[0])) {
-                        if (args.length > 1) {
-                            String a1 = args[1];
-                            page = -1;
-
-                            try {
-                                page = Integer.parseInt(a1);
-                            } catch (NumberFormatException ignored) {
-                            }
-                        }
-
-                        if (page == -1) {
-                            return showHelp.exec(player, 1);
-                        } else {
-                            return showHelp.exec(player, page);
-                        }
-                    }
-                    if ("reload".equalsIgnoreCase(args[0])) {
-                        if (player.hasPermission("plotme.admin.reload")) {
-                            return reload.exec(player);
-                        }
-                    }
-                    if ("claim".equalsIgnoreCase(args[0])) {
-                        return claim.exec(player, args);
-                    }
-                    if ("auto".equalsIgnoreCase(args[0])) {
-                        return auto.exec(player, args);
-                    }
-                    if ("info".equalsIgnoreCase(args[0]) || "i".equalsIgnoreCase(args[0])) {
-                        return info.exec(player);
-                    }
-                    if ("biome".equalsIgnoreCase(args[0])) {
-                        return biome.exec(player, args);
-                    }
-                    if ("biomes".equalsIgnoreCase(args[0])) {
-                        return biomes.exec(player, args);
-                    }
-                    if ("tp".equalsIgnoreCase(args[0])) {
-                        return tp.exec(player, args);
-                    }
-                    if ("clear".equalsIgnoreCase(args[0])) {
-                        return clear.exec(player);
-                    }
-                    if ("reset".equalsIgnoreCase(args[0])) {
-                        return reset.exec(player);
-                    }
-                    if ("add".equalsIgnoreCase(args[0]) || "+".equalsIgnoreCase(args[0])) {
-                        return add.exec(player, args);
-                    }
-                    if ("deny".equalsIgnoreCase(args[0])) {
-                        return deny.exec(player, args);
-                    }
-                    if ("undeny".equalsIgnoreCase(args[0])) {
-                        return undeny.exec(player, args);
-                    }
-                    if ("remove".equalsIgnoreCase(args[0]) || "-".equalsIgnoreCase(args[0])) {
-                        return remove.exec(player, args);
-                    }
-                    if ("setowner".equalsIgnoreCase(args[0])) {
-                        return setOwner.exec(player, args);
-                    }
-                    if ("move".equalsIgnoreCase(args[0])) {
-                        return move.exec(player, args);
-                    }
-                    if ("weanywhere".equalsIgnoreCase(args[0])) {
-                        return weAnywhere.exec(player);
-                    }
-                    if ("list".equalsIgnoreCase(args[0])) {
-                        return plotList.exec(player, args);
-                    }
-                    if ("expired".equalsIgnoreCase(args[0])) {
-                        return expired.exec(player, args);
-                    }
-                    if ("addtime".equalsIgnoreCase(args[0])) {
-                        return addTime.exec(player);
-                    }
-                    if ("done".equalsIgnoreCase(args[0])) {
-                        return done.exec(player);
-                    }
-                    if ("donelist".equalsIgnoreCase(args[0])) {
-                        return doneList.exec(player, args);
-                    }
-                    if ("protect".equalsIgnoreCase(args[0])) {
-                        return protect.exec(player);
-                    }
-                    if ("sell".equalsIgnoreCase(args[0])) {
-                        return sell.exec(player, args);
-                    }
-                    if ("dispose".equalsIgnoreCase(args[0])) {
-                        return dispose.exec(player);
-                    }
-                    if ("buy".equalsIgnoreCase(args[0])) {
-                        return buy.exec(player);
-                    }
-                    if ("middle".equalsIgnoreCase(args[0])) {
-                        return middle.exec(player);
-                    }
-                    // arg can be "home" or "home:n"
-                    if ((args[0].toLowerCase() + ":").startsWith("home:") || (args[0].toLowerCase() + ":").startsWith("h:")) {
-                        return home.exec(player, args);
-                    }
-                } else {
-                    return showHelp.exec(player, page);
+                    return showHelp.exec(player, 1);
                 }
+                return showHelp.exec(player, page);
             }
+            if ("reload".equalsIgnoreCase(args[0]) && player.hasPermission("plotme.admin.reload")) {
+                return reload.exec(player);
+            }
+            if ("claim".equalsIgnoreCase(args[0])) {
+                return claim.exec(player, args);
+            }
+            if ("auto".equalsIgnoreCase(args[0])) {
+                return auto.exec(player, args);
+            }
+            if ("info".equalsIgnoreCase(args[0]) || "i".equalsIgnoreCase(args[0])) {
+                return info.exec(player);
+            }
+            if ("biome".equalsIgnoreCase(args[0])) {
+                return biome.exec(player, args);
+            }
+            if ("biomes".equalsIgnoreCase(args[0])) {
+                return biomes.exec(player, args);
+            }
+            if ("tp".equalsIgnoreCase(args[0])) {
+                return tp.exec(player, args);
+            }
+            if ("clear".equalsIgnoreCase(args[0])) {
+                return clear.exec(player);
+            }
+            if ("reset".equalsIgnoreCase(args[0])) {
+                return reset.exec(player);
+            }
+            if ("add".equalsIgnoreCase(args[0]) || "+".equalsIgnoreCase(args[0])) {
+                return add.exec(player, args);
+            }
+            if ("deny".equalsIgnoreCase(args[0])) {
+                return deny.exec(player, args);
+            }
+            if ("undeny".equalsIgnoreCase(args[0])) {
+                return undeny.exec(player, args);
+            }
+            if ("remove".equalsIgnoreCase(args[0]) || "-".equalsIgnoreCase(args[0])) {
+                return remove.exec(player, args);
+            }
+            if ("setowner".equalsIgnoreCase(args[0])) {
+                return setOwner.exec(player, args);
+            }
+            if ("move".equalsIgnoreCase(args[0])) {
+                return move.exec(player, args);
+            }
+            if ("weanywhere".equalsIgnoreCase(args[0])) {
+                return weAnywhere.exec(player);
+            }
+            if ("list".equalsIgnoreCase(args[0])) {
+                return plotList.exec(player, args);
+            }
+            if ("expired".equalsIgnoreCase(args[0])) {
+                return expired.exec(player, args);
+            }
+            if ("addtime".equalsIgnoreCase(args[0])) {
+                return addTime.exec(player);
+            }
+            if ("done".equalsIgnoreCase(args[0])) {
+                return done.exec(player);
+            }
+            if ("donelist".equalsIgnoreCase(args[0])) {
+                return doneList.exec(player, args);
+            }
+            if ("protect".equalsIgnoreCase(args[0])) {
+                return protect.exec(player);
+            }
+            if ("sell".equalsIgnoreCase(args[0])) {
+                return sell.exec(player, args);
+            }
+            if ("dispose".equalsIgnoreCase(args[0])) {
+                return dispose.exec(player);
+            }
+            if ("buy".equalsIgnoreCase(args[0])) {
+                return buy.exec(player);
+            }
+            if ("middle".equalsIgnoreCase(args[0])) {
+                return middle.exec(player);
+            }
+            // arg can be "home" or "home:n"
+            if ((args[0].toLowerCase() + ":").startsWith("home:") || (args[0].toLowerCase() + ":").startsWith("h:")) {
+                return home.exec(player, args);
+            }
+        } else {
+            return showHelp.exec(player, page);
+        }
+        return false;
+    }
+
+    private boolean handleConsoleCommands(CommandSender sender, String[] args) {
+        if (args.length == 0) {
+            sender.sendMessage(C("ConsoleHelpMain"));
+            sender.sendMessage("- /plotme reload");
+            sender.sendMessage(C("ConsoleHelpReload"));
+            return true;
+        }
+        if ("reload".equalsIgnoreCase(args[0])) {
+            return reload.exec(new BukkitCommandSender(sender));
+        }
+        if ("resetexpired".equalsIgnoreCase(args[0])) {
+            return resetExpired.exec(new BukkitCommandSender(sender), args[1]);
         }
         return false;
     }

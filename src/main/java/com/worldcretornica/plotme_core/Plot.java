@@ -4,7 +4,6 @@ import com.worldcretornica.plotme_core.api.IBiome;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 
-import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -22,41 +21,35 @@ public class Plot implements Cloneable {
     private UUID ownerId;
     private String world;
     private IBiome biome;
-    private Date expiredDate;
+    private String expiredDate;
     private boolean finished;
     private PlotId id;
-    private double customPrice;
+    private double price;
     private boolean forSale;
     private String finishedDate;
     private boolean protect;
-    private boolean auctioned;
-    private String currentBidder;
-    private double currentBid;
-    private UUID currentBidderId;
     private Map<String, Map<String, String>> metadata;
+    private int likes;
+    private int internalID;
+    private String plotName;
 
     public Plot(PlotMe_Core plugin) {
         this.plugin = plugin;
-        setOwner("");
-        setOwnerId(null);
-        setWorld("");
-        setId(null);
-        allowed = new PlayerList();
-        denied = new PlayerList();
         setBiome(this.plugin.getServerBridge().getBiome("PLAINS"));
 
-        Calendar.getInstance().add(Calendar.DAY_OF_YEAR, 7);
-        java.util.Date utlDate = Calendar.getInstance().getTime();
-        setExpiredDate(new Date(utlDate.getTime()));
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DAY_OF_YEAR, 7);
+        String temp = new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime());
+        setExpiredDate(temp);
 
-        setCustomPrice(0.0);
+        setPrice(0.0);
         setForSale(false);
         setFinishedDate(null);
-        setProtect(false);
-        setAuctioned(false);
-        setCurrentBidder(null);
-        setCurrentBidderId(null);
-        setCurrentBid(0.0);
+        setProtected(false);
+        setPlotName(null);
+        setLikes(0);
+        allowed = new PlayerList();
+        denied = new PlayerList();
     }
 
     public Plot(PlotMe_Core plugin, String owner, UUID uuid, IWorld world, PlotId plotId, int days) {
@@ -74,26 +67,20 @@ public class Plot implements Cloneable {
         } else {
             Calendar cal = Calendar.getInstance();
             cal.add(Calendar.DAY_OF_YEAR, days);
-            java.util.Date utlDate = cal.getTime();
-            setExpiredDate(new Date(utlDate.getTime()));
+            String temp = new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime());
+            setExpiredDate(temp);
         }
 
-        setCustomPrice(0.0);
+        setPrice(0.0);
         setForSale(false);
         setFinishedDate(null);
-        setProtect(false);
-        setAuctioned(false);
-        setCurrentBidder(null);
-        setCurrentBidderId(null);
-        setCurrentBid(0.0);
+        setProtected(false);
         metadata = new HashMap<>();
     }
 
-    public Plot(PlotMe_Core plugin, String owner, UUID ownerId, String world, String biome, Date expiredDate,
-            boolean finished,
-            PlayerList allowed, PlotId id, double customPrice, boolean sale, String finishedDate,
-            boolean protect, String bidder, UUID bidderId, double bid, boolean isAuctioned, PlayerList denied,
-            Map<String, Map<String, String>> metadata) {
+    public Plot(PlotMe_Core plugin, String owner, UUID ownerId, String world, String biome, String expiredDate, boolean finished,
+            PlayerList allowed, PlotId id, double price, boolean forSale, String finishedDate, boolean protect, PlayerList denied,
+            Map<String, Map<String, String>> metadata, int plotLikes, String plotName) {
         this.plugin = plugin;
         setOwner(owner);
         setOwnerId(ownerId);
@@ -103,14 +90,12 @@ public class Plot implements Cloneable {
         setFinished(finished);
         this.allowed = allowed;
         setId(id);
-        setCustomPrice(customPrice);
-        setForSale(sale);
+        setPrice(price);
+        setForSale(forSale);
         setFinishedDate(finishedDate);
-        setProtect(protect);
-        setAuctioned(isAuctioned);
-        setCurrentBidder(bidder);
-        setCurrentBidderId(bidderId);
-        setCurrentBid(bid);
+        setProtected(protect);
+        setLikes(plotLikes);
+        setPlotName(plotName);
         this.denied = denied;
         this.metadata = metadata;
     }
@@ -124,11 +109,10 @@ public class Plot implements Cloneable {
         } else {
             Calendar cal = Calendar.getInstance();
             cal.add(Calendar.DAY_OF_YEAR, days);
-            java.util.Date utlDate = cal.getTime();
-            Date temp = new Date(utlDate.getTime());
-            if (getExpiredDate() == null || !temp.toString().equalsIgnoreCase(getExpiredDate().toString())) {
+            String temp = new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime());
+            if (getExpiredDate() == null || !temp.equalsIgnoreCase(getExpiredDate())) {
                 setExpiredDate(temp);
-                updateField("expireddate", getExpiredDate());
+                updateField("expiredDate", getExpiredDate());
             }
         }
     }
@@ -144,7 +128,7 @@ public class Plot implements Cloneable {
         setFinishedDate(null);
         setFinished(false);
 
-        updateFinished(getFinishedDate(), isFinished());
+        updateFinished(null, false);
     }
 
     public IBiome getBiome() {
@@ -182,35 +166,35 @@ public class Plot implements Cloneable {
     public void addAllowed(String name, UUID uuid) {
         if (!isAllowedConsulting(name)) {
             allowed().put(name, uuid);
-            plugin.getSqlManager().addPlotAllowed(name, uuid, getId(), getWorld());
+            plugin.getSqlManager().addPlotAllowed(name, uuid, getInternalID());
         }
     }
 
     public void addAllowed(String name) {
         if (!isAllowedConsulting(name)) {
             allowed().put(name);
-            plugin.getSqlManager().addPlotAllowed(name, null, getId(), getWorld());
+            plugin.getSqlManager().addPlotAllowed(name, null, getInternalID());
         }
     }
 
     public void addAllowed(UUID uuid) {
         if (!isAllowed(uuid)) {
             String name = allowed().put(uuid);
-            plugin.getSqlManager().addPlotAllowed(name, uuid, getId(), getWorld());
+            plugin.getSqlManager().addPlotAllowed(name, uuid, getInternalID());
         }
     }
 
     public void addDenied(String name) {
         if (!isDeniedConsulting(name)) {
             denied().put(name);
-            plugin.getSqlManager().addPlotDenied(name, null, getId(), getWorld());
+            plugin.getSqlManager().addPlotDenied(name, null, getInternalID());
         }
     }
 
     public void addDenied(UUID uuid) {
         if (!isDenied(uuid)) {
             String name = denied().put(uuid);
-            plugin.getSqlManager().addPlotDenied(name, uuid, getId(), getWorld());
+            plugin.getSqlManager().addPlotDenied(name, uuid, getInternalID());
         }
     }
 
@@ -222,23 +206,14 @@ public class Plot implements Cloneable {
             if (plugin.getServerBridge().getPlotWorldEdit() != null) {
                 IPlayer player = plugin.getServerBridge().getPlayer(uuid);
 
-                if (player != null) {
-                    if (PlotMeCoreManager.getInstance().isPlotWorld(player.getWorld())) {
-                        if (PlotMeCoreManager.getInstance().isPlayerIgnoringWELimit(player)) {
-                            plugin.getServerBridge().getPlotWorldEdit().removeMask(player);
-                        } else {
-                            plugin.getServerBridge().getPlotWorldEdit().setMask(player);
-                        }
+                if (player != null && PlotMeCoreManager.getInstance().isPlotWorld(player.getWorld())) {
+                    if (PlotMeCoreManager.getInstance().isPlayerIgnoringWELimit(player)) {
+                        plugin.getServerBridge().getPlotWorldEdit().removeMask(player);
+                    } else {
+                        plugin.getServerBridge().getPlotWorldEdit().setMask(player);
                     }
                 }
             }
-        }
-    }
-
-    public void removeAllowedGroup(String name) {
-        if (allowed().contains(name)) {
-            allowed().remove(name);
-            plugin.getSqlManager().deletePlotAllowed(getId().getX(), getId().getZ(), name, null, getWorld());
         }
     }
 
@@ -250,13 +225,11 @@ public class Plot implements Cloneable {
             if (plugin.getServerBridge().getPlotWorldEdit() != null) {
                 IPlayer player = plugin.getServerBridge().getPlayer(uuid);
 
-                if (player != null) {
-                    if (PlotMeCoreManager.getInstance().isPlotWorld(player.getWorld())) {
-                        if (PlotMeCoreManager.getInstance().isPlayerIgnoringWELimit(player)) {
-                            plugin.getServerBridge().getPlotWorldEdit().removeMask(player);
-                        } else {
-                            plugin.getServerBridge().getPlotWorldEdit().setMask(player);
-                        }
+                if (player != null && PlotMeCoreManager.getInstance().isPlotWorld(player.getWorld())) {
+                    if (PlotMeCoreManager.getInstance().isPlayerIgnoringWELimit(player)) {
+                        plugin.getServerBridge().getPlotWorldEdit().removeMask(player);
+                    } else {
+                        plugin.getServerBridge().getPlotWorldEdit().setMask(player);
                     }
                 }
             }
@@ -267,13 +240,6 @@ public class Plot implements Cloneable {
         if (denied().contains(name)) {
             UUID uuid = denied().remove(name);
             plugin.getSqlManager().deletePlotDenied(getId().getX(), getId().getZ(), name, uuid, getWorld());
-        }
-    }
-
-    public void removeDeniedGroup(String name) {
-        if (denied().contains(name)) {
-            denied().remove(name);
-            plugin.getSqlManager().deletePlotDenied(getId().getX(), getId().getZ(), name, null, getWorld());
         }
     }
 
@@ -304,29 +270,20 @@ public class Plot implements Cloneable {
 
     public boolean isAllowedConsulting(String name) {
         IPlayer player = plugin.getServerBridge().getPlayerExact(name);
-        if (player != null) {
-            return isAllowedInternal(name, player.getUniqueId(), true, true);
-        } else {
-            return isGroupAllowed(name);
-        }
-    }
-
-    public boolean isGroupAllowed(String name) {
-        return isAllowedInternal(name, null, true, true);
+        return player != null && isAllowedInternal(name, player.getUniqueId(), true);
     }
 
     public boolean isAllowed(String name, UUID uuid) {
-        return isAllowedInternal(name, uuid, true, true);
+        return isAllowedInternal(name, uuid, true);
     }
 
     public boolean isAllowed(UUID uuid) {
-        return isAllowedInternal("", uuid, true, true);
+        return isAllowedInternal("", uuid, true);
     }
 
-    private boolean isAllowedInternal(String name, UUID uuid, boolean checkStar, boolean checkGroup) {
+    private boolean isAllowedInternal(String name, UUID uuid, boolean checkStar) {
 
-        IPlayer player = plugin.getServerBridge().getPlayer(uuid);
-        if (getOwnerId() != null && getOwnerId().equals(uuid)) {
+        if (getOwnerId().equals(uuid)) {
             return true;
         }
 
@@ -340,26 +297,13 @@ public class Plot implements Cloneable {
             if (u != null && u.equals(uuid) || uuid == null && str.equalsIgnoreCase(name)) {
                 return true;
             }
-            if (checkGroup && str.toLowerCase().startsWith("group:") && player != null) {
-                if (player.hasPermission("plotme.group." + str.replace("Group:", ""))) {
-                    return true;
-                }
-            }
         }
         return false;
     }
 
     public boolean isDeniedConsulting(String name) {
         IPlayer player = plugin.getServerBridge().getPlayerExact(name);
-        if (player != null) {
-            return isDeniedInternal(name, player.getUniqueId());
-        } else {
-            return isGroupDenied(name);
-        }
-    }
-
-    public boolean isGroupDenied(String name) {
-        return isDeniedInternal(name, null);
+        return player != null && isDeniedInternal(name, player.getUniqueId());
     }
 
     public boolean isDenied(UUID uuid) {
@@ -368,13 +312,8 @@ public class Plot implements Cloneable {
 
     public boolean isDeniedInternal(String name, UUID uuid) {
 
-        if (isAllowedInternal(name, uuid, false, false)) {
+        if (isAllowedInternal(name, uuid, false)) {
             return false;
-        }
-
-        IPlayer player = null;
-        if (uuid != null) {
-            player = plugin.getServerBridge().getPlayer(uuid);
         }
 
         HashMap<String, UUID> list = denied().getAllPlayers();
@@ -384,20 +323,8 @@ public class Plot implements Cloneable {
             }
 
             UUID u = list.get(str);
-            if (str.equalsIgnoreCase(name)) {
+            if (str.equalsIgnoreCase(name) || uuid != null && u != null && u.equals(uuid)) {
                 return true;
-            } else if (uuid != null) {
-                if (u != null && u.equals(uuid)) {
-                    return true;
-                } else if (str.toLowerCase().startsWith("group:")) {
-                    if (player != null) {
-                        if (player.hasPermission("plotme.group." + str.replace("Group:", ""))) {
-                            return true;
-                        }
-                    } else {
-                        plugin.getLogger().warning("Something went wrong checking for denied.");
-                    }
-                }
             }
         }
         return false;
@@ -436,11 +363,11 @@ public class Plot implements Cloneable {
         this.world = world.toLowerCase();
     }
 
-    public final Date getExpiredDate() {
+    public final String getExpiredDate() {
         return expiredDate;
     }
 
-    public final void setExpiredDate(Date expiredDate) {
+    public final void setExpiredDate(String expiredDate) {
         this.expiredDate = expiredDate;
     }
 
@@ -460,12 +387,12 @@ public class Plot implements Cloneable {
         this.id = id;
     }
 
-    public final double getCustomPrice() {
-        return customPrice;
+    public final double getPrice() {
+        return price;
     }
 
-    public final void setCustomPrice(double customPrice) {
-        this.customPrice = customPrice;
+    public final void setPrice(double customPrice) {
+        this.price = customPrice;
     }
 
     public final boolean isForSale() {
@@ -488,40 +415,8 @@ public class Plot implements Cloneable {
         return protect;
     }
 
-    public final void setProtect(boolean protect) {
+    public final void setProtected(boolean protect) {
         this.protect = protect;
-    }
-
-    public final boolean isAuctioned() {
-        return auctioned;
-    }
-
-    public final void setAuctioned(boolean auctioned) {
-        this.auctioned = auctioned;
-    }
-
-    public final String getCurrentBidder() {
-        return currentBidder;
-    }
-
-    public final void setCurrentBidder(String currentBidder) {
-        this.currentBidder = currentBidder;
-    }
-
-    public final UUID getCurrentBidderId() {
-        return currentBidderId;
-    }
-
-    public final void setCurrentBidderId(UUID uuid) {
-        currentBidderId = uuid;
-    }
-
-    public final double getCurrentBid() {
-        return currentBid;
-    }
-
-    public final void setCurrentBid(double currentBid) {
-        this.currentBid = currentBid;
     }
 
     public String getPlotProperty(String pluginname, String property) {
@@ -545,8 +440,27 @@ public class Plot implements Cloneable {
         return (Plot) super.clone();
     }
 
-    public void setCurrentBidder(String bidder, UUID uniqueId) {
-        this.currentBidder = bidder;
-        this.currentBidderId = uniqueId;
+    public int getInternalID() {
+        return internalID;
+    }
+
+    public void setInternalID(int internalID) {
+        this.internalID = internalID;
+    }
+
+    public int getLikes() {
+        return likes;
+    }
+
+    public void setLikes(int likes) {
+        this.likes = likes;
+    }
+
+    public String getPlotName() {
+        return plotName;
+    }
+
+    public void setPlotName(String plotName) {
+        this.plotName = plotName;
     }
 }

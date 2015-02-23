@@ -11,14 +11,11 @@ public class CmdResetExpired extends PlotCommand {
         super(instance);
     }
 
-    public boolean exec(ICommandSender sender, String[] args) {
-        if (args.length <= 1) {
-            serverBridge.getLogger()
-                    .info(C("WordUsage") + ": plotme resetexpired <" + C("WordWorld") + "> §rExample: §c/plotme resetexpired plotworld ");
-        } else if (plugin.getWorldCurrentlyProcessingExpired() != null) {
+    public boolean exec(ICommandSender sender, String string) {
+        if (plugin.getWorldCurrentlyProcessingExpired() != null) {
             serverBridge.getLogger().info(C("MsgAlreadyProcessingPlots"));
         } else {
-            IWorld world = serverBridge.getWorld(args[1]);
+            IWorld world = serverBridge.getWorld(string);
 
             if (!manager.isPlotWorld(world)) {
                 serverBridge.getLogger().info("§c" + C("MsgNotPlotWorld"));

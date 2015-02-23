@@ -367,7 +367,7 @@ public class BukkitServerBridge extends IServerBridge {
     @Override
     public boolean createPlotWorld(String worldName, String generator, Map<String, String> args) {
         //Get a seed
-        Long seed = new Random().nextLong();
+        long seed = new Random().nextLong();
 
         //Check if we have multiverse
         if (getMultiverse() == null) {
@@ -426,7 +426,7 @@ public class BukkitServerBridge extends IServerBridge {
         if (getMultiverse() != null) {
             boolean success = false;
             if (getMultiverse().isEnabled()) {
-                success = plugin.getServerObjectBuilder().addMultiverseWorld(worldName, seed.toString(), generator);
+                success = plugin.getServerObjectBuilder().addMultiverseWorld(worldName, String.valueOf(seed), generator);
 
                 if (!success) {
                     getLogger().info(plugin.getAPI().getUtil().C("ErrCannotCreateMV"));

@@ -7,6 +7,7 @@ import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotTeleportHomeEvent;
+import com.worldcretornica.plotme_core.bukkit.api.BukkitLocation;
 import net.milkbowl.vault.economy.EconomyResponse;
 
 import java.util.UUID;
@@ -18,12 +19,10 @@ public class CmdHome extends PlotCommand {
     }
 
     public boolean exec(IPlayer player, String[] args) {
-        if (player.hasPermission(PermissionNames.USER_HOME) || player.hasPermission(PermissionNames.ADMIN_HOME_OTHER)) {
+        if (player.hasPermission(PermissionNames.USER_HOME)) {
             if (manager.isPlotWorld(player) || serverBridge.getConfig().getBoolean("allowWorldTeleport")) {
-                String playerName = player.getName();
                 UUID uuid = player.getUniqueId();
                 IWorld world;
-
                 if (manager.isPlotWorld(player)) {
                     world = player.getWorld();
                 } else {
@@ -40,22 +39,20 @@ public class CmdHome extends PlotCommand {
                     if (args[0].split(":").length == 1 || args[0].split(":")[1].isEmpty()) {
                         player.sendMessage(C("WordUsage") + ": §c/plotme home:# §r" + C("WordExample") + ": §c/plotme home:1");
                         return true;
-                    } else {
-                        try {
-                            nb = Integer.parseInt(args[0].split(":")[1]);
-                        } catch (NumberFormatException e) {
-                            player.sendMessage(C("WordUsage") + ": §c/plotme home:# §r" + C("WordExample") + ": §c/plotme home:1");
-                            return true;
-                        }
+                    }
+                    try {
+                        nb = Integer.parseInt(args[0].split(":")[1]);
+                    } catch (NumberFormatException e) {
+                        player.sendMessage(C("WordUsage") + ": §c/plotme home:# §r" + C("WordExample") + ": §c/plotme home:1");
+                        return true;
                     }
                 }
 
+                String playerName = player.getName();
                 if (args.length == 2) {
                     if (serverBridge.getWorld(args[1]) == null) {
-                        if (player.hasPermission(PermissionNames.ADMIN_HOME_OTHER)) {
-                            playerName = args[1];
-                            uuid = null;
-                        }
+                        playerName = args[1];
+                        uuid = null;
                     } else {
                         world = serverBridge.getWorld(args[1]);
                     }
@@ -65,10 +62,9 @@ public class CmdHome extends PlotCommand {
                     if (serverBridge.getWorld(args[2]) == null) {
                         player.sendMessage("§c" + args[2] + C("MsgWorldNotPlot"));
                         return true;
-                    } else {
-                        world = serverBridge.getWorld(args[2]);
-                        worldName = args[2];
                     }
+                    world = serverBridge.getWorld(args[2]);
+                    worldName = args[2];
                 }
                 if (world == null) {
                     return true;
@@ -78,6 +74,7 @@ public class CmdHome extends PlotCommand {
                     int i = nb - 1;
 
                     for (Plot plot : plugin.getSqlManager().getOwnedPlots(world.getName(), uuid, playerName)) {
+                        BukkitLocation location;
                         if (uuid == null) {
                             if (plot.getOwner().equalsIgnoreCase(playerName)) {
                                 if (i == 0) {
@@ -91,17 +88,17 @@ public class CmdHome extends PlotCommand {
                                         double balance = serverBridge.getBalance(player);
 
                                         if (balance >= price) {
-                                            event = serverBridge.getEventFactory().callPlotTeleportHomeEvent(plugin, world, plot, player);
+                                            location = (BukkitLocation) manager.getPlotHome(world, plot.getId());
+                                            event = serverBridge.getEventFactory().callPlotTeleportHomeEvent(world, plot, player, location);
 
                                             if (event.isCancelled()) {
                                                 return true;
-                                            } else {
-                                                EconomyResponse er = serverBridge.withdrawPlayer(player, price);
+                                            }
+                                            EconomyResponse er = serverBridge.withdrawPlayer(player, price);
 
-                                                if (!er.transactionSuccess()) {
-                                                    player.sendMessage("§c" + er.errorMessage);
-                                                    return true;
-                                                }
+                                            if (!er.transactionSuccess()) {
+                                                player.sendMessage("§c" + er.errorMessage);
+                                                return true;
                                             }
                                         } else {
                                             player.sendMessage("§c" + C("MsgNotEnoughTp") + " " + C("WordMissing") + " §r" + Util()
@@ -109,7 +106,8 @@ public class CmdHome extends PlotCommand {
                                             return true;
                                         }
                                     } else {
-                                        event = serverBridge.getEventFactory().callPlotTeleportHomeEvent(plugin, world, plot, player);
+                                        location = (BukkitLocation) manager.getPlotHome(world, plot.getId());
+                                        event = serverBridge.getEventFactory().callPlotTeleportHomeEvent(world, plot, player, location);
                                     }
 
                                     if (!event.isCancelled()) {
@@ -120,9 +118,8 @@ public class CmdHome extends PlotCommand {
                                         }
                                     }
                                     return true;
-                                } else {
-                                    i--;
                                 }
+                                i--;
                             }
                         } else if (plot.getOwnerId().equals(uuid)) {
                             if (i == 0) {
@@ -136,7 +133,8 @@ public class CmdHome extends PlotCommand {
                                     double balance = serverBridge.getBalance(player);
 
                                     if (balance >= price) {
-                                        event = serverBridge.getEventFactory().callPlotTeleportHomeEvent(plugin, world, plot, player);
+                                        location = (BukkitLocation) manager.getPlotHome(world, plot.getId());
+                                        event = serverBridge.getEventFactory().callPlotTeleportHomeEvent(world, plot, player, location);
 
                                         if (!event.isCancelled()) {
                                             EconomyResponse er = serverBridge.withdrawPlayer(player, price);
@@ -152,7 +150,8 @@ public class CmdHome extends PlotCommand {
                                         return true;
                                     }
                                 } else {
-                                    event = serverBridge.getEventFactory().callPlotTeleportHomeEvent(plugin, world, plot, player);
+                                    location = (BukkitLocation) manager.getPlotHome(world, plot.getId());
+                                    event = serverBridge.getEventFactory().callPlotTeleportHomeEvent(world, plot, player, location);
                                 }
 
                                 if (!event.isCancelled()) {
@@ -163,9 +162,8 @@ public class CmdHome extends PlotCommand {
                                     }
                                 }
                                 return true;
-                            } else {
-                                i--;
                             }
+                            i--;
                         }
                     }
 

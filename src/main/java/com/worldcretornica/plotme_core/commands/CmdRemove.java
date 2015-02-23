@@ -35,7 +35,7 @@ public class CmdRemove extends PlotCommand {
                         String allowed = args[1];
 
                         if (plot.getOwnerId().equals(playerUniqueId) || player.hasPermission(PermissionNames.ADMIN_REMOVE)) {
-                            if (plot.isAllowedConsulting(allowed) || plot.isGroupAllowed(allowed)) {
+                            if (plot.isAllowedConsulting(allowed)) {
 
                                 double price = 0.0;
 
@@ -46,7 +46,7 @@ public class CmdRemove extends PlotCommand {
                                     double balance = serverBridge.getBalance(player);
 
                                     if (balance >= price) {
-                                        event = serverBridge.getEventFactory().callPlotRemoveAllowedEvent(plugin, world, plot, player, allowed);
+                                        event = serverBridge.getEventFactory().callPlotRemoveAllowedEvent(world, plot, player, allowed);
 
                                         if (event.isCancelled()) {
                                             return true;
@@ -65,7 +65,7 @@ public class CmdRemove extends PlotCommand {
                                         return true;
                                     }
                                 } else {
-                                    event = serverBridge.getEventFactory().callPlotRemoveAllowedEvent(plugin, world, plot, player, allowed);
+                                    event = serverBridge.getEventFactory().callPlotRemoveAllowedEvent(world, plot, player, allowed);
                                 }
 
                                 if (!event.isCancelled()) {
@@ -77,7 +77,7 @@ public class CmdRemove extends PlotCommand {
                                     if (isAdvancedLogging()) {
                                         serverBridge.getLogger()
                                                 .info(allowed + " " + C("MsgRemovedPlayer") + " " + allowed + " " + C("MsgFromPlot") + " " + id + (
-                                                        price != 0 ? " " + C("WordFor") + " " + price : ""));
+                                                        price == 0 ? "" : " " + C("WordFor") + " " + price));
                                     }
                                 }
                             } else {

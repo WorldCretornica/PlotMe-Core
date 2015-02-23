@@ -44,7 +44,7 @@ public class CmdClear extends PlotCommand {
                                 double balance = serverBridge.getBalance(player);
 
                                 if (balance >= price) {
-                                    event = serverBridge.getEventFactory().callPlotClearEvent(plugin, world, plot, player);
+                                    event = serverBridge.getEventFactory().callPlotClearEvent(world, plot, player);
 
                                     if (event.isCancelled()) {
                                         return true;
@@ -64,7 +64,7 @@ public class CmdClear extends PlotCommand {
                                     return true;
                                 }
                             } else {
-                                event = serverBridge.getEventFactory().callPlotClearEvent(plugin, world, plot, player);
+                                event = serverBridge.getEventFactory().callPlotClearEvent(world, plot, player);
                             }
 
                             if (!event.isCancelled()) {

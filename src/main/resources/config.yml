@@ -12,3 +12,4 @@ LoadAllPlotsOnStart: false
 PlotEnterAnnouncement: false
 CoreDatabaseUpdate: true
 mySQLConverter: true
+LastPlotMeVersion: 0.14

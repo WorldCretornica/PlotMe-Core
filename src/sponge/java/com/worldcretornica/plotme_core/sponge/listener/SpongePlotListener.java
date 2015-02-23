@@ -50,7 +50,7 @@ public class SpongePlotListener {
             if (id == null) {
                 event.setCancelled(true);
             } else {
-                PlotToClear ptc = api.getPlotLocked(location.getWorld().getName(), id);
+                PlotToClear ptc = api.getPlotLocked(location.getWorld(), id);
                 if (ptc != null) {
                     switch (ptc.getReason()) {
                         case Clear:
@@ -140,12 +140,10 @@ public class SpongePlotListener {
         PlotMapInfo pmi = PlotMeCoreManager.getInstance().getMap(world);
         if (!pmi.canUseProjectiles()) {
             ProjectileSource source = event.getSource().orNull();
-            if (source != null) {
-                if (source instanceof Player) {
-                    //noinspection OverlyStrongTypeCast
-                    ((Player) source).sendMessage("");
-                    event.getLaunchedProjectile().remove();
-                }
+            if (source instanceof Player) {
+                //noinspection OverlyStrongTypeCast
+                ((Player) source).sendMessage("");
+                event.getLaunchedProjectile().remove();
             }
         }
     }

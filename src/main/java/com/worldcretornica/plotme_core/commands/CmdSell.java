@@ -30,10 +30,6 @@ public class CmdSell extends PlotCommand {
                         } else if (!manager.isPlotAvailable(id, pmi)) {
                             Plot plot = manager.getPlotById(id, pmi);
 
-                            if (plot.isAuctioned()) {
-                                player.sendMessage(C("You cannot sell a plot that is for auction"));
-                                return true;
-                            }
                             if (player.getUniqueId().equals(plot.getOwnerId()) || player.hasPermission(PermissionNames.ADMIN_SELL)) {
 
                                 InternalPlotSellChangeEvent event;
@@ -41,10 +37,10 @@ public class CmdSell extends PlotCommand {
                                 if (plot.isForSale()) {
                                     event =
                                             serverBridge.getEventFactory()
-                                                    .callPlotSellChangeEvent(plugin, world, plot, player, plot.getCustomPrice(), false);
+                                                    .callPlotSellChangeEvent(world, plot, player, plot.getPrice(), false);
 
                                     if (!event.isCancelled()) {
-                                        plot.setCustomPrice(0.0);
+                                        plot.setPrice(0.0);
                                         plot.setForSale(false);
 
                                         plot.updateField("customprice", 0);
@@ -66,10 +62,8 @@ public class CmdSell extends PlotCommand {
                                     if (args.length == 2) {
                                         try {
                                             price = Double.parseDouble(args[1]);
-                                        } catch (Exception e) {
-                                            player.sendMessage(
-                                                    C("WordUsage") + ": §c /plotme sell <" + C("WordAmount") + ">§r " + C("WordExample")
-                                                            + ": §c/plotme sell 200");
+                                        } catch (NumberFormatException e) {
+                                            player.sendMessage("Invalid price.");
                                             return true;
                                         }
                                     }
@@ -77,10 +71,10 @@ public class CmdSell extends PlotCommand {
                                     if (price < 0.0) {
                                         player.sendMessage("§c" + C("MsgInvalidAmount"));
                                     } else {
-                                        event = serverBridge.getEventFactory().callPlotSellChangeEvent(plugin, world, plot, player, price, true);
+                                        event = serverBridge.getEventFactory().callPlotSellChangeEvent(world, plot, player, price, true);
 
                                         if (!event.isCancelled()) {
-                                            plot.setCustomPrice(price);
+                                            plot.setPrice(price);
                                             plot.setForSale(true);
 
                                             plot.updateField("customprice", price);

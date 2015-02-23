@@ -38,7 +38,6 @@ public class SpongeServerBridge extends IServerBridge {
 
     @Override
     public IOfflinePlayer getOfflinePlayer(UUID uuid) {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -228,7 +227,6 @@ public class SpongeServerBridge extends IServerBridge {
 
     @Override
     public List<String> getBiomes() {
-        // TODO Auto-generated method stub
         return null;
     }
 

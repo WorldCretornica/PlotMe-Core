@@ -27,7 +27,7 @@ public class CmdMiddle extends PlotCommand {
                 } else if (plot.isAllowed(player.getUniqueId()) || player.hasPermission(PermissionNames.ADMIN_MIDDLE_OTHER)) {
                     ILocation middleloc = manager.getPlotMiddle(world, plot.getId());
                     InternalPlotTeleportMiddleEvent event =
-                            serverBridge.getEventFactory().callPlotTeleportMiddleEvent(plugin, world, plot, player, middleloc);
+                            serverBridge.getEventFactory().callPlotTeleportMiddleEvent(world, plot, player, middleloc);
 
                     if (!event.isCancelled()) {
                         player.setLocation(event.getMiddleLocation());

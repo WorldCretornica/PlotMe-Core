@@ -19,7 +19,6 @@ public class CmdTP extends PlotCommand {
         if (player.hasPermission(PermissionNames.ADMIN_TP)) {
             if (manager.isPlotWorld(player) || serverBridge.getConfig().getBoolean("allowWorldTeleport")) {
                 if (args.length == 2 || args.length == 3) {
-                    String id = args[1];
                     IWorld world;
                     if (args.length == 3) {
 
@@ -35,25 +34,16 @@ public class CmdTP extends PlotCommand {
                         world = manager.getFirstWorld();
                     }
 
-                    if (manager.isValidId(world, id)) {
-                        PlotId id2 = new PlotId(id);
+                    if (PlotId.isValidID(args[1])) {
+                        PlotId id2 = new PlotId(args[1]);
                         if (!manager.isPlotWorld(world)) {
                             player.sendMessage("§c" + C("MsgNoPlotworldFound"));
-                        } else if (!manager.isValidId(world, id)) {
-                            if (serverBridge.getConfig().getBoolean("allowWorldTeleport")) {
-                                player.sendMessage(
-                                        C("WordUsage") + ": §c/plotme tp <ID> [" + C("WordWorld") + "] §r" + C("WordExample")
-                                                + ": §c/plotme tp 5;-1 ");
-                            } else {
-                                player.sendMessage(C("WordUsage") + ": §c/plotme tp <ID> §r" + C("WordExample") + ": §c/plotme tp 5;-1 ");
-                            }
-                            return true;
                         } else {
                             ILocation location = manager.getPlotHome(world, id2);
                             Plot plot = manager.getPlotById(id2, world);
                             InternalPlotTeleportEvent
                                     event =
-                                    serverBridge.getEventFactory().callPlotTeleportEvent(plugin, world, plot, player, location, id);
+                                    serverBridge.getEventFactory().callPlotTeleportEvent(world, plot, player, location, id2);
 
                             if (!event.isCancelled()) {
                                 player.setLocation(location);

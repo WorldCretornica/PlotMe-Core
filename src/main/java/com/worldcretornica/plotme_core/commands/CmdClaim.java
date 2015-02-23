@@ -27,83 +27,82 @@ public class CmdClaim extends PlotCommand {
 
                 if (id == null) {
                     player.sendMessage("§c" + C("MsgCannotClaimRoad"));
-                } else if (!manager.isPlotAvailable(id, pmi)) {
+                    return true;
+                }
+                if (!manager.isPlotAvailable(id, pmi)) {
                     player.sendMessage("§c" + C("MsgThisPlotOwned"));
+                    return true;
+                }
+                String playerName = player.getName();
+                UUID playerUniqueId = player.getUniqueId();
+
+                if (args.length == 2 && player.hasPermission(PermissionNames.ADMIN_CLAIM_OTHER)) {
+                    playerName = args[1];
+                    playerUniqueId = null;
+                }
+
+                int plotLimit = getPlotLimit(player);
+
+                int plotsOwned = manager.getOwnedPlotCount(player.getUniqueId(), world.getName().toLowerCase());
+
+                if (playerName.equals(player.getName()) && plotLimit != -1 && plotsOwned >= plotLimit) {
+                    player.sendMessage("§c" + C("MsgAlreadyReachedMaxPlots") + " (" + plotsOwned + "/" + getPlotLimit(player)
+                            + "). " + C("WordUse") + " §c/plotme home§r " + C("MsgToGetToIt"));
                 } else {
-                    String playerName = player.getName();
-                    UUID playerUniqueId = player.getUniqueId();
 
-                    if (args.length == 2) {
-                        if (player.hasPermission(PermissionNames.ADMIN_CLAIM_OTHER)) {
-                            playerName = args[1];
-                            playerUniqueId = null;
-                        }
-                    }
+                    double price = 0.0;
 
-                    int plotLimit = getPlotLimit(player);
+                    InternalPlotCreateEvent event;
 
-                    int plotsOwned = manager.getNbOwnedPlot(player.getUniqueId(), world.getName().toLowerCase());
+                    if (manager.isEconomyEnabled(pmi)) {
+                        price = pmi.getClaimPrice();
+                        double balance = serverBridge.getBalance(player);
 
-                    if (playerName.equals(player.getName()) && plotLimit != -1 && plotsOwned >= plotLimit) {
-                        player.sendMessage("§c" + C("MsgAlreadyReachedMaxPlots") + " (" + plotsOwned + "/" + getPlotLimit(player)
-                                + "). " + C("WordUse") + " §c/plotme home§r " + C("MsgToGetToIt"));
-                    } else {
+                        if (balance >= price) {
+                            event = serverBridge.getEventFactory().callPlotCreatedEvent(world, id, player);
 
-                        double price = 0.0;
+                            if (event.isCancelled()) {
+                                return true;
+                            }
+                            EconomyResponse er = serverBridge.withdrawPlayer(player, price);
 
-                        InternalPlotCreateEvent event;
-
-                        if (manager.isEconomyEnabled(pmi)) {
-                            price = pmi.getClaimPrice();
-                            double balance = serverBridge.getBalance(player);
-
-                            if (balance >= price) {
-                                event = serverBridge.getEventFactory().callPlotCreatedEvent(plugin, world, id, player);
-
-                                if (event.isCancelled()) {
-                                    return true;
-                                } else {
-                                    EconomyResponse er = serverBridge.withdrawPlayer(player, price);
-
-                                    if (!er.transactionSuccess()) {
-                                        player.sendMessage("§c" + er.errorMessage);
-                                        serverBridge.getLogger().warning(er.errorMessage);
-                                        return true;
-                                    }
-                                }
-                            } else {
-                                player.sendMessage(
-                                        "§c" + C("MsgNotEnoughBuy") + " " + C("WordMissing") + " §r" + (price - balance) + "§c " + serverBridge
-                                                .getEconomy().currencyNamePlural());
+                            if (!er.transactionSuccess()) {
+                                player.sendMessage("§c" + er.errorMessage);
+                                serverBridge.getLogger().warning(er.errorMessage);
                                 return true;
                             }
                         } else {
-                            event = serverBridge.getEventFactory().callPlotCreatedEvent(plugin, world, id, player);
+                            player.sendMessage(
+                                    "§c" + C("MsgNotEnoughBuy") + " " + C("WordMissing") + " §r" + (price - balance) + "§c " + serverBridge
+                                            .getEconomy().currencyNamePlural());
+                            return true;
                         }
+                    } else {
+                        event = serverBridge.getEventFactory().callPlotCreatedEvent(world, id, player);
+                    }
 
-                        if (!event.isCancelled()) {
-                            Plot plot = manager.createPlot(world, id, playerName, playerUniqueId, pmi);
+                    if (!event.isCancelled()) {
+                        Plot plot = manager.createPlot(world, id, playerName, playerUniqueId, pmi);
 
-                            //plugin.getPlotMeCoreManager().adjustLinkedPlots(id, world);
-                            if (plot == null) {
-                                player.sendMessage("§c" + C("ErrCreatingPlotAt") + " " + id);
+                        //plugin.getPlotMeCoreManager().adjustLinkedPlots(id, world);
+                        if (plot == null) {
+                            player.sendMessage("§c" + C("ErrCreatingPlotAt") + " " + id);
+                        } else {
+                            if (playerName.equalsIgnoreCase(player.getName())) {
+                                player.sendMessage(
+                                        C("MsgThisPlotYours") + " " + C("WordUse") + " §c/plotme home§r " + C("MsgToGetToIt") + " " + Util()
+                                                .moneyFormat(-price, true));
                             } else {
-                                if (playerName.equalsIgnoreCase(player.getName())) {
-                                    player.sendMessage(
-                                            C("MsgThisPlotYours") + " " + C("WordUse") + " §c/plotme home§r " + C("MsgToGetToIt") + " " + Util()
-                                                    .moneyFormat(-price, true));
-                                } else {
-                                    player.sendMessage(C("MsgThisPlotIsNow") + " " + playerName + C("WordPossessive") + ". " + C("WordUse")
-                                            + " §c/plotme home§r " + C("MsgToGetToIt") + " " + Util().moneyFormat(-price, true));
-                                }
+                                player.sendMessage(C("MsgThisPlotIsNow") + " " + playerName + C("WordPossessive") + ". " + C("WordUse")
+                                        + " §c/plotme home§r " + C("MsgToGetToIt") + " " + Util().moneyFormat(-price, true));
+                            }
 
-                                if (isAdvancedLogging()) {
-                                    if (price == 0) {
-                                        serverBridge.getLogger().info(playerName + " " + C("MsgClaimedPlot") + " " + id);
-                                    } else {
-                                        serverBridge.getLogger()
-                                                .info(playerName + " " + C("MsgClaimedPlot") + " " + id + (" " + C("WordFor") + " " + price));
-                                    }
+                            if (isAdvancedLogging()) {
+                                if (price == 0) {
+                                    serverBridge.getLogger().info(playerName + " " + C("MsgClaimedPlot") + " " + id);
+                                } else {
+                                    serverBridge.getLogger()
+                                            .info(playerName + " " + C("MsgClaimedPlot") + " " + id + (" " + C("WordFor") + " " + price));
                                 }
                             }
                         }

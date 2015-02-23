@@ -7,7 +7,6 @@ import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.UUID;
 
 public class CmdPlotList extends PlotCommand {
@@ -51,7 +50,7 @@ public class CmdPlotList extends PlotCommand {
 
                     // Is it expired?
                     if (plot.getExpiredDate() != null) {
-                        Date expiredDate = plot.getExpiredDate();
+                        String expiredDate = plot.getExpiredDate();
 
                         if (expiredDate.before(Calendar.getInstance().getTime())) {
                             addition.append("§c @" + plot.getExpiredDate() + "§r");
@@ -60,19 +59,9 @@ public class CmdPlotList extends PlotCommand {
                         }
                     }
 
-                    // Is it auctioned?
-                    if (plot.isAuctioned()) {
-                        if (plot.getCurrentBidder() != null) {
-                            addition.append(
-                                    " " + C("WordAuction") + ": §a" + Math.round(plot.getCurrentBid()) + "§r" + (" " + plot.getCurrentBidder()));
-                        } else {
-                            addition.append(" " + C("WordAuction") + ": §a" + Math.round(plot.getCurrentBid()) + "§r");
-                        }
-                    }
-
                     // Is it for sale?
                     if (plot.isForSale()) {
-                        addition.append(" " + C("WordSell") + ": §a" + Math.round(plot.getCustomPrice()) + "§r");
+                        addition.append(" " + C("WordSell") + ": §a" + Math.round(plot.getPrice()) + "§r");
                     }
 
                     // Is the plot owner the name?
@@ -84,17 +73,14 @@ public class CmdPlotList extends PlotCommand {
                             } else {
                                 player.sendMessage("  " + plot.getId() + " -> §b§o" + plot.getOwner() + "§r" + addition);
                             }
+                        } else if (plot.getOwner().equalsIgnoreCase(player.getName())) {
+                            player.sendMessage(
+                                    "  " + plot.getId() + " -> §b§o" + C("WordYours") + "§r" + addition + ", " + C("WordHelpers") + ": §b" + plot
+                                            .getAllowed().replace(",", "§r,§b"));
                         } else {
-                            // Is the owner the current player?
-                            if (plot.getOwner().equalsIgnoreCase(player.getName())) {
-                                player.sendMessage(
-                                        "  " + plot.getId() + " -> §b§o" + C("WordYours") + "§r" + addition + ", " + C("WordHelpers") + ": §b" + plot
-                                                .getAllowed().replace(",", "§r,§b"));
-                            } else {
-                                player.sendMessage(
-                                        "  " + plot.getId() + " -> §b§o" + plot.getOwner() + "§r" + addition + ", " + C("WordHelpers") + ": §b" + plot
-                                                .getAllowed().replace(",", "§r,§b"));
-                            }
+                            player.sendMessage(
+                                    "  " + plot.getId() + " -> §b§o" + plot.getOwner() + "§r" + addition + ", " + C("WordHelpers") + ": §b" + plot
+                                            .getAllowed().replace(",", "§r,§b"));
                         }
 
                         // Is the name allowed to build there?

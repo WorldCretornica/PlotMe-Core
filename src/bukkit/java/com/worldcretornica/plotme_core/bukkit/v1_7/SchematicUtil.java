@@ -151,10 +151,10 @@ public class SchematicUtil extends AbstractSchematicUtil {
 
         String filename = coreFolder.getAbsolutePath() + "\\" + file + ".plotschematic";
 
-        File f = new File(filename);
+        File file2 = new File(filename);
 
         Schematic schem = null;
-        if (f.exists()) {
+        if (file2.exists()) {
             try (ObjectInput input = new ObjectInputStream(new BufferedInputStream(new FileInputStream(filename)))) {
                 schem = (Schematic) input.readObject();
             } catch (ClassNotFoundException ex) {

@@ -39,7 +39,7 @@ public class CmdDeny extends PlotCommand {
                                 return true;
                             }
 
-                            if (plot.isDeniedConsulting(denied) || plot.isGroupDenied(denied)) {
+                            if (plot.isDeniedConsulting(denied)) {
                                 player.sendMessage(C("WordPlayer") + " §c" + args[1] + "§r " + C("MsgAlreadyDenied"));
                             } else {
 
@@ -52,18 +52,17 @@ public class CmdDeny extends PlotCommand {
                                     double balance = serverBridge.getBalance(player);
 
                                     if (balance >= price) {
-                                        event = serverBridge.getEventFactory().callPlotAddDeniedEvent(plugin, world, plot, player, denied);
+                                        event = serverBridge.getEventFactory().callPlotAddDeniedEvent(world, plot, player, denied);
 
                                         if (event.isCancelled()) {
                                             return true;
-                                        } else {
-                                            EconomyResponse er = serverBridge.withdrawPlayer(player, price);
+                                        }
+                                        EconomyResponse er = serverBridge.withdrawPlayer(player, price);
 
-                                            if (!er.transactionSuccess()) {
-                                                player.sendMessage("§c" + er.errorMessage);
-                                                serverBridge.getLogger().warning(er.errorMessage);
-                                                return true;
-                                            }
+                                        if (!er.transactionSuccess()) {
+                                            player.sendMessage("§c" + er.errorMessage);
+                                            serverBridge.getLogger().warning(er.errorMessage);
+                                            return true;
                                         }
                                     } else {
                                         player.sendMessage("§c" + C("MsgNotEnoughDeny") + " " + C("WordMissing") + " §r" + Util()
@@ -71,7 +70,7 @@ public class CmdDeny extends PlotCommand {
                                         return true;
                                     }
                                 } else {
-                                    event = serverBridge.getEventFactory().callPlotAddDeniedEvent(plugin, world, plot, player, denied);
+                                    event = serverBridge.getEventFactory().callPlotAddDeniedEvent(world, plot, player, denied);
                                 }
 
                                 if (!event.isCancelled()) {
@@ -89,13 +88,11 @@ public class CmdDeny extends PlotCommand {
                                     } else {
                                         IPlayer deniedPlayer = serverBridge.getPlayerExact(denied);
 
-                                        if (deniedPlayer != null) {
-                                            if (deniedPlayer.getWorld().equals(world)) {
-                                                PlotId plotId = manager.getPlotId(deniedPlayer);
+                                        if (deniedPlayer != null && deniedPlayer.getWorld().equals(world)) {
+                                            PlotId plotId = manager.getPlotId(deniedPlayer);
 
-                                                if (plotId.equals(id)) {
-                                                    deniedPlayer.setLocation(manager.getPlotHome(world, plot.getId()));
-                                                }
+                                            if (plotId.equals(id)) {
+                                                deniedPlayer.setLocation(manager.getPlotHome(world, plot.getId()));
                                             }
                                         }
                                     }

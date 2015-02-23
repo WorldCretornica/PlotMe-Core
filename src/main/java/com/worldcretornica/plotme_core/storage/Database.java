@@ -3,6 +3,8 @@ package com.worldcretornica.plotme_core.storage;
 import com.worldcretornica.plotme_core.PlayerList;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotId;
+import com.worldcretornica.plotme_core.PlotMapInfo;
+import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitBiome;
@@ -51,9 +53,7 @@ public abstract class Database {
             This is not to be confused with the plot id that the user is used to seeing.
             */
             + "`plot_id` VARCHAR(32) NOT NULL,"
-            // `allowedID` will be null if we add or deny a group to the plot.
-            + "`allowedID` BLOB(16),"
-            //The name of the user or group that is allowed
+            + "`allowedID` BLOB(16) NOT NULL,"
             + "`allowed` VARCHAR(32) NOT NULL,"
             //This is true if the player can build even when the plot owner is offline
             + "`trusted` BOOLEAN NOT NULL DEFAULT '1'"
@@ -65,9 +65,7 @@ public abstract class Database {
             This is not to be confused with the plot id that the user is used to seeing.
             */
             + "`plot_id` VARCHAR(32) NOT NULL,"
-            // `allowedID` will be null if we add or deny a group to the plot.
-            + "`deniedID` BLOB(16),"
-            //The name of the user or group that is allowed
+            + "`deniedID` BLOB(16) NOT NULL,"
             + "`denied` VARCHAR(32) NOT NULL"
             + ");";
     public static final String LIKES_TABLE = "CREATE TABLE IF NOT EXISTS plotmecore_likes ("
@@ -133,6 +131,7 @@ public abstract class Database {
             @Override
             public void run() {
                 Connection connection = getConnection();
+
                 try (Statement statement = connection.createStatement();
                         PreparedStatement statement2 = connection.prepareStatement(SELECT_INTERNAL_ID
                                 + " AND LOWER(world) = ?"); PreparedStatement statement3 = connection.prepareStatement(
@@ -155,7 +154,7 @@ public abstract class Database {
                         ResultSet resultSet = statement2.executeQuery();
                         while (resultSet.next()) {
                             statement3.executeQuery("INSERT INTO plotmecore_allowed (plot_id, allowedID, allowed) VALUES (" + resultSet.getInt(1)
-                                    + "," + allowedResult.getString("playerid") + "," + allowedResult.getString("player") + ")");
+                                    + "," + allowedResult.getBytes("playerid") + "," + allowedResult.getString("player") + ")");
                         }
                         resultSet.close();
                     }
@@ -245,7 +244,7 @@ public abstract class Database {
             ps.setInt(8, plotTopLoc.getBlockZ());
             ps.setInt(9, plotBottomLoc.getBlockZ());
             ps.setString(10, ((BukkitBiome) plot.getBiome()).getBiome().name());
-            ps.setDate(11, plot.getExpiredDate());
+            ps.setString(11, plot.getExpiredDate());
             ps.setBoolean(12, plot.isFinished());
             ps.setDouble(13, plot.getPrice());
             ps.setBoolean(14, plot.isForSale());
@@ -307,8 +306,8 @@ public abstract class Database {
 
     }
 
-    public Plot[] getPlayerPlots(String name, UUID uuid) {
-        return new Plot[0];
+    public List<Plot> getPlayerPlots(String name, UUID uuid) {
+        return null;
     }
 
     public void updatePlotsNewUUID(UUID uuid, String name) {
@@ -316,6 +315,163 @@ public abstract class Database {
     }
 
     public List<Plot> getOwnedPlots(String name, UUID uuid, String playerName) {
+        return null;
+    }
+
+    public void loadPlotsAsynchronously(final String world) {
+        plugin.getServerBridge().runTaskAsynchronously(new Runnable() {
+            @Override
+            public void run() {
+                plugin.getLogger().info("Starting to load plots for world " + world);
+
+                HashMap<PlotId, Plot> plots = getPlots(world);
+
+                PlotMapInfo pmi = PlotMeCoreManager.getInstance().getMap(world);
+
+                for (PlotId id : plots.keySet()) {
+                    pmi.addPlot(id, plots.get(id));
+                    plugin.getServerBridge().getEventFactory()
+                            .callPlotLoadedEvent(plugin.getServerBridge().getWorld(world), plots.get(id));
+                }
+                plugin.getServerBridge().getEventFactory().callPlotWorldLoadEvent(world, pmi.getNbPlots());
+            }
+
+            private HashMap<PlotId, Plot> getPlots(String world) {
+                return null;
+            }
+        });
+    }
+
+    public Plot getPlot(String world, PlotId id) {
+        Connection connection = getConnection();
+        int idX = id.getX();
+        int idZ = id.getZ();
+        Plot plot = null;
+        try (PreparedStatement statementPlot = connection.prepareStatement("SELECT * FROM plotmecore_plots WHERE LOWER(world) = ? AND plotX = ? and "
+                + "plotZ = ?");
+                PreparedStatement statementAllowed = connection.prepareStatement("SELECT * FROM plotmecore_allowed WHERE id = ?");
+                PreparedStatement statementDenied = connection.prepareStatement("SELECT * FROM plotmecore_denied WHERE id = ?");
+                PreparedStatement statementMetadata = connection.prepareStatement("SELECT * FROM plotmecore_metadata WHERE id = ?")) {
+            statementPlot.setString(1, world);
+            statementPlot.setInt(2, idX);
+            statementPlot.setInt(3, idZ);
+            ResultSet setPlots = statementPlot.executeQuery();
+            if (setPlots.next()) {
+                int internalID = setPlots.getInt("id");
+                byte[] byOwner = setPlots.getBytes("ownerID");
+                UUID ownerId = UUIDFetcher.fromBytes(byOwner);
+                String owner = setPlots.getString("owner");
+                String biome = setPlots.getString("biome");
+                boolean finished = setPlots.getBoolean("finished");
+                String finishedDate;
+                if (finished) {
+                    finishedDate = setPlots.getString("finishedDate");
+                } else {
+                    finishedDate = null;
+                }
+                boolean forSale = setPlots.getBoolean("forSale");
+                double price = setPlots.getDouble("price");
+                boolean protect = setPlots.getBoolean("protected");
+                String expiredDate = setPlots.getString("expiredDate");
+                String plotName = setPlots.getString("plotName");
+                int plotLikes = setPlots.getInt("plotLikes");
+
+                PlayerList allowed = new PlayerList();
+                PlayerList trusted = new PlayerList();
+                PlayerList denied = new PlayerList();
+                Map<String, Map<String, String>> metadata = new HashMap<>();
+
+                //Get Allowed Players
+                statementAllowed.setInt(1, internalID);
+
+                ResultSet setAllowed = statementAllowed.executeQuery();
+
+                while (setAllowed.next()) {
+                    boolean offlineOnly = setAllowed.getBoolean("offlineOnly");
+                    if (offlineOnly) {
+                        byte[] byPlayerId = setAllowed.getBytes("allowedID");
+                        if (byPlayerId == null) {
+                            trusted.put(setAllowed.getString("allowed"), null);
+                        } else {
+                            trusted.put(setAllowed.getString("allowed"), UUIDFetcher.fromBytes(byPlayerId));
+                        }
+                    } else {
+                        byte[] byPlayerId = setAllowed.getBytes("playerid");
+                        if (byPlayerId == null) {
+                            allowed.put(setAllowed.getString("player"), null);
+                        } else {
+                            allowed.put(setAllowed.getString("player"), UUIDFetcher.fromBytes(byPlayerId));
+                        }
+                    }
+                }
+                setAllowed.close();
+
+                //Get Denied Players
+                statementDenied.setInt(1, internalID);
+
+                ResultSet setDenied = statementDenied.executeQuery();
+
+                while (setDenied.next()) {
+                    byte[] byPlayerId = setDenied.getBytes("deniedID");
+                    if (byPlayerId == null) {
+                        denied.put(setDenied.getString("denied"));
+                    } else {
+                        denied.put(setDenied.getString("denied"), UUIDFetcher.fromBytes(byPlayerId));
+                    }
+                }
+                setDenied.close();
+
+                statementMetadata.setInt(1, internalID);
+
+                ResultSet setMetadata = statementMetadata.executeQuery();
+
+                while (setMetadata.next()) {
+                    String pluginname = setMetadata.getString("pluginName");
+                    String propertyname = setMetadata.getString("propertyName");
+                    String propertyvalue = setMetadata.getString("propertyValue");
+                    if (!metadata.containsKey(pluginname)) {
+                        metadata.put(pluginname, new HashMap<String, String>());
+                    }
+                    metadata.get(pluginname).put(propertyname, propertyvalue);
+                }
+
+                setMetadata.close();
+
+                plot = new Plot(plugin, owner, ownerId, world, biome, expiredDate, finished, allowed,
+                        id, price, forSale, finishedDate, protect, denied, metadata, plotLikes, plotName);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return plot;
+    }
+
+    public void updatePlot(PlotId id, String name, String biome, Object name1) {
+        //TODO Get rid of this ugly method
+    }
+
+    public void plotConvertToUUIDAsynchronously() {
+
+    }
+
+    public void coreDatabaseUpdate() {
+
+    }
+
+    public void deletePlotAllowed(int x, int z, String name, UUID uuid, String world) {
+
+    }
+
+    public void deletePlotDenied(int x, int z, String name, UUID uuid, String world) {
+
+    }
+
+    public boolean savePlotProperty(PlotId id, String world, String pluginname, String property, String value) {
+        return false;
+    }
+
+    public List<Plot> getExpiredPlots(String name, int i, int i1) {
         return null;
     }
 }

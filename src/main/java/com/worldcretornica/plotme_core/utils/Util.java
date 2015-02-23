@@ -24,7 +24,7 @@ public class Util {
         StringBuilder ret = new StringBuilder();
 
         for (int i = 0; i + spaceWidth < length; i += spaceWidth) {
-            ret.append(" ");
+            ret.append(' ');
         }
 
         return ret;

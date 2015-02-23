@@ -19,7 +19,7 @@ public class PlotMeSpool implements Runnable {
     @Override
     public void run() {
         if (getPlotToClear() != null) {
-            IWorld world = plugin.getServerBridge().getWorld(getPlotToClear().getWorld());
+            IWorld world = getPlotToClear().getWorld();
             PlotMeCoreManager plotMeCoreManager = PlotMeCoreManager.getInstance();
             IPlotMe_GeneratorManager genmanager = plotMeCoreManager.getGenManager(world);
 
@@ -35,11 +35,11 @@ public class PlotMeSpool implements Runnable {
 
                 if (currentClear == null) {
                     if (getPlotToClear().getReason() == ClearReason.Clear) {
-                        genmanager.adjustPlotFor(world, getPlotToClear().getPlotId(), true, false, false, false);
+                        genmanager.adjustPlotFor(world, getPlotToClear().getPlotId(), true, false, false);
                     } else {
-                        genmanager.adjustPlotFor(world, getPlotToClear().getPlotId(), false, false, false, false);
+                        genmanager.adjustPlotFor(world, getPlotToClear().getPlotId(), false, false, false);
                     }
-                    if (plugin.getServerBridge().getUsingLwc()) {
+                    if (plugin.getServerBridge().isUsingLwc()) {
                         plotMeCoreManager.removeLWC(world, getPlotToClear().getPlotId());
                     }
                     genmanager.refreshPlotChunks(world, getPlotToClear().getPlotId());

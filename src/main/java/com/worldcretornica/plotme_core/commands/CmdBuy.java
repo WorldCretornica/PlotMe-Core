@@ -36,37 +36,30 @@ public class CmdBuy extends PlotCommand {
                             } else {
                                 int plotLimit = getPlotLimit(player);
 
-                                int plotsOwned = manager.getNbOwnedPlot(player.getUniqueId(), world.getName().toLowerCase());
+                                int plotsOwned = manager.getOwnedPlotCount(player.getUniqueId(), world.getName().toLowerCase());
 
                                 if (plotLimit != -1 && plotsOwned >= plotLimit) {
                                     player.sendMessage(C("MsgAlreadyReachedMaxPlots") + " ("
                                             + plotsOwned + "/" + getPlotLimit(player) + "). "
                                             + C("WordUse") + " §c/plotme home§r " + C("MsgToGetToIt"));
                                 } else {
-
-                                    double cost = plot.getCustomPrice();
+                                    double cost = plot.getPrice();
 
                                     if (serverBridge.getBalance(player) < cost) {
                                         player.sendMessage("§c" + C("MsgNotEnoughBuy"));
                                     } else {
-
-                                        InternalPlotBuyEvent
-                                                event =
-                                                serverBridge.getEventFactory().callPlotBuyEvent(plugin, world, plot, player, cost);
+                                        InternalPlotBuyEvent event = serverBridge.getEventFactory().callPlotBuyEvent(world, plot, player, cost);
 
                                         if (!event.isCancelled()) {
                                             EconomyResponse er = serverBridge.withdrawPlayer(player, cost);
 
                                             if (er.transactionSuccess()) {
                                                 String oldOwner = plot.getOwner();
-                                                IOfflinePlayer currentbidder = null;
 
-                                                if (plot.getOwnerId() != null) {
-                                                    currentbidder = serverBridge.getOfflinePlayer(plot.getOwnerId());
-                                                }
+                                                IOfflinePlayer currBuyer = serverBridge.getOfflinePlayer(plot.getOwnerId());
 
-                                                if (currentbidder != null) {
-                                                    EconomyResponse er2 = serverBridge.depositPlayer(currentbidder, cost);
+                                                if (currBuyer != null) {
+                                                    EconomyResponse er2 = serverBridge.depositPlayer(currBuyer, cost);
 
                                                     if (er2.transactionSuccess()) {
                                                         for (IPlayer onlinePlayers : serverBridge.getOnlinePlayers()) {
@@ -85,7 +78,7 @@ public class CmdBuy extends PlotCommand {
 
                                                 plot.setOwner(buyer);
                                                 plot.setOwnerId(player.getUniqueId());
-                                                plot.setCustomPrice(0.0);
+                                                plot.setPrice(0.0);
                                                 plot.setForSale(false);
 
                                                 plot.updateField("owner", buyer);

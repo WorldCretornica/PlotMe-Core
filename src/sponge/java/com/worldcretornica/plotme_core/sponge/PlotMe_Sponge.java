@@ -34,7 +34,6 @@ public class PlotMe_Sponge {
     public void onEnable(ServerStartedEvent event) {
         game.getEventManager().register(this, new SpongePlotListener(this));
         game.getEventManager().register(this, new SpongePlotDenyListener(this));
-
         serverObjectBuilder = new SpongeServerBridge(this);
 
         SpongeAbstractSchematicUtil schematicutil = new SchematicUtil(this); //TODO

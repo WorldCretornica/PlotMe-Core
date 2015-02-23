@@ -34,10 +34,10 @@ public class CmdProtect extends PlotCommand {
                         InternalPlotProtectChangeEvent event;
 
                         if (plot.isProtect()) {
-                            event = serverBridge.getEventFactory().callPlotProtectChangeEvent(plugin, world, plot, player, false);
+                            event = serverBridge.getEventFactory().callPlotProtectChangeEvent(world, plot, player, false);
 
                             if (!event.isCancelled()) {
-                                plot.setProtect(false);
+                                plot.setProtected(false);
                                 manager.adjustWall(player);
 
                                 plot.updateField("protected", false);
@@ -59,7 +59,7 @@ public class CmdProtect extends PlotCommand {
                                     player.sendMessage("§c" + C("MsgNotEnoughProtectPlot"));
                                     return true;
                                 } else {
-                                    event = serverBridge.getEventFactory().callPlotProtectChangeEvent(plugin, world, plot, player, true);
+                                    event = serverBridge.getEventFactory().callPlotProtectChangeEvent(world, plot, player, true);
 
                                     if (event.isCancelled()) {
                                         return true;
@@ -75,11 +75,11 @@ public class CmdProtect extends PlotCommand {
                                 }
 
                             } else {
-                                event = serverBridge.getEventFactory().callPlotProtectChangeEvent(plugin, world, plot, player, true);
+                                event = serverBridge.getEventFactory().callPlotProtectChangeEvent(world, plot, player, true);
                             }
 
                             if (!event.isCancelled()) {
-                                plot.setProtect(true);
+                                plot.setProtected(true);
                                 manager.adjustWall(player);
 
                                 plot.updateField("protected", true);

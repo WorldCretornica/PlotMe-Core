@@ -106,12 +106,6 @@ public class CmdShowHelp extends PlotCommand {
             if (player.hasPermission(PermissionNames.USER_SELL)) {
                 allowed_commands.add("sell");
             }
-            if (player.hasPermission(PermissionNames.USE_AUCTION)) {
-                allowed_commands.add("auction");
-            }
-            if (player.hasPermission(PermissionNames.PLOT_ME_USE_BID)) {
-                allowed_commands.add("bid");
-            }
         }
 
         int maxPage = (int) Math.ceil(allowed_commands.size() / 4);
@@ -131,7 +125,7 @@ public class CmdShowHelp extends PlotCommand {
 
                     IWorld world = player.getWorld();
 
-                    int ownedPlots = manager.getNbOwnedPlot(player.getUniqueId(), world.getName().toLowerCase());
+                    int ownedPlots = manager.getOwnedPlotCount(player.getUniqueId(), world.getName().toLowerCase());
 
                     if (plotLimit == -1) {
                         player.sendMessage(
@@ -144,7 +138,7 @@ public class CmdShowHelp extends PlotCommand {
                     IWorld world = manager.getFirstWorld();
 
                     if (world != null) {
-                        int ownedPlots = manager.getNbOwnedPlot(player.getUniqueId(), world.getName().toLowerCase());
+                        int ownedPlots = manager.getOwnedPlotCount(player.getUniqueId(), world.getName().toLowerCase());
 
                         if (plotLimit == -1) {
                             player.sendMessage(
@@ -316,12 +310,6 @@ public class CmdShowHelp extends PlotCommand {
                 player.sendMessage("§a /plotme sell [" + C("WordAmount") + "]");
                 assert pmi != null;
                 player.sendMessage("§b " + C("HelpSell") + " " + C("WordDefault") + " : §r" + Math.round(pmi.getSellToPlayerPrice()));
-            } else if ("auction".equalsIgnoreCase(allowedCommand)) {
-                player.sendMessage("§a /plotme auction [" + C("WordAmount") + "]");
-                player.sendMessage("§b " + C("HelpAuction") + " " + C("WordDefault") + " : §r1");
-            } else if ("bid".equalsIgnoreCase(allowedCommand)) {
-                player.sendMessage("§a /plotme bid <" + C("WordAmount") + ">");
-                player.sendMessage("§b " + C("HelpBid"));
             }
         }
         return true;

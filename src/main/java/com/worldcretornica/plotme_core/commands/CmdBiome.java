@@ -49,7 +49,7 @@ public class CmdBiome extends PlotCommand {
                                 double balance = serverBridge.getBalance(player);
 
                                 if (balance >= price) {
-                                    event = serverBridge.getEventFactory().callPlotBiomeChangeEvent(plugin, world, plot, player, biome);
+                                    event = serverBridge.getEventFactory().callPlotBiomeChangeEvent(world, plot, player, biome);
                                     if (event.isCancelled()) {
                                         return true;
                                     } else {
@@ -67,7 +67,7 @@ public class CmdBiome extends PlotCommand {
                                     return true;
                                 }
                             } else {
-                                event = serverBridge.getEventFactory().callPlotBiomeChangeEvent(plugin, world, plot, player, biome);
+                                event = serverBridge.getEventFactory().callPlotBiomeChangeEvent(world, plot, player, biome);
                             }
 
                             if (!event.isCancelled()) {

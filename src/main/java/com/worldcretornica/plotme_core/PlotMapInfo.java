@@ -18,9 +18,7 @@ public class PlotMapInfo {
         this.world = world.toLowerCase();
         config = plugin.getServerBridge().loadDefaultConfig("worlds." + this.world);
         plots = new ConcurrentHashMap<>(1000, 0.75f, 5);
-        if (plugin.getServerBridge().getConfig().getBoolean("LoadAllPlotsOnStart", false)) {
-            plugin.getSqlManager().loadPlotsAsynchronously(world);
-        }
+        plugin.getSqlManager().loadPlotsAsynchronously(this.world);
     }
 
     public int getNbPlots() {
@@ -96,9 +94,17 @@ public class PlotMapInfo {
     public boolean isUseEconomy() {
         return getEconomySection().getBoolean("UseEconomy");
     }
-
     public void setUseEconomy(boolean useEconomy) {
         getEconomySection().set("UseEconomy", useEconomy);
+        config.saveConfig();
+    }
+
+    public boolean hasPlotEnterAnnouncement() {
+        return config.getBoolean("PlotEnterAnnouncement");
+    }
+
+    public void setPlotEnterAnnouncement(boolean announce) {
+        config.set("PlotEnterAnnouncement", announce);
         config.saveConfig();
     }
 

@@ -21,10 +21,7 @@ public class CmdBiomes extends PlotCommand {
                 int page = 1;
 
                 if (args.length > 1) {
-                    try {
-                        page = Integer.parseInt(args[1]);
-                    } catch (NumberFormatException ignored) {
-                    }
+                    page = Integer.parseInt(args[1]);
                 }
 
                 player.sendMessage(C("WordBiomes") + " (" + page + "/" + pages + ") : ");

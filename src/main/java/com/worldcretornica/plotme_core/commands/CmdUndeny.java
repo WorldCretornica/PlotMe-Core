@@ -33,7 +33,7 @@ public class CmdUndeny extends PlotCommand {
                         String denied = args[1];
 
                         if (player.getUniqueId().equals(plot.getOwnerId()) || player.hasPermission(PermissionNames.ADMIN_UNDENY)) {
-                            if (plot.isDeniedConsulting(denied) || plot.isGroupDenied(denied)) {
+                            if (plot.isDeniedConsulting(denied)) {
 
                                 double price = 0.0;
 
@@ -44,7 +44,7 @@ public class CmdUndeny extends PlotCommand {
                                     double balance = serverBridge.getBalance(player);
 
                                     if (balance >= price) {
-                                        event = serverBridge.getEventFactory().callPlotRemoveDeniedEvent(plugin, world, plot, player, denied);
+                                        event = serverBridge.getEventFactory().callPlotRemoveDeniedEvent(world, plot, player, denied);
 
                                         if (event.isCancelled()) {
                                             return true;
@@ -63,7 +63,7 @@ public class CmdUndeny extends PlotCommand {
                                         return true;
                                     }
                                 } else {
-                                    event = serverBridge.getEventFactory().callPlotRemoveDeniedEvent(plugin, world, plot, player, denied);
+                                    event = serverBridge.getEventFactory().callPlotRemoveDeniedEvent(world, plot, player, denied);
                                 }
 
                                 if (!event.isCancelled()) {

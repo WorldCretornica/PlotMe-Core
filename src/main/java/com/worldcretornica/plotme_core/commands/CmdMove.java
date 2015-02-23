@@ -30,13 +30,13 @@ public class CmdMove extends PlotCommand {
                 }
                 IWorld world = player.getWorld();
 
-                if (!manager.isValidId(world, plot1) || !manager.isValidId(world, plot2)) {
+                if (!PlotId.isValidID(plot1) || !PlotId.isValidID(plot2)) {
                     player.sendMessage(C("WordUsage") + ": §c/plotme move <" + C("WordIdFrom") + "> <" + C("WordIdTo") + "> §r" + C("WordExample")
                             + ": §c/plotme move 0;1 2;-1");
                 } else {
                     PlotId id1 = new PlotId(plot1);
                     PlotId id2 = new PlotId(plot2);
-                    InternalPlotMoveEvent event = serverBridge.getEventFactory().callPlotMoveEvent(plugin, world, id1, id2, player);
+                    InternalPlotMoveEvent event = serverBridge.getEventFactory().callPlotMoveEvent(world, id1, id2, player);
                     if (!event.isCancelled()) {
                         if (manager.movePlot(world, id1, id2)) {
                             player.sendMessage(C("MsgPlotMovedSuccess"));

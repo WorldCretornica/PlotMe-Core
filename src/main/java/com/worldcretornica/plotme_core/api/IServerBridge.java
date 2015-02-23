@@ -58,7 +58,7 @@ public abstract class IServerBridge {
 
     public abstract PlotWorldEdit getPlotWorldEdit();
 
-    public boolean getUsingLwc() {
+    public boolean isUsingLwc() {
         return usingLwc;
     }
 

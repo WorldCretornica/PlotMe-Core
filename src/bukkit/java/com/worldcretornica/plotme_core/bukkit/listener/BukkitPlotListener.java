@@ -409,7 +409,6 @@ public class BukkitPlotListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onBlockPistonRetract(BlockPistonRetractEvent event) {
-        @SuppressWarnings("deprecation")
         BukkitBlock block = new BukkitBlock(event.getBlock().getRelative(event.getDirection(), 2));
 
         if (manager.isPlotWorld(block.getWorld())) {

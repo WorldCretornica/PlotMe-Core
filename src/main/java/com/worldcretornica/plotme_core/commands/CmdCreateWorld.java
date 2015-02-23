@@ -101,7 +101,6 @@ public class CmdCreateWorld extends PlotCommand {
                 parameters.put("DaysToExpiration", "7");
                 parameters.put("ProtectedWallBlockId", "44:4");
                 parameters.put("ForSaleWallBlockId", "44:1");
-                parameters.put("AuctionWallBlockId", "44:1");
                 parameters.put("AutoLinkPlots", "true");
                 parameters.put("DisableExplosion", "true");
                 parameters.put("DisableIgnition", "true");
