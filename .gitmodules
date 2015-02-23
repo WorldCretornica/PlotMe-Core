@@ -1,0 +1,3 @@
+[submodule "PlotMe-AbstractGenerator"]
+	path = PlotMe-AbstractGenerator
+	url = https://github.com/WorldCretornica/PlotMe-AbstractGenerator.git
