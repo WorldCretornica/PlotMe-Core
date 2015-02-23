@@ -22,8 +22,6 @@ public interface IPlotMe_GeneratorManager {
 
     void setSellerDisplay(IWorld world, PlotId id, String line1, String line2, String line3, String line4);
 
-    void setAuctionDisplay(IWorld world, PlotId id, String line1, String line2, String line3, String line4);
-
     void removeOwnerDisplay(IWorld world, PlotId id);
 
     void removeSellerDisplay(IWorld world, PlotId id);
@@ -48,7 +46,10 @@ public interface IPlotMe_GeneratorManager {
 
     Long[] clear(IWorld world, PlotId id, long maxBlocks, Long[] start);
 
+    @Deprecated
     void adjustPlotFor(IWorld world, PlotId id, boolean claimed, boolean protect, boolean auctioned, boolean forSale);
+
+    void adjustPlotFor(IWorld world, PlotId id, boolean claimed, boolean protect, boolean forSale);
 
     boolean isBlockInPlot(PlotId id, ILocation blockLocation);
 
@@ -63,8 +64,6 @@ public interface IPlotMe_GeneratorManager {
     int topZ(PlotId id, IWorld world);
 
     ILocation getPlotHome(IWorld world, PlotId id);
-
-    boolean isValidId(String id);
 
     boolean createConfig(String worldName, Map<String, String> args);
 

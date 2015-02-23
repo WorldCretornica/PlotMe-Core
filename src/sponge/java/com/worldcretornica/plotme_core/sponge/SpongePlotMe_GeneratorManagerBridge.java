@@ -68,11 +68,6 @@ public class SpongePlotMe_GeneratorManagerBridge implements IPlotMe_GeneratorMan
     }
 
     @Override
-    public void setAuctionDisplay(IWorld world, PlotId id, String line1, String line2, String line3, String line4) {
-        generatorManager.setAuctionDisplay(((SpongeWorld) world).getWorld(), id, line1, line2, line3, line4);
-    }
-
-    @Override
     public void removeOwnerDisplay(IWorld world, PlotId id) {
         generatorManager.removeOwnerDisplay(((SpongeWorld) world).getWorld(), id);
     }
@@ -134,7 +129,12 @@ public class SpongePlotMe_GeneratorManagerBridge implements IPlotMe_GeneratorMan
 
     @Override
     public void adjustPlotFor(IWorld world, PlotId id, boolean claimed, boolean protect, boolean auctioned, boolean forSale) {
-        generatorManager.adjustPlotFor(((SpongeWorld) world).getWorld(), id, claimed, protect, auctioned, forSale);
+        generatorManager.adjustPlotFor(((SpongeWorld) world).getWorld(), id, claimed, protect, forSale);
+    }
+
+    @Override
+    public void adjustPlotFor(IWorld world, PlotId id, boolean claimed, boolean protect, boolean forSale) {
+        generatorManager.adjustPlotFor(((SpongeWorld) world).getWorld(), id, claimed, protect, forSale);
     }
 
     @Override
@@ -170,11 +170,6 @@ public class SpongePlotMe_GeneratorManagerBridge implements IPlotMe_GeneratorMan
     @Override
     public ILocation getPlotHome(IWorld world, PlotId id) {
         return new SpongeLocation(generatorManager.getPlotHome(((SpongeWorld) world).getWorld(), id));
-    }
-
-    @Override
-    public boolean isValidId(String id) {
-        return generatorManager.isValidId(id);
     }
 
     @Override

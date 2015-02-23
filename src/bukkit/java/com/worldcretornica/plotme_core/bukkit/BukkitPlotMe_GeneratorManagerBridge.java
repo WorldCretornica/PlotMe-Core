@@ -67,10 +67,6 @@ public class BukkitPlotMe_GeneratorManagerBridge implements IPlotMe_GeneratorMan
         generatorManager.setSellerDisplay(((BukkitWorld) world).getWorld(), id, line1, line2, line3, line4);
     }
 
-    @Override
-    public void setAuctionDisplay(IWorld world, PlotId id, String line1, String line2, String line3, String line4) {
-        generatorManager.setAuctionDisplay(((BukkitWorld) world).getWorld(), id, line1, line2, line3, line4);
-    }
 
     @Override
     public void removeOwnerDisplay(IWorld world, PlotId id) {
@@ -132,9 +128,15 @@ public class BukkitPlotMe_GeneratorManagerBridge implements IPlotMe_GeneratorMan
         return generatorManager.clear(((BukkitWorld) world).getWorld(), id, maxBlocks, start);
     }
 
+    @Deprecated
     @Override
     public void adjustPlotFor(IWorld world, PlotId id, boolean claimed, boolean protect, boolean auctioned, boolean forSale) {
-        generatorManager.adjustPlotFor(((BukkitWorld) world).getWorld(), id, claimed, protect, auctioned, forSale);
+        adjustPlotFor(world, id, claimed, protect, forSale);
+    }
+
+    @Override
+    public void adjustPlotFor(IWorld world, PlotId id, boolean claimed, boolean protect, boolean forSale) {
+        generatorManager.adjustPlotFor(((BukkitWorld) world).getWorld(), id, claimed, protect, forSale);
     }
 
     @Override
@@ -170,11 +172,6 @@ public class BukkitPlotMe_GeneratorManagerBridge implements IPlotMe_GeneratorMan
     @Override
     public ILocation getPlotHome(IWorld world, PlotId id) {
         return new BukkitLocation(generatorManager.getPlotHome(((BukkitWorld) world).getWorld(), id));
-    }
-
-    @Override
-    public boolean isValidId(String id) {
-        return generatorManager.isValidId(id);
     }
 
     @Override

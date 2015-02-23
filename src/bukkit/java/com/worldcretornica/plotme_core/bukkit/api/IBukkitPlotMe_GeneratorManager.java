@@ -26,8 +26,6 @@ public interface IBukkitPlotMe_GeneratorManager {
 
     void setSellerDisplay(World world, PlotId id, String line1, String line2, String Line3, String line4);
 
-    void setAuctionDisplay(World world, PlotId id, String line1, String line2, String Line3, String line4);
-
     void removeOwnerDisplay(World world, PlotId id);
 
     void removeSellerDisplay(World world, PlotId id);
@@ -52,7 +50,7 @@ public interface IBukkitPlotMe_GeneratorManager {
 
     Long[] clear(World world, PlotId id, long maxBlocks, Long[] start);
 
-    void adjustPlotFor(World world, PlotId id, boolean claimed, boolean protect, boolean auctioned, boolean forSale);
+    void adjustPlotFor(World world, PlotId id, boolean claimed, boolean protect, boolean forSale);
 
     boolean isBlockInPlot(PlotId id, Location location);
 
@@ -67,8 +65,6 @@ public interface IBukkitPlotMe_GeneratorManager {
     int topZ(PlotId id, World world);
 
     Location getPlotHome(World world, PlotId id);
-
-    boolean isValidId(String id);
 
     boolean createConfig(String worldName, Map<String, String> args);
 
