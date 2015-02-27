@@ -142,6 +142,7 @@ public abstract class Database {
                             + "forSale, price, protected, expiredDate, topX,topZ, bottomX, bottomZ) SELECT idX,idZ,world,ownerid,owner,biome,"
                             + "finished,finisheddate,forsale,customprice,protected,expireddate,topX,topZ,bottomX,bottomZ FROM `plotmePlots` WHERE "
                             + "ownerid IS NOT NULL");
+                    statement.executeUpdate("");
                     connection.commit();
                     ResultSet allowedResult = statement.executeQuery("SELECT * FROM plotmeallowed");
                     while (allowedResult.next()) {

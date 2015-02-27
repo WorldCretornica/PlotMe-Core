@@ -39,7 +39,7 @@ package com.worldcretornica.schematic.jnbt;
  *
  */
 public final class DoubleTag extends Tag {
-    
+
     /**
      * The value.
      */
@@ -54,17 +54,17 @@ public final class DoubleTag extends Tag {
         super(name);
         this.value = value;
     }
-    
+
     @Override
     public Double getValue() {
         return value;
     }
-    
+
     @Override
     public String toString() {
         String name = getName();
         String append = "";
-        if(name != null && !name.equals("")) {
+        if (name != null && !name.equals("")) {
             append = "(\"" + this.getName() + "\")";
         }
         return "TAG_Double" + append + ": " + value;

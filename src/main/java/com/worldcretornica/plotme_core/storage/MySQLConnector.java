@@ -18,7 +18,6 @@ public class MySQLConnector extends Database {
         this.url = url;
         this.userName = userName;
         this.password = password;
-        startConnection();
     }
 
     @Override

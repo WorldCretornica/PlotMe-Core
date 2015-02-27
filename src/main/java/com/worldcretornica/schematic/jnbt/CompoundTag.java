@@ -42,12 +42,12 @@ import java.util.Map;
  *
  */
 public final class CompoundTag extends Tag {
-    
+
     /**
      * The value.
      */
     private final Map<String, Tag> value;
-    
+
     /**
      * Creates the tag.
      * @param name The name.
@@ -62,17 +62,17 @@ public final class CompoundTag extends Tag {
     public Map<String, Tag> getValue() {
         return value;
     }
-    
+
     @Override
     public String toString() {
         String name = getName();
         String append = "";
-        if(name != null && !name.equals("")) {
+        if (name != null && !name.equals("")) {
             append = "(\"" + this.getName() + "\")";
         }
         StringBuilder bldr = new StringBuilder();
         bldr.append("TAG_Compound" + append + ": " + value.size() + " entries\r\n{\r\n");
-        for(Map.Entry<String, Tag> entry : value.entrySet()) {
+        for (Map.Entry<String, Tag> entry : value.entrySet()) {
             bldr.append("   " + entry.getValue().toString().replaceAll("\r\n", "\r\n   ") + "\r\n");
         }
         bldr.append("}");

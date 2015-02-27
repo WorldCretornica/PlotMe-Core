@@ -109,18 +109,16 @@ public class BukkitPlotWorldEditListener implements Listener {
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
         BukkitPlayer player = (BukkitPlayer) plugin.wrapPlayer(event.getPlayer());
 
-        if (manager.isPlotWorld(player)) {
-            if (!manager.isPlayerIgnoringWELimit(player)) {
-                if (event.getMessage().startsWith("//gmask")) {
+        if (manager.isPlotWorld(player) && !manager.isPlayerIgnoringWELimit(player)) {
+            if (event.getMessage().startsWith("//gmask")) {
+                player.sendMessage(api.getUtil().C("ErrCannotUse"));
+                event.setCancelled(true);
+            } else if (event.getMessage().startsWith("//up")) {
+                Plot plot = manager.getPlotById(player);
+
+                if (plot == null || !plot.isAllowed(player.getName(), player.getUniqueId())) {
                     player.sendMessage(api.getUtil().C("ErrCannotUse"));
                     event.setCancelled(true);
-                } else if (event.getMessage().startsWith("//up")) {
-                    Plot plot = manager.getPlotById(player);
-
-                    if (plot == null || !plot.isAllowed(player.getName(), player.getUniqueId())) {
-                        player.sendMessage(api.getUtil().C("ErrCannotUse"));
-                        event.setCancelled(true);
-                    }
                 }
             }
         }

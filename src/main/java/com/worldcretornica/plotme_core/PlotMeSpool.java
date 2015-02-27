@@ -26,10 +26,10 @@ public class PlotMeSpool implements Runnable {
             if (world != null) {
                 if (currentClear == null) {
                     currentClear = genmanager
-                            .clear(world, getPlotToClear().getPlotId(), plugin.getServerBridge().getConfig().getInt("NbBlocksPerClearStep"), null);
+                            .clear(world, getPlotToClear().getPlotId(), plugin.getConfig().getInt("NbBlocksPerClearStep"), null);
                 } else {
                     currentClear = genmanager
-                            .clear(world, getPlotToClear().getPlotId(), plugin.getServerBridge().getConfig().getInt("NbBlocksPerClearStep"),
+                            .clear(world, getPlotToClear().getPlotId(), plugin.getConfig().getInt("NbBlocksPerClearStep"),
                                     currentClear);
                 }
 

@@ -133,7 +133,7 @@ public class CmdShowHelp extends PlotCommand {
                     } else {
                         player.sendMessage("§a" + C("HelpYourPlotLimitWorld") + " : §b" + ownedPlots + "§a " + C("HelpUsedOf") + " §b" + plotLimit);
                     }
-                } else if (serverBridge.getConfig().getBoolean("allowWorldTeleport")) {
+                } else if (plugin.getConfig().getBoolean("allowWorldTeleport")) {
 
                     IWorld world = manager.getFirstWorld();
 
@@ -168,7 +168,7 @@ public class CmdShowHelp extends PlotCommand {
                     player.sendMessage("§b " + C("HelpClaimOther"));
                 }
             } else if ("auto".equalsIgnoreCase(allowedCommand)) {
-                if (serverBridge.getConfig().getBoolean("allowWorldTeleport")) {
+                if (plugin.getConfig().getBoolean("allowWorldTeleport")) {
                     player.sendMessage("§a /plotme auto [" + C("WordWorld") + "]");
                 } else {
                     player.sendMessage("§a /plotme auto");
@@ -180,7 +180,7 @@ public class CmdShowHelp extends PlotCommand {
                     player.sendMessage("§b " + C("HelpAuto"));
                 }
             } else if ("home".equalsIgnoreCase(allowedCommand)) {
-                if (serverBridge.getConfig().getBoolean("allowWorldTeleport")) {
+                if (plugin.getConfig().getBoolean("allowWorldTeleport")) {
                     player.sendMessage("§a /plotme home[:#] [" + C("WordWorld") + "]");
                 } else {
                     player.sendMessage("§a /plotme home[:#]");
@@ -192,7 +192,7 @@ public class CmdShowHelp extends PlotCommand {
                     player.sendMessage("§b " + C("HelpHome"));
                 }
             } else if ("home.other".equalsIgnoreCase(allowedCommand)) {
-                if (serverBridge.getConfig().getBoolean("allowWorldTeleport")) {
+                if (plugin.getConfig().getBoolean("allowWorldTeleport")) {
                     player.sendMessage("§a /plotme home[:#] <" + C("WordPlayer") + "> [" + C("WordWorld") + "]");
                 } else {
                     player.sendMessage("§a /plotme home[:#] <" + C("WordPlayer") + ">");
@@ -226,7 +226,7 @@ public class CmdShowHelp extends PlotCommand {
                 player.sendMessage("§a /plotme done");
                 player.sendMessage("§b " + C("HelpDone"));
             } else if ("tp".equalsIgnoreCase(allowedCommand)) {
-                if (serverBridge.getConfig().getBoolean("allowWorldTeleport")) {
+                if (plugin.getConfig().getBoolean("allowWorldTeleport")) {
                     player.sendMessage("§a /plotme tp <ID> [" + C("WordWorld") + "]");
                 } else {
                     player.sendMessage("§a /plotme tp <ID>");

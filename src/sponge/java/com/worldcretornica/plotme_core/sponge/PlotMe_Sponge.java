@@ -51,7 +51,6 @@ public class PlotMe_Sponge {
     }
 
     public Game getGame() {
-
         return game;
     }
 

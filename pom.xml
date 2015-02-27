@@ -175,8 +175,13 @@
             <groupId>com.sk89q.worldedit</groupId>
             <artifactId>worldedit-bukkit</artifactId>
             <version>6.0.1-SNAPSHOT</version>
-            <optional>true</optional>
             <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.sk89q.bukkit</groupId>
+                    <artifactId>bukkit-classloader-check</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>net.milkbowl.vault</groupId>

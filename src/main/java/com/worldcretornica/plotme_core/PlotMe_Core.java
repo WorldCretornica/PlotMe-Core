@@ -1,5 +1,8 @@
 package com.worldcretornica.plotme_core;
 
+import com.worldcretornica.configuration.ConfigAccessor;
+import com.worldcretornica.configuration.file.FileConfiguration;
+import com.worldcretornica.configuration.file.YamlConfiguration;
 import com.worldcretornica.plotme_core.api.IConfigSection;
 import com.worldcretornica.plotme_core.api.IPlotMe_GeneratorManager;
 import com.worldcretornica.plotme_core.api.IServerBridge;
@@ -11,6 +14,12 @@ import com.worldcretornica.plotme_core.storage.SQLiteConnector;
 import com.worldcretornica.plotme_core.utils.Util;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Level;
@@ -18,9 +27,6 @@ import java.util.logging.Logger;
 
 public class PlotMe_Core {
 
-    public static final String CAPTION_FILE = "captions.yml";
-
-    public static final String WORLDS_CONFIG_SECTION = "worlds";
     //Bridge
     private final IServerBridge serverBridge;
     private final AbstractSchematicUtil schematicutil;
@@ -32,6 +38,9 @@ public class PlotMe_Core {
     //Global variables
     private Database sqlManager;
     private Util util;
+    private File configFile;
+    private FileConfiguration fileConfiguration;
+    private File captionFile;
 
     public PlotMe_Core(IServerBridge serverObjectBuilder, AbstractSchematicUtil schematicutil) {
         this.serverBridge = serverObjectBuilder;
@@ -61,6 +70,9 @@ public class PlotMe_Core {
     public void enable() {
         PlotMeCoreManager.getInstance().setPlugin(this);
         setupSQL();
+        configFile = new File(getServerBridge().getDataFolder(), "config.yml");
+        captionFile = new File(getServerBridge().getDataFolder(), "captions.yml");
+        createCoreConfig();
         setupConfig();
         setupDefaultCaptions();
         serverBridge.setupCommands();
@@ -71,6 +83,7 @@ public class PlotMe_Core {
         if (serverBridge.getConfig().getBoolean("setupDatabase")) {
 
         }
+        getSqlManager().startConnection();
         getSqlManager().createTables();
         if (serverBridge.getConfig().getBoolean("coreDatabaseUpdate")) {
             getSqlManager().coreDatabaseUpdate();
@@ -96,35 +109,10 @@ public class PlotMe_Core {
         return serverBridge.getLogger();
     }
 
-    /*private void setupWorlds() {
-        IConfigSection worldsCS = serverBridge.getConfig().getConfigurationSection(WORLDS_CONFIG_SECTION);
-        for (String world : worldsCS.getKeys(false)) {
-            String worldName = world.toLowerCase();
-            if (getGenManager(worldName) == null) {
-                getLogger().log(Level.SEVERE, "The world {0} either does not exist or not using a PlotMe generator", world);
-                getLogger().log(Level.SEVERE, "Please ensure that {0} is set up and that it is using a PlotMe generator", world);
-            } else {
-                PlotMapInfo pmi = new PlotMapInfo(this, worldName);
-                //Lets just hide a bit of code to clean up the config in here.
-                IConfigSection config = getServerBridge().loadDefaultConfig("worlds." + world);
-                config.set("BottomBlockId", null);
-                config.set("AutoLinkPlots", null);
-                plotMeCoreManager.addPlotMap(worldName, pmi);
-            }
-        }
-        if (getPlotMeCoreManager().getPlotMaps().isEmpty()) {
-            getLogger().severe("Uh oh. There are no plotworlds setup.");
-            getLogger().severe("Is that a mistake? Try making sure you setup PlotMe Correctly PlotMe to stay safe.");
-        }
-    }*/
-
     private void setupConfig() {
         // Get the config we will be working with
-        IConfigSection config = serverBridge.getConfig();
-        config.set("allowToDeny", null);
-        // If no world exists add config for a world
-        //if (!config.contains("worlds") || config.contains("worlds") && config.getConfigurationSection("worlds").getKeys(false).isEmpty()) {
-        if (!(config.contains(WORLDS_CONFIG_SECTION) && !config.getConfigurationSection(WORLDS_CONFIG_SECTION).getKeys(false).isEmpty())) {
+        FileConfiguration config = getConfig();
+        if (config.getConfigurationSection("worlds").getKeys(false).isEmpty()) {
             new PlotMapInfo(this, "plotworld");
         }
         // Do any config validation
@@ -134,10 +122,31 @@ public class PlotMe_Core {
         }
 
         // Copy new values over
-        config.copyDefaults(true);
-        config.set("Language", null);
-        config.set("language", null);
-        config.saveConfig();
+        config.options().copyDefaults(true);
+        saveConfiguration();
+    }
+
+    private void saveConfiguration() {
+        try {
+            getConfig().save(configFile);
+        } catch (IOException ex) {
+            getLogger().severe("Could not save config to " + configFile);
+        }
+    }
+
+    private void setupFiles() {
+        createCoreConfig();
+        createCaptions();
+    }
+
+    private void createCaptions() {
+        ConfigAccessor config = new ConfigAccessor(this, "captions.yml");
+        config.createFile();
+    }
+
+    private void createCoreConfig() {
+        ConfigAccessor config = new ConfigAccessor(this, "config.yml");
+        config.createFile();
     }
 
     private void setupWorld(String worldname) {
@@ -147,7 +156,7 @@ public class PlotMe_Core {
         } else {
             PlotMapInfo pmi = new PlotMapInfo(this, worldname);
             //Lets just hide a bit of code to clean up the config in here.
-            IConfigSection config = getServerBridge().loadDefaultConfig("worlds." + worldname.toLowerCase());
+            IConfigSection config = getServerBridge().loadDefaultConfig("worlds." + worldname);
             config.set("BottomBlockId", null);
             config.set("AutoLinkPlots", null);
             config.saveConfig();
@@ -161,37 +170,17 @@ public class PlotMe_Core {
     }
 
     public IConfigSection getCaptionConfig() {
-        return serverBridge.getConfig(CAPTION_FILE);
+        return serverBridge.getCaptionConfig();
     }
 
     public void reloadCaptionConfig() {
-        serverBridge.getConfig(CAPTION_FILE).reloadConfig();
+        serverBridge.getCaptionConfig().reloadConfig();
     }
 
     private void setupDefaultCaptions() {
-        //Changing Captions File Name
-        String pluginsFolder = serverBridge.getDataFolder();
-        File coreFolder = new File(pluginsFolder);
-        File newCaptionFile = new File(coreFolder, CAPTION_FILE);
-        for (String plotMeFiles : coreFolder.list()) {
-            if (plotMeFiles.startsWith("caption")) {
-                if (CAPTION_FILE.equals(plotMeFiles)) {
-                    break;
-                } else {
-                    File oldCaptionFile = new File(coreFolder, plotMeFiles);
-                    if (oldCaptionFile.renameTo(newCaptionFile)) {
-                        getLogger().info("Renamed Caption File to captions.yml");
-                        if (oldCaptionFile.delete()) {
-                            getLogger().info("Deleted old caption file.");
-                        } else {
-                            getLogger().warning("Failed to delete old caption file. ");
-                        }
-                    }
-                }
-            }
-        }
-        if (!newCaptionFile.exists()) {
-            getServerBridge().saveResource(CAPTION_FILE, true);
+        if (!captionFile.exists()) {
+            new ConfigAccessor(this, "captions.yml").createFile();
+            getServerBridge().saveResource(true);
         }
     }
 
@@ -199,7 +188,7 @@ public class PlotMe_Core {
      * Setup SQL Database
      */
     private void setupSQL() {
-        IConfigSection config = serverBridge.getConfig();
+        FileConfiguration config = serverBridge.getConfig();
         if (config.getBoolean("usemySQL", false)) {
             String url = config.getString("mySQLconn");
             String user = config.getString("mySQLuname");
@@ -295,4 +284,36 @@ public class PlotMe_Core {
         this.util = util;
     }
 
+    public FileConfiguration getConfig() {
+        if (fileConfiguration == null) {
+            reloadConfig();
+        }
+        return fileConfiguration;
+    }
+
+    private void reloadConfig() {
+        fileConfiguration = YamlConfiguration.loadConfiguration(configFile);
+
+        final InputStream defConfigStream = getResource("config.yml");
+        if (defConfigStream == null) {
+            return;
+        }
+        YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(defConfigStream, StandardCharsets.UTF_8));
+        fileConfiguration.setDefaults(defConfig);
+
+    }
+
+    private InputStream getResource(String filename) {
+        try {
+            URL url = getClass().getClassLoader().getResource(filename);
+            if (url == null) {
+                return null;
+            }
+            URLConnection connection = url.openConnection();
+            connection.setUseCaches(false);
+            return connection.getInputStream();
+        } catch (IOException ex) {
+            return null;
+        }
+    }
 }

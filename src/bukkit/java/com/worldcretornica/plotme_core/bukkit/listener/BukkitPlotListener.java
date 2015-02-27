@@ -161,36 +161,34 @@ public class BukkitPlotListener implements Listener {
         Player player = event.getPlayer();
         BukkitLocation location = new BukkitLocation(event.getBlockClicked().getLocation());
 
-        if (!player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE)) {
-            if (manager.isPlotWorld(location)) {
-                PlotId id = manager.getPlotId(location);
+        if (!player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE) && manager.isPlotWorld(location)) {
+            PlotId id = manager.getPlotId(location);
 
-                if (id == null) {
-                    player.sendMessage(api.getUtil().C("ErrCannotBuild"));
+            if (id == null) {
+                player.sendMessage(api.getUtil().C("ErrCannotBuild"));
+                event.setCancelled(true);
+            } else {
+                PlotToClear ptc = api.getPlotLocked(location.getWorld(), id);
+
+                if (ptc != null) {
+                    switch (ptc.getReason()) {
+                        case Clear:
+                            player.sendMessage(api.getUtil().C("MsgPlotLockedClear"));
+                            break;
+                        case Reset:
+                            player.sendMessage(api.getUtil().C("MsgPlotLockedReset"));
+                            break;
+                        case Expired:
+                            player.sendMessage(api.getUtil().C("MsgPlotLockedExpired"));
+                            break;
+                    }
                     event.setCancelled(true);
                 } else {
-                    PlotToClear ptc = api.getPlotLocked(location.getWorld(), id);
+                    Plot plot = manager.getPlotById(id, location.getWorld());
 
-                    if (ptc != null) {
-                        switch (ptc.getReason()) {
-                            case Clear:
-                                player.sendMessage(api.getUtil().C("MsgPlotLockedClear"));
-                                break;
-                            case Reset:
-                                player.sendMessage(api.getUtil().C("MsgPlotLockedReset"));
-                                break;
-                            case Expired:
-                                player.sendMessage(api.getUtil().C("MsgPlotLockedExpired"));
-                                break;
-                        }
+                    if (plot == null || !plot.isAllowed(player.getName(), player.getUniqueId())) {
+                        player.sendMessage(api.getUtil().C("ErrCannotBuild"));
                         event.setCancelled(true);
-                    } else {
-                        Plot plot = manager.getPlotById(id, location.getWorld());
-
-                        if (plot == null || !plot.isAllowed(player.getName(), player.getUniqueId())) {
-                            player.sendMessage(api.getUtil().C("ErrCannotBuild"));
-                            event.setCancelled(true);
-                        }
                     }
                 }
             }
@@ -237,10 +235,8 @@ public class BukkitPlotListener implements Listener {
                     }
                 } else {
                     boolean blocked = false;
-                    if (pmi.isProtectedBlock(block.getTypeId())) {
-                        if (!player.hasPermission("plotme.unblock." + block.getTypeId())) {
-                            blocked = true;
-                        }
+                    if (pmi.isProtectedBlock(block.getTypeId()) && !player.hasPermission("plotme.unblock." + block.getTypeId())) {
+                        blocked = true;
                     }
 
                     ItemStack item = event.getItem();
@@ -250,10 +246,9 @@ public class BukkitPlotListener implements Listener {
                             int itemId = item.getType().getId();
                             byte itemData = item.getData().getData();
 
-                            if (pmi.isPreventedItem(String.valueOf(itemId)) || pmi.isPreventedItem(itemId + ":" + itemData)) {
-                                if (!player.hasPermission("plotme.unblock." + itemId)) {
-                                    blocked = true;
-                                }
+                            if ((pmi.isPreventedItem(String.valueOf(itemId)) || pmi.isPreventedItem(itemId + ":" + itemData)) && !player
+                                    .hasPermission("plotme.unblock." + itemId)) {
+                                blocked = true;
                             }
                         }
                     }

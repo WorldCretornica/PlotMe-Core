@@ -1,5 +1,6 @@
 package com.worldcretornica.plotme_core.sponge;
 
+import com.worldcretornica.configuration.file.FileConfiguration;
 import com.worldcretornica.plotme_core.PlotWorldEdit;
 import com.worldcretornica.plotme_core.api.IBiome;
 import com.worldcretornica.plotme_core.api.IConfigSection;
@@ -18,7 +19,7 @@ import org.spongepowered.api.entity.player.Player;
 import org.spongepowered.api.service.command.CommandService;
 import org.spongepowered.api.world.World;
 
-import java.io.InputStream;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -184,13 +185,7 @@ public class SpongeServerBridge extends IServerBridge {
     }
 
     @Override
-    public InputStream getResource(String path) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public String getDataFolder() {
+    public File getDataFolder() {
         // TODO Auto-generated method stub
         return null;
     }
@@ -202,19 +197,19 @@ public class SpongeServerBridge extends IServerBridge {
     }
 
     @Override
-    public IConfigSection getConfig() {
+    public FileConfiguration getConfig() {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public IConfigSection getConfig(String file) {
+    public IConfigSection getCaptionConfig() {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public void saveResource(String fileName, boolean replace) {
+    public void saveResource(boolean replace) {
         // TODO Auto-generated method stub
 
     }

@@ -37,14 +37,14 @@ public class SqlManager {
         try {
             if (isUsingMySQL()) {
                 Class.forName("com.mysql.jdbc.Driver");
-                String url = plugin.getServerBridge().getConfig().getString("mySQLconn");
-                String user = plugin.getServerBridge().getConfig().getString("mySQLuname");
-                String pass = plugin.getServerBridge().getConfig().getString("mySQLpass");
+                String url = plugin.getConfig().getString("mySQLconn");
+                String user = plugin.getConfig().getString("mySQLuname");
+                String pass = plugin.getConfig().getString("mySQLpass");
                 conn = DriverManager.getConnection(url, user, pass);
                 conn.setAutoCommit(false);
             } else {
                 Class.forName(SQLITE_DRIVER);
-                conn = DriverManager.getConnection("jdbc:sqlite:" + plugin.getServerBridge().getDataFolder() + "/plotmecore.db");
+                conn = DriverManager.getConnection("jdbc:sqlite:" + plugin.getServerBridge().getDataFolder().getAbsolutePath() + "/plotmecore.db");
                 conn.setAutoCommit(false);
             }
         } catch (SQLException | ClassNotFoundException e) {
@@ -125,12 +125,14 @@ public class SqlManager {
             if (isUsingMySQL()) {
 
                 String sqlitedb = "plots.db";
-                File sqlitefile = new File(plugin.getServerBridge().getDataFolder(), sqlitedb);
+                File sqlitefile = new File(plugin.getServerBridge().getDataFolder().getAbsolutePath(), sqlitedb);
                 if (sqlitefile.exists()) {
                     plugin.getLogger().info("Modifying database for MySQL support");
                     plugin.getLogger().info("Trying to import plots from plots.db");
                     Class.forName(SQLITE_DRIVER);
-                    Connection sqliteconn = DriverManager.getConnection("jdbc:sqlite:" + plugin.getServerBridge().getDataFolder() + "/plotmecore.db");
+                    Connection sqliteconn =
+                            DriverManager.getConnection("jdbc:sqlite:" + plugin.getServerBridge().getDataFolder().getAbsolutePath() + "/plotmecore"
+                                    + ".db");
 
                     sqliteconn.setAutoCommit(false);
                     Statement slstatement = sqliteconn.createStatement();
@@ -241,7 +243,7 @@ public class SqlManager {
                     sqliteconn.close();
 
                     plugin.getLogger().info("Renaming " + sqlitedb + " to " + sqlitedb + ".old");
-                    if (!sqlitefile.renameTo(new File(plugin.getServerBridge().getDataFolder(), sqlitedb + ".old"))) {
+                    if (!sqlitefile.renameTo(new File(plugin.getServerBridge().getDataFolder().getAbsolutePath(), sqlitedb + ".old"))) {
                         plugin.getLogger().severe("Failed to rename " + sqlitedb + "! Please rename this manually!");
                     }
                 }
@@ -1180,10 +1182,8 @@ public class SqlManager {
             statementPlot = conn.prepareStatement(query);
 
             statementPlot.setBytes(1, UUIDFetcher.toBytes(playerId));
-            if (ownedonly) {
-                if (!world.isEmpty()) {
-                    statementPlot.setString(3, world.toLowerCase());
-                }
+            if (ownedonly && !world.isEmpty()) {
+                statementPlot.setString(3, world.toLowerCase());
             }
 
             setPlots = statementPlot.executeQuery();
@@ -1495,12 +1495,7 @@ public class SqlManager {
                                             psDeniedPlayerId4.setBytes(1, byteuuid);
                                             psDeniedPlayerId4.setString(2, newname);
                                             psDeniedPlayerId4.setString(3, oldname.toLowerCase());
-                                            try {
-                                                count += psDeniedPlayerId4.executeUpdate();
-                                            } catch (Exception t) {
-                                                plugin.getLogger().info("newname : " + newname);
-                                                plugin.getLogger().info("oldname : " + oldname);
-                                            }
+                                            count += psDeniedPlayerId4.executeUpdate();
                                             conn.commit();
                                             if (count == 0) {
                                                 plugin.getLogger().warning("Unable to update player '" + keyname + "'");
@@ -1681,12 +1676,7 @@ public class SqlManager {
                     String newname = name;
 
                     if (player == null) {
-                        try {
-                            uuid = UUIDFetcher.getUUIDOf(name);
-                        } catch (Exception e) {
-                            plugin.getLogger().severe("Failed to get UUID for the following name: " + name);
-                            plugin.getLogger().severe("Either unable to connect to Mojang servers or a serious error occurred.");
-                        }
+                        uuid = UUIDFetcher.getUUIDOf(name);
                     } else {
                         uuid = player.getUniqueId();
                         newname = player.getName();
@@ -1763,7 +1753,7 @@ public class SqlManager {
     }
 
     public boolean isUsingMySQL() {
-        return plugin.getServerBridge().getConfig().getBoolean("usemySQL", false);
+        return plugin.getConfig().getBoolean("usemySQL", false);
     }
 
     public void updatePlotsNewUUID(final UUID uuid, final String newname) {

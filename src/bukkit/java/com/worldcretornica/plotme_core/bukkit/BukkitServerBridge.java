@@ -1,6 +1,11 @@
 package com.worldcretornica.plotme_core.bukkit;
 
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
+import com.worldcretornica.configuration.ConfigAccessor;
+import com.worldcretornica.configuration.ConfigurationSection;
+import com.worldcretornica.configuration.InvalidConfigurationException;
+import com.worldcretornica.configuration.file.FileConfiguration;
+import com.worldcretornica.configuration.file.YamlConfiguration;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotWorldEdit;
@@ -28,9 +33,6 @@ import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -39,9 +41,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -61,6 +62,7 @@ public class BukkitServerBridge extends IServerBridge {
     public BukkitServerBridge(PlotMe_CorePlugin instance) {
         plugin = instance;
         eventFactory = new BukkitEventFactory();
+        super(plugin.getDataFolder());
     }
 
     private static MultiverseWrapper getMultiverseWrapper() {
@@ -265,35 +267,30 @@ public class BukkitServerBridge extends IServerBridge {
     }
 
     @Override
-    public InputStream getResource(String path) {
-        return plugin.getResource(path);
+    public File getDataFolder() {
+        return plugin.getDataFolder();
     }
 
     @Override
-    public String getDataFolder() {
-        return plugin.getDataFolder().getAbsolutePath();
+    public FileConfiguration getConfig() {
+        return YamlConfiguration.loadConfiguration(new InputStreamReader(getClass().getClassLoader().getResourceAsStream("config.yml"),
+                StandardCharsets.UTF_8));
     }
 
     @Override
+    public IConfigSection getCaptionConfig() {
 
-    public IConfigSection getConfig() {
-        return new BukkitConfigSection(plugin);
-    }
-
-    @Override
-    public IConfigSection getConfig(String file) {
-
-        File configFile = new File(plugin.getDataFolder().getAbsolutePath(), file);
+        File configFile = new File(getDataFolder(), "captions.yml");
         YamlConfiguration config = new YamlConfiguration();
 
         try {
             config.load(configFile);
         } catch (FileNotFoundException ignored) {
         } catch (IOException e) {
-            plugin.getLogger().severe("Can't read configuration file");
+            getLogger().severe("Can't read configuration file");
             e.printStackTrace();
         } catch (InvalidConfigurationException e) {
-            plugin.getLogger().severe("Invalid configuration format");
+            getLogger().severe("Invalid configuration format");
             e.printStackTrace();
         }
 
@@ -301,8 +298,9 @@ public class BukkitServerBridge extends IServerBridge {
     }
 
     @Override
-    public void saveResource(String fileName, boolean replace) {
-        plugin.saveResource(fileName, replace);
+    public void saveResource(boolean replace) {
+        YamlConfiguration.loadConfiguration(
+                new InputStreamReader(getClass().getClassLoader().getResourceAsStream("default-world.yml"), StandardCharsets.UTF_8));
     }
 
     @Override
@@ -370,10 +368,8 @@ public class BukkitServerBridge extends IServerBridge {
         long seed = new Random().nextLong();
 
         //Check if we have multiverse
-        if (getMultiverse() == null) {
-            if (Bukkit.getPluginManager().isPluginEnabled("Multiverse-Core")) {
-                setMultiverse((JavaPlugin) Bukkit.getPluginManager().getPlugin("Multiverse-Core"));
-            }
+        if (getMultiverse() == null && Bukkit.getPluginManager().isPluginEnabled("Multiverse-Core")) {
+            setMultiverse((JavaPlugin) Bukkit.getPluginManager().getPlugin("Multiverse-Core"));
         }
 
         //Do we have one of them
@@ -390,7 +386,7 @@ public class BukkitServerBridge extends IServerBridge {
             getLogger().info(plugin.getAPI().getUtil().C("ErrCannotFindWorldGen") + " '" + generator + "'");
             return false;
         }
-        if (!plotMeGenerator.getManager().createConfig(worldName, args)) { //Create the generator configurations
+        if (!plotMeGenerator.getManager().createFile(worldName, args)) { //Create the generator configurations
             getLogger().info(plugin.getAPI().getUtil().C("ErrCannotCreateGen1") + " '" + generator + "' " + plugin.getAPI().getUtil()
                     .C("ErrCannotCreateGen2"));
             return false;
@@ -457,28 +453,21 @@ public class BukkitServerBridge extends IServerBridge {
     public IConfigSection loadDefaultConfig(String world) {
         ConfigurationSection defaultCS = getDefaultWorld();
         ConfigurationSection configSection;
-        if (plugin.getConfig().contains(world)) {
-            configSection = plugin.getConfig().getConfigurationSection(world);
+        if (getConfig().contains(world)) {
+            configSection = getConfig().getConfigurationSection(world);
         } else {
-            plugin.getConfig().set(world, defaultCS);
-            plugin.saveConfig();
-            configSection = plugin.getConfig().getConfigurationSection(world);
+            getConfig().set(world, defaultCS);
+            configSection = getConfig().getConfigurationSection(world);
         }
         for (String path : defaultCS.getKeys(true)) {
             configSection.addDefault(path, defaultCS.get(path));
         }
-        return new BukkitConfigSection(plugin, plugin.getConfig(), configSection);
+        return new ConfigAccessor(plugin, getConfig(), configSection);
     }
 
     private ConfigurationSection getDefaultWorld() {
-        InputStream defConfigStream = plugin.getResource("default-world.yml");
-        InputStreamReader isr;
-        try {
-            isr = new InputStreamReader(defConfigStream, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            isr = new InputStreamReader(defConfigStream);
-        }
-        return YamlConfiguration.loadConfiguration(isr);
+        return YamlConfiguration.loadConfiguration(
+                new InputStreamReader(getClass().getClassLoader().getResourceAsStream("default-world.yml"), StandardCharsets.UTF_8));
     }
 
     public void clearBukkitPlayerMap() {

@@ -1,11 +1,12 @@
 package com.worldcretornica.plotme_core.api;
 
+import com.worldcretornica.configuration.file.FileConfiguration;
 import com.worldcretornica.plotme_core.PlotWorldEdit;
 import com.worldcretornica.plotme_core.api.event.IEventFactory;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 
-import java.io.InputStream;
+import java.io.File;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,10 @@ import java.util.logging.Logger;
 public abstract class IServerBridge {
 
     private boolean usingLwc;
+
+    public IServerBridge(File pluginFolder) {
+        new File
+    }
 
     public abstract IOfflinePlayer getOfflinePlayer(UUID uuid);
 
@@ -88,17 +93,15 @@ public abstract class IServerBridge {
 
     public abstract IEventFactory getEventFactory();
 
-    public abstract InputStream getResource(String path);
-
-    public abstract String getDataFolder();
+    public abstract File getDataFolder();
 
     public abstract void reloadConfig();
 
-    public abstract IConfigSection getConfig();
+    public abstract FileConfiguration getConfig();
 
-    public abstract IConfigSection getConfig(String file);
+    public abstract IConfigSection getCaptionConfig();
 
-    public abstract void saveResource(String fileName, boolean replace);
+    public abstract void saveResource(boolean replace);
 
     public abstract boolean addMultiverseWorld(String worldName, String seed, String generator);
 
@@ -115,4 +118,8 @@ public abstract class IServerBridge {
     public abstract IMaterial getMaterial(String string);
 
     public abstract IConfigSection loadDefaultConfig(String string);
+
+    public void createWorldSection(String world) {
+
+    }
 }

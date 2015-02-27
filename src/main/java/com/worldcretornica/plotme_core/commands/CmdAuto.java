@@ -17,9 +17,9 @@ public class CmdAuto extends PlotCommand {
 
     public boolean exec(IPlayer player, String[] args) {
         if (player.hasPermission(PermissionNames.USER_AUTO)) {
-            if (manager.isPlotWorld(player) || serverBridge.getConfig().getBoolean("allowWorldTeleport")) {
+            if (manager.isPlotWorld(player) || plugin.getConfig().getBoolean("allowWorldTeleport")) {
                 IWorld world;
-                if (!manager.isPlotWorld(player) && serverBridge.getConfig().getBoolean("allowWorldTeleport")) {
+                if (!manager.isPlotWorld(player) && plugin.getConfig().getBoolean("allowWorldTeleport")) {
                     if (args.length == 2) {
                         world = serverBridge.getWorld(args[1]);
                     } else {

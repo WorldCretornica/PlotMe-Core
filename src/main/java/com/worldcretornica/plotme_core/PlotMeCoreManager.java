@@ -288,7 +288,7 @@ public class PlotMeCoreManager {
      * @return true if economy enabled
      */
     public boolean isEconomyEnabled(PlotMapInfo pmi) {
-        if (!plugin.getServerBridge().getConfig().getBoolean("globalUseEconomy") || plugin.getServerBridge().getEconomy() == null) {
+        if (!plugin.getConfig().getBoolean("globalUseEconomy") || plugin.getServerBridge().getEconomy() == null) {
             return false;
         }
         return pmi != null && pmi.isUseEconomy();
@@ -519,9 +519,6 @@ public class PlotMeCoreManager {
      * @return true if world is plotworld, false otherwise
      */
     public boolean isPlotWorld(IWorld world) {
-        if (getGenManager(world) == null) {
-            return false;
-        }
         return getPlotMaps().containsKey(world.getName().toLowerCase());
     }
 
@@ -844,7 +841,7 @@ public class PlotMeCoreManager {
     }
 
     public boolean isPlayerIgnoringWELimit(IPlayer player) {
-        if (plugin.getServerBridge().getConfig().getBoolean("defaultWEAnywhere") && player.hasPermission(PermissionNames.ADMIN_WEANYWHERE)) {
+        if (plugin.getConfig().getBoolean("defaultWEAnywhere") && player.hasPermission(PermissionNames.ADMIN_WEANYWHERE)) {
             return !getPlayersIgnoringWELimit().contains(player.getUniqueId());
         }
         return getPlayersIgnoringWELimit().contains(player.getUniqueId());

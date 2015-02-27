@@ -11,7 +11,6 @@ public class SQLiteConnector extends Database {
 
     public SQLiteConnector(PlotMe_Core plugin) {
         super(plugin);
-        startConnection();
     }
 
     /**
@@ -22,7 +21,7 @@ public class SQLiteConnector extends Database {
     public Connection startConnection() {
         try {
             Class.forName("org.sqlite.JDBC");
-            connection = DriverManager.getConnection("jdbc:sqlite:" + plugin.getServerBridge().getDataFolder() + "/plotmecore.db");
+            connection = DriverManager.getConnection("jdbc:sqlite:" + plugin.getServerBridge().getDataFolder().getAbsolutePath() + "/plotmecore.db");
             connection.setAutoCommit(false);
             return connection;
         } catch (ClassNotFoundException | SQLException e) {

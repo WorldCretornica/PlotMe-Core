@@ -44,7 +44,7 @@ import java.util.zip.GZIPOutputStream;
  * <p>This class writes <strong>NBT</strong>, or
  * <strong>Named Binary Tag</strong> <code>Tag</code> objects to an underlying
  * <code>OutputStream</code>.</p>
- * 
+ *
  * <p>The NBT format was created by Markus Persson, and the specification may
  * be found at <a href="http://www.minecraft.net/docs/NBT.txt">
  * http://www.minecraft.net/docs/NBT.txt</a>.</p>
@@ -52,12 +52,12 @@ import java.util.zip.GZIPOutputStream;
  *
  */
 public final class NBTOutputStream implements Closeable {
-    
+
     /**
      * The output stream.
      */
     private final DataOutputStream os;
-    
+
     /**
      * Creates a new <code>NBTOutputStream</code>, which will write data to the
      * specified underlying output stream.
@@ -67,7 +67,7 @@ public final class NBTOutputStream implements Closeable {
     public NBTOutputStream(OutputStream os) throws IOException {
         this.os = new DataOutputStream(new GZIPOutputStream(os));
     }
-    
+
     /**
      * Writes a tag.
      * @param tag The tag to write.
@@ -77,15 +77,15 @@ public final class NBTOutputStream implements Closeable {
         int type = NBTUtils.getTypeCode(tag.getClass());
         String name = tag.getName();
         byte[] nameBytes = name.getBytes(NBTConstants.CHARSET);
-        
+
         os.writeByte(type);
         os.writeShort(nameBytes.length);
         os.write(nameBytes);
-        
-        if(type == NBTConstants.TYPE_END) {
+
+        if (type == NBTConstants.TYPE_END) {
             throw new IOException("Named TAG_End not permitted.");
         }
-        
+
         writeTagPayload(tag);
     }
 
@@ -96,42 +96,42 @@ public final class NBTOutputStream implements Closeable {
      */
     private void writeTagPayload(Tag tag) throws IOException {
         int type = NBTUtils.getTypeCode(tag.getClass());
-        switch(type) {
-        case NBTConstants.TYPE_END:
-            writeEndTagPayload((EndTag) tag);
-            break;
-        case NBTConstants.TYPE_BYTE:
-            writeByteTagPayload((ByteTag) tag);
-            break;
-        case NBTConstants.TYPE_SHORT:
-            writeShortTagPayload((ShortTag) tag);
-            break;
-        case NBTConstants.TYPE_INT:
-            writeIntTagPayload((IntTag) tag);
-            break;
-        case NBTConstants.TYPE_LONG:
-            writeLongTagPayload((LongTag) tag);
-            break;
-        case NBTConstants.TYPE_FLOAT:
-            writeFloatTagPayload((FloatTag) tag);
-            break;
-        case NBTConstants.TYPE_DOUBLE:
-            writeDoubleTagPayload((DoubleTag) tag);
-            break;
-        case NBTConstants.TYPE_BYTE_ARRAY:
-            writeByteArrayTagPayload((ByteArrayTag) tag);
-            break;
-        case NBTConstants.TYPE_STRING:
-            writeStringTagPayload((StringTag) tag);
-            break;
-        case NBTConstants.TYPE_LIST:
-            writeListTagPayload((ListTag) tag);
-            break;
-        case NBTConstants.TYPE_COMPOUND:
-            writeCompoundTagPayload((CompoundTag) tag);
-            break;
-        default:
-            throw new IOException("Invalid tag type: " + type + ".");
+        switch (type) {
+            case NBTConstants.TYPE_END:
+                writeEndTagPayload((EndTag) tag);
+                break;
+            case NBTConstants.TYPE_BYTE:
+                writeByteTagPayload((ByteTag) tag);
+                break;
+            case NBTConstants.TYPE_SHORT:
+                writeShortTagPayload((ShortTag) tag);
+                break;
+            case NBTConstants.TYPE_INT:
+                writeIntTagPayload((IntTag) tag);
+                break;
+            case NBTConstants.TYPE_LONG:
+                writeLongTagPayload((LongTag) tag);
+                break;
+            case NBTConstants.TYPE_FLOAT:
+                writeFloatTagPayload((FloatTag) tag);
+                break;
+            case NBTConstants.TYPE_DOUBLE:
+                writeDoubleTagPayload((DoubleTag) tag);
+                break;
+            case NBTConstants.TYPE_BYTE_ARRAY:
+                writeByteArrayTagPayload((ByteArrayTag) tag);
+                break;
+            case NBTConstants.TYPE_STRING:
+                writeStringTagPayload((StringTag) tag);
+                break;
+            case NBTConstants.TYPE_LIST:
+                writeListTagPayload((ListTag) tag);
+                break;
+            case NBTConstants.TYPE_COMPOUND:
+                writeCompoundTagPayload((CompoundTag) tag);
+                break;
+            default:
+                throw new IOException("Invalid tag type: " + type + ".");
         }
     }
 
@@ -161,7 +161,7 @@ public final class NBTOutputStream implements Closeable {
      * @throws IOException if an I/O error occurs.
      */
     private void writeCompoundTagPayload(CompoundTag tag) throws IOException {
-        for(Tag childTag : tag.getValue().values()) {
+        for (Tag childTag : tag.getValue().values()) {
             writeTag(childTag);
         }
         os.writeByte((byte) 0); // end tag - better way?
@@ -176,11 +176,11 @@ public final class NBTOutputStream implements Closeable {
         Class<? extends Tag> clazz = tag.getType();
         List<Tag> tags = tag.getValue();
         int size = tags.size();
-        
+
         os.writeByte(NBTUtils.getTypeCode(clazz));
         os.writeInt(size);
-        for(int i = 0; i < size; i++) {
-            writeTagPayload(tags.get(i));
+        for (Tag tag1 : tags) {
+            writeTagPayload(tag1);
         }
     }
 

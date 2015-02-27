@@ -56,9 +56,6 @@ public class CmdTrust extends PlotCommand {
                                                 serverBridge.getLogger().warning(er.errorMessage);
                                                 return true;
                                             }
-                                            if (isAdvancedLogging()) {
-
-                                            }
                                         } else {
                                             return true;
                                         }
