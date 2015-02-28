@@ -36,8 +36,8 @@ public class CmdAuto extends PlotCommand {
                 PlotMapInfo pmi = manager.getMap(world);
                 int playerLimit = getPlotLimit(player);
 
-                short plotsOwned = manager.getNbOwnedPlot(player.getUniqueId(), world.getName().toLowerCase());
-                
+                int plotsOwned = manager.getNbOwnedPlot(player.getUniqueId(), world.getName().toLowerCase());
+
                 if (playerLimit != -1 && plotsOwned >= playerLimit && !player.hasPermission("PlotMe.admin")) {
                     player.sendMessage("§c" + C("MsgAlreadyReachedMaxPlots") + " (" + plotsOwned + "/" + playerLimit + "). " + C("WordUse") + " §c/plotme home§r " + C("MsgToGetToIt"));
                 } else {
@@ -51,8 +51,8 @@ public class CmdAuto extends PlotCommand {
                     int maxPlots = t * t;
 
                     for (int i = 0; i < maxPlots; i++) {
-                        if ((-limit / 2 <= x) && (x <= limit / 2) && (-limit / 2 <= z) && (z <= limit / 2)) {
-                            String id = "" + x + ";" + z;
+                        if (-limit / 2 <= x && x <= limit / 2 && -limit / 2 <= z && z <= limit / 2) {
+                            String id = x + ";" + z;
                             if (manager.isPlotAvailable(id, pmi)) {
                                 double price = 0.0;
 
@@ -65,9 +65,7 @@ public class CmdAuto extends PlotCommand {
                                     if (balance >= price) {
                                         event = serverBridge.getEventFactory().callPlotCreatedEvent(plugin, world, id, player);
 
-                                        if (event.isCancelled()) {
-                                            return true;
-                                        } else {
+                                        if (!event.isCancelled()) {
                                             EconomyResponse er = serverBridge.withdrawPlayer(player, price);
 
                                             if (!er.transactionSuccess()) {
@@ -75,6 +73,8 @@ public class CmdAuto extends PlotCommand {
                                                 serverBridge.getLogger().warning(er.errorMessage);
                                                 return true;
                                             }
+                                        } else {
+                                            return true;
                                         }
                                     } else {
                                         player.sendMessage("§c" + C("MsgNotEnoughAuto") + " " + C("WordMissing") + " §r" + Util()
@@ -102,7 +102,7 @@ public class CmdAuto extends PlotCommand {
                                 }
                             }
                         }
-                        if ((x == z) || ((x < 0) && (x == -z)) || ((x > 0) && (x == 1 - z))) {
+                        if (x == z || x < 0 && x == -z || x > 0 && x == 1 - z) {
                             t = dx;
                             dx = -dz;
                             dz = t;

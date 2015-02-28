@@ -60,16 +60,6 @@ public class CmdPlotList extends PlotCommand {
                         }
                     }
 
-                    // Is it auctioned?
-                    if (plot.isAuctioned()) {
-                        if (plot.getCurrentBidder() != null) {
-                            addition.append(
-                                    " " + C("WordAuction") + ": §a" + Math.round(plot.getCurrentBid()) + "§r" + (" " + plot.getCurrentBidder()));
-                        } else {
-                            addition.append(" " + C("WordAuction") + ": §a" + Math.round(plot.getCurrentBid()) + "§r");
-                        }
-                    }
-
                     // Is it for sale?
                     if (plot.isForSale()) {
                         addition.append(" " + C("WordSell") + ": §a" + Math.round(plot.getCustomPrice()) + "§r");
@@ -121,7 +111,7 @@ public class CmdPlotList extends PlotCommand {
                         } else {
                             player.sendMessage(
                                     "  " + plot.getId() + " -> §b" + plot.getOwner() + C("WordPossessive") + "§r" + addition + ", " + C("WordHelpers")
-                                    + ": " + helpers);
+                                            + ": " + helpers);
                         }
                     }
                 }

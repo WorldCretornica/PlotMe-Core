@@ -32,10 +32,9 @@ public class CmdAdd extends PlotCommand {
                         String allowed = args[1];
 
                         if (player.getUniqueId().equals(plot.getOwnerId()) || player.hasPermission(PermissionNames.ADMIN_ADD)) {
-                            if (plot.isAllowedConsulting(allowed) || plot.isGroupAllowed(allowed)) {
+                            if (plot.isAllowedConsulting(allowed)) {
                                 player.sendMessage(C("WordPlayer") + " §c" + allowed + "§r " + C("MsgAlreadyAllowed"));
                             } else {
-
                                 InternalPlotAddAllowedEvent event;
                                 double advancedPrice = 0.0;
                                 if (manager.isEconomyEnabled(pmi)) {
@@ -67,15 +66,10 @@ public class CmdAdd extends PlotCommand {
                                 }
 
                                 if (!event.isCancelled()) {
-                                    if (!allowed.toLowerCase().startsWith("group:")) {
-                                        IPlayer allowed2 = plugin.getServerBridge().getPlayerExact(allowed);
-                                        if (allowed2 != null) {
-                                            plot.addAllowed(allowed, allowed2.getUniqueId());
-                                            plot.removeDenied(allowed2.getUniqueId());
-                                        } else {
-                                            plot.addAllowed(allowed);
-                                            plot.removeDenied(allowed);
-                                        }
+                                    IPlayer allowed2 = plugin.getServerBridge().getPlayerExact(allowed);
+                                    if (allowed2 != null) {
+                                        plot.addAllowed(allowed, allowed2.getUniqueId());
+                                        plot.removeDenied(allowed2.getUniqueId());
                                     } else {
                                         plot.addAllowed(allowed);
                                         plot.removeDenied(allowed);
@@ -86,11 +80,11 @@ public class CmdAdd extends PlotCommand {
                                         if (advancedPrice == 0) {
                                             serverBridge.getLogger()
                                                     .info(player.getName() + " " + C("MsgAddedPlayer") + " " + allowed + " " + C("MsgToPlot") + " "
-                                                          + id);
+                                                            + id);
                                         } else {
                                             serverBridge.getLogger()
                                                     .info(player.getName() + " " + C("MsgAddedPlayer") + " " + allowed + " " + C("MsgToPlot") + " "
-                                                          + id + (" " + C("WordFor") + " " + advancedPrice));
+                                                            + id + (" " + C("WordFor") + " " + advancedPrice));
                                         }
                                     }
                                 }

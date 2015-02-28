@@ -106,12 +106,6 @@ public class CmdShowHelp extends PlotCommand {
             if (player.hasPermission(PermissionNames.USER_SELL)) {
                 allowed_commands.add("sell");
             }
-            if (player.hasPermission(PermissionNames.USE_AUCTION)) {
-                allowed_commands.add("auction");
-            }
-            if (player.hasPermission(PermissionNames.PLOT_ME_USE_BID)) {
-                allowed_commands.add("bid");
-            }
         }
 
         int maxPage = (int) Math.ceil(allowed_commands.size() / 4);
@@ -131,7 +125,7 @@ public class CmdShowHelp extends PlotCommand {
 
                     IWorld world = player.getWorld();
 
-                    short ownedPlots = manager.getNbOwnedPlot(player.getUniqueId(), world.getName().toLowerCase());
+                    int ownedPlots = manager.getNbOwnedPlot(player.getUniqueId(), world.getName().toLowerCase());
 
                     if (plotLimit == -1) {
                         player.sendMessage(
@@ -144,7 +138,7 @@ public class CmdShowHelp extends PlotCommand {
                     IWorld world = manager.getFirstWorld();
 
                     if (world != null) {
-                        short ownedPlots = manager.getNbOwnedPlot(player.getUniqueId(), world.getName().toLowerCase());
+                        int ownedPlots = manager.getNbOwnedPlot(player.getUniqueId(), world.getName().toLowerCase());
 
                         if (plotLimit == -1) {
                             player.sendMessage(

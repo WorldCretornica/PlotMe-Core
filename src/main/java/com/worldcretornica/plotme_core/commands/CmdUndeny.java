@@ -32,7 +32,7 @@ public class CmdUndeny extends PlotCommand {
                         String denied = args[1];
 
                         if (player.getUniqueId().equals(plot.getOwnerId()) || player.hasPermission(PermissionNames.ADMIN_UNDENY)) {
-                            if (plot.isDeniedConsulting(denied) || plot.isGroupDenied(denied)) {
+                            if (plot.isDeniedConsulting(denied)) {
 
                                 double price = 0.0;
 
@@ -45,9 +45,7 @@ public class CmdUndeny extends PlotCommand {
                                     if (balance >= price) {
                                         event = serverBridge.getEventFactory().callPlotRemoveDeniedEvent(plugin, world, plot, player, denied);
 
-                                        if (event.isCancelled()) {
-                                            return true;
-                                        } else {
+                                        if (!event.isCancelled()) {
                                             EconomyResponse er = serverBridge.withdrawPlayer(player, price);
 
                                             if (!er.transactionSuccess()) {
@@ -55,6 +53,8 @@ public class CmdUndeny extends PlotCommand {
                                                 serverBridge.getLogger().warning(er.errorMessage);
                                                 return true;
                                             }
+                                        } else {
+                                            return true;
                                         }
                                     } else {
                                         player.sendMessage("§c" + C("MsgNotEnoughUndeny") + " " + C("WordMissing") + " §r" + Util()
@@ -75,11 +75,11 @@ public class CmdUndeny extends PlotCommand {
                                         if (price != 0) {
                                             serverBridge.getLogger()
                                                     .info(playerName + " " + C("MsgUndeniedPlayer") + " " + denied + " " + C("MsgFromPlot") + " " + id
-                                                          + (" " + C("WordFor") + " " + price));
+                                                            + (" " + C("WordFor") + " " + price));
                                         } else {
                                             serverBridge.getLogger()
                                                     .info(playerName + " " + C("MsgUndeniedPlayer") + " " + denied + " " + C("MsgFromPlot") + " "
-                                                          + id);
+                                                            + id);
                                         }
                                     }
                                 }

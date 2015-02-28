@@ -53,7 +53,7 @@ public class PlotMeSpool implements Runnable {
             }
         }
     }
-    
+
     public void setTaskId(int taskId) {
         this.taskId = taskId;
     }

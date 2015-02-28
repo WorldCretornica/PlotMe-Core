@@ -26,7 +26,7 @@ public class CmdExpired extends PlotCommand {
                     page = Integer.parseInt(args[1]);
                 }
 
-                int maxPage = (int) Math.ceil(plugin.getSqlManager().getExpiredPlotCount(world.getName()) / 8);
+                int maxPage = (int) Math.ceil(plugin.getSqlManager().getExpiredPlotCount(world.getName()));
 
                 List<Plot> expiredPlots = plugin.getSqlManager().getExpiredPlots(world.getName(), page, 8);
 
@@ -35,9 +35,7 @@ public class CmdExpired extends PlotCommand {
                 } else {
                     player.sendMessage(C("MsgExpiredPlotsPage") + " " + page + "/" + maxPage);
 
-                    for (int i = (page - 1) * 8; i < expiredPlots.size() && i < page * 8; i++) {
-                        Plot plot = expiredPlots.get(i);
-
+                    for (Plot plot : expiredPlots) {
                         String startText = "  §b" + plot.getId() + "§r -> " + plot.getOwner();
 
                         int textLength = MinecraftFontWidthCalculator.getStringWidth(startText);

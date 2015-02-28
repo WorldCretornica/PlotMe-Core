@@ -24,7 +24,7 @@ public class CmdResetExpired extends PlotCommand {
                 serverBridge.getLogger().info("§c" + C("MsgNotPlotWorld"));
             } else {
                 plugin.setWorldCurrentlyProcessingExpired(world);
-                plugin.setCounterExpired((short) 50);
+                plugin.setCounterExpired(50);
 
                 plugin.scheduleTask(new PlotRunnableDeleteExpire(plugin, sender));
             }

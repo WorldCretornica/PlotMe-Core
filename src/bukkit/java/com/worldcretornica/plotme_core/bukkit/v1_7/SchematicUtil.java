@@ -1,22 +1,81 @@
 package com.worldcretornica.plotme_core.bukkit.v1_7;
 
-import com.worldcretornica.plotme_core.bukkit.*;
-import com.worldcretornica.schematic.*;
+import com.worldcretornica.plotme_core.bukkit.AbstractSchematicUtil;
+import com.worldcretornica.schematic.Attribute;
+import com.worldcretornica.schematic.Display;
+import com.worldcretornica.schematic.Ench;
 import com.worldcretornica.schematic.Entity;
 import com.worldcretornica.schematic.Item;
-import com.worldcretornica.schematic.jnbt.*;
-import org.bukkit.*;
-import org.bukkit.block.*;
-import org.bukkit.enchantments.*;
-import org.bukkit.entity.*;
-import org.bukkit.entity.Horse.*;
-import org.bukkit.entity.Skeleton.*;
-import org.bukkit.inventory.*;
-import org.bukkit.inventory.meta.*;
-import org.bukkit.plugin.*;
-import org.bukkit.util.*;
+import com.worldcretornica.schematic.ItemTag;
+import com.worldcretornica.schematic.Leash;
+import com.worldcretornica.schematic.Modifier;
+import com.worldcretornica.schematic.RecordItem;
+import com.worldcretornica.schematic.Schematic;
+import com.worldcretornica.schematic.TileEntity;
+import com.worldcretornica.schematic.jnbt.ByteArrayTag;
+import com.worldcretornica.schematic.jnbt.ByteTag;
+import com.worldcretornica.schematic.jnbt.CompoundTag;
+import com.worldcretornica.schematic.jnbt.DoubleTag;
+import com.worldcretornica.schematic.jnbt.FloatTag;
+import com.worldcretornica.schematic.jnbt.IntTag;
+import com.worldcretornica.schematic.jnbt.ListTag;
+import com.worldcretornica.schematic.jnbt.NBTInputStream;
+import com.worldcretornica.schematic.jnbt.ShortTag;
+import com.worldcretornica.schematic.jnbt.StringTag;
+import com.worldcretornica.schematic.jnbt.Tag;
+import org.bukkit.Art;
+import org.bukkit.Bukkit;
+import org.bukkit.DyeColor;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Rotation;
+import org.bukkit.SkullType;
+import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.BrewingStand;
+import org.bukkit.block.CommandBlock;
+import org.bukkit.block.CreatureSpawner;
+import org.bukkit.block.Furnace;
+import org.bukkit.block.Jukebox;
+import org.bukkit.block.NoteBlock;
+import org.bukkit.block.Sign;
+import org.bukkit.block.Skull;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Ageable;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Horse;
+import org.bukkit.entity.Horse.Style;
+import org.bukkit.entity.Horse.Variant;
+import org.bukkit.entity.ItemFrame;
+import org.bukkit.entity.LeashHitch;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Painting;
+import org.bukkit.entity.Sheep;
+import org.bukkit.entity.Skeleton;
+import org.bukkit.entity.Skeleton.SkeletonType;
+import org.bukkit.entity.Tameable;
+import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BookMeta;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.util.Vector;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -28,11 +87,11 @@ import java.util.UUID;
 public class SchematicUtil extends AbstractSchematicUtil {
 
     protected final Plugin plugin;
-    
+
     @SuppressWarnings("deprecation")
     public SchematicUtil(Plugin instance) {
         this.plugin = instance;
-        
+
         blockPlacedLast.add(Material.SAPLING.getId());
         blockPlacedLast.add(Material.BED.getId());
         blockPlacedLast.add(Material.POWERED_RAIL.getId());
@@ -330,9 +389,9 @@ public class SchematicUtil extends AbstractSchematicUtil {
 
                         if (isTileEntity) {
                             TileEntity te = new TileEntity(x, y, z, customname, id, items, rot, skulltype, delay, maxnearbyentities, maxspawndelay,
-                                                           minspawndelay, requiredplayerrange, spawncount, spawnrange, entityid, burntime, cooktime,
-                                                           text1, text2, text3, text4, note, record, recorditem, brewtime, command, outputsignal,
-                                                           transfercooldown, levels, primary, secondary, null, null);
+                                    minspawndelay, requiredplayerrange, spawncount, spawnrange, entityid, burntime, cooktime,
+                                    text1, text2, text3, text4, note, record, recorditem, brewtime, command, outputsignal,
+                                    transfercooldown, levels, primary, secondary, null, null);
                             tileentities.add(te);
                         }
                     }
@@ -474,15 +533,25 @@ public class SchematicUtil extends AbstractSchematicUtil {
             Painting painting = (Painting) bukkitentity;
             Art art = painting.getArt();
             motive = art.name();
-            
-            switch(painting.getFacing()) {
-                case EAST: facing = 3; break;
-                case WEST: facing = 1; break;
-                case NORTH: facing = 2; break;
-                case SOUTH: facing = 0; break;
-                default: facing = 0; break;
+
+            switch (painting.getFacing()) {
+                case EAST:
+                    facing = 3;
+                    break;
+                case WEST:
+                    facing = 1;
+                    break;
+                case NORTH:
+                    facing = 2;
+                    break;
+                case SOUTH:
+                    facing = 0;
+                    break;
+                default:
+                    facing = 0;
+                    break;
             }
-            
+
             if (art.getBlockHeight() == 2 || art.getBlockHeight() == 4) {
                 y -= 1;
             }
@@ -535,7 +604,7 @@ public class SchematicUtil extends AbstractSchematicUtil {
                     headarmor = getItem(isHelm, null);
                 }
             }
-            
+
             if (livingentity instanceof Tameable) {
                 Tameable tameable = (Tameable) livingentity;
                 owneruuid = tameable.getOwner().getUniqueId().toString();
@@ -544,8 +613,8 @@ public class SchematicUtil extends AbstractSchematicUtil {
 
             if (livingentity instanceof Skeleton) {
                 Skeleton skeleton = (Skeleton) livingentity;
-                
-                switch(skeleton.getSkeletonType()) {
+
+                switch (skeleton.getSkeletonType()) {
                     case NORMAL:
                         skeletontype = 0;
                         break;
@@ -559,38 +628,71 @@ public class SchematicUtil extends AbstractSchematicUtil {
                 color = sheep.getColor().getWoolData();
             } else if (livingentity instanceof Horse) {
                 Horse horse = (Horse) livingentity;
-                
+
                 attributes = new ArrayList<>();
                 attributes.add(new Attribute(horse.getJumpStrength(), "horse.jumpStrength", null));
-                
+
                 temper = horse.getDomestication();
-                
-                switch(horse.getVariant()) {
-                    case HORSE: variant = 0; break;
-                    case DONKEY: variant = 1; break;
-                    case MULE: variant = 2; break;
-                    case UNDEAD_HORSE: variant = 3; break;
-                    case SKELETON_HORSE: variant = 4; break;
+
+                switch (horse.getVariant()) {
+                    case HORSE:
+                        variant = 0;
+                        break;
+                    case DONKEY:
+                        variant = 1;
+                        break;
+                    case MULE:
+                        variant = 2;
+                        break;
+                    case UNDEAD_HORSE:
+                        variant = 3;
+                        break;
+                    case SKELETON_HORSE:
+                        variant = 4;
+                        break;
                 }
-                
-                switch(horse.getStyle()) {
-                    case NONE: type = 0; break;
-                    case WHITE: type = 256; break;
-                    case WHITEFIELD: type = 512; break;
-                    case WHITE_DOTS: type = 768; break;
-                    case BLACK_DOTS: type = 1024; break;
+
+                switch (horse.getStyle()) {
+                    case NONE:
+                        type = 0;
+                        break;
+                    case WHITE:
+                        type = 256;
+                        break;
+                    case WHITEFIELD:
+                        type = 512;
+                        break;
+                    case WHITE_DOTS:
+                        type = 768;
+                        break;
+                    case BLACK_DOTS:
+                        type = 1024;
+                        break;
                 }
-                
-                switch(horse.getColor()) {
-                    case CREAMY: type += 1; break;
-                    case CHESTNUT: type += 2; break;
-                    case BROWN: type += 3; break;
-                    case BLACK: type += 4; break;
-                    case GRAY: type += 5; break;
-                    case DARK_BROWN: type += 6; break;
-                    default: break;
+
+                switch (horse.getColor()) {
+                    case CREAMY:
+                        type += 1;
+                        break;
+                    case CHESTNUT:
+                        type += 2;
+                        break;
+                    case BROWN:
+                        type += 3;
+                        break;
+                    case BLACK:
+                        type += 4;
+                        break;
+                    case GRAY:
+                        type += 5;
+                        break;
+                    case DARK_BROWN:
+                        type += 6;
+                        break;
+                    default:
+                        break;
                 }
-                
+
             }
         }
 
@@ -601,14 +703,14 @@ public class SchematicUtil extends AbstractSchematicUtil {
         positions.add(z);
 
         return new Entity(dir, direction, invulnerable, onground, air, fire, dimension, portalcooldown,
-                          tilex, tiley, tilez, falldistance, id, motive, motion, positions, rotation, canpickuploot,
-                          color, customnamevisible, leashed, persistencerequired, sheared, attacktime, deathtime, health,
-                          hurttime, age, inlove, absorptionamount, healf, customname, attributes, dropchances,
-                          itemheld, feetarmor, headarmor, chestarmor, legarmor,
-                          skeletontype, riding, leash, item, isbaby, items, transfercooldown, fuel, pushx, pushz, tntfuse,
-                          itemrotation, itemdropchance, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
-                          bred, chestedhorse, eatinghaystack, hasreproduced, tame, temper, type, variant, owneruuid,
-                          facing);
+                tilex, tiley, tilez, falldistance, id, motive, motion, positions, rotation, canpickuploot,
+                color, customnamevisible, leashed, persistencerequired, sheared, attacktime, deathtime, health,
+                hurttime, age, inlove, absorptionamount, healf, customname, attributes, dropchances,
+                itemheld, feetarmor, headarmor, chestarmor, legarmor,
+                skeletontype, riding, leash, item, isbaby, items, transfercooldown, fuel, pushx, pushz, tntfuse,
+                itemrotation, itemdropchance, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
+                bred, chestedhorse, eatinghaystack, hasreproduced, tame, temper, type, variant, owneruuid,
+                facing);
     }
 
     protected Leash getLeash(org.bukkit.entity.Entity leashHolder) {
@@ -794,17 +896,17 @@ public class SchematicUtil extends AbstractSchematicUtil {
                             }
 
                             tileentities.add(new TileEntity(x, y, z, customname, id, items, rot, skulltype, delay, maxnearbyentities,
-                                                            maxspawndelay, minspawndelay, requiredplayerrange, spawncount, spawnrange, entityid,
-                                                            burntime, cooktime,
-                                                            text1, text2, text3, text4, note, record, recorditem, brewtime, command, outputsignal,
-                                                            transfercooldown, levels, primary, secondary, null, null));
+                                    maxspawndelay, minspawndelay, requiredplayerrange, spawncount, spawnrange, entityid,
+                                    burntime, cooktime,
+                                    text1, text2, text3, text4, note, record, recorditem, brewtime, command, outputsignal,
+                                    transfercooldown, levels, primary, secondary, null, null));
                         }
                     }
                 }
 
                 schem =
                         new Schematic(blocks, blockData, blockBiomes, materials, width, length, height, entities, tileentities, roomauthor, originx,
-                                      originy, originz);
+                                originy, originz);
 
                 saveCompiledSchematic(schem, file.getName());
             }
@@ -830,9 +932,9 @@ public class SchematicUtil extends AbstractSchematicUtil {
         Short height = schematic.getHeight();
 
         for (int y = 0; y < height; ++y) {
-            
+
             Collection<LastBlock> lastblocks = new HashSet<>();
-            
+
             for (int x = 0; x < width; ++x) {
                 for (int z = 0; z < length; ++z) {
                     int index = y * width * length + z * width + x;
@@ -848,13 +950,13 @@ public class SchematicUtil extends AbstractSchematicUtil {
                         } catch (NullPointerException e) {
                             plugin.getLogger().info("Error pasting block : " + blocks[index] + " of data " + blockData[index]);
                         }
-                    
+
                     } else {
                         lastblocks.add(new LastBlock(block, blocks[index], blockData[index]));
                     }
                 }
             }
-            
+
             for (LastBlock lastblock : lastblocks) {
                 try {
                     if (setBlock) {
@@ -865,11 +967,11 @@ public class SchematicUtil extends AbstractSchematicUtil {
                     plugin.getLogger().info("Error pasting block : " + lastblock.id + " of data " + lastblock.data);
                 }
             }
-            
+
             lastblocks.clear();
         }
     }
-    
+
     @SuppressWarnings("deprecation")
     protected void pasteSchematicEntities(Location loc, Schematic schematic) {
         World world = loc.getWorld();
@@ -1191,11 +1293,19 @@ public class SchematicUtil extends AbstractSchematicUtil {
 
                 BlockFace bf = BlockFace.SOUTH;
 
-                switch(facing) {
-                    case 0: bf = BlockFace.SOUTH; break;
-                    case 1: bf = BlockFace.WEST; break;
-                    case 2: bf = BlockFace.NORTH; break;
-                    case 3: bf = BlockFace.EAST; break;
+                switch (facing) {
+                    case 0:
+                        bf = BlockFace.SOUTH;
+                        break;
+                    case 1:
+                        bf = BlockFace.WEST;
+                        break;
+                    case 2:
+                        bf = BlockFace.NORTH;
+                        break;
+                    case 3:
+                        bf = BlockFace.EAST;
+                        break;
                 }
 
                 painting.setFacingDirection(bf, true);
@@ -1354,7 +1464,7 @@ public class SchematicUtil extends AbstractSchematicUtil {
                     Skeleton skeleton = (Skeleton) livingentity;
                     SkeletonType st = null;
 
-                    switch(skeletontype) {
+                    switch (skeletontype) {
                         case 0:
                             st = SkeletonType.NORMAL;
                             break;
@@ -1392,12 +1502,22 @@ public class SchematicUtil extends AbstractSchematicUtil {
                     if (temper != null) horse.setDomestication(temper);
 
                     if (variant != null) {
-                        switch(variant) {
-                            case 0: horse.setVariant(Variant.HORSE); break;
-                            case 1: horse.setVariant(Variant.DONKEY); break;
-                            case 2: horse.setVariant(Variant.MULE); break;
-                            case 3: horse.setVariant(Variant.UNDEAD_HORSE); break;
-                            case 4: horse.setVariant(Variant.SKELETON_HORSE); break;
+                        switch (variant) {
+                            case 0:
+                                horse.setVariant(Variant.HORSE);
+                                break;
+                            case 1:
+                                horse.setVariant(Variant.DONKEY);
+                                break;
+                            case 2:
+                                horse.setVariant(Variant.MULE);
+                                break;
+                            case 3:
+                                horse.setVariant(Variant.UNDEAD_HORSE);
+                                break;
+                            case 4:
+                                horse.setVariant(Variant.SKELETON_HORSE);
+                                break;
                         }
                     }
 
@@ -1414,14 +1534,28 @@ public class SchematicUtil extends AbstractSchematicUtil {
                             horse.setStyle(Style.BLACK_DOTS);
                         }
 
-                        switch((int) ((double) type) % 256) {
-                            case 0 : horse.setColor(Horse.Color.WHITE); break;
-                            case 1 : horse.setColor(Horse.Color.CREAMY); break;
-                            case 2 : horse.setColor(Horse.Color.CHESTNUT); break;
-                            case 3 : horse.setColor(Horse.Color.BROWN); break;
-                            case 4 : horse.setColor(Horse.Color.BLACK); break;
-                            case 5 : horse.setColor(Horse.Color.GRAY); break;
-                            case 6 : horse.setColor(Horse.Color.DARK_BROWN); break;
+                        switch ((int) ((double) type) % 256) {
+                            case 0:
+                                horse.setColor(Horse.Color.WHITE);
+                                break;
+                            case 1:
+                                horse.setColor(Horse.Color.CREAMY);
+                                break;
+                            case 2:
+                                horse.setColor(Horse.Color.CHESTNUT);
+                                break;
+                            case 3:
+                                horse.setColor(Horse.Color.BROWN);
+                                break;
+                            case 4:
+                                horse.setColor(Horse.Color.BLACK);
+                                break;
+                            case 5:
+                                horse.setColor(Horse.Color.GRAY);
+                                break;
+                            case 6:
+                                horse.setColor(Horse.Color.DARK_BROWN);
+                                break;
                         }
                     }
                 }
@@ -1578,14 +1712,14 @@ public class SchematicUtil extends AbstractSchematicUtil {
         }
 
         return new Entity(dir, direction, invulnerable, onground, air, fire, dimension, portalcooldown, tilex, tiley, tilez, falldistance, id, motive,
-                          motion, pos, rotation,
-                          canpickuploot, color, customnamevisible, leashed, persistencerequired, sheared, attacktime, deathtime, health, hurttime,
-                          age, inlove, absorptionamount,
-                          healf, customname, attributes, dropchances, itemheld, feetarmor, legarmor, chestarmor, headarmor,
-                          skeletontype, riding, leash, item, isbaby, items, transfercooldown, fuel, pushx, pushz, tntfuse,
-                          itemrotation, itemdropchance, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
-                          bred, chestedhorse, eatinghaystack, hasreproduced, tame, temper, type, variant, owneruuid,
-                          facing);
+                motion, pos, rotation,
+                canpickuploot, color, customnamevisible, leashed, persistencerequired, sheared, attacktime, deathtime, health, hurttime,
+                age, inlove, absorptionamount,
+                healf, customname, attributes, dropchances, itemheld, feetarmor, legarmor, chestarmor, headarmor,
+                skeletontype, riding, leash, item, isbaby, items, transfercooldown, fuel, pushx, pushz, tntfuse,
+                itemrotation, itemdropchance, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
+                bred, chestedhorse, eatinghaystack, hasreproduced, tame, temper, type, variant, owneruuid,
+                facing);
     }
 
     protected Leash getLeash(CompoundTag leashelement) {

@@ -40,21 +40,8 @@ public class CmdReset extends PlotCommand {
                             manager.clear(world, plot, player, ClearReason.Reset);
 
                             if (manager.isEconomyEnabled(pmi)) {
-                                if (plot.isAuctioned()) {
-                                    if (plot.getCurrentBidderId() != null) {
-                                        IOfflinePlayer offlinePlayer = serverBridge.getOfflinePlayer(plot.getCurrentBidderId());
-                                        EconomyResponse economyResponse = serverBridge.depositPlayer(offlinePlayer, plot.getCurrentBid());
 
-                                        if (economyResponse.transactionSuccess()) {
-                                            player.sendMessage(plot.getCurrentBidder() + " was refunded their money for their plot bid.");
-                                        } else {
-                                            player.sendMessage(economyResponse.errorMessage);
-                                            serverBridge.getLogger().warning(economyResponse.errorMessage);
-                                        }
-                                    }
-                                }
-
-                                if (pmi.isRefundClaimPriceOnReset() && plot.getOwnerId() != null) {
+                                if (pmi.isRefundClaimPriceOnReset()) {
                                     IOfflinePlayer playerowner = serverBridge.getOfflinePlayer(plot.getOwnerId());
 
                                     EconomyResponse er = serverBridge.depositPlayer(playerowner, pmi.getClaimPrice());
@@ -64,7 +51,7 @@ public class CmdReset extends PlotCommand {
                                         if (playerOwner.getName().equalsIgnoreCase(plot.getOwner())) {
                                             playerOwner.sendMessage(
                                                     C("WordPlot") + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner() + " " + C("MsgWasReset")
-                                                    + " " + Util().moneyFormat(pmi.getClaimPrice(), true));
+                                                            + " " + Util().moneyFormat(pmi.getClaimPrice(), true));
                                         }
                                     } else {
                                         player.sendMessage("§c" + er.errorMessage);

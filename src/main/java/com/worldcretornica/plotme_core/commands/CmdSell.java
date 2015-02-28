@@ -29,10 +29,6 @@ public class CmdSell extends PlotCommand {
                         } else if (!manager.isPlotAvailable(id, pmi)) {
                             Plot plot = manager.getPlotById(id, pmi);
 
-                            if (plot.isAuctioned()) {
-                                player.sendMessage(C("You cannot sell a plot that is for auction"));
-                                return true;
-                            }
                             if (player.getUniqueId().equals(plot.getOwnerId()) || player.hasPermission(PermissionNames.ADMIN_SELL)) {
 
                                 InternalPlotSellChangeEvent event;
@@ -68,7 +64,7 @@ public class CmdSell extends PlotCommand {
                                         } catch (Exception e) {
                                             player.sendMessage(
                                                     C("WordUsage") + ": §c /plotme sell <" + C("WordAmount") + ">§r " + C("WordExample")
-                                                    + ": §c/plotme sell 200");
+                                                            + ": §c/plotme sell 200");
                                             return true;
                                         }
                                     }
@@ -93,7 +89,7 @@ public class CmdSell extends PlotCommand {
                                             if (isAdvancedLogging()) {
                                                 serverBridge.getLogger()
                                                         .info(player.getName() + " " + C("MsgPutOnSalePlot") + " " + id + " " + C("WordFor") + " "
-                                                              + price);
+                                                                + price);
                                             }
                                         }
                                     }

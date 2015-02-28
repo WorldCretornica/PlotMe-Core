@@ -4,10 +4,10 @@ import com.worldcretornica.plotme_core.api.IConfigSection;
 import com.worldcretornica.plotme_core.api.IPlotMe_GeneratorManager;
 import com.worldcretornica.plotme_core.api.IServerBridge;
 import com.worldcretornica.plotme_core.api.IWorld;
-import com.worldcretornica.plotme_core.bukkit.*;
+import com.worldcretornica.plotme_core.bukkit.AbstractSchematicUtil;
 import com.worldcretornica.plotme_core.utils.Util;
 
-import java.io.*;
+import java.io.File;
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Level;
@@ -23,7 +23,7 @@ public class PlotMe_Core {
     private final AbstractSchematicUtil schematicutil;
     private HashMap<String, IPlotMe_GeneratorManager> managers;
     private IWorld worldcurrentlyprocessingexpired;
-    private short counterExpired;
+    private int counterExpired;
     //Spool stuff
     private ConcurrentLinkedQueue<PlotToClear> plotsToClear;
     //Global variables
@@ -46,6 +46,7 @@ public class PlotMe_Core {
 
     public void disable() {
         getSqlManager().closeConnection();
+        PlotMeCoreManager.getInstance().getPlotMaps().clear();
         serverBridge.unHook();
         PlotMeCoreManager.getInstance().setPlayersIgnoringWELimit(null);
         setWorldCurrentlyProcessingExpired(null);
@@ -59,12 +60,13 @@ public class PlotMe_Core {
         PlotMeCoreManager.getInstance().setPlugin(this);
         setupMySQL();
         setupConfig();
-        setupDefaultCaptions();        
+        setupDefaultCaptions();
         serverBridge.setupCommands();
         setUtil(new Util(this));
         serverBridge.setupHooks();
         serverBridge.setupListeners();
         setupClearSpools();
+        getSqlManager().createTable();
         getSqlManager().plotConvertToUUIDAsynchronously();
     }
 
@@ -109,11 +111,7 @@ public class PlotMe_Core {
     }*/
 
     private void setupConfig() {
-        // Get the config we will be working with
         IConfigSection config = serverBridge.getConfig();
-        config.set("allowToDeny", null);
-        // If no world exists add config for a world
-        //if (!config.contains("worlds") || config.contains("worlds") && config.getConfigurationSection("worlds").getKeys(false).isEmpty()) {
         if (!(config.contains(WORLDS_CONFIG_SECTION) && !config.getConfigurationSection(WORLDS_CONFIG_SECTION).getKeys(false).isEmpty())) {
             new PlotMapInfo(this, "plotworld");
         }
@@ -125,8 +123,6 @@ public class PlotMe_Core {
 
         // Copy new values over
         config.copyDefaults(true);
-        config.set("Language", null);
-        config.set("language", null);
         config.saveConfig();
     }
 
@@ -137,9 +133,7 @@ public class PlotMe_Core {
         } else {
             PlotMapInfo pmi = new PlotMapInfo(this, worldname);
             //Lets just hide a bit of code to clean up the config in here.
-            IConfigSection config = getServerBridge().loadDefaultConfig("worlds." + worldname.toLowerCase());
-            config.set("BottomBlockId", null);
-            config.set("AutoLinkPlots", null);
+            IConfigSection config = getServerBridge().loadDefaultConfig("worlds." + worldname);
             config.saveConfig();
             PlotMeCoreManager.getInstance().addPlotMap(worldname, pmi);
         }
@@ -159,31 +153,10 @@ public class PlotMe_Core {
     }
 
     private void setupDefaultCaptions() {
-        //Changing Captions File Name
-        String pluginsFolder = serverBridge.getDataFolder();
-        File coreFolder = new File(pluginsFolder);
-        File newCaptionFile = new File(coreFolder, CAPTION_FILE);
-        for (String plotMeFiles : coreFolder.list()) {
-            if (plotMeFiles.startsWith("caption")) {
-                if (CAPTION_FILE.equals(plotMeFiles)) {
-                    break;
-                } else {
-                    File oldCaptionFile = new File(coreFolder, plotMeFiles);
-                    if (oldCaptionFile.renameTo(newCaptionFile)) {
-                        getLogger().info("Renamed Caption File to captions.yml");
-                        if (oldCaptionFile.delete()) {
-                            getLogger().info("Deleted old caption file.");
-                        } else {
-                            getLogger().warning("Failed to delete old caption file. ");
-                        }
-                    }
-                }
-            }
-        }
+        File newCaptionFile = new File(getServerBridge().getDataFolder(), CAPTION_FILE);
         if (!newCaptionFile.exists()) {
             getServerBridge().saveResource(CAPTION_FILE, true);
         }
-        serverBridge.getConfig(CAPTION_FILE).set("MsgCannotDenyOwner", "You can''t deny the owner of the plot.");
     }
 
     /**
@@ -228,11 +201,11 @@ public class PlotMe_Core {
         this.worldcurrentlyprocessingexpired = worldcurrentlyprocessingexpired;
     }
 
-    public short getCounterExpired() {
+    public int getCounterExpired() {
         return counterExpired;
     }
 
-    public void setCounterExpired(short counterExpired) {
+    public void setCounterExpired(int counterExpired) {
         this.counterExpired = counterExpired;
     }
 
@@ -279,9 +252,5 @@ public class PlotMe_Core {
     private void setUtil(Util util) {
         this.util = util;
     }
-    
-    @Deprecated
-    public PlotMeCoreManager getPlotMeCoreManager() {
-        return PlotMeCoreManager.getInstance();
-    }
+
 }

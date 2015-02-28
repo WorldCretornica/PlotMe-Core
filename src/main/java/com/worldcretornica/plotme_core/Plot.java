@@ -107,7 +107,7 @@ public class Plot implements Cloneable {
         setForSale(sale);
         setFinishedDate(finishedDate);
         setProtect(protect);
-        setAuctioned(isAuctioned);
+        setAuctioned(false);
         setCurrentBidder(bidder);
         setCurrentBidderId(bidderId);
         setCurrentBid(bid);
@@ -235,13 +235,6 @@ public class Plot implements Cloneable {
         }
     }
 
-    public void removeAllowedGroup(String name) {
-        if (allowed().contains(name)) {
-            allowed().remove(name);
-            plugin.getSqlManager().deletePlotAllowed(PlotMeCoreManager.getInstance().getIdX(getId()), PlotMeCoreManager.getInstance().getIdZ(getId()), name, null, getWorld());
-        }
-    }
-
     public void removeAllowed(UUID uuid) {
         if (allowed().contains(uuid)) {
             String name = allowed().remove(uuid);
@@ -267,13 +260,6 @@ public class Plot implements Cloneable {
         if (denied().contains(name)) {
             UUID uuid = denied().remove(name);
             plugin.getSqlManager().deletePlotDenied(PlotMeCoreManager.getInstance().getIdX(getId()), PlotMeCoreManager.getInstance().getIdZ(getId()), name, uuid, getWorld());
-        }
-    }
-
-    public void removeDeniedGroup(String name) {
-        if (denied().contains(name)) {
-            denied().remove(name);
-            plugin.getSqlManager().deletePlotDenied(PlotMeCoreManager.getInstance().getIdX(getId()), PlotMeCoreManager.getInstance().getIdZ(getId()), name, null, getWorld());
         }
     }
 
@@ -304,28 +290,24 @@ public class Plot implements Cloneable {
 
     public boolean isAllowedConsulting(String name) {
         IPlayer player = plugin.getServerBridge().getPlayerExact(name);
-        if (player != null) {
-            return isAllowedInternal(name, player.getUniqueId(), true, true);
-        } else {
-            return isGroupAllowed(name);
-        }
-    }
-
-    public boolean isGroupAllowed(String name) {
-        return isAllowedInternal(name, null, true, true);
+        return player != null && isAllowedInternal(name, player.getUniqueId(), true);
     }
 
     public boolean isAllowed(String name, UUID uuid) {
-        return isAllowedInternal(name, uuid, true, true);
+        return isAllowedInternal(name, uuid, true);
     }
 
     public boolean isAllowed(UUID uuid) {
-        return isAllowedInternal("", uuid, true, true);
+        return isAllowedInternal("", uuid, true);
     }
 
+    public boolean isAllowedInternal(String name, UUID uuid, boolean checkStar) {
+        return isAllowedInternal(name, uuid, checkStar, false);
+    }
+
+    @Deprecated
     private boolean isAllowedInternal(String name, UUID uuid, boolean checkStar, boolean checkGroup) {
 
-        IPlayer player = plugin.getServerBridge().getPlayer(uuid);
         if (getOwnerId() != null && getOwnerId().equals(uuid)) {
             return true;
         }
@@ -340,26 +322,13 @@ public class Plot implements Cloneable {
             if (u != null && u.equals(uuid) || uuid == null && str.equalsIgnoreCase(name)) {
                 return true;
             }
-            if (checkGroup && str.toLowerCase().startsWith("group:") && player != null) {
-                if (player.hasPermission("plotme.group." + str.replace("Group:", ""))) {
-                    return true;
-                }
-            }
         }
         return false;
     }
 
     public boolean isDeniedConsulting(String name) {
         IPlayer player = plugin.getServerBridge().getPlayerExact(name);
-        if (player != null) {
-            return isDeniedInternal(name, player.getUniqueId());
-        } else {
-            return isGroupDenied(name);
-        }
-    }
-
-    public boolean isGroupDenied(String name) {
-        return isDeniedInternal(name, null);
+        return player != null && isDeniedInternal(name, player.getUniqueId());
     }
 
     public boolean isDenied(UUID uuid) {
@@ -368,13 +337,8 @@ public class Plot implements Cloneable {
 
     public boolean isDeniedInternal(String name, UUID uuid) {
 
-        if (isAllowedInternal(name, uuid, false, false)) {
+        if (isAllowedInternal(name, uuid, false)) {
             return false;
-        }
-
-        IPlayer player = null;
-        if (uuid != null) {
-            player = plugin.getServerBridge().getPlayer(uuid);
         }
 
         HashMap<String, UUID> list = denied().getAllPlayers();
@@ -389,14 +353,6 @@ public class Plot implements Cloneable {
             } else if (uuid != null) {
                 if (u != null && u.equals(uuid)) {
                     return true;
-                } else if (str.toLowerCase().startsWith("group:")) {
-                    if (player != null) {
-                        if (player.hasPermission("plotme.group." + str.replace("Group:", ""))) {
-                            return true;
-                        }
-                    } else {
-                        plugin.getLogger().warning("Something went wrong checking for denied.");
-                    }
                 }
             }
         }
@@ -492,42 +448,50 @@ public class Plot implements Cloneable {
         this.protect = protect;
     }
 
+    @Deprecated
     public final boolean isAuctioned() {
         return auctioned;
     }
 
+    @Deprecated
     public final void setAuctioned(boolean auctioned) {
         this.auctioned = auctioned;
     }
 
+    @Deprecated
     public final String getCurrentBidder() {
         return currentBidder;
     }
 
+    @Deprecated
     public final void setCurrentBidder(String currentBidder) {
         this.currentBidder = currentBidder;
     }
 
+    @Deprecated
     public final UUID getCurrentBidderId() {
         return currentBidderId;
     }
 
+    @Deprecated
     public final void setCurrentBidderId(UUID uuid) {
         currentBidderId = uuid;
     }
 
+    @Deprecated
     public final double getCurrentBid() {
         return currentBid;
     }
 
+    @Deprecated
     public final void setCurrentBid(double currentBid) {
         this.currentBid = currentBid;
     }
-    
+
     public String getPlotProperty(String pluginname, String property) {
         return metadata.get(pluginname).get(property);
     }
-    
+
     public boolean setPlotProperty(String pluginname, String property, String value) {
         if (!metadata.containsKey(pluginname)) {
             metadata.put(pluginname, new HashMap<String, String>());
@@ -535,7 +499,7 @@ public class Plot implements Cloneable {
         metadata.get(pluginname).put(property, value);
         return plugin.getSqlManager().savePlotProperty(PlotMeCoreManager.getInstance().getIdX(getId()), PlotMeCoreManager.getInstance().getIdZ(getId()), this.world, pluginname, property, value);
     }
-    
+
     public Map<String, Map<String, String>> getAllPlotProperties() {
         return metadata;
     }

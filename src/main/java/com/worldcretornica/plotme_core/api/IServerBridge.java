@@ -2,11 +2,11 @@ package com.worldcretornica.plotme_core.api;
 
 import com.worldcretornica.plotme_core.PlotWorldEdit;
 import com.worldcretornica.plotme_core.api.event.IEventFactory;
-
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 
-import java.io.*;
+import java.io.File;
+import java.io.InputStream;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -91,7 +91,7 @@ public abstract class IServerBridge {
 
     public abstract InputStream getResource(String path);
 
-    public abstract String getDataFolder();
+    public abstract File getDataFolder();
 
     public abstract void reloadConfig();
 

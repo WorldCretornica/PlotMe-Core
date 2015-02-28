@@ -38,7 +38,7 @@ public class CmdDeny extends PlotCommand {
                                 return true;
                             }
 
-                            if (plot.isDeniedConsulting(denied) || plot.isGroupDenied(denied)) {
+                            if (plot.isDeniedConsulting(denied)) {
                                 player.sendMessage(C("WordPlayer") + " §c" + args[1] + "§r " + C("MsgAlreadyDenied"));
                             } else {
 
@@ -106,11 +106,11 @@ public class CmdDeny extends PlotCommand {
                                         if (price == 0) {
                                             serverBridge.getLogger()
                                                     .info(player.getName() + " " + C("MsgDeniedPlayer") + " " + denied + " " + C("MsgToPlot") + " "
-                                                          + id);
+                                                            + id);
                                         } else {
                                             serverBridge.getLogger()
                                                     .info(player.getName() + " " + C("MsgDeniedPlayer") + " " + denied + " " + C("MsgToPlot") + " "
-                                                          + id + (
+                                                            + id + (
                                                             " " + C("WordFor") + " " + price));
                                         }
                                     }

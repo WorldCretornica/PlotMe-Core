@@ -1,6 +1,6 @@
 name: PlotMe
 main: com.worldcretornica.plotme_core.bukkit.PlotMe_CorePlugin
-version: 0.16.3
+version: 0.16.4
 author: ZachBora
 authors: [MattBDev]
 website: http://worldcretornica.github.io/PlotMe-Core/
@@ -27,8 +27,6 @@ permissions:
         plotme.use.list: true
         plotme.use.buy: true
         plotme.use.sell: true
-        plotme.use.auction: true
-        plotme.use.bid: true
         plotme.use.dispose: true
         plotme.use.done: true
         plotme.use.deny: true
@@ -71,10 +69,6 @@ permissions:
       description: Gives the buy command
     plotme.use.sell:
       description: Gives the sell command
-    plotme.use.auction:
-      description: Gives the auction command
-    plotme.use.bid:
-      description: Gives the bid command
     plotme.use.dispose:
       description: Gives the dispose command
     plotme.use.done:
@@ -149,8 +143,6 @@ permissions:
       description: Gives the buy command
     plotme.admin.sell:
       description: Gives the sell command for any plots
-    plotme.admin.auction:
-      description: Gives the auction command for any plots
     plotme.admin.dispose:
       description: Gives the dispose command for any plots
     plotme.admin.done:
@@ -161,5 +153,3 @@ permissions:
       description: Gives the expired command
     plotme.admin.buildanywhere:
       description: Allows to build anywhere in the plot world
-    plotme.group.*:
-      description: Group of players

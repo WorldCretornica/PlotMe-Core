@@ -34,7 +34,7 @@ public class CmdRemove extends PlotCommand {
                         String allowed = args[1];
 
                         if (plot.getOwnerId().equals(playerUniqueId) || player.hasPermission(PermissionNames.ADMIN_REMOVE)) {
-                            if (plot.isAllowedConsulting(allowed) || plot.isGroupAllowed(allowed)) {
+                            if (plot.isAllowedConsulting(allowed)) {
 
                                 double price = 0.0;
 

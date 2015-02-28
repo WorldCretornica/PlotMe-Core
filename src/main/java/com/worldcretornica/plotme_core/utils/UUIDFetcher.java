@@ -1,12 +1,14 @@
 package com.worldcretornica.plotme_core.utils;
 
 import com.google.common.collect.ImmutableList;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.ByteBuffer;
@@ -88,7 +90,7 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
     }
 
     public static UUID getUUIDOf(String name) {
-        return new UUIDFetcher(Arrays.asList(name)).call().get(name.toLowerCase());
+        return new UUIDFetcher(Arrays.asList(name)).call().get(name);
     }
 
     @Override
@@ -126,16 +128,18 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
                     
                     success = true;
                 } catch(Exception ex) {
+                    if (ex.getMessage().contains("429")) {
+                    }
                     ex.printStackTrace();
                     try {
                         //If we got an exception, retry in 30 seconds
-                        Thread.sleep(30000L);
+                        Thread.sleep(30000);
                     } catch (InterruptedException ignored) {
                     }
-                    if (retries > 0 && retries % 10 == 0) {
+                    //if (retries > 0 && retries % 10 == 0) {
                         //Bukkit.getLogger().warning("The UUID fetcher has been trying for " + retries + " times to get UUIDs.");
-                    }
-                    retries += 1;
+                    // }
+                    //retries += 1;
                 }
             }
             
@@ -152,13 +156,13 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
                             //ex.printStackTrace();
                             try {
                                 //If we got an exception, retry in 30 seconds
-                                Thread.sleep(30000L);
+                                Thread.sleep(30000);
                             } catch (InterruptedException ignored) {
                             }
-                            if (retries > 0 && retries % 20 == 0) {
-                                //Bukkit.getLogger().warning("The UUID fetcher has been trying for " + retries + " times to get UUIDs.");
-                            }
-                            retries += 1;
+                            //if (retries > 0 && retries % 20 == 0) {
+                            //    //Bukkit.getLogger().warning("The UUID fetcher has been trying for " + retries + " times to get UUIDs.");
+                            //}
+                            //retries += 1;
                         }
                         
                         if (connection != null) {
@@ -168,7 +172,7 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
                                 String newname = (String) jsonProfile.get("name");
                                 UUID uuid = UUIDFetcher.getUUID(id);
                                 uuidMap.put(name.toLowerCase() + ";" + newname, uuid);
-                            } catch(Exception ex) {
+                            } catch (IOException | ParseException ex) {
                                 //Unable to find name at mojang...
                                 uuidMap.put(name.toLowerCase() + ";", null);
                             }
@@ -183,12 +187,12 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
             
             if (rateLimiting && i != requests - 1) {
                 try {
-                    Thread.sleep(1100L);
+                    Thread.sleep(1100);
                 } catch (InterruptedException ignored) {
                 }
             }
-            
-            retries = 0;
+
+            //retries = 0;
         }
         return uuidMap;
     }

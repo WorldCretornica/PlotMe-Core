@@ -26,10 +26,6 @@ public class CmdSetOwner extends PlotCommand {
                     player.sendMessage("§c" + C("MsgNoPlotFound"));
                 } else {
                     String newOwner = args[1];
-                    if (newOwner.startsWith("group:")) {
-                        player.sendMessage("You cannot make a group an owner. Try adding them to the plot instead.");
-                        return true;
-                    }
                     String oldowner = "<" + C("WordNotApplicable") + ">";
                     String playerName = player.getName();
 
@@ -68,43 +64,20 @@ public class CmdSetOwner extends PlotCommand {
                                 event = serverBridge.getEventFactory().callPlotOwnerChangeEvent(plugin, world, plot, player, newOwner);
                             }
 
-                            if (plot.getCurrentBidderId() != null) {
-                                IOfflinePlayer playercurrentbidder = serverBridge.getOfflinePlayer(plot.getCurrentBidderId());
-                                EconomyResponse er = serverBridge.depositPlayer(playercurrentbidder, plot.getCurrentBid());
-
-                                if (er.transactionSuccess()) {
-                                    IPlayer currentBidder = serverBridge.getPlayer(playercurrentbidder.getUniqueId());
-                                    if (currentBidder != null) {
-                                        currentBidder.sendMessage(
-                                                C("WordPlot") + " " + id + " " + C("MsgChangedOwnerFrom") + " " + oldowner + " " + C("WordTo") + " "
-                                                + newOwner + ". " + Util().moneyFormat(plot.getCurrentBid(), true));
-                                    }
-                                } else {
-                                    player.sendMessage(er.errorMessage);
-                                    serverBridge.getLogger().warning(er.errorMessage);
-                                }
-                            }
                         } else {
                             event = serverBridge.getEventFactory().callPlotOwnerChangeEvent(plugin, world, plot, player, newOwner);
                         }
 
                         if (!event.isCancelled()) {
-                            plot.setCurrentBidder(null);
-                            plot.setCurrentBidderId(null);
-                            plot.setCurrentBid(0.0);
-                            plot.setAuctioned(false);
                             plot.setForSale(false);
 
                             manager.removeAuctionSign(world, id);
                             manager.removeSellSign(world, id);
 
-                            plot.updateField("currentbidder", null);
-                            plot.updateField("currentbid", 0);
-                            plot.updateField("auctionned", false);
                             plot.updateField("forsale", false);
-                            plot.updateField("currentbidderid", null);
 
                             plot.setOwner(newOwner);
+                            plot.setOwnerId(null);
 
                             manager.setOwnerSign(world, plot);
 
@@ -119,7 +92,7 @@ public class CmdSetOwner extends PlotCommand {
                     if (isAdvancedLogging()) {
                         serverBridge.getLogger()
                                 .info(playerName + " " + C("MsgChangedOwnerOf") + " " + id + " " + C("WordFrom") + " " + oldowner + " " + C("WordTo")
-                                      + " " + newOwner);
+                                        + " " + newOwner);
                     }
                 }
             } else {

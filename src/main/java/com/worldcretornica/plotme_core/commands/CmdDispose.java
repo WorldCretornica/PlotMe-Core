@@ -4,7 +4,6 @@ import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotDisposeEvent;
@@ -55,27 +54,6 @@ public class CmdDispose extends PlotCommand {
                                         player.sendMessage("§c" + economyResponse.errorMessage);
                                         serverBridge.getLogger().warning(economyResponse.errorMessage);
                                         return true;
-                                    }
-
-                                    if (plot.isAuctioned()) {
-                                        String currentbidder = plot.getCurrentBidder();
-
-                                        if (currentbidder != null) {
-                                            IOfflinePlayer playercurrentbidder = serverBridge.getOfflinePlayer(plot.getCurrentBidderId());
-                                            EconomyResponse er2 = serverBridge.depositPlayer(playercurrentbidder, plot.getCurrentBid());
-
-                                            if (er2.transactionSuccess()) {
-                                                IPlayer currentBidder = serverBridge.getPlayer(playercurrentbidder.getUniqueId());
-                                                if (currentBidder != null) {
-                                                    currentBidder.sendMessage(
-                                                            C("WordPlot") + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner() + " " + C(
-                                                                    "MsgWasDisposed") + " " + Util().moneyFormat(cost, true));
-                                                }
-                                            } else {
-                                                player.sendMessage("§c" + er2.errorMessage);
-                                                serverBridge.getLogger().warning(er2.errorMessage);
-                                            }
-                                        }
                                     }
                                 }
                             } else {

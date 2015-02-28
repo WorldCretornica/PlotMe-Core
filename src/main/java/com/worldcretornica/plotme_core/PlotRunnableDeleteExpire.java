@@ -26,7 +26,7 @@ public class PlotRunnableDeleteExpire implements Runnable {
             List<Plot> expiredPlots = sqlmanager.getExpiredPlots(world.getName(), 1, 5);
 
             if (expiredPlots.isEmpty()) {
-                plugin.setCounterExpired((short) 0);
+                plugin.setCounterExpired(0);
             } else {
                 String ids = "";
 
@@ -45,8 +45,7 @@ public class PlotRunnableDeleteExpire implements Runnable {
 
                         sqlmanager.deletePlot(plotMeCoreManager.getIdX(id), plotMeCoreManager.getIdZ(id), world.getName());
 
-                        //noinspection NumericCastThatLosesPrecision
-                        plugin.setCounterExpired((short) (plugin.getCounterExpired() - 1));
+                        plugin.setCounterExpired(plugin.getCounterExpired() - 1);
                     }
                 }
 
