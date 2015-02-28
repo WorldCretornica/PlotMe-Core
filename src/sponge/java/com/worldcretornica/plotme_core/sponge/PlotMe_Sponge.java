@@ -3,8 +3,6 @@ package com.worldcretornica.plotme_core.sponge;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IServerBridge;
 import com.worldcretornica.plotme_core.sponge.api.SpongePlayer;
-import com.worldcretornica.plotme_core.sponge.listener.SpongePlotDenyListener;
-import com.worldcretornica.plotme_core.sponge.listener.SpongePlotListener;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.entity.player.Player;
 import org.spongepowered.api.event.state.PreInitializationEvent;
@@ -32,8 +30,8 @@ public class PlotMe_Sponge {
 
     @Subscribe
     public void onEnable(ServerStartedEvent event) {
-        game.getEventManager().register(this, new SpongePlotListener(this));
-        game.getEventManager().register(this, new SpongePlotDenyListener(this));
+        //game.getEventManager().register(this, new SpongePlotListener(this));
+        //game.getEventManager().register(this, new SpongePlotDenyListener(this));
 
         serverObjectBuilder = new SpongeServerBridge(this);
 
