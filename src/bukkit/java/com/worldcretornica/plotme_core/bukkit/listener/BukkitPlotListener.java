@@ -102,7 +102,7 @@ public class BukkitPlotListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onBlockPlace(BlockPlaceEvent event) {
         Player player = event.getPlayer();
-        BukkitLocation location = new BukkitLocation(event.getBlockPlaced().getLocation());
+        BukkitLocation location = new BukkitLocation(event.getBlock().getLocation());
 
         if (manager.isPlotWorld(location)) {
             boolean canBuild = !player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE);

@@ -224,12 +224,13 @@ public class PlotMe_Core {
     }
 
     public PlotToClear getPlotLocked(String world, String id) {
-        for (PlotToClear ptc : plotsToClear.toArray(new PlotToClear[plotsToClear.size()])) {
-            if (ptc.getWorld().equalsIgnoreCase(world) && ptc.getPlotId().equalsIgnoreCase(id)) {
-                return ptc;
+        if (plotsToClear != null) {
+            for (PlotToClear ptc : plotsToClear.toArray(new PlotToClear[plotsToClear.size()])) {
+                if (ptc.getWorld().equalsIgnoreCase(world) && ptc.getPlotId().equalsIgnoreCase(id)) {
+                    return ptc;
+                }
             }
         }
-
         return null;
     }
 
