@@ -9,6 +9,10 @@ public abstract class AbstractSchematicElement implements Serializable {
     public abstract String toString();
 
     protected String Sanitize(Object object) {
-        return (object == null ? "" : object.toString());
+        if (object == null) {
+            return "";
+        } else {
+            return object.toString();
+        }
     }
 }

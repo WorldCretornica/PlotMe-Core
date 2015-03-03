@@ -1,9 +1,9 @@
 package com.worldcretornica.plotme_core.sponge;
 
-import com.worldcretornica.configuration.file.FileConfiguration;
+import com.worldcretornica.configuration.ConfigAccessor;
+import com.worldcretornica.configuration.ConfigurationSection;
 import com.worldcretornica.plotme_core.PlotWorldEdit;
 import com.worldcretornica.plotme_core.api.IBiome;
-import com.worldcretornica.plotme_core.api.IConfigSection;
 import com.worldcretornica.plotme_core.api.IMaterial;
 import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import com.worldcretornica.plotme_core.api.IPlayer;
@@ -23,7 +23,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Logger;
 
@@ -191,24 +190,6 @@ public class SpongeServerBridge extends IServerBridge {
     }
 
     @Override
-    public void reloadConfig() {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public FileConfiguration getConfig() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public IConfigSection getCaptionConfig() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
     public void saveResource(boolean replace) {
         // TODO Auto-generated method stub
 
@@ -235,11 +216,13 @@ public class SpongeServerBridge extends IServerBridge {
         return worlds;
     }
 
+/*
     @Override
     public boolean createPlotWorld(String worldName, String generator, Map<String, String> args) {
         // TODO Auto-generated method stub
         return false;
     }
+*/
 
     @Override
     public IMaterial getMaterial(String string) {
@@ -248,7 +231,7 @@ public class SpongeServerBridge extends IServerBridge {
     }
 
     @Override
-    public IConfigSection loadDefaultConfig(String string) {
+    public ConfigurationSection loadDefaultConfig(ConfigAccessor configFile, String world) {
         // TODO Auto-generated method stub
         return null;
     }

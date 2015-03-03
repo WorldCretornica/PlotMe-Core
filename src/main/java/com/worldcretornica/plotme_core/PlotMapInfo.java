@@ -1,6 +1,7 @@
 package com.worldcretornica.plotme_core;
 
-import com.worldcretornica.plotme_core.api.IConfigSection;
+import com.worldcretornica.configuration.ConfigAccessor;
+import com.worldcretornica.configuration.ConfigurationSection;
 
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -11,12 +12,14 @@ public class PlotMapInfo {
 
     private final ConcurrentHashMap<PlotId, Plot> plots;
     private final String world;
-    private final IConfigSection config;
+    private final ConfigurationSection config;
+    private final ConfigAccessor configFile;
 
-    public PlotMapInfo(PlotMe_Core instance, String world) {
+    public PlotMapInfo(PlotMe_Core instance, ConfigAccessor config, String world) {
         plugin = instance;
         this.world = world.toLowerCase();
-        config = plugin.getServerBridge().loadDefaultConfig("worlds." + this.world);
+        this.configFile = config;
+        this.config = config.getConfig().getConfigurationSection("worlds." + world);
         plots = new ConcurrentHashMap<>(1000, 0.75f, 5);
         plugin.getSqlManager().loadPlotsAsynchronously(this.world);
     }
@@ -75,7 +78,7 @@ public class PlotMapInfo {
 
     public void setPlotAutoLimit(int plotAutoLimit) {
         config.set("PlotAutoLimit", plotAutoLimit);
-        config.saveConfig();
+        configFile.saveConfig();
     }
 
     public int getDaysToExpiration() {
@@ -84,10 +87,10 @@ public class PlotMapInfo {
 
     public void setDaysToExpiration(int daysToExpiration) {
         config.set("DaysToExpiration", daysToExpiration);
-        config.saveConfig();
+        configFile.saveConfig();
     }
 
-    private IConfigSection getEconomySection() {
+    private ConfigurationSection getEconomySection() {
         return config.getConfigurationSection("economy");
     }
 
@@ -96,7 +99,7 @@ public class PlotMapInfo {
     }
     public void setUseEconomy(boolean useEconomy) {
         getEconomySection().set("UseEconomy", useEconomy);
-        config.saveConfig();
+        configFile.saveConfig();
     }
 
     public boolean hasPlotEnterAnnouncement() {
@@ -105,7 +108,7 @@ public class PlotMapInfo {
 
     public void setPlotEnterAnnouncement(boolean announce) {
         config.set("PlotEnterAnnouncement", announce);
-        config.saveConfig();
+        configFile.saveConfig();
     }
 
     public boolean canUseProjectiles() {
@@ -114,7 +117,7 @@ public class PlotMapInfo {
 
     public void setUseProjectiles(boolean allowed) {
         config.set("Projectiles", allowed);
-        config.saveConfig();
+        configFile.saveConfig();
     }
 
     public boolean isCanPutOnSale() {
@@ -123,7 +126,7 @@ public class PlotMapInfo {
 
     public void setCanPutOnSale(boolean canPutOnSale) {
         getEconomySection().set("CanPutOnSale", canPutOnSale);
-        config.saveConfig();
+        configFile.saveConfig();
     }
 
     public boolean isRefundClaimPriceOnReset() {
@@ -132,7 +135,7 @@ public class PlotMapInfo {
 
     public void setRefundClaimPriceOnReset(boolean refundClaimPriceOnReset) {
         getEconomySection().set("RefundClaimPriceOnReset", refundClaimPriceOnReset);
-        config.saveConfig();
+        configFile.saveConfig();
     }
 
     public boolean isRefundClaimPriceOnSetOwner() {
@@ -141,7 +144,7 @@ public class PlotMapInfo {
 
     public void setRefundClaimPriceOnSetOwner(boolean refundClaimPriceOnSetOwner) {
         getEconomySection().set("RefundClaimPriceOnSetOwner", refundClaimPriceOnSetOwner);
-        config.saveConfig();
+        configFile.saveConfig();
     }
 
     public double getClaimPrice() {
@@ -150,7 +153,7 @@ public class PlotMapInfo {
 
     public void setClaimPrice(double claimPrice) {
         getEconomySection().set("ClaimPrice", claimPrice);
-        config.saveConfig();
+        configFile.saveConfig();
     }
 
     public double getClearPrice() {
@@ -159,7 +162,7 @@ public class PlotMapInfo {
 
     public void setClearPrice(double clearPrice) {
         getEconomySection().set("ClearPrice", clearPrice);
-        config.saveConfig();
+        configFile.saveConfig();
     }
 
     public double getAddPlayerPrice() {
@@ -168,7 +171,7 @@ public class PlotMapInfo {
 
     public void setAddPlayerPrice(double addPlayerPrice) {
         getEconomySection().set("AddPlayerPrice", addPlayerPrice);
-        config.saveConfig();
+        configFile.saveConfig();
     }
 
     public double getDenyPlayerPrice() {
@@ -177,7 +180,7 @@ public class PlotMapInfo {
 
     public void setDenyPlayerPrice(double denyPlayerPrice) {
         getEconomySection().set("DenyPlayerPrice", denyPlayerPrice);
-        config.saveConfig();
+        configFile.saveConfig();
     }
 
     public double getRemovePlayerPrice() {
@@ -186,7 +189,7 @@ public class PlotMapInfo {
 
     public void setRemovePlayerPrice(double removePlayerPrice) {
         getEconomySection().set("RemovePlayerPrice", removePlayerPrice);
-        config.saveConfig();
+        configFile.saveConfig();
     }
 
     public double getUndenyPlayerPrice() {
@@ -195,7 +198,7 @@ public class PlotMapInfo {
 
     public void setUndenyPlayerPrice(double undenyPlayerPrice) {
         getEconomySection().set("UndenyPlayerPrice", undenyPlayerPrice);
-        config.saveConfig();
+        configFile.saveConfig();
     }
 
     public double getPlotHomePrice() {
@@ -204,7 +207,7 @@ public class PlotMapInfo {
 
     public void setPlotHomePrice(double plotHomePrice) {
         getEconomySection().set("PlotHomePrice", plotHomePrice);
-        config.saveConfig();
+        configFile.saveConfig();
     }
 
     public double getSellToPlayerPrice() {
@@ -213,7 +216,7 @@ public class PlotMapInfo {
 
     public void setSellToPlayerPrice(double sellToPlayerPrice) {
         getEconomySection().set("SellToPlayerPrice", sellToPlayerPrice);
-        config.saveConfig();
+        configFile.saveConfig();
     }
 
     public double getBiomeChangePrice() {
@@ -222,7 +225,7 @@ public class PlotMapInfo {
 
     public void setBiomeChangePrice(double biomeChangePrice) {
         getEconomySection().set("BiomeChangePrice", biomeChangePrice);
-        config.saveConfig();
+        configFile.saveConfig();
     }
 
     public double getProtectPrice() {
@@ -231,7 +234,7 @@ public class PlotMapInfo {
 
     public void setProtectPrice(double protectPrice) {
         getEconomySection().set("ProtectPrice", protectPrice);
-        config.saveConfig();
+        configFile.saveConfig();
     }
 
     public double getDisposePrice() {
@@ -240,7 +243,7 @@ public class PlotMapInfo {
 
     public void setDisposePrice(double disposePrice) {
         getEconomySection().set("DisposePrice", disposePrice);
-        config.saveConfig();
+        configFile.saveConfig();
     }
 
     public boolean isAutoLinkPlots() {
@@ -249,7 +252,7 @@ public class PlotMapInfo {
 
     public void setAutoLinkPlots(boolean autoLinkPlots) {
         config.set("AutoLinkPlots", autoLinkPlots);
-        config.saveConfig();
+        configFile.saveConfig();
     }
 
     public boolean isDisableExplosion() {
@@ -258,7 +261,7 @@ public class PlotMapInfo {
 
     public void setDisableExplosion(boolean disableExplosion) {
         config.set("DisableExplosion", disableExplosion);
-        config.saveConfig();
+        configFile.saveConfig();
     }
 
     public boolean isDisableIgnition() {
@@ -267,7 +270,7 @@ public class PlotMapInfo {
 
     public void setDisableIgnition(boolean disableIgnition) {
         config.set("DisableIgnition", disableIgnition);
-        config.saveConfig();
+        configFile.saveConfig();
     }
 
     public boolean isUseProgressiveClear() {
@@ -276,6 +279,6 @@ public class PlotMapInfo {
 
     public void setUseProgressiveClear(boolean useProgressiveClear) {
         config.set("UseProgressiveClear", useProgressiveClear);
-        config.saveConfig();
+        configFile.saveConfig();
     }
 }

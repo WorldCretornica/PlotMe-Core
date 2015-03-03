@@ -13,7 +13,7 @@ public class CmdWEAnywhere extends PlotCommand {
     }
 
     public boolean exec(IPlayer player) {
-        boolean defaultWEAnywhere = serverBridge.getConfig().getBoolean("defaultWEAnywhere");
+        boolean defaultWEAnywhere = plugin.getConfig().getBoolean("defaultWEAnywhere");
         if (player.hasPermission(PermissionNames.ADMIN_WEANYWHERE) && plugin.getServerBridge().getPlotWorldEdit() != null) {
             String name = player.getName();
             UUID uuid = player.getUniqueId();

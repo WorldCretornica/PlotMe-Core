@@ -2,7 +2,6 @@ package com.worldcretornica.configuration;
 
 import com.worldcretornica.configuration.file.FileConfiguration;
 import com.worldcretornica.configuration.file.YamlConfiguration;
-import com.worldcretornica.plotme_core.PlotMe_Core;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -14,26 +13,24 @@ import java.io.OutputStream;
 public class ConfigAccessor {
 
     private final String fileName;
-    private final PlotMe_Core plugin;
 
-    private File configFile;
+    private final File configFile;
+    private final File pluginFolder;
     private FileConfiguration fileConfiguration;
-    private File pluginFolder;
 
-    public ConfigAccessor(PlotMe_Core plugin, String fileName) {
-        this.plugin = plugin;
+    public ConfigAccessor(File pluginFolder, String fileName) {
         this.fileName = fileName;
-        File dataFolder = plugin.getServerBridge().getDataFolder();
-        this.configFile = new File(dataFolder, fileName);
+        this.pluginFolder = pluginFolder;
+        this.configFile = new File(pluginFolder, fileName);
     }
 
-    public void reloadConfig() {
-        fileConfiguration = YamlConfiguration.loadConfiguration(configFile);
+    public void reloadFile() {
+        fileConfiguration = YamlConfiguration.loadConfig(configFile);
 
         // Look for defaults in the jar
         InputStream defConfigStream = getResource(fileName);
         if (defConfigStream != null) {
-            YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(defConfigStream));
+            YamlConfiguration defConfig = YamlConfiguration.loadConfig(new InputStreamReader(defConfigStream));
             fileConfiguration.setDefaults(defConfig);
         }
     }
@@ -44,17 +41,16 @@ public class ConfigAccessor {
 
     public FileConfiguration getConfig() {
         if (fileConfiguration == null) {
-            this.reloadConfig();
+            this.reloadFile();
         }
         return fileConfiguration;
     }
 
     public void saveConfig() {
-        if (fileConfiguration != null && configFile != null) {
+        if (fileConfiguration != null) {
             try {
                 getConfig().save(configFile);
             } catch (IOException ex) {
-                plugin.getLogger().severe("Could not save config to " + configFile);
             }
         }
     }

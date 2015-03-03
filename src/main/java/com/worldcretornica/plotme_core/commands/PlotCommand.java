@@ -55,6 +55,6 @@ public abstract class PlotCommand {
     }
 
     protected boolean isAdvancedLogging() {
-        return serverBridge.getConfig().getBoolean("AdvancedLogging");
+        return plugin.getConfig().getBoolean("AdvancedLogging");
     }
 }

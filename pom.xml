@@ -93,6 +93,11 @@
 
     <repositories>
         <repository>
+            <id>Sonatype-public</id>
+            <name>SnakeYAML repository</name>
+            <url>http://oss.sonatype.org/content/groups/public/</url>
+        </repository>
+        <repository>
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
         </repository>
@@ -106,9 +111,6 @@
         <repository>
             <id>worldedit-repo</id>
             <url>http://maven.sk89q.com/repo/</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
         </repository>
         <repository>
             <id>vault-repo</id>
@@ -220,9 +222,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>ninja.leaping.configurate</groupId>
-            <artifactId>configurate-yaml</artifactId>
-            <version>0.1</version>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <version>1.16-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

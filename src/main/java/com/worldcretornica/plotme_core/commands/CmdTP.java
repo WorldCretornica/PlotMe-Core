@@ -17,7 +17,7 @@ public class CmdTP extends PlotCommand {
 
     public boolean exec(IPlayer player, String[] args) {
         if (player.hasPermission(PermissionNames.ADMIN_TP)) {
-            if (manager.isPlotWorld(player) || serverBridge.getConfig().getBoolean("allowWorldTeleport")) {
+            if (manager.isPlotWorld(player) || plugin.getConfig().getBoolean("allowWorldTeleport")) {
                 if (args.length == 2 || args.length == 3) {
                     IWorld world;
                     if (args.length == 3) {

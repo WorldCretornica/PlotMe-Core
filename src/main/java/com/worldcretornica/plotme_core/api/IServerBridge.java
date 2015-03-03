@@ -1,15 +1,18 @@
 package com.worldcretornica.plotme_core.api;
 
-import com.worldcretornica.configuration.file.FileConfiguration;
+import com.worldcretornica.configuration.ConfigAccessor;
+import com.worldcretornica.configuration.ConfigurationSection;
+import com.worldcretornica.configuration.file.YamlConfiguration;
 import com.worldcretornica.plotme_core.PlotWorldEdit;
 import com.worldcretornica.plotme_core.api.event.IEventFactory;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 
 import java.io.File;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Logger;
 
@@ -17,12 +20,9 @@ public abstract class IServerBridge {
 
     private boolean usingLwc;
 
-    public IServerBridge(File pluginFolder) {
-        new File
-    }
-
     public abstract IOfflinePlayer getOfflinePlayer(UUID uuid);
 
+    @SuppressWarnings("unused")
     public abstract IOfflinePlayer getOfflinePlayer(String player);
 
     /**
@@ -67,7 +67,7 @@ public abstract class IServerBridge {
         return usingLwc;
     }
 
-    public void setUsingLwc(boolean usingLwc) {
+    protected void setUsingLwc(boolean usingLwc) {
         this.usingLwc = usingLwc;
     }
 
@@ -95,31 +95,45 @@ public abstract class IServerBridge {
 
     public abstract File getDataFolder();
 
-    public abstract void reloadConfig();
-
-    public abstract FileConfiguration getConfig();
-
-    public abstract IConfigSection getCaptionConfig();
-
+    @SuppressWarnings("unused")
     public abstract void saveResource(boolean replace);
 
+    @SuppressWarnings("unused")
     public abstract boolean addMultiverseWorld(String worldName, String seed, String generator);
 
     public abstract List<String> getBiomes();
 
+    @SuppressWarnings("unused")
     /**
      * Get all Existing Plotworlds.
      * @return all plotworlds on the server
      */
     public abstract Collection<IWorld> getWorlds();
 
-    public abstract boolean createPlotWorld(String worldName, String generator, Map<String, String> args);
+    //public abstract boolean createPlotWorld(String worldName, String generator, Map<String, String> args);
 
+    @SuppressWarnings("unused")
     public abstract IMaterial getMaterial(String string);
 
-    public abstract IConfigSection loadDefaultConfig(String string);
-
-    public void createWorldSection(String world) {
-
+    public ConfigurationSection loadDefaultConfig(ConfigAccessor configFile, String world) {
+        ConfigurationSection defaultWorld = getDefaultWorld();
+        ConfigurationSection configSection;
+        if (configFile.getConfig().contains(world)) {
+            configSection = configFile.getConfig().getConfigurationSection(world);
+        } else {
+            configFile.getConfig().set(world, defaultWorld);
+            configFile.saveConfig();
+            configSection = configFile.getConfig().getConfigurationSection(world);
+        }
+        for (String path : defaultWorld.getKeys(true)) {
+            configSection.addDefault(path, defaultWorld.get(path));
+        }
+        return configSection;
     }
+
+    public ConfigurationSection getDefaultWorld() {
+        return YamlConfiguration
+                .loadConfig(new InputStreamReader(getClass().getClassLoader().getResourceAsStream("default-world.yml"), StandardCharsets.UTF_8));
+    }
+
 }
