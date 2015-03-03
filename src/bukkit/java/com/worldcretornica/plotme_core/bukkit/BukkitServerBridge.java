@@ -1,7 +1,6 @@
 package com.worldcretornica.plotme_core.bukkit;
 
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
-import com.worldcretornica.configuration.file.YamlConfiguration;
 import com.worldcretornica.plotme_core.PlotWorldEdit;
 import com.worldcretornica.plotme_core.api.IBiome;
 import com.worldcretornica.plotme_core.api.IMaterial;
@@ -31,8 +30,6 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -251,12 +248,6 @@ public class BukkitServerBridge extends IServerBridge {
     @Override
     public File getDataFolder() {
         return plugin.getDataFolder();
-    }
-
-    @Override
-    public void saveResource(boolean replace) {
-        YamlConfiguration.loadConfig(
-                new InputStreamReader(getClass().getClassLoader().getResourceAsStream("default-world.yml"), StandardCharsets.UTF_8));
     }
 
     @Override

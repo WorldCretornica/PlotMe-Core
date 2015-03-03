@@ -7,13 +7,6 @@ package com.worldcretornica.configuration;
 public class InvalidConfigurationException extends Exception {
 
     /**
-     * Creates a new instance of InvalidConfigurationException without a
-     * message or cause.
-     */
-    public InvalidConfigurationException() {
-    }
-
-    /**
      * Constructs an instance of InvalidConfigurationException with the
      * specified message.
      *
@@ -33,14 +26,4 @@ public class InvalidConfigurationException extends Exception {
         super(cause);
     }
 
-    /**
-     * Constructs an instance of InvalidConfigurationException with the
-     * specified message and cause.
-     *
-     * @param cause The cause of the exception.
-     * @param msg The details of the exception.
-     */
-    public InvalidConfigurationException(String msg, Throwable cause) {
-        super(msg, cause);
-    }
 }

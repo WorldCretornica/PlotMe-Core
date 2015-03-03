@@ -8,12 +8,12 @@ public class PlotMeSpool implements Runnable {
     private final PlotMe_Core plugin;
     private Long[] currentClear;
 
-    private PlotToClear plottoclear;
+    private PlotToClear plotToClear;
     private int taskId;
 
     public PlotMeSpool(PlotMe_Core instance, PlotToClear plotToClear) {
         plugin = instance;
-        plottoclear = plotToClear;
+        this.plotToClear = plotToClear;
     }
 
     @Override
@@ -44,15 +44,15 @@ public class PlotMeSpool implements Runnable {
                     }
                     genmanager.refreshPlotChunks(world, getPlotToClear().getPlotId());
 
-                    plottoclear.getRequester().sendMessage(
+                    plotToClear.getRequester().sendMessage(
                             plugin.getUtil().C("WordPlot") + " " + getPlotToClear().getPlotId() + " " + plugin.getUtil().C("WordCleared"));
 
                     plugin.removePlotToClear(getPlotToClear(), taskId);
-                    plottoclear = null;
+                    plotToClear = null;
                 }
             } else {
                 plugin.removePlotToClear(getPlotToClear(), taskId);
-                plottoclear = null;
+                plotToClear = null;
                 currentClear = null;
             }
         }
@@ -63,7 +63,7 @@ public class PlotMeSpool implements Runnable {
     }
 
     public PlotToClear getPlotToClear() {
-        return plottoclear;
+        return plotToClear;
     }
 
 }

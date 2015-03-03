@@ -15,12 +15,10 @@ public class ConfigAccessor {
     private final String fileName;
 
     private final File configFile;
-    private final File pluginFolder;
     private FileConfiguration fileConfiguration;
 
     public ConfigAccessor(File pluginFolder, String fileName) {
         this.fileName = fileName;
-        this.pluginFolder = pluginFolder;
         this.configFile = new File(pluginFolder, fileName);
     }
 

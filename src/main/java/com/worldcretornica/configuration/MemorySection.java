@@ -506,10 +506,7 @@ public class MemorySection implements ConfigurationSection {
             if (object instanceof Integer) {
                 result.add((Integer) object);
             } else if (object instanceof String) {
-                try {
-                    result.add(Integer.valueOf((String) object));
-                } catch (NumberFormatException ignored) {
-                }
+                result.add(Integer.valueOf((String) object));
             } else if (object instanceof Character) {
                 result.add((int) (Character) object);
             } else if (object instanceof Number) {
@@ -559,10 +556,7 @@ public class MemorySection implements ConfigurationSection {
             if (object instanceof Double) {
                 result.add((Double) object);
             } else if (object instanceof String) {
-                try {
-                    result.add(Double.valueOf((String) object));
-                } catch (Exception ignored) {
-                }
+                result.add(Double.valueOf((String) object));
             } else if (object instanceof Character) {
                 result.add((double) (Character) object);
             } else if (object instanceof Number) {
@@ -587,10 +581,7 @@ public class MemorySection implements ConfigurationSection {
             if (object instanceof Float) {
                 result.add((Float) object);
             } else if (object instanceof String) {
-                try {
-                    result.add(Float.valueOf((String) object));
-                } catch (NumberFormatException ex) {
-                }
+                result.add(Float.valueOf((String) object));
             } else if (object instanceof Character) {
                 result.add((float) (Character) object);
             } else if (object instanceof Number) {
@@ -615,10 +606,7 @@ public class MemorySection implements ConfigurationSection {
             if (object instanceof Long) {
                 result.add((Long) object);
             } else if (object instanceof String) {
-                try {
-                    result.add(Long.valueOf((String) object));
-                } catch (NumberFormatException ex) {
-                }
+                result.add(Long.valueOf((String) object));
             } else if (object instanceof Character) {
                 result.add((long) (Character) object);
             } else if (object instanceof Number) {
@@ -698,10 +686,7 @@ public class MemorySection implements ConfigurationSection {
             if (object instanceof Short) {
                 result.add((Short) object);
             } else if (object instanceof String) {
-                try {
-                    result.add(Short.valueOf((String) object));
-                } catch (NumberFormatException ex) {
-                }
+                result.add(Short.valueOf((String) object));
             } else if (object instanceof Character) {
                 result.add((short) ((Character) object).charValue());
             } else if (object instanceof Number) {
@@ -755,10 +740,8 @@ public class MemorySection implements ConfigurationSection {
     }
 
     protected boolean isPrimitiveWrapper(Object input) {
-        return input instanceof Integer || input instanceof Boolean ||
-                input instanceof Character || input instanceof Byte ||
-                input instanceof Short || input instanceof Double ||
-                input instanceof Long || input instanceof Float;
+        return input instanceof Integer || input instanceof Boolean || input instanceof Character || input instanceof Byte ||
+                input instanceof Short || input instanceof Double || input instanceof Long || input instanceof Float;
     }
 
 
@@ -822,12 +805,6 @@ public class MemorySection implements ConfigurationSection {
     @Override
     public String toString() {
         Configuration root = getRoot();
-        if (root == null) {
-            return getClass().getSimpleName() + "[path='" + getCurrentPath() + "', root='" + null
-                    + "']";
-        } else {
-            return getClass().getSimpleName() + "[path='" + getCurrentPath() + "', root='" + root.getClass().getSimpleName()
-                    + "']";
-        }
+        return getClass().getSimpleName() + "[path='" + getCurrentPath() + "', root='" + root.getClass().getSimpleName() + "']";
     }
 }

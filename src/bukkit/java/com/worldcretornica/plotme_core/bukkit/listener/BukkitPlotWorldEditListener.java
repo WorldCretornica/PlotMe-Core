@@ -135,11 +135,11 @@ public class BukkitPlotWorldEditListener implements Listener {
                     PlotId id = manager.getPlotId(location);
                     Plot plot = manager.getMap(location).getPlot(id);
 
-                    if (plot != null && plot.isAllowed(player.getName(), player.getUniqueId())) {
-                        worldEdit.setMask(player);
-                    } else {
+                    if (plot == null || !plot.isAllowed(player.getName(), player.getUniqueId())) {
                         player.sendMessage(api.getUtil().C("ErrCannotBuild"));
                         event.setCancelled(true);
+                    } else {
+                        worldEdit.setMask(player);
                     }
                 }
             }

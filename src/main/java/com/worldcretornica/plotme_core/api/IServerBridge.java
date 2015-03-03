@@ -95,8 +95,10 @@ public abstract class IServerBridge {
 
     public abstract File getDataFolder();
 
-    @SuppressWarnings("unused")
-    public abstract void saveResource(boolean replace);
+    public void saveResource(boolean replace) {
+        YamlConfiguration.loadConfig(
+                new InputStreamReader(getClass().getClassLoader().getResourceAsStream("default-world.yml"), StandardCharsets.UTF_8));
+    }
 
     @SuppressWarnings("unused")
     public abstract boolean addMultiverseWorld(String worldName, String seed, String generator);
