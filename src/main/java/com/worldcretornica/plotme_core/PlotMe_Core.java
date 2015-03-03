@@ -60,11 +60,11 @@ public class PlotMe_Core {
 
     public void enable() {
         PlotMeCoreManager.getInstance().setPlugin(this);
-        setupSQL();
         configFile = new ConfigAccessor(getServerBridge().getDataFolder(), "config.yml");
         captionFile = new ConfigAccessor(getServerBridge().getDataFolder(), "captions.yml");
         setupConfigFiles();
         serverBridge.setupCommands();
+        setupSQL();
         setUtil(new Util(this));
         serverBridge.setupHooks();
         serverBridge.setupListeners();
