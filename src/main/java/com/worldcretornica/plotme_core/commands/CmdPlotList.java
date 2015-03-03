@@ -6,7 +6,6 @@ import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 
-import java.util.Calendar;
 import java.util.UUID;
 
 public class CmdPlotList extends PlotCommand {
@@ -48,16 +47,16 @@ public class CmdPlotList extends PlotCommand {
                         player.sendMessage("  World: " + plot.getWorld());
                     }
 
-                    // Is it expired?
-                    if (plot.getExpiredDate() != null) {
-                        String expiredDate = plot.getExpiredDate();
-
-                        if (expiredDate.before(Calendar.getInstance().getTime())) {
-                            addition.append("§c @" + plot.getExpiredDate() + "§r");
-                        } else {
-                            addition.append(" @" + plot.getExpiredDate());
-                        }
-                    }
+                    //                    // Is it expired?
+                    //                    if (plot.getExpiredDate() != null) {
+                    //                        String expiredDate = plot.getExpiredDate();
+                    //
+                    //                        if (expiredDate.before(Calendar.getInstance().getTime())) {
+                    //                            addition.append("§c @" + plot.getExpiredDate() + "§r");
+                    //                        } else {
+                    //                            addition.append(" @" + plot.getExpiredDate());
+                    //                        }
+                    //                    }
 
                     // Is it for sale?
                     if (plot.isForSale()) {
