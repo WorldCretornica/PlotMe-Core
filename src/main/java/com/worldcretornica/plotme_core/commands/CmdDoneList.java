@@ -26,15 +26,15 @@ public class CmdDoneList extends PlotCommand {
                     page = Integer.parseInt(args[1]);
                 }
 
-                int maxPage = (int) Math.ceil(plugin.getSqlManager().getFinishedPlotCount(player.getWorld().getName()) / 8F);
-
+                //int maxPage = (int) Math.ceil(plugin.getSqlManager().getFinishedPlotCount(player.getWorld().getName()) / 8F);
+                int maxPage = 8;
                 if (page < 1) {
                     page = 1;
                 } else if (page > maxPage) {
                     page = maxPage;
                 }
 
-                List<Plot> donePlots = plugin.getSqlManager().getDonePlots(player.getWorld().getName(), page, 8);
+                List<Plot> donePlots = null; //= plugin.getSqlManager().getDonePlots(player.getWorld().getName(), page, 8);
 
                 if (donePlots.isEmpty()) {
                     player.sendMessage(C("MsgNoPlotsFinished"));
