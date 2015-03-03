@@ -13,7 +13,6 @@ import com.worldcretornica.plotme_core.utils.Util;
 
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class PlotMe_Core {
@@ -119,21 +118,10 @@ public class PlotMe_Core {
     }
 
     private void setupWorld(String world) {
-        if (getGenManager(world) == null) {
-            getLogger().log(Level.SEVERE, "The world {0} either does not exist or not using a PlotMe generator", world);
-            getLogger().log(Level.SEVERE, "Please ensure that {0} is set up and that it is using a PlotMe generator", world);
-        } else {
-            //Lets just hide a bit of code to clean up the config in here.
-            getServerBridge().loadDefaultConfig(configFile, "worlds." + world);
-            configFile.saveConfig();
-            PlotMapInfo pmi = new PlotMapInfo(this, configFile, world);
-            PlotMeCoreManager.getInstance().addPlotMap(world, pmi);
-        }
-
-        if (PlotMeCoreManager.getInstance().getPlotMaps().isEmpty()) {
-            getLogger().severe("Uh oh. There are no plotworlds setup.");
-            getLogger().severe("Is that a mistake? Try making sure you setup PlotMe Correctly PlotMe to stay safe.");
-        }
+        getServerBridge().loadDefaultConfig(configFile, "worlds." + world);
+        configFile.saveConfig();
+        PlotMapInfo pmi = new PlotMapInfo(this, configFile, world);
+        PlotMeCoreManager.getInstance().addPlotMap(world, pmi);
     }
 
     public FileConfiguration getCaptionConfig() {
