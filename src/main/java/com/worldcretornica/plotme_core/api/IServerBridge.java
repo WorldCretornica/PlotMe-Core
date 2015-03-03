@@ -138,4 +138,5 @@ public abstract class IServerBridge {
                 .loadConfig(new InputStreamReader(getClass().getClassLoader().getResourceAsStream("default-world.yml"), StandardCharsets.UTF_8));
     }
 
+    public abstract File getWorldFolder();
 }

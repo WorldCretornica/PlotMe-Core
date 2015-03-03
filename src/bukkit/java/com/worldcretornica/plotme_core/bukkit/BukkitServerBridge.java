@@ -396,4 +396,8 @@ public class BukkitServerBridge extends IServerBridge {
     public void clearBukkitPlayerMap() {
         plugin.getBukkitPlayerMap().clear();
     }
+
+    public File getWorldFolder() {
+        return plugin.getServer().getWorldContainer();
+    }
 }
