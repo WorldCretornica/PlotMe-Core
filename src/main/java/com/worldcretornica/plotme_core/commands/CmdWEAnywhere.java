@@ -13,27 +13,30 @@ public class CmdWEAnywhere extends PlotCommand {
     }
 
     public boolean exec(IPlayer player) {
-        boolean defaultWEAnywhere = plugin.getConfig().getBoolean("defaultWEAnywhere");
         if (player.hasPermission(PermissionNames.ADMIN_WEANYWHERE) && plugin.getServerBridge().getPlotWorldEdit() != null) {
             String name = player.getName();
             UUID uuid = player.getUniqueId();
 
-            if (manager.isPlayerIgnoringWELimit(player) && !defaultWEAnywhere || !manager.isPlayerIgnoringWELimit(player) && defaultWEAnywhere) {
+            boolean defaultWEAnywhere = plugin.getConfig().getBoolean("defaultWEAnywhere");
+            boolean playerIgnoringWELimit = manager.isPlayerIgnoringWELimit(player);
+            if (playerIgnoringWELimit && !defaultWEAnywhere || !playerIgnoringWELimit && defaultWEAnywhere) {
                 manager.removePlayerIgnoringWELimit(uuid);
                 plugin.getServerBridge().getPlotWorldEdit().setMask(player);
-                player.sendMessage(C("MsgWorldEditInYourPlots"));
-                if (isAdvancedLogging()) {
-                    plugin.getLogger().info(name + "disabled WorldEdit Anywhere");
-                }
             } else {
                 manager.addPlayerIgnoringWELimit(uuid);
                 plugin.getServerBridge().getPlotWorldEdit().removeMask(player);
+            }
+            if (manager.isPlayerIgnoringWELimit(player)) {
                 player.sendMessage(C("MsgWorldEditAnywhere"));
                 if (isAdvancedLogging()) {
                     plugin.getLogger().info(name + "enabled WorldEdit Anywhere");
                 }
+            } else {
+                player.sendMessage(C("MsgWorldEditInYourPlots"));
+                if (isAdvancedLogging()) {
+                    plugin.getLogger().info(name + "disabled WorldEdit Anywhere");
+                }
             }
-
         } else {
             player.sendMessage("§c" + C("MsgPermissionDenied"));
             return false;

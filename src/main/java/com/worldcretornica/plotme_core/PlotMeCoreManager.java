@@ -843,8 +843,9 @@ public class PlotMeCoreManager {
     public boolean isPlayerIgnoringWELimit(IPlayer player) {
         if (plugin.getConfig().getBoolean("defaultWEAnywhere") && player.hasPermission(PermissionNames.ADMIN_WEANYWHERE)) {
             return !getPlayersIgnoringWELimit().contains(player.getUniqueId());
+        } else {
+            return getPlayersIgnoringWELimit().contains(player.getUniqueId());
         }
-        return getPlayersIgnoringWELimit().contains(player.getUniqueId());
     }
 
     /**
