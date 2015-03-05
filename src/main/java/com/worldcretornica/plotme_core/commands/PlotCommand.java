@@ -8,11 +8,11 @@ import com.worldcretornica.plotme_core.utils.Util;
 
 public abstract class PlotCommand {
 
-    protected final PlotMe_Core plugin;
+    final PlotMe_Core plugin;
 
-    protected final IServerBridge serverBridge;
+    final IServerBridge serverBridge;
 
-    protected final PlotMeCoreManager manager;
+    final PlotMeCoreManager manager;
 
     public PlotCommand(PlotMe_Core instance) {
         plugin = instance;
@@ -50,7 +50,7 @@ public abstract class PlotCommand {
     }
 
 
-    protected String C(String caption) {
+    String C(String caption) {
         return Util().C(caption);
     }
 
