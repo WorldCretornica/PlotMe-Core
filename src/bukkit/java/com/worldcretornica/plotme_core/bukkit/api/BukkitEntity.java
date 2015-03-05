@@ -56,4 +56,9 @@ public class BukkitEntity implements IEntity {
         return entity.getUniqueId();
     }
 
+    @Override
+    public String getName() {
+        return entity.getName();
+    }
+
 }
