@@ -42,33 +42,6 @@ public class PlotMeCoreManager {
     }
 
     /**
-     * Gets the plot by the id and pmi
-     *
-     * @param id Plot ID
-     * @param pmi PlotMapInfo
-     * @return plot
-     */
-    public Plot getPlotById(PlotId id, PlotMapInfo pmi) {
-        if (pmi == null) {
-            return null;
-        }
-
-        return pmi.getPlot(id);
-    }
-
-    /**
-     * Gets the plot with the player and pmi. The player has its location checked to retrieve the plotID.
-     *
-     * @param player player standing in the plot
-     * @param pmi PlotMapInfo
-     * @return plot
-     */
-    public Plot getPlotById(IPlayer player, PlotMapInfo pmi) {
-        PlotId id = getPlotId(player);
-        return getPlotById(id, pmi);
-    }
-
-    /**
      * Removes the plot from the plotmap
      *  @param pmi plotmap
      * @param id plot id
@@ -92,10 +65,6 @@ public class PlotMeCoreManager {
         String line3 = plot.getOwner();
         String line4 = "";
         getGenManager(world).setOwnerDisplay(world, plot.getId(), line1, line2, line3, line4);
-    }
-
-    public boolean isPlotAvailable(PlotId id, PlotMapInfo pmi) {
-        return pmi != null && pmi.getPlot(id) == null;
     }
 
     /**
@@ -126,14 +95,6 @@ public class PlotMeCoreManager {
 
     }
 
-    public ILocation getPlotBottomLoc(IWorld world, PlotId id) {
-        return getGenManager(world).getPlotBottomLoc(world, id);
-    }
-
-    public ILocation getPlotTopLoc(IWorld world, PlotId id) {
-        return getGenManager(world).getPlotTopLoc(world, id);
-    }
-
     /**
      * Removes the owner sign from the plot.
      *  @param world plotworld
@@ -154,9 +115,10 @@ public class PlotMeCoreManager {
 
     /**
      * Remove the auction sign from the plot
-     *  @param world plotworld
+     * @param world plotworld
      * @param id    plot id to remove the sign from
      */
+    @Deprecated
     public void removeAuctionSign(IWorld world, PlotId id) {
         getGenManager(world).removeAuctionDisplay(world, id);
     }
@@ -187,6 +149,14 @@ public class PlotMeCoreManager {
      */
     public boolean isValidId(IWorld world, String id) {
         return PlotId.isValidID(id);
+    }
+
+    public ILocation getPlotBottomLoc(IWorld world, PlotId id) {
+        return getGenManager(world).getPlotBottomLoc(world, id);
+    }
+
+    public ILocation getPlotTopLoc(IWorld world, PlotId id) {
+        return getGenManager(world).getPlotTopLoc(world, id);
     }
 
     /**
@@ -276,7 +246,7 @@ public class PlotMeCoreManager {
      * @param world world name
      * @return true if economy enabled
      */
-    private boolean isEconomyEnabled(String world) {
+    public boolean isEconomyEnabled(String world) {
         PlotMapInfo pmi = getMap(world);
         return isEconomyEnabled(pmi);
     }
@@ -305,7 +275,6 @@ public class PlotMeCoreManager {
         return isEconomyEnabled(world.getName().toLowerCase());
     }
 
-
     public PlotMapInfo getMap(IWorld world) {
         String worldName = world.getName().toLowerCase();
         return getPlotMaps().get(worldName);
@@ -314,6 +283,7 @@ public class PlotMeCoreManager {
     public PlotMapInfo getMap(String world) {
         return getPlotMaps().get(world.toLowerCase());
     }
+
 
     public PlotMapInfo getMap(ILocation location) {
         String worldName = location.getWorld().getName().toLowerCase();
@@ -424,6 +394,35 @@ public class PlotMeCoreManager {
     }
 
     /**
+     * Gets the plot by the id and pmi
+     *
+     * @param id Plot ID
+     * @param pmi PlotMapInfo
+     * @return plot
+     */
+    public Plot getPlotById(PlotId id, PlotMapInfo pmi) {
+        if (pmi == null) {
+            return null;
+        }
+
+        return pmi.getPlot(id);
+    }
+
+    /**
+     * Gets the plot with the player and pmi. The player has its location checked to retrieve the plotID.
+     *
+     * @param player player standing in the plot
+     * @param pmi PlotMapInfo
+     * @return plot
+     * @deprecated to be removed after 0.17
+     */
+    @Deprecated
+    public Plot getPlotById(IPlayer player, PlotMapInfo pmi) {
+        PlotId id = getPlotId(player);
+        return getPlotById(id, pmi);
+    }
+
+    /**
      * Gets the plot with the given id and location based on the given player.
      *
      * @param id plot id
@@ -439,7 +438,9 @@ public class PlotMeCoreManager {
      *
      * @param player player standing in a plot
      * @return plot
+     * @deprecated to be removed after 0.17
      */
+    @Deprecated
     public Plot getPlotById(IPlayer player) {
         PlotMapInfo pmi = getMap(player);
         PlotId id = getPlotId(player);
@@ -627,10 +628,7 @@ public class PlotMeCoreManager {
     }
 
     /**
-     * Move a plot to an spot where there is no plot existing
-     *  @param world         plotworld
-     * @param filledPlot    the Plot to be moved
-     * @param idDestination the id the plot will be moved to
+     * Move a plot to an spot where there is no plot existing.
      */
     private void movePlotToEmpty(IWorld world, Plot filledPlot, PlotId idDestination) {
         PlotId idFrom = filledPlot.getId();
@@ -721,6 +719,18 @@ public class PlotMeCoreManager {
     /**
      * Checks if the plot is claimed or not
      *
+     * @param id    the plot id to be checked
+     * @param pmi plotmap of the plotworld
+     * @return true if the plot is unclaimed, false otherwise
+     */
+
+    public boolean isPlotAvailable(PlotId id, PlotMapInfo pmi) {
+        return pmi != null && pmi.getPlot(id) == null;
+    }
+
+    /**
+     * Checks if the plot is claimed or not
+     *
      * @param id     the plot id to be checked
      * @param player the player which will have it's world checked
      * @return true if the plot is unclaimed, false otherwise
@@ -736,7 +746,7 @@ public class PlotMeCoreManager {
      * @param world plotworld to be checked as a string
      * @return true if the plot is unclaimed, false otherwise
      */
-    private boolean isPlotAvailable(PlotId id, String world) {
+    public boolean isPlotAvailable(PlotId id, String world) {
         PlotMapInfo pmi = getMap(world);
 
         return pmi != null && pmi.getPlot(id) == null;
