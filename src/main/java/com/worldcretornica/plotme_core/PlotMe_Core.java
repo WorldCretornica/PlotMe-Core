@@ -25,7 +25,6 @@ public class PlotMe_Core {
     private int counterExpired;
     //Spool stuff
     private ConcurrentLinkedQueue<PlotToClear> plotsToClear;
-    //Global variables
     private Database sqlManager;
     private Util util;
     //Caption and Config File.
