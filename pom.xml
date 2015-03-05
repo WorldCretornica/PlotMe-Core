@@ -36,6 +36,7 @@
                             <artifactSet>
                                 <includes>
                                     <include>org.mcstats.bukkit:metrics</include>
+                                    <include>org.yaml:snakeyaml</include>
                                 </includes>
                             </artifactSet>
                             <relocations>
@@ -61,6 +62,7 @@
                     <target>1.7</target>
                     <showDeprecation>true</showDeprecation>
                     <showWarnings>true</showWarnings>
+                    <optimize>true</optimize>
                 </configuration>
             </plugin>
             <!-- Add source folder -->
@@ -78,7 +80,7 @@
                         <configuration>
                             <sources>
                                 <source>src/bukkit/java</source>
-                                <source>src/sponge/java</source>
+                                <!--<source>src/sponge/java</source>-->
                             </sources>
                         </configuration>
                     </execution>
@@ -99,25 +101,22 @@
         </repository>
         <repository>
             <id>spigot-repo</id>
+            <name>Bukkit and Spigot Repository</name>
             <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
         </repository>
         <repository>
             <id>onarandombox-repo</id>
             <url>http://repo.onarandombox.com/content/groups/public</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
         </repository>
         <repository>
             <id>worldedit-repo</id>
+            <name>WorldEdit Repository</name>
             <url>http://maven.sk89q.com/repo/</url>
         </repository>
         <repository>
             <id>vault-repo</id>
+            <name>Vault Repository</name>
             <url>http://nexus.theyeticave.net/content/repositories/pub_releases</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
         </repository>
         <repository>
             <id>mcstats-repo</id>
@@ -128,7 +127,7 @@
         </repository>
         <repository>
             <id>sponge-maven-repo</id>
-            <name>Sponge maven repo</name>
+            <name>Sponge Repository</name>
             <url>http://repo.spongepowered.org/maven/</url>
             <releases>
                 <enabled>true</enabled>
@@ -160,16 +159,20 @@
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
-                    <artifactId>craftbukkit</artifactId>
-                    <groupId>org.bukkit</groupId>
-                </exclusion>
-                <exclusion>
                     <artifactId>bukkit</artifactId>
                     <groupId>org.bukkit</groupId>
                 </exclusion>
                 <exclusion>
                     <artifactId>Vault</artifactId>
                     <groupId>net.milkbowl.vault</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>buscript</artifactId>
+                    <groupId>com.dumptruckman.minecraft</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>Logging</artifactId>
+                    <groupId>com.dumptruckman.minecraft</groupId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -195,13 +198,8 @@
             <groupId>org.getlwc</groupId>
             <artifactId>lwc</artifactId>
             <version>4.4.0-SNAPSHOT</version>
+            <type>jar</type>
             <scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                    <artifactId>bukkit</artifactId>
-                    <groupId>org.bukkit</groupId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.mcstats.bukkit</groupId>
