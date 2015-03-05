@@ -48,12 +48,13 @@ public class SpongeBlockLoc implements IBlock {
 
     @Override
     public IBiome getBiome() {
-        return null;
+        //TODO: This cast is invalid and must be changed.
+        return (IBiome) block.getExtent().getBiome(block.getPosition().toVector2());
     }
 
     @Override
     public void setBiome(IBiome biome) {
-        block.getExtent().setBiome(block.getPosition(), BiomeTypes.PLAINS); //TODO: Placeholder to set the biome to Plains
+        block.getExtent().setBiome(block.getPosition().toVector2(), BiomeTypes.PLAINS); //TODO: Placeholder to set the biome to Plains
     }
 
     @Override

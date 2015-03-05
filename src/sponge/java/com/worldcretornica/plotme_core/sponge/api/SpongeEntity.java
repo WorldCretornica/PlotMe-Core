@@ -49,4 +49,9 @@ public class SpongeEntity implements IEntity {
     public UUID getUniqueId() {
         return entity.getUniqueId();
     }
+
+    @Override
+    public String getName() {
+        return null; //Todo: Sponge doesn't have a get name for entities (yet).
+    }
 }

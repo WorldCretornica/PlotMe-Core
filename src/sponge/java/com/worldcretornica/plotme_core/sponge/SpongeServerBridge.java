@@ -237,6 +237,11 @@ public class SpongeServerBridge extends IServerBridge {
     }
 
     @Override
+    public File getWorldFolder() {
+        return null;
+    }
+
+    @Override
     public void runTaskLaterAsynchronously(Runnable runnable, long delay) {
         // TODO Auto-generated method stub
 
