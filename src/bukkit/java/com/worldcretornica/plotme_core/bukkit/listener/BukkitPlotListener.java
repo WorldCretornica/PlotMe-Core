@@ -13,7 +13,6 @@ import com.worldcretornica.plotme_core.bukkit.api.BukkitEntity;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitLocation;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
 import com.worldcretornica.plotme_core.bukkit.event.PlotWorldLoadEvent;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
@@ -417,16 +416,14 @@ public class BukkitPlotListener implements Listener {
     public void onBlockPistonRetract(BlockPistonRetractEvent event) {
         BukkitBlock block = new BukkitBlock(event.getBlock().getRelative(event.getDirection(), 2));
 
-        if (manager.isPlotWorld(block.getWorld())) {
+        if (manager.isPlotWorld(block.getWorld()) && event.isSticky()) {
             PlotId id = manager.getPlotId(block.getLocation());
 
             if (id == null) {
-                if (event.isSticky() && event.getBlock().getType().equals(Material.SLIME_BLOCK)) {
-                    BukkitBlock block2 = new BukkitBlock(event.getBlock().getRelative(event.getDirection(), 3));
-                    PlotId id2 = manager.getPlotId(block2.getLocation());
-                    if (id2 == null) {
-                        event.setCancelled(true);
-                    }
+                BukkitBlock block2 = new BukkitBlock(event.getBlock().getRelative(event.getDirection(), 3));
+                PlotId id2 = manager.getPlotId(block2.getLocation());
+                if (id2 == null) {
+                    event.setCancelled(true);
                 }
                 event.setCancelled(true);
             } else {
@@ -505,24 +502,10 @@ public class BukkitPlotListener implements Listener {
                 } else {
                     PlotToClear ptc = api.getPlotLocked(location.getWorld(), id);
 
-                    Player player = null;
                     if (ptc != null) {
-                        if (event.getPlayer() != null) {
-                            player = event.getPlayer();
-                            switch (ptc.getReason()) {
-                                case Clear:
-                                    player.sendMessage(api.getUtil().C("MsgPlotLockedClear"));
-                                    break;
-                                case Reset:
-                                    player.sendMessage(api.getUtil().C("MsgPlotLockedReset"));
-                                    break;
-                                case Expired:
-                                    player.sendMessage(api.getUtil().C("MsgPlotLockedExpired"));
-                                    break;
-                            }
-                        }
                         event.setCancelled(true);
                     } else {
+                        Player player = null;
                         if (event.getPlayer() != null) {
                             player = event.getPlayer();
                         }
@@ -670,15 +653,11 @@ public class BukkitPlotListener implements Listener {
                             player.sendMessage(api.getUtil().C("ErrCannotBuild"));
                             event.setCancelled(true);
                         }
-                    } else {
-                        if (plot.isAllowed(player.getName(), player.getUniqueId())) {
-                            plot.resetExpire(manager.getMap(location).getDaysToExpiration());
-                        } else {
-                            if (cannotBuildAnywhere || !event.getRightClicked().getType().equals(EntityType.MINECART)) {
-                                player.sendMessage(api.getUtil().C("ErrCannotBuild"));
-                                event.setCancelled(true);
-                            }
-                        }
+                    } else if (plot.isAllowed(player.getName(), player.getUniqueId())) {
+                        plot.resetExpire(manager.getMap(location).getDaysToExpiration());
+                    } else if (cannotBuildAnywhere || !event.getRightClicked().getType().equals(EntityType.MINECART)) {
+                        player.sendMessage(api.getUtil().C("ErrCannotBuild"));
+                        event.setCancelled(true);
                     }
                 }
             }

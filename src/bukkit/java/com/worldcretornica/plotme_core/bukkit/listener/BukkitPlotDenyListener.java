@@ -46,28 +46,6 @@ public class BukkitPlotDenyListener implements Listener {
         }
     }
 
-/*
-    @EventHandler(priority = EventPriority.HIGH)
-    public void onPlayerTeleport(PlayerTeleportEvent event) {
-        BukkitPlayer player = (BukkitPlayer) plugin.wrapPlayer(event.getPlayer());
-
-        if (manager.isPlotWorld(player) && !player.hasPermission(PermissionNames.ADMIN_BYPASSDENY)) {
-            BukkitLocation to = new BukkitLocation(event.getTo());
-
-            PlotId idTo = manager.getPlotId(to);
-
-            if (idTo != null) {
-                Plot plot = manager.getPlotById(idTo, player);
-
-                if (plot != null && plot.isDeniedInternal(player.getName(), player.getUniqueId())) {
-                    BukkitLocation location = (BukkitLocation) manager.getPlotHome(player.getWorld(), plot.getId());
-                    event.setTo(location.getLocation());
-                }
-            }
-        }
-    }
-*/
-
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerJoin(PlayerJoinEvent event) {
         BukkitPlayer player = (BukkitPlayer) plugin.wrapPlayer(event.getPlayer());

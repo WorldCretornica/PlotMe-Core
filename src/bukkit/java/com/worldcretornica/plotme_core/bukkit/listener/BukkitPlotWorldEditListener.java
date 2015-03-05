@@ -111,7 +111,8 @@ public class BukkitPlotWorldEditListener implements Listener {
                 player.sendMessage(api.getUtil().C("ErrCannotUse"));
                 event.setCancelled(true);
             } else if (event.getMessage().startsWith("//up")) {
-                Plot plot = manager.getPlotById(player);
+                PlotId id = manager.getPlotId(player);
+                Plot plot = manager.getPlotById(id, player);
 
                 if (plot == null || !plot.isAllowed(player.getName(), player.getUniqueId())) {
                     player.sendMessage(api.getUtil().C("ErrCannotUse"));
