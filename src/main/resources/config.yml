@@ -4,12 +4,12 @@ mySQLuname: root
 mySQLpass: password
 globalUseEconomy: false
 allowWorldTeleport: true
-defaultWEAnywhere: false
+defaultWEAnywhere: true
 NbClearSpools: 3
 NbBlocksPerClearStep: 50000
 AdvancedLogging: false
-LoadAllPlotsOnStart: false
 PlotEnterAnnouncement: false
-CoreDatabaseUpdate: true
+Version17DatabaseUpdate: true
 mySQLConverter: true
-LastPlotMeVersion: 0.14
+Version: 0.17
+
