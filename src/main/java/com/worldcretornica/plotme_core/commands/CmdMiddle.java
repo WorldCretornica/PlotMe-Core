@@ -2,6 +2,7 @@ package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
+import com.worldcretornica.plotme_core.PlotId;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
@@ -18,8 +19,8 @@ public class CmdMiddle extends PlotCommand {
         if (player.hasPermission(PermissionNames.USER_MIDDLE) || player.hasPermission(PermissionNames.ADMIN_MIDDLE_OTHER)) {
             if (manager.isPlotWorld(player)) {
                 IWorld world = player.getWorld();
-
-                Plot plot = manager.getPlotById(player);
+                PlotId id = manager.getPlotId(player);
+                Plot plot = manager.getPlotById(id, player);
 
                 if (plot == null) {
                     player.sendMessage("§c" + C("MsgNoPlotFound"));

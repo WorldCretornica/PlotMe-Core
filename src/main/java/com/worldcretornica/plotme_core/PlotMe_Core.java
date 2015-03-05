@@ -72,11 +72,12 @@ public class PlotMe_Core {
 
         }
         getSqlManager().startConnection();
+
         getSqlManager().createTables();
         if (getConfig().getBoolean("coreDatabaseUpdate")) {
             getSqlManager().coreDatabaseUpdate();
         }
-        getSqlManager().plotConvertToUUIDAsynchronously();
+        //getSqlManager().plotConvertToUUIDAsynchronously();
     }
 
     public void reload() {
@@ -106,7 +107,10 @@ public class PlotMe_Core {
             getLogger().warning("Having more than 50 clear spools seems drastic, changing to 50");
             config.set("NbClearSpools", 50);
         }
-
+        //Check if the config doesn't have the worlds section. This should happen only if there is no config file for the plugin already.
+        if (!config.contains("worlds")) {
+            getServerBridge().loadDefaultConfig(configFile, "worlds.plotworld");
+        }
         // Copy new values over
         getConfig().options().copyDefaults(true);
         configFile.saveConfig();

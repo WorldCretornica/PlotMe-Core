@@ -97,6 +97,7 @@ public class PlotMapInfo {
     public boolean isUseEconomy() {
         return getEconomySection().getBoolean("UseEconomy");
     }
+
     public void setUseEconomy(boolean useEconomy) {
         getEconomySection().set("UseEconomy", useEconomy);
         configFile.saveConfig();

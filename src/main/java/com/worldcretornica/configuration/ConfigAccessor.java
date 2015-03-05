@@ -41,6 +41,7 @@ public class ConfigAccessor {
         if (fileConfiguration == null) {
             this.reloadFile();
         }
+
         return fileConfiguration;
     }
 

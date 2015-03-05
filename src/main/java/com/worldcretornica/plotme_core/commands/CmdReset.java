@@ -22,55 +22,52 @@ public class CmdReset extends PlotCommand {
             IWorld world = player.getWorld();
             PlotMapInfo pmi = manager.getMap(world);
             if (manager.isPlotWorld(world)) {
-                Plot plot = manager.getPlotById(player, pmi);
+                PlotId id = manager.getPlotId(player);
+                Plot plot = manager.getPlotById(id, pmi);
 
                 if (plot == null) {
                     player.sendMessage("§c" + C("MsgNoPlotFound"));
                 } else if (plot.isProtect()) {
                     player.sendMessage("§c" + C("MsgPlotProtectedCannotReset"));
-                } else {
-                    PlotId id = plot.getId();
+                } else if (player.getUniqueId().equals(plot.getOwnerId()) || player.hasPermission(PermissionNames.ADMIN_RESET)) {
 
-                    if (player.getUniqueId().equals(plot.getOwnerId()) || player.hasPermission(PermissionNames.ADMIN_RESET)) {
+                    InternalPlotResetEvent event = serverBridge.getEventFactory().callPlotResetEvent(world, plot, player);
 
-                        InternalPlotResetEvent event = serverBridge.getEventFactory().callPlotResetEvent(world, plot, player);
+                    if (!event.isCancelled()) {
+                        manager.setBiome(world, id, serverBridge.getBiome("PLAINS"));
+                        manager.clear(world, plot, player, ClearReason.Reset);
 
-                        if (!event.isCancelled()) {
-                            manager.setBiome(world, id, serverBridge.getBiome("PLAINS"));
-                            manager.clear(world, plot, player, ClearReason.Reset);
+                        if (manager.isEconomyEnabled(pmi) && pmi.isRefundClaimPriceOnReset()) {
+                            IPlayer playerOwner = serverBridge.getPlayer(plot.getOwnerId());
 
-                            if (manager.isEconomyEnabled(pmi) && pmi.isRefundClaimPriceOnReset()) {
-                                IPlayer playerOwner = serverBridge.getPlayer(plot.getOwnerId());
+                            EconomyResponse er = serverBridge.depositPlayer(playerOwner, pmi.getClaimPrice());
 
-                                EconomyResponse er = serverBridge.depositPlayer(playerOwner, pmi.getClaimPrice());
-
-                                if (er.transactionSuccess()) {
-                                    playerOwner.sendMessage(
-                                            C("WordPlot") + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner() + " " + C("MsgWasReset")
-                                                    + " " + Util().moneyFormat(pmi.getClaimPrice(), true));
-                                } else {
-                                    player.sendMessage("§c" + er.errorMessage);
-                                    serverBridge.getLogger().warning(er.errorMessage);
-                                    return true;
-                                }
-                            }
-
-                            if (!manager.isPlotAvailable(id, pmi)) {
-                                manager.removePlot(pmi, id);
-                            }
-
-                            manager.removeOwnerSign(world, id);
-                            manager.removeSellSign(world, id);
-                            manager.removeAuctionSign(world, id);
-                            plugin.getSqlManager().deletePlot(id, world.getName());
-
-                            if (isAdvancedLogging()) {
-                                serverBridge.getLogger().info(player.getName() + " " + C("MsgResetPlot") + " " + id);
+                            if (er.transactionSuccess()) {
+                                playerOwner.sendMessage(
+                                        C("WordPlot") + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner() + " " + C("MsgWasReset")
+                                                + " " + Util().moneyFormat(pmi.getClaimPrice(), true));
+                            } else {
+                                player.sendMessage("§c" + er.errorMessage);
+                                serverBridge.getLogger().warning(er.errorMessage);
+                                return true;
                             }
                         }
-                    } else {
-                        player.sendMessage("§c" + C("MsgThisPlot") + "(" + id + ") " + C("MsgNotYoursNotAllowedReset"));
+
+                        if (!manager.isPlotAvailable(id, pmi)) {
+                            manager.removePlot(pmi, id);
+                        }
+
+                        manager.removeOwnerSign(world, id);
+                        manager.removeSellSign(world, id);
+                        manager.removeAuctionSign(world, id);
+                        plugin.getSqlManager().deletePlot(id, world.getName());
+
+                        if (isAdvancedLogging()) {
+                            serverBridge.getLogger().info(player.getName() + " " + C("MsgResetPlot") + " " + id);
+                        }
                     }
+                } else {
+                    player.sendMessage("§c" + C("MsgThisPlot") + "(" + id + ") " + C("MsgNotYoursNotAllowedReset"));
                 }
             } else {
                 player.sendMessage("§c" + C("MsgNotPlotWorld"));

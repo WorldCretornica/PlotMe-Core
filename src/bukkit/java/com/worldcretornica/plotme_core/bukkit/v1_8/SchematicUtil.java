@@ -522,13 +522,25 @@ public class SchematicUtil extends com.worldcretornica.plotme_core.bukkit.v1_7.S
         if (bukkitentity instanceof LivingEntity) {
             LivingEntity livingentity = (LivingEntity) bukkitentity;
 
-            canpickuploot = (byte) (livingentity.getCanPickupItems() ? 1 : 0);
+            if (livingentity.getCanPickupItems()) {
+                canpickuploot = (byte) 1;
+            } else {
+                canpickuploot = (byte) 0;
+            }
             customname = livingentity.getCustomName();
-            customnamevisible = (byte) (livingentity.isCustomNameVisible() ? 1 : 0);
+            if (livingentity.isCustomNameVisible()) {
+                customnamevisible = (byte) 1;
+            } else {
+                customnamevisible = (byte) 0;
+            }
             health = (short) livingentity.getHealth();
             healf = (float) livingentity.getHealth();
             air = (short) livingentity.getRemainingAir();
-            persistencerequired = (byte) (livingentity.getRemoveWhenFarAway() ? 0 : 1);
+            if (livingentity.getRemoveWhenFarAway()) {
+                persistencerequired = (byte) 0;
+            } else {
+                persistencerequired = (byte) 1;
+            }
 
             if (livingentity.isLeashed()) {
                 leash = getLeash(livingentity.getLeashHolder());
@@ -567,8 +579,16 @@ public class SchematicUtil extends com.worldcretornica.plotme_core.bukkit.v1_7.S
                 Ageable ageable = (Ageable) livingentity;
 
                 age = ageable.getAge();
-                agelocked = (byte) (ageable.getAgeLock() ? 1 : 0);
-                isbaby = (byte) (ageable.isAdult() ? 0 : 1);
+                if (ageable.getAgeLock()) {
+                    agelocked = (byte) 1;
+                } else {
+                    agelocked = (byte) 0;
+                }
+                if (ageable.isAdult()) {
+                    isbaby = (byte) 0;
+                } else {
+                    isbaby = (byte) 1;
+                }
             }
 
             if (livingentity instanceof Tameable) {
@@ -576,7 +596,11 @@ public class SchematicUtil extends com.worldcretornica.plotme_core.bukkit.v1_7.S
                 if (tameable.getOwner() != null) {
                     owneruuid = tameable.getOwner().getUniqueId().toString();
                 }
-                tame = (byte) (tameable.isTamed() ? 1 : 0);
+                if (tameable.isTamed()) {
+                    tame = (byte) 1;
+                } else {
+                    tame = (byte) 0;
+                }
             }
 
             if (livingentity instanceof Skeleton) {
@@ -620,11 +644,31 @@ public class SchematicUtil extends com.worldcretornica.plotme_core.bukkit.v1_7.S
             } else if (livingentity instanceof ArmorStand) {
                 ArmorStand armorstand = (ArmorStand) livingentity;
 
-                showarms = (byte) (armorstand.hasArms() ? 1 : 0);
-                nobaseplate = (byte) (armorstand.hasBasePlate() ? 0 : 1);
-                invisible = (byte) (armorstand.isVisible() ? 0 : 1);
-                nogravity = (byte) (armorstand.hasGravity() ? 0 : 1);
-                small = (byte) (armorstand.isSmall() ? 1 : 0);
+                if (armorstand.hasArms()) {
+                    showarms = (byte) 1;
+                } else {
+                    showarms = (byte) 0;
+                }
+                if (armorstand.hasBasePlate()) {
+                    nobaseplate = (byte) 0;
+                } else {
+                    nobaseplate = (byte) 1;
+                }
+                if (armorstand.isVisible()) {
+                    invisible = (byte) 0;
+                } else {
+                    invisible = (byte) 1;
+                }
+                if (armorstand.hasGravity()) {
+                    nogravity = (byte) 0;
+                } else {
+                    nogravity = (byte) 1;
+                }
+                if (armorstand.isSmall()) {
+                    small = (byte) 1;
+                } else {
+                    small = (byte) 0;
+                }
 
                 List<Float> body = new ArrayList<>();
                 List<Float> head = new ArrayList<>();
@@ -667,11 +711,19 @@ public class SchematicUtil extends com.worldcretornica.plotme_core.bukkit.v1_7.S
 
             } else if (livingentity instanceof Guardian) {
                 Guardian guardian = (Guardian) livingentity;
-                elder = (byte) (guardian.isElder() ? 1 : 0);
+                if (guardian.isElder()) {
+                    elder = (byte) 1;
+                } else {
+                    elder = (byte) 0;
+                }
 
             } else if (livingentity instanceof Sheep) {
                 Sheep sheep = (Sheep) livingentity;
-                sheared = (byte) (sheep.isSheared() ? 1 : 0);
+                if (sheep.isSheared()) {
+                    sheared = (byte) 1;
+                } else {
+                    sheared = (byte) 0;
+                }
                 color = sheep.getColor().getWoolData();
 
             } else if (livingentity instanceof Horse) {
@@ -681,7 +733,11 @@ public class SchematicUtil extends com.worldcretornica.plotme_core.bukkit.v1_7.S
                 attributes.add(new Attribute(horse.getJumpStrength(), "horse.jumpStrength", null));
 
                 temper = horse.getDomestication();
-                chestedhorse = (byte) (horse.isCarryingChest() ? 1 : 0);
+                if (horse.isCarryingChest()) {
+                    chestedhorse = (byte) 1;
+                } else {
+                    chestedhorse = (byte) 0;
+                }
 
                 switch (horse.getVariant()) {
                     case HORSE:

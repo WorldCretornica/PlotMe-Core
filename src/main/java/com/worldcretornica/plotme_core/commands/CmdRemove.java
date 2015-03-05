@@ -75,9 +75,15 @@ public class CmdRemove extends PlotCommand {
                                             C("WordPlayer") + " §c" + allowed + "§r " + C("WordRemoved") + ". " + Util().moneyFormat(-price, true));
 
                                     if (isAdvancedLogging()) {
-                                        serverBridge.getLogger()
-                                                .info(allowed + " " + C("MsgRemovedPlayer") + " " + allowed + " " + C("MsgFromPlot") + " " + id + (
-                                                        price == 0 ? "" : " " + C("WordFor") + " " + price));
+                                        if (price == 0) {
+                                            serverBridge.getLogger()
+                                                    .info(allowed + " " + C("MsgRemovedPlayer") + " " + allowed + " " + C("MsgFromPlot") + " " + id
+                                                            + "");
+                                        } else {
+                                            serverBridge.getLogger()
+                                                    .info(allowed + " " + C("MsgRemovedPlayer") + " " + allowed + " " + C("MsgFromPlot") + " " + id
+                                                            + (" " + C("WordFor") + " " + price));
+                                        }
                                     }
                                 }
                             } else {

@@ -567,13 +567,25 @@ public class SchematicUtil extends AbstractSchematicUtil {
         if (bukkitentity instanceof LivingEntity) {
             LivingEntity livingentity = (LivingEntity) bukkitentity;
 
-            canpickuploot = (byte) (livingentity.getCanPickupItems() ? 1 : 0);
+            if (livingentity.getCanPickupItems()) {
+                canpickuploot = (byte) 1;
+            } else {
+                canpickuploot = (byte) 0;
+            }
             customname = livingentity.getCustomName();
-            customnamevisible = (byte) (livingentity.isCustomNameVisible() ? 1 : 0);
+            if (livingentity.isCustomNameVisible()) {
+                customnamevisible = (byte) 1;
+            } else {
+                customnamevisible = (byte) 0;
+            }
             health = (short) livingentity.getHealth();
             healf = (float) livingentity.getHealth();
             air = (short) livingentity.getRemainingAir();
-            persistencerequired = (byte) (livingentity.getRemoveWhenFarAway() ? 0 : 1);
+            if (livingentity.getRemoveWhenFarAway()) {
+                persistencerequired = (byte) 0;
+            } else {
+                persistencerequired = (byte) 1;
+            }
             leash = getLeash(livingentity.getLeashHolder());
 
             EntityEquipment entityequipment = livingentity.getEquipment();
@@ -608,7 +620,11 @@ public class SchematicUtil extends AbstractSchematicUtil {
             if (livingentity instanceof Tameable) {
                 Tameable tameable = (Tameable) livingentity;
                 owneruuid = tameable.getOwner().getUniqueId().toString();
-                tame = (byte) (tameable.isTamed() ? 1 : 0);
+                if (tameable.isTamed()) {
+                    tame = (byte) 1;
+                } else {
+                    tame = (byte) 0;
+                }
             }
 
             if (livingentity instanceof Skeleton) {
@@ -624,7 +640,11 @@ public class SchematicUtil extends AbstractSchematicUtil {
                 }
             } else if (livingentity instanceof Sheep) {
                 Sheep sheep = (Sheep) livingentity;
-                sheared = (byte) (sheep.isSheared() ? 1 : 0);
+                if (sheep.isSheared()) {
+                    sheared = (byte) 1;
+                } else {
+                    sheared = (byte) 0;
+                }
                 color = sheep.getColor().getWoolData();
             } else if (livingentity instanceof Horse) {
                 Horse horse = (Horse) livingentity;
@@ -1898,9 +1918,9 @@ public class SchematicUtil extends AbstractSchematicUtil {
 
     private class LastBlock {
 
-        Block block;
-        int id;
-        byte data;
+        final Block block;
+        final int id;
+        final byte data;
 
         public LastBlock(Block block, int id, byte data) {
             this.block = block;

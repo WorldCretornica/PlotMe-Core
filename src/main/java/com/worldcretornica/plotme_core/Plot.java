@@ -283,7 +283,7 @@ public class Plot implements Cloneable {
 
     private boolean isAllowedInternal(String name, UUID uuid, boolean checkStar) {
 
-        if (getOwnerId().equals(uuid)) {
+        if (this.getOwnerId().equals(uuid)) {
             return true;
         }
 

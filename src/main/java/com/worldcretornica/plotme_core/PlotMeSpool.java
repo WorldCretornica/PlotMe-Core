@@ -23,37 +23,28 @@ public class PlotMeSpool implements Runnable {
             PlotMeCoreManager plotMeCoreManager = PlotMeCoreManager.getInstance();
             IPlotMe_GeneratorManager genmanager = plotMeCoreManager.getGenManager(world);
 
-            if (world != null) {
-                if (currentClear == null) {
-                    currentClear = genmanager
-                            .clear(world, getPlotToClear().getPlotId(), plugin.getConfig().getInt("NbBlocksPerClearStep"), null);
-                } else {
-                    currentClear = genmanager
-                            .clear(world, getPlotToClear().getPlotId(), plugin.getConfig().getInt("NbBlocksPerClearStep"),
-                                    currentClear);
-                }
-
-                if (currentClear == null) {
-                    if (getPlotToClear().getReason() == ClearReason.Clear) {
-                        genmanager.adjustPlotFor(world, getPlotToClear().getPlotId(), true, false, false);
-                    } else {
-                        genmanager.adjustPlotFor(world, getPlotToClear().getPlotId(), false, false, false);
-                    }
-                    if (plugin.getServerBridge().isUsingLwc()) {
-                        plotMeCoreManager.removeLWC(world, getPlotToClear().getPlotId());
-                    }
-                    genmanager.refreshPlotChunks(world, getPlotToClear().getPlotId());
-
-                    plotToClear.getRequester().sendMessage(
-                            plugin.getUtil().C("WordPlot") + " " + getPlotToClear().getPlotId() + " " + plugin.getUtil().C("WordCleared"));
-
-                    plugin.removePlotToClear(getPlotToClear(), taskId);
-                    plotToClear = null;
-                }
+            if (currentClear == null) {
+                currentClear = genmanager.clear(world, getPlotToClear().getPlotId(), plugin.getConfig().getInt("NbBlocksPerClearStep"), null);
             } else {
+                currentClear = genmanager.clear(world, getPlotToClear().getPlotId(), plugin.getConfig().getInt("NbBlocksPerClearStep"), currentClear);
+            }
+
+            if (currentClear == null) {
+                if (getPlotToClear().getReason() == ClearReason.Clear) {
+                    genmanager.adjustPlotFor(world, getPlotToClear().getPlotId(), true, false, false);
+                } else {
+                    genmanager.adjustPlotFor(world, getPlotToClear().getPlotId(), false, false, false);
+                }
+                if (plugin.getServerBridge().isUsingLwc()) {
+                    plotMeCoreManager.removeLWC(world, getPlotToClear().getPlotId());
+                }
+                genmanager.refreshPlotChunks(world, getPlotToClear().getPlotId());
+
+                plotToClear.getRequester().sendMessage(
+                        plugin.getUtil().C("WordPlot") + " " + getPlotToClear().getPlotId() + " " + plugin.getUtil().C("WordCleared"));
+
                 plugin.removePlotToClear(getPlotToClear(), taskId);
                 plotToClear = null;
-                currentClear = null;
             }
         }
     }

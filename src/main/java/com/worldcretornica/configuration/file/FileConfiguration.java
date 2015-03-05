@@ -111,9 +111,7 @@ public abstract class FileConfiguration extends MemoryConfiguration {
      * @throws IllegalArgumentException Thrown when file is null.
      */
     public void load(File file) throws IOException, InvalidConfigurationException {
-
-        final FileInputStream stream = new FileInputStream(file);
-
+        FileInputStream stream = new FileInputStream(file);
         load(new InputStreamReader(stream, StandardCharsets.UTF_8));
     }
 
