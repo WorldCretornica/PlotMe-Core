@@ -33,6 +33,10 @@ public class PlotMeCoreManager {
         plotmaps = new HashMap<>();
     }
 
+    /**
+     * This is the hook into retrieving the {@link #PlotMeCoreManager()}
+     * @return instance of {@link #PlotMeCoreManager()}
+     */
     public static PlotMeCoreManager getInstance() {
         return INSTANCE;
     }
@@ -151,10 +155,22 @@ public class PlotMeCoreManager {
         return PlotId.isValidID(id);
     }
 
+    /**
+     * Gets the bottom corner of the plot
+     * @param world plotworld
+     * @param id PlotID
+     * @return bottom location of the plot
+     */
     public ILocation getPlotBottomLoc(IWorld world, PlotId id) {
         return getGenManager(world).getPlotBottomLoc(world, id);
     }
 
+    /**
+     * Gets the top corner of the plot
+     * @param world plotworld
+     * @param id PlotID
+     * @return top location of the plot
+     */
     public ILocation getPlotTopLoc(IWorld world, PlotId id) {
         return getGenManager(world).getPlotTopLoc(world, id);
     }
@@ -275,21 +291,40 @@ public class PlotMeCoreManager {
         return isEconomyEnabled(world.getName().toLowerCase());
     }
 
+    /**
+     * Get the PlotMap based on the world given
+     * @param world plotworld
+     * @return PlotMapInfo for the plotworld, if the world doesn't exist then it will return null
+     */
     public PlotMapInfo getMap(IWorld world) {
         String worldName = world.getName().toLowerCase();
         return getPlotMaps().get(worldName);
     }
 
+    /**
+     * Get the PlotMap based on the world given
+     * @param world plotworld
+     * @return PlotMapInfo for the plotworld, if the world doesn't exist then it will return null
+     */
     public PlotMapInfo getMap(String world) {
         return getPlotMaps().get(world.toLowerCase());
     }
 
-
+    /**
+     * Get the PlotMap based on the world given
+     * @param location the location in a plotworld
+     * @return PlotMapInfo for the plotworld, if the world doesn't exist then it will return null
+     */
     public PlotMapInfo getMap(ILocation location) {
         String worldName = location.getWorld().getName().toLowerCase();
         return getMap(worldName);
     }
 
+    /**
+     * Get the PlotMap based on the world given
+     * @param player a player in a plotworld
+     * @return PlotMapInfo for the plotworld, if the world doesn't exist then it will return null
+     */
     public PlotMapInfo getMap(IEntity player) {
         String world = player.getWorld().getName();
         return getMap(world);
@@ -501,7 +536,6 @@ public class PlotMeCoreManager {
      *
      * @return plotworld
      */
-
     public IWorld getFirstWorld() {
         String firstWorld;
         try {
