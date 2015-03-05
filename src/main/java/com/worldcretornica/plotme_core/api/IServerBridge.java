@@ -130,6 +130,7 @@ public abstract class IServerBridge {
         for (String path : defaultWorld.getKeys(true)) {
             configSection.addDefault(path, defaultWorld.get(path));
         }
+        configFile.saveConfig();
         return configSection;
     }
 
