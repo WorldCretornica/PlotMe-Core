@@ -119,11 +119,6 @@ public class BukkitPlotMe_GeneratorManagerBridge implements IPlotMe_GeneratorMan
     }
 
     @Override
-    public Long[] clear(ILocation bottom, ILocation top, long maxBlocks, Long[] start) {
-        return generatorManager.clear(((BukkitLocation) bottom).getLocation(), ((BukkitLocation) top).getLocation(), maxBlocks, start);
-    }
-
-    @Override
     public Long[] clear(IWorld world, PlotId id, long maxBlocks, Long[] start) {
         return generatorManager.clear(((BukkitWorld) world).getWorld(), id, maxBlocks, start);
     }
@@ -177,11 +172,6 @@ public class BukkitPlotMe_GeneratorManagerBridge implements IPlotMe_GeneratorMan
     @Override
     public boolean createConfig(String worldName, Map<String, String> args) {
         return generatorManager.createConfig(worldName, args);
-    }
-
-    @Override
-    public Map<String, String> getDefaultGenerationConfig() {
-        return generatorManager.getDefaultGenerationConfig();
     }
 
     @Override

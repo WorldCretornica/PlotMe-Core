@@ -42,8 +42,6 @@ public interface IPlotMe_GeneratorManager {
 
     void clear(ILocation bottom, ILocation top);
 
-    Long[] clear(ILocation bottom, ILocation top, long maxBlocks, Long[] start);
-
     Long[] clear(IWorld world, PlotId id, long maxBlocks, Long[] start);
 
     @Deprecated
@@ -66,8 +64,6 @@ public interface IPlotMe_GeneratorManager {
     ILocation getPlotHome(IWorld world, PlotId id);
 
     boolean createConfig(String worldName, Map<String, String> args);
-
-    Map<String, String> getDefaultGenerationConfig();
 
     int getPlotSize(String worldName);
 
