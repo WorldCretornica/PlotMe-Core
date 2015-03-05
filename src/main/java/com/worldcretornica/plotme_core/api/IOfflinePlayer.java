@@ -11,7 +11,6 @@ public interface IOfflinePlayer extends IActor {
      */
     boolean isOnline();
 
-
     /**
      * Returns the player name
      *

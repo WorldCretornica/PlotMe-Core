@@ -39,4 +39,5 @@ public interface IEntity extends IActor {
     @Override
     UUID getUniqueId();
 
+    String getName();
 }
