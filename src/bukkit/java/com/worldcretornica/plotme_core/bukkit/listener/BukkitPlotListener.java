@@ -511,7 +511,7 @@ public class BukkitPlotListener implements Listener {
                         }
                         Plot plot = manager.getPlotById(id, pmi);
 
-                        if (plot == null || player != null && !plot.isAllowed(player.getName(), player.getUniqueId())) {
+                        if (plot == null || player != null && !plot.isAllowed(player.getName(), player.getUniqueId()) && !player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE)) {
                             event.setCancelled(true);
                         }
                     }
