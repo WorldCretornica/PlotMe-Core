@@ -277,7 +277,7 @@ public class PlotMeCoreManager {
         if (!plugin.getConfig().getBoolean("globalUseEconomy") || plugin.getServerBridge().getEconomy() == null) {
             return false;
         }
-        return pmi != null && pmi.isUseEconomy();
+        return pmi != null && pmi.canUseEconomy();
     }
 
     /**
@@ -813,7 +813,6 @@ public class PlotMeCoreManager {
     }
 
     public void setBiome(IWorld world, PlotId id, IBiome biome) {
-        getGenManager(world).setBiome(world, id, biome);
         plugin.getSqlManager().updatePlot(id, world.getName(), "biome", ((BukkitBiome) biome).getBiome().name());
     }
 

@@ -1,13 +1,11 @@
 package com.worldcretornica.plotme_core.sponge;
 
 import com.worldcretornica.plotme_core.PlotId;
-import com.worldcretornica.plotme_core.api.IBiome;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IPlotMe_GeneratorManager;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.sponge.api.ISpongePlotMe_GeneratorManager;
-import com.worldcretornica.plotme_core.sponge.api.SpongeBiomeType;
 import com.worldcretornica.plotme_core.sponge.api.SpongeLocation;
 import com.worldcretornica.plotme_core.sponge.api.SpongePlayer;
 import com.worldcretornica.plotme_core.sponge.api.SpongeWorld;
@@ -16,7 +14,6 @@ import org.spongepowered.api.entity.player.Player;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class SpongePlotMe_GeneratorManagerBridge implements IPlotMe_GeneratorManager {
 
@@ -93,11 +90,6 @@ public class SpongePlotMe_GeneratorManagerBridge implements IPlotMe_GeneratorMan
     }
 
     @Override
-    public void setBiome(IWorld world, PlotId id, IBiome biome) {
-        generatorManager.setBiome(((SpongeWorld) world).getWorld(), id, ((SpongeBiomeType) biome).getBiomeType());
-    }
-
-    @Override
     public void refreshPlotChunks(IWorld world, PlotId id) {
         generatorManager.refreshPlotChunks(((SpongeWorld) world).getWorld(), id);
     }
@@ -168,18 +160,13 @@ public class SpongePlotMe_GeneratorManagerBridge implements IPlotMe_GeneratorMan
     }
 
     @Override
-    public boolean createConfig(String worldName, Map<String, String> args) {
-        return generatorManager.createConfig(worldName, args);
+    public int getPlotSize() {
+        return generatorManager.getPlotSize();
     }
 
     @Override
-    public int getPlotSize(String worldName) {
-        return generatorManager.getPlotSize(worldName);
-    }
-
-    @Override
-    public int getRoadHeight(String worldName) {
-        return generatorManager.getRoadHeight(worldName);
+    public int getRoadHeight() {
+        return generatorManager.getRoadHeight();
     }
 
     @Override

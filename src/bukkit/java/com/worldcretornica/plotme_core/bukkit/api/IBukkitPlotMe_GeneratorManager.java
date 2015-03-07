@@ -4,11 +4,9 @@ import com.worldcretornica.plotme_core.PlotId;
 import com.worldcretornica.schematic.Schematic;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.block.Biome;
 import org.bukkit.entity.Player;
 
 import java.util.List;
-import java.util.Map;
 
 public interface IBukkitPlotMe_GeneratorManager {
 
@@ -35,8 +33,6 @@ public interface IBukkitPlotMe_GeneratorManager {
     Location getPlotBottomLoc(World world, PlotId id);
 
     Location getPlotTopLoc(World world, PlotId id);
-
-    void setBiome(World world, PlotId id, Biome biome);
 
     void refreshPlotChunks(World world, PlotId id);
 
@@ -66,11 +62,9 @@ public interface IBukkitPlotMe_GeneratorManager {
 
     Location getPlotHome(World world, PlotId id);
 
-    boolean createConfig(String worldName, Map<String, String> args);
+    int getPlotSize();
 
-    int getPlotSize(String worldName);
-
-    int getRoadHeight(String worldName);
+    int getRoadHeight();
 
     Location getPlotMiddle(World world, PlotId id);
 

@@ -105,8 +105,8 @@ public class PlotMe_CorePlugin extends JavaPlugin {
 
                         for (String plotter : manager.getPlotMaps().keySet()) {
                             IPlotMe_GeneratorManager genmanager = plotme.getGenManager(plotter);
-                            if (genmanager != null && genmanager.getPlotSize(plotter) != 0) {
-                                totalPlotSize += genmanager.getPlotSize(plotter);
+                            if (genmanager != null && genmanager.getPlotSize() != 0) {
+                                totalPlotSize += genmanager.getPlotSize();
                             }
                         }
 

@@ -8,7 +8,6 @@ import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.biome.BiomeType;
 
 import java.util.List;
-import java.util.Map;
 
 public interface ISpongePlotMe_GeneratorManager {
 
@@ -68,13 +67,9 @@ public interface ISpongePlotMe_GeneratorManager {
 
     boolean isValidId(String id);
 
-    boolean createConfig(String worldName, Map<String, String> args);
+    int getPlotSize();
 
-    Map<String, String> getDefaultGenerationConfig();
-
-    int getPlotSize(String worldName);
-
-    int getRoadHeight(String worldName);
+    int getRoadHeight();
 
     Location getPlotMiddle(World world, PlotId id);
 

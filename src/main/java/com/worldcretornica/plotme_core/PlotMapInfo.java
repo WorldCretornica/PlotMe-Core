@@ -68,6 +68,11 @@ public class PlotMapInfo {
         return config.getStringList("PreventedItems");
     }
 
+    /**
+     * Returns whether or not this world has the provided item prevented
+     *
+     * @return true if this world has the provided item prevented, false otherwise
+     */
     public boolean isPreventedItem(String itemId) {
         return getPreventedItems().contains(itemId);
     }
@@ -94,10 +99,20 @@ public class PlotMapInfo {
         return config.getConfigurationSection("economy");
     }
 
-    public boolean isUseEconomy() {
+    /**
+     * Returns whether or not this world can use economy features.
+     *
+     * @return true if this world can use economy features, false otherwise
+     */
+    public boolean canUseEconomy() {
         return getEconomySection().getBoolean("UseEconomy");
     }
 
+    /**
+     * Sets if this world can use economy features.
+     *
+     * @param useEconomy true if this world can use economy features, false otherwise
+     */
     public void setUseEconomy(boolean useEconomy) {
         getEconomySection().set("UseEconomy", useEconomy);
         configFile.saveConfig();

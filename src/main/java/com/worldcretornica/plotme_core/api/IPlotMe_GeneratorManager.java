@@ -4,7 +4,6 @@ import com.worldcretornica.plotme_core.PlotId;
 import com.worldcretornica.schematic.Schematic;
 
 import java.util.List;
-import java.util.Map;
 
 public interface IPlotMe_GeneratorManager {
 
@@ -31,8 +30,6 @@ public interface IPlotMe_GeneratorManager {
     ILocation getPlotBottomLoc(IWorld world, PlotId id);
 
     ILocation getPlotTopLoc(IWorld world, PlotId id);
-
-    void setBiome(IWorld world, PlotId id, IBiome biome);
 
     void refreshPlotChunks(IWorld world, PlotId id);
 
@@ -63,11 +60,9 @@ public interface IPlotMe_GeneratorManager {
 
     ILocation getPlotHome(IWorld world, PlotId id);
 
-    boolean createConfig(String worldName, Map<String, String> args);
+    int getPlotSize();
 
-    int getPlotSize(String worldName);
-
-    int getRoadHeight(String worldName);
+    int getRoadHeight();
 
     ILocation getPlotMiddle(IWorld world, PlotId id);
 
