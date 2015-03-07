@@ -13,7 +13,7 @@ public class PlotIDTest {
                 PlotId id = new PlotId(x, z);
                 System.out.println(id.hashCode());
                 System.out.println(id);
-                PlotId id2 = new PlotId(x+1, z+1);
+                PlotId id2 = new PlotId(x + 1, z + 1);
                 System.out.println(id.hashCode());
                 System.out.println(id);
                 Assert.assertEquals(id, id2);

@@ -62,6 +62,7 @@ public class PlotId {
         }
         return result;
     }
+
     @Override
     public int hashCode() {
         return (31 * (31 + getX()) + getZ());

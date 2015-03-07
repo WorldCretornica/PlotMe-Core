@@ -158,7 +158,8 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
                             } catch (InterruptedException ignored) {
                             }
                             //                            if (retries > 0 && retries % 20 == 0) {
-                            //                                Bukkit.getLogger().warning("The UUID fetcher has been trying for " + retries + " times to get UUIDs.");
+                            //                                Bukkit.getLogger().warning("The UUID fetcher has been trying for " + retries + "
+                            // times to get UUIDs.");
                             //                            }
                             //                            retries += 1;
 

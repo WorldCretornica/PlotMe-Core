@@ -62,7 +62,6 @@
                     <target>1.7</target>
                     <showDeprecation>true</showDeprecation>
                     <showWarnings>true</showWarnings>
-                    <optimize>true</optimize>
                 </configuration>
             </plugin>
             <!-- Add source folder -->
@@ -228,7 +227,13 @@
     </dependencies>
 
     <scm>
-        <url>https://github.com/ZachBora/PlotMe-Core/tree/master/</url>
+        <url>https://github.com/WorldCretornica/PlotMe-Core</url>
+        <connection>scm:git:git://github.com/WorldCretornica/PlotMe-Core.git</connection>
+        <developerConnection>scm:git:git@github.com:WorldCretornica/PlotMe-Core.git</developerConnection>
     </scm>
 
+    <issueManagement>
+        <url>https://github.com/WorldCretornica/PlotMe-Core/issues</url>
+        <system>GitHub</system>
+    </issueManagement>
 </project>

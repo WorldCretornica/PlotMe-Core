@@ -875,7 +875,7 @@ public class SqlManager {
         try {
             Connection conn = getConnection();
 
-            ps = conn.prepareStatement("SELECT Count(*) as NbPlot FROM plotmePlots WHERE LOWER(world) = ? AND finished <> 0");
+            ps = conn.prepareStatement("SELECT Count(*) AS NbPlot FROM plotmePlots WHERE LOWER(world) = ? AND finished <> 0");
             ps.setString(1, world);
 
             setNbPlots = ps.executeQuery();
@@ -1346,9 +1346,9 @@ public class SqlManager {
                             "SELECT LOWER(owner) AS Name FROM plotmePlots WHERE NOT owner IS NULL AND NOT owner = '' AND ownerid IS NULL GROUP BY "
                                     + "LOWER(owner) ";
                     sql += "UNION SELECT LOWER(player) AS Name FROM plotmeAllowed WHERE NOT player IS NULL AND Not player = '' AND Not player LIKE"
-                                    + " 'group:%' AND Not player LIKE '%*%' AND playerid IS NULL GROUP BY LOWER(player) ";
+                            + " 'group:%' AND Not player LIKE '%*%' AND playerid IS NULL GROUP BY LOWER(player) ";
                     sql += "UNION SELECT LOWER(player) AS Name FROM plotmeDenied WHERE NOT player IS NULL AND Not player = '' AND Not player LIKE "
-                                    + "'group:%' AND Not player LIKE '%*%' AND playerid IS NULL GROUP BY LOWER(player) ";
+                            + "'group:%' AND Not player LIKE '%*%' AND playerid IS NULL GROUP BY LOWER(player) ";
                     sql += "LIMIT " + ((int) UUIDFetcher.PROFILES_PER_REQUEST);
 
                     setPlayers = statementPlayers.executeQuery(sql);

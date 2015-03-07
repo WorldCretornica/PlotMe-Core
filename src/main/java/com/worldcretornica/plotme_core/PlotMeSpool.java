@@ -39,7 +39,8 @@ public class PlotMeSpool implements Runnable {
                 }
                 genmanager.refreshPlotChunks(world, getPlotToClear().getPlotId());
 
-                plotToClear.getRequester().sendMessage(plugin.getUtil().C("WordPlot") + " " + getPlotToClear().getPlotId() + " " + plugin.getUtil().C("WordCleared"));
+                plotToClear.getRequester()
+                        .sendMessage(plugin.getUtil().C("WordPlot") + " " + getPlotToClear().getPlotId() + " " + plugin.getUtil().C("WordCleared"));
 
                 plugin.removePlotToClear(getPlotToClear(), taskId);
                 plotToClear = null;
