@@ -98,7 +98,7 @@ public class PlotMe_Core {
 
     private void setupConfigFiles() {
         createConfigs();
-
+        captionFile.saveConfig();
         // Get the config we will be working with
         FileConfiguration config = getConfig();
         // Do any config validation
