@@ -16,7 +16,6 @@ import com.worldcretornica.plotme_core.bukkit.event.PlotWorldLoadEvent;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -40,6 +39,7 @@ import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingPlaceEvent;
+import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
@@ -648,35 +648,18 @@ public class BukkitPlotListener implements Listener {
                     event.setCancelled(true);
                 }
             } else {
-                PlotToClear ptc = api.getPlotLocked(location.getWorld(), id);
+                Plot plot = manager.getPlotById(id, location.getWorld());
 
-                if (ptc != null) {
-                    switch (ptc.getReason()) {
-                        case Clear:
-                            player.sendMessage(api.getUtil().C("MsgPlotLockedClear"));
-                            break;
-                        case Reset:
-                            player.sendMessage(api.getUtil().C("MsgPlotLockedReset"));
-                            break;
-                        case Expired:
-                            player.sendMessage(api.getUtil().C("MsgPlotLockedExpired"));
-                            break;
-                    }
-                    event.setCancelled(true);
-                } else {
-                    Plot plot = manager.getPlotById(id, location.getWorld());
-
-                    if (plot == null) {
-                        if (cannotBuildAnywhere) {
-                            player.sendMessage(api.getUtil().C("ErrCannotBuild"));
-                            event.setCancelled(true);
-                        }
-                    } else if (plot.isAllowed(player.getName(), player.getUniqueId())) {
-                        plot.resetExpire(manager.getMap(location).getDaysToExpiration());
-                    } else if (cannotBuildAnywhere || !event.getRightClicked().getType().equals(EntityType.MINECART)) {
+                if (plot == null) {
+                    if (cannotBuildAnywhere) {
                         player.sendMessage(api.getUtil().C("ErrCannotBuild"));
                         event.setCancelled(true);
                     }
+                } else if (plot.isAllowed(player.getName(), player.getUniqueId())) {
+                    plot.resetExpire(manager.getMap(location).getDaysToExpiration());
+                } else {
+                    player.sendMessage(api.getUtil().C("ErrCannotBuild"));
+                    event.setCancelled(true);
                 }
             }
         }
@@ -757,6 +740,38 @@ public class BukkitPlotListener implements Listener {
                     }
                 }
 
+            }
+        }
+    }
+
+    @EventHandler
+    public void onArmorStand(PlayerArmorStandManipulateEvent event) {
+        Player player = event.getPlayer();
+        BukkitLocation location = new BukkitLocation(event.getRightClicked().getLocation());
+
+        if (manager.isPlotWorld(location)) {
+            boolean cannotBuildAnywhere = !player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE);
+            PlotId id = manager.getPlotId(location);
+
+            if (id == null) {
+                if (cannotBuildAnywhere) {
+                    player.sendMessage(api.getUtil().C("ErrCannotBuild"));
+                    event.setCancelled(true);
+                }
+            } else {
+                Plot plot = manager.getPlotById(id, location.getWorld());
+
+                if (plot == null) {
+                    if (cannotBuildAnywhere) {
+                        player.sendMessage(api.getUtil().C("ErrCannotBuild"));
+                        event.setCancelled(true);
+                    }
+                } else if (plot.isAllowed(player.getName(), player.getUniqueId())) {
+                    plot.resetExpire(manager.getMap(location).getDaysToExpiration());
+                } else {
+                    player.sendMessage(api.getUtil().C("ErrCannotBuild"));
+                    event.setCancelled(true);
+                }
             }
         }
     }
