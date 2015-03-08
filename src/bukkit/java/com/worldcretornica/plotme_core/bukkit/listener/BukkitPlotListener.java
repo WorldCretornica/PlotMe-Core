@@ -285,15 +285,13 @@ public class BukkitPlotListener implements Listener {
 
                     ItemStack item = event.getItem();
 
-                    if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-                        if (item != null) {
-                            int itemId = item.getType().getId();
-                            byte itemData = item.getData().getData();
+                    if (event.getAction() == Action.RIGHT_CLICK_BLOCK && item != null) {
+                        int itemId = item.getType().getId();
+                        byte itemData = item.getData().getData();
 
-                            if ((pmi.isPreventedItem(String.valueOf(itemId)) || pmi.isPreventedItem(itemId + ":" + itemData)) && !player
-                                    .hasPermission("plotme.unblock." + itemId)) {
-                                blocked = true;
-                            }
+                        if ((pmi.isPreventedItem(String.valueOf(itemId)) || pmi.isPreventedItem(itemId + ":" + itemData)) && !player
+                                .hasPermission("plotme.unblock." + itemId)) {
+                            blocked = true;
                         }
                     }
 
@@ -424,7 +422,7 @@ public class BukkitPlotListener implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onBlockPistonExtend(BlockPistonExtendEvent event) {
         BukkitLocation location = new BukkitLocation(event.getBlock().getLocation());
         if (manager.isPlotWorld(location)) {

@@ -116,8 +116,12 @@ public class PlotMe_Core {
     }
 
     private void createConfigs() {
-        configFile.createFile();
-        captionFile.createFile();
+        if (configFile.createFile()) {
+            getLogger().info("Created Config File");
+        }
+        if (captionFile.createFile()) {
+            getLogger().info("Created Caption File");
+        }
     }
 
     private void setupWorld(String world) {

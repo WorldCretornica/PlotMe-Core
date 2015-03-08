@@ -22,7 +22,6 @@ public abstract class IServerBridge {
 
     public abstract IOfflinePlayer getOfflinePlayer(UUID uuid);
 
-    @SuppressWarnings("unused")
     public abstract IOfflinePlayer getOfflinePlayer(String player);
 
     /**
@@ -100,12 +99,10 @@ public abstract class IServerBridge {
                 new InputStreamReader(getClass().getClassLoader().getResourceAsStream("default-world.yml"), StandardCharsets.UTF_8));
     }
 
-    @SuppressWarnings("unused")
     public abstract boolean addMultiverseWorld(String worldName, String seed, String generator);
 
     public abstract List<String> getBiomes();
 
-    @SuppressWarnings("unused")
     /**
      * Get all Existing Plotworlds.
      * @return all plotworlds on the server
@@ -114,7 +111,6 @@ public abstract class IServerBridge {
 
     //public abstract boolean createPlotWorld(String worldName, String generator, Map<String, String> args);
 
-    @SuppressWarnings("unused")
     public abstract IMaterial getMaterial(String string);
 
     public ConfigurationSection loadDefaultConfig(ConfigAccessor configFile, String world) {

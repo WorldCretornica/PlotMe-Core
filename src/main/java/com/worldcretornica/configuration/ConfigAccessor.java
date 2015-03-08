@@ -61,7 +61,7 @@ public class ConfigAccessor {
      */
     public boolean createFile() {
         if (!configFile.exists()) {
-            saveFile(false);
+            saveFile(true);
             return true;
         }
         return false;
