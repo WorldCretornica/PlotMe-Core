@@ -35,7 +35,6 @@ import org.bukkit.event.block.BlockSpreadEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
-import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingPlaceEvent;
@@ -43,7 +42,6 @@ import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
-import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -677,6 +675,7 @@ public class BukkitPlotListener implements Listener {
         }
     }
 
+/*
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onBowEvent(EntityShootBowEvent event) {
         if (event.getEntity() instanceof Player) {
@@ -687,7 +686,9 @@ public class BukkitPlotListener implements Listener {
             }
         }
     }
+*/
 
+/*
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onEggEvent(PlayerEggThrowEvent event) {
         PlotMapInfo pmi = manager.getMap(event.getEgg().getWorld().getName());
@@ -696,6 +697,7 @@ public class BukkitPlotListener implements Listener {
             event.setHatching(false);
         }
     }
+*/
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onCreatureSpawn(CreatureSpawnEvent event) {
