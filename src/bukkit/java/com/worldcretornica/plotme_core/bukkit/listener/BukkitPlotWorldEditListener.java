@@ -139,7 +139,7 @@ public class BukkitPlotWorldEditListener implements Listener {
                 if (plot != null && plot.isAllowed(player.getName(), player.getUniqueId())) {
                     worldEdit.setMask(player, id);
                 } else {
-                    player.sendMessage(api.getUtil().C("You can't WorldEdit here"));
+                    player.sendMessage("You can't WorldEdit here");
                     event.setCancelled(true);
                 }
             }
