@@ -635,8 +635,11 @@ public class BukkitPlotListener implements Listener {
     public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
         Player player = event.getPlayer();
         BukkitLocation location = new BukkitLocation(event.getRightClicked().getLocation());
-
         if (manager.isPlotWorld(location)) {
+            //Citizens Support
+            if (event.getRightClicked().hasMetadata("NPC") && event.getRightClicked().getMetadata("NPC").get(0).asBoolean()) {
+                return;
+            }
             boolean cannotBuildAnywhere = !player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE);
             PlotId id = manager.getPlotId(location);
 
