@@ -13,7 +13,6 @@ import java.io.OutputStream;
 public class ConfigAccessor {
 
     private final String fileName;
-
     private final File configFile;
     private FileConfiguration fileConfiguration;
 
@@ -27,10 +26,8 @@ public class ConfigAccessor {
 
         // Look for defaults in the jar
         InputStream defConfigStream = getResource(fileName);
-        if (defConfigStream != null) {
-            YamlConfiguration defConfig = YamlConfiguration.loadConfig(new InputStreamReader(defConfigStream));
-            fileConfiguration.setDefaults(defConfig);
-        }
+        YamlConfiguration defConfig = YamlConfiguration.loadConfig(new InputStreamReader(defConfigStream));
+        fileConfiguration.setDefaults(defConfig);
     }
 
     private InputStream getResource(String fileName) {

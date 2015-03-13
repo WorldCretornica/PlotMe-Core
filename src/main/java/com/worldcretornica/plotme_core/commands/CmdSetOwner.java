@@ -25,73 +25,73 @@ public class CmdSetOwner extends PlotCommand {
                 PlotId id = manager.getPlotId(player);
                 if (id == null) {
                     player.sendMessage("§c" + C("MsgNoPlotFound"));
-                } else {
-                    String newOwner = args[1];
-                    String oldowner = "<" + C("WordNotApplicable") + ">";
+                    return false;
+                }
+                String newOwner = args[1];
+                String oldowner = "<" + C("WordNotApplicable") + ">";
 
-                    if (!manager.isPlotAvailable(id, pmi)) {
-                        Plot plot = manager.getPlotById(id, pmi);
+                if (!manager.isPlotAvailable(id, pmi)) {
+                    Plot plot = manager.getPlotById(id, pmi);
 
-                        oldowner = plot.getOwner();
+                    oldowner = plot.getOwner();
 
-                        InternalPlotOwnerChangeEvent event;
+                    InternalPlotOwnerChangeEvent event;
 
-                        if (manager.isEconomyEnabled(world)) {
-                            if (pmi.isRefundClaimPriceOnSetOwner() && !newOwner.equals(oldowner)) {
-                                event = serverBridge.getEventFactory().callPlotOwnerChangeEvent(world, plot, player, newOwner);
+                    if (manager.isEconomyEnabled(world)) {
+                        if (pmi.isRefundClaimPriceOnSetOwner() && !newOwner.equals(oldowner)) {
+                            event = serverBridge.getEventFactory().callPlotOwnerChangeEvent(world, plot, player, newOwner);
 
-                                if (event.isCancelled()) {
-                                    return true;
-                                }
-                                IOfflinePlayer playeroldowner = serverBridge.getOfflinePlayer(plot.getOwnerId());
-                                EconomyResponse er = serverBridge.depositPlayer(playeroldowner, pmi.getClaimPrice());
+                            if (event.isCancelled()) {
+                                return true;
+                            }
+                            IOfflinePlayer playeroldowner = serverBridge.getOfflinePlayer(plot.getOwnerId());
+                            EconomyResponse er = serverBridge.depositPlayer(playeroldowner, pmi.getClaimPrice());
 
-                                if (er.transactionSuccess()) {
-                                    IPlayer oldOwner = serverBridge.getPlayer(plot.getOwnerId());
-                                    if (oldOwner != null) {
-                                        oldOwner.sendMessage(
-                                                C("MsgYourPlot") + " " + id + " " + C("MsgNowOwnedBy") + " " + newOwner + ". " + Util()
-                                                        .moneyFormat(pmi.getClaimPrice(), true));
-                                    }
-                                } else {
-                                    player.sendMessage("§c" + er.errorMessage);
-                                    serverBridge.getLogger().warning(er.errorMessage);
-                                    return true;
+                            if (er.transactionSuccess()) {
+                                IPlayer oldOwner = serverBridge.getPlayer(plot.getOwnerId());
+                                if (oldOwner != null) {
+                                    oldOwner.sendMessage(
+                                            C("MsgYourPlot") + " " + id + " " + C("MsgNowOwnedBy") + " " + newOwner + ". " + Util()
+                                                    .moneyFormat(pmi.getClaimPrice(), true));
                                 }
                             } else {
-                                event = serverBridge.getEventFactory().callPlotOwnerChangeEvent(world, plot, player, newOwner);
+                                player.sendMessage("§c" + er.errorMessage);
+                                serverBridge.getLogger().warning(er.errorMessage);
+                                return true;
                             }
-
                         } else {
                             event = serverBridge.getEventFactory().callPlotOwnerChangeEvent(world, plot, player, newOwner);
                         }
 
-                        if (!event.isCancelled()) {
-                            plot.setForSale(false);
-
-                            manager.removeAuctionSign(world, id);
-                            manager.removeSellSign(world, id);
-
-                            plot.updateField("forsale", false);
-
-                            plot.setOwner(newOwner);
-
-                            manager.setOwnerSign(world, plot);
-
-                            plot.updateField("owner", newOwner);
-                        }
                     } else {
-                        manager.createPlot(world, id, newOwner, null, pmi);
+                        event = serverBridge.getEventFactory().callPlotOwnerChangeEvent(world, plot, player, newOwner);
                     }
 
-                    player.sendMessage(C("MsgOwnerChangedTo") + " §c" + newOwner);
+                    if (!event.isCancelled()) {
+                        plot.setForSale(false);
 
-                    if (isAdvancedLogging()) {
-                        serverBridge.getLogger()
-                                .info(player.getName() + " " + C("MsgChangedOwnerOf") + " " + id + " " + C("WordFrom") + " " + oldowner + " " + C(
-                                        "WordTo")
-                                        + " " + newOwner);
+                        manager.removeAuctionSign(world, id);
+                        manager.removeSellSign(world, id);
+
+                        plot.updateField("forsale", false);
+
+                        plot.setOwner(newOwner);
+
+                        manager.setOwnerSign(world, plot);
+
+                        plot.updateField("owner", newOwner);
                     }
+                } else {
+                    manager.createPlot(world, id, newOwner, null, pmi);
+                }
+
+                player.sendMessage(C("MsgOwnerChangedTo") + " §c" + newOwner);
+
+                if (isAdvancedLogging()) {
+                    serverBridge.getLogger()
+                            .info(player.getName() + " " + C("MsgChangedOwnerOf") + " " + id + " " + C("WordFrom") + " " + oldowner + " " + C(
+                                    "WordTo")
+                                    + " " + newOwner);
                 }
             } else {
                 player.sendMessage("§c" + C("MsgNotPlotWorld"));

@@ -537,13 +537,7 @@ public class PlotMeCoreManager {
      * @return plotworld
      */
     public IWorld getFirstWorld() {
-        String firstWorld;
-        try {
-            firstWorld = (String) getPlotMaps().keySet().toArray()[0];
-        } catch (ArrayIndexOutOfBoundsException error) {
-            plugin.getLogger().warning("Uh oh. You don't have any plotworlds so plotme isn't working properly.");
-            return null;
-        }
+        String firstWorld = (String) getPlotMaps().keySet().toArray()[0];
         return plugin.getServerBridge().getWorld(firstWorld);
     }
 
@@ -587,7 +581,6 @@ public class PlotMeCoreManager {
     public boolean isPlotWorld(IBlock block) {
         return isPlotWorld(block.getWorld());
     }
-
     /**
      * Creates a new plot
      *
@@ -597,9 +590,11 @@ public class PlotMeCoreManager {
      * @param uuid  owner uuid
      * @param pmi   plotmap to add the plot to
      * @return the new plot created
+     *
+     * @throws NullPointerException If the <code>id</code> argument is <code>null</code>
      */
     public Plot createPlot(IWorld world, PlotId id, String owner, UUID uuid, PlotMapInfo pmi) {
-        if (isPlotAvailable(id, pmi) && id != null) {
+        if (isPlotAvailable(id, pmi)) {
             Plot plot = new Plot(plugin, owner, uuid, world, id, pmi.getDaysToExpiration());
 
             setOwnerSign(world, plot);

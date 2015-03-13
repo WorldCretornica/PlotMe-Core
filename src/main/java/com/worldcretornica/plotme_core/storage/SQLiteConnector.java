@@ -35,7 +35,6 @@ public class SQLiteConnector extends Database {
     public void createTables() {
         Connection connection = getConnection();
         try (Statement statement = connection.createStatement()) {
-            statement.executeUpdate(PLOT_TABLE + ");");
             //SQLite Specific Unique Index Additions.
             statement.executeUpdate("CREATE UNIQUE INDEX IF NOT EXISTS plotName ON  plotmecore_plots(plotName)");
             statement.executeUpdate("CREATE UNIQUE INDEX IF NOT EXISTS plotName ON  plotmecore_plots(plotName)");

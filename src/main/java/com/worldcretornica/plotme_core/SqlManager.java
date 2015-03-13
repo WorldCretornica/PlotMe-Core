@@ -76,9 +76,6 @@ public class SqlManager {
                 if (statement != null) {
                     statement.close();
                 }
-                if (set != null) {
-                    set.close();
-                }
             } catch (SQLException ex) {
                 plugin.getLogger().severe("Update table exception (on close) :");
                 plugin.getLogger().severe(ex.getMessage());

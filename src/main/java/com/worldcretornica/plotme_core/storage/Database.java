@@ -45,13 +45,12 @@ public abstract class Database {
             + "`homeX` INTEGER NOT NULL,"
             + "`homeY` INTEGER NOT NULL,"
             + "`homeZ` INTEGER NOT NULL,"
-            + "`homeName` VARCHAR(32)";
+            + "`homeName` VARCHAR(32)"
+            + ");";
     public static final String ALLOWED_TABLE = "CREATE TABLE IF NOT EXISTS plotmecore_allowed ("
             //Not used yet but included if needed in the future
             + "`id` INTEGER PRIMARY KEY UNIQUE NOT NULL,"
-            /*`plot_id` is the internal plot id that is in the first collumn of the main plot table.
-            This is not to be confused with the plot id that the user is used to seeing.
-            */
+            //`plot_id` is the internal plot id that is in the first column of the main plot table.
             + "`plot_id` VARCHAR(32) NOT NULL,"
             + "`allowedID` BLOB(16) NOT NULL,"
             + "`allowed` VARCHAR(32) NOT NULL,"
@@ -61,9 +60,7 @@ public abstract class Database {
     public static final String DENIED_TABLE = "CREATE TABLE IF NOT EXISTS plotmecore_denied ("
             //Not used yet but included if needed in the future
             + "`id` INTEGER PRIMARY KEY UNIQUE NOT NULL,"
-            /*`plot_id` is the internal plot id that is in the first collumn of the main plot table.
-            This is not to be confused with the plot id that the user is used to seeing.
-            */
+            //`plot_id` is the internal plot id that is in the first column of the main plot table.
             + "`plot_id` VARCHAR(32) NOT NULL,"
             + "`deniedID` BLOB(16) NOT NULL,"
             + "`denied` VARCHAR(32) NOT NULL"
@@ -124,7 +121,14 @@ public abstract class Database {
         return connection;
     }
 
-    public abstract void createTables();
+    public void createTables() {
+        try (Statement statement = getConnection().createStatement()) {
+            statement.executeUpdate(PLOT_TABLE);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void legacyConverter() {
         plugin.getServerBridge().runTaskAsynchronously(new Runnable() {
