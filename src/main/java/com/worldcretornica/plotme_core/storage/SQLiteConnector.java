@@ -35,18 +35,64 @@ public class SQLiteConnector extends Database {
     public void createTables() {
         Connection connection = getConnection();
         try (Statement statement = connection.createStatement()) {
-            //SQLite Specific Unique Index Additions.
-            statement.executeUpdate("CREATE UNIQUE INDEX IF NOT EXISTS plotName ON  plotmecore_plots(plotName)");
-            statement.executeUpdate("CREATE UNIQUE INDEX IF NOT EXISTS plotName ON  plotmecore_plots(plotName)");
-            statement.executeUpdate("CREATE UNIQUE INDEX IF NOT EXISTS plotName ON  plotmecore_plots(plotName)");
+            //MySQL specific plot table creation.
+            statement.executeUpdate("CREATE TABLE `plotmecore_plots` ("
+                    + "`id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
+                    + "`plotX` INTEGER NOT NULL,"
+                    + "`plotZ` INTEGER NOT NULL,"
+                    + "`world` VARCHAR(32) NOT NULL,"
+                    + "`ownerID` VARCHAR(50) NOT NULL,"
+                    + "`owner` VARCHAR(32) NOT NULL,"
+                    + "`biome` VARCHAR(50) NOT NULL DEFAULT 'PLAINS',"
+                    + "`finished` BOOLEAN NOT NULL DEFAULT '0',"
+                    + "`finishedDate` VARCHAR(16) DEFAULT NULL,"
+                    + "`forSale` BOOLEAN NOT NULL DEFAULT '0',"
+                    + "`price` DOUBLE NOT NULL DEFAULT '0',"
+                    + "`protected` BOOLEAN NOT NULL DEFAULT '0',"
+                    + "`expiredDate` VARCHAR(16) DEFAULT NULL,"
+                    + "`topX` INTEGER NOT NULL DEFAULT '0',"
+                    + "`topZ` INTEGER NOT NULL DEFAULT '0',"
+                    + "`bottomX` INTEGER NOT NULL DEFAULT '0',"
+                    + "`bottomZ` INTEGER NOT NULL DEFAULT '0',"
+                    + "`plotName` VARCHAR(32) DEFAULT NULL UNIQUE,"
+                    + "`plotLikes` INTEGER NOT NULL DEFAULT '0',"
+                    + "`homeX` INTEGER NOT NULL,"
+                    + "`homeY` INTEGER NOT NULL,"
+                    + "`homeZ` INTEGER NOT NULL,"
+                    + "`homeName` VARCHAR(32) DEFAULT NULL"
+                    + ");");
+            statement.executeUpdate("CREATE UNIQUE INDEX IF NOT EXISTS `plotLocation` ON plotmecore_plots(plotx,plotz,world);");
+            statement.executeUpdate("CREATE UNIQUE INDEX IF NOT EXISTS `playerHome` ON plotmecore_plots(ownerid,homename);");
             connection.commit();
-            statement.executeUpdate(ALLOWED_TABLE);
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS `plotmecore_denied` ("
+                    + "`id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
+                    + "`plot_id` INTEGER NOT NULL,"
+                    + "`denied` VARCHAR(50) NOT NULL"
+                    + ");");
+            statement.executeUpdate("CREATE UNIQUE INDEX IF NOT EXISTS `denied` ON plotmecore_denied(plot_id,denied)");
             connection.commit();
-            statement.executeUpdate(DENIED_TABLE);
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS `plotmecore_allowed` ("
+                    + "`id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
+                    + "`plot_id` INTEGER NOT NULL,"
+                    + "`allowed` VARCHAR(50) NOT NULL,"
+                    + "`access` INTEGER NOT NULL DEFAULT '1'"
+                    + ");");
+            statement.executeUpdate("CREATE UNIQUE INDEX IF NOT EXISTS `allowed` ON plotmecore_allowed(plot_id,allowed)");
             connection.commit();
-            statement.executeUpdate(LIKES_TABLE);
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS plotmecore_likes ("
+                    + "`id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
+                    + "`plot_id` INTEGER NOT NULL,"
+                    + "`player` VARCHAR(50) NOT NULL"
+                    + ");");
+            statement.executeUpdate("CREATE UNIQUE INDEX IF NOT EXISTS `likes` ON plotmecore_likes(plot_id,player)");
             connection.commit();
-            statement.executeUpdate(METADATA_TABLE);
+            statement.executeUpdate("CREATE TABLE `plotmecore_metadata` ("
+                    + "`id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
+                    + "`plot_id` INTEGER NOT NULL,"
+                    + "`pluginname` VARCHAR(100) NOT NULL,"
+                    + "`propertyname` VARCHAR(100) NOT NULL,"
+                    + "`propertyvalue` VARCHAR(255) DEFAULT NULL"
+                    + ");");
             connection.commit();
         } catch (SQLException e) {
             e.printStackTrace();

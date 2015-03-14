@@ -94,7 +94,7 @@ public class MySQLConnector extends Database {
                     + "`plot_id` INTEGER NOT NULL,"
                     + "`pluginname` VARCHAR(100) NOT NULL,"
                     + "`propertyname` VARCHAR(100) NOT NULL,"
-                    + "`propertyvalue` VARCHAR(255)"
+                    + "`propertyvalue` VARCHAR(255) DEFAULT NULL"
                     + ");");
             connection.commit();
         } catch (SQLException e) {
