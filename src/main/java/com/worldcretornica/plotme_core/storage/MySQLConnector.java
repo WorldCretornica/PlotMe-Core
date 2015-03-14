@@ -89,10 +89,13 @@ public class MySQLConnector extends Database {
                     + "`player` VARCHAR(50) NOT NULL,"
                     + "UNIQUE INDEX `likes` (plot_id, player)"
                     + ");");
-            statement.executeUpdate("ALTER TABLE plotmecore_likes MODIFY id INTEGER AUTO_INCREMENT");
-            connection.commit();
-            statement.executeUpdate(METADATA_TABLE);
-            statement.executeUpdate("ALTER TABLE plotmecore_metadata MODIFY id INTEGER AUTO_INCREMENT");
+            statement.executeUpdate("CREATE TABLE `plotmecore_metadata` ("
+                    + "`id` INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,"
+                    + "`plot_id` INTEGER NOT NULL,\n"
+                    + "`pluginname` VARCHAR(100) NOT NULL,"
+                    + "`propertyname` VARCHAR(100) NOT NULL,"
+                    + "`propertyvalue` VARCHAR(255)"
+                    + ");");
             connection.commit();
         } catch (SQLException e) {
             e.printStackTrace();
