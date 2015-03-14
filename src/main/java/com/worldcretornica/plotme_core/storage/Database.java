@@ -22,62 +22,6 @@ import java.util.UUID;
 
 public abstract class Database {
 
-    public static final String PLOT_TABLE = "CREATE TABLE IF NOT EXISTS plotmecore_plots ("
-            + "`id` INTEGER PRIMARY KEY UNIQUE NOT NULL,"
-            + "`plotX` INTEGER NOT NULL,"
-            + "`plotZ` INTEGER NOT NULL,"
-            + "`world` VARCHAR(32) NOT NULL,"
-            + "`ownerID` BLOB(16) NOT NULL,"
-            + "`owner` VARCHAR(32) NOT NULL,"
-            + "`biome` VARCHAR(32) DEFAULT 'PLAINS' NOT NULL,"
-            + "`finished` BOOLEAN NOT NULL DEFAULT '0',"
-            + "`finishedDate` VARCHAR(16),"
-            + "`forSale` BOOLEAN NOT NULL DEFAULT '0',"
-            + "`price` DOUBLE NOT NULL DEFAULT '0',"
-            + "`protected` BOOLEAN NOT NULL DEFAULT '0',"
-            + "`expiredDate` VARCHAR(16),"
-            + "`topX` INTEGER NOT NULL DEFAULT '0',"
-            + "`topZ` INTEGER NOT NULL DEFAULT '0',"
-            + "`bottomX` INTEGER NOT NULL DEFAULT '0',"
-            + "`bottomZ` INTEGER NOT NULL DEFAULT '0',"
-            + "`plotName` VARCHAR(32) UNIQUE,"
-            + "`plotLikes` INTEGER NOT NULL DEFAULT '0',"
-            + "`homeX` INTEGER NOT NULL,"
-            + "`homeY` INTEGER NOT NULL,"
-            + "`homeZ` INTEGER NOT NULL,"
-            + "`homeName` VARCHAR(32)"
-            + ");";
-    public static final String ALLOWED_TABLE = "CREATE TABLE IF NOT EXISTS plotmecore_allowed ("
-            //Not used yet but included if needed in the future
-            + "`id` INTEGER PRIMARY KEY UNIQUE NOT NULL,"
-            //`plot_id` is the internal plot id that is in the first column of the main plot table.
-            + "`plot_id` VARCHAR(32) NOT NULL,"
-            + "`allowedID` BLOB(16) NOT NULL,"
-            + "`allowed` VARCHAR(32) NOT NULL,"
-            //This is true if the player can build even when the plot owner is offline
-            + "`trusted` BOOLEAN NOT NULL DEFAULT '1'"
-            + ");";
-    public static final String DENIED_TABLE = "CREATE TABLE IF NOT EXISTS plotmecore_denied ("
-            //Not used yet but included if needed in the future
-            + "`id` INTEGER PRIMARY KEY UNIQUE NOT NULL,"
-            //`plot_id` is the internal plot id that is in the first column of the main plot table.
-            + "`plot_id` VARCHAR(32) NOT NULL,"
-            + "`deniedID` BLOB(16) NOT NULL,"
-            + "`denied` VARCHAR(32) NOT NULL"
-            + ");";
-    public static final String LIKES_TABLE = "CREATE TABLE IF NOT EXISTS plotmecore_likes ("
-            + "`id` INTEGER PRIMARY KEY UNIQUE NOT NULL,"
-            + "`plot_id` VARCHAR(32) NOT NULL,"
-            + "`playerID` BLOB(16),"
-            + "`player` VARCHAR(32) NOT NULL"
-            + ");";
-    public static final String METADATA_TABLE = "CREATE TABLE IF NOT EXISTS plotmecore_metadata ("
-            + "`id` INTEGER PRIMARY KEY UNIQUE NOT NULL,"
-            + "`plot_id` VARCHAR(32) NOT NULL,"
-            + "`pluginName` NVARCHAR(100) NOT NULL,"
-            + "`propertyBame` NVARCHAR(100) NOT NULL,"
-            + "`propertyValue` NVARCHAR(255)"
-            + ");";
     public static final String SELECT_INTERNAL_ID = "SELECT id FROM plotmecore_plots WHERE plotX = ? AND plotZ = ?";
     private static final String SELECT_PLOT_COUNT = "SELECT Count(*) as plotCount FROM plotmecore_plots WHERE LOWER(world) = ?";
     public final PlotMe_Core plugin;
