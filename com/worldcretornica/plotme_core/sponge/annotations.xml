@@ -1,0 +1,14 @@
+<root>
+  <item name='com.worldcretornica.plotme_core.sponge.SpongePlotMe_GeneratorManagerBridge com.worldcretornica.plotme_core.api.ILocation getPlotTopLoc(com.worldcretornica.plotme_core.api.IWorld, com.worldcretornica.plotme_core.PlotId)'>
+    <annotation name='org.jetbrains.annotations.NotNull'/>
+  </item>
+  <item name='com.worldcretornica.plotme_core.sponge.SpongePlotMe_GeneratorManagerBridge com.worldcretornica.plotme_core.api.ILocation getPlotTopLoc(com.worldcretornica.plotme_core.api.IWorld, com.worldcretornica.plotme_core.PlotId) 0'>
+    <annotation name='org.jetbrains.annotations.NotNull'/>
+  </item>
+  <item name='com.worldcretornica.plotme_core.sponge.SpongePlotMe_GeneratorManagerBridge com.worldcretornica.plotme_core.api.ILocation getPlotTopLoc(com.worldcretornica.plotme_core.api.IWorld, com.worldcretornica.plotme_core.PlotId) 1'>
+    <annotation name='org.jetbrains.annotations.NotNull'/>
+  </item>
+  <item name='com.worldcretornica.plotme_core.sponge.SpongeServerBridge com.worldcretornica.plotme_core.api.IWorld getWorld(java.lang.String) 0'>
+    <annotation name='org.jetbrains.annotations.NotNull'/>
+  </item>
+</root>

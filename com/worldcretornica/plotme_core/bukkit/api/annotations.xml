@@ -1,0 +1,74 @@
+<root>
+  <item name='com.worldcretornica.plotme_core.bukkit.api.IBukkitPlotMe_GeneratorManager boolean isBlockInPlot(com.worldcretornica.plotme_core.PlotId, org.bukkit.Location) 0'>
+    <annotation name='org.jetbrains.annotations.NotNull'/>
+  </item>
+  <item name='com.worldcretornica.plotme_core.bukkit.api.IBukkitPlotMe_GeneratorManager boolean movePlot(org.bukkit.World, com.worldcretornica.plotme_core.PlotId, com.worldcretornica.plotme_core.PlotId) 1'>
+    <annotation name='org.jetbrains.annotations.NotNull'/>
+  </item>
+  <item name='com.worldcretornica.plotme_core.bukkit.api.IBukkitPlotMe_GeneratorManager boolean movePlot(org.bukkit.World, com.worldcretornica.plotme_core.PlotId, com.worldcretornica.plotme_core.PlotId) 2'>
+    <annotation name='org.jetbrains.annotations.NotNull'/>
+  </item>
+  <item name='com.worldcretornica.plotme_core.bukkit.api.IBukkitPlotMe_GeneratorManager com.worldcretornica.schematic.Schematic getPlotSchematic(org.bukkit.World, com.worldcretornica.plotme_core.PlotId) 1'>
+    <annotation name='org.jetbrains.annotations.NotNull'/>
+  </item>
+  <item name='com.worldcretornica.plotme_core.bukkit.api.IBukkitPlotMe_GeneratorManager int bottomX(com.worldcretornica.plotme_core.PlotId, org.bukkit.World) 0'>
+    <annotation name='org.jetbrains.annotations.NotNull'/>
+  </item>
+  <item name='com.worldcretornica.plotme_core.bukkit.api.IBukkitPlotMe_GeneratorManager int bottomZ(com.worldcretornica.plotme_core.PlotId, org.bukkit.World) 0'>
+    <annotation name='org.jetbrains.annotations.NotNull'/>
+  </item>
+  <item name='com.worldcretornica.plotme_core.bukkit.api.IBukkitPlotMe_GeneratorManager int topX(com.worldcretornica.plotme_core.PlotId, org.bukkit.World) 0'>
+    <annotation name='org.jetbrains.annotations.NotNull'/>
+  </item>
+  <item name='com.worldcretornica.plotme_core.bukkit.api.IBukkitPlotMe_GeneratorManager int topZ(com.worldcretornica.plotme_core.PlotId, org.bukkit.World) 0'>
+    <annotation name='org.jetbrains.annotations.NotNull'/>
+  </item>
+  <item name='com.worldcretornica.plotme_core.bukkit.api.IBukkitPlotMe_GeneratorManager java.lang.Long[] clear(org.bukkit.World, com.worldcretornica.plotme_core.PlotId, long, java.lang.Long[]) 1'>
+    <annotation name='org.jetbrains.annotations.NotNull'/>
+  </item>
+  <item name='com.worldcretornica.plotme_core.bukkit.api.IBukkitPlotMe_GeneratorManager org.bukkit.Location getBottom(org.bukkit.World, com.worldcretornica.plotme_core.PlotId) 1'>
+    <annotation name='org.jetbrains.annotations.NotNull'/>
+  </item>
+  <item name='com.worldcretornica.plotme_core.bukkit.api.IBukkitPlotMe_GeneratorManager org.bukkit.Location getPlotBottomLoc(org.bukkit.World, com.worldcretornica.plotme_core.PlotId) 0'>
+    <annotation name='org.jetbrains.annotations.NotNull'/>
+  </item>
+  <item name='com.worldcretornica.plotme_core.bukkit.api.IBukkitPlotMe_GeneratorManager org.bukkit.Location getPlotBottomLoc(org.bukkit.World, com.worldcretornica.plotme_core.PlotId) 1'>
+    <annotation name='org.jetbrains.annotations.NotNull'/>
+  </item>
+  <item name='com.worldcretornica.plotme_core.bukkit.api.IBukkitPlotMe_GeneratorManager org.bukkit.Location getPlotHome(org.bukkit.World, com.worldcretornica.plotme_core.PlotId) 1'>
+    <annotation name='org.jetbrains.annotations.NotNull'/>
+  </item>
+  <item name='com.worldcretornica.plotme_core.bukkit.api.IBukkitPlotMe_GeneratorManager org.bukkit.Location getPlotMiddle(org.bukkit.World, com.worldcretornica.plotme_core.PlotId) 1'>
+    <annotation name='org.jetbrains.annotations.NotNull'/>
+  </item>
+  <item name='com.worldcretornica.plotme_core.bukkit.api.IBukkitPlotMe_GeneratorManager org.bukkit.Location getPlotTopLoc(org.bukkit.World, com.worldcretornica.plotme_core.PlotId) 1'>
+    <annotation name='org.jetbrains.annotations.NotNull'/>
+  </item>
+  <item name='com.worldcretornica.plotme_core.bukkit.api.IBukkitPlotMe_GeneratorManager org.bukkit.Location getTop(org.bukkit.World, com.worldcretornica.plotme_core.PlotId) 1'>
+    <annotation name='org.jetbrains.annotations.NotNull'/>
+  </item>
+  <item name='com.worldcretornica.plotme_core.bukkit.api.IBukkitPlotMe_GeneratorManager void adjustPlotFor(org.bukkit.World, com.worldcretornica.plotme_core.PlotId, boolean, boolean, boolean) 1'>
+    <annotation name='org.jetbrains.annotations.NotNull'/>
+  </item>
+  <item name='com.worldcretornica.plotme_core.bukkit.api.IBukkitPlotMe_GeneratorManager void fillMiddleRoad(com.worldcretornica.plotme_core.PlotId, com.worldcretornica.plotme_core.PlotId, org.bukkit.World) 1'>
+    <annotation name='org.jetbrains.annotations.NotNull'/>
+  </item>
+  <item name='com.worldcretornica.plotme_core.bukkit.api.IBukkitPlotMe_GeneratorManager void refreshPlotChunks(org.bukkit.World, com.worldcretornica.plotme_core.PlotId) 1'>
+    <annotation name='org.jetbrains.annotations.NotNull'/>
+  </item>
+  <item name='com.worldcretornica.plotme_core.bukkit.api.IBukkitPlotMe_GeneratorManager void removeAuctionDisplay(org.bukkit.World, com.worldcretornica.plotme_core.PlotId) 1'>
+    <annotation name='org.jetbrains.annotations.NotNull'/>
+  </item>
+  <item name='com.worldcretornica.plotme_core.bukkit.api.IBukkitPlotMe_GeneratorManager void removeOwnerDisplay(org.bukkit.World, com.worldcretornica.plotme_core.PlotId) 1'>
+    <annotation name='org.jetbrains.annotations.NotNull'/>
+  </item>
+  <item name='com.worldcretornica.plotme_core.bukkit.api.IBukkitPlotMe_GeneratorManager void removeSellerDisplay(org.bukkit.World, com.worldcretornica.plotme_core.PlotId) 1'>
+    <annotation name='org.jetbrains.annotations.NotNull'/>
+  </item>
+  <item name='com.worldcretornica.plotme_core.bukkit.api.IBukkitPlotMe_GeneratorManager void setOwnerDisplay(org.bukkit.World, com.worldcretornica.plotme_core.PlotId, java.lang.String, java.lang.String, java.lang.String, java.lang.String) 1'>
+    <annotation name='org.jetbrains.annotations.NotNull'/>
+  </item>
+  <item name='com.worldcretornica.plotme_core.bukkit.api.IBukkitPlotMe_GeneratorManager void setSellerDisplay(org.bukkit.World, com.worldcretornica.plotme_core.PlotId, java.lang.String, java.lang.String, java.lang.String, java.lang.String) 1'>
+    <annotation name='org.jetbrains.annotations.NotNull'/>
+  </item>
+</root>

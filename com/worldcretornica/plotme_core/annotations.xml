@@ -1,0 +1,152 @@
+<root>
+    <item name='com.worldcretornica.plotme_core.Plot com.worldcretornica.plotme_core.PlotId getId()'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='com.worldcretornica.plotme_core.Plot id'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='com.worldcretornica.plotme_core.Plot java.lang.String getWorld()'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='com.worldcretornica.plotme_core.Plot java.util.UUID getOwnerId()'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='com.worldcretornica.plotme_core.Plot owner'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='com.worldcretornica.plotme_core.Plot void setId(com.worldcretornica.plotme_core.PlotId) 0'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='com.worldcretornica.plotme_core.Plot void setWorld(java.lang.String) 0'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='com.worldcretornica.plotme_core.Plot world'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='com.worldcretornica.plotme_core.PlotId PlotId(java.lang.String) 0'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='com.worldcretornica.plotme_core.PlotId boolean equals(java.lang.Object) 0'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='com.worldcretornica.plotme_core.PlotId boolean isValidID(java.lang.String) 0'>
+      <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='com.worldcretornica.plotme_core.PlotId java.lang.String getID()'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='com.worldcretornica.plotme_core.PlotId java.lang.String toString()'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='com.worldcretornica.plotme_core.PlotMapInfo void addPlot(com.worldcretornica.plotme_core.PlotId, com.worldcretornica.plotme_core.Plot) 0'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='com.worldcretornica.plotme_core.PlotMapInfo void removePlot(com.worldcretornica.plotme_core.PlotId) 0'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='com.worldcretornica.plotme_core.PlotMeCoreManager boolean isPlotWorld(com.worldcretornica.plotme_core.api.IEntity) 0'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='com.worldcretornica.plotme_core.PlotMeCoreManager boolean isPlotWorld(com.worldcretornica.plotme_core.api.IWorld) 0'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='com.worldcretornica.plotme_core.PlotMeCoreManager boolean movePlot(com.worldcretornica.plotme_core.api.IWorld, com.worldcretornica.plotme_core.PlotId, com.worldcretornica.plotme_core.PlotId) 1'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='com.worldcretornica.plotme_core.PlotMeCoreManager boolean movePlot(com.worldcretornica.plotme_core.api.IWorld, com.worldcretornica.plotme_core.PlotId, com.worldcretornica.plotme_core.PlotId) 2'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='com.worldcretornica.plotme_core.PlotMeCoreManager com.worldcretornica.plotme_core.Plot createPlot(com.worldcretornica.plotme_core.api.IWorld, com.worldcretornica.plotme_core.PlotId, java.lang.String, java.util.UUID, com.worldcretornica.plotme_core.PlotMapInfo) 0'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='com.worldcretornica.plotme_core.PlotMeCoreManager com.worldcretornica.plotme_core.Plot createPlot(com.worldcretornica.plotme_core.api.IWorld, com.worldcretornica.plotme_core.PlotId, java.lang.String, java.util.UUID, com.worldcretornica.plotme_core.PlotMapInfo) 1'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='com.worldcretornica.plotme_core.PlotMeCoreManager com.worldcretornica.plotme_core.Plot createPlot(com.worldcretornica.plotme_core.api.IWorld, com.worldcretornica.plotme_core.PlotId, java.lang.String, java.util.UUID, com.worldcretornica.plotme_core.PlotMapInfo) 4'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='com.worldcretornica.plotme_core.PlotMeCoreManager com.worldcretornica.plotme_core.api.ILocation getPlotHome(com.worldcretornica.plotme_core.api.IWorld, com.worldcretornica.plotme_core.PlotId) 1'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='com.worldcretornica.plotme_core.PlotMeCoreManager com.worldcretornica.plotme_core.api.ILocation getPlotTopLoc(com.worldcretornica.plotme_core.api.IWorld, com.worldcretornica.plotme_core.PlotId) 0'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='com.worldcretornica.plotme_core.PlotMeCoreManager com.worldcretornica.plotme_core.api.ILocation getPlotTopLoc(com.worldcretornica.plotme_core.api.IWorld, com.worldcretornica.plotme_core.PlotId) 1'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='com.worldcretornica.plotme_core.PlotMeCoreManager com.worldcretornica.plotme_core.api.IWorld getFirstWorld()'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='com.worldcretornica.plotme_core.PlotMeCoreManager int bottomX(com.worldcretornica.plotme_core.PlotId, com.worldcretornica.plotme_core.api.IWorld) 0'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='com.worldcretornica.plotme_core.PlotMeCoreManager int bottomX(com.worldcretornica.plotme_core.PlotId, com.worldcretornica.plotme_core.api.IWorld) 1'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='com.worldcretornica.plotme_core.PlotMeCoreManager int bottomZ(com.worldcretornica.plotme_core.PlotId, com.worldcretornica.plotme_core.api.IWorld) 0'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='com.worldcretornica.plotme_core.PlotMeCoreManager int bottomZ(com.worldcretornica.plotme_core.PlotId, com.worldcretornica.plotme_core.api.IWorld) 1'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='com.worldcretornica.plotme_core.PlotMeCoreManager int getOwnedPlotCount(java.util.UUID, java.lang.String) 1'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='com.worldcretornica.plotme_core.PlotMeCoreManager int topX(com.worldcretornica.plotme_core.PlotId, com.worldcretornica.plotme_core.api.IWorld) 0'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='com.worldcretornica.plotme_core.PlotMeCoreManager int topX(com.worldcretornica.plotme_core.PlotId, com.worldcretornica.plotme_core.api.IWorld) 1'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='com.worldcretornica.plotme_core.PlotMeCoreManager int topZ(com.worldcretornica.plotme_core.PlotId, com.worldcretornica.plotme_core.api.IWorld) 0'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='com.worldcretornica.plotme_core.PlotMeCoreManager int topZ(com.worldcretornica.plotme_core.PlotId, com.worldcretornica.plotme_core.api.IWorld) 1'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='com.worldcretornica.plotme_core.PlotMeCoreManager java.util.List&lt;com.worldcretornica.plotme_core.api.IPlayer&gt; getPlayersInPlot(com.worldcretornica.plotme_core.api.IWorld, com.worldcretornica.plotme_core.PlotId) 0'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='com.worldcretornica.plotme_core.PlotMeCoreManager java.util.List&lt;com.worldcretornica.plotme_core.api.IPlayer&gt; getPlayersInPlot(com.worldcretornica.plotme_core.api.IWorld, com.worldcretornica.plotme_core.PlotId) 1'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='com.worldcretornica.plotme_core.PlotMeCoreManager void addPlot(com.worldcretornica.plotme_core.api.IWorld, com.worldcretornica.plotme_core.PlotId, com.worldcretornica.plotme_core.Plot) 0'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='com.worldcretornica.plotme_core.PlotMeCoreManager void addPlot(com.worldcretornica.plotme_core.api.IWorld, com.worldcretornica.plotme_core.PlotId, com.worldcretornica.plotme_core.Plot) 1'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='com.worldcretornica.plotme_core.PlotMeCoreManager void addPlot(com.worldcretornica.plotme_core.api.IWorld, com.worldcretornica.plotme_core.PlotId, com.worldcretornica.plotme_core.Plot, com.worldcretornica.plotme_core.PlotMapInfo) 0'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='com.worldcretornica.plotme_core.PlotMeCoreManager void addPlot(com.worldcretornica.plotme_core.api.IWorld, com.worldcretornica.plotme_core.PlotId, com.worldcretornica.plotme_core.Plot, com.worldcretornica.plotme_core.PlotMapInfo) 1'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='com.worldcretornica.plotme_core.PlotMeCoreManager void removePlot(com.worldcretornica.plotme_core.api.IWorld, com.worldcretornica.plotme_core.PlotId) 0'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='com.worldcretornica.plotme_core.PlotMeCoreManager void removePlot(com.worldcretornica.plotme_core.api.IWorld, com.worldcretornica.plotme_core.PlotId) 1'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='com.worldcretornica.plotme_core.PlotMe_Core com.worldcretornica.plotme_core.PlotToClear getPlotLocked(com.worldcretornica.plotme_core.api.IWorld, com.worldcretornica.plotme_core.PlotId)'>
+        <annotation name='org.jetbrains.annotations.Nullable'/>
+    </item>
+    <item name='com.worldcretornica.plotme_core.PlotMe_Core com.worldcretornica.plotme_core.api.IServerBridge getServerBridge()'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='com.worldcretornica.plotme_core.PlotMe_Core java.util.logging.Logger getLogger()'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='com.worldcretornica.plotme_core.PlotToClear com.worldcretornica.plotme_core.ClearReason getReason()'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='com.worldcretornica.plotme_core.PlotToClear com.worldcretornica.plotme_core.PlotId getPlotId()'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='com.worldcretornica.plotme_core.PlotToClear com.worldcretornica.plotme_core.api.ICommandSender getRequester()'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='com.worldcretornica.plotme_core.PlotToClear com.worldcretornica.plotme_core.api.IWorld getWorld()'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+</root>
