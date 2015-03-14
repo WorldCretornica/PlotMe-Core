@@ -28,8 +28,6 @@ public interface IBukkitPlotMe_GeneratorManager {
 
     void removeSellerDisplay(World world, PlotId id);
 
-    void removeAuctionDisplay(World world, PlotId id);
-
     Location getPlotBottomLoc(World world, PlotId id);
 
     Location getPlotTopLoc(World world, PlotId id);

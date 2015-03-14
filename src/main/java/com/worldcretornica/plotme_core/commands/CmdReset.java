@@ -59,8 +59,7 @@ public class CmdReset extends PlotCommand {
 
                         manager.removeOwnerSign(world, id);
                         manager.removeSellSign(world, id);
-                        manager.removeAuctionSign(world, id);
-                        plugin.getSqlManager().deletePlot(id, world.getName());
+                        plugin.getSqlManager().deletePlot(plot.getInternalID(), world.getName());
 
                         if (isAdvancedLogging()) {
                             serverBridge.getLogger().info(player.getName() + " " + C("MsgResetPlot") + " " + id);

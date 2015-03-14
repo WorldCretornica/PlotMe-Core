@@ -118,16 +118,6 @@ public class PlotMeCoreManager {
     }
 
     /**
-     * Remove the auction sign from the plot
-     * @param world plotworld
-     * @param id    plot id to remove the sign from
-     */
-    @Deprecated
-    public void removeAuctionSign(IWorld world, PlotId id) {
-        getGenManager(world).removeAuctionDisplay(world, id);
-    }
-
-    /**
      * Set the sell sign on the plot
      *
      * @param world plotworld
@@ -626,10 +616,10 @@ public class PlotMeCoreManager {
 
         if (plotFrom != null) {
             if (plotTo != null) {
-                plugin.getSqlManager().deletePlot(idTo, world.getName());
+                plugin.getSqlManager().deletePlot(plotTo.getInternalID(), world.getName());
                 removePlot(world, idFrom);
                 removePlot(world, idTo);
-                plugin.getSqlManager().deletePlot(idFrom, world.getName());
+                plugin.getSqlManager().deletePlot(plotFrom.getInternalID(), world.getName());
 
                 plotTo.setId(idFrom);
                 plugin.getSqlManager().addPlot(plotTo, idFrom, getPlotTopLoc(world, idFrom), getPlotBottomLoc(world, idFrom));
@@ -641,10 +631,8 @@ public class PlotMeCoreManager {
 
                 setOwnerSign(world, plotFrom);
                 removeSellSign(world, plotFrom.getId());
-                removeAuctionSign(world, plotFrom.getId());
                 setOwnerSign(world, plotTo);
                 removeSellSign(world, plotTo.getId());
-                removeAuctionSign(world, plotTo.getId());
 
             } else {
                 movePlotToEmpty(world, plotFrom, idTo);
@@ -661,7 +649,7 @@ public class PlotMeCoreManager {
      */
     private void movePlotToEmpty(IWorld world, Plot filledPlot, PlotId idDestination) {
         PlotId idFrom = filledPlot.getId();
-        plugin.getSqlManager().deletePlot(idFrom, world.getName());
+        plugin.getSqlManager().deletePlot(filledPlot.getInternalID(), world.getName());
         removePlot(world, idFrom);
 
         filledPlot.setId(idDestination);
@@ -673,7 +661,6 @@ public class PlotMeCoreManager {
         setSellSign(world, filledPlot);
         removeOwnerSign(world, idFrom);
         removeSellSign(world, idFrom);
-        removeAuctionSign(world, idFrom);
     }
 
     /**

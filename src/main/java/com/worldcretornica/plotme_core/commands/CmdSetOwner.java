@@ -9,7 +9,10 @@ import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotOwnerChangeEvent;
+import com.worldcretornica.plotme_core.utils.UUIDFetcher;
 import net.milkbowl.vault.economy.EconomyResponse;
+
+import java.util.UUID;
 
 public class CmdSetOwner extends PlotCommand {
 
@@ -28,6 +31,7 @@ public class CmdSetOwner extends PlotCommand {
                     return false;
                 }
                 String newOwner = args[1];
+                UUID newOwnerId = UUIDFetcher.getUUIDOf(newOwner);
                 String oldowner = "<" + C("WordNotApplicable") + ">";
 
                 if (!manager.isPlotAvailable(id, pmi)) {
@@ -70,19 +74,18 @@ public class CmdSetOwner extends PlotCommand {
                     if (!event.isCancelled()) {
                         plot.setForSale(false);
 
-                        manager.removeAuctionSign(world, id);
                         manager.removeSellSign(world, id);
 
                         plot.updateField("forsale", false);
 
                         plot.setOwner(newOwner);
-
+                        plot.setOwnerId(newOwnerId);
                         manager.setOwnerSign(world, plot);
 
                         plot.updateField("owner", newOwner);
                     }
                 } else {
-                    manager.createPlot(world, id, newOwner, null, pmi);
+                    manager.createPlot(world, id, newOwner, newOwnerId, pmi);
                 }
 
                 player.sendMessage(C("MsgOwnerChangedTo") + " §c" + newOwner);

@@ -6,7 +6,6 @@ import java.util.Set;
 import java.util.UUID;
 
 public class PlayerList {
-
     private final HashMap<String, UUID> playerList;
     private PlotMe_Core api;
 
@@ -99,7 +98,7 @@ public class PlayerList {
     }
 
     public void replace(UUID uuid, String newName) {
-        if (uuid != null && playerList != null && contains(uuid)) {
+        if (playerList != null && contains(uuid)) {
             Iterator<String> it = playerList.keySet().iterator();
             while (it.hasNext()) {
                 String name = it.next();
@@ -114,7 +113,7 @@ public class PlayerList {
     }
 
     public void replace(String oldname, String newname, UUID newUuid) {
-        if (newUuid != null && playerList != null && contains(oldname)) {
+        if (playerList != null && contains(oldname)) {
             Iterator<String> it = playerList.keySet().iterator();
             while (it.hasNext()) {
                 String key = it.next();

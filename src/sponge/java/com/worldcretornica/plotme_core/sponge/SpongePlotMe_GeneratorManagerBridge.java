@@ -75,11 +75,6 @@ public class SpongePlotMe_GeneratorManagerBridge implements IPlotMe_GeneratorMan
     }
 
     @Override
-    public void removeAuctionDisplay(IWorld world, PlotId id) {
-        generatorManager.removeAuctionDisplay(((SpongeWorld) world).getWorld(), id);
-    }
-
-    @Override
     public ILocation getPlotBottomLoc(IWorld world, PlotId id) {
         return new SpongeLocation(generatorManager.getPlotBottomLoc(((SpongeWorld) world).getWorld(), id));
     }

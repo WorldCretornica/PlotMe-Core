@@ -26,7 +26,7 @@ public abstract class Database {
     private static final String SELECT_PLOT_COUNT = "SELECT Count(*) as plotCount FROM plotmecore_plots WHERE LOWER(world) = ?";
     public final PlotMe_Core plugin;
 
-    public Connection connection;
+    public Connection connection = getConnection();
 
     public Database(PlotMe_Core plugin) {
         this.plugin = plugin;
@@ -71,8 +71,6 @@ public abstract class Database {
         plugin.getServerBridge().runTaskAsynchronously(new Runnable() {
             @Override
             public void run() {
-                Connection connection = getConnection();
-
                 try (Statement statement = connection.createStatement();
                         PreparedStatement statement2 = connection.prepareStatement(SELECT_INTERNAL_ID
                                 + " AND LOWER(world) = ?"); PreparedStatement statement3 = connection.prepareStatement(
@@ -134,7 +132,7 @@ public abstract class Database {
      */
     public int getPlotCount(String world) {
         int plotCount = 0;
-        try (PreparedStatement ps = getConnection().prepareStatement(SELECT_PLOT_COUNT)) {
+        try (PreparedStatement ps = connection.prepareStatement(SELECT_PLOT_COUNT)) {
 
             ps.setString(1, world);
 
@@ -151,7 +149,7 @@ public abstract class Database {
 
     public int getPlotCount(String world, UUID uuid) {
         int plotCount = 0;
-        try (PreparedStatement ps = getConnection().prepareStatement(SELECT_PLOT_COUNT + " AND ownerID = ?")) {
+        try (PreparedStatement ps = connection.prepareStatement(SELECT_PLOT_COUNT + " AND ownerID = ?")) {
 
             ps.setString(1, world);
             ps.setBytes(2, UUIDFetcher.toBytes(uuid));
@@ -168,7 +166,6 @@ public abstract class Database {
     }
 
     public void addPlot(Plot plot, PlotId id, ILocation plotTopLoc, ILocation plotBottomLoc) {
-        Connection connection = getConnection();
         try (PreparedStatement ps = connection.prepareStatement(
                 "INSERT INTO plotmecore_plots (plotX, plotZ, owner, ownerID, world, topX, bottomX, "
                         + "topZ, bottomZ, "
@@ -244,8 +241,47 @@ public abstract class Database {
 
     }
 
-    public void deletePlot(PlotId idTo, String name) {
-
+    public void deletePlot(int internalID, String name) {
+        try (PreparedStatement ps = connection.prepareStatement("DELETE FROM plotmecore_allowed WHERE plot_id = ?")) {
+            ps.setInt(1, internalID);
+            ps.executeUpdate();
+            connection.commit();
+        } catch (SQLException e) {
+            plugin.getLogger().severe("Error deleting allowed data for plot with internal id " + internalID);
+            e.printStackTrace();
+        }
+        try (PreparedStatement ps = connection.prepareStatement("DELETE FROM plotmecore_metadata WHERE plot_id = ?")) {
+            ps.setInt(1, internalID);
+            ps.executeUpdate();
+            connection.commit();
+        } catch (SQLException e) {
+            plugin.getLogger().severe("Error deleting metadata for plot with internal id " + internalID);
+            e.printStackTrace();
+        }
+        try (PreparedStatement ps = connection.prepareStatement("DELETE FROM plotmecore_likes WHERE plot_id = ?")) {
+            ps.setInt(1, internalID);
+            ps.executeUpdate();
+            connection.commit();
+        } catch (SQLException e) {
+            plugin.getLogger().severe("Error deleting likes data for plot with internal id " + internalID);
+            e.printStackTrace();
+        }
+        try (PreparedStatement ps = connection.prepareStatement("DELETE FROM plotmecore_denied WHERE plot_id = ?")) {
+            ps.setInt(1, internalID);
+            ps.executeUpdate();
+            connection.commit();
+        } catch (SQLException e) {
+            plugin.getLogger().severe("Error deleting denied data for plot with internal id " + internalID);
+            e.printStackTrace();
+        }
+        try (PreparedStatement ps = connection.prepareStatement("DELETE FROM plotmecore_plots WHERE id = ?")) {
+            ps.setInt(1, internalID);
+            ps.executeUpdate();
+            connection.commit();
+        } catch (SQLException e) {
+            plugin.getLogger().severe("Error deleting plot with internal id " + internalID);
+            e.printStackTrace();
+        }
     }
 
     public List<Plot> getPlayerPlots(String name, UUID uuid) {
@@ -285,7 +321,6 @@ public abstract class Database {
     }
 
     public Plot getPlot(String world, PlotId id) {
-        Connection connection = getConnection();
         int idX = id.getX();
         int idZ = id.getZ();
         Plot plot = null;

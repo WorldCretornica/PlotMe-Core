@@ -25,8 +25,6 @@ public interface IPlotMe_GeneratorManager {
 
     void removeSellerDisplay(IWorld world, PlotId id);
 
-    void removeAuctionDisplay(IWorld world, PlotId id);
-
     ILocation getPlotBottomLoc(IWorld world, PlotId id);
 
     ILocation getPlotTopLoc(IWorld world, PlotId id);

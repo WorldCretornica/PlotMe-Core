@@ -49,7 +49,6 @@ public class PlotMe_Core {
         getSqlManager().closeConnection();
         PlotMeCoreManager.getInstance().getPlotMaps().clear();
         serverBridge.unHook();
-        PlotMeCoreManager.getInstance().setPlayersIgnoringWELimit(null);
         setWorldCurrentlyProcessingExpired(null);
         plotsToClear = null;
         managers.clear();

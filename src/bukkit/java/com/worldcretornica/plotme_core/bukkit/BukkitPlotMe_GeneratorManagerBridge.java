@@ -76,11 +76,6 @@ public class BukkitPlotMe_GeneratorManagerBridge implements IPlotMe_GeneratorMan
     }
 
     @Override
-    public void removeAuctionDisplay(IWorld world, PlotId id) {
-        generatorManager.removeAuctionDisplay(((BukkitWorld) world).getWorld(), id);
-    }
-
-    @Override
     public ILocation getPlotBottomLoc(IWorld world, PlotId id) {
         return new BukkitLocation(generatorManager.getPlotBottomLoc(((BukkitWorld) world).getWorld(), id));
     }

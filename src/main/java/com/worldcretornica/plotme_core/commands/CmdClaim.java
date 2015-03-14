@@ -8,6 +8,7 @@ import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotCreateEvent;
+import com.worldcretornica.plotme_core.utils.UUIDFetcher;
 import net.milkbowl.vault.economy.EconomyResponse;
 
 import java.util.UUID;
@@ -38,7 +39,7 @@ public class CmdClaim extends PlotCommand {
 
                 if (args.length == 2 && player.hasPermission(PermissionNames.ADMIN_CLAIM_OTHER)) {
                     playerName = args[1];
-                    playerUniqueId = null;
+                    playerUniqueId = UUIDFetcher.getUUIDOf(playerName);
                 }
 
                 int plotLimit = getPlotLimit(player);
