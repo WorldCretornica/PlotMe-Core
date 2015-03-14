@@ -121,14 +121,7 @@ public abstract class Database {
         return connection;
     }
 
-    public void createTables() {
-        try (Statement statement = getConnection().createStatement()) {
-            statement.executeUpdate(PLOT_TABLE);
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+    public abstract void createTables();
 
     public void legacyConverter() {
         plugin.getServerBridge().runTaskAsynchronously(new Runnable() {
