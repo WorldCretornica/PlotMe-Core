@@ -56,9 +56,9 @@ public class SQLiteConnector extends Database {
                     + "`bottomZ` INTEGER NOT NULL DEFAULT '0',"
                     + "`plotName` VARCHAR(32) DEFAULT NULL UNIQUE,"
                     + "`plotLikes` INTEGER NOT NULL DEFAULT '0',"
-                    + "`homeX` INTEGER NOT NULL,"
-                    + "`homeY` INTEGER NOT NULL,"
-                    + "`homeZ` INTEGER NOT NULL,"
+                    + "`homeX` INTEGER NOT NULL DEFAULT '0',"
+                    + "`homeY` INTEGER NOT NULL DEFAULT '0',"
+                    + "`homeZ` INTEGER NOT NULL DEFAULT '0',"
                     + "`homeName` VARCHAR(32) DEFAULT NULL"
                     + ");");
             statement.executeUpdate("CREATE UNIQUE INDEX IF NOT EXISTS `plotLocation` ON plotmecore_plots(plotx,plotz,world);");
