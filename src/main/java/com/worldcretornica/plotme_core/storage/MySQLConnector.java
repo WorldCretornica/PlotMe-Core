@@ -91,7 +91,7 @@ public class MySQLConnector extends Database {
                     + ");");
             statement.executeUpdate("CREATE TABLE `plotmecore_metadata` ("
                     + "`id` INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,"
-                    + "`plot_id` INTEGER NOT NULL,\n"
+                    + "`plot_id` INTEGER NOT NULL,"
                     + "`pluginname` VARCHAR(100) NOT NULL,"
                     + "`propertyname` VARCHAR(100) NOT NULL,"
                     + "`propertyvalue` VARCHAR(255)"
