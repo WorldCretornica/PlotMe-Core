@@ -10,13 +10,17 @@
 
 ## Frequently asked questions(FAQ):
 Q: What are the permissions?
+
 A: *[Click me for all PlotMe permissions](http://plotme.worldcretornica.com/cp.html)*
 
 Q: I edited my config file, but PlotMe is still not working!
+
 A: *Make sure you edit both the PlotMe-Core and PlotMe-DefaultGenerator configs*
 
 Q: I have edited both my PlotMe-Core and PlotMe-DefaultGenerator configs, but PlotMe still doesn't work!
+
 A: *Make sure that your plotworlds are **lowercase** in both configs*
 
 Q: I am experiencing normal MineCraft terrain in my plotworld
+
 A: *You are having a rare case, but we have a solution at the [website](http://plotme.worldcretornica.com/setup.html)*
