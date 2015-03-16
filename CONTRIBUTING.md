@@ -19,7 +19,7 @@ A: *Make sure you edit both the PlotMe-Core and PlotMe-DefaultGenerator configs*
 
 Q: I have edited both my PlotMe-Core and PlotMe-DefaultGenerator configs, but PlotMe still doesn't work!
 
-A: *Make sure that your plotworlds are **lowercase** in both configs*
+A: *Make sure that your plotworlds are __lowercase__ in both configs*
 
 Q: I am experiencing normal MineCraft terrain in my plotworld
 
