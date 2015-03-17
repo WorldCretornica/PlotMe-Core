@@ -7,20 +7,13 @@ import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotCreateEvent;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitLocation;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
-import com.worldcretornica.plotme_core.bukkit.api.BukkitWorld;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 
 public class PlotCreateEvent extends PlotEvent implements Cancellable {
 
     private final InternalPlotCreateEvent event;
-
-    public PlotCreateEvent(World world, PlotId plotId, Player creator) {
-        super(null, world);
-        event = new InternalPlotCreateEvent(new BukkitWorld(world), plotId, new BukkitPlayer(creator));
-    }
 
     public PlotCreateEvent(IWorld world, PlotId plotId, IPlayer creator) {
         super(null, world);

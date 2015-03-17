@@ -41,8 +41,6 @@ public interface IEventFactory {
 
     InternalPlotProtectChangeEvent callPlotProtectChangeEvent(IWorld world, Plot plot, IPlayer player, boolean protect);
 
-    InternalPlotReloadEvent callPlotReloadEvent();
-
     InternalPlotAddAllowedEvent callPlotAddAllowedEvent(IWorld world, Plot plot, IPlayer player, String allowed);
 
     InternalPlotRemoveAllowedEvent callPlotRemoveAllowedEvent(IWorld world, Plot plot, IPlayer player, String allowed);

@@ -5,10 +5,8 @@ import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IWorld;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
 
 public class InternalPlotEvent {
 
@@ -83,25 +81,24 @@ public class InternalPlotEvent {
      *
      * @return list of people allowed
      */
-    public Set<String> getAllAllowed() {
+    public List<String> getAllAllowed() {
         if (getPlot() != null) {
-            return getPlot().allowed().getAllPlayers().keySet();
+            return getPlot().allowed().getAllPlayers();
         } else {
-            return new HashSet<>();
+            return new ArrayList<>();
         }
     }
-
     /**
-     * Returns the collection of people allowed to build on this plot. The function
-     * returns an empty Collection if the plot is null.
+     * Returns the list of people denied from building on this plot. The
+     * function returns an empty Set if the plot is null.
      *
-     * @return list of people allowed
+     * @return list of people denied
      */
-    public Collection<UUID> getAllAllowedUUID() {
+    public List<String> getAllDenied() {
         if (getPlot() != null) {
-            return getPlot().allowed().getAllPlayers().values();
+            return getPlot().denied().getAllPlayers();
         } else {
-            return new HashSet<>();
+            return new ArrayList<>();
         }
     }
 
@@ -111,25 +108,11 @@ public class InternalPlotEvent {
      *
      * @return list of people denied
      */
-    public Set<String> getAllDenied() {
+    public List<String> getAllDeniedUUID() {
         if (getPlot() != null) {
-            return getPlot().denied().getAllPlayers().keySet();
+            return getPlot().denied().getAllPlayers();
         } else {
-            return new HashSet<>();
-        }
-    }
-
-    /**
-     * Returns the list of people denied from building on this plot. The
-     * function returns an empty Set if the plot is null.
-     *
-     * @return list of people denied
-     */
-    public Collection<UUID> getAllDeniedUUID() {
-        if (getPlot() != null) {
-            return getPlot().denied().getAllPlayers().values();
-        } else {
-            return new HashSet<>();
+            return new ArrayList<>();
         }
     }
 

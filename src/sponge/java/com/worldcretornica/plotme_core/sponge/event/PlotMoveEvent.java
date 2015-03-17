@@ -1,4 +1,4 @@
-package com.worldcretornica.plotme_core.bukkit.event;
+package com.worldcretornica.plotme_core.sponge.event;
 
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotId;
@@ -6,11 +6,11 @@ import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotMoveEvent;
-import com.worldcretornica.plotme_core.bukkit.api.BukkitLocation;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
-import org.bukkit.Location;
+import com.worldcretornica.plotme_core.sponge.api.SpongeLocation;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
+import org.spongepowered.api.world.Location;
 
 public class PlotMoveEvent extends PlotEvent implements Cancellable {
 
@@ -54,20 +54,20 @@ public class PlotMoveEvent extends PlotEvent implements Cancellable {
 
     @Override
     public Location getUpperBound() {
-        return ((BukkitLocation) PlotMeCoreManager.getInstance().getPlotTopLoc(event.getWorld(), event.getId())).getLocation();
+        return ((SpongeLocation) PlotMeCoreManager.getInstance().getPlotTopLoc(event.getWorld(), event.getId())).getLocation();
     }
 
     @Override
     public Location getLowerBound() {
-        return ((BukkitLocation) PlotMeCoreManager.getInstance().getPlotBottomLoc(event.getWorld(), event.getId())).getLocation();
+        return ((SpongeLocation) PlotMeCoreManager.getInstance().getPlotBottomLoc(event.getWorld(), event.getId())).getLocation();
     }
 
     public Location getUpperBoundTo() {
-        return ((BukkitLocation) PlotMeCoreManager.getInstance().getPlotTopLoc(event.getWorld(), event.getIdTo())).getLocation();
+        return ((SpongeLocation) PlotMeCoreManager.getInstance().getPlotTopLoc(event.getWorld(), event.getIdTo())).getLocation();
     }
 
     public Location getLowerBoundTo() {
-        return ((BukkitLocation) PlotMeCoreManager.getInstance().getPlotBottomLoc(event.getWorld(), event.getIdTo())).getLocation();
+        return ((SpongeLocation) PlotMeCoreManager.getInstance().getPlotBottomLoc(event.getWorld(), event.getIdTo())).getLocation();
     }
 
     public String getOwnerTo() {

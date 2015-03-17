@@ -20,7 +20,6 @@ import com.worldcretornica.plotme_core.api.event.InternalPlotLoadEvent;
 import com.worldcretornica.plotme_core.api.event.InternalPlotMoveEvent;
 import com.worldcretornica.plotme_core.api.event.InternalPlotOwnerChangeEvent;
 import com.worldcretornica.plotme_core.api.event.InternalPlotProtectChangeEvent;
-import com.worldcretornica.plotme_core.api.event.InternalPlotReloadEvent;
 import com.worldcretornica.plotme_core.api.event.InternalPlotRemoveAllowedEvent;
 import com.worldcretornica.plotme_core.api.event.InternalPlotRemoveDeniedEvent;
 import com.worldcretornica.plotme_core.api.event.InternalPlotResetEvent;
@@ -124,13 +123,6 @@ public class BukkitEventFactory implements IEventFactory {
     @Override
     public InternalPlotProtectChangeEvent callPlotProtectChangeEvent(IWorld world, Plot plot, IPlayer player, boolean protect) {
         PlotProtectChangeEvent event = new PlotProtectChangeEvent(world, plot, player, protect);
-        Bukkit.getPluginManager().callEvent(event);
-        return event.getInternal();
-    }
-
-    @Override
-    public InternalPlotReloadEvent callPlotReloadEvent() {
-        PlotReloadEvent event = new PlotReloadEvent();
         Bukkit.getPluginManager().callEvent(event);
         return event.getInternal();
     }

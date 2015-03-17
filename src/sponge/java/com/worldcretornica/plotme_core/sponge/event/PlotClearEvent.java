@@ -1,12 +1,12 @@
-package com.worldcretornica.plotme_core.bukkit.event;
+package com.worldcretornica.plotme_core.sponge.event;
 
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotClearEvent;
-import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
-import org.bukkit.entity.Player;
-import org.bukkit.event.Cancellable;
+import com.worldcretornica.plotme_core.sponge.api.SpongePlayer;
+import org.spongepowered.api.entity.player.Player;
+import org.spongepowered.api.util.event.Cancellable;
 
 public class PlotClearEvent extends PlotEvent implements Cancellable {
 
@@ -28,7 +28,7 @@ public class PlotClearEvent extends PlotEvent implements Cancellable {
     }
 
     public Player getPlayer() {
-        return ((BukkitPlayer) event.getPlayer()).getPlayer();
+        return ((SpongePlayer) event.getPlayer()).getPlayer();
     }
 
     public InternalPlotClearEvent getInternal() {

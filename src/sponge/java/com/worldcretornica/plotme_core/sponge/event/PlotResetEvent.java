@@ -1,4 +1,4 @@
-package com.worldcretornica.plotme_core.bukkit.event;
+package com.worldcretornica.plotme_core.sponge.event;
 
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.api.ICommandSender;

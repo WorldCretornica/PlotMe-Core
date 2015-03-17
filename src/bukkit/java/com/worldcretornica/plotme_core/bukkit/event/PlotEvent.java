@@ -11,10 +11,8 @@ import org.bukkit.World;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class PlotEvent extends Event {
 
@@ -100,25 +98,11 @@ public abstract class PlotEvent extends Event {
      *
      * @return list of people allowed
      */
-    public Set<String> getAllAllowed() {
+    public List<String> getAllAllowed() {
         if (event.getPlot() != null) {
-            return event.getPlot().allowed().getAllPlayers().keySet();
+            return event.getPlot().allowed().getAllPlayers();
         } else {
-            return new HashSet<>();
-        }
-    }
-
-    /**
-     * Returns the collection of people allowed to build on this plot. The function
-     * returns an empty Collection if the plot is null.
-     *
-     * @return list of people allowed
-     */
-    public Collection<UUID> getAllAllowedUUID() {
-        if (event.getPlot() != null) {
-            return event.getPlot().allowed().getAllPlayers().values();
-        } else {
-            return new HashSet<>();
+            return new ArrayList<>();
         }
     }
 
@@ -128,25 +112,11 @@ public abstract class PlotEvent extends Event {
      *
      * @return list of people denied
      */
-    public Set<String> getAllDenied() {
+    public List<String> getAllDenied() {
         if (event.getPlot() != null) {
-            return event.getPlot().denied().getAllPlayers().keySet();
+            return event.getPlot().denied().getAllPlayers();
         } else {
-            return new HashSet<>();
-        }
-    }
-
-    /**
-     * Returns the list of people denied from building on this plot. The
-     * function returns an empty Set if the plot is null.
-     *
-     * @return list of people denied
-     */
-    public Collection<UUID> getAllDeniedUUID() {
-        if (event.getPlot() != null) {
-            return event.getPlot().denied().getAllPlayers().values();
-        } else {
-            return new HashSet<>();
+            return new ArrayList<>();
         }
     }
 

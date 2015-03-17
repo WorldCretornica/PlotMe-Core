@@ -1,20 +1,20 @@
-package com.worldcretornica.plotme_core.bukkit.event;
+package com.worldcretornica.plotme_core.sponge.event;
 
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
-import com.worldcretornica.plotme_core.api.event.InternalPlotRemoveAllowedEvent;
+import com.worldcretornica.plotme_core.api.event.InternalPlotSellChangeEvent;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 
-public class PlotRemoveAllowedEvent extends PlotEvent implements Cancellable {
+public class PlotSellChangeEvent extends PlotEvent implements Cancellable {
 
-    private final InternalPlotRemoveAllowedEvent event;
+    private final InternalPlotSellChangeEvent event;
 
-    public PlotRemoveAllowedEvent(IWorld world, Plot plot, IPlayer player, String removed) {
+    public PlotSellChangeEvent(IWorld world, Plot plot, IPlayer seller, double price, boolean isForSale) {
         super(plot, world);
-        event = new InternalPlotRemoveAllowedEvent(world, plot, player, removed);
+        event = new InternalPlotSellChangeEvent(world, plot, seller, price, isForSale);
     }
 
     @Override
@@ -31,11 +31,15 @@ public class PlotRemoveAllowedEvent extends PlotEvent implements Cancellable {
         return ((BukkitPlayer) event.getPlayer()).getPlayer();
     }
 
-    public String getRemovedAllowed() {
-        return event.getRemovedAllowed();
+    public double getPrice() {
+        return event.getPrice();
     }
 
-    public InternalPlotRemoveAllowedEvent getInternal() {
+    public boolean isForSale() {
+        return event.isForSale();
+    }
+
+    public InternalPlotSellChangeEvent getInternal() {
         return event;
     }
 }

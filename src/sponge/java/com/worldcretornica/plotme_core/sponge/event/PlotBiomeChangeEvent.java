@@ -1,15 +1,13 @@
-package com.worldcretornica.plotme_core.bukkit.event;
+package com.worldcretornica.plotme_core.sponge.event;
 
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.api.IBiome;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotBiomeChangeEvent;
-import com.worldcretornica.plotme_core.bukkit.api.BukkitBiome;
-import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
-import org.bukkit.block.Biome;
-import org.bukkit.entity.Player;
-import org.bukkit.event.Cancellable;
+import com.worldcretornica.plotme_core.sponge.api.SpongePlayer;
+import org.spongepowered.api.entity.player.Player;
+import org.spongepowered.api.util.event.Cancellable;
 
 public class PlotBiomeChangeEvent extends PlotEvent implements Cancellable {
 
@@ -31,15 +29,7 @@ public class PlotBiomeChangeEvent extends PlotEvent implements Cancellable {
     }
 
     public Player getPlayer() {
-        return ((BukkitPlayer) event.getPlayer()).getPlayer();
-    }
-
-    public Biome getBiome() {
-        return ((BukkitBiome) event.getBiome()).getBiome();
-    }
-
-    public void setBiome(Biome biome) {
-        event.setBiome(new BukkitBiome(biome));
+        return ((SpongePlayer) event.getPlayer()).getPlayer();
     }
 
     public InternalPlotBiomeChangeEvent getInternal() {

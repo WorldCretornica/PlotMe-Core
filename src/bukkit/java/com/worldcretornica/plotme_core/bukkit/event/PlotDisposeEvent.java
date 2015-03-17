@@ -5,19 +5,12 @@ import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotDisposeEvent;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
-import com.worldcretornica.plotme_core.bukkit.api.BukkitWorld;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 
 public class PlotDisposeEvent extends PlotEvent implements Cancellable {
 
     private final InternalPlotDisposeEvent event;
-
-    public PlotDisposeEvent(World world, Plot plot, Player disposer) {
-        super(plot, world);
-        event = new InternalPlotDisposeEvent(new BukkitWorld(world), plot, new BukkitPlayer(disposer));
-    }
 
     public PlotDisposeEvent(IWorld world, Plot plot, IPlayer disposer) {
         super(plot, world);

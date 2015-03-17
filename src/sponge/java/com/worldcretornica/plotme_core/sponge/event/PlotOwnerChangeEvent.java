@@ -1,20 +1,20 @@
-package com.worldcretornica.plotme_core.bukkit.event;
+package com.worldcretornica.plotme_core.sponge.event;
 
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
-import com.worldcretornica.plotme_core.api.event.InternalPlotRemoveAllowedEvent;
+import com.worldcretornica.plotme_core.api.event.InternalPlotOwnerChangeEvent;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 
-public class PlotRemoveAllowedEvent extends PlotEvent implements Cancellable {
+public class PlotOwnerChangeEvent extends PlotEvent implements Cancellable {
 
-    private final InternalPlotRemoveAllowedEvent event;
+    private final InternalPlotOwnerChangeEvent event;
 
-    public PlotRemoveAllowedEvent(IWorld world, Plot plot, IPlayer player, String removed) {
+    public PlotOwnerChangeEvent(IWorld world, Plot plot, IPlayer player, String newOwner) {
         super(plot, world);
-        event = new InternalPlotRemoveAllowedEvent(world, plot, player, removed);
+        event = new InternalPlotOwnerChangeEvent(world, plot, player, newOwner);
     }
 
     @Override
@@ -31,11 +31,11 @@ public class PlotRemoveAllowedEvent extends PlotEvent implements Cancellable {
         return ((BukkitPlayer) event.getPlayer()).getPlayer();
     }
 
-    public String getRemovedAllowed() {
-        return event.getRemovedAllowed();
+    public String getNewOwner() {
+        return event.getNewOwner();
     }
 
-    public InternalPlotRemoveAllowedEvent getInternal() {
+    public InternalPlotOwnerChangeEvent getInternal() {
         return event;
     }
 }

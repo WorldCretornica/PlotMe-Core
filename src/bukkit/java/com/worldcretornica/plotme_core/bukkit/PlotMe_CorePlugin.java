@@ -38,7 +38,6 @@ public class PlotMe_CorePlugin extends JavaPlugin {
     public void onEnable() {
         serverObjectBuilder = new BukkitServerBridge(this);
         AbstractSchematicUtil schematicutil = null;
-
         if (Bukkit.getVersion().contains("1.7")) {
             try {
                 Constructor<?> constructor = Class.forName("com.worldcretornica.plotme_core.bukkit.v1_7.SchematicUtil").getConstructor(Plugin.class);

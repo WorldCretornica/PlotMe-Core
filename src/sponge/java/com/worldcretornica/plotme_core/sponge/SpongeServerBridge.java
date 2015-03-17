@@ -10,9 +10,9 @@ import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IServerBridge;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.IEventFactory;
-import com.worldcretornica.plotme_core.bukkit.event.BukkitEventFactory;
 import com.worldcretornica.plotme_core.sponge.api.SpongePlayer;
 import com.worldcretornica.plotme_core.sponge.api.SpongeWorld;
+import com.worldcretornica.plotme_core.sponge.event.SpongeEventFactory;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.spongepowered.api.entity.player.Player;
@@ -33,7 +33,7 @@ public class SpongeServerBridge extends IServerBridge {
 
     public SpongeServerBridge(PlotMe_Sponge instance) {
         plugin = instance;
-        eventFactory = new BukkitEventFactory();
+        eventFactory = new SpongeEventFactory(plugin.getGame());
     }
 
     @Override
@@ -179,8 +179,7 @@ public class SpongeServerBridge extends IServerBridge {
 
     @Override
     public IEventFactory getEventFactory() {
-        // TODO Auto-generated method stub
-        return null;
+        return eventFactory;
     }
 
     @Override
@@ -193,12 +192,6 @@ public class SpongeServerBridge extends IServerBridge {
     public void saveResource(boolean replace) {
         // TODO Auto-generated method stub
 
-    }
-
-    @Override
-    public boolean addMultiverseWorld(String worldName, String seed, String generator) {
-        // TODO Auto-generated method stub
-        return false;
     }
 
     @Override
@@ -238,6 +231,11 @@ public class SpongeServerBridge extends IServerBridge {
 
     @Override
     public File getWorldFolder() {
+        return null;
+    }
+
+    @Override
+    public void getOfflinePlayers() {
         return null;
     }
 
