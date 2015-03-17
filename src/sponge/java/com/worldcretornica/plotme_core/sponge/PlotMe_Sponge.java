@@ -1,5 +1,6 @@
 package com.worldcretornica.plotme_core.sponge;
 
+import com.google.inject.Inject;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IServerBridge;
 import com.worldcretornica.plotme_core.sponge.api.SpongePlayer;
@@ -50,6 +51,7 @@ public class PlotMe_Sponge {
         return plotme;
     }
 
+    @Inject
     public Game getGame() {
         return game;
     }

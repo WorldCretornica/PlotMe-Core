@@ -235,7 +235,7 @@ public class SpongeServerBridge extends IServerBridge {
     }
 
     @Override
-    public void getOfflinePlayers() {
+    public List<IOfflinePlayer> getOfflinePlayers() {
         return null;
     }
 

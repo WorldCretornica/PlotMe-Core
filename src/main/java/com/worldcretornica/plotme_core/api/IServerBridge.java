@@ -99,8 +99,6 @@ public abstract class IServerBridge {
                 new InputStreamReader(getClass().getClassLoader().getResourceAsStream("default-world.yml"), StandardCharsets.UTF_8));
     }
 
-    public abstract boolean addMultiverseWorld(String worldName, String seed, String generator);
-
     public abstract List<String> getBiomes();
 
     /**
@@ -136,4 +134,6 @@ public abstract class IServerBridge {
     }
 
     public abstract File getWorldFolder();
+
+    public abstract List<IOfflinePlayer> getOfflinePlayers();
 }

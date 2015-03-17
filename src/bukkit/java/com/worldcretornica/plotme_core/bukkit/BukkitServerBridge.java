@@ -27,7 +27,6 @@ import org.bukkit.block.Biome;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -42,19 +41,10 @@ public class BukkitServerBridge extends IServerBridge {
     private final IEventFactory eventFactory;
     private Economy economy;
     private PlotWorldEdit plotworldedit;
-    private MultiverseWrapper multiverse;
 
     public BukkitServerBridge(PlotMe_CorePlugin instance) {
         plugin = instance;
         eventFactory = new BukkitEventFactory();
-    }
-
-    private static MultiverseWrapper getMultiverseWrapper() {
-        if (Bukkit.getPluginManager().isPluginEnabled("Multiverse-Core")) {
-            return new MultiverseWrapper((JavaPlugin) Bukkit.getPluginManager().getPlugin("Multiverse-Core"));
-        } else {
-            return null;
-        }
     }
 
     @Override
@@ -251,11 +241,6 @@ public class BukkitServerBridge extends IServerBridge {
     }
 
     @Override
-    public boolean addMultiverseWorld(String worldName, String seed, String generator) {
-        return getMultiverseWrapper().getMVWorldManager().addWorld(worldName, seed, generator);
-    }
-
-    @Override
     public double getBalance(IPlayer player) {
         return getEconomy().getBalance(((BukkitOfflinePlayer) player).getOfflinePlayer());
     }
@@ -380,14 +365,6 @@ public class BukkitServerBridge extends IServerBridge {
     }
 */
 
-    private MultiverseWrapper getMultiverse() {
-        return multiverse;
-    }
-
-    private void setMultiverse(JavaPlugin multiverse) {
-        this.multiverse = new MultiverseWrapper(multiverse);
-    }
-
     @Override
     public IMaterial getMaterial(String string) {
         return new BukkitMaterial(Material.valueOf(string));
@@ -399,5 +376,14 @@ public class BukkitServerBridge extends IServerBridge {
 
     public File getWorldFolder() {
         return plugin.getServer().getWorldContainer();
+    }
+
+    @Override
+    public List<IOfflinePlayer> getOfflinePlayers() {
+        List<IOfflinePlayer> list = new ArrayList<>();
+        for (OfflinePlayer player : plugin.getServer().getOfflinePlayers()) {
+            list.add(new BukkitOfflinePlayer(player));
+        }
+        return list;
     }
 }

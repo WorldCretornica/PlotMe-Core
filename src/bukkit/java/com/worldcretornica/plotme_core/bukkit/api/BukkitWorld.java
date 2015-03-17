@@ -3,6 +3,8 @@ package com.worldcretornica.plotme_core.bukkit.api;
 import com.worldcretornica.plotme_core.api.IWorld;
 import org.bukkit.World;
 
+import java.io.File;
+
 public class BukkitWorld implements IWorld {
 
     private final World world;
@@ -25,4 +27,7 @@ public class BukkitWorld implements IWorld {
         return world;
     }
 
+    public File getWorldFolder() {
+        return world.getWorldFolder();
+    }
 }

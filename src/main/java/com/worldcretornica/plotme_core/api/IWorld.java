@@ -1,6 +1,8 @@
 package com.worldcretornica.plotme_core.api;
 
 
+import java.io.File;
+
 public interface IWorld {
 
     /**
@@ -10,4 +12,5 @@ public interface IWorld {
      */
     String getName();
 
+    File getWorldFolder();
 }
