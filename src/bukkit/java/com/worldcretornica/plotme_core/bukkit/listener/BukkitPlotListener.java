@@ -13,6 +13,7 @@ import com.worldcretornica.plotme_core.bukkit.api.BukkitEntity;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitLocation;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
 import com.worldcretornica.plotme_core.bukkit.event.PlotWorldLoadEvent;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
@@ -96,7 +97,7 @@ public class BukkitPlotListener implements Listener {
                 } else {
                     Plot plot = manager.getMap(location).getPlot(id);
 
-                    if (plot == null || !plot.isAllowed(player.getName(), player.getUniqueId())) {
+                    if (plot == null || !plot.isAllowed(player.getUniqueId())) {
                         if (!player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE)) {
                             player.sendMessage(api.getUtil().C("ErrCannotBuild"));
                             event.setCancelled(true);
@@ -142,7 +143,7 @@ public class BukkitPlotListener implements Listener {
                 } else {
                     Plot plot = manager.getPlotById(id, location.getWorld());
 
-                    if (plot == null || !plot.isAllowed(player.getName(), player.getUniqueId())) {
+                    if (plot == null || !plot.isAllowed(player.getUniqueId())) {
                         if (canBuild) {
                             player.sendMessage(api.getUtil().C("ErrCannotBuild"));
                             event.setCancelled(true);
@@ -185,7 +186,7 @@ public class BukkitPlotListener implements Listener {
                 } else {
                     Plot plot = manager.getPlotById(id, location.getWorld());
 
-                    if (plot == null || !plot.isAllowed(player.getName(), player.getUniqueId())) {
+                    if (plot == null || !plot.isAllowed(player.getUniqueId())) {
                         player.sendMessage(api.getUtil().C("ErrCannotBuild"));
                         event.setCancelled(true);
                     }
@@ -228,7 +229,7 @@ public class BukkitPlotListener implements Listener {
                 } else {
                     Plot plot = manager.getPlotById(id, location.getWorld());
 
-                    if (plot == null || !plot.isAllowed(player.getName(), player.getUniqueId())) {
+                    if (plot == null || !plot.isAllowed(player.getUniqueId())) {
                         player.sendMessage(api.getUtil().C("ErrCannotBuild"));
                         event.setCancelled(true);
                     }
@@ -246,8 +247,11 @@ public class BukkitPlotListener implements Listener {
             Player player = event.getPlayer();
 
             PlotId plotId = manager.getPlotId(block.getLocation());
+            if (plotId == null) {
+                event.setCancelled(true);
+                return;
+            }
             PlotToClear ptc = api.getPlotLocked(block.getWorld(), plotId);
-
             if (ptc != null) {
                 switch (ptc.getReason()) {
                     case Clear:
@@ -267,7 +271,7 @@ public class BukkitPlotListener implements Listener {
 
                 Plot plot = manager.getPlotById(plotId, pmi);
                 if (event.isBlockInHand() && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-                    if (plot == null || !plot.isAllowed(player.getName(), player.getUniqueId())) {
+                    if (plot == null || !plot.isAllowed(player.getUniqueId())) {
                         if (canBuild) {
                             player.sendMessage(api.getUtil().C("ErrCannotBuild"));
                             event.setCancelled(true);
@@ -288,13 +292,13 @@ public class BukkitPlotListener implements Listener {
                         byte itemData = item.getData().getData();
 
                         if ((pmi.isPreventedItem(String.valueOf(itemId)) || pmi.isPreventedItem(itemId + ":" + itemData)) && !player
-                                .hasPermission("plotme.unblock." + itemId)) {
+                                .hasPermission("plotme.unblock." + itemId) || item.getType().equals(Material.MONSTER_EGG)) {
                             blocked = true;
                         }
                     }
 
                     if (blocked) {
-                        if (plot == null || !plot.isAllowed(player.getName(), player.getUniqueId())) {
+                        if (plot == null || !plot.isAllowed(player.getUniqueId())) {
                             if (canBuild) {
                                 if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
                                     player.sendMessage(api.getUtil().C("ErrCannotUse"));
@@ -525,7 +529,8 @@ public class BukkitPlotListener implements Listener {
                         }
                         Plot plot = manager.getPlotById(id, pmi);
 
-                        if (plot == null || player != null && !plot.isAllowed(player.getName(), player.getUniqueId()) && !player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE)) {
+                        if (plot == null || player != null && !plot.isAllowed(player.getUniqueId()) && !player
+                                .hasPermission(PermissionNames.ADMIN_BUILDANYWHERE)) {
                             event.setCancelled(true);
                         }
                     }
@@ -567,7 +572,7 @@ public class BukkitPlotListener implements Listener {
                 } else {
                     Plot plot = manager.getPlotById(id, location.getWorld());
 
-                    if (plot == null || !plot.isAllowed(player.getName(), player.getUniqueId())) {
+                    if (plot == null || !plot.isAllowed(player.getUniqueId())) {
                         if (canBuild) {
                             player.sendMessage(api.getUtil().C("ErrCannotBuild"));
                             event.setCancelled(true);
@@ -615,7 +620,7 @@ public class BukkitPlotListener implements Listener {
                     } else {
                         Plot plot = manager.getPlotById(id, player.getWorld());
 
-                        if (plot == null || !plot.isAllowed(player.getName(), player.getUniqueId())) {
+                        if (plot == null || !plot.isAllowed(player.getUniqueId())) {
                             if (canBuild) {
                                 player.sendMessage(api.getUtil().C("ErrCannotBuild"));
                                 event.setCancelled(true);
@@ -654,7 +659,7 @@ public class BukkitPlotListener implements Listener {
                         player.sendMessage(api.getUtil().C("ErrCannotBuild"));
                         event.setCancelled(true);
                     }
-                } else if (plot.isAllowed(player.getName(), player.getUniqueId())) {
+                } else if (plot.isAllowed(player.getUniqueId())) {
                     plot.resetExpire(manager.getMap(location).getDaysToExpiration());
                 } else {
                     player.sendMessage(api.getUtil().C("ErrCannotBuild"));
@@ -733,7 +738,7 @@ public class BukkitPlotListener implements Listener {
                     }
                 } else {
                     Plot plot = manager.getPlotById(id, bukkitPlayer);
-                    if (plot == null || !plot.isAllowed(player.getName(), player.getUniqueId())) {
+                    if (plot == null || !plot.isAllowed(player.getUniqueId())) {
                         if (cantBuild) {
                             bukkitPlayer.sendMessage(api.getUtil().C("ErrCannotBuild"));
                             event.setCancelled(true);
@@ -769,7 +774,7 @@ public class BukkitPlotListener implements Listener {
                         player.sendMessage(api.getUtil().C("ErrCannotBuild"));
                         event.setCancelled(true);
                     }
-                } else if (plot.isAllowed(player.getName(), player.getUniqueId())) {
+                } else if (plot.isAllowed(player.getUniqueId())) {
                     plot.resetExpire(manager.getMap(location).getDaysToExpiration());
                 } else {
                     player.sendMessage(api.getUtil().C("ErrCannotBuild"));
