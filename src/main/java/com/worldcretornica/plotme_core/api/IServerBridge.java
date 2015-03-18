@@ -136,4 +136,6 @@ public abstract class IServerBridge {
     public abstract File getWorldFolder();
 
     public abstract List<IOfflinePlayer> getOfflinePlayers();
+
+    public abstract String addColor(char c, String string);
 }

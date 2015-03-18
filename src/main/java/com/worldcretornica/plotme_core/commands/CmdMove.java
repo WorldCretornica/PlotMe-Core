@@ -16,23 +16,23 @@ public class CmdMove extends PlotCommand {
     public boolean exec(IPlayer player, String[] args) {
         if (player.hasPermission(PermissionNames.ADMIN_MOVE)) {
             if (!manager.isPlotWorld(player)) {
-                player.sendMessage("§c" + C("MsgNotPlotWorld"));
+                player.sendMessage(C("MsgNotPlotWorld"));
             } else if (args.length < 3 || args[1].isEmpty() || args[2].isEmpty()) {
-                player.sendMessage(C("WordUsage") + ": §c/plotme move <" + C("WordIdFrom") + "> <" + C("WordIdTo") + "> §r" + C("WordExample")
-                        + ": §c/plotme move 0;1 2;-1");
+                player.sendMessage(C("WordUsage") + ": /plotme move <" + C("WordIdFrom") + "> <" + C("WordIdTo") + "> " + C("WordExample")
+                        + ": /plotme move 0;1 2;-1");
             } else {
                 String plot1 = args[1];
                 String plot2 = args[2];
                 if (plot1.equals(plot2)) {
-                    player.sendMessage(C("WordUsage") + ": §c/plotme move <" + C("WordIdFrom") + "> <" + C("WordIdTo") + "> §r" + C("WordExample")
-                            + ": §c/plotme move 0;1 2;-1");
+                    player.sendMessage(C("WordUsage") + ": /plotme move <" + C("WordIdFrom") + "> <" + C("WordIdTo") + "> " + C("WordExample")
+                            + ": /plotme move 0;1 2;-1");
                     return true;
                 }
                 IWorld world = player.getWorld();
 
                 if (!PlotId.isValidID(plot1) || !PlotId.isValidID(plot2)) {
-                    player.sendMessage(C("WordUsage") + ": §c/plotme move <" + C("WordIdFrom") + "> <" + C("WordIdTo") + "> §r" + C("WordExample")
-                            + ": §c/plotme move 0;1 2;-1");
+                    player.sendMessage(C("WordUsage") + ": /plotme move <" + C("WordIdFrom") + "> <" + C("WordIdTo") + "> " + C("WordExample")
+                            + ": /plotme move 0;1 2;-1");
                 } else {
                     PlotId id1 = new PlotId(plot1);
                     PlotId id2 = new PlotId(plot2);
@@ -44,13 +44,13 @@ public class CmdMove extends PlotCommand {
                             serverBridge.getLogger()
                                     .info(player.getName() + " " + C("MsgExchangedPlot") + " " + plot1 + " " + C("MsgAndPlot") + " " + plot2);
                         } else {
-                            player.sendMessage("§c" + C("ErrMovingPlot"));
+                            player.sendMessage(C("ErrMovingPlot"));
                         }
                     }
                 }
             }
         } else {
-            player.sendMessage("§c" + C("MsgPermissionDenied"));
+            player.sendMessage(C("MsgPermissionDenied"));
             return false;
         }
         return true;

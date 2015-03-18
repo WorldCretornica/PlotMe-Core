@@ -25,7 +25,7 @@ public class CmdTP extends PlotCommand {
                         world = serverBridge.getWorld(args[2]);
 
                         if (world == null) {
-                            player.sendMessage("§c" + C("MsgNoPlotworldFound"));
+                            player.sendMessage(C("MsgNoPlotworldFound"));
                             return true;
                         }
                     } else if (manager.isPlotWorld(player)) {
@@ -37,12 +37,11 @@ public class CmdTP extends PlotCommand {
                     if (PlotId.isValidID(args[1])) {
                         PlotId id2 = new PlotId(args[1]);
                         if (!manager.isPlotWorld(world)) {
-                            player.sendMessage("§c" + C("MsgNoPlotworldFound"));
+                            player.sendMessage(C("MsgNoPlotworldFound"));
                         } else {
                             ILocation location = manager.getPlotHome(world, id2);
                             Plot plot = manager.getPlotById(id2, world);
-                            InternalPlotTeleportEvent
-                                    event =
+                            InternalPlotTeleportEvent event =
                                     serverBridge.getEventFactory().callPlotTeleportEvent(world, plot, player, location, id2);
 
                             if (!event.isCancelled()) {
@@ -52,16 +51,16 @@ public class CmdTP extends PlotCommand {
                     }
                 } else if (plugin.getConfig().getBoolean("allowWorldTeleport")) {
                     player.sendMessage(
-                            C("WordUsage") + ": §c/plotme tp <ID> [" + C("WordWorld") + "] §r" + C("WordExample") + ": §c/plotme tp 5;-1 ");
+                            C("WordUsage") + ": /plotme tp <ID> [" + C("WordWorld") + "] " + C("WordExample") + ": /plotme tp 5;-1 ");
                 } else {
-                    player.sendMessage(C("WordUsage") + ": §c/plotme tp <ID> §r" + C("WordExample") + ": §c/plotme tp 5;-1 ");
+                    player.sendMessage(C("WordUsage") + ": /plotme tp <ID> " + C("WordExample") + ": /plotme tp 5;-1 ");
                 }
             } else {
-                player.sendMessage("§c" + C("MsgNotPlotWorld"));
+                player.sendMessage(C("MsgNotPlotWorld"));
                 return true;
             }
         } else {
-            player.sendMessage("§c" + C("MsgPermissionDenied"));
+            player.sendMessage(C("MsgPermissionDenied"));
             return false;
         }
         return true;

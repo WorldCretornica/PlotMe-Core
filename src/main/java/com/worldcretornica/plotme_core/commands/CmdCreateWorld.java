@@ -37,7 +37,7 @@ public class CmdCreateWorld extends PlotCommand {
                                     parameters.remove(ckey);
                                     parameters.put(ckey, value);
 
-                                    sender.sendMessage(C("MsgSettingChanged") + " §a" + ckey + "§r=§b" + value);
+                                    sender.sendMessage(C("MsgSettingChanged") + " " + ckey + "=" + value);
 
                                     return true;
                                 }
@@ -57,7 +57,7 @@ public class CmdCreateWorld extends PlotCommand {
         } else {
             //Usage
             if (args.length == 1) {
-                sender.sendMessage(C("WordUsage") + ": §c/plotme createworld <" + C("WordWorld") + "> [" + C("WordGenerator") + "]");
+                sender.sendMessage(C("WordUsage") + ": /plotme createworld <" + C("WordWorld") + "> [" + C("WordGenerator") + "]");
                 sender.sendMessage(C("MsgCreateWorldHelp"));
             } else {
 
@@ -152,7 +152,7 @@ public class CmdCreateWorld extends PlotCommand {
                 buffer = " ";
             }
 
-            buffer += "§a" + key + "§r=§b" + parameters.get(key) + "  ";
+            buffer += key + "=" + parameters.get(key) + "  ";
         }
         cs.sendMessage(buffer);
     }

@@ -5,8 +5,6 @@ import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
-import com.worldcretornica.plotme_core.utils.MinecraftFontWidthCalculator;
-import com.worldcretornica.plotme_core.utils.Util;
 
 import java.util.List;
 
@@ -40,21 +38,15 @@ public class CmdExpired extends PlotCommand {
                     for (int i = (page - 1) * 8; i < expiredPlots.size() && i < page * 8; i++) {
                         Plot plot = expiredPlots.get(i);
 
-                        String startText = "  §b" + plot.getId() + "§r -> " + plot.getOwner();
-
-                        int textLength = MinecraftFontWidthCalculator.getStringWidth(startText);
-
-                        String line = startText + Util.whitespace(550 - textLength) + "@" + plot.getExpiredDate();
-
-                        player.sendMessage(line);
+                        player.sendMessage(plot.getId() + " -> " + plot.getOwner() + " @ " + plot.getExpiredDate());
                     }
                 }
             } else {
-                player.sendMessage("§c" + C("MsgNotPlotWorld"));
+                player.sendMessage(C("MsgNotPlotWorld"));
                 return true;
             }
         } else {
-            player.sendMessage("§c" + C("MsgPermissionDenied"));
+            player.sendMessage(C("MsgPermissionDenied"));
             return false;
         }
         return true;

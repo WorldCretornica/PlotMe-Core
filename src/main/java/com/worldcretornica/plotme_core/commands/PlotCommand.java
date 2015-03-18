@@ -4,7 +4,6 @@ import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IServerBridge;
-import com.worldcretornica.plotme_core.utils.Util;
 
 public abstract class PlotCommand {
 
@@ -18,10 +17,6 @@ public abstract class PlotCommand {
         plugin = instance;
         serverBridge = plugin.getServerBridge();
         manager = PlotMeCoreManager.getInstance();
-    }
-
-    Util Util() {
-        return plugin.getUtil();
     }
 
     short getPlotLimit(IPlayer player) {
@@ -51,7 +46,7 @@ public abstract class PlotCommand {
 
 
     String C(String caption) {
-        return Util().C(caption);
+        return plugin.C(caption);
     }
 
     protected boolean isAdvancedLogging() {

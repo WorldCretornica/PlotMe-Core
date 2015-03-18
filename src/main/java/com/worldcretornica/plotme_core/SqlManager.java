@@ -172,7 +172,7 @@ public class SqlManager {
                             if (byPlayerId == null) {
                                 allowed.put(setAllowed.getString("player"));
                             } else {
-                                allowed.put(setAllowed.getString("player"), UUIDFetcher.fromBytes(byPlayerId));
+                                allowed.put(UUIDFetcher.fromBytes(byPlayerId).toString());
                             }
                         }
 
@@ -186,7 +186,7 @@ public class SqlManager {
                             if (byPlayerId == null) {
                                 denied.put(setDenied.getString("player"));
                             } else {
-                                denied.put(setDenied.getString("player"), UUIDFetcher.fromBytes(byPlayerId));
+                                denied.put(UUIDFetcher.fromBytes(byPlayerId).toString());
                             }
                         }
 
@@ -306,17 +306,17 @@ public class SqlManager {
 
             PlayerList allowedlist = plot.allowed();
             if (allowedlist != null && allowedlist.getAllPlayers() != null) {
-                HashMap<String, UUID> allowed = allowedlist.getAllPlayers();
-                for (String key : allowed.keySet()) {
-                    addPlotAllowed(key, allowed.get(key), id, plot.getWorld());
+                List<String> allowed = allowedlist.getAllPlayers();
+                for (String key : allowed) {
+                    addPlotAllowed(key, id, plot.getWorld());
                 }
             }
 
             PlayerList deniedlist = plot.denied();
             if (deniedlist != null && deniedlist.getAllPlayers() != null) {
-                HashMap<String, UUID> denied = deniedlist.getAllPlayers();
-                for (String key : denied.keySet()) {
-                    addPlotDenied(key, denied.get(key), id, plot.getWorld());
+                List<String> denied = deniedlist.getAllPlayers();
+                for (String key : denied) {
+                    addPlotDenied(key, id, plot.getWorld());
                 }
             }
 
@@ -379,7 +379,7 @@ public class SqlManager {
         }
     }
 
-    public void addPlotAllowed(String player, UUID uuid, PlotId id, String world) {
+    public void addPlotAllowed(String player, PlotId id, String world) {
         PreparedStatement ps = null;
 
         //Allowed
@@ -391,12 +391,8 @@ public class SqlManager {
             ps.setInt(2, id.getZ());
             ps.setString(3, player);
             ps.setString(4, world.toLowerCase());
-            if (uuid != null) {
-                ps.setBytes(5, UUIDFetcher.toBytes(uuid));
-            } else {
-                ps.setBytes(5, null);
-                fetchUUIDAsync(id, world, "allowed", player);
-            }
+            ps.setBytes(5, null);
+            fetchUUIDAsync(id, world, "allowed", player);
 
             ps.executeUpdate();
             conn.commit();
@@ -416,7 +412,7 @@ public class SqlManager {
         }
     }
 
-    public void addPlotDenied(String player, UUID playerid, PlotId id, String world) {
+    public void addPlotDenied(String player, PlotId id, String world) {
         PreparedStatement ps = null;
 
         //Denied
@@ -428,12 +424,8 @@ public class SqlManager {
             ps.setInt(2, id.getZ());
             ps.setString(3, player);
             ps.setString(4, world.toLowerCase());
-            if (playerid == null) {
-                ps.setBytes(5, null);
-                fetchUUIDAsync(id, world, "denied", player);
-            } else {
-                ps.setBytes(5, UUIDFetcher.toBytes(playerid));
-            }
+            ps.setBytes(5, null);
+            fetchUUIDAsync(id, world, "denied", player);
 
             ps.executeUpdate();
             conn.commit();
@@ -636,7 +628,7 @@ public class SqlManager {
                     if (byPlayerId == null) {
                         allowed.put(setAllowed.getString("player"));
                     } else {
-                        allowed.put(setAllowed.getString("player"), UUIDFetcher.fromBytes(byPlayerId));
+                        allowed.put(UUIDFetcher.fromBytes(byPlayerId).toString());
                     }
                 }
 
@@ -654,7 +646,7 @@ public class SqlManager {
                     if (byPlayerId == null) {
                         denied.put(setDenied.getString("player"));
                     } else {
-                        denied.put(setDenied.getString("player"), UUIDFetcher.fromBytes(byPlayerId));
+                        denied.put(UUIDFetcher.fromBytes(byPlayerId).toString());
                     }
                 }
                 setDenied.close();
@@ -786,7 +778,7 @@ public class SqlManager {
                     if (byPlayerId == null) {
                         allowed.put(setAllowed.getString("player"));
                     } else {
-                        allowed.put(setAllowed.getString("player"), UUIDFetcher.fromBytes(byPlayerId));
+                        allowed.put(UUIDFetcher.fromBytes(byPlayerId).toString());
                     }
                 }
 
@@ -801,7 +793,7 @@ public class SqlManager {
                     if (byPlayerId == null) {
                         denied.put(setDenied.getString("player"));
                     } else {
-                        denied.put(setDenied.getString("player"), UUIDFetcher.fromBytes(byPlayerId));
+                        denied.put(UUIDFetcher.fromBytes(byPlayerId).toString());
                     }
                 }
 
@@ -1216,7 +1208,7 @@ public class SqlManager {
                     if (byPlayerId == null) {
                         allowed.put(setAllowed.getString("player"));
                     } else {
-                        allowed.put(setAllowed.getString("player"), UUIDFetcher.fromBytes(byPlayerId));
+                        allowed.put(UUIDFetcher.fromBytes(byPlayerId).toString());
                     }
                 }
 
@@ -1234,7 +1226,7 @@ public class SqlManager {
                     if (byPlayerId == null) {
                         denied.put(setDenied.getString("player"));
                     } else {
-                        denied.put(setDenied.getString("player"), UUIDFetcher.fromBytes(byPlayerId));
+                        denied.put(UUIDFetcher.fromBytes(byPlayerId).toString());
                     }
                 }
 
@@ -1543,10 +1535,10 @@ public class SqlManager {
                                                 }
 
                                                 //Allowed
-                                                plot.allowed().replace(oldname, newname, uuid);
+                                                plot.allowed().replace(oldname, newname);
 
                                                 //Denied
-                                                plot.denied().replace(oldname, newname, uuid);
+                                                plot.denied().replace(oldname, newname);
 
                                             }
                                         }
@@ -1669,7 +1661,7 @@ public class SqlManager {
                     Connection conn = getConnection();
 
                     IPlayer player = plugin.getServerBridge().getPlayerExact(name);
-                    UUID uuid = null;
+                    UUID uuid;
                     String newname = name;
 
                     if (player == null) {
@@ -1722,11 +1714,11 @@ public class SqlManager {
                                     break;
                                 case "allowed":
                                     plot.allowed().remove(name);
-                                    plot.allowed().put(newname, uuid);
+                                    plot.allowed().put(uuid.toString());
                                     break;
                                 case "denied":
                                     plot.denied().remove(name);
-                                    plot.denied().put(newname, uuid);
+                                    plot.denied().put(uuid.toString());
                                     break;
                                 default:
                             }

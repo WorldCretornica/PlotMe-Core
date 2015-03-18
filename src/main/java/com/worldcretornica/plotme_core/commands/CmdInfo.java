@@ -21,68 +21,68 @@ public class CmdInfo extends PlotCommand {
                 PlotId id = manager.getPlotId(player);
 
                 if (id == null) {
-                    player.sendMessage("§c" + C("MsgNoPlotFound"));
+                    player.sendMessage(C("MsgNoPlotFound"));
                     return true;
                 }
                 if (!manager.isPlotAvailable(id, world)) {
                     Plot plot = manager.getPlotById(id, world);
 
-                    player.sendMessage("§aID: §b" + id + "§a " + C("InfoOwner") + ": §b" + plot.getOwner()
-                            + "§a " + C("InfoBiome") + ": §b" + ((BukkitBiome) plot.getBiome()).getBiome().name());
+                    player.sendMessage("ID: " + id + " " + C("InfoOwner") + ": " + plot.getOwner()
+                            + " " + C("InfoBiome") + ": " + ((BukkitBiome) plot.getBiome()).getBiome().name());
 
                     if (plot.getExpiredDate() == null) {
                         if (plot.isFinished()) {
                             if (plot.isProtect()) {
-                                player.sendMessage("§a" + C("InfoExpire") + ": §b" + C("WordNever")
-                                        + "§a " + C("InfoFinished") + ": §b" + C("WordYes")
-                                        + "§a " + C("InfoProtected") + ": §b" + C("WordYes"));
+                                player.sendMessage(C("InfoExpire") + ": " + C("WordNever")
+                                        + " " + C("InfoFinished") + ": " + C("WordYes")
+                                        + " " + C("InfoProtected") + ": " + C("WordYes"));
                             } else {
-                                player.sendMessage("§a" + C("InfoExpire") + ": §b" + C("WordNever")
-                                        + "§a " + C("InfoFinished") + ": §b" + C("WordYes")
-                                        + "§a " + C("InfoProtected") + ": §b" + C("WordNo"));
+                                player.sendMessage(C("InfoExpire") + ": " + C("WordNever")
+                                        + " " + C("InfoFinished") + ": " + C("WordYes")
+                                        + " " + C("InfoProtected") + ": " + C("WordNo"));
                             }
                         } else if (plot.isProtect()) {
-                            player.sendMessage("§a" + C("InfoExpire") + ": §b" + C("WordNever")
-                                    + "§a " + C("InfoFinished") + ": §b" + C("WordNo")
-                                    + "§a " + C("InfoProtected") + ": §b" + C("WordYes"));
+                            player.sendMessage(C("InfoExpire") + ": " + C("WordNever")
+                                    + " " + C("InfoFinished") + ": " + C("WordNo")
+                                    + " " + C("InfoProtected") + ": " + C("WordYes"));
                         } else {
-                            player.sendMessage("§a" + C("InfoExpire") + ": §b" + C("WordNever")
-                                    + "§a " + C("InfoFinished") + ": §b" + C("WordNo")
-                                    + "§a " + C("InfoProtected") + ": §b" + C("WordNo"));
+                            player.sendMessage(C("InfoExpire") + ": " + C("WordNever")
+                                    + " " + C("InfoFinished") + ": " + C("WordNo")
+                                    + " " + C("InfoProtected") + ": " + C("WordNo"));
                         }
                     } else if (plot.isProtect()) {
                         if (plot.isFinished()) {
-                            player.sendMessage("§a" + C("InfoExpire") + ": §b" + plot.getExpiredDate()
-                                    + "§a " + C("InfoFinished") + ": §b" + C("WordYes")
-                                    + "§a " + C("InfoProtected") + ": §b" + C("WordYes"));
+                            player.sendMessage(C("InfoExpire") + ": " + plot.getExpiredDate()
+                                    + " " + C("InfoFinished") + ": " + C("WordYes")
+                                    + " " + C("InfoProtected") + ": " + C("WordYes"));
                         } else {
-                            player.sendMessage("§a" + C("InfoExpire") + ": §b" + plot.getExpiredDate()
-                                    + "§a " + C("InfoFinished") + ": §b" + C("WordNo")
-                                    + "§a " + C("InfoProtected") + ": §b" + C("WordYes"));
+                            player.sendMessage(C("InfoExpire") + ": " + plot.getExpiredDate()
+                                    + " " + C("InfoFinished") + ": " + C("WordNo")
+                                    + " " + C("InfoProtected") + ": " + C("WordYes"));
                         }
                     } else if (plot.isFinished()) {
-                        player.sendMessage("§a" + C("InfoExpire") + ": §b" + plot.getExpiredDate()
-                                + "§a " + C("InfoFinished") + ": §b" + C("WordYes")
-                                + "§a " + C("InfoProtected") + ": §b" + C("WordNo"));
+                        player.sendMessage(C("InfoExpire") + ": " + plot.getExpiredDate()
+                                + " " + C("InfoFinished") + ": " + C("WordYes")
+                                + " " + C("InfoProtected") + ": " + C("WordNo"));
                     } else {
-                        player.sendMessage("§a" + C("InfoExpire") + ": §b" + plot.getExpiredDate()
-                                + "§a " + C("InfoFinished") + ": §b" + C("WordNo")
-                                + "§a " + C("InfoProtected") + ": §b" + C("WordNo"));
+                        player.sendMessage(C("InfoExpire") + ": " + plot.getExpiredDate()
+                                + " " + C("InfoFinished") + ": " + C("WordNo")
+                                + " " + C("InfoProtected") + ": " + C("WordNo"));
                     }
 
-                    if (plot.allowedcount() > 0) {
-                        player.sendMessage("§a" + C("InfoHelpers") + ": §b" + plot.getAllowed());
+                    if (plot.allowed().size() > 0) {
+                        player.sendMessage(C("InfoHelpers") + ": " + plot.getAllowed());
                     }
 
-                    if (plot.deniedcount() > 0) {
-                        player.sendMessage("§a" + C("InfoDenied") + ": §b" + plot.getDenied());
+                    if (plot.denied().size() > 0) {
+                        player.sendMessage(C("InfoDenied") + ": " + plot.getDenied());
                     }
 
                     if (manager.isEconomyEnabled(world)) {
                         if (plot.isForSale()) {
-                            player.sendMessage("§a " + C("InfoForSale") + ": §b" + ("§b" + Math.round(plot.getPrice())));
+                            player.sendMessage(" " + C("InfoForSale") + ": " + (Math.round(plot.getPrice())));
                         } else {
-                            player.sendMessage("§a " + C("InfoForSale") + ": §b" + C("WordNo"));
+                            player.sendMessage(" " + C("InfoForSale") + ": " + C("WordNo"));
                         }
                     }
                     int bottomX = manager.bottomX(id, world);
@@ -90,17 +90,17 @@ public class CmdInfo extends PlotCommand {
                     int topX = manager.topX(id, world);
                     int topZ = manager.topZ(id, world);
 
-                    player.sendMessage("§b" + C("WordBottom") + ": §r" + bottomX + "§9,§r" + bottomZ);
-                    player.sendMessage("§b" + C("WordTop") + ": §r" + topX + "§9,§r" + topZ);
+                    player.sendMessage(C("WordBottom") + ": " + bottomX + "§9," + bottomZ);
+                    player.sendMessage(C("WordTop") + ": " + topX + "§9," + topZ);
 
                 } else {
-                    player.sendMessage("§c" + C("MsgThisPlot") + " (" + id + ") " + C("MsgHasNoOwner"));
+                    player.sendMessage(C("MsgThisPlot") + " (" + id + ") " + C("MsgHasNoOwner"));
                 }
             } else {
-                player.sendMessage("§c" + C("MsgNotPlotWorld"));
+                player.sendMessage(C("MsgNotPlotWorld"));
             }
         } else {
-            player.sendMessage("§c" + C("MsgPermissionDenied"));
+            player.sendMessage(C("MsgPermissionDenied"));
             return false;
         }
         return true;

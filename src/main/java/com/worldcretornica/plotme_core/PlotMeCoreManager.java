@@ -11,7 +11,6 @@ import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IPlotMe_GeneratorManager;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitBiome;
-import com.worldcretornica.plotme_core.utils.Util;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -41,7 +40,7 @@ public class PlotMeCoreManager {
         return INSTANCE;
     }
 
-    protected void setPlugin(PlotMe_Core instance) {
+    void setPlugin(PlotMe_Core instance) {
         plugin = instance;
     }
 
@@ -124,8 +123,8 @@ public class PlotMeCoreManager {
      * @param plot  plot to add sign to
      */
     public void setSellSign(IWorld world, Plot plot) {
-        String line1 = Util().C("SignForSale");
-        String line2 = Util().C("SignPrice");
+        String line1 = plugin.C("SignForSale");
+        String line2 = plugin.C("SignPrice");
         String line3 = String.valueOf(plot.getPrice());
         String line4 = "/plotme buy";
 
@@ -717,7 +716,7 @@ public class PlotMeCoreManager {
             if (plugin.getServerBridge().isUsingLwc()) {
                 removeLWC(world, id);
             }
-            sender.sendMessage(Util().C("MsgPlotCleared"));
+            sender.sendMessage(plugin.C("MsgPlotCleared"));
         }
     }
 
@@ -741,7 +740,12 @@ public class PlotMeCoreManager {
      */
 
     public boolean isPlotAvailable(PlotId id, PlotMapInfo pmi) {
-        return pmi != null && pmi.getPlot(id) == null;
+        if (pmi != null) {
+            if (pmi.getPlot(id) == null) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -776,9 +780,13 @@ public class PlotMeCoreManager {
     public void adjustWall(IPlayer player) {
         IWorld world = player.getWorld();
         PlotId id = getPlotId(player);
-        Plot plot = getPlotById(id, world);
+        if (id == null) {
+            player.sendMessage(plugin.C("MsgNoPlotFound"));
+        } else {
+            Plot plot = getPlotById(id, world);
 
-        getGenManager(world).adjustPlotFor(world, id, true, plot.isProtect(), plot.isForSale());
+            getGenManager(world).adjustPlotFor(world, id, true, plot.isProtect(), plot.isForSale());
+        }
     }
 
     /**
@@ -861,10 +869,6 @@ public class PlotMeCoreManager {
     }
 
 
-    private Util Util() {
-        return plugin.getUtil();
-    }
-
     public boolean isPlayerIgnoringWELimit(IPlayer player) {
         if (plugin.getConfig().getBoolean("defaultWEAnywhere") && player.hasPermission(PermissionNames.ADMIN_WEANYWHERE)) {
             return !getPlayersIgnoringWELimit().contains(player.getUniqueId());
@@ -905,10 +909,10 @@ public class PlotMeCoreManager {
                         }
 
                         //Allowed
-                        plot.allowed().replace(name, name, uuid);
+                        plot.allowed().replace(name, name);
 
                         //Denied
-                        plot.denied().replace(name, name, uuid);
+                        plot.denied().replace(name, name);
                     }
                 }
             }

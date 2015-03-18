@@ -111,15 +111,19 @@ public class BukkitPlotWorldEditListener implements Listener {
         BukkitPlayer player = (BukkitPlayer) plugin.wrapPlayer(event.getPlayer());
 
         if (manager.isPlotWorld(player) && !manager.isPlayerIgnoringWELimit(player)) {
-            if (event.getMessage().startsWith("//gmask")) {
-                player.sendMessage(api.getUtil().C("ErrCannotUse"));
+            if (event.getMessage().startsWith("//gmask") || event.getMessage().startsWith("/repl")) {
+                player.sendMessage(api.C("ErrCannotUse"));
                 event.setCancelled(true);
             } else if (event.getMessage().startsWith("//up")) {
                 PlotId id = manager.getPlotId(player);
+                if(id == null) {
+                    event.setCancelled(true);
+                    return;
+                }
                 Plot plot = manager.getPlotById(id, player);
 
-                if (plot == null || !plot.isAllowed(player.getName(), player.getUniqueId())) {
-                    player.sendMessage(api.getUtil().C("ErrCannotUse"));
+                if (plot == null || !plot.isAllowed(player.getUniqueId())) {
+                    player.sendMessage(api.C("ErrCannotUse"));
                     event.setCancelled(true);
                 }
             }
@@ -136,7 +140,7 @@ public class BukkitPlotWorldEditListener implements Listener {
                 PlotId id = manager.getPlotId(location);
                 Plot plot = manager.getMap(location).getPlot(id);
 
-                if (plot != null && plot.isAllowed(player.getName(), player.getUniqueId())) {
+                if (plot != null && plot.isAllowed(player.getUniqueId())) {
                     worldEdit.setMask(player, id);
                 } else {
                     player.sendMessage("You can't WorldEdit here");

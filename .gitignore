@@ -108,11 +108,4 @@ crashlytics-build.properties
 
 
 
-com/worldcretornica/configuration/annotations.xml
-com/worldcretornica/plotme_core/api/annotations.xml
-com/worldcretornica/plotme_core/annotations.xml
-com/worldcretornica/plotme_core/sponge/annotations.xml
-com/worldcretornica/plotme_core/commands/annotations.xml
-com/worldcretornica/plotme_core/bukkit/annotations.xml
-com/worldcretornica/plotme_core/bukkit/api/annotations.xml
-PlotMe-AbstractGenerator/com/worldcretornica/plotme_abstractgenerator/bukkit/annotations.xml
+annotations.xml

@@ -20,10 +20,14 @@ public class CmdMiddle extends PlotCommand {
             if (manager.isPlotWorld(player)) {
                 IWorld world = player.getWorld();
                 PlotId id = manager.getPlotId(player);
+                if (id == null) {
+                    player.sendMessage(C("MsgNoPlotFound"));
+                    return true;
+                }
                 Plot plot = manager.getPlotById(id, player);
 
                 if (plot == null) {
-                    player.sendMessage("§c" + C("MsgNoPlotFound"));
+                    player.sendMessage(C("MsgNoPlotFound"));
 
                 } else if (plot.isAllowed(player.getUniqueId()) || player.hasPermission(PermissionNames.ADMIN_MIDDLE_OTHER)) {
                     ILocation middleloc = manager.getPlotMiddle(world, plot.getId());
@@ -34,13 +38,13 @@ public class CmdMiddle extends PlotCommand {
                         player.setLocation(event.getMiddleLocation());
                     }
                 } else {
-                    player.sendMessage("§c" + C("MsgPermissionDenied"));
+                    player.sendMessage(C("MsgPermissionDenied"));
                 }
             } else {
-                player.sendMessage("§c" + C("MsgNotPlotWorld"));
+                player.sendMessage(C("MsgNotPlotWorld"));
             }
         } else {
-            player.sendMessage("§c" + C("MsgPermissionDenied"));
+            player.sendMessage(C("MsgPermissionDenied"));
             return false;
         }
         return true;

@@ -1,12 +1,9 @@
 package com.worldcretornica.plotme_core.commands;
 
-import static com.worldcretornica.plotme_core.utils.Util.whitespace;
-
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IPlayer;
-import com.worldcretornica.plotme_core.utils.MinecraftFontWidthCalculator;
 
 import java.util.List;
 
@@ -42,21 +39,16 @@ public class CmdDoneList extends PlotCommand {
                     player.sendMessage(C("MsgFinishedPlotsPage") + " " + page + "/" + maxPage);
 
                     for (Plot plot : donePlots) {
-                        String startText = "  §b" + plot.getId() + "§r -> " + plot.getOwner();
 
-                        int textLength = MinecraftFontWidthCalculator.getStringWidth(startText);
-
-                        String line = startText + whitespace(550 - textLength) + "@" + plot.getFinishedDate();
-
-                        player.sendMessage(line);
+                        player.sendMessage(plot.getId() + " -> " + plot.getOwner() + " @ " + plot.getFinishedDate());
                     }
                 }
             } else {
-                player.sendMessage("§c" + C("MsgPermissionDenied"));
+                player.sendMessage(C("MsgPermissionDenied"));
                 return false;
             }
         } else {
-            player.sendMessage("§c" + C("MsgNotPlotWorld"));
+            player.sendMessage(C("MsgNotPlotWorld"));
         }
         return true;
     }

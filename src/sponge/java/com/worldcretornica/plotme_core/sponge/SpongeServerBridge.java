@@ -240,6 +240,11 @@ public class SpongeServerBridge extends IServerBridge {
     }
 
     @Override
+    public String addColor(char c, String string) {
+        return null;
+    }
+
+    @Override
     public void runTaskLaterAsynchronously(Runnable runnable, long delay) {
         // TODO Auto-generated method stub
 

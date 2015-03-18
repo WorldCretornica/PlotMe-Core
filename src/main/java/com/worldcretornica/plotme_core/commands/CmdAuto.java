@@ -25,9 +25,12 @@ public class CmdAuto extends PlotCommand {
                     } else {
                         world = manager.getFirstWorld();
                     }
-
+                    if (world == null) {
+                        player.sendMessage(C("MsgNotPlotWorld"));
+                        return true;
+                    }
                     if (!manager.isPlotWorld(world)) {
-                        player.sendMessage("§c" + world + " " + C("MsgWorldNotPlot"));
+                        player.sendMessage(world + " " + C("MsgWorldNotPlot"));
                         return true;
                     }
                 } else {
@@ -39,8 +42,8 @@ public class CmdAuto extends PlotCommand {
                 int plotsOwned = manager.getOwnedPlotCount(player.getUniqueId(), world.getName().toLowerCase());
 
                 if (playerLimit != -1 && plotsOwned >= playerLimit && !player.hasPermission("PlotMe.admin")) {
-                    player.sendMessage("§c" + C("MsgAlreadyReachedMaxPlots") + " (" + plotsOwned + "/" + playerLimit + "). " + C("WordUse")
-                            + " §c/plotme home§r " + C("MsgToGetToIt"));
+                    player.sendMessage(C("MsgAlreadyReachedMaxPlots") + " (" + plotsOwned + "/" + playerLimit + "). " + C("WordUse")
+                            + " /plotme home " + C("MsgToGetToIt"));
                     return true;
                 }
                 PlotMapInfo pmi = manager.getMap(world);
@@ -74,12 +77,12 @@ public class CmdAuto extends PlotCommand {
                                     EconomyResponse er = serverBridge.withdrawPlayer(player, price);
 
                                     if (!er.transactionSuccess()) {
-                                        player.sendMessage("§c" + er.errorMessage);
+                                        player.sendMessage(er.errorMessage);
                                         serverBridge.getLogger().warning(er.errorMessage);
                                         return true;
                                     }
                                 } else {
-                                    player.sendMessage("§c" + C("MsgNotEnoughAuto") + " " + C("WordMissing") + " §r" + Util()
+                                    player.sendMessage(C("MsgNotEnoughAuto") + " " + C("WordMissing") + " " + plugin
                                             .moneyFormat(price - balance, false));
                                     return true;
                                 }
@@ -91,7 +94,7 @@ public class CmdAuto extends PlotCommand {
 
                                 player.setLocation(manager.getPlotHome(world, id));
 
-                                player.sendMessage(C("MsgThisPlotYours") + " " + C("WordUse") + " §c/plotme home§r " + C("MsgToGetToIt"));
+                                player.sendMessage(C("MsgThisPlotYours") + " " + C("WordUse") + " /plotme home " + C("MsgToGetToIt"));
 
                                 if (isAdvancedLogging()) {
                                     if (price == 0) {
@@ -117,10 +120,10 @@ public class CmdAuto extends PlotCommand {
                 player.sendMessage(C("MsgNoPlotFound"));
                 return true;
             } else {
-                player.sendMessage("§c" + C("MsgNotPlotWorld"));
+                player.sendMessage(C("MsgNotPlotWorld"));
             }
         } else {
-            player.sendMessage("§c" + C("MsgPermissionDenied"));
+            player.sendMessage(C("MsgPermissionDenied"));
             return false;
         }
         return true;

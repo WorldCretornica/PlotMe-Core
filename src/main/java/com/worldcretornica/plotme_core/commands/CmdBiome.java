@@ -23,14 +23,16 @@ public class CmdBiome extends PlotCommand {
             PlotMapInfo pmi = manager.getMap(world);
             if (manager.isPlotWorld(world)) {
                 PlotId id = manager.getPlotId(player);
-                if (!manager.isPlotAvailable(id, pmi)) {
+                if (id == null){
+                    return true;
+                } else if (!manager.isPlotAvailable(id, pmi)) {
 
                     if (args.length == 2) {
 
                         BukkitBiome biome = (BukkitBiome) serverBridge.getBiome(args[1]);
 
                         if (biome == null) {
-                            player.sendMessage("§c" + args[1] + "§r " + C("MsgIsInvalidBiome"));
+                            player.sendMessage(args[1] + " " + C("MsgIsInvalidBiome"));
                             return true;
                         }
                         String biomeName = biome.getBiome().name();
@@ -56,13 +58,13 @@ public class CmdBiome extends PlotCommand {
                                         EconomyResponse er = serverBridge.withdrawPlayer(player, price);
 
                                         if (!er.transactionSuccess()) {
-                                            player.sendMessage("§c" + er.errorMessage);
+                                            player.sendMessage(er.errorMessage);
                                             serverBridge.getLogger().warning(er.errorMessage);
                                             return true;
                                         }
                                     }
                                 } else {
-                                    player.sendMessage("§c" + C("MsgNotEnoughBiome") + " " + C("WordMissing") + " §r" + Util()
+                                    player.sendMessage(C("MsgNotEnoughBiome") + " " + C("WordMissing") + " " + plugin
                                             .moneyFormat(price - balance, false));
                                     return true;
                                 }
@@ -74,7 +76,7 @@ public class CmdBiome extends PlotCommand {
                                 plot.setBiome(biome);
                                 manager.setBiome(world, id, biome);
 
-                                player.sendMessage(C("MsgBiomeSet") + " §9" + biomeName + " " + Util().moneyFormat(-price, true));
+                                player.sendMessage(C("MsgBiomeSet") + " " + biomeName + " " + plugin.moneyFormat(-price, true));
 
                                 if (isAdvancedLogging()) {
                                     if (price == 0) {
@@ -87,20 +89,18 @@ public class CmdBiome extends PlotCommand {
                                 }
                             }
                         } else {
-                            player.sendMessage("§c" + C("MsgThisPlot") + "(" + id + ") " + C("MsgNotYoursNotAllowedBiome"));
+                            player.sendMessage(C("MsgThisPlot") + "(" + id + ") " + C("MsgNotYoursNotAllowedBiome"));
                         }
                     }
-                } else if (id == null) {
-                    player.sendMessage("§c" + C("MsgNoPlotFound"));
                 } else {
-                    player.sendMessage("§c" + C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
+                    player.sendMessage(C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
                 }
             } else {
-                player.sendMessage("§c" + C("MsgNotPlotWorld"));
+                player.sendMessage(C("MsgNotPlotWorld"));
                 return true;
             }
         } else {
-            player.sendMessage("§c" + C("MsgPermissionDenied"));
+            player.sendMessage(C("MsgPermissionDenied"));
             return false;
         }
         return true;

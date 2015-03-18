@@ -23,12 +23,13 @@ public class CmdDispose extends PlotCommand {
             if (manager.isPlotWorld(world)) {
                 PlotId id = manager.getPlotId(player);
                 if (id == null) {
-                    player.sendMessage("§c" + C("MsgNoPlotFound"));
+                    player.sendMessage(C("MsgNoPlotFound"));
+                    return true;
                 } else if (!manager.isPlotAvailable(id, pmi)) {
                     Plot plot = manager.getPlotById(id, pmi);
 
                     if (plot.isProtect()) {
-                        player.sendMessage("§c" + C("MsgPlotProtectedNotDisposed"));
+                        player.sendMessage(C("MsgPlotProtectedNotDisposed"));
                     } else {
                         String name = player.getName();
 
@@ -40,7 +41,7 @@ public class CmdDispose extends PlotCommand {
 
                             if (manager.isEconomyEnabled(pmi)) {
                                 if (cost != 0 && serverBridge.getBalance(player) < cost) {
-                                    player.sendMessage("§c" + C("MsgNotEnoughDispose"));
+                                    player.sendMessage(C("MsgNotEnoughDispose"));
                                     return true;
                                 }
 
@@ -52,7 +53,7 @@ public class CmdDispose extends PlotCommand {
                                 EconomyResponse economyResponse = serverBridge.withdrawPlayer(player, cost);
 
                                 if (!economyResponse.transactionSuccess()) {
-                                    player.sendMessage("§c" + economyResponse.errorMessage);
+                                    player.sendMessage(economyResponse.errorMessage);
                                     serverBridge.getLogger().warning(economyResponse.errorMessage);
                                     return true;
                                 }
@@ -77,17 +78,17 @@ public class CmdDispose extends PlotCommand {
                                 }
                             }
                         } else {
-                            player.sendMessage("§c" + C("MsgThisPlot") + "(" + id + ") " + C("MsgNotYoursCannotDispose"));
+                            player.sendMessage(C("MsgThisPlot") + "(" + id + ") " + C("MsgNotYoursCannotDispose"));
                         }
                     }
                 } else {
-                    player.sendMessage("§c" + C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
+                    player.sendMessage(C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
                 }
             } else {
-                player.sendMessage("§c" + C("MsgNotPlotWorld"));
+                player.sendMessage(C("MsgNotPlotWorld"));
             }
         } else {
-            player.sendMessage("§c" + C("MsgPermissionDenied"));
+            player.sendMessage(C("MsgPermissionDenied"));
             return false;
         }
         return true;

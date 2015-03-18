@@ -32,7 +32,7 @@ public class SpongePlotDenyListener {
             if (idTo != null) {
                 Plot plot = manager.getPlotById(idTo, player);
 
-                if (plot != null && plot.isDeniedInternal(player.getName(), player.getUniqueId())) {
+                if (plot != null && plot.isDeniedInternal(player.getName())) {
                     event.getPlayer().setLocation(event.getOldLocation());
                 }
             }

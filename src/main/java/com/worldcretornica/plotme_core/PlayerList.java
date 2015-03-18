@@ -1,69 +1,45 @@
 package com.worldcretornica.plotme_core;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PlayerList {
-    private final HashMap<String, UUID> playerList;
+
+    private final List<String> playerList;
     private PlotMe_Core api;
 
     public PlayerList() {
-        playerList = new HashMap<>();
+        playerList = new ArrayList<>();
     }
 
-    public PlayerList(HashMap<String, UUID> players) {
+    public PlayerList(ArrayList<String> players) {
         playerList = players;
     }
 
+    public void add(String name) {
+        put(name);
+    }
+
     public void put(String name) {
-        put(name, null);
+        playerList.add(name);
     }
 
-    public void put(String name, UUID uuid) {
-        playerList.put(name, uuid);
-    }
-
-    public String put(UUID uuid) {
-        String name = api.getServerBridge().getOfflinePlayer(uuid).getName();
-        playerList.put(name, uuid);
-        return name;
-    }
-
-    public UUID remove(String name) {
-        String found = "";
-        for (String key : playerList.keySet()) {
+    public void remove(String name) {
+        for (String key : playerList) {
             if (key.equalsIgnoreCase(name)) {
-                found = key;
-            }
-        }
-        UUID uuid = null;
-        if (!found.isEmpty()) {
-            uuid = playerList.get(found);
-            playerList.remove(found);
-        }
-        return uuid;
-    }
-
-    public String remove(UUID uuid) {
-        for (String name : playerList.keySet()) {
-            if (playerList.get(name).equals(uuid)) {
                 playerList.remove(name);
-                return name;
             }
         }
-        return "";
     }
 
-    public Set<String> getPlayers() {
-        return playerList.keySet();
+    public List<String> getPlayers() {
+        return playerList;
     }
 
     public String getPlayerList() {
         StringBuilder list = new StringBuilder();
 
-        for (String s : playerList.keySet()) {
+        for (String s : playerList) {
             list = list.append(s + ", ");
         }
         if (list.length() > 1) {
@@ -73,7 +49,7 @@ public class PlayerList {
     }
 
     public boolean contains(String name) {
-        for (String key : playerList.keySet()) {
+        for (String key : playerList) {
             if (key.equalsIgnoreCase(name)) {
                 return true;
             }
@@ -81,11 +57,7 @@ public class PlayerList {
         return false;
     }
 
-    public boolean contains(UUID uuid) {
-        return playerList.values().contains(uuid);
-    }
-
-    public HashMap<String, UUID> getAllPlayers() {
+    public List<String> getAllPlayers() {
         return playerList;
     }
 
@@ -97,33 +69,10 @@ public class PlayerList {
         return playerList.size();
     }
 
-    public void replace(UUID uuid, String newName) {
-        if (playerList != null && contains(uuid)) {
-            Iterator<String> it = playerList.keySet().iterator();
-            while (it.hasNext()) {
-                String name = it.next();
-
-                if (playerList.get(name) != null && playerList.get(name).equals(uuid)) {
-                    playerList.remove(name);
-                    playerList.put(newName, uuid);
-                    return;
-                }
-            }
-        }
-    }
-
-    public void replace(String oldname, String newname, UUID newUuid) {
+    public void replace(String oldname, String newname) {
         if (playerList != null && contains(oldname)) {
-            Iterator<String> it = playerList.keySet().iterator();
-            while (it.hasNext()) {
-                String key = it.next();
-
-                if (key.equalsIgnoreCase(oldname)) {
-                    playerList.remove(key);
-                    playerList.put(newname, newUuid);
-                    return;
-                }
-            }
+            playerList.remove(oldname);
+            playerList.add(newname);
         }
     }
 }

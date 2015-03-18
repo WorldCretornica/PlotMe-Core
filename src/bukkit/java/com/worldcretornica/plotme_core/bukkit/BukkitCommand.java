@@ -106,7 +106,7 @@ public class BukkitCommand implements CommandExecutor {
     }
 
     private String C(String caption) {
-        return api.getUtil().C(caption);
+        return api.C(caption);
     }
 
     @Override

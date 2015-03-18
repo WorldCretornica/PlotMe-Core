@@ -20,6 +20,7 @@ import com.worldcretornica.plotme_core.bukkit.listener.BukkitPlotWorldEditListen
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
@@ -385,5 +386,10 @@ public class BukkitServerBridge extends IServerBridge {
             list.add(new BukkitOfflinePlayer(player));
         }
         return list;
+    }
+
+    @Override
+    public String addColor(char c, String string) {
+        return ChatColor.translateAlternateColorCodes(c, string);
     }
 }

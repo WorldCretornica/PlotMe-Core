@@ -30,11 +30,11 @@ public class CmdBiomes extends PlotCommand {
                     if (biomes.size() <= ctr + (page - 1) * 19) {
                         return true;
                     } else {
-                        player.sendMessage("  §b" + biomes.get(ctr + (page - 1) * 19));
+                        player.sendMessage("  " + biomes.get(ctr + (page - 1) * 19));
                     }
                 }
             } else {
-                player.sendMessage("§c" + C("MsgPermissionDenied"));
+                player.sendMessage(C("MsgPermissionDenied"));
                 return false;
             }
         }

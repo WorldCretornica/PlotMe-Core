@@ -27,8 +27,8 @@ public class CmdSetOwner extends PlotCommand {
             if (manager.isPlotWorld(world)) {
                 PlotId id = manager.getPlotId(player);
                 if (id == null) {
-                    player.sendMessage("§c" + C("MsgNoPlotFound"));
-                    return false;
+                    player.sendMessage(C("MsgNoPlotFound"));
+                    return true;
                 }
                 String newOwner = args[1];
                 UUID newOwnerId = UUIDFetcher.getUUIDOf(newOwner);
@@ -55,11 +55,11 @@ public class CmdSetOwner extends PlotCommand {
                                 IPlayer oldOwner = serverBridge.getPlayer(plot.getOwnerId());
                                 if (oldOwner != null) {
                                     oldOwner.sendMessage(
-                                            C("MsgYourPlot") + " " + id + " " + C("MsgNowOwnedBy") + " " + newOwner + ". " + Util()
-                                                    .moneyFormat(pmi.getClaimPrice(), true));
+                                            C("MsgYourPlot") + " " + id + " " + C("MsgNowOwnedBy") + " " + newOwner + ". " + plugin.moneyFormat(pmi
+                                                    .getClaimPrice(), true));
                                 }
                             } else {
-                                player.sendMessage("§c" + er.errorMessage);
+                                player.sendMessage(er.errorMessage);
                                 serverBridge.getLogger().warning(er.errorMessage);
                                 return true;
                             }
@@ -88,7 +88,7 @@ public class CmdSetOwner extends PlotCommand {
                     manager.createPlot(world, id, newOwner, newOwnerId, pmi);
                 }
 
-                player.sendMessage(C("MsgOwnerChangedTo") + " §c" + newOwner);
+                player.sendMessage(C("MsgOwnerChangedTo") + " " + newOwner);
 
                 if (isAdvancedLogging()) {
                     serverBridge.getLogger()
@@ -97,10 +97,10 @@ public class CmdSetOwner extends PlotCommand {
                                     + " " + newOwner);
                 }
             } else {
-                player.sendMessage("§c" + C("MsgNotPlotWorld"));
+                player.sendMessage(C("MsgNotPlotWorld"));
             }
         } else {
-            player.sendMessage("§c" + C("MsgPermissionDenied"));
+            player.sendMessage(C("MsgPermissionDenied"));
             return false;
         }
         return true;

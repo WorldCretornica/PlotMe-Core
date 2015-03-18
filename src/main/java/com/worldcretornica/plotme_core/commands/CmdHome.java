@@ -29,21 +29,18 @@ public class CmdHome extends PlotCommand {
                     world = manager.getFirstWorld();
                 }
 
-                String worldName = null;
-                if (world != null) {
-                    worldName = world.getName();
-                }
+                String worldName = world.getName();
 
                 int nb = 1;
                 if (args[0].contains(":")) {
                     if (args[0].split(":").length == 1 || args[0].split(":")[1].isEmpty()) {
-                        player.sendMessage(C("WordUsage") + ": §c/plotme home:# §r" + C("WordExample") + ": §c/plotme home:1");
+                        player.sendMessage(C("WordUsage") + ": /plotme home:# " + C("WordExample") + ": /plotme home:1");
                         return true;
                     }
                     try {
                         nb = Integer.parseInt(args[0].split(":")[1]);
                     } catch (NumberFormatException e) {
-                        player.sendMessage(C("WordUsage") + ": §c/plotme home:# §r" + C("WordExample") + ": §c/plotme home:1");
+                        player.sendMessage(C("WordUsage") + ": /plotme home:# " + C("WordExample") + ": /plotme home:1");
                         return true;
                     }
                 }
@@ -60,7 +57,7 @@ public class CmdHome extends PlotCommand {
 
                 if (args.length == 3) {
                     if (serverBridge.getWorld(args[2]) == null) {
-                        player.sendMessage("§c" + args[2] + C("MsgWorldNotPlot"));
+                        player.sendMessage(args[2] + C("MsgWorldNotPlot"));
                         return true;
                     }
                     world = serverBridge.getWorld(args[2]);
@@ -97,12 +94,12 @@ public class CmdHome extends PlotCommand {
                                             EconomyResponse er = serverBridge.withdrawPlayer(player, price);
 
                                             if (!er.transactionSuccess()) {
-                                                player.sendMessage("§c" + er.errorMessage);
+                                                player.sendMessage(er.errorMessage);
                                                 return true;
                                             }
                                         } else {
-                                            player.sendMessage("§c" + C("MsgNotEnoughTp") + " " + C("WordMissing") + " §r" + Util()
-                                                    .moneyFormat(price - balance, false));
+                                            player.sendMessage(C("MsgNotEnoughTp") + " " + C("WordMissing") + " " + plugin.moneyFormat(price -
+                                                    balance, false));
                                             return true;
                                         }
                                     } else {
@@ -114,7 +111,7 @@ public class CmdHome extends PlotCommand {
                                         player.setLocation(event.getHomeLocation());
 
                                         if (price != 0) {
-                                            player.sendMessage(Util().moneyFormat(-price, true));
+                                            player.sendMessage(plugin.moneyFormat(-price, true));
                                         }
                                     }
                                     return true;
@@ -140,13 +137,13 @@ public class CmdHome extends PlotCommand {
                                             EconomyResponse er = serverBridge.withdrawPlayer(player, price);
 
                                             if (!er.transactionSuccess()) {
-                                                player.sendMessage("§c" + er.errorMessage);
+                                                player.sendMessage(er.errorMessage);
                                                 return true;
                                             }
                                         }
                                     } else {
-                                        player.sendMessage("§c" + C("MsgNotEnoughTp") + " " + C("WordMissing") + " §r" + Util()
-                                                .moneyFormat(price - balance, false));
+                                        player.sendMessage(C("MsgNotEnoughTp") + " " + C("WordMissing") + " " + plugin.moneyFormat(price - balance,
+                                                false));
                                         return true;
                                     }
                                 } else {
@@ -158,7 +155,7 @@ public class CmdHome extends PlotCommand {
                                     player.setLocation(event.getHomeLocation());
 
                                     if (price != 0) {
-                                        player.sendMessage(Util().moneyFormat(-price, true));
+                                        player.sendMessage(plugin.moneyFormat(-price, true));
                                     }
                                 }
                                 return true;
@@ -169,23 +166,23 @@ public class CmdHome extends PlotCommand {
 
                     if (nb > 0) {
                         if (playerName.equalsIgnoreCase(player.getName())) {
-                            player.sendMessage("§c" + C("MsgPlotNotFound") + " #" + nb);
+                            player.sendMessage(C("MsgPlotNotFound") + " #" + nb);
                         } else {
-                            player.sendMessage("§c" + playerName + " " + C("MsgDoesNotHavePlot") + " #" + nb);
+                            player.sendMessage(playerName + " " + C("MsgDoesNotHavePlot") + " #" + nb);
                         }
                     } else if (!playerName.equalsIgnoreCase(player.getName())) {
-                        player.sendMessage("§c" + playerName + " " + C("MsgDoesNotHavePlot"));
+                        player.sendMessage(playerName + " " + C("MsgDoesNotHavePlot"));
                     } else {
-                        player.sendMessage("§c" + C("MsgYouHaveNoPlot"));
+                        player.sendMessage(C("MsgYouHaveNoPlot"));
                     }
                 } else {
-                    player.sendMessage("§c" + worldName + C("MsgWorldNotPlot"));
+                    player.sendMessage(worldName + C("MsgWorldNotPlot"));
                 }
             } else {
-                player.sendMessage("§c" + C("MsgNotPlotWorld"));
+                player.sendMessage(C("MsgNotPlotWorld"));
             }
         } else {
-            player.sendMessage("§c" + C("MsgPermissionDenied"));
+            player.sendMessage(C("MsgPermissionDenied"));
             return false;
         }
         return true;

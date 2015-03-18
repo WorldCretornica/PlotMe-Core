@@ -23,7 +23,7 @@ public class CmdPlotList extends PlotCommand {
                 if (player.hasPermission(PermissionNames.ADMIN_LIST) && args.length == 2) {
                     name = args[1];
                     uuid = null;
-                    player.sendMessage(C("MsgListOfPlotsWhere") + " §b" + name + "§r " + C("MsgCanBuild"));
+                    player.sendMessage(C("MsgListOfPlotsWhere") + " " + name + " " + C("MsgCanBuild"));
                 } else {
                     name = player.getName();
                     uuid = player.getUniqueId();
@@ -52,7 +52,7 @@ public class CmdPlotList extends PlotCommand {
                     //                        String expiredDate = plot.getExpiredDate();
                     //
                     //                        if (expiredDate.before(Calendar.getInstance().getTime())) {
-                    //                            addition.append("§c @" + plot.getExpiredDate() + "§r");
+                    //                            addition.append(" @" + plot.getExpiredDate());
                     //                        } else {
                     //                            addition.append(" @" + plot.getExpiredDate());
                     //                        }
@@ -60,26 +60,26 @@ public class CmdPlotList extends PlotCommand {
 
                     // Is it for sale?
                     if (plot.isForSale()) {
-                        addition.append(" " + C("WordSell") + ": §a" + Math.round(plot.getPrice()) + "§r");
+                        addition.append(" " + C("WordSell") + ": " + Math.round(plot.getPrice()));
                     }
 
                     // Is the plot owner the name?
                     if (plot.getOwner().equalsIgnoreCase(name)) {
-                        if (plot.allowedcount() == 0) {
+                        if (plot.allowed().size() == 0) {
                             // Is the name the current player too?
                             if (name.equalsIgnoreCase(player.getName())) {
-                                player.sendMessage("  " + plot.getId() + " -> §b§o" + C("WordYours") + "§r" + addition);
+                                player.sendMessage("  " + plot.getId() + " -> " + C("WordYours") + addition);
                             } else {
-                                player.sendMessage("  " + plot.getId() + " -> §b§o" + plot.getOwner() + "§r" + addition);
+                                player.sendMessage("  " + plot.getId() + " -> " + plot.getOwner() + addition);
                             }
                         } else if (plot.getOwner().equalsIgnoreCase(player.getName())) {
                             player.sendMessage(
-                                    "  " + plot.getId() + " -> §b§o" + C("WordYours") + "§r" + addition + ", " + C("WordHelpers") + ": §b" + plot
-                                            .getAllowed().replace(",", "§r,§b"));
+                                    "  " + plot.getId() + " -> " + C("WordYours") + addition + ", " + C("WordHelpers") + ": " + plot
+                                            .getAllowed().replace(",", ","));
                         } else {
                             player.sendMessage(
-                                    "  " + plot.getId() + " -> §b§o" + plot.getOwner() + "§r" + addition + ", " + C("WordHelpers") + ": §b" + plot
-                                            .getAllowed().replace(",", "§r,§b"));
+                                    "  " + plot.getId() + " -> " + plot.getOwner() + addition + ", " + C("WordHelpers") + ": " + plot
+                                            .getAllowed().replace(",", ","));
                         }
 
                         // Is the name allowed to build there?
@@ -88,12 +88,12 @@ public class CmdPlotList extends PlotCommand {
                         for (String allowed : plot.allowed().getPlayers()) {
                             if (player.getName().equalsIgnoreCase(allowed)) {
                                 if (name.equalsIgnoreCase(player.getName())) {
-                                    helpers.append("§b").append("§o").append("You").append("§r").append(", ");
+                                    helpers.append("You").append(", ");
                                 } else {
-                                    helpers.append("§b").append("§o").append(args[1]).append("§r").append(", ");
+                                    helpers.append(args[1]).append(", ");
                                 }
                             } else {
-                                helpers.append("§b").append(allowed).append("§r").append(", ");
+                                helpers.append(allowed).append(", ");
                             }
                         }
                         if (helpers.length() > 2) {
@@ -102,19 +102,19 @@ public class CmdPlotList extends PlotCommand {
 
                         if (plot.getOwner().equalsIgnoreCase(player.getName())) {
                             player.sendMessage(
-                                    "  " + plot.getId() + " -> §b" + C("WordYours") + "§r" + addition + ", " + C("WordHelpers") + ": " + helpers);
+                                    "  " + plot.getId() + " -> " + C("WordYours") + addition + ", " + C("WordHelpers") + ": " + helpers);
                         } else {
                             player.sendMessage(
-                                    "  " + plot.getId() + " -> §b" + plot.getOwner() + C("WordPossessive") + "§r" + addition + ", " + C("WordHelpers")
+                                    "  " + plot.getId() + " -> " + plot.getOwner() + C("WordPossessive") + addition + ", " + C("WordHelpers")
                                             + ": " + helpers);
                         }
                     }
                 }
             } else {
-                player.sendMessage("§c" + C("MsgNotPlotWorld"));
+                player.sendMessage(C("MsgNotPlotWorld"));
             }
         } else {
-            player.sendMessage("§c" + C("MsgPermissionDenied"));
+            player.sendMessage(C("MsgPermissionDenied"));
             return false;
         }
         return true;

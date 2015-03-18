@@ -26,7 +26,8 @@ public class CmdSell extends PlotCommand {
                         PlotId id = manager.getPlotId(player);
 
                         if (id == null) {
-                            player.sendMessage("§c" + C("MsgNoPlotFound"));
+                            player.sendMessage(C("MsgNoPlotFound"));
+                            return true;
                         } else if (!manager.isPlotAvailable(id, pmi)) {
                             Plot plot = manager.getPlotById(id, pmi);
 
@@ -69,7 +70,7 @@ public class CmdSell extends PlotCommand {
                                     }
 
                                     if (price < 0.0) {
-                                        player.sendMessage("§c" + C("MsgInvalidAmount"));
+                                        player.sendMessage(C("MsgInvalidAmount"));
                                     } else {
                                         event = serverBridge.getEventFactory().callPlotSellChangeEvent(world, plot, player, price, true);
 
@@ -94,20 +95,20 @@ public class CmdSell extends PlotCommand {
                                     }
                                 }
                             } else {
-                                player.sendMessage("§c" + C("MsgDoNotOwnPlot"));
+                                player.sendMessage(C("MsgDoNotOwnPlot"));
                             }
                         } else {
-                            player.sendMessage("§c" + C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
+                            player.sendMessage(C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
                         }
                     } else {
-                        player.sendMessage("§c" + C("MsgPermissionDenied"));
+                        player.sendMessage(C("MsgPermissionDenied"));
                         return false;
                     }
                 } else {
-                    player.sendMessage("§c" + C("MsgSellingPlotsIsDisabledWorld"));
+                    player.sendMessage(C("MsgSellingPlotsIsDisabledWorld"));
                 }
             } else {
-                player.sendMessage("§c" + C("MsgEconomyDisabledWorld"));
+                player.sendMessage(C("MsgEconomyDisabledWorld"));
             }
         }
         return true;

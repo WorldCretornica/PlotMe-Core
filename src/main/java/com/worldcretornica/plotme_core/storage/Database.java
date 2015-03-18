@@ -11,6 +11,7 @@ import com.worldcretornica.plotme_core.bukkit.api.BukkitBiome;
 import com.worldcretornica.plotme_core.utils.UUIDFetcher;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -183,7 +184,7 @@ public abstract class Database {
             ps.setInt(8, plotTopLoc.getBlockZ());
             ps.setInt(9, plotBottomLoc.getBlockZ());
             ps.setString(10, ((BukkitBiome) plot.getBiome()).getBiome().name());
-            ps.setString(11, plot.getExpiredDate());
+            ps.setDate(11, plot.getExpiredDate());
             ps.setBoolean(12, plot.isFinished());
             ps.setDouble(13, plot.getPrice());
             ps.setBoolean(14, plot.isForSale());
@@ -199,17 +200,17 @@ public abstract class Database {
             }
             PlayerList allowedlist = plot.allowed();
             if (allowedlist.getAllPlayers() != null) {
-                HashMap<String, UUID> allowed = allowedlist.getAllPlayers();
-                for (String player : allowed.keySet()) {
-                    addPlotAllowed(player, allowed.get(player), plot.getInternalID());
+                List<String> allowed = allowedlist.getAllPlayers();
+                for (String player : allowed) {
+                    addPlotAllowed(player, plot.getInternalID());
                 }
             }
 
             PlayerList deniedlist = plot.denied();
             if (deniedlist.getAllPlayers() != null) {
-                HashMap<String, UUID> denied = deniedlist.getAllPlayers();
-                for (String player : denied.keySet()) {
-                    addPlotDenied(player, denied.get(player), plot.getInternalID());
+                List<String> denied = deniedlist.getAllPlayers();
+                for (String player : denied) {
+                    addPlotDenied(player, plot.getInternalID());
                 }
             }
 
@@ -233,11 +234,11 @@ public abstract class Database {
 
     }
 
-    public void addPlotDenied(String player, UUID uuid, int plotInternalID) {
+    public void addPlotDenied(String player, int plotInternalID) {
 
     }
 
-    public void addPlotAllowed(String key, UUID uuid, int plotInternalID) {
+    public void addPlotAllowed(String key, int plotInternalID) {
 
     }
 
@@ -340,16 +341,11 @@ public abstract class Database {
                 String owner = setPlots.getString("owner");
                 String biome = setPlots.getString("biome");
                 boolean finished = setPlots.getBoolean("finished");
-                String finishedDate;
-                if (finished) {
-                    finishedDate = setPlots.getString("finishedDate");
-                } else {
-                    finishedDate = null;
-                }
+                String finishedDate = setPlots.getString("finishedDate");
                 boolean forSale = setPlots.getBoolean("forSale");
                 double price = setPlots.getDouble("price");
                 boolean protect = setPlots.getBoolean("protected");
-                String expiredDate = setPlots.getString("expiredDate");
+                Date expiredDate = setPlots.getDate("expiredDate");
                 String plotName = setPlots.getString("plotName");
                 int plotLikes = setPlots.getInt("plotLikes");
 
@@ -364,21 +360,12 @@ public abstract class Database {
                 ResultSet setAllowed = statementAllowed.executeQuery();
 
                 while (setAllowed.next()) {
-                    boolean offlineOnly = setAllowed.getBoolean("offlineOnly");
-                    if (offlineOnly) {
-                        byte[] byPlayerId = setAllowed.getBytes("allowedID");
-                        if (byPlayerId == null) {
-                            trusted.put(setAllowed.getString("allowed"), null);
-                        } else {
-                            trusted.put(setAllowed.getString("allowed"), UUIDFetcher.fromBytes(byPlayerId));
-                        }
-                    } else {
-                        byte[] byPlayerId = setAllowed.getBytes("playerid");
-                        if (byPlayerId == null) {
-                            allowed.put(setAllowed.getString("player"), null);
-                        } else {
-                            allowed.put(setAllowed.getString("player"), UUIDFetcher.fromBytes(byPlayerId));
-                        }
+                    int accessLevel = setAllowed.getInt("access");
+                    //This is for adding players
+                    if (accessLevel == 1) {
+                        allowed.add(setAllowed.getString("allowed"));
+                    } else if (accessLevel == 2) { //If the player is trusted only
+                        trusted.add(setAllowed.getString("allowed"));
                     }
                 }
                 setAllowed.close();
@@ -393,7 +380,7 @@ public abstract class Database {
                     if (byPlayerId == null) {
                         denied.put(setDenied.getString("denied"));
                     } else {
-                        denied.put(setDenied.getString("denied"), UUIDFetcher.fromBytes(byPlayerId));
+                        denied.add(UUIDFetcher.fromBytes(byPlayerId).toString());
                     }
                 }
                 setDenied.close();
@@ -436,11 +423,11 @@ public abstract class Database {
 
     }
 
-    public void deletePlotAllowed(int x, int z, String name, UUID uuid, String world) {
+    public void deletePlotAllowed(int x, int z, String name, String world) {
 
     }
 
-    public void deletePlotDenied(int x, int z, String name, UUID uuid, String world) {
+    public void deletePlotDenied(int x, int z, String name, String world) {
 
     }
 

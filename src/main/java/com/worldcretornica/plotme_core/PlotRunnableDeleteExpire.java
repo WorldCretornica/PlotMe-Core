@@ -54,11 +54,11 @@ public class PlotRunnableDeleteExpire implements Runnable {
                     ids = ids.substring(0, ids.length() - 2);
                 }
 
-                plugin.getLogger().info(plugin.getUtil().C("MsgDeletedExpiredPlots") + " " + ids);
+                plugin.getLogger().info(plugin.C("MsgDeletedExpiredPlots") + " " + ids);
             }
 
             if (plugin.getCounterExpired() == 0) {
-                plugin.getLogger().info(plugin.getUtil().C("MsgDeleteSessionFinished"));
+                plugin.getLogger().info(plugin.C("MsgDeleteSessionFinished"));
                 plugin.setWorldCurrentlyProcessingExpired(null);
             }
         }

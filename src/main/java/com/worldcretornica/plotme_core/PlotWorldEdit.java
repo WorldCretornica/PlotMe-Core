@@ -40,7 +40,7 @@ public class PlotWorldEdit {
             PlotMeCoreManager manager = PlotMeCoreManager.getInstance();
             Plot plot = manager.getPlotById(id, player);
 
-            if (plot != null && plot.isAllowed(player.getName(), player.getUniqueId())) {
+            if (plot != null && plot.isAllowed(player.getUniqueId())) {
                 bottom = (BukkitLocation) manager.getPlotBottomLoc(bukkitWorld, id);
                 top = (BukkitLocation) manager.getPlotTopLoc(bukkitWorld, id);
 

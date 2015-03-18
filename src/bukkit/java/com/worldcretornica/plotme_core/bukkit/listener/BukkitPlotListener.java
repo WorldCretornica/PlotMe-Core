@@ -75,7 +75,7 @@ public class BukkitPlotListener implements Listener {
 
             if (id == null) {
                 if (!player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE)) {
-                    player.sendMessage(api.getUtil().C("ErrCannotBuild"));
+                    player.sendMessage(api.C("ErrCannotBuild"));
                     event.setCancelled(true);
                 }
             } else {
@@ -84,13 +84,13 @@ public class BukkitPlotListener implements Listener {
                 if (ptc != null) {
                     switch (ptc.getReason()) {
                         case Clear:
-                            player.sendMessage(api.getUtil().C("MsgPlotLockedClear"));
+                            player.sendMessage(api.C("MsgPlotLockedClear"));
                             break;
                         case Reset:
-                            player.sendMessage(api.getUtil().C("MsgPlotLockedReset"));
+                            player.sendMessage(api.C("MsgPlotLockedReset"));
                             break;
                         case Expired:
-                            player.sendMessage(api.getUtil().C("MsgPlotLockedExpired"));
+                            player.sendMessage(api.C("MsgPlotLockedExpired"));
                             break;
                     }
                     event.setCancelled(true);
@@ -99,7 +99,7 @@ public class BukkitPlotListener implements Listener {
 
                     if (plot == null || !plot.isAllowed(player.getUniqueId())) {
                         if (!player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE)) {
-                            player.sendMessage(api.getUtil().C("ErrCannotBuild"));
+                            player.sendMessage(api.C("ErrCannotBuild"));
                             event.setCancelled(true);
                         }
                     } else {
@@ -121,7 +121,7 @@ public class BukkitPlotListener implements Listener {
 
             if (id == null) {
                 if (canBuild) {
-                    player.sendMessage(api.getUtil().C("ErrCannotBuild"));
+                    player.sendMessage(api.C("ErrCannotBuild"));
                     event.setCancelled(true);
                 }
             } else {
@@ -130,13 +130,13 @@ public class BukkitPlotListener implements Listener {
                 if (ptc != null) {
                     switch (ptc.getReason()) {
                         case Clear:
-                            player.sendMessage(api.getUtil().C("MsgPlotLockedClear"));
+                            player.sendMessage(api.C("MsgPlotLockedClear"));
                             break;
                         case Reset:
-                            player.sendMessage(api.getUtil().C("MsgPlotLockedReset"));
+                            player.sendMessage(api.C("MsgPlotLockedReset"));
                             break;
                         case Expired:
-                            player.sendMessage(api.getUtil().C("MsgPlotLockedExpired"));
+                            player.sendMessage(api.C("MsgPlotLockedExpired"));
                             break;
                     }
                     event.setCancelled(true);
@@ -145,7 +145,7 @@ public class BukkitPlotListener implements Listener {
 
                     if (plot == null || !plot.isAllowed(player.getUniqueId())) {
                         if (canBuild) {
-                            player.sendMessage(api.getUtil().C("ErrCannotBuild"));
+                            player.sendMessage(api.C("ErrCannotBuild"));
                             event.setCancelled(true);
                         }
                     } else {
@@ -165,7 +165,7 @@ public class BukkitPlotListener implements Listener {
             PlotId id =
                     manager.getPlotId(location.add(event.getBlockFace().getModX(), event.getBlockFace().getModY(), event.getBlockFace().getModZ()));
             if (id == null) {
-                player.sendMessage(api.getUtil().C("ErrCannotBuild"));
+                player.sendMessage(api.C("ErrCannotBuild"));
                 event.setCancelled(true);
             } else {
                 PlotToClear ptc = api.getPlotLocked(location.getWorld(), id);
@@ -173,13 +173,13 @@ public class BukkitPlotListener implements Listener {
                 if (ptc != null) {
                     switch (ptc.getReason()) {
                         case Clear:
-                            player.sendMessage(api.getUtil().C("MsgPlotLockedClear"));
+                            player.sendMessage(api.C("MsgPlotLockedClear"));
                             break;
                         case Reset:
-                            player.sendMessage(api.getUtil().C("MsgPlotLockedReset"));
+                            player.sendMessage(api.C("MsgPlotLockedReset"));
                             break;
                         case Expired:
-                            player.sendMessage(api.getUtil().C("MsgPlotLockedExpired"));
+                            player.sendMessage(api.C("MsgPlotLockedExpired"));
                             break;
                     }
                     event.setCancelled(true);
@@ -187,7 +187,7 @@ public class BukkitPlotListener implements Listener {
                     Plot plot = manager.getPlotById(id, location.getWorld());
 
                     if (plot == null || !plot.isAllowed(player.getUniqueId())) {
-                        player.sendMessage(api.getUtil().C("ErrCannotBuild"));
+                        player.sendMessage(api.C("ErrCannotBuild"));
                         event.setCancelled(true);
                     }
                 }
@@ -208,7 +208,7 @@ public class BukkitPlotListener implements Listener {
             PlotId id = manager.getPlotId(location);
 
             if (id == null) {
-                player.sendMessage(api.getUtil().C("ErrCannotBuild"));
+                player.sendMessage(api.C("ErrCannotBuild"));
                 event.setCancelled(true);
             } else {
                 PlotToClear ptc = api.getPlotLocked(location.getWorld(), id);
@@ -216,13 +216,13 @@ public class BukkitPlotListener implements Listener {
                 if (ptc != null) {
                     switch (ptc.getReason()) {
                         case Clear:
-                            player.sendMessage(api.getUtil().C("MsgPlotLockedClear"));
+                            player.sendMessage(api.C("MsgPlotLockedClear"));
                             break;
                         case Reset:
-                            player.sendMessage(api.getUtil().C("MsgPlotLockedReset"));
+                            player.sendMessage(api.C("MsgPlotLockedReset"));
                             break;
                         case Expired:
-                            player.sendMessage(api.getUtil().C("MsgPlotLockedExpired"));
+                            player.sendMessage(api.C("MsgPlotLockedExpired"));
                             break;
                     }
                     event.setCancelled(true);
@@ -230,7 +230,7 @@ public class BukkitPlotListener implements Listener {
                     Plot plot = manager.getPlotById(id, location.getWorld());
 
                     if (plot == null || !plot.isAllowed(player.getUniqueId())) {
-                        player.sendMessage(api.getUtil().C("ErrCannotBuild"));
+                        player.sendMessage(api.C("ErrCannotBuild"));
                         event.setCancelled(true);
                     }
                 }
@@ -255,13 +255,13 @@ public class BukkitPlotListener implements Listener {
             if (ptc != null) {
                 switch (ptc.getReason()) {
                     case Clear:
-                        player.sendMessage(api.getUtil().C("MsgPlotLockedClear"));
+                        player.sendMessage(api.C("MsgPlotLockedClear"));
                         break;
                     case Reset:
-                        player.sendMessage(api.getUtil().C("MsgPlotLockedReset"));
+                        player.sendMessage(api.C("MsgPlotLockedReset"));
                         break;
                     case Expired:
-                        player.sendMessage(api.getUtil().C("MsgPlotLockedExpired"));
+                        player.sendMessage(api.C("MsgPlotLockedExpired"));
                         break;
                 }
                 event.setCancelled(true);
@@ -273,7 +273,7 @@ public class BukkitPlotListener implements Listener {
                 if (event.isBlockInHand() && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
                     if (plot == null || !plot.isAllowed(player.getUniqueId())) {
                         if (canBuild) {
-                            player.sendMessage(api.getUtil().C("ErrCannotBuild"));
+                            player.sendMessage(api.C("ErrCannotBuild"));
                             event.setCancelled(true);
                         }
                     } else {
@@ -301,7 +301,7 @@ public class BukkitPlotListener implements Listener {
                         if (plot == null || !plot.isAllowed(player.getUniqueId())) {
                             if (canBuild) {
                                 if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-                                    player.sendMessage(api.getUtil().C("ErrCannotUse"));
+                                    player.sendMessage(api.C("ErrCannotUse"));
                                 }
                                 event.setCancelled(true);
                             }
@@ -550,7 +550,7 @@ public class BukkitPlotListener implements Listener {
 
             if (id == null) {
                 if (canBuild) {
-                    player.sendMessage(api.getUtil().C("ErrCannotBuild"));
+                    player.sendMessage(api.C("ErrCannotBuild"));
                     event.setCancelled(true);
                 }
             } else {
@@ -559,13 +559,13 @@ public class BukkitPlotListener implements Listener {
                 if (ptc != null) {
                     switch (ptc.getReason()) {
                         case Clear:
-                            player.sendMessage(api.getUtil().C("MsgPlotLockedClear"));
+                            player.sendMessage(api.C("MsgPlotLockedClear"));
                             break;
                         case Reset:
-                            player.sendMessage(api.getUtil().C("MsgPlotLockedReset"));
+                            player.sendMessage(api.C("MsgPlotLockedReset"));
                             break;
                         case Expired:
-                            player.sendMessage(api.getUtil().C("MsgPlotLockedExpired"));
+                            player.sendMessage(api.C("MsgPlotLockedExpired"));
                             break;
                     }
                     event.setCancelled(true);
@@ -574,7 +574,7 @@ public class BukkitPlotListener implements Listener {
 
                     if (plot == null || !plot.isAllowed(player.getUniqueId())) {
                         if (canBuild) {
-                            player.sendMessage(api.getUtil().C("ErrCannotBuild"));
+                            player.sendMessage(api.C("ErrCannotBuild"));
                             event.setCancelled(true);
                         }
                     } else {
@@ -598,7 +598,7 @@ public class BukkitPlotListener implements Listener {
 
                 if (id == null) {
                     if (canBuild) {
-                        player.sendMessage(api.getUtil().C("ErrCannotBuild"));
+                        player.sendMessage(api.C("ErrCannotBuild"));
                         event.setCancelled(true);
                     }
                 } else {
@@ -607,13 +607,13 @@ public class BukkitPlotListener implements Listener {
                     if (ptc != null) {
                         switch (ptc.getReason()) {
                             case Clear:
-                                player.sendMessage(api.getUtil().C("MsgPlotLockedClear"));
+                                player.sendMessage(api.C("MsgPlotLockedClear"));
                                 break;
                             case Reset:
-                                player.sendMessage(api.getUtil().C("MsgPlotLockedReset"));
+                                player.sendMessage(api.C("MsgPlotLockedReset"));
                                 break;
                             case Expired:
-                                player.sendMessage(api.getUtil().C("MsgPlotLockedExpired"));
+                                player.sendMessage(api.C("MsgPlotLockedExpired"));
                                 break;
                         }
                         event.setCancelled(true);
@@ -622,7 +622,7 @@ public class BukkitPlotListener implements Listener {
 
                         if (plot == null || !plot.isAllowed(player.getUniqueId())) {
                             if (canBuild) {
-                                player.sendMessage(api.getUtil().C("ErrCannotBuild"));
+                                player.sendMessage(api.C("ErrCannotBuild"));
                                 event.setCancelled(true);
                             }
                         } else {
@@ -648,7 +648,7 @@ public class BukkitPlotListener implements Listener {
 
             if (id == null) {
                 if (cannotBuildAnywhere) {
-                    player.sendMessage(api.getUtil().C("ErrCannotBuild"));
+                    player.sendMessage(api.C("ErrCannotBuild"));
                     event.setCancelled(true);
                 }
             } else {
@@ -656,13 +656,13 @@ public class BukkitPlotListener implements Listener {
 
                 if (plot == null) {
                     if (cannotBuildAnywhere) {
-                        player.sendMessage(api.getUtil().C("ErrCannotBuild"));
+                        player.sendMessage(api.C("ErrCannotBuild"));
                         event.setCancelled(true);
                     }
                 } else if (plot.isAllowed(player.getUniqueId())) {
                     plot.resetExpire(manager.getMap(location).getDaysToExpiration());
                 } else {
-                    player.sendMessage(api.getUtil().C("ErrCannotBuild"));
+                    player.sendMessage(api.C("ErrCannotBuild"));
                     event.setCancelled(true);
                 }
             }
@@ -674,7 +674,7 @@ public class BukkitPlotListener implements Listener {
         if (event.getEntity() instanceof Player) {
             PlotMapInfo pmi = manager.getMap(event.getEntity().getWorld().getName());
             if (pmi != null && !pmi.canUseProjectiles()) {
-                event.getEntity().sendMessage(api.getUtil().C("ErrCannotUseEggs"));
+                event.getEntity().sendMessage(api.C("ErrCannotUseEggs"));
                 event.setCancelled(true);
             }
         }
@@ -686,7 +686,7 @@ public class BukkitPlotListener implements Listener {
         if (event.getEntity() instanceof Player) {
             PlotMapInfo pmi = manager.getMap(event.getEntity().getWorld().getName());
             if (pmi != null && !pmi.canUseProjectiles()) {
-                event.getEntity().sendMessage(api.getUtil().C("ErrCannotUseEggs"));
+                event.getEntity().sendMessage(api.C("ErrCannotUseEggs"));
                 event.setCancelled(true);
             }
         }
@@ -698,7 +698,7 @@ public class BukkitPlotListener implements Listener {
     public void onEggEvent(PlayerEggThrowEvent event) {
         PlotMapInfo pmi = manager.getMap(event.getEgg().getWorld().getName());
         if (pmi != null && !pmi.canUseProjectiles()) {
-            event.getPlayer().sendMessage(api.getUtil().C("ErrCannotUseEggs"));
+            event.getPlayer().sendMessage(api.C("ErrCannotUseEggs"));
             event.setHatching(false);
         }
     }
@@ -733,14 +733,14 @@ public class BukkitPlotListener implements Listener {
                 PlotId id = manager.getPlotId(entity.getLocation());
                 if (id == null) {
                     if (cantBuild) {
-                        player.sendMessage(api.getUtil().C("ErrCannotBuild"));
+                        player.sendMessage(api.C("ErrCannotBuild"));
                         event.setCancelled(true);
                     }
                 } else {
                     Plot plot = manager.getPlotById(id, bukkitPlayer);
                     if (plot == null || !plot.isAllowed(player.getUniqueId())) {
                         if (cantBuild) {
-                            bukkitPlayer.sendMessage(api.getUtil().C("ErrCannotBuild"));
+                            bukkitPlayer.sendMessage(api.C("ErrCannotBuild"));
                             event.setCancelled(true);
                         }
                     } else {
@@ -763,7 +763,7 @@ public class BukkitPlotListener implements Listener {
 
             if (id == null) {
                 if (cannotBuildAnywhere) {
-                    player.sendMessage(api.getUtil().C("ErrCannotBuild"));
+                    player.sendMessage(api.C("ErrCannotBuild"));
                     event.setCancelled(true);
                 }
             } else {
@@ -771,13 +771,13 @@ public class BukkitPlotListener implements Listener {
 
                 if (plot == null) {
                     if (cannotBuildAnywhere) {
-                        player.sendMessage(api.getUtil().C("ErrCannotBuild"));
+                        player.sendMessage(api.C("ErrCannotBuild"));
                         event.setCancelled(true);
                     }
                 } else if (plot.isAllowed(player.getUniqueId())) {
                     plot.resetExpire(manager.getMap(location).getDaysToExpiration());
                 } else {
-                    player.sendMessage(api.getUtil().C("ErrCannotBuild"));
+                    player.sendMessage(api.C("ErrCannotBuild"));
                     event.setCancelled(true);
                 }
             }

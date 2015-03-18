@@ -9,7 +9,7 @@ import com.worldcretornica.plotme_core.bukkit.AbstractSchematicUtil;
 import com.worldcretornica.plotme_core.storage.Database;
 import com.worldcretornica.plotme_core.storage.MySQLConnector;
 import com.worldcretornica.plotme_core.storage.SQLiteConnector;
-import com.worldcretornica.plotme_core.utils.Util;
+import net.milkbowl.vault.economy.Economy;
 
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -20,13 +20,12 @@ public class PlotMe_Core {
     //Bridge
     private final IServerBridge serverBridge;
     private final AbstractSchematicUtil schematicutil;
-    private HashMap<String, IPlotMe_GeneratorManager> managers;
+    private final HashMap<String, IPlotMe_GeneratorManager> managers = new HashMap<>();
+    //Spool stuff
+    private final ConcurrentLinkedQueue<PlotToClear> plotsToClear = new ConcurrentLinkedQueue<>();
     private IWorld worldcurrentlyprocessingexpired;
     private int counterExpired;
-    //Spool stuff
-    private ConcurrentLinkedQueue<PlotToClear> plotsToClear;
     private Database sqlManager;
-    private Util util;
     //Caption and Config File.
     private ConfigAccessor configFile;
     private ConfigAccessor captionFile;
@@ -34,7 +33,6 @@ public class PlotMe_Core {
     public PlotMe_Core(IServerBridge serverObjectBuilder, AbstractSchematicUtil schematicutil) {
         this.serverBridge = serverObjectBuilder;
         this.schematicutil = schematicutil;
-        managers = new HashMap<>();
     }
 
     public IPlotMe_GeneratorManager getGenManager(String name) {
@@ -50,9 +48,8 @@ public class PlotMe_Core {
         PlotMeCoreManager.getInstance().getPlotMaps().clear();
         serverBridge.unHook();
         setWorldCurrentlyProcessingExpired(null);
-        plotsToClear = null;
+        plotsToClear.clear();
         managers.clear();
-        managers = null;
     }
 
     public void enable() {
@@ -62,16 +59,14 @@ public class PlotMe_Core {
         setupConfigFiles();
         serverBridge.setupCommands();
         setupSQL();
-        setUtil(new Util(this));
         serverBridge.setupHooks();
         serverBridge.setupListeners();
-        setupClearSpools();
         if (getConfig().getBoolean("setupDatabase")) {
 
         }
         getSqlManager().startConnection();
-
         getSqlManager().createTables();
+        getServerBridge().getOfflinePlayers();
         if (getConfig().getBoolean("coreDatabaseUpdate")) {
             getSqlManager().coreDatabaseUpdate();
         }
@@ -150,10 +145,6 @@ public class PlotMe_Core {
         }
     }
 
-    private void setupClearSpools() {
-        plotsToClear = new ConcurrentLinkedQueue<>();
-    }
-
     public void addManager(String world, IPlotMe_GeneratorManager manager) {
         managers.put(world.toLowerCase(), manager);
         setupWorld(world.toLowerCase());
@@ -164,11 +155,18 @@ public class PlotMe_Core {
     }
 
     public void scheduleTask(Runnable task) {
-        getLogger().info(util.C("MsgStartDeleteSession"));
+        getLogger().info(this.C("MsgStartDeleteSession"));
 
         for (int ctr = 0; ctr < 10; ctr++) {
             serverBridge.scheduleSyncDelayedTask(task, ctr * 100);
         }
+    }
+
+    public String C(String caption) {
+        return addColor(this.getCaptionConfig().getString(caption, "Missing caption: " + caption));
+    }
+    private String addColor(String string) {
+        return getServerBridge().addColor('&', string);
     }
 
     public IWorld getWorldCurrentlyProcessingExpired() {
@@ -226,16 +224,36 @@ public class PlotMe_Core {
         this.sqlManager = sqlManager;
     }
 
-    public Util getUtil() {
-        return util;
-    }
-
-    private void setUtil(Util util) {
-        this.util = util;
-    }
-
     public FileConfiguration getConfig() {
         return configFile.getConfig();
+    }
+
+    public String moneyFormat(double price, boolean showSign) {
+        if (price == 0) {
+            return "";
+        }
+
+        String format = String.valueOf(Math.round(Math.abs(price)));
+
+        Economy economy = getServerBridge().getEconomy();
+
+        if (economy != null) {
+            if (price <= 1.0 && price >= -1.0) {
+                format = format + " " + economy.currencyNameSingular();
+            } else {
+                format = format + " " + economy.currencyNamePlural();
+            }
+        }
+
+        if (showSign) {
+            if (price > 0.0) {
+                return ("+" + format);
+            } else {
+                return ("-" + format);
+            }
+        } else {
+            return format;
+        }
     }
 
 }

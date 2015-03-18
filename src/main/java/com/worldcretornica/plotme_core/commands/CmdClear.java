@@ -24,12 +24,13 @@ public class CmdClear extends PlotCommand {
             if (manager.isPlotWorld(world)) {
                 PlotId id = manager.getPlotId(player);
                 if (id == null) {
-                    player.sendMessage("§c" + C("MsgNoPlotFound"));
+                    player.sendMessage(C("MsgNoPlotFound"));
+                    return true;
                 } else if (!manager.isPlotAvailable(id, pmi)) {
                     Plot plot = manager.getPlotById(id, pmi);
 
                     if (plot.isProtect()) {
-                        player.sendMessage("§c" + C("MsgPlotProtectedCannotClear"));
+                        player.sendMessage(C("MsgPlotProtectedCannotClear"));
                     } else {
                         String playerName = player.getName();
 
@@ -52,14 +53,14 @@ public class CmdClear extends PlotCommand {
                                         EconomyResponse er = serverBridge.withdrawPlayer(player, price);
 
                                         if (!er.transactionSuccess()) {
-                                            player.sendMessage("§c" + er.errorMessage);
+                                            player.sendMessage(er.errorMessage);
                                             serverBridge.getLogger().warning(er.errorMessage);
                                             return true;
                                         }
                                     }
                                 } else {
                                     player.sendMessage(
-                                            "§c" + C("MsgNotEnoughClear") + " " + C("WordMissing") + " §r" + (price - balance) + "§c " + serverBridge
+                                            C("MsgNotEnoughClear") + " " + C("WordMissing") + " " + (price - balance) + " " + serverBridge
                                                     .getEconomy().currencyNamePlural());
                                     return true;
                                 }
@@ -80,17 +81,17 @@ public class CmdClear extends PlotCommand {
                                 }
                             }
                         } else {
-                            player.sendMessage("§c" + C("MsgThisPlot") + "(" + id + ") " + C("MsgNotYoursNotAllowedClear"));
+                            player.sendMessage(C("MsgThisPlot") + "(" + id + ") " + C("MsgNotYoursNotAllowedClear"));
                         }
                     }
                 } else {
-                    player.sendMessage("§c" + C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
+                    player.sendMessage(C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
                 }
             } else {
-                player.sendMessage("§c" + C("MsgNotPlotWorld"));
+                player.sendMessage(C("MsgNotPlotWorld"));
             }
         } else {
-            player.sendMessage("§c" + C("MsgPermissionDenied"));
+            player.sendMessage(C("MsgPermissionDenied"));
             return false;
         }
         return true;
