@@ -173,7 +173,7 @@ public abstract class Database {
                 "INSERT INTO plotmecore_plots(plotX, plotZ, world, ownerID, owner, biome, finished, finishedDate, forSale, price, protected, "
                         + "expiredDate, topX, topZ, bottomX, bottomZ, plotLikes) VALUES (?,?,?,?,?,?,?,?,"
                         + "?,?,?,?,?,?,?,?,?)");
-                Statement statement = connection.createStatement()) {
+                PreparedStatement ps2 = connection.prepareStatement(SELECT_INTERNAL_ID)) {
 
             ps.setInt(1, id.getX());
             ps.setInt(2, id.getZ());
@@ -194,7 +194,9 @@ public abstract class Database {
             ps.setInt(17, plot.getLikes());
             ps.executeUpdate();
             connection.commit();
-            ResultSet getID = statement.executeQuery(SELECT_INTERNAL_ID);
+            ps2.setInt(1, id.getX());
+            ps2.setInt(2, id.getZ());
+            ResultSet getID = ps2.executeQuery();
             while (getID.next()) {
                 plot.setInternalID(getID.getInt(1));
             }
