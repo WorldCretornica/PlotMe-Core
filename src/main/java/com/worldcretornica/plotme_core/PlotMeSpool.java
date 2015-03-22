@@ -6,6 +6,7 @@ import com.worldcretornica.plotme_core.api.IWorld;
 public class PlotMeSpool implements Runnable {
 
     private final PlotMe_Core plugin;
+    private final PlotMeCoreManager plotMeCoreManager;
     private Long[] currentClear;
 
     private PlotToClear plotToClear;
@@ -13,6 +14,7 @@ public class PlotMeSpool implements Runnable {
 
     public PlotMeSpool(PlotMe_Core instance, PlotToClear plotToClear) {
         plugin = instance;
+        plotMeCoreManager = PlotMeCoreManager.getInstance();
         this.plotToClear = plotToClear;
     }
 
@@ -20,7 +22,6 @@ public class PlotMeSpool implements Runnable {
     public void run() {
         if (getPlotToClear() != null) {
             IWorld world = getPlotToClear().getWorld();
-            PlotMeCoreManager plotMeCoreManager = PlotMeCoreManager.getInstance();
             IPlotMe_GeneratorManager genmanager = plotMeCoreManager.getGenManager(world);
 
             if (currentClear == null) {

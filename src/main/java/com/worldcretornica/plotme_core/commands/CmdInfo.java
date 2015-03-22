@@ -4,17 +4,22 @@ import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotId;
 import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
-import com.worldcretornica.plotme_core.bukkit.api.BukkitBiome;
 
-public class CmdInfo extends PlotCommand {
+public class CmdInfo extends PlotCommand implements CommandBase {
 
     public CmdInfo(PlotMe_Core instance) {
         super(instance);
     }
 
-    public boolean exec(IPlayer player) {
+    public String getName() {
+        return "info";
+    }
+
+    public boolean execute(ICommandSender sender, String[] args) {
+        IPlayer player = (IPlayer) sender;
         if (player.hasPermission(PermissionNames.USER_INFO)) {
             IWorld world = player.getWorld();
             if (manager.isPlotWorld(world)) {
@@ -28,7 +33,7 @@ public class CmdInfo extends PlotCommand {
                     Plot plot = manager.getPlotById(id, world);
 
                     player.sendMessage("ID: " + id + " " + C("InfoOwner") + ": " + plot.getOwner()
-                            + " " + C("InfoBiome") + ": " + ((BukkitBiome) plot.getBiome()).getBiome().name());
+                            + " " + C("InfoBiome") + ": " + plot.getBiome());
 
                     if (plot.getExpiredDate() == null) {
                         if (plot.isFinished()) {
@@ -80,9 +85,9 @@ public class CmdInfo extends PlotCommand {
 
                     if (manager.isEconomyEnabled(world)) {
                         if (plot.isForSale()) {
-                            player.sendMessage(" " + C("InfoForSale") + ": " + (Math.round(plot.getPrice())));
+                            player.sendMessage(C("InfoForSale") + ": " + (Math.round(plot.getPrice())));
                         } else {
-                            player.sendMessage(" " + C("InfoForSale") + ": " + C("WordNo"));
+                            player.sendMessage(C("InfoForSale") + ": " + C("WordNo"));
                         }
                     }
                     int bottomX = manager.bottomX(id, world);
@@ -100,9 +105,13 @@ public class CmdInfo extends PlotCommand {
                 player.sendMessage(C("MsgNotPlotWorld"));
             }
         } else {
-            player.sendMessage(C("MsgPermissionDenied"));
             return false;
         }
         return true;
+    }
+
+    @Override
+    public String getUsage() {
+        return C("WordUsage") + ": /plotme info";
     }
 }

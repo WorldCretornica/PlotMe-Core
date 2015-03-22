@@ -5,18 +5,24 @@ import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotId;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotDisposeEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
 
-public class CmdDispose extends PlotCommand {
+public class CmdDispose extends PlotCommand implements CommandBase {
 
     public CmdDispose(PlotMe_Core instance) {
         super(instance);
     }
 
-    public boolean exec(IPlayer player) {
+    public String getName() {
+        return "dispose";
+    }
+
+    public boolean execute(ICommandSender sender, String[] args) {
+        IPlayer player = (IPlayer) sender;
         if (player.hasPermission(PermissionNames.ADMIN_DISPOSE) || player.hasPermission(PermissionNames.USER_DISPOSE)) {
             IWorld world = player.getWorld();
             PlotMapInfo pmi = manager.getMap(world);
@@ -69,7 +75,7 @@ public class CmdDispose extends PlotCommand {
                                 manager.removeOwnerSign(world, id);
                                 manager.removeSellSign(world, id);
 
-                                plugin.getSqlManager().deletePlot(plot.getInternalID(), world.getName());
+                                plugin.getSqlManager().deletePlot(plot.getInternalID());
                                 manager.adjustWall(world, id, false);
                                 player.sendMessage(C("MsgPlotDisposedAnyoneClaim"));
 
@@ -88,9 +94,13 @@ public class CmdDispose extends PlotCommand {
                 player.sendMessage(C("MsgNotPlotWorld"));
             }
         } else {
-            player.sendMessage(C("MsgPermissionDenied"));
             return false;
         }
         return true;
+    }
+
+    @Override
+    public String getUsage() {
+        return C("WordUsage") + " /plotme dispose";
     }
 }

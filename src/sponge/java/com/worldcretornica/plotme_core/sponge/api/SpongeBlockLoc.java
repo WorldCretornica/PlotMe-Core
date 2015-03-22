@@ -1,12 +1,10 @@
 package com.worldcretornica.plotme_core.sponge.api;
 
-import com.worldcretornica.plotme_core.api.IBiome;
 import com.worldcretornica.plotme_core.api.IBlock;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IWorld;
 import org.spongepowered.api.block.BlockLoc;
 import org.spongepowered.api.world.World;
-import org.spongepowered.api.world.biome.BiomeTypes;
 
 public class SpongeBlockLoc implements IBlock {
 
@@ -47,14 +45,8 @@ public class SpongeBlockLoc implements IBlock {
     }
 
     @Override
-    public IBiome getBiome() {
-        //TODO: This cast is invalid and must be changed.
-        return (IBiome) block.getExtent().getBiome(block.getPosition().toVector2());
-    }
-
-    @Override
-    public void setBiome(IBiome biome) {
-        block.getExtent().setBiome(block.getPosition().toVector2(), BiomeTypes.PLAINS); //TODO: Placeholder to set the biome to Plains
+    public String getBiome() {
+        return block.getExtent().getBiome(block.getPosition().toVector2()).getName();
     }
 
     @Override

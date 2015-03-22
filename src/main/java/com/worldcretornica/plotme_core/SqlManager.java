@@ -2,7 +2,6 @@ package com.worldcretornica.plotme_core;
 
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
-import com.worldcretornica.plotme_core.bukkit.api.BukkitBiome;
 import com.worldcretornica.plotme_core.utils.UUIDFetcher;
 
 import java.io.File;
@@ -292,7 +291,7 @@ public class SqlManager {
             ps.setInt(6, bottomX);
             ps.setInt(7, topZ);
             ps.setInt(8, bottomZ);
-            ps.setString(9, ((BukkitBiome) plot.getBiome()).getBiome().name());
+            ps.setString(9, plot.getBiome());
             //ps.setDate(10, plot.getExpiredDate());
             ps.setBoolean(11, plot.isFinished());
             ps.setDouble(12, plot.getPrice());
@@ -440,126 +439,6 @@ public class SqlManager {
                 }
             } catch (SQLException ex) {
                 plugin.getLogger().severe("Insert Exception (on close) :");
-                plugin.getLogger().severe(ex.getMessage());
-            }
-        }
-    }
-
-    public void deletePlot(PlotId id, String world) {
-        PreparedStatement ps = null;
-        try {
-            Connection conn = getConnection();
-
-            ps = conn.prepareStatement("DELETE FROM plotmeAllowed WHERE idX = ? and idZ = ? and LOWER(world) = ?");
-            ps.setInt(1, id.getX());
-            ps.setInt(2, id.getZ());
-            ps.setString(3, world.toLowerCase());
-            ps.executeUpdate();
-            ps.close();
-            conn.commit();
-
-            ps = conn.prepareStatement("DELETE FROM plotmeDenied WHERE idX = ? and idZ = ? and LOWER(world) = ?");
-            ps.setInt(1, id.getX());
-            ps.setInt(2, id.getZ());
-            ps.setString(3, world.toLowerCase());
-            ps.executeUpdate();
-            ps.close();
-            conn.commit();
-
-            ps = conn.prepareStatement("DELETE FROM plotmeMetadata WHERE idX = ? and idZ = ? and LOWER(world) = ?");
-            ps.setInt(1, id.getX());
-            ps.setInt(2, id.getZ());
-            ps.setString(3, world.toLowerCase());
-            ps.executeUpdate();
-            ps.close();
-            conn.commit();
-
-            ps = conn.prepareStatement("DELETE FROM plotmePlots WHERE idX = ? and idZ = ? and LOWER(world) = ?");
-            ps.setInt(1, id.getX());
-            ps.setInt(2, id.getZ());
-            ps.setString(3, world.toLowerCase());
-            ps.executeUpdate();
-            ps.close();
-            conn.commit();
-
-        } catch (SQLException ex) {
-            plugin.getLogger().severe("Delete Exception :");
-            plugin.getLogger().severe(ex.getMessage());
-        } finally {
-            try {
-                if (ps != null) {
-                    ps.close();
-                }
-            } catch (SQLException ex) {
-                plugin.getLogger().severe("Delete exception (on close) :");
-                plugin.getLogger().severe(ex.getMessage());
-            }
-        }
-    }
-
-    public void deletePlotAllowed(int idX, int idZ, String player, UUID playerid, String world) {
-        PreparedStatement ps = null;
-
-        try {
-            Connection conn = getConnection();
-
-            if (playerid == null) {
-                ps = conn.prepareStatement("DELETE FROM plotmeAllowed WHERE idX = ? and idZ = ? and player = ? and LOWER(world) = ?");
-                ps.setString(3, player);
-            } else {
-                ps = conn.prepareStatement("DELETE FROM plotmeAllowed WHERE idX = ? and idZ = ? and playerid = ? and LOWER(world) = ?");
-                ps.setBytes(3, UUIDFetcher.toBytes(playerid));
-            }
-            ps.setInt(1, idX);
-            ps.setInt(2, idZ);
-            ps.setString(4, world.toLowerCase());
-            ps.executeUpdate();
-            conn.commit();
-
-        } catch (SQLException ex) {
-            plugin.getLogger().severe("Delete Exception :");
-            plugin.getLogger().severe(ex.getMessage());
-        } finally {
-            try {
-                if (ps != null) {
-                    ps.close();
-                }
-            } catch (SQLException ex) {
-                plugin.getLogger().severe("Delete exception (on close) :");
-                plugin.getLogger().severe(ex.getMessage());
-            }
-        }
-    }
-
-    public void deletePlotDenied(int idX, int idZ, String player, UUID playerid, String world) {
-        PreparedStatement ps = null;
-
-        try {
-            Connection conn = getConnection();
-
-            if (playerid == null) {
-                ps = conn.prepareStatement("DELETE FROM plotmeDenied WHERE idX = ? and idZ = ? and player = ? and LOWER(world) = ?");
-                ps.setString(3, player);
-            } else {
-                ps = conn.prepareStatement("DELETE FROM plotmeDenied WHERE idX = ? and idZ = ? and playerid = ? and LOWER(world) = ?");
-                ps.setBytes(3, UUIDFetcher.toBytes(playerid));
-            }
-            ps.setInt(1, idX);
-            ps.setInt(2, idZ);
-            ps.setString(4, world.toLowerCase());
-            ps.executeUpdate();
-            conn.commit();
-
-        } catch (SQLException ex) {
-            plugin.getLogger().severe("Delete exception :");
-            plugin.getLogger().severe(ex.getMessage());
-        } finally {
-            try {
-                if (ps != null) {
-                    ps.close();
-                }
-            } catch (SQLException ex) {
-                plugin.getLogger().severe("Delete exception (on close) :");
                 plugin.getLogger().severe(ex.getMessage());
             }
         }

@@ -65,7 +65,7 @@ public class SpongeCommand implements CommandCallable {
      */
     @Override
     public Optional<String> getShortDescription() {
-        return null;
+        return Optional.of("Generic PlotMe Help");
     }
 
     /**
@@ -75,7 +75,7 @@ public class SpongeCommand implements CommandCallable {
      */
     @Override
     public Optional<String> getHelp() {
-        return null;
+        return Optional.of("Generic PlotMe Help");
     }
 
     /**
@@ -88,7 +88,7 @@ public class SpongeCommand implements CommandCallable {
      */
     @Override
     public String getUsage() {
-        return null;
+        return "Add this message later";
     }
 
     /**
@@ -104,6 +104,7 @@ public class SpongeCommand implements CommandCallable {
      */
     @Override
     public List<String> getSuggestions(CommandSource source, String arguments) throws CommandException {
+        //noinspection ConstantConditions
         return null;
     }
 }

@@ -5,18 +5,24 @@ import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotId;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotProtectChangeEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
 
-public class CmdProtect extends PlotCommand {
+public class CmdProtect extends PlotCommand implements CommandBase {
 
     public CmdProtect(PlotMe_Core instance) {
         super(instance);
     }
 
-    public boolean exec(IPlayer player) {
+    public String getName() {
+        return "protect";
+    }
+
+    public boolean execute(ICommandSender sender, String[] args) {
+        IPlayer player = (IPlayer) sender;
         if (player.hasPermission(PermissionNames.ADMIN_PROTECT) || player.hasPermission(PermissionNames.USER_PROTECT)) {
             IWorld world = player.getWorld();
             PlotMapInfo pmi = manager.getMap(world);
@@ -104,9 +110,13 @@ public class CmdProtect extends PlotCommand {
                 return true;
             }
         } else {
-            player.sendMessage(C("MsgPermissionDenied"));
             return false;
         }
         return true;
+    }
+
+    @Override
+    public String getUsage() {
+        return null;
     }
 }

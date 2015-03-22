@@ -4,9 +4,9 @@ import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotProtectChangeEvent;
-import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
-import org.bukkit.entity.Player;
+import com.worldcretornica.plotme_core.sponge.api.SpongePlayer;
 import org.bukkit.event.Cancellable;
+import org.spongepowered.api.entity.player.Player;
 
 public class PlotProtectChangeEvent extends PlotEvent implements Cancellable {
 
@@ -28,7 +28,7 @@ public class PlotProtectChangeEvent extends PlotEvent implements Cancellable {
     }
 
     public Player getPlayer() {
-        return ((BukkitPlayer) event.getPlayer()).getPlayer();
+        return ((SpongePlayer) event.getPlayer()).getPlayer();
     }
 
     public boolean isProtected() {

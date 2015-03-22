@@ -3,17 +3,23 @@ package com.worldcretornica.plotme_core.commands;
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 
 import java.util.List;
 
-public class CmdDoneList extends PlotCommand {
+public class CmdDoneList extends PlotCommand implements CommandBase {
 
     public CmdDoneList(PlotMe_Core instance) {
         super(instance);
     }
 
-    public boolean exec(IPlayer player, String[] args) {
+    public String getName() {
+        return "donelist";
+    }
+
+    public boolean execute(ICommandSender sender, String[] args) {
+        IPlayer player = (IPlayer) sender;
         if (manager.isPlotWorld(player)) {
             if (player.hasPermission(PermissionNames.ADMIN_DONE)) {
 
@@ -44,12 +50,16 @@ public class CmdDoneList extends PlotCommand {
                     }
                 }
             } else {
-                player.sendMessage(C("MsgPermissionDenied"));
                 return false;
             }
         } else {
             player.sendMessage(C("MsgNotPlotWorld"));
         }
         return true;
+    }
+
+    @Override
+    public String getUsage() {
+        return null;
     }
 }

@@ -5,17 +5,21 @@ import com.worldcretornica.plotme_core.PlotRunnableDeleteExpire;
 import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IWorld;
 
-public class CmdResetExpired extends PlotCommand {
+public class CmdResetExpired extends PlotCommand implements CommandBase {
 
     public CmdResetExpired(PlotMe_Core instance) {
         super(instance);
     }
 
-    public boolean exec(ICommandSender sender, String string) {
+    public String getName() {
+        return "resetexpired";
+    }
+
+    public boolean execute(ICommandSender sender, String[] args) {
         if (plugin.getWorldCurrentlyProcessingExpired() != null) {
             serverBridge.getLogger().info(C("MsgAlreadyProcessingPlots"));
         } else {
-            IWorld world = serverBridge.getWorld(string);
+            IWorld world = serverBridge.getWorld(args[1]);
 
             if (!manager.isPlotWorld(world)) {
                 serverBridge.getLogger().info(C("MsgNotPlotWorld"));
@@ -27,5 +31,10 @@ public class CmdResetExpired extends PlotCommand {
             }
         }
         return true;
+    }
+
+    @Override
+    public String getUsage() {
+        return null;
     }
 }

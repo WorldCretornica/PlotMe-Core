@@ -59,10 +59,9 @@ public class PlotWorldEdit {
             }
         }
 
-        bottom = new BukkitLocation(new Location(bukkitWorld.getWorld(), 0, 0, 0));
-        top = new BukkitLocation(new Location(bukkitWorld.getWorld(), 0, 0, 0));
-
         if (session.getMask() == null) {
+            bottom = new BukkitLocation(new Location(bukkitWorld.getWorld(), 0, 0, 0));
+            top = new BukkitLocation(new Location(bukkitWorld.getWorld(), 0, 0, 0));
             LocalSession localsession = worldEdit.getSession(bukkitPlayer.getPlayer());
             World world = localsession.getSelectionWorld();
 

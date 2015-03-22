@@ -4,18 +4,24 @@ import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.PlotId;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotCreateEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
 
-public class CmdAuto extends PlotCommand {
+public class CmdAuto extends PlotCommand implements CommandBase {
 
     public CmdAuto(PlotMe_Core instance) {
         super(instance);
     }
 
-    public boolean exec(IPlayer player, String[] args) {
+    public String getName() {
+        return "auto";
+    }
+
+    public boolean execute(ICommandSender sender, String[] args) {
+        IPlayer player = (IPlayer) sender;
         if (player.hasPermission(PermissionNames.USER_AUTO)) {
             if (manager.isPlotWorld(player) || plugin.getConfig().getBoolean("allowWorldTeleport")) {
                 IWorld world;
@@ -123,9 +129,14 @@ public class CmdAuto extends PlotCommand {
                 player.sendMessage(C("MsgNotPlotWorld"));
             }
         } else {
-            player.sendMessage(C("MsgPermissionDenied"));
             return false;
         }
         return true;
     }
+
+    @Override
+    public String getUsage() {
+        return null;
+    }
+
 }

@@ -5,6 +5,7 @@ import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotId;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
@@ -14,13 +15,18 @@ import net.milkbowl.vault.economy.EconomyResponse;
 
 import java.util.UUID;
 
-public class CmdSetOwner extends PlotCommand {
+public class CmdSetOwner extends PlotCommand implements CommandBase {
 
     public CmdSetOwner(PlotMe_Core instance) {
         super(instance);
     }
 
-    public boolean exec(IPlayer player, String[] args) {
+    public String getName() {
+        return "setowner";
+    }
+
+    public boolean execute(ICommandSender sender, String[] args) {
+        IPlayer player = (IPlayer) sender;
         IWorld world = player.getWorld();
         PlotMapInfo pmi = manager.getMap(world);
         if (player.hasPermission(PermissionNames.ADMIN_SETOWNER)) {
@@ -100,9 +106,13 @@ public class CmdSetOwner extends PlotCommand {
                 player.sendMessage(C("MsgNotPlotWorld"));
             }
         } else {
-            player.sendMessage(C("MsgPermissionDenied"));
             return false;
         }
         return true;
+    }
+
+    @Override
+    public String getUsage() {
+        return null;
     }
 }

@@ -4,7 +4,7 @@ import com.worldcretornica.configuration.ConfigurationSection;
 import org.yaml.snakeyaml.nodes.Node;
 import org.yaml.snakeyaml.representer.Representer;
 
-public class YamlRepresenter extends Representer {
+class YamlRepresenter extends Representer {
 
     public YamlRepresenter() {
         this.multiRepresenters.put(ConfigurationSection.class, new RepresentConfigurationSection());

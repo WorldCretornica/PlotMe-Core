@@ -27,7 +27,6 @@ permissions:
         plotme.use.list: true
         plotme.use.buy: true
         plotme.use.sell: true
-        plotme.use.auction: true
         plotme.use.dispose: true
         plotme.use.done: true
         plotme.use.deny: true
@@ -51,7 +50,6 @@ permissions:
         plotme.admin.list: true
         plotme.admin.buy: true
         plotme.admin.sell: true
-        plotme.admin.auction: true
         plotme.admin.dispose: true
         plotme.admin.done: true
         plotme.admin.addtime: true

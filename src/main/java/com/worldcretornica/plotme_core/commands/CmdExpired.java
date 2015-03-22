@@ -3,18 +3,24 @@ package com.worldcretornica.plotme_core.commands;
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 
 import java.util.List;
 
-public class CmdExpired extends PlotCommand {
+public class CmdExpired extends PlotCommand implements CommandBase {
 
     public CmdExpired(PlotMe_Core instance) {
         super(instance);
     }
 
-    public boolean exec(IPlayer player, String[] args) {
+    public String getName() {
+        return "expired";
+    }
+
+    public boolean execute(ICommandSender sender, String[] args) {
+        IPlayer player = (IPlayer) sender;
         if (player.hasPermission(PermissionNames.ADMIN_EXPIRED)) {
             IWorld world = player.getWorld();
             if (manager.isPlotWorld(world)) {
@@ -46,9 +52,13 @@ public class CmdExpired extends PlotCommand {
                 return true;
             }
         } else {
-            player.sendMessage(C("MsgPermissionDenied"));
             return false;
         }
         return true;
+    }
+
+    @Override
+    public String getUsage() {
+        return null;
     }
 }

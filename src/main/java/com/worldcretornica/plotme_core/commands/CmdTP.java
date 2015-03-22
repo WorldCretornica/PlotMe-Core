@@ -4,18 +4,24 @@ import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotId;
 import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotTeleportEvent;
 
-public class CmdTP extends PlotCommand {
+public class CmdTP extends PlotCommand implements CommandBase {
 
     public CmdTP(PlotMe_Core instance) {
         super(instance);
     }
 
-    public boolean exec(IPlayer player, String[] args) {
+    public String getName() {
+        return "tp";
+    }
+
+    public boolean execute(ICommandSender sender, String[] args) {
+        IPlayer player = (IPlayer) sender;
         if (player.hasPermission(PermissionNames.ADMIN_TP)) {
             if (manager.isPlotWorld(player) || plugin.getConfig().getBoolean("allowWorldTeleport")) {
                 if (args.length == 2 || args.length == 3) {
@@ -49,20 +55,27 @@ public class CmdTP extends PlotCommand {
                             }
                         }
                     }
-                } else if (plugin.getConfig().getBoolean("allowWorldTeleport")) {
-                    player.sendMessage(
-                            C("WordUsage") + ": /plotme tp <ID> [" + C("WordWorld") + "] " + C("WordExample") + ": /plotme tp 5;-1 ");
                 } else {
-                    player.sendMessage(C("WordUsage") + ": /plotme tp <ID> " + C("WordExample") + ": /plotme tp 5;-1 ");
+                    player.sendMessage(getUsage());
+                    return true;
                 }
             } else {
                 player.sendMessage(C("MsgNotPlotWorld"));
                 return true;
             }
         } else {
-            player.sendMessage(C("MsgPermissionDenied"));
             return false;
         }
         return true;
     }
+
+    @Override
+    public String getUsage() {
+        if (plugin.getConfig().getBoolean("allowWorldTeleport")) {
+            return C("WordUsage") + ": /plotme tp <ID> [" + C("WordWorld") + "] " + C("WordExample") + ": /plotme tp 5;-1 ";
+        } else {
+            return C("WordUsage") + ": /plotme tp <ID> " + C("WordExample") + ": /plotme tp 5;-1 ";
+        }
+    }
+
 }

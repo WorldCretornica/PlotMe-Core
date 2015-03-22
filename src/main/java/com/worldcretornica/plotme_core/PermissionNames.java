@@ -2,9 +2,6 @@ package com.worldcretornica.plotme_core;
 
 public class PermissionNames {
 
-    public static final String ADMIN_UNDENY = "PlotMe.admin.undeny";
-    public static final String USER_UNDENY = "PlotMe.use.undeny";
-    public static final String ADMIN_RESET = "PlotMe.admin.reset";
     public static final String ADMIN_ADDTIME = "PlotMe.admin.addtime";
     public static final String USER_HOME = "PlotMe.use.home";
     public static final String USER_AUTO = "PlotMe.use.auto";
@@ -36,10 +33,11 @@ public class PermissionNames {
     public static final String ADMIN_CLAIM_OTHER = "PlotMe.admin.claim.other";
     public static final String ADMIN_WEANYWHERE = "PlotMe.admin.weanywhere";
     public static final String USER_DENY = "PlotMe.use.deny";
-    public static final String ADMIN_PROTECT = "PlotMe.admin.protect";
     public static final String ADMIN_DENY = "PlotMe.admin.deny";
     public static final String ADMIN_REMOVE = "PlotMe.admin.remove";
+    public static final String ADMIN_PROTECT = "PlotMe.admin.protect";
     public static final String USER_PROTECT = "PlotMe.use.protect";
     public static final String USER_MIDDLE = "PlotMe.use.middle";
     public static final String ADMIN_MIDDLE_OTHER = "PlotMe.admin.middle";
+    public static final String ADMIN_RESET = "PlotMe.admin.reset";
 }

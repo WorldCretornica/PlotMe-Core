@@ -9,7 +9,7 @@ public class CmdCreateWorld extends PlotCommand {
     }
 /*
 
-    public boolean exec(ICommandSender sender, String[] args) {
+    public boolean execute(ICommandSender sender, String[] args) {
         if (plugin.creationbuffer.containsKey(sender.getName())) {
             if (args.length == 1) {
                 //try to create world

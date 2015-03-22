@@ -5,18 +5,24 @@ import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotId;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotAddAllowedEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
 
-public class CmdAdd extends PlotCommand {
+public class CmdAdd extends PlotCommand implements CommandBase {
 
     public CmdAdd(PlotMe_Core instance) {
         super(instance);
     }
 
-    public boolean exec(IPlayer player, String[] args) {
+    public String getName() {
+        return "add";
+    }
+
+    public boolean execute(ICommandSender sender, String[] args) {
+        IPlayer player = (IPlayer) sender;
         if (player.hasPermission(PermissionNames.ADMIN_ADD) || player.hasPermission(PermissionNames.USER_ADD)) {
             IWorld world = player.getWorld();
             PlotMapInfo pmi = manager.getMap(world);
@@ -26,8 +32,9 @@ public class CmdAdd extends PlotCommand {
                     player.sendMessage(C("MsgNoPlotFound"));
                     return true;
                 } else if (!manager.isPlotAvailable(id, pmi)) {
-                    if (args.length < 2) {
+                    if (args.length < 2 && args.length >= 3) {
                         player.sendMessage(C("WordUsage") + " /plotme add <" + C("WordPlayer") + ">");
+                        return true;
                     } else {
                         Plot plot = manager.getPlotById(id, pmi);
 
@@ -99,9 +106,14 @@ public class CmdAdd extends PlotCommand {
                 player.sendMessage(C("MsgNotPlotWorld"));
             }
         } else {
-            player.sendMessage(C("MsgPermissionDenied"));
             return false;
         }
         return true;
     }
+
+    @Override
+    public String getUsage() {
+        return C("WordUsage") + " /plotme add <" + C("WordPlayer") + ">";
+    }
+
 }

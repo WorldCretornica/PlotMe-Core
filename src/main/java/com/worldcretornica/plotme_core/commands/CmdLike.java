@@ -1,20 +1,25 @@
 package com.worldcretornica.plotme_core.commands;
 
-import com.worldcretornica.plotme_core.PlotId;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.api.ICommandSender;
 
-public class CmdLike extends PlotCommand {
+public class CmdLike extends PlotCommand implements CommandBase {
 
     public CmdLike(PlotMe_Core instance) {
         super(instance);
     }
 
-    public boolean exec(IPlayer player) {
-        PlotId id1 = new PlotId(1, 1);
-        PlotId id2 = new PlotId(2, 1);
-        manager.getGenManager(player.getWorld()).fillMiddleRoad(id1, id2, player.getWorld());
+    public String getName() {
+        return "like";
+    }
+
+    public boolean execute(ICommandSender sender, String[] args) {
         return true;
+    }
+
+    @Override
+    public String getUsage() {
+        return null;
     }
 
 }

@@ -6,18 +6,24 @@ import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotId;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotResetEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
 
-public class CmdReset extends PlotCommand {
+public class CmdReset extends PlotCommand implements CommandBase {
 
     public CmdReset(PlotMe_Core instance) {
         super(instance);
     }
 
-    public boolean exec(IPlayer player) {
+    public String getName() {
+        return "reset";
+    }
+
+    public boolean execute(ICommandSender sender, String[] args) {
+        IPlayer player = (IPlayer) sender;
         if (player.hasPermission(PermissionNames.ADMIN_RESET) || player.hasPermission("PlotMe.use.reset")) {
             IWorld world = player.getWorld();
             PlotMapInfo pmi = manager.getMap(world);
@@ -38,7 +44,7 @@ public class CmdReset extends PlotCommand {
                     InternalPlotResetEvent event = serverBridge.getEventFactory().callPlotResetEvent(world, plot, player);
 
                     if (!event.isCancelled()) {
-                        manager.setBiome(world, id, serverBridge.getBiome("PLAINS"));
+                        manager.setBiome(world, id, "PLAINS");
                         manager.clear(world, plot, player, ClearReason.Reset);
 
                         if (manager.isEconomyEnabled(pmi) && pmi.isRefundClaimPriceOnReset()) {
@@ -63,7 +69,7 @@ public class CmdReset extends PlotCommand {
 
                         manager.removeOwnerSign(world, id);
                         manager.removeSellSign(world, id);
-                        plugin.getSqlManager().deletePlot(plot.getInternalID(), world.getName());
+                        plugin.getSqlManager().deletePlot(plot.getInternalID());
 
                         if (isAdvancedLogging()) {
                             serverBridge.getLogger().info(player.getName() + " " + C("MsgResetPlot") + " " + id);
@@ -76,9 +82,13 @@ public class CmdReset extends PlotCommand {
                 player.sendMessage(C("MsgNotPlotWorld"));
             }
         } else {
-            player.sendMessage(C("MsgPermissionDenied"));
             return false;
         }
         return true;
+    }
+
+    @Override
+    public String getUsage() {
+        return null;
     }
 }

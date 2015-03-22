@@ -40,7 +40,7 @@ public class MySQLConnector extends Database {
         Connection connection = getConnection();
         try (Statement statement = connection.createStatement()) {
             //MySQL specific plot table creation.
-            statement.executeUpdate("CREATE TABLE `plotmecore_plots` ("
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS `plotmecore_plots` ("
                     + "`id` INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,"
                     + "`plotX` INTEGER NOT NULL,"
                     + "`plotZ` INTEGER NOT NULL,"
@@ -89,7 +89,7 @@ public class MySQLConnector extends Database {
                     + "`player` VARCHAR(50) NOT NULL,"
                     + "UNIQUE INDEX `likes` (plot_id, player)"
                     + ");");
-            statement.executeUpdate("CREATE TABLE `plotmecore_metadata` ("
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS `plotmecore_metadata` ("
                     + "`id` INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,"
                     + "`plot_id` INTEGER NOT NULL,"
                     + "`pluginname` VARCHAR(100) NOT NULL,"

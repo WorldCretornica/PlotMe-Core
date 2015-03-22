@@ -2,7 +2,6 @@ package com.worldcretornica.plotme_core;
 
 import com.griefcraft.lwc.LWC;
 import com.griefcraft.model.Protection;
-import com.worldcretornica.plotme_core.api.IBiome;
 import com.worldcretornica.plotme_core.api.IBlock;
 import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IEntity;
@@ -10,7 +9,6 @@ import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IPlotMe_GeneratorManager;
 import com.worldcretornica.plotme_core.api.IWorld;
-import com.worldcretornica.plotme_core.bukkit.api.BukkitBiome;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -615,10 +613,10 @@ public class PlotMeCoreManager {
 
         if (plotFrom != null) {
             if (plotTo != null) {
-                plugin.getSqlManager().deletePlot(plotTo.getInternalID(), world.getName());
+                plugin.getSqlManager().deletePlot(plotTo.getInternalID());
                 removePlot(world, idFrom);
                 removePlot(world, idTo);
-                plugin.getSqlManager().deletePlot(plotFrom.getInternalID(), world.getName());
+                plugin.getSqlManager().deletePlot(plotFrom.getInternalID());
 
                 plotTo.setId(idFrom);
                 plugin.getSqlManager().addPlot(plotTo, idFrom, getPlotTopLoc(world, idFrom), getPlotBottomLoc(world, idFrom));
@@ -648,7 +646,7 @@ public class PlotMeCoreManager {
      */
     private void movePlotToEmpty(IWorld world, Plot filledPlot, PlotId idDestination) {
         PlotId idFrom = filledPlot.getId();
-        plugin.getSqlManager().deletePlot(filledPlot.getInternalID(), world.getName());
+        plugin.getSqlManager().deletePlot(filledPlot.getInternalID());
         removePlot(world, idFrom);
 
         filledPlot.setId(idDestination);
@@ -802,8 +800,8 @@ public class PlotMeCoreManager {
         getGenManager(world).adjustPlotFor(world, id, claimed, plot.isProtect(), plot.isForSale());
     }
 
-    public void setBiome(IWorld world, PlotId id, IBiome biome) {
-        plugin.getSqlManager().updatePlot(id, world.getName(), "biome", ((BukkitBiome) biome).getBiome().name());
+    public void setBiome(IWorld world, PlotId id, String biome) {
+        plugin.getSqlManager().updatePlot(id, world.getName(), "biome", biome.toUpperCase());
     }
 
 

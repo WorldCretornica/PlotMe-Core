@@ -3,18 +3,24 @@ package com.worldcretornica.plotme_core.commands;
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 
 import java.util.UUID;
 
-public class CmdPlotList extends PlotCommand {
+public class CmdPlotList extends PlotCommand implements CommandBase {
 
     public CmdPlotList(PlotMe_Core instance) {
         super(instance);
     }
 
-    public boolean exec(IPlayer player, String[] args) {
+    public String getName() {
+        return "list";
+    }
+
+    public boolean execute(ICommandSender sender, String[] args) {
+        IPlayer player = (IPlayer) sender;
         if (player.hasPermission(PermissionNames.USER_LIST)) {
             if (manager.isPlotWorld(player)) {
                 String name;
@@ -114,9 +120,13 @@ public class CmdPlotList extends PlotCommand {
                 player.sendMessage(C("MsgNotPlotWorld"));
             }
         } else {
-            player.sendMessage(C("MsgPermissionDenied"));
             return false;
         }
         return true;
+    }
+
+    @Override
+    public String getUsage() {
+        return null;
     }
 }

@@ -2,7 +2,6 @@ package com.worldcretornica.plotme_core.api.event;
 
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotId;
-import com.worldcretornica.plotme_core.api.IBiome;
 import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
@@ -25,7 +24,7 @@ public interface IEventFactory {
 
     InternalPlotResetEvent callPlotResetEvent(IWorld world, Plot plot, ICommandSender commandSender);
 
-    InternalPlotBiomeChangeEvent callPlotBiomeChangeEvent(IWorld world, Plot plot, IPlayer player, IBiome biome);
+    InternalPlotBiomeChangeEvent callPlotBiomeChangeEvent(IWorld world, Plot plot, IPlayer player, String biome);
 
     InternalPlotBuyEvent callPlotBuyEvent(IWorld world, Plot plot, IPlayer player, double price);
 

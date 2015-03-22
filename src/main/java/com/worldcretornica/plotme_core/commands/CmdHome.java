@@ -4,6 +4,7 @@ import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotTeleportHomeEvent;
@@ -12,13 +13,18 @@ import net.milkbowl.vault.economy.EconomyResponse;
 
 import java.util.UUID;
 
-public class CmdHome extends PlotCommand {
+public class CmdHome extends PlotCommand implements CommandBase {
 
     public CmdHome(PlotMe_Core instance) {
         super(instance);
     }
 
-    public boolean exec(IPlayer player, String[] args) {
+    public String getName() {
+        return "home";
+    }
+
+    public boolean execute(ICommandSender sender, String[] args) {
+        IPlayer player = (IPlayer) sender;
         if (player.hasPermission(PermissionNames.USER_HOME)) {
             if (manager.isPlotWorld(player) || plugin.getConfig().getBoolean("allowWorldTeleport")) {
                 UUID uuid = player.getUniqueId();
@@ -34,7 +40,7 @@ public class CmdHome extends PlotCommand {
                 int nb = 1;
                 if (args[0].contains(":")) {
                     if (args[0].split(":").length == 1 || args[0].split(":")[1].isEmpty()) {
-                        player.sendMessage(C("WordUsage") + ": /plotme home:# " + C("WordExample") + ": /plotme home:1");
+                        player.sendMessage(C("WordUsage") + ": /plotme home # " + C("WordExample") + ": /plotme home:1");
                         return true;
                     }
                     try {
@@ -182,9 +188,13 @@ public class CmdHome extends PlotCommand {
                 player.sendMessage(C("MsgNotPlotWorld"));
             }
         } else {
-            player.sendMessage(C("MsgPermissionDenied"));
             return false;
         }
         return true;
+    }
+
+    @Override
+    public String getUsage() {
+        return null;
     }
 }

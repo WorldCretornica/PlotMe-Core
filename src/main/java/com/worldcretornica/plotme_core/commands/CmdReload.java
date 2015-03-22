@@ -3,13 +3,17 @@ package com.worldcretornica.plotme_core.commands;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ICommandSender;
 
-public class CmdReload extends PlotCommand {
+public class CmdReload extends PlotCommand implements CommandBase {
 
     public CmdReload(PlotMe_Core instance) {
         super(instance);
     }
 
-    public boolean exec(ICommandSender sender) {
+    public String getName() {
+        return "reload";
+    }
+
+    public boolean execute(ICommandSender sender, String[] args) {
 
         if (sender.hasPermission("plotme.admin.reload")) {
             plugin.reload();
@@ -18,5 +22,10 @@ public class CmdReload extends PlotCommand {
         } else {
             return false;
         }
+    }
+
+    @Override
+    public String getUsage() {
+        return C("WordUsage") + ": /plotme reload";
     }
 }

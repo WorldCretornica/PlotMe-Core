@@ -5,17 +5,23 @@ import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotId;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotSellChangeEvent;
 
-public class CmdSell extends PlotCommand {
+public class CmdSell extends PlotCommand implements CommandBase {
 
     public CmdSell(PlotMe_Core instance) {
         super(instance);
     }
 
-    public boolean exec(IPlayer player, String[] args) {
+    public String getName() {
+        return "sell";
+    }
+
+    public boolean execute(ICommandSender sender, String[] args) {
+        IPlayer player = (IPlayer) sender;
         IWorld world = player.getWorld();
         if (manager.isPlotWorld(world)) {
             PlotMapInfo pmi = manager.getMap(world);
@@ -112,5 +118,10 @@ public class CmdSell extends PlotCommand {
             }
         }
         return true;
+    }
+
+    @Override
+    public String getUsage() {
+        return null;
     }
 }

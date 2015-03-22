@@ -1,10 +1,13 @@
-package com.worldcretornica.plotme_core.bukkit.v1_8;
+package com.worldcretornica.plotme_core.bukkit;
 
 import com.worldcretornica.schematic.Attribute;
+import com.worldcretornica.schematic.Display;
+import com.worldcretornica.schematic.Ench;
 import com.worldcretornica.schematic.Entity;
 import com.worldcretornica.schematic.Item;
 import com.worldcretornica.schematic.ItemTag;
 import com.worldcretornica.schematic.Leash;
+import com.worldcretornica.schematic.Modifier;
 import com.worldcretornica.schematic.Pattern;
 import com.worldcretornica.schematic.Pose;
 import com.worldcretornica.schematic.RecordItem;
@@ -42,6 +45,7 @@ import org.bukkit.block.NoteBlock;
 import org.bukkit.block.Sign;
 import org.bukkit.block.Skull;
 import org.bukkit.block.banner.PatternType;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Ageable;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
@@ -50,11 +54,11 @@ import org.bukkit.entity.Horse;
 import org.bukkit.entity.Horse.Style;
 import org.bukkit.entity.Horse.Variant;
 import org.bukkit.entity.ItemFrame;
+import org.bukkit.entity.LeashHitch;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Painting;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Rabbit;
-import org.bukkit.entity.Rabbit.Type;
 import org.bukkit.entity.Sheep;
 import org.bukkit.entity.Skeleton;
 import org.bukkit.entity.Skeleton.SkeletonType;
@@ -63,294 +67,489 @@ import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BookMeta;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-public class SchematicUtil extends com.worldcretornica.plotme_core.bukkit.v1_7.SchematicUtil {
+public class SchematicUtil extends AbstractSchematicUtil {
 
-    public SchematicUtil(Plugin instance) {
-        super(instance);
-    }
+    protected final Plugin plugin;
 
     @SuppressWarnings("deprecation")
+    public SchematicUtil(Plugin instance) {
+        this.plugin = instance;
+
+        blockPlacedLast.add(Material.SAPLING.getId());
+        blockPlacedLast.add(Material.BED.getId());
+        blockPlacedLast.add(Material.POWERED_RAIL.getId());
+        blockPlacedLast.add(Material.DETECTOR_RAIL.getId());
+        blockPlacedLast.add(Material.LONG_GRASS.getId());
+        blockPlacedLast.add(Material.DEAD_BUSH.getId());
+        blockPlacedLast.add(Material.PISTON_EXTENSION.getId());
+        blockPlacedLast.add(Material.YELLOW_FLOWER.getId());
+        blockPlacedLast.add(Material.RED_ROSE.getId());
+        blockPlacedLast.add(Material.BROWN_MUSHROOM.getId());
+        blockPlacedLast.add(Material.RED_MUSHROOM.getId());
+        blockPlacedLast.add(Material.TORCH.getId());
+        blockPlacedLast.add(Material.FIRE.getId());
+        blockPlacedLast.add(Material.REDSTONE_WIRE.getId());
+        blockPlacedLast.add(Material.CROPS.getId());
+        blockPlacedLast.add(Material.LADDER.getId());
+        blockPlacedLast.add(Material.RAILS.getId());
+        blockPlacedLast.add(Material.LEVER.getId());
+        blockPlacedLast.add(Material.STONE_PLATE.getId());
+        blockPlacedLast.add(Material.WOOD_PLATE.getId());
+        blockPlacedLast.add(Material.REDSTONE_TORCH_OFF.getId());
+        blockPlacedLast.add(Material.REDSTONE_TORCH_ON.getId());
+        blockPlacedLast.add(Material.STONE_BUTTON.getId());
+        blockPlacedLast.add(Material.SNOW.getId());
+        blockPlacedLast.add(Material.PORTAL.getId());
+        blockPlacedLast.add(Material.DIODE_BLOCK_OFF.getId());
+        blockPlacedLast.add(Material.DIODE_BLOCK_ON.getId());
+        blockPlacedLast.add(Material.TRAP_DOOR.getId());
+        blockPlacedLast.add(Material.VINE.getId());
+        blockPlacedLast.add(Material.WATER_LILY.getId());
+        blockPlacedLast.add(Material.NETHER_WARTS.getId());
+        blockPlacedLast.add(Material.PISTON_BASE.getId());
+        blockPlacedLast.add(Material.PISTON_STICKY_BASE.getId());
+        blockPlacedLast.add(Material.PISTON_EXTENSION.getId());
+        blockPlacedLast.add(Material.PISTON_MOVING_PIECE.getId());
+        blockPlacedLast.add(Material.COCOA.getId());
+        blockPlacedLast.add(Material.TRIPWIRE_HOOK.getId());
+        blockPlacedLast.add(Material.TRIPWIRE.getId());
+        blockPlacedLast.add(Material.FLOWER_POT.getId());
+        blockPlacedLast.add(Material.CARROT.getId());
+        blockPlacedLast.add(Material.POTATO.getId());
+        blockPlacedLast.add(Material.WOOD_BUTTON.getId());
+        blockPlacedLast.add(Material.SKULL.getId());
+        blockPlacedLast.add(Material.GOLD_PLATE.getId());
+        blockPlacedLast.add(Material.IRON_PLATE.getId());
+        blockPlacedLast.add(Material.REDSTONE_COMPARATOR_OFF.getId());
+        blockPlacedLast.add(Material.REDSTONE_COMPARATOR_ON.getId());
+        blockPlacedLast.add(Material.ACTIVATOR_RAIL.getId());
+    }
+
     @Override
-    public Schematic createCompiledSchematic(Location loc1, Location loc2) {
+    public Schematic loadCompiledSchematic(String file) {
 
-        Schematic schem;
+        File pluginsFolder = plugin.getDataFolder().getParentFile();
+        File coreFolder = new File(pluginsFolder, "PlotMe\\PlotSchematic");
+        coreFolder.mkdirs();
 
-        if (loc1.getWorld().equals(loc2.getWorld())) {
-            int minX = Math.min(loc1.getBlockX(), loc2.getBlockX());
-            int maxX = Math.max(loc1.getBlockX(), loc2.getBlockX());
-            int minY = Math.min(loc1.getBlockY(), loc2.getBlockY());
-            int maxY = Math.max(loc1.getBlockY(), loc2.getBlockY());
-            int minZ = Math.min(loc1.getBlockZ(), loc2.getBlockZ());
-            int maxZ = Math.max(loc1.getBlockZ(), loc2.getBlockZ());
+        String filename = coreFolder.getAbsolutePath() + "\\" + file + ".plotschematic";
 
-            Short length = (short) (maxZ - minZ + 1);
-            Short width = (short) (maxX - minX + 1);
-            Short height = (short) (maxY - minY + 1);
+        File file2 = new File(filename);
 
-            World world = loc1.getWorld();
-            int[] blocks = new int[length * width * height];
-            byte[] blockData = new byte[length * width * height];
-            byte[] biomes = null;
-
-            List<Entity> entities = new ArrayList<>();
-            List<TileEntity> tileentities = new ArrayList<>();
-
-            for (int x = 0; x < width; ++x) {
-                for (int z = 0; z < length; ++z) {
-                    for (int y = 0; y < height; ++y) {
-                        int index = y * width * length + z * width + x;
-
-                        Block block = world.getBlockAt(x + minX, y + minY, z + minZ);
-
-                        blocks[index] = block.getTypeId();
-                        blockData[index] = block.getData();
-
-                        boolean isTileEntity = false;
-
-                        BlockState bs = block.getState();
-
-                        Byte rot = null;
-                        Byte skulltype = null;
-                        Byte note = null;
-
-                        Integer record = null;
-                        Integer outputsignal = null;
-                        Integer transfercooldown = null;
-                        Integer levels = null;
-                        Integer primary = null;
-                        Integer secondary = null;
-                        Integer base = null;
-
-                        RecordItem recorditem = null;
-
-                        Short delay = null;
-                        Short maxnearbyentities = null;
-                        Short maxspawndelay = null;
-                        Short minspawndelay = null;
-                        Short requiredplayerrange = null;
-                        Short spawncount = null;
-                        Short spawnrange = null;
-                        Short burntime = null;
-                        Short cooktime = null;
-                        Short brewtime = null;
-
-                        String entityid = null;
-                        String customname = null;
-                        String id = null;
-                        String text1 = null;
-                        String text2 = null;
-                        String text3 = null;
-                        String text4 = null;
-                        String command = null;
-
-                        List<Item> items = null;
-                        List<Pattern> patterns = null;
-
-                        if (bs instanceof Skull) {
-                            Skull skull = (Skull) bs;
-
-                            switch (skull.getRotation()) {
-                                case NORTH:
-                                    rot = 0;
-                                    break;
-                                case NORTH_NORTH_EAST:
-                                    rot = 1;
-                                    break;
-                                case UP:
-                                    break;
-                                case DOWN:
-                                    break;
-                                case NORTH_EAST:
-                                    rot = 2;
-                                    break;
-                                case EAST_NORTH_EAST:
-                                    rot = 3;
-                                    break;
-                                case EAST:
-                                    rot = 4;
-                                    break;
-                                case EAST_SOUTH_EAST:
-                                    rot = 5;
-                                    break;
-                                case SOUTH_EAST:
-                                    rot = 6;
-                                    break;
-                                case SOUTH_SOUTH_EAST:
-                                    rot = 7;
-                                    break;
-                                case SOUTH:
-                                    rot = 8;
-                                    break;
-                                case SOUTH_SOUTH_WEST:
-                                    rot = 9;
-                                    break;
-                                case SOUTH_WEST:
-                                    rot = 10;
-                                    break;
-                                case WEST_SOUTH_WEST:
-                                    rot = 11;
-                                    break;
-                                case WEST:
-                                    rot = 12;
-                                    break;
-                                case WEST_NORTH_WEST:
-                                    rot = 13;
-                                    break;
-                                case NORTH_WEST:
-                                    rot = 14;
-                                    break;
-                                case NORTH_NORTH_WEST:
-                                    rot = 15;
-                                    break;
-                                case SELF:
-                                    break;
-                                default:
-                                    rot = 0;
-                                    break;
-                            }
-
-                            skulltype = (byte) skull.getSkullType().ordinal();
-
-                            isTileEntity = true;
-                        }
-
-                        if (bs instanceof CreatureSpawner) {
-                            CreatureSpawner spawner = (CreatureSpawner) bs;
-
-                            entityid = spawner.getCreatureTypeName();
-                            delay = (short) spawner.getDelay();
-
-                            isTileEntity = true;
-                        }
-
-                        if (bs instanceof Furnace) {
-                            Furnace furnace = (Furnace) bs;
-
-                            burntime = furnace.getBurnTime();
-                            cooktime = furnace.getCookTime();
-
-                            isTileEntity = true;
-                        }
-
-                        if (bs instanceof Sign) {
-                            Sign sign = (Sign) bs;
-                            text1 = sign.getLine(0);
-                            text2 = sign.getLine(1);
-                            text3 = sign.getLine(2);
-                            text4 = sign.getLine(3);
-
-                            isTileEntity = true;
-                        }
-
-                        if (bs instanceof CommandBlock) {
-                            CommandBlock cb = (CommandBlock) bs;
-
-                            command = cb.getCommand();
-
-                            isTileEntity = true;
-                        }
-
-                        if (bs instanceof BrewingStand) {
-                            BrewingStand brew = (BrewingStand) bs;
-
-                            brewtime = (short) brew.getBrewingTime();
-
-                            isTileEntity = true;
-                        }
-
-                        if (bs instanceof Jukebox) {
-                            Jukebox jb = (Jukebox) bs;
-
-                            record = jb.getPlaying().getId();
-
-                            isTileEntity = true;
-                        }
-
-                        if (bs instanceof NoteBlock) {
-                            NoteBlock nb = (NoteBlock) bs;
-
-                            note = nb.getRawNote();
-
-                            isTileEntity = true;
-                        }
-
-                        if (bs instanceof InventoryHolder) {
-
-                            InventoryHolder ih = (InventoryHolder) bs;
-                            Inventory inventory = ih.getInventory();
-
-                            if (inventory.getSize() > 0) {
-                                items = new ArrayList<>();
-
-                                for (byte slot = 0; slot < inventory.getSize(); slot++) {
-                                    ItemStack is = inventory.getItem(slot);
-                                    if (is != null) {
-                                        Item item = getItem(is, slot);
-                                        items.add(item);
-                                    }
-                                }
-                            }
-
-                            isTileEntity = true;
-                        }
-
-                        if (bs instanceof Banner) {
-                            Banner banner = (Banner) bs;
-                            patterns = new ArrayList<>();
-                            base = (int) banner.getBaseColor().getDyeData();
-
-                            for (org.bukkit.block.banner.Pattern pattern : banner.getPatterns()) {
-                                patterns.add(new Pattern((int) pattern.getColor().getDyeData(), pattern.getPattern().getIdentifier()));
-                            }
-
-                            isTileEntity = true;
-                        }
-
-                        if (isTileEntity) {
-                            TileEntity te = new TileEntity(x, y, z, customname, id, items, rot, skulltype, delay, maxnearbyentities, maxspawndelay,
-                                    minspawndelay, requiredplayerrange, spawncount, spawnrange, entityid, burntime, cooktime,
-                                    text1, text2, text3, text4, note, record, recorditem, brewtime, command, outputsignal,
-                                    transfercooldown, levels, primary, secondary, patterns, base);
-                            tileentities.add(te);
-                        }
-                    }
-                }
+        Schematic schem = null;
+        if (file2.exists()) {
+            try (ObjectInput input = new ObjectInputStream(new BufferedInputStream(new FileInputStream(filename)))) {
+                schem = (Schematic) input.readObject();
+            } catch (ClassNotFoundException ex) {
+                plugin.getLogger().severe("Cannot load '" + file + ".plotschematic'");
+            } catch (IOException ex) {
+                plugin.getLogger().severe("Cannot read file '" + file + ".plotschematic', verify file permissions");
             }
-
-            for (org.bukkit.entity.Entity bukkitentity : world.getEntities()) {
-                Location entloc = bukkitentity.getLocation();
-
-                if (entloc.getX() >= minX && entloc.getX() <= maxX &&
-                        entloc.getY() >= minY && entloc.getY() <= maxY &&
-                        entloc.getZ() >= minZ && entloc.getZ() <= maxZ &&
-                        !(bukkitentity instanceof Player)) {
-                    entities.add(getEntity(bukkitentity, minX, minY, minZ));
-                }
-            }
-
-            schem = new Schematic(blocks, blockData, biomes, "Alpha", width, length, height, entities, tileentities, "", 0, 0, 0);
         } else {
-            schem = null;
+            plugin.getLogger().severe("File '" + file + ".plotschematic' does not exist");
         }
 
         return schem;
     }
 
+    protected Leash getLeash(org.bukkit.entity.Entity leashHolder) {
+        Location loc = leashHolder.getLocation();
+        return new Leash(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
+    }
+
+    @SuppressWarnings("deprecation")
+    protected Item getItem(ItemStack is, Byte slot) {
+        Byte count = (byte) is.getAmount();
+        Short damage = (short) is.getData().getData();
+        Short itemid = (short) is.getTypeId();
+
+        ItemTag itemtag = null;
+
+        if (is.hasItemMeta()) {
+            List<Ench> enchants = null;
+
+            ItemMeta im = is.getItemMeta();
+
+            Map<Enchantment, Integer> isEnchants = im.getEnchants();
+            if (isEnchants != null) {
+                enchants = new ArrayList<>();
+                for (Enchantment ench : isEnchants.keySet()) {
+                    enchants.add(new Ench((short) ench.getId(), isEnchants.get(ench).shortValue()));
+                }
+            }
+
+            List<String> lore = im.getLore();
+            String name = im.getDisplayName();
+            Display display = new Display(name, lore);
+
+            String author = null;
+            String title = null;
+            List<String> pages = null;
+            if (im instanceof BookMeta) {
+                BookMeta bm = (BookMeta) im;
+                author = bm.getAuthor();
+                title = bm.getTitle();
+                pages = bm.getPages();
+            }
+
+            itemtag = new ItemTag(0, enchants, display, author, title, pages);
+        }
+
+        return new Item(count, slot, damage, itemid, itemtag);
+    }
+
     @Override
+    public void saveCompiledSchematic(Schematic schem, String file) {
+
+        File pluginsFolder = plugin.getDataFolder().getParentFile();
+        File coreFolder = new File(pluginsFolder, "PlotMe\\PlotSchematic");
+        coreFolder.mkdirs();
+
+        String filename = coreFolder.getAbsolutePath() + "\\" + file + ".plotschematic";
+
+        try (ObjectOutput output = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(filename)))) {
+            output.writeObject(schem);
+        } catch (IOException ex) {
+            plugin.getLogger().severe("Could not save " + filename + ".");
+            ex.printStackTrace();
+        }
+    }
+
+    @Override
+    public void pasteSchematic(Location loc, Schematic schem) {
+        pasteSchematicBlocks(loc, schem, true);
+        pasteSchematicEntities(loc, schem);
+    }
+
+    @SuppressWarnings("deprecation")
+    protected void pasteSchematicBlocks(Location loc, Schematic schematic, boolean setBlock) {
+        World world = loc.getWorld();
+        int[] blocks = schematic.getBlocks();
+        byte[] blockData = schematic.getData();
+
+        Short length = schematic.getLength();
+        Short width = schematic.getWidth();
+        Short height = schematic.getHeight();
+
+        for (int y = 0; y < height; ++y) {
+
+            Collection<LastBlock> lastblocks = new HashSet<>();
+
+            for (int x = 0; x < width; ++x) {
+                for (int z = 0; z < length; ++z) {
+                    int index = y * width * length + z * width + x;
+
+                    Block block = world.getBlockAt(x + loc.getBlockX(), y + loc.getBlockY(), z + loc.getBlockZ());
+
+                    if (!blockPlacedLast.contains(blocks[index])) {
+                        try {
+                            if (setBlock) {
+                                block.setTypeIdAndData(blocks[index], blockData[index], false);
+                            }
+                            block.setData(blockData[index], false);
+                        } catch (NullPointerException e) {
+                            plugin.getLogger().info("Error pasting block : " + blocks[index] + " of data " + blockData[index]);
+                        }
+
+                    } else {
+                        lastblocks.add(new LastBlock(block, blocks[index], blockData[index]));
+                    }
+                }
+            }
+
+            for (LastBlock lastblock : lastblocks) {
+                try {
+                    if (setBlock) {
+                        lastblock.block.setTypeIdAndData(lastblock.id, lastblock.data, false);
+                    }
+                    lastblock.block.setData(lastblock.data, false);
+                } catch (NullPointerException e) {
+                    plugin.getLogger().info("Error pasting block : " + lastblock.id + " of data " + lastblock.data);
+                }
+            }
+
+            lastblocks.clear();
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    protected ItemStack getItemStack(Item item) {
+        ItemStack is = new ItemStack(item.getId(), item.getCount(), item.getDamage(), item.getDamage().byteValue());
+
+        ItemTag itemtag = item.getTag();
+
+        if (itemtag != null) {
+            setTag(is, itemtag);
+        }
+
+        return is;
+    }
+
+    @SuppressWarnings("deprecation")
+    protected void setTag(ItemStack is, ItemTag itemtag) {
+        List<Ench> enchants = itemtag.getEnchants();
+        //Integer repaircost = itemtag.getRepairCost();
+        List<String> pages = itemtag.getPages();
+        String author = itemtag.getAuthor();
+        String title = itemtag.getTitle();
+        Display display = itemtag.getDisplay();
+
+        ItemMeta itemmeta = is.getItemMeta();
+
+        if (display != null) {
+            List<String> lores = display.getLore();
+            String name = display.getName();
+
+            itemmeta.setLore(lores);
+            itemmeta.setDisplayName(name);
+        }
+
+        if (itemmeta instanceof BookMeta) {
+            BookMeta bookmeta = (BookMeta) itemmeta;
+            bookmeta.setAuthor(author);
+            bookmeta.setTitle(title);
+            bookmeta.setPages(pages);
+        }
+
+        if (itemmeta instanceof EnchantmentStorageMeta) {
+            EnchantmentStorageMeta enchantmentstoragemeta = (EnchantmentStorageMeta) itemmeta;
+
+            for (Ench enchant : enchants) {
+                enchantmentstoragemeta.addEnchant(Enchantment.getById(enchant.getId()), enchant.getLvl(), true);
+            }
+        }
+
+        is.setItemMeta(itemmeta);
+    }
+
+    protected org.bukkit.entity.Entity getLeash(Leash leash, Location loc, int originX, int originY, int originZ) {
+        org.bukkit.entity.Entity ent = null;
+        World world = loc.getWorld();
+
+        int x = leash.getX() - originX;
+        int y = leash.getY() - originY;
+        int z = leash.getZ() - originZ;
+
+        Location etloc = new Location(world, x + loc.getBlockX(), y + loc.getBlockY(), z + loc.getBlockZ());
+
+        Block block = world.getBlockAt(etloc);
+
+        if (block.getType() == Material.FENCE || block.getType() == Material.NETHER_FENCE) {
+            etloc.setX(Math.floor(etloc.getX()));
+            etloc.setY(Math.floor(etloc.getY()));
+            etloc.setZ(Math.floor(etloc.getZ()));
+
+            ent = world.spawnEntity(etloc, EntityType.LEASH_HITCH);
+
+            List<org.bukkit.entity.Entity> nearbyentities = ent.getNearbyEntities(1, 1, 1);
+
+            for (org.bukkit.entity.Entity nearby : nearbyentities) {
+                if (nearby instanceof LeashHitch) {
+                    if (nearby.getLocation().distance(ent.getLocation()) == 0) {
+                        ent.remove();
+                        return nearby;
+                    }
+                }
+            }
+        }
+
+        return ent;
+    }
+
+    protected Leash getLeash(CompoundTag leashelement) {
+        Map<String, Tag> leash = leashelement.getValue();
+        Integer x = getChildTag(leash, "X", IntTag.class, Integer.class);
+        Integer y = getChildTag(leash, "Y", IntTag.class, Integer.class);
+        Integer z = getChildTag(leash, "Z", IntTag.class, Integer.class);
+
+        return new Leash(x, y, z);
+    }
+
+    protected Modifier getModifier(CompoundTag modifierelement) {
+        Map<String, Tag> modifier = modifierelement.getValue();
+        Integer operation = getChildTag(modifier, "Operation", IntTag.class, Integer.class);
+        Double amount = getChildTag(modifier, "Amount", DoubleTag.class, Double.class);
+        String name = getChildTag(modifier, "Name", StringTag.class, String.class);
+
+        return new Modifier(operation, amount, name);
+    }
+
+    protected List<Modifier> getModifiers(Map<String, Tag> attribute) {
+        List<?> modifierlist = getChildTag(attribute, "Modifiers", ListTag.class, List.class);
+
+        if (modifierlist != null) {
+            List<Modifier> modifiers = new ArrayList<>();
+
+            for (Object modifierelement : modifierlist) {
+                if (modifierelement instanceof CompoundTag) {
+                    modifiers.add(getModifier((CompoundTag) modifierelement));
+                }
+            }
+
+            return modifiers;
+        } else {
+            return null;
+        }
+    }
+
+    protected Item getItem(CompoundTag itemElement) {
+        Map<String, Tag> item = itemElement.getValue();
+        Byte count = getChildTag(item, "Count", ByteTag.class, Byte.class);
+        Byte slot = getChildTag(item, "Slot", ByteTag.class, Byte.class);
+        Short damage = getChildTag(item, "Damage", ShortTag.class, Short.class);
+        Short itemid = getChildTag(item, "id", ShortTag.class, Short.class);
+
+        ItemTag tag = getItemTag(item);
+
+        return new Item(count, slot, damage, itemid, tag);
+    }
+
+    protected List<Item> getItems(Map<String, Tag> entity) {
+        List<?> itemsList = getChildTag(entity, "Items", ListTag.class, List.class);
+
+        if (itemsList != null) {
+            List<Item> items = new ArrayList<>();
+
+            for (Object itemElement : itemsList) {
+                if (itemElement instanceof CompoundTag) {
+                    items.add(getItem((CompoundTag) itemElement));
+                }
+            }
+
+            return items;
+        } else {
+            return null;
+        }
+    }
+
+    protected ItemTag getItemTag(Map<String, Tag> item) {
+        CompoundTag itemtagElement = getChildTag(item, "tag", CompoundTag.class);
+
+        if (itemtagElement != null) {
+            Map<String, Tag> itemtag = itemtagElement.getValue();
+            Integer repaircost = getChildTag(itemtag, "RepairCost", IntTag.class, Integer.class);
+            String author = getChildTag(itemtag, "author", StringTag.class, String.class);
+            String title = getChildTag(itemtag, "title", StringTag.class, String.class);
+            List<String> pages = convert(getChildTag(itemtag, "pages", ListTag.class, List.class), String.class);
+            Display display = getDisplay(itemtag);
+            List<Ench> enchants = getEnchant(itemtag);
+
+            return new ItemTag(repaircost, enchants, display, author, title, pages);
+        } else {
+            return null;
+        }
+    }
+
+    protected Display getDisplay(Map<String, Tag> itemtag) {
+        CompoundTag displayElement = getChildTag(itemtag, "display", CompoundTag.class);
+
+        if (displayElement != null) {
+            Map<String, Tag> display = displayElement.getValue();
+            String name = getChildTag(display, "Name", StringTag.class, String.class);
+            List<String> lore = convert(getChildTag(display, "Lore", ListTag.class, List.class), String.class);
+
+            return new Display(name, lore);
+        } else {
+            return null;
+        }
+    }
+
+    protected Ench getEnchant(CompoundTag enchantelement) {
+        Map<String, Tag> enchant = enchantelement.getValue();
+        Short id = getChildTag(enchant, "id", ShortTag.class, Short.class);
+        Short lvl = getChildTag(enchant, "lvl", ShortTag.class, Short.class);
+        return new Ench(id, lvl);
+    }
+
+    protected List<Ench> getEnchant(Map<String, Tag> enchanttag) {
+        List<?> enchantList = getChildTag(enchanttag, "ench", ListTag.class, List.class);
+
+        if (enchantList != null) {
+            List<Ench> enchants = new ArrayList<>();
+
+            for (Object enchantelement : enchantList) {
+                if (enchantelement instanceof CompoundTag) {
+                    enchants.add(getEnchant((CompoundTag) enchantelement));
+                }
+            }
+
+            return enchants;
+        } else {
+            return null;
+        }
+    }
+
+    protected List<Item> getEquipment(Map<String, Tag> entity) {
+        List<?> equipmentlist = getChildTag(entity, "Equipment", ListTag.class, List.class);
+
+        if (equipmentlist != null) {
+            List<Item> items = new ArrayList<>();
+
+            for (Object equipmentelement : equipmentlist) {
+                if (equipmentelement instanceof CompoundTag) {
+                    items.add(getItem((CompoundTag) equipmentelement));
+                } else {
+                    items.add(null);
+                }
+            }
+
+            return items;
+        } else {
+            return null;
+        }
+    }
+
+    protected Attribute getAttribute(CompoundTag attributeelement) {
+        Map<String, Tag> attribute = attributeelement.getValue();
+        Double base = getChildTag(attribute, "Base", DoubleTag.class, Double.class);
+        String name = getChildTag(attribute, "Name", StringTag.class, String.class);
+        List<Modifier> modifiers = getModifiers(attribute);
+        return new Attribute(base, name, modifiers);
+    }
+
+    protected List<Attribute> getAttributes(Map<String, Tag> entity) {
+        List<?> attributelist = getChildTag(entity, "Attributes", ListTag.class, List.class);
+
+        if (attributelist != null) {
+            List<Attribute> attributes = new ArrayList<>();
+
+            for (Object attributeelement : attributelist) {
+                if (attributeelement instanceof CompoundTag) {
+                    attributes.add(getAttribute((CompoundTag) attributeelement));
+                }
+            }
+
+            return attributes;
+        } else {
+            return null;
+        }
+    }
+
     @SuppressWarnings("deprecation")
     protected Entity getEntity(org.bukkit.entity.Entity bukkitentity, int minX, int minY, int minZ) {
 
@@ -960,7 +1159,6 @@ public class SchematicUtil extends com.worldcretornica.plotme_core.bukkit.v1_7.S
     }
 
     @SuppressWarnings("deprecation")
-    @Override
     protected void pasteSchematicEntities(Location loc, Schematic schematic) {
         World world = loc.getWorld();
 
@@ -1121,7 +1319,6 @@ public class SchematicUtil extends com.worldcretornica.plotme_core.bukkit.v1_7.S
         }
     }
 
-    @Override
     protected org.bukkit.entity.Entity createEntity(Entity e, Location loc, int originX, int originY, int originZ) {
         try {
             @SuppressWarnings("deprecation")
@@ -1262,11 +1459,11 @@ public class SchematicUtil extends com.worldcretornica.plotme_core.bukkit.v1_7.S
                     painting.setArt(Art.getByName(motive), true);
                     painting.setFacingDirection(bf, true);
 
-                } else if (entitytype == EntityType.LEASH_HITCH) {                        
+                } else if (entitytype == EntityType.LEASH_HITCH) {
                     /*etloc.setX(Math.floor(etloc.getX()));
                     etloc.setY(Math.floor(etloc.getY()));
                     etloc.setZ(Math.floor(etloc.getZ()));
-                    
+
                     ent = world.spawnEntity(etloc, entitytype);*/
                     return null;
                 } else if (entitytype == EntityType.DROPPED_ITEM) {
@@ -1441,25 +1638,25 @@ public class SchematicUtil extends com.worldcretornica.plotme_core.bukkit.v1_7.S
 
                         switch (rabbittype) {
                             case 0:
-                                rabbit.setRabbitType(Type.BROWN);
+                                rabbit.setRabbitType(Rabbit.Type.BROWN);
                                 break;
                             case 1:
-                                rabbit.setRabbitType(Type.WHITE);
+                                rabbit.setRabbitType(Rabbit.Type.WHITE);
                                 break;
                             case 2:
-                                rabbit.setRabbitType(Type.BLACK);
+                                rabbit.setRabbitType(Rabbit.Type.BLACK);
                                 break;
                             case 3:
-                                rabbit.setRabbitType(Type.BLACK_AND_WHITE);
+                                rabbit.setRabbitType(Rabbit.Type.BLACK_AND_WHITE);
                                 break;
                             case 4:
-                                rabbit.setRabbitType(Type.GOLD);
+                                rabbit.setRabbitType(Rabbit.Type.GOLD);
                                 break;
                             case 5:
-                                rabbit.setRabbitType(Type.SALT_AND_PEPPER);
+                                rabbit.setRabbitType(Rabbit.Type.SALT_AND_PEPPER);
                                 break;
                             case 99:
-                                rabbit.setRabbitType(Type.THE_KILLER_BUNNY);
+                                rabbit.setRabbitType(Rabbit.Type.THE_KILLER_BUNNY);
                                 break;
                         }
                     } else if (livingentity instanceof ArmorStand) {
@@ -1615,7 +1812,6 @@ public class SchematicUtil extends com.worldcretornica.plotme_core.bukkit.v1_7.S
         }
     }
 
-    @Override
     protected Entity getEntity(CompoundTag tag) {
         Map<String, Tag> entity = tag.getValue();
 
@@ -1751,7 +1947,6 @@ public class SchematicUtil extends com.worldcretornica.plotme_core.bukkit.v1_7.S
                 bred, chestedhorse, eatinghaystack, hasreproduced, tame, temper, type, variant, owneruuid,
                 facing);
     }
-
     protected Pose getPose(CompoundTag poseelement) {
         Map<String, Tag> pose = poseelement.getValue();
         List<Float> body = convert(getChildTag(pose, "body", ListTag.class, List.class), Float.class);
@@ -1788,5 +1983,284 @@ public class SchematicUtil extends com.worldcretornica.plotme_core.bukkit.v1_7.S
         String pattern = getChildTag(patternmap, "Pattern", StringTag.class, String.class);
 
         return new Pattern(color, pattern);
+    }
+
+    @SuppressWarnings("deprecation")
+    public Schematic createCompiledSchematic(Location loc1, Location loc2) {
+
+        Schematic schem;
+
+        if (loc1.getWorld().equals(loc2.getWorld())) {
+            int minX = Math.min(loc1.getBlockX(), loc2.getBlockX());
+            int maxX = Math.max(loc1.getBlockX(), loc2.getBlockX());
+            int minY = Math.min(loc1.getBlockY(), loc2.getBlockY());
+            int maxY = Math.max(loc1.getBlockY(), loc2.getBlockY());
+            int minZ = Math.min(loc1.getBlockZ(), loc2.getBlockZ());
+            int maxZ = Math.max(loc1.getBlockZ(), loc2.getBlockZ());
+
+            Short length = (short) (maxZ - minZ + 1);
+            Short width = (short) (maxX - minX + 1);
+            Short height = (short) (maxY - minY + 1);
+
+            World world = loc1.getWorld();
+            int[] blocks = new int[length * width * height];
+            byte[] blockData = new byte[length * width * height];
+            byte[] biomes = null;
+
+            List<Entity> entities = new ArrayList<>();
+            List<TileEntity> tileentities = new ArrayList<>();
+
+            for (int x = 0; x < width; ++x) {
+                for (int z = 0; z < length; ++z) {
+                    for (int y = 0; y < height; ++y) {
+                        int index = y * width * length + z * width + x;
+
+                        Block block = world.getBlockAt(x + minX, y + minY, z + minZ);
+
+                        blocks[index] = block.getTypeId();
+                        blockData[index] = block.getData();
+
+                        boolean isTileEntity = false;
+
+                        BlockState bs = block.getState();
+
+                        Byte rot = null;
+                        Byte skulltype = null;
+                        Byte note = null;
+
+                        Integer record = null;
+                        Integer outputsignal = null;
+                        Integer transfercooldown = null;
+                        Integer levels = null;
+                        Integer primary = null;
+                        Integer secondary = null;
+                        Integer base = null;
+
+                        RecordItem recorditem = null;
+
+                        Short delay = null;
+                        Short maxnearbyentities = null;
+                        Short maxspawndelay = null;
+                        Short minspawndelay = null;
+                        Short requiredplayerrange = null;
+                        Short spawncount = null;
+                        Short spawnrange = null;
+                        Short burntime = null;
+                        Short cooktime = null;
+                        Short brewtime = null;
+
+                        String entityid = null;
+                        String customname = null;
+                        String id = null;
+                        String text1 = null;
+                        String text2 = null;
+                        String text3 = null;
+                        String text4 = null;
+                        String command = null;
+
+                        List<Item> items = null;
+                        List<Pattern> patterns = null;
+
+                        if (bs instanceof Skull) {
+                            Skull skull = (Skull) bs;
+
+                            switch (skull.getRotation()) {
+                                case NORTH:
+                                    rot = 0;
+                                    break;
+                                case NORTH_NORTH_EAST:
+                                    rot = 1;
+                                    break;
+                                case UP:
+                                    break;
+                                case DOWN:
+                                    break;
+                                case NORTH_EAST:
+                                    rot = 2;
+                                    break;
+                                case EAST_NORTH_EAST:
+                                    rot = 3;
+                                    break;
+                                case EAST:
+                                    rot = 4;
+                                    break;
+                                case EAST_SOUTH_EAST:
+                                    rot = 5;
+                                    break;
+                                case SOUTH_EAST:
+                                    rot = 6;
+                                    break;
+                                case SOUTH_SOUTH_EAST:
+                                    rot = 7;
+                                    break;
+                                case SOUTH:
+                                    rot = 8;
+                                    break;
+                                case SOUTH_SOUTH_WEST:
+                                    rot = 9;
+                                    break;
+                                case SOUTH_WEST:
+                                    rot = 10;
+                                    break;
+                                case WEST_SOUTH_WEST:
+                                    rot = 11;
+                                    break;
+                                case WEST:
+                                    rot = 12;
+                                    break;
+                                case WEST_NORTH_WEST:
+                                    rot = 13;
+                                    break;
+                                case NORTH_WEST:
+                                    rot = 14;
+                                    break;
+                                case NORTH_NORTH_WEST:
+                                    rot = 15;
+                                    break;
+                                case SELF:
+                                    break;
+                                default:
+                                    rot = 0;
+                                    break;
+                            }
+
+                            skulltype = (byte) skull.getSkullType().ordinal();
+
+                            isTileEntity = true;
+                        }
+
+                        if (bs instanceof CreatureSpawner) {
+                            CreatureSpawner spawner = (CreatureSpawner) bs;
+
+                            entityid = spawner.getCreatureTypeName();
+                            delay = (short) spawner.getDelay();
+
+                            isTileEntity = true;
+                        }
+
+                        if (bs instanceof Furnace) {
+                            Furnace furnace = (Furnace) bs;
+
+                            burntime = furnace.getBurnTime();
+                            cooktime = furnace.getCookTime();
+
+                            isTileEntity = true;
+                        }
+
+                        if (bs instanceof Sign) {
+                            Sign sign = (Sign) bs;
+                            text1 = sign.getLine(0);
+                            text2 = sign.getLine(1);
+                            text3 = sign.getLine(2);
+                            text4 = sign.getLine(3);
+
+                            isTileEntity = true;
+                        }
+
+                        if (bs instanceof CommandBlock) {
+                            CommandBlock cb = (CommandBlock) bs;
+
+                            command = cb.getCommand();
+
+                            isTileEntity = true;
+                        }
+
+                        if (bs instanceof BrewingStand) {
+                            BrewingStand brew = (BrewingStand) bs;
+
+                            brewtime = (short) brew.getBrewingTime();
+
+                            isTileEntity = true;
+                        }
+
+                        if (bs instanceof Jukebox) {
+                            Jukebox jb = (Jukebox) bs;
+
+                            record = jb.getPlaying().getId();
+
+                            isTileEntity = true;
+                        }
+
+                        if (bs instanceof NoteBlock) {
+                            NoteBlock nb = (NoteBlock) bs;
+
+                            note = nb.getRawNote();
+
+                            isTileEntity = true;
+                        }
+
+                        if (bs instanceof InventoryHolder) {
+
+                            InventoryHolder ih = (InventoryHolder) bs;
+                            Inventory inventory = ih.getInventory();
+
+                            if (inventory.getSize() > 0) {
+                                items = new ArrayList<>();
+
+                                for (byte slot = 0; slot < inventory.getSize(); slot++) {
+                                    ItemStack is = inventory.getItem(slot);
+                                    if (is != null) {
+                                        Item item = getItem(is, slot);
+                                        items.add(item);
+                                    }
+                                }
+                            }
+
+                            isTileEntity = true;
+                        }
+
+                        if (bs instanceof Banner) {
+                            Banner banner = (Banner) bs;
+                            patterns = new ArrayList<>();
+                            base = (int) banner.getBaseColor().getDyeData();
+
+                            for (org.bukkit.block.banner.Pattern pattern : banner.getPatterns()) {
+                                patterns.add(new Pattern((int) pattern.getColor().getDyeData(), pattern.getPattern().getIdentifier()));
+                            }
+
+                            isTileEntity = true;
+                        }
+
+                        if (isTileEntity) {
+                            TileEntity te = new TileEntity(x, y, z, customname, id, items, rot, skulltype, delay, maxnearbyentities, maxspawndelay,
+                                    minspawndelay, requiredplayerrange, spawncount, spawnrange, entityid, burntime, cooktime,
+                                    text1, text2, text3, text4, note, record, recorditem, brewtime, command, outputsignal,
+                                    transfercooldown, levels, primary, secondary, patterns, base);
+                            tileentities.add(te);
+                        }
+                    }
+                }
+            }
+
+            for (org.bukkit.entity.Entity bukkitentity : world.getEntities()) {
+                Location entloc = bukkitentity.getLocation();
+
+                if (entloc.getX() >= minX && entloc.getX() <= maxX &&
+                        entloc.getY() >= minY && entloc.getY() <= maxY &&
+                        entloc.getZ() >= minZ && entloc.getZ() <= maxZ &&
+                        !(bukkitentity instanceof Player)) {
+                    entities.add(getEntity(bukkitentity, minX, minY, minZ));
+                }
+            }
+
+            schem = new Schematic(blocks, blockData, biomes, "Alpha", width, length, height, entities, tileentities, "", 0, 0, 0);
+        } else {
+            schem = null;
+        }
+
+        return schem;
+    }
+
+    private class LastBlock {
+
+        final Block block;
+        final int id;
+        final byte data;
+
+        public LastBlock(Block block, int id, byte data) {
+            this.block = block;
+            this.id = id;
+            this.data = data;
+        }
     }
 }

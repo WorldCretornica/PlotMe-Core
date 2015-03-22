@@ -44,7 +44,6 @@ public class BukkitPlotWorldEditListener implements Listener {
 
         IPlayer player = plugin.wrapPlayer(event.getPlayer());
 
-        PlotId idTo;
         if (event.getTo() == null) {
             worldEdit.removeMask(player);
         } else {
@@ -54,7 +53,7 @@ public class BukkitPlotWorldEditListener implements Listener {
                     changemask = true;
                 } else if (from.getLocation() != to.getLocation()) {
                     PlotId idFrom = manager.getPlotId(from);
-                    idTo = manager.getPlotId(to);
+                    PlotId idTo = manager.getPlotId(to);
                     if (idFrom == null) {
                         if (idTo != null) {
                             changemask = true;

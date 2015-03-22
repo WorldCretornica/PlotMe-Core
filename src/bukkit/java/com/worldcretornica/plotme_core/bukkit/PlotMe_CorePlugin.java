@@ -39,16 +39,10 @@ public class PlotMe_CorePlugin extends JavaPlugin {
         serverObjectBuilder = new BukkitServerBridge(this);
         AbstractSchematicUtil schematicutil = null;
         if (Bukkit.getVersion().contains("1.7")) {
-            try {
-                Constructor<?> constructor = Class.forName("com.worldcretornica.plotme_core.bukkit.v1_7.SchematicUtil").getConstructor(Plugin.class);
-                schematicutil = (AbstractSchematicUtil) constructor.newInstance(this);
-            } catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException | IllegalAccessException | InstantiationException e) {
-                getLogger().severe("Unable to create the SchematicUtil instance");
-                getLogger().severe(e.getMessage());
-            }
+            getPluginLoader().disablePlugin(this);
         } else if (Bukkit.getVersion().contains("1.8")) {
             try {
-                Constructor<?> constructor = Class.forName("com.worldcretornica.plotme_core.bukkit.v1_8.SchematicUtil").getConstructor(Plugin.class);
+                Constructor<?> constructor = Class.forName("com.worldcretornica.plotme_core.bukkit.SchematicUtil").getConstructor(Plugin.class);
                 schematicutil = (AbstractSchematicUtil) constructor.newInstance(this);
             } catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException | IllegalAccessException | InstantiationException e) {
                 getLogger().severe("Unable to create the SchematicUtil instance");
@@ -57,7 +51,7 @@ public class PlotMe_CorePlugin extends JavaPlugin {
         } else {
             getLogger().warning("This MC version is not supported yet! PlotMe 1.8 SchematicUtil will be used.");
             try {
-                Constructor<?> constructor = Class.forName("com.worldcretornica.plotme_core.bukkit.v1_8.SchematicUtil").getConstructor(Plugin.class);
+                Constructor<?> constructor = Class.forName("com.worldcretornica.plotme_core.bukkit.SchematicUtil").getConstructor(Plugin.class);
                 schematicutil = (AbstractSchematicUtil) constructor.newInstance(this);
             } catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException | IllegalAccessException | InstantiationException e) {
                 getLogger().severe("Unable to create the SchematicUtil instance");
@@ -104,7 +98,7 @@ public class PlotMe_CorePlugin extends JavaPlugin {
 
                         for (String plotter : manager.getPlotMaps().keySet()) {
                             IPlotMe_GeneratorManager genmanager = plotme.getGenManager(plotter);
-                            if (genmanager != null && genmanager.getPlotSize() != 0) {
+                            if (genmanager != null) {
                                 totalPlotSize += genmanager.getPlotSize();
                             }
                         }

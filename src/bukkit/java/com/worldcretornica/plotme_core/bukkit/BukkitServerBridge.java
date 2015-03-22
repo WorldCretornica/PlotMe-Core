@@ -2,14 +2,12 @@ package com.worldcretornica.plotme_core.bukkit;
 
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.worldcretornica.plotme_core.PlotWorldEdit;
-import com.worldcretornica.plotme_core.api.IBiome;
 import com.worldcretornica.plotme_core.api.IMaterial;
 import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IServerBridge;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.IEventFactory;
-import com.worldcretornica.plotme_core.bukkit.api.BukkitBiome;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitMaterial;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitOfflinePlayer;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitWorld;
@@ -179,20 +177,15 @@ public class BukkitServerBridge extends IServerBridge {
     }
 
     @Override
-    public IBiome getBiome(String name) {
-        Biome biome = null;
+    public boolean doesBiomeExist(String name) {
 
-        for (Biome bio : Biome.values()) {
-            if (bio.name().equalsIgnoreCase(name)) {
-                biome = bio;
+        for (Biome biome : Biome.values()) {
+            if (biome.name().equalsIgnoreCase(name)) {
+                return true;
             }
         }
 
-        if (biome == null) {
-            return null;
-        } else {
-            return new BukkitBiome(biome);
-        }
+        return false;
     }
 
     @Override

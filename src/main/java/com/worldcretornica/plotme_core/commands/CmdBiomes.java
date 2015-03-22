@@ -2,17 +2,23 @@ package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 
 import java.util.List;
 
-public class CmdBiomes extends PlotCommand {
+public class CmdBiomes extends PlotCommand implements CommandBase {
 
     public CmdBiomes(PlotMe_Core instance) {
         super(instance);
     }
 
-    public boolean exec(IPlayer player, String[] args) {
+    public String getName() {
+        return "biomes";
+    }
+
+    public boolean execute(ICommandSender sender, String[] args) {
+        IPlayer player = (IPlayer) sender;
         if (manager.isPlotWorld(player)) {
             if (player.hasPermission(PermissionNames.USER_BIOME)) {
                 List<String> biomes = serverBridge.getBiomes();
@@ -34,10 +40,15 @@ public class CmdBiomes extends PlotCommand {
                     }
                 }
             } else {
-                player.sendMessage(C("MsgPermissionDenied"));
                 return false;
             }
         }
         return true;
     }
+
+    @Override
+    public String getUsage() {
+        return null;
+    }
+
 }

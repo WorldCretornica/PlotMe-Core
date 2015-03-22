@@ -1,7 +1,6 @@
 package com.worldcretornica.plotme_core.sponge.event;
 
 import com.worldcretornica.plotme_core.Plot;
-import com.worldcretornica.plotme_core.api.IBiome;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotBiomeChangeEvent;
@@ -13,7 +12,7 @@ public class PlotBiomeChangeEvent extends PlotEvent implements Cancellable {
 
     private final InternalPlotBiomeChangeEvent event;
 
-    public PlotBiomeChangeEvent(IWorld world, Plot plot, IPlayer player, IBiome biome) {
+    public PlotBiomeChangeEvent(IWorld world, Plot plot, IPlayer player, String biome) {
         super(plot, world);
         event = new InternalPlotBiomeChangeEvent(world, plot, player, biome);
     }

@@ -41,7 +41,6 @@ import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
-import org.bukkit.event.player.PlayerBucketEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -197,10 +196,6 @@ public class BukkitPlotListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onBucketFillEvent(PlayerBucketFillEvent event) {
-        handleBucketEvent(event);
-    }
-
-    private void handleBucketEvent(PlayerBucketEvent event) {
         Player player = event.getPlayer();
         BukkitLocation location = new BukkitLocation(event.getBlockClicked().getLocation());
 

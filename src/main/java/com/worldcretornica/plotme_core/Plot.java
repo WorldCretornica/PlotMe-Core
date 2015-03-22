@@ -1,6 +1,5 @@
 package com.worldcretornica.plotme_core;
 
-import com.worldcretornica.plotme_core.api.IBiome;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 
@@ -22,7 +21,7 @@ public class Plot implements Cloneable {
     private String owner;
     private UUID ownerId = UUID.randomUUID();
     private String world;
-    private IBiome biome;
+    private String biome;
     private Date expiredDate;
     private boolean finished;
     private PlotId id;
@@ -37,7 +36,7 @@ public class Plot implements Cloneable {
 
     public Plot(PlotMe_Core plugin) {
         this.plugin = plugin;
-        setBiome(this.plugin.getServerBridge().getBiome("PLAINS"));
+        setBiome("PLAINS");
 
         setExpiredDate(null);
         setPrice(0.0);
@@ -57,7 +56,7 @@ public class Plot implements Cloneable {
         setWorld(world.getName().toLowerCase());
         allowed = new PlayerList();
         denied = new PlayerList();
-        setBiome(this.plugin.getServerBridge().getBiome("PLAINS"));
+        setBiome("PLAINS");
         setId(plotId);
 
         if (days == 0) {
@@ -83,7 +82,7 @@ public class Plot implements Cloneable {
         setOwner(owner);
         setOwnerId(ownerId);
         setWorld(world);
-        setBiome(this.plugin.getServerBridge().getBiome(biome));
+        setBiome(biome);
         setExpiredDate(expiredDate);
         setFinished(finished);
         this.allowed = allowed;
@@ -130,11 +129,11 @@ public class Plot implements Cloneable {
         updateFinished(null, false);
     }
 
-    public IBiome getBiome() {
+    public String getBiome() {
         return biome;
     }
 
-    public final void setBiome(IBiome biome) {
+    public final void setBiome(String biome) {
         this.biome = biome;
     }
 
@@ -178,7 +177,7 @@ public class Plot implements Cloneable {
 
     public void removeAllowed(String name) {
         if (allowed().contains(name)) {
-            plugin.getSqlManager().deletePlotAllowed(getId().getX(), getId().getZ(), name, getWorld());
+            plugin.getSqlManager().deletePlotAllowed(getInternalID(), name);
 
             if (plugin.getServerBridge().getPlotWorldEdit() != null) {
                 IPlayer player = (IPlayer) plugin.getServerBridge().getOfflinePlayer(name);
@@ -196,14 +195,14 @@ public class Plot implements Cloneable {
 
     public void removeDenied(String name) {
         if (denied().contains(name)) {
-            plugin.getSqlManager().deletePlotDenied(getId().getX(), getId().getZ(), name, getWorld());
+            plugin.getSqlManager().deletePlotDenied(getInternalID(), name);
         }
     }
 
     public void removeAllAllowed() {
         List<String> list = allowed().getAllPlayers();
         for (String n : list) {
-            plugin.getSqlManager().deletePlotAllowed(getId().getX(), getId().getZ(), n, getWorld());
+            plugin.getSqlManager().deleteAllAllowed(getInternalID());
         }
         allowed().clear();
     }
@@ -211,7 +210,7 @@ public class Plot implements Cloneable {
     public void removeAllDenied() {
         List<String> list = denied().getAllPlayers();
         for (String n : list) {
-            plugin.getSqlManager().deletePlotDenied(getId().getX(), getId().getZ(), n, getWorld());
+            plugin.getSqlManager().deleteAllDenied(getInternalID());
         }
         denied().clear();
     }

@@ -5,19 +5,25 @@ import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotId;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotRemoveDeniedEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
 
-public class CmdUndeny extends PlotCommand {
+public class CmdUndeny extends PlotCommand implements CommandBase {
 
     public CmdUndeny(PlotMe_Core instance) {
         super(instance);
     }
 
-    public boolean exec(IPlayer player, String[] args) {
-        if (player.hasPermission(PermissionNames.ADMIN_UNDENY) || player.hasPermission(PermissionNames.USER_UNDENY)) {
+    public String getName() {
+        return "undeny";
+    }
+
+    public boolean execute(ICommandSender sender, String[] args) {
+        IPlayer player = (IPlayer) sender;
+        if (player.hasPermission(PermissionNames.ADMIN_DENY) || player.hasPermission(PermissionNames.USER_DENY)) {
             IWorld world = player.getWorld();
             PlotMapInfo pmi = manager.getMap(world);
             if (manager.isPlotWorld(world)) {
@@ -26,14 +32,14 @@ public class CmdUndeny extends PlotCommand {
                     player.sendMessage(C("MsgNoPlotFound"));
                     return true;
                 } else if (!manager.isPlotAvailable(id, pmi)) {
-                    if (args.length < 2 || args[1].isEmpty()) {
-                        player.sendMessage(C("WordUsage") + ": /plotme undeny <" + C("WordPlayer") + ">");
+                    if (args.length < 2 && args.length >= 3) {
+                        player.sendMessage(getUsage());
                     } else {
                         Plot plot = manager.getPlotById(id, pmi);
                         String playerName = player.getName();
                         String denied = args[1];
 
-                        if (player.getUniqueId().equals(plot.getOwnerId()) || player.hasPermission(PermissionNames.ADMIN_UNDENY)) {
+                        if (player.getUniqueId().equals(plot.getOwnerId()) || player.hasPermission(PermissionNames.ADMIN_DENY)) {
                             if (plot.isDeniedConsulting(denied)) {
 
                                 double price = 0.0;
@@ -100,9 +106,14 @@ public class CmdUndeny extends PlotCommand {
                 player.sendMessage(C("MsgNotPlotWorld"));
             }
         } else {
-            player.sendMessage(C("MsgPermissionDenied"));
             return false;
         }
         return true;
     }
+
+    @Override
+    public String getUsage() {
+        return C("WordUsage") + ": /plotme undeny <" + C("WordPlayer") + ">";
+    }
+
 }

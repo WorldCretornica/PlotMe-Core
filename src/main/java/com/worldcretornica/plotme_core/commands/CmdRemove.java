@@ -5,6 +5,7 @@ import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotId;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotRemoveAllowedEvent;
@@ -12,13 +13,18 @@ import net.milkbowl.vault.economy.EconomyResponse;
 
 import java.util.UUID;
 
-public class CmdRemove extends PlotCommand {
+public class CmdRemove extends PlotCommand implements CommandBase {
 
     public CmdRemove(PlotMe_Core instance) {
         super(instance);
     }
 
-    public boolean exec(IPlayer player, String[] args) {
+    public String getName() {
+        return "remove";
+    }
+
+    public boolean execute(ICommandSender sender, String[] args) {
+        IPlayer player = (IPlayer) sender;
         if (player.hasPermission(PermissionNames.ADMIN_REMOVE) || player.hasPermission(PermissionNames.USER_REMOVE)) {
             IWorld world = player.getWorld();
             PlotMapInfo pmi = manager.getMap(world);
@@ -29,7 +35,7 @@ public class CmdRemove extends PlotCommand {
                     return true;
                 } else if (!manager.isPlotAvailable(id, pmi)) {
                     if (args.length < 2 || args[1].isEmpty()) {
-                        player.sendMessage(C("WordUsage") + ": /plotme remove <" + C("WordPlayer") + ">");
+                        player.sendMessage(getUsage());
                     } else {
                         Plot plot = manager.getPlotById(id, pmi);
                         UUID playerUniqueId = player.getUniqueId();
@@ -100,9 +106,13 @@ public class CmdRemove extends PlotCommand {
                 player.sendMessage(C("MsgNotPlotWorld"));
             }
         } else {
-            player.sendMessage(C("MsgPermissionDenied"));
             return false;
         }
         return true;
+    }
+
+    @Override
+    public String getUsage() {
+        return C("WordUsage") + ": /plotme remove <" + C("WordPlayer") + ">";
     }
 }

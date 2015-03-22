@@ -5,7 +5,7 @@ import org.yaml.snakeyaml.error.YAMLException;
 import org.yaml.snakeyaml.nodes.Node;
 import org.yaml.snakeyaml.nodes.Tag;
 
-public class YamlConstructor extends SafeConstructor {
+class YamlConstructor extends SafeConstructor {
 
     public YamlConstructor() {
         this.yamlConstructors.put(Tag.MAP, new ConstructCustomObject());

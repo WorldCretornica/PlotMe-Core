@@ -1,7 +1,6 @@
 package com.worldcretornica.plotme_core.api.event;
 
 import com.worldcretornica.plotme_core.Plot;
-import com.worldcretornica.plotme_core.api.IBiome;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 
@@ -9,9 +8,9 @@ public class InternalPlotBiomeChangeEvent extends InternalPlotEvent implements I
 
     private final IPlayer player;
     private boolean canceled;
-    private IBiome biome;
+    private String biome;
 
-    public InternalPlotBiomeChangeEvent(IWorld world, Plot plot, IPlayer player, IBiome biome) {
+    public InternalPlotBiomeChangeEvent(IWorld world, Plot plot, IPlayer player, String biome) {
         super(plot, world);
         this.player = player;
         this.biome = biome;
@@ -31,11 +30,11 @@ public class InternalPlotBiomeChangeEvent extends InternalPlotEvent implements I
         return player;
     }
 
-    public IBiome getBiome() {
+    public String getBiome() {
         return biome;
     }
 
-    public void setBiome(IBiome biome) {
+    public void setBiome(String biome) {
         this.biome = biome;
     }
 }

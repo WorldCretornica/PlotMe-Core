@@ -36,7 +36,7 @@ public class SQLiteConnector extends Database {
         Connection connection = getConnection();
         try (Statement statement = connection.createStatement()) {
             //MySQL specific plot table creation.
-            statement.executeUpdate("CREATE TABLE `plotmecore_plots` ("
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS `plotmecore_plots` ("
                     + "`id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
                     + "`plotX` INTEGER NOT NULL,"
                     + "`plotZ` INTEGER NOT NULL,"
@@ -86,7 +86,7 @@ public class SQLiteConnector extends Database {
                     + ");");
             statement.executeUpdate("CREATE UNIQUE INDEX IF NOT EXISTS `likes` ON plotmecore_likes(plot_id,player)");
             connection.commit();
-            statement.executeUpdate("CREATE TABLE `plotmecore_metadata` ("
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS `plotmecore_metadata` ("
                     + "`id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
                     + "`plot_id` INTEGER NOT NULL,"
                     + "`pluginname` VARCHAR(100) NOT NULL,"

@@ -6,7 +6,7 @@ package com.worldcretornica.configuration.file;
  */
 public class YamlConfigurationOptions extends FileConfigurationOptions {
 
-    protected YamlConfigurationOptions(YamlConfiguration configuration) {
+    YamlConfigurationOptions(YamlConfiguration configuration) {
         super(configuration);
     }
 

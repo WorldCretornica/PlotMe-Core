@@ -4,19 +4,25 @@ import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotId;
 import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotBuyEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
 
-public class CmdBuy extends PlotCommand {
+public class CmdBuy extends PlotCommand implements CommandBase {
 
     public CmdBuy(PlotMe_Core instance) {
         super(instance);
     }
 
-    public boolean exec(IPlayer player) {
+    public String getName() {
+        return "buy";
+    }
+
+    public boolean execute(ICommandSender sender, String[] args) {
+        IPlayer player = (IPlayer) sender;
         IWorld world = player.getWorld();
         if (manager.isPlotWorld(world)) {
             if (manager.isEconomyEnabled(world)) {
@@ -111,7 +117,6 @@ public class CmdBuy extends PlotCommand {
                         player.sendMessage(C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
                     }
                 } else {
-                    player.sendMessage(C("MsgPermissionDenied"));
                     return false;
                 }
             } else {
@@ -120,4 +125,10 @@ public class CmdBuy extends PlotCommand {
         }
         return true;
     }
+
+    @Override
+    public String getUsage() {
+        return null;
+    }
+
 }

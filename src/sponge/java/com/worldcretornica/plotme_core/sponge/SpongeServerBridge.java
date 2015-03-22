@@ -3,7 +3,6 @@ package com.worldcretornica.plotme_core.sponge;
 import com.worldcretornica.configuration.ConfigAccessor;
 import com.worldcretornica.configuration.ConfigurationSection;
 import com.worldcretornica.plotme_core.PlotWorldEdit;
-import com.worldcretornica.plotme_core.api.IBiome;
 import com.worldcretornica.plotme_core.api.IMaterial;
 import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import com.worldcretornica.plotme_core.api.IPlayer;
@@ -172,9 +171,8 @@ public class SpongeServerBridge extends IServerBridge {
     }
 
     @Override
-    public IBiome getBiome(String name) {
-        // TODO Auto-generated method stub
-        return null;
+    public boolean doesBiomeExist(String name) {
+        return true;
     }
 
     @Override
