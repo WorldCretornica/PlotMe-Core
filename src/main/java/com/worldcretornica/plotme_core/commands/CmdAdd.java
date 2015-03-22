@@ -33,13 +33,15 @@ public class CmdAdd extends PlotCommand implements CommandBase {
                     return true;
                 } else if (!manager.isPlotAvailable(id, pmi)) {
                     if (args.length < 2 && args.length >= 3) {
-                        player.sendMessage(C("WordUsage") + " /plotme add <" + C("WordPlayer") + ">");
+                        player.sendMessage(getUsage());
                         return true;
                     } else {
                         Plot plot = manager.getPlotById(id, pmi);
-
+                        if (plot == null) {
+                            player.sendMessage("Something is terribly wrong. Report to admin.");
+                            return true;
+                        }
                         String allowed = args[1];
-
                         if (player.getUniqueId().equals(plot.getOwnerId()) || player.hasPermission(PermissionNames.ADMIN_ADD)) {
                             if (plot.isAllowedConsulting(allowed)) {
                                 player.sendMessage(C("WordPlayer") + " " + allowed + " " + C("MsgAlreadyAllowed"));
@@ -104,6 +106,7 @@ public class CmdAdd extends PlotCommand implements CommandBase {
                 }
             } else {
                 player.sendMessage(C("MsgNotPlotWorld"));
+                return true;
             }
         } else {
             return false;

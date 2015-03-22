@@ -66,7 +66,6 @@ public class PlotMe_Core {
         }
         getSqlManager().startConnection();
         getSqlManager().createTables();
-        getServerBridge().getOfflinePlayers();
         if (getConfig().getBoolean("coreDatabaseUpdate")) {
             getSqlManager().coreDatabaseUpdate();
         }

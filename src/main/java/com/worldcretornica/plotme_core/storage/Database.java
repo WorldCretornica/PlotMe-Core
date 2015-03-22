@@ -26,7 +26,7 @@ public abstract class Database {
     private static final String SELECT_PLOT_COUNT = "SELECT Count(*) as plotCount FROM plotmecore_plots WHERE LOWER(world) = ?";
     public final PlotMe_Core plugin;
 
-    public Connection connection = getConnection();
+    public Connection connection;
 
     public Database(PlotMe_Core plugin) {
         this.plugin = plugin;
@@ -132,6 +132,7 @@ public abstract class Database {
      */
     public int getPlotCount(String world) {
         int plotCount = 0;
+        Connection connection = getConnection();
         try (PreparedStatement ps = connection.prepareStatement(SELECT_PLOT_COUNT)) {
 
             ps.setString(1, world);
@@ -149,6 +150,7 @@ public abstract class Database {
 
     public int getPlotCount(String world, UUID uuid) {
         int plotCount = 0;
+        Connection connection = getConnection();
         try (PreparedStatement ps = connection.prepareStatement(SELECT_PLOT_COUNT + " AND ownerID = ?")) {
 
             ps.setString(1, world);
@@ -166,6 +168,7 @@ public abstract class Database {
     }
 
     public void addPlot(Plot plot, PlotId id, ILocation plotTopLoc, ILocation plotBottomLoc) {
+        Connection connection = getConnection();
         try (PreparedStatement ps = connection.prepareStatement(
                 "INSERT INTO plotmecore_plots(plotX, plotZ, world, ownerID, owner, biome, finished, finishedDate, forSale, price, protected, "
                         + "expiredDate, topX, topZ, bottomX, bottomZ, plotLikes) VALUES (?,?,?,?,?,?,?,?,"
@@ -207,6 +210,7 @@ public abstract class Database {
     }
 
     public void addPlotDenied(String player, int plotInternalID) {
+        Connection connection = getConnection();
         try (PreparedStatement ps = connection.prepareStatement("INSERT INTO plotmecore_denied (plot_id, denied) VALUES (?,?)")) {
             ps.setInt(1, plotInternalID);
             ps.setString(2, player);
@@ -221,6 +225,7 @@ public abstract class Database {
     }
 
     public void addPlotAllowed(String key, int plotInternalID) {
+        Connection connection = getConnection();
         try (PreparedStatement ps = connection.prepareStatement("INSERT INTO plotmecore_allowed (plot_id, allowed, trusted) VALUES(?,?,?)")) {
             ps.setInt(1, plotInternalID);
             ps.setString(2, key);
@@ -234,6 +239,7 @@ public abstract class Database {
     }
 
     public void deletePlot(int internalID) {
+        Connection connection = getConnection();
         try (PreparedStatement ps = connection.prepareStatement("DELETE FROM plotmecore_allowed WHERE plot_id = ?")) {
             ps.setInt(1, internalID);
             ps.executeUpdate();
@@ -327,8 +333,8 @@ public abstract class Database {
             ResultSet setPlots = statementPlot.executeQuery();
             if (setPlots.next()) {
                 int internalID = setPlots.getInt("id");
-                byte[] byOwner = setPlots.getBytes("ownerID");
-                UUID ownerId = UUIDFetcher.fromBytes(byOwner);
+                String byOwner = setPlots.getString("ownerID");
+                UUID ownerId = UUID.fromString(byOwner);
                 String owner = setPlots.getString("owner");
                 String biome = setPlots.getString("biome");
                 boolean finished = setPlots.getBoolean("finished");
@@ -438,6 +444,7 @@ public abstract class Database {
     }
 
     public void deletePlotDenied(int internalID, String name) {
+        Connection connection = getConnection();
         try (PreparedStatement statement = connection.prepareStatement("DELETE FROM plotmecore_denied WHERE plot_id = ? AND denied = ?")) {
             statement.setInt(1, internalID);
             statement.setString(2, name);
@@ -449,6 +456,7 @@ public abstract class Database {
     }
 
     public void deleteAllDenied(int internalID) {
+        Connection connection = getConnection();
         try (PreparedStatement statement = connection.prepareStatement("DELETE FROM plotmecore_denied WHERE deniedID = ?")) {
             statement.setInt(1, internalID);
             statement.execute();

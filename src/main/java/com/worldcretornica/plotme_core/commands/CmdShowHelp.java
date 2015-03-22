@@ -21,7 +21,10 @@ public class CmdShowHelp extends PlotCommand implements CommandBase {
     }
 
     public boolean execute(ICommandSender player, String[] args) {
-        int page = Integer.parseInt(args[1]);
+        int page = 0;
+        if (args.length >= 2) {
+            page = Integer.parseInt(args[1]);
+        }
         List<String> allowed_commands = new ArrayList<>();
 
         allowed_commands.add("limit");
