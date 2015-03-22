@@ -104,10 +104,6 @@
             <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
         </repository>
         <repository>
-            <id>onarandombox-repo</id>
-            <url>http://repo.onarandombox.com/content/groups/public</url>
-        </repository>
-        <repository>
             <id>worldedit-repo</id>
             <name>WorldEdit Repository</name>
             <url>http://maven.sk89q.com/repo/</url>
@@ -197,7 +193,7 @@
         <dependency>
             <groupId>org.yaml</groupId>
             <artifactId>snakeyaml</artifactId>
-            <version>1.16-SNAPSHOT</version>
+            <version>1.14</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

@@ -322,6 +322,7 @@ public abstract class Database {
         int idX = id.getX();
         int idZ = id.getZ();
         Plot plot = null;
+        Connection connection = getConnection();
         try (PreparedStatement statementPlot = connection.prepareStatement("SELECT * FROM plotmecore_plots WHERE LOWER(world) = ? AND plotX = ? and "
                 + "plotZ = ?");
                 PreparedStatement statementAllowed = connection.prepareStatement("SELECT * FROM plotmecore_allowed WHERE id = ?");

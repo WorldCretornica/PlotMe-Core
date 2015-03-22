@@ -12,8 +12,11 @@ import org.bukkit.entity.Player;
 public class BukkitCommand extends CommandExBase implements CommandExecutor {
 
 
+    private final PlotMe_CorePlugin plugin;
+
     public BukkitCommand(PlotMe_CorePlugin instance) {
         super(instance.getAPI());
+        plugin = instance;
     }
 
     private String C(String caption) {
@@ -23,7 +26,9 @@ public class BukkitCommand extends CommandExBase implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player) {
-
+            if (args.length == 0) {
+                return commandMap.get("help").execute(plugin.wrapPlayer((Player) sender), args);
+            }
             CommandBase _command = commandMap.get(args[0]);
             if (_command == null) {
                 sender.sendMessage("PlotMe does not have a command by that name.");

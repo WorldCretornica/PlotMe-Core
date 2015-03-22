@@ -32,6 +32,7 @@ public class CmdInfo extends PlotCommand implements CommandBase {
                 if (!manager.isPlotAvailable(id, world)) {
                     Plot plot = manager.getPlotById(id, world);
 
+                    player.sendMessage("Internal ID: " + plot.getInternalID());
                     player.sendMessage("ID: " + id + " " + C("InfoOwner") + ": " + plot.getOwner()
                             + " " + C("InfoBiome") + ": " + plot.getBiome());
 
