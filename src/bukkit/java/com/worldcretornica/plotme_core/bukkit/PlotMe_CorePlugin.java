@@ -11,14 +11,11 @@ import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.Metrics;
 import org.mcstats.Metrics.Graph;
 
 import java.io.IOException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -37,28 +34,11 @@ public class PlotMe_CorePlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         serverObjectBuilder = new BukkitServerBridge(this);
-        AbstractSchematicUtil schematicutil = null;
         if (Bukkit.getVersion().contains("1.7")) {
             getPluginLoader().disablePlugin(this);
-        } else if (Bukkit.getVersion().contains("1.8")) {
-            try {
-                Constructor<?> constructor = Class.forName("com.worldcretornica.plotme_core.bukkit.SchematicUtil").getConstructor(Plugin.class);
-                schematicutil = (AbstractSchematicUtil) constructor.newInstance(this);
-            } catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException | IllegalAccessException | InstantiationException e) {
-                getLogger().severe("Unable to create the SchematicUtil instance");
-                getLogger().severe(e.getMessage());
-            }
-        } else {
-            getLogger().warning("This MC version is not supported yet! PlotMe 1.8 SchematicUtil will be used.");
-            try {
-                Constructor<?> constructor = Class.forName("com.worldcretornica.plotme_core.bukkit.SchematicUtil").getConstructor(Plugin.class);
-                schematicutil = (AbstractSchematicUtil) constructor.newInstance(this);
-            } catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException | IllegalAccessException | InstantiationException e) {
-                getLogger().severe("Unable to create the SchematicUtil instance");
-                getLogger().severe(e.getMessage());
-            }
+            return;
         }
-
+        AbstractSchematicUtil schematicutil = new SchematicUtil(this);
         plotme = new PlotMe_Core(serverObjectBuilder, schematicutil);
         getAPI().enable();
         doMetric();
