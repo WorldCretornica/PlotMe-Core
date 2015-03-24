@@ -55,13 +55,13 @@ public class SpongePlotListener {
                 if (ptc != null) {
                     switch (ptc.getReason()) {
                         case Clear:
-                            player.sendMessage(api.C("MsgPlotLockedClear"));
+                            //player.sendMessage(api.C("MsgPlotLockedClear"));
                             break;
                         case Reset:
-                            player.sendMessage(api.C("MsgPlotLockedReset"));
+                            //player.sendMessage(api.C("MsgPlotLockedReset"));
                             break;
                         case Expired:
-                            player.sendMessage(api.C("MsgPlotLockedExpired"));
+                            //player.sendMessage(api.C("MsgPlotLockedExpired"));
                             break;
                     }
                     event.setCancelled(true);
@@ -70,7 +70,7 @@ public class SpongePlotListener {
 
                     if (plot == null || !plot.isAllowed(player.getUniqueId())) {
                         if (cannotBuild) {
-                            player.sendMessage(api.C("ErrCannotBuild"));
+                            //player.sendMessage(api.C("ErrCannotBuild"));
                             event.setCancelled(true);
                         }
                     } else {
@@ -143,7 +143,7 @@ public class SpongePlotListener {
             ProjectileSource source = event.getSource().orNull();
             if (source instanceof Player) {
                 //noinspection OverlyStrongTypeCast
-                ((Player) source).sendMessage("");
+                //((Player) source).sendMessage("");
                 event.getLaunchedProjectile().remove();
             }
         }
