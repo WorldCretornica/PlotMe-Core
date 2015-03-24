@@ -6,16 +6,14 @@ import com.worldcretornica.plotme_core.PlotId;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ICommandSender;
-import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.api.event.InternalPlotCreateEvent;
 import com.worldcretornica.plotme_core.api.event.InternalPlotOwnerChangeEvent;
-import com.worldcretornica.plotme_core.utils.UUIDFetcher;
-import net.milkbowl.vault.economy.EconomyResponse;
 
 import java.util.UUID;
 
-public class CmdSetOwner extends PlotCommand implements CommandBase {
+public class CmdSetOwner extends PlotCommand {
 
     public CmdSetOwner(PlotMe_Core instance) {
         super(instance);
@@ -28,91 +26,69 @@ public class CmdSetOwner extends PlotCommand implements CommandBase {
     public boolean execute(ICommandSender sender, String[] args) {
         IPlayer player = (IPlayer) sender;
         IWorld world = player.getWorld();
-        PlotMapInfo pmi = manager.getMap(world);
-        if (player.hasPermission(PermissionNames.ADMIN_SETOWNER)) {
-            if (manager.isPlotWorld(world)) {
-                PlotId id = manager.getPlotId(player);
-                if (id == null) {
-                    player.sendMessage(C("MsgNoPlotFound"));
-                    return true;
+        if (player.hasPermission(PermissionNames.ADMIN_SETOWNER) && manager.isPlotWorld(world)) {
+            PlotMapInfo pmi = manager.getMap(world);
+            PlotId id = manager.getPlotId(player);
+            if (id == null) {
+                player.sendMessage(C("MsgNoPlotFound"));
+                return true;
+            }
+            String newOwner = null;
+            if (args[1].length() > 16) {
+                throw new IllegalArgumentException("Player Name is too long!");
+            }
+
+            //If the player by the name given is not online, stop the command from executing.
+            UUID newOwnerId = null;
+            for (IPlayer online : serverBridge.getOnlinePlayers()) {
+                if (online.getName().equalsIgnoreCase(args[1])) {
+                    newOwner = online.getName();
+                    newOwnerId = online.getUniqueId();
+                    break;
                 }
-                String newOwner = args[1];
-                UUID newOwnerId = UUIDFetcher.getUUIDOf(newOwner);
-                String oldowner = "<" + C("WordNotApplicable") + ">";
+            }
+            if (newOwnerId == null || newOwner == null) {
+                player.sendMessage(C("MsgNoPlayerFound"));
+                return true;
+            }
 
-                if (!manager.isPlotAvailable(id, pmi)) {
-                    Plot plot = manager.getPlotById(id, pmi);
+            if (!manager.isPlotAvailable(id, pmi)) {
+                Plot plot = manager.getPlotById(id, pmi);
+                UUID oldowner = plot.getOwnerId();
 
-                    oldowner = plot.getOwner();
 
-                    InternalPlotOwnerChangeEvent event;
-
-                    if (manager.isEconomyEnabled(world)) {
-                        if (pmi.isRefundClaimPriceOnSetOwner() && !newOwner.equals(oldowner)) {
-                            event = serverBridge.getEventFactory().callPlotOwnerChangeEvent(world, plot, player, newOwner);
-
-                            if (event.isCancelled()) {
-                                return true;
-                            }
-                            IOfflinePlayer playeroldowner = serverBridge.getOfflinePlayer(plot.getOwnerId());
-                            EconomyResponse er = serverBridge.depositPlayer(playeroldowner, pmi.getClaimPrice());
-
-                            if (er.transactionSuccess()) {
-                                IPlayer oldOwner = serverBridge.getPlayer(plot.getOwnerId());
-                                if (oldOwner != null) {
-                                    oldOwner.sendMessage(
-                                            C("MsgYourPlot") + " " + id + " " + C("MsgNowOwnedBy") + " " + newOwner + ". " + plugin.moneyFormat(pmi
-                                                    .getClaimPrice(), true));
-                                }
-                            } else {
-                                player.sendMessage(er.errorMessage);
-                                serverBridge.getLogger().warning(er.errorMessage);
-                                return true;
-                            }
-                        } else {
-                            event = serverBridge.getEventFactory().callPlotOwnerChangeEvent(world, plot, player, newOwner);
-                        }
-
-                    } else {
-                        event = serverBridge.getEventFactory().callPlotOwnerChangeEvent(world, plot, player, newOwner);
-                    }
-
+                if (!oldowner.equals(newOwnerId)) {
+                    InternalPlotOwnerChangeEvent event = serverBridge.getEventFactory().callPlotOwnerChangeEvent(world, plot, player, newOwner);
                     if (!event.isCancelled()) {
                         plot.setForSale(false);
-
                         manager.removeSellSign(world, id);
-
+                        plot.resetExpire(pmi.getDaysToExpiration());
                         plot.updateField("forsale", false);
-
                         plot.setOwner(newOwner);
                         plot.setOwnerId(newOwnerId);
                         manager.setOwnerSign(world, plot);
-
-                        plot.updateField("owner", newOwner);
+                        //todo new function to change the plot owner in database or just modify the plot class to do this.
+                        player.sendMessage(C("MsgOwnerChangedTo") + " " + newOwner);
                     }
                 } else {
-                    manager.createPlot(world, id, newOwner, newOwnerId, pmi);
-                }
-
-                player.sendMessage(C("MsgOwnerChangedTo") + " " + newOwner);
-
-                if (isAdvancedLogging()) {
-                    serverBridge.getLogger()
-                            .info(player.getName() + " " + C("MsgChangedOwnerOf") + " " + id + " " + C("WordFrom") + " " + oldowner + " " + C(
-                                    "WordTo")
-                                    + " " + newOwner);
+                    player.sendMessage("This person already owns this plot!"); //TODO add caption for this
                 }
             } else {
-                player.sendMessage(C("MsgNotPlotWorld"));
+                InternalPlotCreateEvent event =
+                        serverBridge.getEventFactory().callPlotCreatedEvent(world, id, serverBridge.getPlayer(newOwnerId));
+                if (!event.isCancelled()) {
+                    manager.createPlot(world, id, newOwner, newOwnerId, pmi);
+                    player.sendMessage(C("MsgOwnerChangedTo") + " " + newOwner);
+                }
             }
+            return true;
         } else {
             return false;
         }
-        return true;
     }
 
     @Override
     public String getUsage() {
-        return null;
+        return C("WordUsage") + ": /plotme setowner <" + C("WordPlayer") + ">";
     }
 }
