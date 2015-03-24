@@ -1,12 +1,14 @@
 package com.worldcretornica.plotme_core.sponge;
 
+import com.worldcretornica.plotme_core.AbstractSchematicUtil;
+import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.schematic.Schematic;
-import org.spongepowered.api.world.Location;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
 
-public class SchematicUtil extends SpongeAbstractSchematicUtil {
+public class SchematicUtil extends AbstractSchematicUtil {
 
     private final PlotMe_Sponge plugin;
 
@@ -15,17 +17,19 @@ public class SchematicUtil extends SpongeAbstractSchematicUtil {
     }
 
     @Override
-    public void pasteSchematic(Location loc, Schematic schem) {
+    public void pasteSchematic(ILocation loc, Schematic schem) {
 
     }
 
+    @Nullable
     @Override
     public Schematic loadSchematic(File file) throws IOException, IllegalArgumentException {
         return null;
     }
 
+    @Nullable
     @Override
-    public Schematic createCompiledSchematic(Location loc1, Location loc2) {
+    public Schematic createCompiledSchematic(ILocation loc1, ILocation loc2) {
         return null;
     }
 
@@ -34,6 +38,7 @@ public class SchematicUtil extends SpongeAbstractSchematicUtil {
 
     }
 
+    @Nullable
     @Override
     public Schematic loadCompiledSchematic(String name) {
         return null;

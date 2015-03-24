@@ -37,8 +37,7 @@ public class PlotMe_Sponge {
         game.getEventManager().register(this, new SpongePlotDenyListener(this));
         serverObjectBuilder = new SpongeServerBridge(this);
 
-        SpongeAbstractSchematicUtil schematicutil = new SchematicUtil(this); //TODO
-        plotme = new PlotMe_Core(serverObjectBuilder, null);
+        plotme = new PlotMe_Core(serverObjectBuilder, new SchematicUtil(this));
     }
 
     @Subscribe
