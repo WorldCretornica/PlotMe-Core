@@ -11,7 +11,7 @@ import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotRemoveDeniedEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
 
-public class CmdUndeny extends PlotCommand implements CommandBase {
+public class CmdUndeny extends PlotCommand {
 
     public CmdUndeny(PlotMe_Core instance) {
         super(instance);

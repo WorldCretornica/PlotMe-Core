@@ -10,10 +10,18 @@ import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotTeleportEvent;
 
-public class CmdTP extends PlotCommand implements CommandBase {
+import java.util.Collections;
+import java.util.List;
+
+public class CmdTP extends PlotCommand {
 
     public CmdTP(PlotMe_Core instance) {
         super(instance);
+    }
+
+    @Override
+    public List getAliases() {
+        return Collections.singletonList("teleport");
     }
 
     public String getName() {
@@ -72,9 +80,9 @@ public class CmdTP extends PlotCommand implements CommandBase {
     @Override
     public String getUsage() {
         if (plugin.getConfig().getBoolean("allowWorldTeleport")) {
-            return C("WordUsage") + ": /plotme tp <ID> [" + C("WordWorld") + "] " + C("WordExample") + ": /plotme tp 5;-1 ";
+            return C("WordUsage") + ": /plotme tp <ID> [" + C("WordWorld") + "]";
         } else {
-            return C("WordUsage") + ": /plotme tp <ID> " + C("WordExample") + ": /plotme tp 5;-1 ";
+            return C("WordUsage") + ": /plotme tp <ID> ";
         }
     }
 

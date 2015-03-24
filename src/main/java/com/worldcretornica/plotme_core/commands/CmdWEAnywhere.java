@@ -7,7 +7,7 @@ import com.worldcretornica.plotme_core.api.IPlayer;
 
 import java.util.UUID;
 
-public class CmdWEAnywhere extends PlotCommand implements CommandBase {
+public class CmdWEAnywhere extends PlotCommand {
 
     public CmdWEAnywhere(PlotMe_Core instance) {
         super(instance);
@@ -50,7 +50,7 @@ public class CmdWEAnywhere extends PlotCommand implements CommandBase {
 
     @Override
     public String getUsage() {
-        return null;
+        return C("WordUsage") + ": /plotme weanywhere";
     }
 
 }

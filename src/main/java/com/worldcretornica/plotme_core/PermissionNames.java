@@ -22,7 +22,6 @@ public class PermissionNames {
     public static final String USER_SELL = "PlotMe.use.sell";
     public static final String ADMIN_SELL = "PlotMe.admin.sell";
     public static final String ADMIN_EXPIRED = "PlotMe.admin.expired";
-    public static final String ADMIN_LIST = "PlotMe.admin.list";
     public static final String USER_ADD = "PlotMe.use.add";
     public static final String USER_TRUST = "PlotMe.use.trust";
     public static final String USER_BUY = "PlotMe.use.buy";

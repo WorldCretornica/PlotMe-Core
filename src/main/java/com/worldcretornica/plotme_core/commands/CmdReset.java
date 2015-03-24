@@ -12,7 +12,7 @@ import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotResetEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
 
-public class CmdReset extends PlotCommand implements CommandBase {
+public class CmdReset extends PlotCommand {
 
     public CmdReset(PlotMe_Core instance) {
         super(instance);
@@ -37,7 +37,7 @@ public class CmdReset extends PlotCommand implements CommandBase {
 
                 if (plot == null) {
                     player.sendMessage(C("MsgNoPlotFound"));
-                } else if (plot.isProtect()) {
+                } else if (plot.isProtected()) {
                     player.sendMessage(C("MsgPlotProtectedCannotReset"));
                 } else if (player.getUniqueId().equals(plot.getOwnerId()) || player.hasPermission(PermissionNames.ADMIN_RESET)) {
 
@@ -89,6 +89,6 @@ public class CmdReset extends PlotCommand implements CommandBase {
 
     @Override
     public String getUsage() {
-        return null;
+        return C("WordUsage") + ": /plotme reset";
     }
 }

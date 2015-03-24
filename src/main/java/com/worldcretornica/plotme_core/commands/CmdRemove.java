@@ -11,9 +11,11 @@ import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotRemoveAllowedEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 
-public class CmdRemove extends PlotCommand implements CommandBase {
+public class CmdRemove extends PlotCommand {
 
     public CmdRemove(PlotMe_Core instance) {
         super(instance);
@@ -109,6 +111,11 @@ public class CmdRemove extends PlotCommand implements CommandBase {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public List getAliases() {
+        return Collections.singletonList("-");
     }
 
     @Override

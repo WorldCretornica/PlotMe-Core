@@ -581,17 +581,14 @@ public class PlotMeCoreManager {
      * @throws NullPointerException If the <code>id</code> argument is <code>null</code>
      */
     public Plot createPlot(IWorld world, PlotId id, String owner, UUID uuid, PlotMapInfo pmi) {
-        if (isPlotAvailable(id, pmi)) {
-            Plot plot = new Plot(plugin, owner, uuid, world, id, pmi.getDaysToExpiration());
+        Plot plot = new Plot(plugin, owner, uuid, world, id, pmi.getDaysToExpiration());
 
-            setOwnerSign(world, plot);
-            addPlot(world, id, plot, pmi);
-            adjustWall(world, id, true);
+        setOwnerSign(world, plot);
+        addPlot(world, id, plot, pmi);
+        adjustWall(world, id, true);
 
-            plugin.getSqlManager().addPlot(plot, id, getPlotTopLoc(world, id), getPlotBottomLoc(world, id));
-            return plot;
-        }
-        return null;
+        plugin.getSqlManager().addPlot(plot, id, getPlotTopLoc(world, id), getPlotBottomLoc(world, id));
+        return plot;
     }
 
     /**
@@ -783,7 +780,7 @@ public class PlotMeCoreManager {
         } else {
             Plot plot = getPlotById(id, world);
 
-            getGenManager(world).adjustPlotFor(world, id, true, plot.isProtect(), plot.isForSale());
+            getGenManager(world).adjustPlotFor(world, id, true, plot.isProtected(), plot.isForSale());
         }
     }
 
@@ -797,7 +794,7 @@ public class PlotMeCoreManager {
     public void adjustWall(IWorld world, PlotId id, boolean claimed) {
         Plot plot = getPlotById(id, world);
 
-        getGenManager(world).adjustPlotFor(world, id, claimed, plot.isProtect(), plot.isForSale());
+        getGenManager(world).adjustPlotFor(world, id, claimed, plot.isProtected(), plot.isForSale());
     }
 
     public void setBiome(IWorld world, PlotId id, String biome) {

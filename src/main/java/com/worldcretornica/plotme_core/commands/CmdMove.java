@@ -8,7 +8,7 @@ import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotMoveEvent;
 
-public class CmdMove extends PlotCommand implements CommandBase {
+public class CmdMove extends PlotCommand {
 
     public CmdMove(PlotMe_Core instance) {
         super(instance);
@@ -60,7 +60,6 @@ public class CmdMove extends PlotCommand implements CommandBase {
 
     @Override
     public String getUsage() {
-        return C("WordUsage") + ": /plotme move <" + C("WordIdFrom") + "> <" + C("WordIdTo") + "> " + C("WordExample")
-                + ": /plotme move 0;1 2;-1";
+        return C("WordUsage") + ": /plotme move <" + C("WordIdFrom") + "> <" + C("WordIdTo") + "> ";
     }
 }

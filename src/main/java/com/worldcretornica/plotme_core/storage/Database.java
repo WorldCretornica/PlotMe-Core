@@ -132,8 +132,7 @@ public abstract class Database {
      */
     public int getPlotCount(String world) {
         int plotCount = 0;
-        Connection connection = getConnection();
-        try (PreparedStatement ps = connection.prepareStatement(SELECT_PLOT_COUNT)) {
+        try (PreparedStatement ps = getConnection().prepareStatement(SELECT_PLOT_COUNT)) {
 
             ps.setString(1, world);
 
@@ -150,8 +149,7 @@ public abstract class Database {
 
     public int getPlotCount(String world, UUID uuid) {
         int plotCount = 0;
-        Connection connection = getConnection();
-        try (PreparedStatement ps = connection.prepareStatement(SELECT_PLOT_COUNT + " AND ownerID = ?")) {
+        try (PreparedStatement ps = getConnection().prepareStatement(SELECT_PLOT_COUNT + " AND ownerID = ?")) {
 
             ps.setString(1, world);
             ps.setBytes(2, UUIDFetcher.toBytes(uuid));
@@ -168,12 +166,11 @@ public abstract class Database {
     }
 
     public void addPlot(Plot plot, PlotId id, ILocation plotTopLoc, ILocation plotBottomLoc) {
-        Connection connection = getConnection();
-        try (PreparedStatement ps = connection.prepareStatement(
+        try (PreparedStatement ps = getConnection().prepareStatement(
                 "INSERT INTO plotmecore_plots(plotX, plotZ, world, ownerID, owner, biome, finished, finishedDate, forSale, price, protected, "
                         + "expiredDate, topX, topZ, bottomX, bottomZ, plotLikes) VALUES (?,?,?,?,?,?,?,?,"
                         + "?,?,?,?,?,?,?,?,?)");
-                PreparedStatement ps2 = connection.prepareStatement(SELECT_INTERNAL_ID)) {
+                PreparedStatement ps2 = getConnection().prepareStatement(SELECT_INTERNAL_ID)) {
 
             ps.setInt(1, id.getX());
             ps.setInt(2, id.getZ());
@@ -185,7 +182,7 @@ public abstract class Database {
             ps.setString(8, plot.getFinishedDate());
             ps.setBoolean(9, plot.isForSale());
             ps.setDouble(10, plot.getPrice());
-            ps.setBoolean(11, plot.isProtect());
+            ps.setBoolean(11, plot.isProtected());
             ps.setDate(12, plot.getExpiredDate());
             ps.setInt(13, plotTopLoc.getBlockX());
             ps.setInt(14, plotTopLoc.getBlockZ());
@@ -193,7 +190,7 @@ public abstract class Database {
             ps.setInt(16, plotBottomLoc.getBlockZ());
             ps.setInt(17, plot.getLikes());
             ps.executeUpdate();
-            connection.commit();
+            getConnection().commit();
             ps2.setInt(1, id.getX());
             ps2.setInt(2, id.getZ());
             ResultSet getID = ps2.executeQuery();
@@ -212,12 +209,11 @@ public abstract class Database {
     }
 
     public void addPlotDenied(String player, int plotInternalID) {
-        Connection connection = getConnection();
-        try (PreparedStatement ps = connection.prepareStatement("INSERT INTO plotmecore_denied (plot_id, denied) VALUES (?,?)")) {
+        try (PreparedStatement ps = getConnection().prepareStatement("INSERT INTO plotmecore_denied (plot_id, denied) VALUES (?,?)")) {
             ps.setInt(1, plotInternalID);
             ps.setString(2, player);
             ps.execute();
-            connection.commit();
+            getConnection().commit();
         } catch (SQLException e) {
             plugin.getLogger().severe("Error adding denied data for plot with internal id " + plotInternalID);
             e.printStackTrace();
@@ -226,12 +222,25 @@ public abstract class Database {
 
     }
 
-    public void addPlotAllowed(String key, int plotInternalID) {
-        Connection connection = getConnection();
-        try (PreparedStatement ps = connection.prepareStatement("INSERT INTO plotmecore_allowed (plot_id, allowed, trusted) VALUES(?,?,?)")) {
+    public void addPlotAllowed(String player, int plotInternalID) {
+        try (PreparedStatement ps = getConnection().prepareStatement("INSERT INTO plotmecore_allowed (plot_id, allowed, access) VALUES(?,?,?)")) {
             ps.setInt(1, plotInternalID);
-            ps.setString(2, key);
-            ps.setBoolean(3, false);
+            ps.setString(2, player);
+            ps.setInt(3, 0);
+            ps.execute();
+            getConnection().commit();
+        } catch (SQLException e) {
+            plugin.getLogger().severe("Error adding allowed data for plot with internal id " + plotInternalID);
+            e.printStackTrace();
+        }
+    }
+
+    public void addPlotTrusted(String player, int plotInternalID) {
+        Connection connection = getConnection();
+        try (PreparedStatement ps = connection.prepareStatement("INSERT INTO plotmecore_allowed (plot_id, allowed, access) VALUES(?,?,?)")) {
+            ps.setInt(1, plotInternalID);
+            ps.setString(2, player);
+            ps.setInt(3, 1);
             ps.execute();
             connection.commit();
         } catch (SQLException e) {
@@ -424,6 +433,7 @@ public abstract class Database {
     }
 
     public void deletePlotAllowed(int internalID, String name) {
+        Connection connection = getConnection();
         try (PreparedStatement statement = connection.prepareStatement("DELETE FROM plotmecore_allowed WHERE plot_id = ? AND allowed = ?")) {
             statement.setInt(1, internalID);
             statement.setString(2, name);
@@ -435,7 +445,12 @@ public abstract class Database {
 
     }
 
+    /**
+     * This deletes all the players added to this plot. Including trusted players.
+     * @param internalID
+     */
     public void deleteAllAllowed(int internalID) {
+        Connection connection = getConnection();
         try (PreparedStatement statement = connection.prepareStatement("DELETE FROM plotmecore_allowed WHERE plot_id = ?")) {
             statement.setInt(1, internalID);
             statement.execute();

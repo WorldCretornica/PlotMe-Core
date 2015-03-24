@@ -10,7 +10,7 @@ import com.worldcretornica.plotme_core.api.IWorld;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CmdShowHelp extends PlotCommand implements CommandBase {
+public class CmdShowHelp extends PlotCommand {
 
     public CmdShowHelp(PlotMe_Core instance) {
         super(instance);
@@ -53,9 +53,6 @@ public class CmdShowHelp extends PlotCommand implements CommandBase {
         if (player.hasPermission(PermissionNames.USER_DONE) || player.hasPermission(PermissionNames.ADMIN_DONE)) {
             allowed_commands.add("done");
         }
-        if (player.hasPermission(PermissionNames.ADMIN_DONE)) {
-            allowed_commands.add("donelist");
-        }
         if (player.hasPermission(PermissionNames.ADMIN_TP)) {
             allowed_commands.add("tp");
         }
@@ -76,7 +73,6 @@ public class CmdShowHelp extends PlotCommand implements CommandBase {
         }
         if (player.hasPermission(PermissionNames.USER_DENY) || player.hasPermission(PermissionNames.ADMIN_DENY)) {
             allowed_commands.add("deny");
-            allowed_commands.add("undeny");
         }
         if (player.hasPermission(PermissionNames.ADMIN_SETOWNER)) {
             allowed_commands.add("setowner");
@@ -86,9 +82,6 @@ public class CmdShowHelp extends PlotCommand implements CommandBase {
         }
         if (player.hasPermission(PermissionNames.ADMIN_WEANYWHERE)) {
             allowed_commands.add("weanywhere");
-        }
-        if (player.hasPermission(PermissionNames.ADMIN_LIST)) {
-            allowed_commands.add("listother");
         }
         if (player.hasPermission(PermissionNames.ADMIN_EXPIRED)) {
             allowed_commands.add("expired");
@@ -193,11 +186,8 @@ public class CmdShowHelp extends PlotCommand implements CommandBase {
                 player.sendMessage("/plotme info");
                 player.sendMessage(C("HelpInfo"));
             } else if ("list".equalsIgnoreCase(allowedCommand)) {
-                player.sendMessage("/plotme list");
-                player.sendMessage(C("HelpList"));
-            } else if ("listother".equalsIgnoreCase(allowedCommand)) {
                 player.sendMessage("/plotme list <" + C("WordPlayer") + ">");
-                player.sendMessage(C("HelpListOther"));
+                player.sendMessage(C("HelpList"));
             } else if ("biome".equalsIgnoreCase(allowedCommand)) {
                 player.sendMessage("/plotme biome <" + C("WordBiome") + ">");
                 if (economyEnabled && pmi.getBiomeChangePrice() != 0) {
@@ -210,6 +200,8 @@ public class CmdShowHelp extends PlotCommand implements CommandBase {
             } else if ("done".equalsIgnoreCase(allowedCommand)) {
                 player.sendMessage("/plotme done");
                 player.sendMessage(C("HelpDone"));
+                player.sendMessage("/plotme donelist [page]");
+                player.sendMessage(C("HelpDoneList"));
             } else if ("tp".equalsIgnoreCase(allowedCommand)) {
                 if (plugin.getConfig().getBoolean("allowWorldTeleport")) {
                     player.sendMessage("/plotme tp <ID> [" + C("WordWorld") + "]");
@@ -234,6 +226,12 @@ public class CmdShowHelp extends PlotCommand implements CommandBase {
                 } else {
                     player.sendMessage(C("HelpAdd"));
                 }
+                player.sendMessage("/plotme remove <" + C("WordPlayer") + ">");
+                if (economyEnabled && pmi.getRemovePlayerPrice() != 0) {
+                    player.sendMessage(C("HelpRemove") + " " + C("WordPrice") + " : " + Math.round(pmi.getRemovePlayerPrice()));
+                } else {
+                    player.sendMessage(" " + C("HelpRemove"));
+                }
             } else if ("deny".equalsIgnoreCase(allowedCommand)) {
                 player.sendMessage("/plotme deny <" + C("WordPlayer") + ">");
                 if (economyEnabled && pmi.getDenyPlayerPrice() != 0) {
@@ -241,14 +239,6 @@ public class CmdShowHelp extends PlotCommand implements CommandBase {
                 } else {
                     player.sendMessage(C("HelpDeny"));
                 }
-            } else if ("remove".equalsIgnoreCase(allowedCommand)) {
-                player.sendMessage("/plotme remove <" + C("WordPlayer") + ">");
-                if (economyEnabled && pmi.getRemovePlayerPrice() != 0) {
-                    player.sendMessage(C("HelpRemove") + " " + C("WordPrice") + " : " + Math.round(pmi.getRemovePlayerPrice()));
-                } else {
-                    player.sendMessage(" " + C("HelpRemove"));
-                }
-            } else if ("undeny".equalsIgnoreCase(allowedCommand)) {
                 player.sendMessage("/plotme undeny <" + C("WordPlayer") + ">");
                 if (economyEnabled && pmi.getUndenyPlayerPrice() != 0) {
                     player.sendMessage(C("HelpUndeny") + " " + C("WordPrice") + " : " + Math.round(pmi.getUndenyPlayerPrice()));
@@ -265,11 +255,8 @@ public class CmdShowHelp extends PlotCommand implements CommandBase {
                 player.sendMessage("/plotme weanywhere");
                 player.sendMessage(C("HelpWEAnywhere"));
             } else if ("expired".equalsIgnoreCase(allowedCommand)) {
-                player.sendMessage("/plotme expired [page]");
+                player.sendMessage("/plotme expired");
                 player.sendMessage(C("HelpExpired"));
-            } else if ("donelist".equalsIgnoreCase(allowedCommand)) {
-                player.sendMessage("/plotme donelist [page]");
-                player.sendMessage(C("HelpDoneList"));
             } else if ("addtime".equalsIgnoreCase(allowedCommand)) {
                 player.sendMessage("/plotme addtime");
                 int days;
@@ -302,6 +289,6 @@ public class CmdShowHelp extends PlotCommand implements CommandBase {
 
     @Override
     public String getUsage() {
-        return null;
+        return C("WordUsage") + ": /plotme help <" + C("WordPage") + ">";
     }
 }

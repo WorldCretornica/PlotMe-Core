@@ -13,7 +13,7 @@ import net.milkbowl.vault.economy.EconomyResponse;
 
 import java.util.List;
 
-public class CmdDeny extends PlotCommand implements CommandBase {
+public class CmdDeny extends PlotCommand {
 
     public CmdDeny(PlotMe_Core instance) {
         super(instance);
@@ -138,6 +138,6 @@ public class CmdDeny extends PlotCommand implements CommandBase {
 
     @Override
     public String getUsage() {
-        return C("WordUsage") + " /plotme deny <" + C("WordPlayer") + ">";
+        return C("WordUsage") + ": /plotme deny <" + C("WordPlayer") + ">";
     }
 }

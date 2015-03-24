@@ -94,7 +94,7 @@ import java.util.UUID;
 
 public class SchematicUtil extends AbstractSchematicUtil {
 
-    protected final Plugin plugin;
+    private final Plugin plugin;
 
     @SuppressWarnings("deprecation")
     public SchematicUtil(Plugin instance) {
@@ -177,16 +177,16 @@ public class SchematicUtil extends AbstractSchematicUtil {
         return schem;
     }
 
-    protected Leash getLeash(org.bukkit.entity.Entity leashHolder) {
+    private Leash getLeash(org.bukkit.entity.Entity leashHolder) {
         Location loc = leashHolder.getLocation();
         return new Leash(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
     }
 
     @SuppressWarnings("deprecation")
-    protected Item getItem(ItemStack is, Byte slot) {
-        Byte count = (byte) is.getAmount();
-        Short damage = (short) is.getData().getData();
-        Short itemid = (short) is.getTypeId();
+    private Item getItem(ItemStack is, Byte slot) {
+        byte count = (byte) is.getAmount();
+        short damage = (short) is.getData().getData();
+        short itemid = (short) is.getTypeId();
 
         ItemTag itemtag = null;
 
@@ -247,14 +247,14 @@ public class SchematicUtil extends AbstractSchematicUtil {
     }
 
     @SuppressWarnings("deprecation")
-    protected void pasteSchematicBlocks(Location loc, Schematic schematic, boolean setBlock) {
+    private void pasteSchematicBlocks(Location loc, Schematic schematic, boolean setBlock) {
         World world = loc.getWorld();
         int[] blocks = schematic.getBlocks();
         byte[] blockData = schematic.getData();
 
-        Short length = schematic.getLength();
-        Short width = schematic.getWidth();
-        Short height = schematic.getHeight();
+        short length = schematic.getLength();
+        short width = schematic.getWidth();
+        short height = schematic.getHeight();
 
         for (int y = 0; y < height; ++y) {
 
@@ -298,7 +298,7 @@ public class SchematicUtil extends AbstractSchematicUtil {
     }
 
     @SuppressWarnings("deprecation")
-    protected ItemStack getItemStack(Item item) {
+    private ItemStack getItemStack(Item item) {
         ItemStack is = new ItemStack(item.getId(), item.getCount(), item.getDamage(), item.getDamage().byteValue());
 
         ItemTag itemtag = item.getTag();
@@ -311,7 +311,7 @@ public class SchematicUtil extends AbstractSchematicUtil {
     }
 
     @SuppressWarnings("deprecation")
-    protected void setTag(ItemStack is, ItemTag itemtag) {
+    private void setTag(ItemStack is, ItemTag itemtag) {
         List<Ench> enchants = itemtag.getEnchants();
         //Integer repaircost = itemtag.getRepairCost();
         List<String> pages = itemtag.getPages();
@@ -347,7 +347,7 @@ public class SchematicUtil extends AbstractSchematicUtil {
         is.setItemMeta(itemmeta);
     }
 
-    protected org.bukkit.entity.Entity getLeash(Leash leash, Location loc, int originX, int originY, int originZ) {
+    private org.bukkit.entity.Entity getLeash(Leash leash, Location loc, int originX, int originY, int originZ) {
         org.bukkit.entity.Entity ent = null;
         World world = loc.getWorld();
 
@@ -381,7 +381,7 @@ public class SchematicUtil extends AbstractSchematicUtil {
         return ent;
     }
 
-    protected Leash getLeash(CompoundTag leashelement) {
+    private Leash getLeash(CompoundTag leashelement) {
         Map<String, Tag> leash = leashelement.getValue();
         Integer x = getChildTag(leash, "X", IntTag.class, Integer.class);
         Integer y = getChildTag(leash, "Y", IntTag.class, Integer.class);
@@ -390,7 +390,7 @@ public class SchematicUtil extends AbstractSchematicUtil {
         return new Leash(x, y, z);
     }
 
-    protected Modifier getModifier(CompoundTag modifierelement) {
+    private Modifier getModifier(CompoundTag modifierelement) {
         Map<String, Tag> modifier = modifierelement.getValue();
         Integer operation = getChildTag(modifier, "Operation", IntTag.class, Integer.class);
         Double amount = getChildTag(modifier, "Amount", DoubleTag.class, Double.class);
@@ -399,7 +399,7 @@ public class SchematicUtil extends AbstractSchematicUtil {
         return new Modifier(operation, amount, name);
     }
 
-    protected List<Modifier> getModifiers(Map<String, Tag> attribute) {
+    private List<Modifier> getModifiers(Map<String, Tag> attribute) {
         List<?> modifierlist = getChildTag(attribute, "Modifiers", ListTag.class, List.class);
 
         if (modifierlist != null) {
@@ -417,7 +417,7 @@ public class SchematicUtil extends AbstractSchematicUtil {
         }
     }
 
-    protected Item getItem(CompoundTag itemElement) {
+    private Item getItem(CompoundTag itemElement) {
         Map<String, Tag> item = itemElement.getValue();
         Byte count = getChildTag(item, "Count", ByteTag.class, Byte.class);
         Byte slot = getChildTag(item, "Slot", ByteTag.class, Byte.class);
@@ -429,7 +429,7 @@ public class SchematicUtil extends AbstractSchematicUtil {
         return new Item(count, slot, damage, itemid, tag);
     }
 
-    protected List<Item> getItems(Map<String, Tag> entity) {
+    private List<Item> getItems(Map<String, Tag> entity) {
         List<?> itemsList = getChildTag(entity, "Items", ListTag.class, List.class);
 
         if (itemsList != null) {
@@ -447,7 +447,7 @@ public class SchematicUtil extends AbstractSchematicUtil {
         }
     }
 
-    protected ItemTag getItemTag(Map<String, Tag> item) {
+    private ItemTag getItemTag(Map<String, Tag> item) {
         CompoundTag itemtagElement = getChildTag(item, "tag", CompoundTag.class);
 
         if (itemtagElement != null) {
@@ -465,7 +465,7 @@ public class SchematicUtil extends AbstractSchematicUtil {
         }
     }
 
-    protected Display getDisplay(Map<String, Tag> itemtag) {
+    private Display getDisplay(Map<String, Tag> itemtag) {
         CompoundTag displayElement = getChildTag(itemtag, "display", CompoundTag.class);
 
         if (displayElement != null) {
@@ -479,14 +479,14 @@ public class SchematicUtil extends AbstractSchematicUtil {
         }
     }
 
-    protected Ench getEnchant(CompoundTag enchantelement) {
+    private Ench getEnchant(CompoundTag enchantelement) {
         Map<String, Tag> enchant = enchantelement.getValue();
         Short id = getChildTag(enchant, "id", ShortTag.class, Short.class);
         Short lvl = getChildTag(enchant, "lvl", ShortTag.class, Short.class);
         return new Ench(id, lvl);
     }
 
-    protected List<Ench> getEnchant(Map<String, Tag> enchanttag) {
+    private List<Ench> getEnchant(Map<String, Tag> enchanttag) {
         List<?> enchantList = getChildTag(enchanttag, "ench", ListTag.class, List.class);
 
         if (enchantList != null) {
@@ -504,7 +504,7 @@ public class SchematicUtil extends AbstractSchematicUtil {
         }
     }
 
-    protected List<Item> getEquipment(Map<String, Tag> entity) {
+    private List<Item> getEquipment(Map<String, Tag> entity) {
         List<?> equipmentlist = getChildTag(entity, "Equipment", ListTag.class, List.class);
 
         if (equipmentlist != null) {
@@ -524,7 +524,7 @@ public class SchematicUtil extends AbstractSchematicUtil {
         }
     }
 
-    protected Attribute getAttribute(CompoundTag attributeelement) {
+    private Attribute getAttribute(CompoundTag attributeelement) {
         Map<String, Tag> attribute = attributeelement.getValue();
         Double base = getChildTag(attribute, "Base", DoubleTag.class, Double.class);
         String name = getChildTag(attribute, "Name", StringTag.class, String.class);
@@ -532,7 +532,7 @@ public class SchematicUtil extends AbstractSchematicUtil {
         return new Attribute(base, name, modifiers);
     }
 
-    protected List<Attribute> getAttributes(Map<String, Tag> entity) {
+    private List<Attribute> getAttributes(Map<String, Tag> entity) {
         List<?> attributelist = getChildTag(entity, "Attributes", ListTag.class, List.class);
 
         if (attributelist != null) {
@@ -551,62 +551,62 @@ public class SchematicUtil extends AbstractSchematicUtil {
     }
 
     @SuppressWarnings("deprecation")
-    protected Entity getEntity(org.bukkit.entity.Entity bukkitentity, int minX, int minY, int minZ) {
+    private Entity getEntity(org.bukkit.entity.Entity bukkitentity, int minX, int minY, int minZ) {
 
         Location entLoc = bukkitentity.getLocation();
         double x = entLoc.getX() - minX;
         double y = entLoc.getY() - minY;
         double z = entLoc.getZ() - minZ;
 
-        Byte dir = null;
-        Byte direction = null;
-        Byte invulnerable = null;
-        Byte onground = null;
-        Byte canpickuploot = null;
-        Byte color = null;
-        Byte customnamevisible = null;
-        Byte persistencerequired = null;
-        Byte sheared = null;
-        Byte skeletontype = null;
-        Byte isbaby = null;
-        Byte itemrotation = null;
-        Byte leashed = null;
-        Byte agelocked = null;
-        Byte invisible = null;
-        Byte nobaseplate = null;
-        Byte nogravity = null;
-        Byte showarms = null;
-        Byte small = null;
-        Byte elder = null;
-        Byte bred = null;
-        Byte chestedhorse = null;
-        Byte eatinghaystack = null;
-        Byte hasreproduced = null;
-        Byte tame = null;
-        Byte facing = null;
+        byte dir = 0;
+        byte direction = 0;
+        byte invulnerable = 0;
+        byte onground = 0;
+        byte canpickuploot = 0;
+        byte color = 0;
+        byte customnamevisible = 0;
+        byte persistencerequired = 0;
+        byte sheared = 0;
+        byte skeletontype = 0;
+        byte isbaby = 0;
+        byte itemrotation = 0;
+        byte leashed = 0;
+        byte agelocked = 0;
+        byte invisible = 0;
+        byte nobaseplate = 0;
+        byte nogravity = 0;
+        byte showarms = 0;
+        byte small = 0;
+        byte elder = 0;
+        byte bred = 0;
+        byte chestedhorse = 0;
+        byte eatinghaystack = 0;
+        byte hasreproduced = 0;
+        byte tame = 0;
+        byte facing = 0;
 
         Entity riding = null;
 
-        Float absorptionamount = null;
-        Float healf = null;
-        Float itemdropchance = null;
+        float absorptionamount = 0;
+        float healf = 0;
+        float itemdropchance = 0;
 
-        Integer dimension = null;
-        Integer portalcooldown = null;
-        Integer tilex = null;
-        Integer tiley = null;
-        Integer tilez = null;
-        Integer inlove = null;
-        Integer transfercooldown = null;
-        Integer tntfuse = null;
-        Integer forcedage = null;
-        Integer hurtbytimestamp = null;
-        Integer morecarrotsticks = null;
-        Integer rabbittype = null;
-        Integer disabledslots = null;
-        Integer temper = null;
-        Integer type = null;
-        Integer variant = null;
+        int dimension = 0;
+        int portalcooldown = 0;
+        int tilex = 0;
+        int tiley = 0;
+        int tilez = 0;
+        int inlove = 0;
+        int transfercooldown = 0;
+        int tntfuse = 0;
+        int forcedage = 0;
+        int hurtbytimestamp = 0;
+        int morecarrotsticks = 0;
+        int rabbittype = 0;
+        int disabledslots = 0;
+        int temper = 0;
+        int type = 0;
+        int variant = 0;
 
         Item item = null;
 
@@ -614,20 +614,20 @@ public class SchematicUtil extends AbstractSchematicUtil {
 
         Pose pose = null;
 
-        Short air = null;
-        Short attacktime = null;
-        Short deathtime = null;
-        Short health = null;
-        Short hurttime = null;
-        Short fuel = null;
+        short air = 0;
+        short attacktime = 0;
+        short deathtime = 0;
+        short health = 0;
+        short hurttime = 0;
+        short fuel = 0;
 
         String id = bukkitentity.getType().getName();
         String motive = null;
         String customname = null;
         String owneruuid = null;
 
-        Double pushx = null;
-        Double pushz = null;
+        double pushx = 0;
+        double pushz = 0;
 
         List<Float> rotation = null;
         List<Attribute> attributes = null;
@@ -1011,10 +1011,9 @@ public class SchematicUtil extends AbstractSchematicUtil {
                 hurttime, age, inlove, absorptionamount, healf, customname, attributes, dropchances,
                 itemheld, feetarmor, legarmor, chestarmor, headarmor,
                 skeletontype, riding, leash, item, isbaby, items, transfercooldown, fuel, pushx, pushz, tntfuse,
-                itemrotation, itemdropchance, agelocked, invisible, nobaseplate, nogravity, showarms, null, small,
+                itemrotation, itemdropchance, agelocked, invisible, nobaseplate, nogravity, showarms, (byte) 0, small,
                 elder, forcedage, hurtbytimestamp, morecarrotsticks, rabbittype, disabledslots, pose,
-                bred, chestedhorse, eatinghaystack, hasreproduced, tame, temper, type, variant, owneruuid,
-                facing);
+                bred, chestedhorse, eatinghaystack, hasreproduced, tame, temper, type, variant, owneruuid, facing);
     }
 
     @Override
@@ -1036,9 +1035,9 @@ public class SchematicUtil extends AbstractSchematicUtil {
                     throw new IllegalArgumentException("Schematic file is missing a \"Blocks\" tag");
                 }
 
-                short width = getChildTag(schematic, "Width", ShortTag.class, Short.class);
-                short length = getChildTag(schematic, "Length", ShortTag.class, Short.class);
-                short height = getChildTag(schematic, "Height", ShortTag.class, Short.class);
+                Short width = getChildTag(schematic, "Width", ShortTag.class, Short.class);
+                Short length = getChildTag(schematic, "Length", ShortTag.class, Short.class);
+                Short height = getChildTag(schematic, "Height", ShortTag.class, Short.class);
                 String roomauthor = getChildTag(schematic, "RoomAuthor", StringTag.class, String.class);
 
                 Integer originx = getChildTag(schematic, "WEOriginX", IntTag.class, Integer.class);
@@ -1159,7 +1158,7 @@ public class SchematicUtil extends AbstractSchematicUtil {
     }
 
     @SuppressWarnings("deprecation")
-    protected void pasteSchematicEntities(Location loc, Schematic schematic) {
+    private void pasteSchematicEntities(Location loc, Schematic schematic) {
         World world = loc.getWorld();
 
         List<Entity> entities = schematic.getEntities();
@@ -1319,7 +1318,7 @@ public class SchematicUtil extends AbstractSchematicUtil {
         }
     }
 
-    protected org.bukkit.entity.Entity createEntity(Entity e, Location loc, int originX, int originY, int originZ) {
+    private org.bukkit.entity.Entity createEntity(Entity e, Location loc, int originX, int originY, int originZ) {
         try {
             @SuppressWarnings("deprecation")
             EntityType entitytype = EntityType.fromName(e.getId());
@@ -1621,15 +1620,12 @@ public class SchematicUtil extends AbstractSchematicUtil {
                     if (livingentity instanceof Skeleton && skeletontype != null) {
                         Skeleton skeleton = (Skeleton) livingentity;
 
-                        SkeletonType st = null;
+                        SkeletonType st;
 
-                        switch (skeletontype) {
-                            case 0:
-                                st = SkeletonType.NORMAL;
-                                break;
-                            default:
-                                st = SkeletonType.WITHER;
-                                break;
+                        if (skeletontype.equals(0)) {
+                            st = SkeletonType.NORMAL;
+                        } else {
+                            st = SkeletonType.WITHER;
                         }
 
                         skeleton.setSkeletonType(st);
@@ -1812,7 +1808,7 @@ public class SchematicUtil extends AbstractSchematicUtil {
         }
     }
 
-    protected Entity getEntity(CompoundTag tag) {
+    private Entity getEntity(CompoundTag tag) {
         Map<String, Tag> entity = tag.getValue();
 
         Byte dir = getChildTag(entity, "Dir", ByteTag.class, Byte.class);
@@ -1947,7 +1943,8 @@ public class SchematicUtil extends AbstractSchematicUtil {
                 bred, chestedhorse, eatinghaystack, hasreproduced, tame, temper, type, variant, owneruuid,
                 facing);
     }
-    protected Pose getPose(CompoundTag poseelement) {
+
+    private Pose getPose(CompoundTag poseelement) {
         Map<String, Tag> pose = poseelement.getValue();
         List<Float> body = convert(getChildTag(pose, "body", ListTag.class, List.class), Float.class);
         List<Float> head = convert(getChildTag(pose, "head", ListTag.class, List.class), Float.class);
@@ -1959,7 +1956,7 @@ public class SchematicUtil extends AbstractSchematicUtil {
         return new Pose(body, head, leftarm, rightarm, leftleg, rightleg);
     }
 
-    protected List<Pattern> getPatterns(Map<String, Tag> entity) {
+    private List<Pattern> getPatterns(Map<String, Tag> entity) {
         List<?> patternsList = getChildTag(entity, "Patterns", ListTag.class, List.class);
 
         if (patternsList != null) {
@@ -1977,7 +1974,7 @@ public class SchematicUtil extends AbstractSchematicUtil {
         }
     }
 
-    protected Pattern getPattern(CompoundTag patternElement) {
+    private Pattern getPattern(CompoundTag patternElement) {
         Map<String, Tag> patternmap = patternElement.getValue();
         Integer color = getChildTag(patternmap, "Color", IntTag.class, Integer.class);
         String pattern = getChildTag(patternmap, "Pattern", StringTag.class, String.class);

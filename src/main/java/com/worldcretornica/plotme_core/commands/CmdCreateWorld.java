@@ -1,11 +1,27 @@
 package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.api.ICommandSender;
 
 public class CmdCreateWorld extends PlotCommand {
 
     public CmdCreateWorld(PlotMe_Core instance) {
         super(instance);
+    }
+
+    @Override
+    public String getName() {
+        return "createworld";
+    }
+
+    @Override
+    public boolean execute(ICommandSender sender, String[] args) {
+        return false;
+    }
+
+    @Override
+    public String getUsage() {
+        return null;
     }
 /*
 

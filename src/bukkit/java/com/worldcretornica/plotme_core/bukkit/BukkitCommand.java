@@ -3,7 +3,7 @@ package com.worldcretornica.plotme_core.bukkit;
 import com.worldcretornica.plotme_core.api.CommandExBase;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitCommandSender;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
-import com.worldcretornica.plotme_core.commands.CommandBase;
+import com.worldcretornica.plotme_core.commands.PlotCommand;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -29,7 +29,7 @@ public class BukkitCommand extends CommandExBase implements CommandExecutor {
             if (args.length == 0) {
                 return commandMap.get("help").execute(plugin.wrapPlayer((Player) sender), args);
             }
-            CommandBase _command = commandMap.get(args[0]);
+            PlotCommand _command = commandMap.get(args[0]);
             if (_command == null) {
                 sender.sendMessage("PlotMe does not have a command by that name.");
                 return true;
@@ -43,19 +43,15 @@ public class BukkitCommand extends CommandExBase implements CommandExecutor {
 
     private boolean handleConsoleCommands(CommandSender sender, String[] args) {
         if (args.length == 0) {
-            sender.sendMessage(C("ConsoleHelpMain"));
-            sender.sendMessage("- /plotme reload");
-            sender.sendMessage(C("ConsoleHelpReload"));
-            return true;
-        }
-        if ("reload".equalsIgnoreCase(args[0])) {
-            CommandBase command = commandMap.get("reload");
+            PlotCommand command = commandMap.get("reload");
             if (command != null) {
                 return command.execute(new BukkitCommandSender(sender), args);
             }
+        } else {
+            sender.sendMessage("You can only reload plotme from the console.");
         }
-        if ("resetexpired".equalsIgnoreCase(args[0])) {
-            CommandBase command = commandMap.get("resetexpired");
+        if ("reload".equalsIgnoreCase(args[0])) {
+            PlotCommand command = commandMap.get("reload");
             if (command != null) {
                 return command.execute(new BukkitCommandSender(sender), args);
             }

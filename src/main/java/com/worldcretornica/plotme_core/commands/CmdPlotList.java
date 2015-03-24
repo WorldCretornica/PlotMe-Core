@@ -9,7 +9,7 @@ import com.worldcretornica.plotme_core.api.IWorld;
 
 import java.util.UUID;
 
-public class CmdPlotList extends PlotCommand implements CommandBase {
+public class CmdPlotList extends PlotCommand {
 
     public CmdPlotList(PlotMe_Core instance) {
         super(instance);
@@ -26,7 +26,7 @@ public class CmdPlotList extends PlotCommand implements CommandBase {
                 String name;
                 UUID uuid;
 
-                if (player.hasPermission(PermissionNames.ADMIN_LIST) && args.length == 2) {
+                if (args.length == 2) {
                     name = args[1];
                     uuid = null;
                     player.sendMessage(C("MsgListOfPlotsWhere") + " " + name + " " + C("MsgCanBuild"));
@@ -50,7 +50,7 @@ public class CmdPlotList extends PlotCommand implements CommandBase {
                     // Display worlds
                     if (!oldWorld.equalsIgnoreCase(plot.getWorld())) {
                         oldWorld = plot.getWorld();
-                        player.sendMessage("  World: " + plot.getWorld());
+                        player.sendMessage("World: " + plot.getWorld());
                     }
 
                     //                    // Is it expired?
@@ -66,7 +66,7 @@ public class CmdPlotList extends PlotCommand implements CommandBase {
 
                     // Is it for sale?
                     if (plot.isForSale()) {
-                        addition.append(" " + C("WordSell") + ": " + Math.round(plot.getPrice()));
+                        addition.append(C("WordSell") + ": " + Math.round(plot.getPrice()));
                     }
 
                     // Is the plot owner the name?
@@ -74,17 +74,15 @@ public class CmdPlotList extends PlotCommand implements CommandBase {
                         if (plot.allowed().size() == 0) {
                             // Is the name the current player too?
                             if (name.equalsIgnoreCase(player.getName())) {
-                                player.sendMessage("  " + plot.getId() + " -> " + C("WordYours") + addition);
+                                player.sendMessage(plot.getId() + " -> " + C("WordYours") + addition);
                             } else {
-                                player.sendMessage("  " + plot.getId() + " -> " + plot.getOwner() + addition);
+                                player.sendMessage(plot.getId() + " -> " + plot.getOwner() + addition);
                             }
                         } else if (plot.getOwner().equalsIgnoreCase(player.getName())) {
-                            player.sendMessage(
-                                    "  " + plot.getId() + " -> " + C("WordYours") + addition + ", " + C("WordHelpers") + ": " + plot
+                            player.sendMessage(plot.getId() + " -> " + C("WordYours") + addition + ", " + C("WordHelpers") + ": " + plot
                                             .getAllowed().replace(",", ","));
                         } else {
-                            player.sendMessage(
-                                    "  " + plot.getId() + " -> " + plot.getOwner() + addition + ", " + C("WordHelpers") + ": " + plot
+                            player.sendMessage(plot.getId() + " -> " + plot.getOwner() + addition + ", " + C("WordHelpers") + ": " + plot
                                             .getAllowed().replace(",", ","));
                         }
 
@@ -107,11 +105,9 @@ public class CmdPlotList extends PlotCommand implements CommandBase {
                         }
 
                         if (plot.getOwner().equalsIgnoreCase(player.getName())) {
-                            player.sendMessage(
-                                    "  " + plot.getId() + " -> " + C("WordYours") + addition + ", " + C("WordHelpers") + ": " + helpers);
+                            player.sendMessage(plot.getId() + " -> " + C("WordYours") + addition + ", " + C("WordHelpers") + ": " + helpers);
                         } else {
-                            player.sendMessage(
-                                    "  " + plot.getId() + " -> " + plot.getOwner() + C("WordPossessive") + addition + ", " + C("WordHelpers")
+                            player.sendMessage(plot.getId() + " -> " + plot.getOwner() + C("WordPossessive") + addition + ", " + C("WordHelpers")
                                             + ": " + helpers);
                         }
                     }
@@ -127,6 +123,6 @@ public class CmdPlotList extends PlotCommand implements CommandBase {
 
     @Override
     public String getUsage() {
-        return null;
+        return C("WordUsage") + ": /plotme list <" + C("WordPlayer") + ">";
     }
 }

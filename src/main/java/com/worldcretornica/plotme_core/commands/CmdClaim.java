@@ -14,7 +14,7 @@ import net.milkbowl.vault.economy.EconomyResponse;
 
 import java.util.UUID;
 
-public class CmdClaim extends PlotCommand implements CommandBase {
+public class CmdClaim extends PlotCommand {
 
     public CmdClaim(PlotMe_Core instance) {
         super(instance);
@@ -91,25 +91,21 @@ public class CmdClaim extends PlotCommand implements CommandBase {
                         Plot plot = manager.createPlot(world, id, playerName, playerUniqueId, pmi);
 
                         //plugin.getPlotMeCoreManager().adjustLinkedPlots(id, world);
-                        if (plot == null) {
-                            player.sendMessage(C("ErrCreatingPlotAt") + " " + id);
+                        if (playerName.equalsIgnoreCase(player.getName())) {
+                            player.sendMessage(
+                                    C("MsgThisPlotYours") + " " + C("WordUse") + " /plotme home " + C("MsgToGetToIt") + " " + plugin.moneyFormat
+                                            (-price, true));
                         } else {
-                            if (playerName.equalsIgnoreCase(player.getName())) {
-                                player.sendMessage(
-                                        C("MsgThisPlotYours") + " " + C("WordUse") + " /plotme home " + C("MsgToGetToIt") + " " + plugin.moneyFormat
-                                                (-price, true));
-                            } else {
-                                player.sendMessage(C("MsgThisPlotIsNow") + " " + playerName + C("WordPossessive") + ". " + C("WordUse")
-                                        + " /plotme home " + C("MsgToGetToIt") + " " + plugin.moneyFormat(-price, true));
-                            }
+                            player.sendMessage(C("MsgThisPlotIsNow") + " " + playerName + C("WordPossessive") + ". " + C("WordUse")
+                                    + " /plotme home " + C("MsgToGetToIt") + " " + plugin.moneyFormat(-price, true));
+                        }
 
-                            if (isAdvancedLogging()) {
-                                if (price == 0) {
-                                    serverBridge.getLogger().info(playerName + " " + C("MsgClaimedPlot") + " " + id);
-                                } else {
-                                    serverBridge.getLogger()
-                                            .info(playerName + " " + C("MsgClaimedPlot") + " " + id + (" " + C("WordFor") + " " + price));
-                                }
+                        if (isAdvancedLogging()) {
+                            if (price == 0) {
+                                serverBridge.getLogger().info(playerName + " " + C("MsgClaimedPlot") + " " + id);
+                            } else {
+                                serverBridge.getLogger()
+                                        .info(playerName + " " + C("MsgClaimedPlot") + " " + id + (" " + C("WordFor") + " " + price));
                             }
                         }
                     }
@@ -125,7 +121,7 @@ public class CmdClaim extends PlotCommand implements CommandBase {
 
     @Override
     public String getUsage() {
-        return null;
+        return C("WordUsage") + ": /plotme claim";
     }
 
 }

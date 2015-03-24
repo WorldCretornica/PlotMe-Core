@@ -2,8 +2,12 @@ package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IServerBridge;
+
+import java.util.Collections;
+import java.util.List;
 
 public abstract class PlotCommand {
 
@@ -49,7 +53,17 @@ public abstract class PlotCommand {
         return plugin.C(caption);
     }
 
+    public abstract String getName();
+
+    public abstract boolean execute(ICommandSender sender, String[] args);
+
+    public abstract String getUsage();
+
     protected boolean isAdvancedLogging() {
         return plugin.getConfig().getBoolean("AdvancedLogging");
+    }
+
+    public List getAliases() {
+        return Collections.emptyList();
     }
 }

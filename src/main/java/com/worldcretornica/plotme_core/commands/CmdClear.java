@@ -12,7 +12,7 @@ import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotClearEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
 
-public class CmdClear extends PlotCommand implements CommandBase {
+public class CmdClear extends PlotCommand {
 
     public CmdClear(PlotMe_Core instance) {
         super(instance);
@@ -35,7 +35,7 @@ public class CmdClear extends PlotCommand implements CommandBase {
                 } else if (!manager.isPlotAvailable(id, pmi)) {
                     Plot plot = manager.getPlotById(id, pmi);
 
-                    if (plot.isProtect()) {
+                    if (plot.isProtected()) {
                         player.sendMessage(C("MsgPlotProtectedCannotClear"));
                     } else {
                         String playerName = player.getName();
@@ -104,6 +104,6 @@ public class CmdClear extends PlotCommand implements CommandBase {
 
     @Override
     public String getUsage() {
-        return null;
+        return C("WordUsage") + ": /plotme clear";
     }
 }

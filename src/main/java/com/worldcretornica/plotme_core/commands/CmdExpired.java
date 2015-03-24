@@ -9,7 +9,7 @@ import com.worldcretornica.plotme_core.api.IWorld;
 
 import java.util.List;
 
-public class CmdExpired extends PlotCommand implements CommandBase {
+public class CmdExpired extends PlotCommand {
 
     public CmdExpired(PlotMe_Core instance) {
         super(instance);
@@ -59,6 +59,6 @@ public class CmdExpired extends PlotCommand implements CommandBase {
 
     @Override
     public String getUsage() {
-        return null;
+        return C("WordUsage") + ": /plotme expired";
     }
 }

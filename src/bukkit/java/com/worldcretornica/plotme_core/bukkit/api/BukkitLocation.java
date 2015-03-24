@@ -5,7 +5,7 @@ import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IWorld;
 import org.bukkit.Location;
 
-public class BukkitLocation implements ILocation, Cloneable {
+public class BukkitLocation implements ILocation {
 
     private final Location location;
 
@@ -85,10 +85,5 @@ public class BukkitLocation implements ILocation, Cloneable {
     @Override
     public ILocation subtract(double x, double y, double z) {
         return new BukkitLocation(location.subtract(x, y, z));
-    }
-
-    @Override
-    public ILocation clone() {
-        return new BukkitLocation(location.clone());
     }
 }

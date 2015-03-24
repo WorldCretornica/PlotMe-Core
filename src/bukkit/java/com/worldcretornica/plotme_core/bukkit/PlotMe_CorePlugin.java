@@ -38,8 +38,8 @@ public class PlotMe_CorePlugin extends JavaPlugin {
             getPluginLoader().disablePlugin(this);
             return;
         }
-        AbstractSchematicUtil schematicutil = new SchematicUtil(this);
-        plotme = new PlotMe_Core(serverObjectBuilder, schematicutil);
+
+        plotme = new PlotMe_Core(serverObjectBuilder, new SchematicUtil(this));
         getAPI().enable();
         doMetric();
     }

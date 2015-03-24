@@ -7,7 +7,7 @@ import com.worldcretornica.plotme_core.api.IPlayer;
 
 import java.util.List;
 
-public class CmdBiomes extends PlotCommand implements CommandBase {
+public class CmdBiomes extends PlotCommand {
 
     public CmdBiomes(PlotMe_Core instance) {
         super(instance);
@@ -48,7 +48,7 @@ public class CmdBiomes extends PlotCommand implements CommandBase {
 
     @Override
     public String getUsage() {
-        return null;
+        return C("WordUsage") + ": /plotme biomes";
     }
 
 }

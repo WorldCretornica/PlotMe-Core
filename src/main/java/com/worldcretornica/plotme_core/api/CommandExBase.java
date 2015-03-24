@@ -30,14 +30,14 @@ import com.worldcretornica.plotme_core.commands.CmdShowHelp;
 import com.worldcretornica.plotme_core.commands.CmdTP;
 import com.worldcretornica.plotme_core.commands.CmdUndeny;
 import com.worldcretornica.plotme_core.commands.CmdWEAnywhere;
-import com.worldcretornica.plotme_core.commands.CommandBase;
+import com.worldcretornica.plotme_core.commands.PlotCommand;
 
 import java.util.HashMap;
 
 public class CommandExBase {
 
-    protected final HashMap<String, CommandBase> commandMap = new HashMap<>();
-    protected PlotMe_Core api;
+    protected final HashMap<String, PlotCommand> commandMap = new HashMap<>();
+    protected final PlotMe_Core api;
 
     public CommandExBase(PlotMe_Core api) {
         this.api = api;
@@ -72,7 +72,7 @@ public class CommandExBase {
         registerCommand(new CmdWEAnywhere(api));
     }
 
-    protected void registerCommand(CommandBase cmd) {
+    private void registerCommand(PlotCommand cmd) {
         if (cmd.getName().equalsIgnoreCase("home")) {
             commandMap.put("h", cmd);
         }

@@ -11,7 +11,7 @@ import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotProtectChangeEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
 
-public class CmdProtect extends PlotCommand implements CommandBase {
+public class CmdProtect extends PlotCommand {
 
     public CmdProtect(PlotMe_Core instance) {
         super(instance);
@@ -40,7 +40,7 @@ public class CmdProtect extends PlotCommand implements CommandBase {
                     if (player.getUniqueId().equals(plot.getOwnerId()) || player.hasPermission(PermissionNames.ADMIN_PROTECT)) {
                         InternalPlotProtectChangeEvent event;
 
-                        if (plot.isProtect()) {
+                        if (plot.isProtected()) {
                             event = serverBridge.getEventFactory().callPlotProtectChangeEvent(world, plot, player, false);
 
                             if (!event.isCancelled()) {
@@ -117,6 +117,6 @@ public class CmdProtect extends PlotCommand implements CommandBase {
 
     @Override
     public String getUsage() {
-        return null;
+        return C("WordUsage") + ": /plotme protect";
     }
 }

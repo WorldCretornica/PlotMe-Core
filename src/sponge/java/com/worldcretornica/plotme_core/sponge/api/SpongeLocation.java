@@ -83,11 +83,6 @@ public class SpongeLocation implements ILocation {
         return new SpongeLocation(location.add(-x, -y, -z));
     }
 
-    @Override
-    public ILocation clone() {
-        return this; //not sure on this
-    }
-
     public Location getLocation() {
         return location;
     }

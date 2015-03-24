@@ -11,9 +11,11 @@ import com.worldcretornica.plotme_core.api.event.InternalPlotTeleportHomeEvent;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitLocation;
 import net.milkbowl.vault.economy.EconomyResponse;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 
-public class CmdHome extends PlotCommand implements CommandBase {
+public class CmdHome extends PlotCommand {
 
     public CmdHome(PlotMe_Core instance) {
         super(instance);
@@ -21,6 +23,11 @@ public class CmdHome extends PlotCommand implements CommandBase {
 
     public String getName() {
         return "home";
+    }
+
+    @Override
+    public List getAliases() {
+        return Collections.singletonList("h");
     }
 
     public boolean execute(ICommandSender sender, String[] args) {
@@ -195,6 +202,10 @@ public class CmdHome extends PlotCommand implements CommandBase {
 
     @Override
     public String getUsage() {
-        return null;
+        if (plugin.getConfig().getBoolean("allowWorldTeleport")) {
+            return C("WordUsage") + ": /plotme home <number/name> <" + C("WordPlayer") + "> [" + C("WordWorld") + "]";
+        } else {
+            return C("WordUsage") + ": /plotme home <number> <" + C("WordPlayer") + ">";
+        }
     }
 }

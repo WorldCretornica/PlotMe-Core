@@ -12,7 +12,7 @@ import com.worldcretornica.plotme_core.api.event.InternalPlotAddAllowedEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
 
 //TODO DOES NOT WORK. CODE NEEDS TO BE MODIFIED FOR TRUST
-public class CmdTrust extends PlotCommand implements CommandBase {
+public class CmdTrust extends PlotCommand {
 
     public CmdTrust(PlotMe_Core instance) {
         super(instance);
@@ -111,7 +111,7 @@ public class CmdTrust extends PlotCommand implements CommandBase {
 
     @Override
     public String getUsage() {
-        return C("WordUsage") + " /plotme trust <" + C("WordPlayer") + ">";
+        return C("WordUsage") + ": /plotme trust <" + C("WordPlayer") + ">";
     }
 
 }

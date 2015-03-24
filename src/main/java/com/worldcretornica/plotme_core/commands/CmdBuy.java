@@ -11,7 +11,7 @@ import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotBuyEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
 
-public class CmdBuy extends PlotCommand implements CommandBase {
+public class CmdBuy extends PlotCommand {
 
     public CmdBuy(PlotMe_Core instance) {
         super(instance);
@@ -128,7 +128,7 @@ public class CmdBuy extends PlotCommand implements CommandBase {
 
     @Override
     public String getUsage() {
-        return null;
+        return C("WordUsage") + ": /plotme buy";
     }
 
 }

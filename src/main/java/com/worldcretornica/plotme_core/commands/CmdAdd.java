@@ -11,7 +11,10 @@ import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotAddAllowedEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
 
-public class CmdAdd extends PlotCommand implements CommandBase {
+import java.util.Collections;
+import java.util.List;
+
+public class CmdAdd extends PlotCommand {
 
     public CmdAdd(PlotMe_Core instance) {
         super(instance);
@@ -115,8 +118,13 @@ public class CmdAdd extends PlotCommand implements CommandBase {
     }
 
     @Override
+    public List getAliases() {
+        return Collections.singletonList("+");
+    }
+
+    @Override
     public String getUsage() {
-        return C("WordUsage") + " /plotme add <" + C("WordPlayer") + ">";
+        return C("WordUsage") + ": /plotme add <" + C("WordPlayer") + ">";
     }
 
 }

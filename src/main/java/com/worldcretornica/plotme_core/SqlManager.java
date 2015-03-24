@@ -297,7 +297,7 @@ public class SqlManager {
             ps.setDouble(12, plot.getPrice());
             ps.setBoolean(13, plot.isForSale());
             ps.setString(14, plot.getFinishedDate());
-            ps.setBoolean(15, plot.isProtect());
+            ps.setBoolean(15, plot.isProtected());
             //ps.setBytes(20, UUIDFetcher.toBytes(plot.getOwnerId()));
 
             ps.executeUpdate();

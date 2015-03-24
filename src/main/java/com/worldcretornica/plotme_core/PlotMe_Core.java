@@ -61,9 +61,6 @@ public class PlotMe_Core {
         setupSQL();
         serverBridge.setupHooks();
         serverBridge.setupListeners();
-        if (getConfig().getBoolean("setupDatabase")) {
-
-        }
         getSqlManager().startConnection();
         getSqlManager().createTables();
         if (getConfig().getBoolean("coreDatabaseUpdate")) {

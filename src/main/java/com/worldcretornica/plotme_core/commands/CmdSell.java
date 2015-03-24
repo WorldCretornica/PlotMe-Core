@@ -10,7 +10,7 @@ import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotSellChangeEvent;
 
-public class CmdSell extends PlotCommand implements CommandBase {
+public class CmdSell extends PlotCommand {
 
     public CmdSell(PlotMe_Core instance) {
         super(instance);
@@ -122,6 +122,6 @@ public class CmdSell extends PlotCommand implements CommandBase {
 
     @Override
     public String getUsage() {
-        return null;
+        return C("WordUsage") + ": /plotme sell [" + C("WordAmount") + "]";
     }
 }

@@ -11,7 +11,7 @@ import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotBiomeChangeEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
 
-public class CmdBiome extends PlotCommand implements CommandBase {
+public class CmdBiome extends PlotCommand {
 
     public CmdBiome(PlotMe_Core instance) {
         super(instance);
@@ -112,7 +112,7 @@ public class CmdBiome extends PlotCommand implements CommandBase {
 
     @Override
     public String getUsage() {
-        return null;
+        return C("WordUsage") + ": /plotme biome <" + C("WordBiome") + ">";
     }
 
 }

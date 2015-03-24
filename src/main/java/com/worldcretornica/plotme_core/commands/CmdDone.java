@@ -8,7 +8,7 @@ import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.event.InternalPlotDoneChangeEvent;
 
-public class CmdDone extends PlotCommand implements CommandBase {
+public class CmdDone extends PlotCommand {
 
     public CmdDone(PlotMe_Core instance) {
         super(instance);
@@ -70,6 +70,6 @@ public class CmdDone extends PlotCommand implements CommandBase {
 
     @Override
     public String getUsage() {
-        return null;
+        return C("WordUsage") + ": /plotme done";
     }
 }

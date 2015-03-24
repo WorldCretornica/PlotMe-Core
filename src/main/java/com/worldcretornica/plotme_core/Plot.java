@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class Plot implements Cloneable {
+public class Plot {
 
     //TODO look into removing reference to plugin
 
@@ -319,7 +319,7 @@ public class Plot implements Cloneable {
         this.finishedDate = finishedDate;
     }
 
-    public final boolean isProtect() {
+    public final boolean isProtected() {
         return protect;
     }
 
@@ -341,11 +341,6 @@ public class Plot implements Cloneable {
 
     public Map<String, Map<String, String>> getAllPlotProperties() {
         return metadata;
-    }
-
-    @Override
-    protected Plot clone() throws CloneNotSupportedException {
-        return (Plot) super.clone();
     }
 
     public int getInternalID() {

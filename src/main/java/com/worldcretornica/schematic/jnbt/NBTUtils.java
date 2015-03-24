@@ -38,7 +38,7 @@ package com.worldcretornica.schematic.jnbt;
  * @author Graham Edgecombe
  *
  */
-public final class NBTUtils {
+final class NBTUtils {
 
     /**
      * Default private constructor.

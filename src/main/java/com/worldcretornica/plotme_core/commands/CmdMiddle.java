@@ -10,7 +10,10 @@ import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotTeleportMiddleEvent;
 
-public class CmdMiddle extends PlotCommand implements CommandBase {
+import java.util.Arrays;
+import java.util.List;
+
+public class CmdMiddle extends PlotCommand {
 
     public CmdMiddle(PlotMe_Core instance) {
         super(instance);
@@ -18,6 +21,11 @@ public class CmdMiddle extends PlotCommand implements CommandBase {
 
     public String getName() {
         return "middle";
+    }
+
+    @Override
+    public List getAliases() {
+        return Arrays.asList("center", "mid");
     }
 
     public boolean execute(ICommandSender sender, String[] args) {

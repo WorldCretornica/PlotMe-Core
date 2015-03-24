@@ -11,7 +11,7 @@ import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotDisposeEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
 
-public class CmdDispose extends PlotCommand implements CommandBase {
+public class CmdDispose extends PlotCommand {
 
     public CmdDispose(PlotMe_Core instance) {
         super(instance);
@@ -34,7 +34,7 @@ public class CmdDispose extends PlotCommand implements CommandBase {
                 } else if (!manager.isPlotAvailable(id, pmi)) {
                     Plot plot = manager.getPlotById(id, pmi);
 
-                    if (plot.isProtect()) {
+                    if (plot.isProtected()) {
                         player.sendMessage(C("MsgPlotProtectedNotDisposed"));
                     } else {
                         String name = player.getName();
@@ -101,6 +101,6 @@ public class CmdDispose extends PlotCommand implements CommandBase {
 
     @Override
     public String getUsage() {
-        return C("WordUsage") + " /plotme dispose";
+        return C("WordUsage") + ": /plotme dispose";
     }
 }

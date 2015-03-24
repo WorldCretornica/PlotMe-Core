@@ -100,7 +100,6 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
         //        int retries = 0;
 
         for (int i = 0; i < requests; i++) {
-
             List<String> missinguuid = new ArrayList<>();
 
             //First step, get people that didn't change name

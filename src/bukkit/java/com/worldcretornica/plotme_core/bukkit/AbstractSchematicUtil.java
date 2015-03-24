@@ -15,7 +15,7 @@ import java.util.Map;
 public abstract class AbstractSchematicUtil {
 
     // List of blocks that should be placed last in world generation
-    public final Collection<Integer> blockPlacedLast = new HashSet<>();
+    final Collection<Integer> blockPlacedLast = new HashSet<>();
 
     public abstract void pasteSchematic(Location loc, Schematic schem);
 
@@ -27,7 +27,7 @@ public abstract class AbstractSchematicUtil {
 
     public abstract Schematic loadCompiledSchematic(String name);
 
-    protected <T extends Tag, K> K getChildTag(Map<String, Tag> items, String key, Class<T> expected, Class<K> result) {
+    <T extends Tag, K> K getChildTag(Map<String, Tag> items, String key, Class<T> expected, Class<K> result) {
         if (!items.containsKey(key)) {
             return null;
         }
@@ -43,7 +43,7 @@ public abstract class AbstractSchematicUtil {
         return result.cast(obj);
     }
 
-    protected <T extends Tag> T getChildTag(Map<String, Tag> items, String key, Class<T> expected) {
+    <T extends Tag> T getChildTag(Map<String, Tag> items, String key, Class<T> expected) {
         if (!items.containsKey(key)) {
             return null;
         }
@@ -71,7 +71,7 @@ public abstract class AbstractSchematicUtil {
         }
     }
 
-    protected <T> List<T> convert(List<?> tagList, Class<T> expected) {
+    <T> List<T> convert(List<?> tagList, Class<T> expected) {
         if (tagList != null) {
             List<T> newlist = new ArrayList<>();
             for (Object tag : tagList) {

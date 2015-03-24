@@ -7,7 +7,7 @@ import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 
-public class CmdAddTime extends PlotCommand implements CommandBase {
+public class CmdAddTime extends PlotCommand {
 
     public CmdAddTime(PlotMe_Core instance) {
         super(instance);
@@ -59,7 +59,7 @@ public class CmdAddTime extends PlotCommand implements CommandBase {
 
     @Override
     public String getUsage() {
-        return C("WordUsage") + " /plotme addtime";
+        return C("WordUsage") + ": /plotme addtime";
     }
 
 }

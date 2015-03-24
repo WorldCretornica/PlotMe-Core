@@ -10,7 +10,7 @@ import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotCreateEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
 
-public class CmdAuto extends PlotCommand implements CommandBase {
+public class CmdAuto extends PlotCommand {
 
     public CmdAuto(PlotMe_Core instance) {
         super(instance);
@@ -136,7 +136,7 @@ public class CmdAuto extends PlotCommand implements CommandBase {
 
     @Override
     public String getUsage() {
-        return null;
+        return C("WordUsage") + ": /plotme auto";
     }
 
 }

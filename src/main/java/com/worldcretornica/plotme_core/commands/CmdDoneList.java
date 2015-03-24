@@ -8,7 +8,7 @@ import com.worldcretornica.plotme_core.api.IPlayer;
 
 import java.util.List;
 
-public class CmdDoneList extends PlotCommand implements CommandBase {
+public class CmdDoneList extends PlotCommand {
 
     public CmdDoneList(PlotMe_Core instance) {
         super(instance);
@@ -60,6 +60,6 @@ public class CmdDoneList extends PlotCommand implements CommandBase {
 
     @Override
     public String getUsage() {
-        return null;
+        return C("WordUsage") + ": /plotme donelist";
     }
 }

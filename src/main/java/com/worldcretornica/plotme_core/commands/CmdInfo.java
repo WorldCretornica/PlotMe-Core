@@ -8,10 +8,18 @@ import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 
-public class CmdInfo extends PlotCommand implements CommandBase {
+import java.util.Collections;
+import java.util.List;
+
+public class CmdInfo extends PlotCommand {
 
     public CmdInfo(PlotMe_Core instance) {
         super(instance);
+    }
+
+    @Override
+    public List getAliases() {
+        return Collections.singletonList("i");
     }
 
     public String getName() {
@@ -38,7 +46,7 @@ public class CmdInfo extends PlotCommand implements CommandBase {
 
                     if (plot.getExpiredDate() == null) {
                         if (plot.isFinished()) {
-                            if (plot.isProtect()) {
+                            if (plot.isProtected()) {
                                 player.sendMessage(C("InfoExpire") + ": " + C("WordNever")
                                         + " " + C("InfoFinished") + ": " + C("WordYes")
                                         + " " + C("InfoProtected") + ": " + C("WordYes"));
@@ -47,7 +55,7 @@ public class CmdInfo extends PlotCommand implements CommandBase {
                                         + " " + C("InfoFinished") + ": " + C("WordYes")
                                         + " " + C("InfoProtected") + ": " + C("WordNo"));
                             }
-                        } else if (plot.isProtect()) {
+                        } else if (plot.isProtected()) {
                             player.sendMessage(C("InfoExpire") + ": " + C("WordNever")
                                     + " " + C("InfoFinished") + ": " + C("WordNo")
                                     + " " + C("InfoProtected") + ": " + C("WordYes"));
@@ -56,7 +64,7 @@ public class CmdInfo extends PlotCommand implements CommandBase {
                                     + " " + C("InfoFinished") + ": " + C("WordNo")
                                     + " " + C("InfoProtected") + ": " + C("WordNo"));
                         }
-                    } else if (plot.isProtect()) {
+                    } else if (plot.isProtected()) {
                         if (plot.isFinished()) {
                             player.sendMessage(C("InfoExpire") + ": " + plot.getExpiredDate()
                                     + " " + C("InfoFinished") + ": " + C("WordYes")
@@ -96,8 +104,8 @@ public class CmdInfo extends PlotCommand implements CommandBase {
                     int topX = manager.topX(id, world);
                     int topZ = manager.topZ(id, world);
 
-                    player.sendMessage(C("WordBottom") + ": " + bottomX + "§9," + bottomZ);
-                    player.sendMessage(C("WordTop") + ": " + topX + "§9," + topZ);
+                    player.sendMessage(C("WordBottom") + ": " + bottomX + "," + bottomZ);
+                    player.sendMessage(C("WordTop") + ": " + topX + "," + topZ);
 
                 } else {
                     player.sendMessage(C("MsgThisPlot") + " (" + id + ") " + C("MsgHasNoOwner"));

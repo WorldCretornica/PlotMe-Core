@@ -216,7 +216,6 @@ public class BukkitServerBridge extends IServerBridge {
     }
 
     @Override
-
     public IOfflinePlayer getOfflinePlayer(String player) {
         @SuppressWarnings("deprecation")
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(player);
