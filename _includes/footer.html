@@ -1,0 +1,55 @@
+<div id="footer_wrap" class="outer">
+    <footer class="inner">
+        <div id="nav" class="quicknav">
+            <div align="left" class="quicknav_wrapper">
+                <ul>
+                    <li><a href="#"><b>Quick Nav</b></a>
+                        <ul>
+                            <li><a href="index.html">Home</a></li>
+                            <li><a href="plotme.html">What is PlotMe</a></li>
+                            <li><a href="team.html">Contributors</a></li>
+                            <li><a href="https://github.com/WorldCretornica/PlotMe-Core/issues/new" target="_blank">Open
+                                an
+                                issue</a>
+                            </li>
+                            <li><a href="https://github.com/WorldCretornica/PlotMe-Core/issues/" target="_blank">View
+                                issues</a>
+                            </li>
+                            <li><a href="irc.html">IRC</a></li>
+                            <li><a href="cp.html">Commands and Permissions</a></li>
+                            <li><a href="core-config.html">PlotMe Core</a></li>
+                            <li><a href="defgen-config.html">Default Generator</a></li>
+                            <li><a href="setup.html">Setup</a></li>
+                            <li><a href="upgrading.html">Upgrading</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <p class="copyright">PlotMe maintained by <a href="https://github.com/WorldCretornica">WorldCretornica</a></p>
+
+        <p>Download PlotMe <a href="http://spigotmc.org/resources/plotme-official.2131/">here</a></p>
+    </footer>
+    <a href="#" class="back-to-top" style="display: none;text-decoration:none;">Top</a>
+    <script>
+        jQuery(document).ready(function () {
+            var offset = 220;
+            var duration = 500;
+            jQuery(window).scroll(function () {
+                if (jQuery(this).scrollTop() > offset) {
+                    jQuery('.back-to-top').fadeIn(duration);
+                } else {
+                    jQuery('.back-to-top').fadeOut(duration);
+                }
+            });
+
+            jQuery('.back-to-top').click(function (event) {
+                event.preventDefault();
+                jQuery('html, body').animate({scrollTop: 0}, duration);
+                return false;
+            })
+        });
+    </script>
+</div>
+</body>
+</html>
