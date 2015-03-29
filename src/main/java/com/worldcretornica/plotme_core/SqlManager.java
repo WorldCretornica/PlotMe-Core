@@ -302,14 +302,6 @@ public class SqlManager {
             ps.executeUpdate();
             conn.commit();
 
-            PlayerList allowedlist = plot.allowed();
-            if (allowedlist != null && allowedlist.getAllPlayers() != null) {
-                List<String> allowed = allowedlist.getAllPlayers();
-                for (String key : allowed) {
-                    addPlotAllowed(key, id, plot.getWorld());
-                }
-            }
-
             PlayerList deniedlist = plot.denied();
             if (deniedlist != null && deniedlist.getAllPlayers() != null) {
                 List<String> denied = deniedlist.getAllPlayers();
