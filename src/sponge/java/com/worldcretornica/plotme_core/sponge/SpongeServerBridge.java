@@ -183,8 +183,7 @@ public class SpongeServerBridge extends IServerBridge {
 
     @Override
     public File getDataFolder() {
-        // TODO Auto-generated method stub
-        return null;
+        return new File("config", "PlotMe");
     }
 
     @Override

@@ -230,7 +230,7 @@ public class BukkitServerBridge extends IServerBridge {
 
     @Override
     public File getDataFolder() {
-        return plugin.getDataFolder();
+        return new File("plugins","PlotMe");
     }
 
     @Override

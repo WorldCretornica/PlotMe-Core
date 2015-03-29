@@ -53,8 +53,8 @@ public class PlotMe_Core {
 
     public void enable() {
         PlotMeCoreManager.getInstance().setPlugin(this);
-        configFile = new ConfigAccessor(getServerBridge().getDataFolder(), "config.yml");
-        captionFile = new ConfigAccessor(getServerBridge().getDataFolder(), "captions.yml");
+        configFile = new ConfigAccessor(this, getServerBridge().getDataFolder(), "config.yml");
+        captionFile = new ConfigAccessor(this, getServerBridge().getDataFolder(), "captions.yml");
         setupConfigFiles();
         serverBridge.setupCommands();
         setupSQL();
