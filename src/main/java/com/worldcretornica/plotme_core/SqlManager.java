@@ -208,8 +208,7 @@ public class SqlManager {
                         setMetadata.close();
 
 
-                        Plot plot = new Plot(plugin, owner, ownerId, world, biome, null, finished, allowed, id, customprice,
-                                forsale, finisheddate, protect, denied, metadata, 0, null);
+                        Plot plot = null;
                         addPlot(plot, id, topX, bottomX, topZ, bottomZ);
 
                         size++;
@@ -550,8 +549,7 @@ public class SqlManager {
 
                 setMetadata.close();
 
-                plot = new Plot(plugin, owner, ownerId, world, biome, null, finished, allowed,
-                        id, customPrice, forSale, finishedDate, protect, denied, metadata, 0, null);
+                plot = null;
             }
         } catch (SQLException ex) {
             plugin.getLogger().severe("Plot load Exception :");
@@ -588,151 +586,6 @@ public class SqlManager {
             }
         }
         return plot;
-    }
-
-    public void loadPlotsAsynchronously(String world) {
-        final String worldName = world;
-
-        plugin.getServerBridge().runTaskAsynchronously(new Runnable() {
-            @Override
-            public void run() {
-                plugin.getLogger().info("Starting to load plots for world " + worldName);
-
-                HashMap<PlotId, Plot> plots = getPlots(worldName);
-
-                PlotMapInfo pmi = PlotMeCoreManager.getInstance().getMap(worldName);
-
-                for (PlotId id : plots.keySet()) {
-                    pmi.addPlot(id, plots.get(id));
-                    plugin.getServerBridge().getEventFactory()
-                            .callPlotLoadedEvent(plugin.getServerBridge().getWorld(worldName), plots.get(id));
-                }
-                plugin.getServerBridge().getEventFactory().callPlotWorldLoadEvent(worldName, pmi.getNbPlots());
-            }
-        });
-    }
-
-    //Do NOT call from the main thread
-    public HashMap<PlotId, Plot> getPlots(String world) {
-        HashMap<PlotId, Plot> ret = new HashMap<>();
-        Statement statementPlot = null;
-        Statement statementAllowed = null;
-        Statement statementDenied = null;
-        Statement statementMetadata = null;
-        ResultSet setPlots = null;
-        ResultSet setAllowed = null;
-        ResultSet setDenied = null;
-        ResultSet setMetadata = null;
-
-        try {
-            Connection conn = getConnection();
-
-            statementPlot = conn.createStatement();
-            setPlots = statementPlot.executeQuery("SELECT * FROM plotmePlots WHERE LOWER(world) = '" + world + "'");
-
-            while (setPlots.next()) {
-                PlotId id = new PlotId(setPlots.getInt("idX"), setPlots.getInt("idZ"));
-                String owner = setPlots.getString("owner");
-                String biome = setPlots.getString("biome");
-                Date expiredDate = setPlots.getDate("expireddate");
-                boolean finished = setPlots.getBoolean("finished");
-                PlayerList allowed = new PlayerList();
-                PlayerList denied = new PlayerList();
-                double price = setPlots.getDouble("customprice");
-                boolean forSale = setPlots.getBoolean("forsale");
-                String finishedDate = setPlots.getString("finisheddate");
-                boolean protect = setPlots.getBoolean("protected");
-                Map<String, Map<String, String>> metadata = new HashMap<>();
-
-                byte[] byOwner = setPlots.getBytes("ownerId");
-
-                UUID ownerId = UUIDFetcher.fromBytes(byOwner);
-
-                statementAllowed = conn.createStatement();
-                setAllowed = statementAllowed.executeQuery("SELECT * FROM plotmeAllowed WHERE idX = '" + id.getX() +
-                        "' AND idZ = '" + id.getZ() + "' AND LOWER(world) = '" + world + "'");
-
-                while (setAllowed.next()) {
-                    byte[] byPlayerId = setAllowed.getBytes("playerid");
-                    if (byPlayerId == null) {
-                        allowed.put(setAllowed.getString("player"));
-                    } else {
-                        allowed.put(UUIDFetcher.fromBytes(byPlayerId).toString());
-                    }
-                }
-
-                setAllowed.close();
-
-                statementDenied = conn.createStatement();
-                setDenied = statementDenied.executeQuery("SELECT * FROM plotmeDenied WHERE idX = '" + id.getX() +
-                        "' AND idZ = '" + id.getZ() + "' AND LOWER(world) = '" + world + "'");
-
-                while (setDenied.next()) {
-                    byte[] byPlayerId = setDenied.getBytes("playerid");
-                    if (byPlayerId == null) {
-                        denied.put(setDenied.getString("player"));
-                    } else {
-                        denied.put(UUIDFetcher.fromBytes(byPlayerId).toString());
-                    }
-                }
-
-                setDenied.close();
-
-                statementMetadata = conn.createStatement();
-                setMetadata = statementMetadata.executeQuery("SELECT * FROM plotmeMetadata WHERE idX = '" + id.getX() +
-                        "' AND idZ = '" + id.getZ() + "' AND LOWER(world) = '" + world + "'");
-
-                while (setMetadata.next()) {
-                    String pluginname = setMetadata.getString("pluginname");
-                    String propertyname = setMetadata.getString("propertyname");
-                    String propertyvalue = setMetadata.getString("propertyvalue");
-                    if (!metadata.containsKey(pluginname)) {
-                        metadata.put(pluginname, new HashMap<String, String>());
-                    }
-                    metadata.get(pluginname).put(propertyname, propertyvalue);
-                }
-
-                setMetadata.close();
-
-                Plot plot = new Plot(plugin, owner, ownerId, world, biome, null, finished, allowed, id,
-                        price, forSale, finishedDate, protect, denied, metadata, 0, null);
-                ret.put(id, plot);
-            }
-        } catch (SQLException ex) {
-            plugin.getLogger().severe("Load exception :");
-            plugin.getLogger().severe(ex.getMessage());
-        } finally {
-            try {
-                if (statementPlot != null) {
-                    statementPlot.close();
-                }
-                if (statementAllowed != null) {
-                    statementAllowed.close();
-                }
-                if (statementDenied != null) {
-                    statementDenied.close();
-                }
-                if (statementMetadata != null) {
-                    statementMetadata.close();
-                }
-                if (setPlots != null) {
-                    setPlots.close();
-                }
-                if (setDenied != null) {
-                    setDenied.close();
-                }
-                if (setAllowed != null) {
-                    setAllowed.close();
-                }
-                if (setMetadata != null) {
-                    setMetadata.close();
-                }
-            } catch (SQLException ex) {
-                plugin.getLogger().severe("Load Exception (on close) :");
-                plugin.getLogger().severe(ex.getMessage());
-            }
-        }
-        return ret;
     }
 
     public int getFinishedPlotCount(String world) {
@@ -836,7 +689,7 @@ public class SqlManager {
 
                 String finisheddate = setPlots.getString("finisheddate");
 
-                Plot plot = new Plot(plugin);
+                Plot plot = null;
                 plot.setOwner(owner);
                 plot.setId(id);
                 plot.setFinishedDate(finisheddate);
@@ -891,7 +744,7 @@ public class SqlManager {
                 PlotId id = new PlotId(setPlots.getInt("idX"), setPlots.getInt("idZ"));
                 String owner = setPlots.getString("owner");
                 //Date expireddate = setPlots.getDate("expireddate");
-                Plot plot = new Plot(plugin);
+                Plot plot = null;
                 plot.setOwner(owner);
                 plot.setId(id);
                 //plot.setExpiredDate(expireddate);
@@ -941,7 +794,7 @@ public class SqlManager {
                 PlotId id = new PlotId(setPlots.getInt("idX"), setPlots.getInt("idZ"));
                 String owner = setPlots.getString("owner");
                 Date expireddate = setPlots.getDate("expireddate");
-                Plot plot = new Plot(plugin);
+                Plot plot = null;
                 plot.setOwner(owner);
                 plot.setId(id);
                 //plot.setExpiredDate(expireddate);
@@ -1130,8 +983,7 @@ public class SqlManager {
 
                 setMetadata.close();
 
-                Plot plot = new Plot(plugin, owner, ownerId, currworld, biome, null, finished, allowed,
-                        id, customprice, forsale, finisheddate, protect, denied, metadata, 0, null);
+                Plot plot = null;
 
                 ret.add(plot);
             }

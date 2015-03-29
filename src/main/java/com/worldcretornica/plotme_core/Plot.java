@@ -45,8 +45,8 @@ public class Plot {
         setProtected(false);
         setPlotName(null);
         setLikes(0);
-        allowed = new PlayerList();
-        denied = new PlayerList();
+        this.allowed = new PlayerList();
+        this.denied = new PlayerList();
     }
 
     public Plot(PlotMe_Core plugin, String owner, UUID uuid, IWorld world, PlotId plotId, int days) {
@@ -75,10 +75,39 @@ public class Plot {
         metadata = new HashMap<>();
     }
 
-    public Plot(PlotMe_Core plugin, String owner, UUID ownerId, String world, String biome, Date expiredDate, boolean finished,
-            PlayerList allowed, PlotId id, double price, boolean forSale, String finishedDate, boolean protect, PlayerList denied,
+    public Plot(PlotMe_Core plugin, int internalID, String owner, UUID ownerId, String world, String biome, Date expiredDate, PlayerList allowed,
+            PlayerList
+                    denied,
+            PlotId id, double price, boolean forSale, boolean finished,
+            String finishedDate, boolean protect,
             Map<String, Map<String, String>> metadata, int plotLikes, String plotName) {
         this.plugin = plugin;
+        setInternalID(internalID);
+        setOwner(owner);
+        setOwnerId(ownerId);
+        setWorld(world);
+        setBiome(biome);
+        setExpiredDate(expiredDate);
+        setFinished(finished);
+        this.allowed = allowed;
+        setId(id);
+        setPrice(price);
+        setForSale(forSale);
+        setFinishedDate(finishedDate);
+        setProtected(protect);
+        setLikes(plotLikes);
+        setPlotName(plotName);
+        this.denied = denied;
+        this.metadata = metadata;
+    }
+
+    public Plot(PlotMe_Core plugin, int internalID, String owner, UUID ownerId, String world, String biome, Date expiredDate, PlayerList allowed,
+            PlayerList
+                    denied,
+            PlayerList likers, PlotId id, double price, boolean forSale, boolean finished, String finishedDate, boolean protect,
+            Map<String, Map<String, String>> metadata, int plotLikes, String plotName) {
+        this.plugin = plugin;
+        setInternalID(internalID);
         setOwner(owner);
         setOwnerId(ownerId);
         setWorld(world);
