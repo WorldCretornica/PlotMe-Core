@@ -104,20 +104,6 @@ public class InternalPlotEvent {
     }
 
     /**
-     * Returns the list of people denied from building on this plot. The
-     * function returns an empty Set if the plot is null.
-     *
-     * @return list of people denied
-     */
-    public List<String> getAllDeniedUUID() {
-        if (getPlot() != null) {
-            return getPlot().denied().getAllPlayers();
-        } else {
-            return new ArrayList<>();
-        }
-    }
-
-    /**
      * Returns the location of the home of this plot. The function returns null
      * if the plot or world is null.
      *

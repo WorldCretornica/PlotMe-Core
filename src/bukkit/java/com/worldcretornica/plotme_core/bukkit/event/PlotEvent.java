@@ -11,10 +11,6 @@ import org.bukkit.World;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
 public abstract class PlotEvent extends Event {
 
     private static final HandlerList handlers = new HandlerList();
@@ -30,10 +26,6 @@ public abstract class PlotEvent extends Event {
 
     public PlotEvent(InternalPlotEvent event) {
         this.event = event;
-    }
-
-    public static HandlerList getHandlerList() {
-        return handlers;
     }
 
     /**
@@ -52,19 +44,6 @@ public abstract class PlotEvent extends Event {
      */
     public World getWorld() {
         return ((BukkitWorld) event.getWorld()).getWorld();
-    }
-
-    /**
-     * Returns the owner of the plot used in the event
-     *
-     * @return owner of the plot
-     */
-    public String getOwner() {
-        if (event.getPlot() != null) {
-            return event.getPlot().getOwner();
-        } else {
-            return "";
-        }
     }
 
     /**
@@ -90,34 +69,6 @@ public abstract class PlotEvent extends Event {
             return ((BukkitLocation) PlotMeCoreManager.getInstance().getPlotBottomLoc(event.getWorld(), event.getPlot().getId())).getLocation();
         } else {
             return null;
-        }
-    }
-
-    /**
-     * Returns the list of people allowed to build on this plot. The function
-     * returns an empty Set if the plot is null.
-     *
-     * @return list of people allowed
-     */
-    public HashMap<String, Integer> getAllAllowed() {
-        if (event.getPlot() != null) {
-            return event.getPlot().allowed();
-        } else {
-            return new HashMap<>();
-        }
-    }
-
-    /**
-     * Returns the list of people denied from building on this plot. The
-     * function returns an empty Set if the plot is null.
-     *
-     * @return list of people denied
-     */
-    public List<String> getAllDenied() {
-        if (event.getPlot() != null) {
-            return event.getPlot().denied().getAllPlayers();
-        } else {
-            return new ArrayList<>();
         }
     }
 
