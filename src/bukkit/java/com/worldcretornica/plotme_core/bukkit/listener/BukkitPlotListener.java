@@ -68,14 +68,15 @@ public class BukkitPlotListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent event) {
+        Player player = event.getPlayer();
         BukkitLocation location = new BukkitLocation(event.getBlock().getLocation());
 
         if (manager.isPlotWorld(location)) {
-            Player player = event.getPlayer();
+            boolean canBuild = !player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE);
             PlotId id = manager.getPlotId(location);
 
             if (id == null) {
-                if (!player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE)) {
+                if (canBuild) {
                     player.sendMessage(api.C("ErrCannotBuild"));
                     event.setCancelled(true);
                 }
@@ -99,7 +100,7 @@ public class BukkitPlotListener implements Listener {
                     Plot plot = manager.getMap(location).getPlot(id);
 
                     if (plot == null || !plot.isAllowed(player.getUniqueId())) {
-                        if (!player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE)) {
+                        if (canBuild) {
                             player.sendMessage(api.C("ErrCannotBuild"));
                             event.setCancelled(true);
                         }
@@ -142,7 +143,7 @@ public class BukkitPlotListener implements Listener {
                     }
                     event.setCancelled(true);
                 } else {
-                    Plot plot = manager.getPlotById(id, location.getWorld());
+                    Plot plot = manager.getMap(location).getPlot(id);
 
                     if (plot == null || !plot.isAllowed(player.getUniqueId())) {
                         if (canBuild) {
@@ -602,7 +603,6 @@ public class BukkitPlotListener implements Listener {
                     }
                 } else {
                     PlotToClear ptc = api.getPlotLocked(player.getWorld(), id);
-
                     if (ptc != null) {
                         switch (ptc.getReason()) {
                             case Clear:
