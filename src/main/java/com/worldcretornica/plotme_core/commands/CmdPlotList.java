@@ -70,6 +70,7 @@ public class CmdPlotList extends PlotCommand {
                     }
 
                     // Is the plot owner the name?
+/*
                     if (plot.getOwner().equalsIgnoreCase(name)) {
                         if (plot.allowed().size() == 0) {
                             // Is the name the current player too?
@@ -111,6 +112,7 @@ public class CmdPlotList extends PlotCommand {
                                             + ": " + helpers);
                         }
                     }
+*/
                 }
             } else {
                 player.sendMessage(C("MsgNotPlotWorld"));
