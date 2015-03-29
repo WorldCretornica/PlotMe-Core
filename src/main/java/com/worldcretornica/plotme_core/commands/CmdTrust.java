@@ -34,7 +34,7 @@ public class CmdTrust extends PlotCommand {
                     return true;
                 } else if (!manager.isPlotAvailable(id, pmi)) {
                     if (args.length < 2) {
-                        player.sendMessage(C("WordUsage") + " /plotme add <" + C("WordPlayer") + ">");
+                        player.sendMessage(getUsage());
                     } else {
                         Plot plot = manager.getPlotById(id, pmi);
 
@@ -111,7 +111,7 @@ public class CmdTrust extends PlotCommand {
 
     @Override
     public String getUsage() {
-        return C("WordUsage") + ": /plotme trust <" + C("WordPlayer") + ">";
+        return C("CmdTrustUsage");
     }
 
 }

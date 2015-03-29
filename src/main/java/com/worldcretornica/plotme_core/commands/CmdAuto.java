@@ -136,7 +136,7 @@ public class CmdAuto extends PlotCommand {
 
     @Override
     public String getUsage() {
-        return C("WordUsage") + ": /plotme auto";
+        return C("CmdAutoUsage");
     }
 
 }

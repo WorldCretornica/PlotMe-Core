@@ -79,11 +79,7 @@ public class CmdTP extends PlotCommand {
 
     @Override
     public String getUsage() {
-        if (plugin.getConfig().getBoolean("allowWorldTeleport")) {
-            return C("WordUsage") + ": /plotme tp <ID> [" + C("WordWorld") + "]";
-        } else {
-            return C("WordUsage") + ": /plotme tp <ID> ";
-        }
+        return C("CmdTeleportUsage");
     }
 
 }

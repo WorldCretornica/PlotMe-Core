@@ -1065,10 +1065,6 @@ public class SqlManager {
                     String sql =
                             "SELECT LOWER(owner) AS Name FROM plotmePlots WHERE NOT owner IS NULL AND NOT owner = '' AND ownerid IS NULL GROUP BY "
                                     + "LOWER(owner) ";
-                    sql += "UNION SELECT LOWER(player) AS Name FROM plotmeAllowed WHERE NOT player IS NULL AND Not player = '' AND Not player LIKE"
-                            + " 'group:%' AND Not player LIKE '%*%' AND playerid IS NULL GROUP BY LOWER(player) ";
-                    sql += "UNION SELECT LOWER(player) AS Name FROM plotmeDenied WHERE NOT player IS NULL AND Not player = '' AND Not player LIKE "
-                            + "'group:%' AND Not player LIKE '%*%' AND playerid IS NULL GROUP BY LOWER(player) ";
                     sql += "LIMIT " + ((int) UUIDFetcher.PROFILES_PER_REQUEST);
 
                     setPlayers = statementPlayers.executeQuery(sql);
@@ -1265,12 +1261,6 @@ public class SqlManager {
                                                     plot.setOwnerId(uuid);
                                                 }
 
-                                                //Allowed
-                                                plot.allowed().replace(oldname, newname);
-
-                                                //Denied
-                                                plot.denied().replace(oldname, newname);
-
                                             }
                                         }
                                     }
@@ -1408,16 +1398,6 @@ public class SqlManager {
                                     "UPDATE plotmePlots SET ownerid = ?, owner = ? WHERE LOWER(owner) = ? AND idX = '" + id.getX() + "' AND idZ = '"
                                             + id.getZ() + "' AND LOWER(world) = '" + world + "'");
                             break;
-                        case "allowed":
-                            ps = conn.prepareStatement(
-                                    "UPDATE plotmeAllowed SET playerid = ?, player = ? WHERE LOWER(player) = ? AND idX = '" + id.getX()
-                                            + "' AND idZ = '" + id.getZ() + "' AND LOWER(world) = '" + world + "'");
-                            break;
-                        case "denied":
-                            ps = conn.prepareStatement(
-                                    "UPDATE plotmeDenied SET playerid = ?, player = ? WHERE LOWER(player) = ? AND idX = '" + id.getX()
-                                            + "' AND idZ = '" + id.getZ() + "' AND LOWER(world) = '" + world + "'");
-                            break;
                         default:
                             return;
                     }
@@ -1442,14 +1422,6 @@ public class SqlManager {
                                 case "owner":
                                     plot.setOwner(newname);
                                     plot.setOwnerId(uuid);
-                                    break;
-                                case "allowed":
-                                    plot.allowed().remove(name);
-                                    plot.allowed().put(uuid.toString());
-                                    break;
-                                case "denied":
-                                    plot.denied().remove(name);
-                                    plot.denied().put(uuid.toString());
                                     break;
                                 default:
                             }

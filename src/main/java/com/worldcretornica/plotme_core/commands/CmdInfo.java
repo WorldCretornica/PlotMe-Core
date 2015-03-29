@@ -85,7 +85,7 @@ public class CmdInfo extends PlotCommand {
                     }
 
                     if (plot.allowed().size() > 0) {
-                        player.sendMessage(C("InfoHelpers") + ": " + plot.getAllowed());
+                        player.sendMessage(C("InfoAllowed") + ": " + plot.allowed().keySet().toString());
                     }
 
                     if (plot.denied().size() > 0) {

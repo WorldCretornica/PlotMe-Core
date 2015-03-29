@@ -11,6 +11,7 @@ import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public abstract class PlotEvent extends AbstractEvent {
@@ -92,11 +93,11 @@ public abstract class PlotEvent extends AbstractEvent {
      *
      * @return list of people allowed
      */
-    public List<String> getAllAllowed() {
+    public HashMap<String, Integer> getAllAllowed() {
         if (event.getPlot() != null) {
-            return event.getPlot().allowed().getAllPlayers();
+            return event.getPlot().allowed();
         } else {
-            return new ArrayList<>();
+            return new HashMap<>();
         }
     }
 

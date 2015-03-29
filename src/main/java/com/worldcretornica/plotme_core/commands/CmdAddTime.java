@@ -59,7 +59,7 @@ public class CmdAddTime extends PlotCommand {
 
     @Override
     public String getUsage() {
-        return C("WordUsage") + ": /plotme addtime";
+        return C("CmdAddTimeUsage");
     }
 
 }

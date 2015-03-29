@@ -112,7 +112,7 @@ public class CmdBiome extends PlotCommand {
 
     @Override
     public String getUsage() {
-        return C("WordUsage") + ": /plotme biome <" + C("WordBiome") + ">";
+        return C("CmdBiomeUsage");
     }
 
 }

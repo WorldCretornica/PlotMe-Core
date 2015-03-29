@@ -47,13 +47,13 @@ public class CmdHome extends PlotCommand {
                 int nb = 1;
                 if (args[0].contains(":")) {
                     if (args[0].split(":").length == 1 || args[0].split(":")[1].isEmpty()) {
-                        player.sendMessage(C("WordUsage") + ": /plotme home # " + C("WordExample") + ": /plotme home:1");
+                        player.sendMessage(getUsage());
                         return true;
                     }
                     try {
                         nb = Integer.parseInt(args[0].split(":")[1]);
                     } catch (NumberFormatException e) {
-                        player.sendMessage(C("WordUsage") + ": /plotme home:# " + C("WordExample") + ": /plotme home:1");
+                        player.sendMessage(getUsage());
                         return true;
                     }
                 }
@@ -202,10 +202,6 @@ public class CmdHome extends PlotCommand {
 
     @Override
     public String getUsage() {
-        if (plugin.getConfig().getBoolean("allowWorldTeleport")) {
-            return C("WordUsage") + ": /plotme home <number/name> <" + C("WordPlayer") + "> [" + C("WordWorld") + "]";
-        } else {
-            return C("WordUsage") + ": /plotme home <number> <" + C("WordPlayer") + ">";
-        }
+        return C("CmdHomeUsage");
     }
 }

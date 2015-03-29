@@ -26,6 +26,9 @@ public class CmdRemove extends PlotCommand {
     }
 
     public boolean execute(ICommandSender sender, String[] args) {
+        if (args.length < 2) {
+            //TODO add exception
+        }
         IPlayer player = (IPlayer) sender;
         if (player.hasPermission(PermissionNames.ADMIN_REMOVE) || player.hasPermission(PermissionNames.USER_REMOVE)) {
             IWorld world = player.getWorld();
