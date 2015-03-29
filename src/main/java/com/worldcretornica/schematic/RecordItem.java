@@ -4,25 +4,25 @@ package com.worldcretornica.schematic;
 public class RecordItem extends AbstractSchematicElement {
 
     private static final long serialVersionUID = -7017507616421449624L;
-    private final Byte count;
-    private final Short damage;
-    private final Short id;
+    private final byte count;
+    private final short damage;
+    private final short id;
 
-    public RecordItem(Byte count, Short damage, Short id) {
+    public RecordItem(byte count, short damage, short id) {
         this.count = count;
         this.damage = damage;
         this.id = id;
     }
 
-    public Byte getCount() {
+    public byte getCount() {
         return count;
     }
 
-    public Short getDamage() {
+    public short getDamage() {
         return damage;
     }
 
-    public Short getId() {
+    public short getId() {
         return id;
     }
 

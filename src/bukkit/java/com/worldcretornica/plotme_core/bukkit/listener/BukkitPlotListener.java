@@ -17,6 +17,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -34,6 +35,7 @@ import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.BlockSpreadEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
@@ -199,34 +201,36 @@ public class BukkitPlotListener implements Listener {
         Player player = event.getPlayer();
         BukkitLocation location = new BukkitLocation(event.getBlockClicked().getLocation());
 
-        if (!player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE) && manager.isPlotWorld(location)) {
-            PlotId id = manager.getPlotId(location);
+        if (manager.isPlotWorld(location)) {
+            if (!player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE)) {
+                PlotId id = manager.getPlotId(location);
 
-            if (id == null) {
-                player.sendMessage(api.C("ErrCannotBuild"));
-                event.setCancelled(true);
-            } else {
-                PlotToClear ptc = api.getPlotLocked(location.getWorld(), id);
-
-                if (ptc != null) {
-                    switch (ptc.getReason()) {
-                        case Clear:
-                            player.sendMessage(api.C("MsgPlotLockedClear"));
-                            break;
-                        case Reset:
-                            player.sendMessage(api.C("MsgPlotLockedReset"));
-                            break;
-                        case Expired:
-                            player.sendMessage(api.C("MsgPlotLockedExpired"));
-                            break;
-                    }
+                if (id == null) {
+                    player.sendMessage(api.C("ErrCannotBuild"));
                     event.setCancelled(true);
                 } else {
-                    Plot plot = manager.getPlotById(id, location.getWorld());
+                    PlotToClear ptc = api.getPlotLocked(location.getWorld(), id);
 
-                    if (plot == null || !plot.isAllowed(player.getUniqueId())) {
-                        player.sendMessage(api.C("ErrCannotBuild"));
+                    if (ptc != null) {
+                        switch (ptc.getReason()) {
+                            case Clear:
+                                player.sendMessage(api.C("MsgPlotLockedClear"));
+                                break;
+                            case Reset:
+                                player.sendMessage(api.C("MsgPlotLockedReset"));
+                                break;
+                            case Expired:
+                                player.sendMessage(api.C("MsgPlotLockedExpired"));
+                                break;
+                        }
                         event.setCancelled(true);
+                    } else {
+                        Plot plot = manager.getPlotById(id, location.getWorld());
+
+                        if (plot == null || !plot.isAllowed(player.getUniqueId())) {
+                            player.sendMessage(api.C("ErrCannotBuild"));
+                            event.setCancelled(true);
+                        }
                     }
                 }
             }
@@ -752,6 +756,14 @@ public class BukkitPlotListener implements Listener {
                     event.setCancelled(true);
                 }
             }
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onSandCannon(EntityChangeBlockEvent event) {
+        BukkitEntity entity = new BukkitEntity(event.getEntity());
+        if (manager.isPlotWorld(entity) && event.getEntity().getType().equals(EntityType.FALLING_BLOCK)) {
+
         }
     }
 

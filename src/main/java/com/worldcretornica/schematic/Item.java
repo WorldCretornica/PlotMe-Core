@@ -4,13 +4,13 @@ package com.worldcretornica.schematic;
 public class Item extends AbstractSchematicElement {
 
     private static final long serialVersionUID = 8615036231087494336L;
-    private final Byte count;
-    private final Byte slot;
-    private final Short damage;
-    private final Short id;
+    private final byte count;
+    private final byte slot;
+    private final short damage;
+    private final short id;
     private final ItemTag tag;
 
-    public Item(Byte count, Byte slot, Short damage, Short id, ItemTag tag) {
+    public Item(byte count, byte slot, short damage, short id, ItemTag tag) {
         this.count = count;
         this.slot = slot;
         this.damage = damage;
@@ -18,19 +18,19 @@ public class Item extends AbstractSchematicElement {
         this.tag = tag;
     }
 
-    public Byte getCount() {
+    public byte getCount() {
         return count;
     }
 
-    public Byte getSlot() {
+    public byte getSlot() {
         return slot;
     }
 
-    public Short getDamage() {
+    public short getDamage() {
         return damage;
     }
 
-    public Short getId() {
+    public short getId() {
         return id;
     }
 

@@ -5,7 +5,7 @@ public class Pattern extends AbstractSchematicElement {
 
     private static final long serialVersionUID = 9110115056957717506L;
 
-    private final Integer color;
+    private final int color;
 
     private final String pattern;
 
@@ -14,7 +14,7 @@ public class Pattern extends AbstractSchematicElement {
         this.pattern = pattern;
     }
 
-    public Integer getColor() {
+    public int getColor() {
         return color;
     }
 

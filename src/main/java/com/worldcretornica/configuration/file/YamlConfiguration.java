@@ -44,7 +44,7 @@ public class YamlConfiguration extends FileConfiguration {
 
         try {
             config.load(file);
-        } catch (IOException | InvalidConfigurationException ex) {
+        } catch (IOException | InvalidConfigurationException ignored) {
         }
 
         return config;

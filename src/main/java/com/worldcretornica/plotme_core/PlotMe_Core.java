@@ -184,7 +184,7 @@ public class PlotMe_Core {
         plotsToClear.offer(plotToClear);
         getLogger().info("plot to clear add " + plotToClear.getPlotId());
         PlotMeSpool pms = new PlotMeSpool(this, plotToClear);
-        pms.setTaskId(serverBridge.scheduleSyncRepeatingTask(pms, 0L, 60L));
+        pms.setTaskId(serverBridge.scheduleSyncRepeatingTask(pms, 40, 60));
     }
 
     public void removePlotToClear(PlotToClear plotToClear, int taskId) {

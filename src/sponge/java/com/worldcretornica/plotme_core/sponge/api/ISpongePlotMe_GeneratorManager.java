@@ -69,7 +69,7 @@ public interface ISpongePlotMe_GeneratorManager {
 
     int getPlotSize();
 
-    int getRoadHeight();
+    int getGroundHeight();
 
     Location getPlotMiddle(World world, PlotId id);
 

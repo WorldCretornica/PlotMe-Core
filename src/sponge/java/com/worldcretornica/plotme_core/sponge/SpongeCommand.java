@@ -38,10 +38,7 @@ public class SpongeCommand extends CommandExBase implements CommandCallable {
      */
     @Override
     public boolean call(CommandSource source, String arguments, List<String> parents) throws CommandException {
-        if (source instanceof Player) {
-            return true;
-        }
-        return false;
+        return source instanceof Player;
     }
 
     /**

@@ -19,7 +19,7 @@ public class SpongePlayer extends SpongeUser implements IPlayer {
 
     @Override
     public void sendMessage(String message) {
-        player.sendMessage(message);
+        //player.sendMessage(message);
     }
 
     @Override

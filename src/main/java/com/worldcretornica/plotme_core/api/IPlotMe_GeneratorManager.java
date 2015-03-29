@@ -35,8 +35,6 @@ public interface IPlotMe_GeneratorManager {
 
     ILocation getBottom(IWorld world, PlotId id);
 
-    void clear(ILocation bottom, ILocation top);
-
     Long[] clear(IWorld world, PlotId id, long maxBlocks, Long[] start);
 
     @Deprecated
@@ -60,7 +58,7 @@ public interface IPlotMe_GeneratorManager {
 
     int getPlotSize();
 
-    int getRoadHeight();
+    int getGroundHeight();
 
     ILocation getPlotMiddle(IWorld world, PlotId id);
 

@@ -35,7 +35,8 @@ public class CmdClaim extends PlotCommand {
                 if (id == null) {
                     player.sendMessage(C("MsgCannotClaimRoad"));
                     return true;
-                } else if (!manager.isPlotAvailable(id, pmi)) {
+                }
+                if (!manager.isPlotAvailable(id, pmi)) {
                     player.sendMessage(C("MsgThisPlotOwned"));
                     return true;
                 }
@@ -43,6 +44,7 @@ public class CmdClaim extends PlotCommand {
                 UUID playerUniqueId = player.getUniqueId();
 
                 if (args.length == 2 && player.hasPermission(PermissionNames.ADMIN_CLAIM_OTHER)) {
+                    serverBridge.getOfflinePlayer(args[1]);
                     playerName = args[1];
                     playerUniqueId = UUIDFetcher.getUUIDOf(playerName);
                 }

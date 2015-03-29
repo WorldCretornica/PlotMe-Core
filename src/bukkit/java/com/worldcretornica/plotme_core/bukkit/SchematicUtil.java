@@ -302,7 +302,7 @@ public class SchematicUtil extends AbstractSchematicUtil {
 
     @SuppressWarnings("deprecation")
     private ItemStack getItemStack(Item item) {
-        ItemStack is = new ItemStack(item.getId(), item.getCount(), item.getDamage(), item.getDamage().byteValue());
+        ItemStack is = new ItemStack(item.getId(), item.getCount(), item.getDamage());
 
         ItemTag itemtag = item.getTag();
 
@@ -649,9 +649,9 @@ public class SchematicUtil extends AbstractSchematicUtil {
             riding = getEntity(bukkitentity.getPassenger(), minX, minY, minZ);
         }
 
-        Float falldistance = bukkitentity.getFallDistance();
-        Short fire = (short) bukkitentity.getFireTicks();
-        Integer age = bukkitentity.getTicksLived();
+        float falldistance = bukkitentity.getFallDistance();
+        short fire = (short) bukkitentity.getFireTicks();
+        int age = bukkitentity.getTicksLived();
 
         Vector velocity = bukkitentity.getVelocity();
         List<Double> motion = new ArrayList<>();
@@ -1065,7 +1065,6 @@ public class SchematicUtil extends AbstractSchematicUtil {
                 }
 
                 byte[] blockData = getChildTag(schematic, "Data", ByteArrayTag.class, byte[].class);
-                byte[] blockBiomes = getChildTag(schematic, "Biomes", ByteArrayTag.class, byte[].class);
 
                 List<Entity> entities = null;
                 List<TileEntity> tileentities = null;
@@ -1151,7 +1150,7 @@ public class SchematicUtil extends AbstractSchematicUtil {
                 }
 
                 schem =
-                        new Schematic(blocks, blockData, blockBiomes, materials, width, length, height, entities, tileentities, roomauthor, originx,
+                        new Schematic(blocks, blockData, materials, width, length, height, entities, tileentities, roomauthor, originx,
                                 originy, originz);
 
                 saveCompiledSchematic(schem, file.getName());
@@ -1167,19 +1166,9 @@ public class SchematicUtil extends AbstractSchematicUtil {
 
         List<Entity> entities = schematic.getEntities();
         List<TileEntity> tileentities = schematic.getTileEntities();
-        Integer originX = schematic.getOriginX();
-        Integer originY = schematic.getOriginY();
-        Integer originZ = schematic.getOriginZ();
-
-        if (originX == null) {
-            originX = 0;
-        }
-        if (originY == null) {
-            originY = 0;
-        }
-        if (originZ == null) {
-            originZ = 0;
-        }
+        int originX = schematic.getOriginX();
+        int originY = schematic.getOriginY();
+        int originZ = schematic.getOriginZ();
 
         try {
             for (Entity e : entities) {
@@ -1294,9 +1283,9 @@ public class SchematicUtil extends AbstractSchematicUtil {
                 nb.update(true, false);
             } else if (bs instanceof Banner) {
                 Banner banner = (Banner) bs;
-                banner.setBaseColor(DyeColor.getByDyeData(te.getBase().byteValue()));
+                banner.setBaseColor(DyeColor.getByDyeData((byte) te.getBase()));
                 for (Pattern pattern : te.getPatterns()) {
-                    DyeColor dc = DyeColor.getByDyeData(pattern.getColor().byteValue());
+                    DyeColor dc = DyeColor.getByDyeData((byte) pattern.getColor());
                     PatternType pt = PatternType.getByIdentifier(pattern.getPattern());
                     org.bukkit.block.banner.Pattern pat = new org.bukkit.block.banner.Pattern(dc, pt);
                     banner.addPattern(pat);
@@ -1312,11 +1301,7 @@ public class SchematicUtil extends AbstractSchematicUtil {
 
                     ItemStack is = getItemStack(item);
 
-                    if (item.getSlot() != null) {
-                        inventory.setItem(item.getSlot(), is);
-                    } else {
-                        inventory.addItem(is);
-                    }
+                    inventory.setItem(item.getSlot(), is);
                 }
             }
         }
@@ -1373,9 +1358,9 @@ public class SchematicUtil extends AbstractSchematicUtil {
                 Entity riding = e.getRiding();
 
                 float falldistance = e.getFallDistance();
-                //Float absorptionamount = e.getAbsorptionAmount();
+                //float absorptionamount = e.getAbsorptionAmount();
                 float healf = e.getHealF();
-                //Float itemdropchance = e.getItemDropChance();
+                //float itemdropchance = e.getItemDropChance();
 
                 //Integer dimension = e.getDimension();
                 //Integer portalcooldown = e.getPortalCooldown();
@@ -1833,9 +1818,9 @@ public class SchematicUtil extends AbstractSchematicUtil {
 
         List<Double> motion = convert(getChildTag(entity, "Motion", ListTag.class, List.class), Double.class);
         List<Double> pos = convert(getChildTag(entity, "Pos", ListTag.class, List.class), Double.class);
-        List<Float> rotation = convert(getChildTag(entity, "Rotation", ListTag.class, List.class), Float.class);
+        List<Float> rotation = convert(getChildTag(entity, "Rotation", ListTag.class, List.class), float.class);
         List<Attribute> attributes = getAttributes(entity);
-        List<Float> dropchances = convert(getChildTag(entity, "DropChances", ListTag.class, List.class), Float.class);
+        List<Float> dropchances = convert(getChildTag(entity, "DropChances", ListTag.class, List.class), float.class);
         List<Item> equipments = getEquipment(entity);
         Item itemheld = null;
         Item feetarmor = null;
@@ -1900,7 +1885,7 @@ public class SchematicUtil extends AbstractSchematicUtil {
 
     private Pose getPose(CompoundTag poseelement) {
         Map<String, Tag> pose = poseelement.getValue();
-        List<Float> body = convert(getChildTag(pose, "body", ListTag.class, List.class), Float.class);
+        List<Float> body = convert(getChildTag(pose, "body", ListTag.class, List.class), float.class);
         List<Float> head = convert(getChildTag(pose, "head", ListTag.class, List.class), Float.class);
         List<Float> leftarm = convert(getChildTag(pose, "leftarm", ListTag.class, List.class), Float.class);
         List<Float> rightarm = convert(getChildTag(pose, "rightarm", ListTag.class, List.class), Float.class);
@@ -1956,7 +1941,6 @@ public class SchematicUtil extends AbstractSchematicUtil {
             World world = ((BukkitWorld) loc1.getWorld()).getWorld();
             int[] blocks = new int[length * width * height];
             byte[] blockData = new byte[length * width * height];
-            byte[] biomes = null;
 
             List<Entity> entities = new ArrayList<>();
             List<TileEntity> tileentities = new ArrayList<>();
@@ -1975,30 +1959,30 @@ public class SchematicUtil extends AbstractSchematicUtil {
 
                         BlockState bs = block.getState();
 
-                        Byte rot = null;
-                        Byte skulltype = null;
-                        Byte note = null;
+                        byte rot = 0;
+                        byte skulltype = 0;
+                        byte note = 0;
 
-                        Integer record = null;
-                        Integer outputsignal = null;
-                        Integer transfercooldown = null;
-                        Integer levels = null;
-                        Integer primary = null;
-                        Integer secondary = null;
-                        Integer base = null;
+                        int record = 0;
+                        int outputsignal = 0;
+                        int transfercooldown = 0;
+                        int levels = 0;
+                        int primary = 0;
+                        int secondary = 0;
+                        int base = 0;
 
                         RecordItem recorditem = null;
 
-                        Short delay = null;
-                        Short maxnearbyentities = null;
-                        Short maxspawndelay = null;
-                        Short minspawndelay = null;
-                        Short requiredplayerrange = null;
-                        Short spawncount = null;
-                        Short spawnrange = null;
-                        Short burntime = null;
-                        Short cooktime = null;
-                        Short brewtime = null;
+                        short delay = 0;
+                        short maxnearbyentities = 0;
+                        short maxspawndelay = 0;
+                        short minspawndelay = 0;
+                        short requiredplayerrange = 0;
+                        short spawncount = 0;
+                        short spawnrange = 0;
+                        short burntime = 0;
+                        short cooktime = 0;
+                        short brewtime = 0;
 
                         String entityid = null;
                         String customname = null;
@@ -2194,7 +2178,7 @@ public class SchematicUtil extends AbstractSchematicUtil {
                 }
             }
 
-            schem = new Schematic(blocks, blockData, biomes, "Alpha", width, length, height, entities, tileentities, "", 0, 0, 0);
+            schem = new Schematic(blocks, blockData, "Alpha", width, length, height, entities, tileentities, "", 0, 0, 0);
         } else {
             schem = null;
         }

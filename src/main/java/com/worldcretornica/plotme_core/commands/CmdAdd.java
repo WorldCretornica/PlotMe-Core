@@ -25,6 +25,9 @@ public class CmdAdd extends PlotCommand {
     }
 
     public boolean execute(ICommandSender sender, String[] args) {
+        if (args[1].length() > 16) {
+            throw new IllegalArgumentException("Player Name is too long!");
+        }
         IPlayer player = (IPlayer) sender;
         if (player.hasPermission(PermissionNames.ADMIN_ADD) || player.hasPermission(PermissionNames.USER_ADD)) {
             IWorld world = player.getWorld();

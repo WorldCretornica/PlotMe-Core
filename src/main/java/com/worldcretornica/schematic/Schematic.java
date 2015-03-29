@@ -8,23 +8,21 @@ public class Schematic extends AbstractSchematicElement {
 
     private final int[] blocks;
     private final byte[] data;
-    private final byte[] biomes;
     private final String materials;
-    private final Short width;
-    private final Short length;
-    private final Short height;
+    private final short width;
+    private final short length;
+    private final short height;
     private final List<Entity> entities;
     private final List<TileEntity> tileentities;
     private final String schemauthor;
-    private final Integer originx;
-    private final Integer originy;
-    private final Integer originz;
+    private final int originx;
+    private final int originy;
+    private final int originz;
 
-    public Schematic(int[] blocks, byte[] data, byte[] biomes, String materials, Short width, Short length, Short height, List<Entity> entities,
-            List<TileEntity> tileentities, String roomauthor, Integer originx, Integer originy, Integer originz) {
+    public Schematic(int[] blocks, byte[] data, String materials, short width, short length, short height, List<Entity> entities,
+            List<TileEntity> tileentities, String roomauthor, int originx, int originy, int originz) {
         this.blocks = blocks;
         this.data = data;
-        this.biomes = biomes;
         this.materials = materials;
         this.width = width;
         this.length = length;
@@ -45,23 +43,19 @@ public class Schematic extends AbstractSchematicElement {
         return data;
     }
 
-    public byte[] getBiomes() {
-        return biomes;
-    }
-
     public String getMaterials() {
         return materials;
     }
 
-    public Short getWidth() {
+    public short getWidth() {
         return width;
     }
 
-    public Short getLength() {
+    public short getLength() {
         return length;
     }
 
-    public Short getHeight() {
+    public short getHeight() {
         return height;
     }
 
@@ -77,15 +71,15 @@ public class Schematic extends AbstractSchematicElement {
         return schemauthor;
     }
 
-    public Integer getOriginX() {
+    public int getOriginX() {
         return originx;
     }
 
-    public Integer getOriginY() {
+    public int getOriginY() {
         return originy;
     }
 
-    public Integer getOriginZ() {
+    public int getOriginZ() {
         return originz;
     }
 
@@ -93,7 +87,6 @@ public class Schematic extends AbstractSchematicElement {
         return "{" + this.getClass().getName() +
                 ": blocks=" + Sanitize(blocks) +
                 ", data=" + Sanitize(data) +
-                ", biomes=" + Sanitize(biomes) +
                 ", materials=" + Sanitize(materials) +
                 ", width=" + Sanitize(width) +
                 ", length=" + Sanitize(length) +

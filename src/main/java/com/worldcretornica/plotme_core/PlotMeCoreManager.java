@@ -704,15 +704,7 @@ public class PlotMeCoreManager {
         } else {
             adjustWall(world, plot.getId(), false);
         }
-        if (getMap(world).isUseProgressiveClear()) {
-            plugin.addPlotToClear(new PlotToClear(world, id, reason, sender));
-        } else {
-            getGenManager(world).clear(bottom, top);
-            if (plugin.getServerBridge().isUsingLwc()) {
-                removeLWC(world, id);
-            }
-            sender.sendMessage(plugin.C("MsgPlotCleared"));
-        }
+        plugin.addPlotToClear(new PlotToClear(world, id, reason, sender));
     }
 
     /**
@@ -880,12 +872,6 @@ public class PlotMeCoreManager {
      * @return location as an ILocation
      */
     public ILocation getPlotMiddle(IWorld world, PlotId id) {
-        /*ILocation bottom = getPlotBottomLoc(world, id);
-        ILocation top = getPlotTopLoc(world, id);
-        
-        ILocation middle = bottom.clone().add(top.getX() - bottom.getX(), 0, top.getZ() - bottom.getZ());
-        middle.setY(getGenManager(world).getRoadHeight(world.getName()) + 1);*/
-
         return getGenManager(world).getPlotMiddle(world, id);
     }
 

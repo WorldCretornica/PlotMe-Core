@@ -24,6 +24,9 @@ public class CmdSetOwner extends PlotCommand {
     }
 
     public boolean execute(ICommandSender sender, String[] args) {
+        if (args[1].length() > 16) {
+            throw new IllegalArgumentException("Player Name is too long!");
+        }
         IPlayer player = (IPlayer) sender;
         IWorld world = player.getWorld();
         if (player.hasPermission(PermissionNames.ADMIN_SETOWNER) && manager.isPlotWorld(world)) {
@@ -34,10 +37,6 @@ public class CmdSetOwner extends PlotCommand {
                 return true;
             }
             String newOwner = null;
-            if (args[1].length() > 16) {
-                throw new IllegalArgumentException("Player Name is too long!");
-            }
-
             //If the player by the name given is not online, stop the command from executing.
             UUID newOwnerId = null;
             for (IPlayer online : serverBridge.getOnlinePlayers()) {

@@ -7,32 +7,32 @@ public class TileEntity extends AbstractSchematicElement {
     private static final long serialVersionUID = -2080234794735672945L;
 
     // START - PRE 1.8
-    private final Byte rot;
-    private final Byte skulltype;
-    private final Byte note;
+    private final byte rot;
+    private final byte skulltype;
+    private final byte note;
 
-    private final Integer x;
-    private final Integer y;
-    private final Integer z;
-    private final Integer record;
-    private final Integer outputsignal;
-    private final Integer transfercooldown;
-    private final Integer levels;
-    private final Integer primary;
-    private final Integer secondary;
+    private final int x;
+    private final int y;
+    private final int z;
+    private final int record;
+    private final int outputsignal;
+    private final int transfercooldown;
+    private final int levels;
+    private final int primary;
+    private final int secondary;
 
     private final RecordItem recorditem;
 
-    private final Short brewtime;
-    private final Short delay;
-    private final Short maxnearbyentities;
-    private final Short maxspawndelay;
-    private final Short minspawndelay;
-    private final Short requiredplayerrange;
-    private final Short spawncount;
-    private final Short spawnrange;
-    private final Short burntime;
-    private final Short cooktime;
+    private final short brewtime;
+    private final short delay;
+    private final short maxnearbyentities;
+    private final short maxspawndelay;
+    private final short minspawndelay;
+    private final short requiredplayerrange;
+    private final short spawncount;
+    private final short spawnrange;
+    private final short burntime;
+    private final short cooktime;
 
     private final String command;
     private final String customname;
@@ -47,16 +47,16 @@ public class TileEntity extends AbstractSchematicElement {
     // END - PRE 1.8
 
     // START - 1.8
-    private final Integer base;
+    private final int base;
     private final List<Pattern> patterns;
     // END - 1.8
 
-    public TileEntity(Integer x, Integer y, Integer z, String customname, String id, List<Item> items, Byte rot,
-            Byte skulltype, Short delay, Short maxnearbyentities, Short maxspawndelay, Short minspawndelay,
-            Short requiredplayerrange, Short spawncount, Short spawnrange, String entityid, Short burntime, Short cooktime,
-            String text1, String text2, String text3, String text4, Byte note, Integer record, RecordItem recorditem,
-            Short brewtime, String command, Integer outputsignal, Integer transfercooldown, Integer levels,
-            Integer primary, Integer secondary, List<Pattern> patterns, Integer base) {
+    public TileEntity(int x, int y, int z, String customname, String id, List<Item> items, byte rot,
+            byte skulltype, short delay, short maxnearbyentities, short maxspawndelay, short minspawndelay,
+            short requiredplayerrange, short spawncount, short spawnrange, String entityid, short burntime, short cooktime,
+            String text1, String text2, String text3, String text4, byte note, int record, RecordItem recorditem,
+            short brewtime, String command, int outputsignal, int transfercooldown, int levels,
+            int primary, int secondary, List<Pattern> patterns, int base) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -93,55 +93,55 @@ public class TileEntity extends AbstractSchematicElement {
         this.base = base;
     }
 
-    public Byte getRot() {
+    public byte getRot() {
         return rot;
     }
 
-    public Byte getSkullType() {
+    public byte getSkullType() {
         return skulltype;
     }
 
-    public Byte getNote() {
+    public byte getNote() {
         return note;
     }
 
-    public Integer getX() {
+    public int getX() {
         return x;
     }
 
-    public Integer getY() {
+    public int getY() {
         return y;
     }
 
-    public Integer getZ() {
+    public int getZ() {
         return z;
     }
 
-    public Integer getRecord() {
+    public int getRecord() {
         return record;
     }
 
-    public Integer getOutputSignal() {
+    public int getOutputSignal() {
         return outputsignal;
     }
 
-    public Integer getTransferCooldown() {
+    public int getTransferCooldown() {
         return transfercooldown;
     }
 
-    public Integer getLevels() {
+    public int getLevels() {
         return levels;
     }
 
-    public Integer getPrimary() {
+    public int getPrimary() {
         return primary;
     }
 
-    public Integer getSecondary() {
+    public int getSecondary() {
         return secondary;
     }
 
-    public Integer getBase() {
+    public int getBase() {
         return base;
     }
 
@@ -149,43 +149,43 @@ public class TileEntity extends AbstractSchematicElement {
         return recorditem;
     }
 
-    public Short getDelay() {
+    public short getDelay() {
         return delay;
     }
 
-    public Short getMaxNearbyEntities() {
+    public short getMaxNearbyEntities() {
         return maxnearbyentities;
     }
 
-    public Short getMaxSpawnDelay() {
+    public short getMaxSpawnDelay() {
         return maxspawndelay;
     }
 
-    public Short getMinSpawnDelay() {
+    public short getMinSpawnDelay() {
         return minspawndelay;
     }
 
-    public Short getRequiredPlayerRange() {
+    public short getRequiredPlayerRange() {
         return requiredplayerrange;
     }
 
-    public Short getSpawnCount() {
+    public short getSpawnCount() {
         return spawncount;
     }
 
-    public Short getSpawnRange() {
+    public short getSpawnRange() {
         return spawnrange;
     }
 
-    public Short getBurnTime() {
+    public short getBurnTime() {
         return burntime;
     }
 
-    public Short getCookTime() {
+    public short getCookTime() {
         return cooktime;
     }
 
-    public Short getBrewTime() {
+    public short getBrewTime() {
         return brewtime;
     }
 

@@ -7,7 +7,7 @@ import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.sponge.PlotMe_Sponge;
 import com.worldcretornica.plotme_core.sponge.api.SpongeLocation;
 import com.worldcretornica.plotme_core.sponge.api.SpongePlayer;
-import org.spongepowered.api.event.entity.living.player.PlayerMoveEvent;
+import org.spongepowered.api.event.entity.player.PlayerMoveEvent;
 import org.spongepowered.api.util.event.Subscribe;
 
 public class SpongePlotDenyListener {

@@ -8,6 +8,7 @@ import com.worldcretornica.plotme_core.api.IServerBridge;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public abstract class PlotCommand {
 
@@ -16,6 +17,7 @@ public abstract class PlotCommand {
     final IServerBridge serverBridge;
 
     final PlotMeCoreManager manager;
+    final Pattern validUserPattern = Pattern.compile("^[a-zA-Z0-9_\\s]{2,16}$");
 
     public PlotCommand(PlotMe_Core instance) {
         plugin = instance;

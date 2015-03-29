@@ -23,8 +23,8 @@ import org.spongepowered.api.event.block.FloraGrowEvent;
 import org.spongepowered.api.event.block.FluidSpreadEvent;
 import org.spongepowered.api.event.block.LeafDecayEvent;
 import org.spongepowered.api.event.entity.ProjectileLaunchEvent;
-import org.spongepowered.api.event.entity.living.player.PlayerChangeBlockEvent;
-import org.spongepowered.api.event.entity.living.player.PlayerInteractEvent;
+import org.spongepowered.api.event.entity.player.PlayerChangeBlockEvent;
+import org.spongepowered.api.event.entity.player.PlayerInteractEvent;
 import org.spongepowered.api.util.event.Subscribe;
 
 public class SpongePlotListener {

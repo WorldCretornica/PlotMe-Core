@@ -100,11 +100,6 @@ public class SpongePlotMe_GeneratorManagerBridge implements IPlotMe_GeneratorMan
     }
 
     @Override
-    public void clear(ILocation bottom, ILocation top) {
-        generatorManager.clear(((SpongeLocation) bottom).getLocation(), ((SpongeLocation) top).getLocation());
-    }
-
-    @Override
     public Long[] clear(IWorld world, PlotId id, long maxBlocks, Long[] start) {
         return generatorManager.clear(((SpongeWorld) world).getWorld(), id, maxBlocks, start);
     }
@@ -160,8 +155,8 @@ public class SpongePlotMe_GeneratorManagerBridge implements IPlotMe_GeneratorMan
     }
 
     @Override
-    public int getRoadHeight() {
-        return generatorManager.getRoadHeight();
+    public int getGroundHeight() {
+        return generatorManager.getGroundHeight();
     }
 
     @Override

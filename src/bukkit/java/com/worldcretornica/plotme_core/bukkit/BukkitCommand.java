@@ -19,10 +19,6 @@ public class BukkitCommand extends CommandExBase implements CommandExecutor {
         plugin = instance;
     }
 
-    private String C(String caption) {
-        return api.C(caption);
-    }
-
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player) {

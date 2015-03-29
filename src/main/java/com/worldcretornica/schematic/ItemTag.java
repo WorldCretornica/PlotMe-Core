@@ -5,14 +5,14 @@ import java.util.List;
 public class ItemTag extends AbstractSchematicElement {
 
     private static final long serialVersionUID = -5311803454526138463L;
-    private final Integer repaircost;
+    private final int repaircost;
     private final List<Ench> enchants;
     private final Display display;
     private final String author;
     private final String title;
     private final List<String> pages;
 
-    public ItemTag(Integer repaircost, List<Ench> enchants, Display display, String author, String title, List<String> pages) {
+    public ItemTag(int repaircost, List<Ench> enchants, Display display, String author, String title, List<String> pages) {
         this.repaircost = repaircost;
         this.enchants = enchants;
         this.display = display;
@@ -21,7 +21,7 @@ public class ItemTag extends AbstractSchematicElement {
         this.pages = pages;
     }
 
-    public Integer getRepairCost() {
+    public int getRepairCost() {
         return repaircost;
     }
 

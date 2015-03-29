@@ -5,17 +5,17 @@ import java.util.List;
 public class Attribute extends AbstractSchematicElement {
 
     private static final long serialVersionUID = 519498698831096866L;
-    private final Double base;
+    private final double base;
     private final String name;
     private final List<Modifier> modifiers;
 
-    public Attribute(Double base, String name, List<Modifier> modifiers) {
+    public Attribute(double base, String name, List<Modifier> modifiers) {
         this.base = base;
         this.name = name;
         this.modifiers = modifiers;
     }
 
-    public Double getBase() {
+    public double getBase() {
         return base;
     }
 

@@ -40,8 +40,7 @@ public class PlotMeSpool implements Runnable {
                 }
                 genmanager.refreshPlotChunks(world, getPlotToClear().getPlotId());
 
-                plotToClear.getRequester()
-                        .sendMessage(plugin.C("WordPlot") + " " + getPlotToClear().getPlotId() + " " + plugin.C("WordCleared"));
+                plotToClear.getRequester().sendMessage(plugin.C("WordPlot") + " " + getPlotToClear().getPlotId() + " " + plugin.C("WordCleared"));
 
                 plugin.removePlotToClear(getPlotToClear(), taskId);
                 plotToClear = null;
@@ -56,5 +55,4 @@ public class PlotMeSpool implements Runnable {
     public PlotToClear getPlotToClear() {
         return plotToClear;
     }
-
 }

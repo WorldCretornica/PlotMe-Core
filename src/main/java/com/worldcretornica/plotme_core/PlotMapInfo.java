@@ -289,12 +289,4 @@ public class PlotMapInfo {
         configFile.saveConfig();
     }
 
-    public boolean isUseProgressiveClear() {
-        return config.getBoolean("UseProgressiveClear");
-    }
-
-    public void setUseProgressiveClear(boolean useProgressiveClear) {
-        config.set("UseProgressiveClear", useProgressiveClear);
-        configFile.saveConfig();
-    }
 }

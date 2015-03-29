@@ -1,5 +1,6 @@
 package com.worldcretornica.plotme_core.bukkit.listener;
 
+import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotId;
@@ -24,21 +25,22 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 public class BukkitPlotWorldEditListener implements Listener {
 
     private final PlotMe_Core api;
+    private final WorldEditPlugin we;
     private final PlotWorldEdit worldEdit;
     private final PlotMe_CorePlugin plugin;
     private final PlotMeCoreManager manager;
 
 
-    public BukkitPlotWorldEditListener(PlotWorldEdit worldEdit, PlotMe_CorePlugin plugin) {
+    public BukkitPlotWorldEditListener(WorldEditPlugin we, PlotWorldEdit worldEdit, PlotMe_CorePlugin plugin) {
         api = plugin.getAPI();
         this.plugin = plugin;
         this.worldEdit = worldEdit;
         manager = PlotMeCoreManager.getInstance();
+        this.we = we;
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onPlayerMove(PlayerMoveEvent event) {
-
         BukkitLocation from = new BukkitLocation(event.getFrom());
         BukkitLocation to = new BukkitLocation(event.getTo());
 
@@ -58,7 +60,8 @@ public class BukkitPlotWorldEditListener implements Listener {
                         if (idTo != null) {
                             changemask = true;
                         }
-                    } else if (!idFrom.equals(idTo)) {
+                    } else //noinspection ConstantConditions
+                        if (!idFrom.equals(idTo)) {
                         changemask = true;
                     }
                 }

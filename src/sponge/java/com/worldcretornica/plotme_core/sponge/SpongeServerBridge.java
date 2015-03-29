@@ -17,6 +17,7 @@ import net.milkbowl.vault.economy.EconomyResponse;
 import org.spongepowered.api.entity.player.Player;
 import org.spongepowered.api.service.command.CommandService;
 import org.spongepowered.api.world.World;
+import org.spongepowered.api.world.biome.BiomeType;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -194,7 +195,11 @@ public class SpongeServerBridge extends IServerBridge {
 
     @Override
     public List<String> getBiomes() {
-        return null;
+        List<String> biomes = new ArrayList<>();
+        for (BiomeType type : plugin.getGame().getRegistry().getBiomes()) {
+            biomes.add(type.getName());
+        }
+        return biomes;
     }
 
     @Override

@@ -13,7 +13,7 @@ public class SpongeCommandSource implements ICommandSender {
 
     @Override
     public void sendMessage(String message) {
-        commandSource.sendMessage(message);
+        //commandSource.sendMessage(message);
     }
 
     @Override

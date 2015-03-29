@@ -4,10 +4,10 @@ package com.worldcretornica.schematic;
 public class Ench extends AbstractSchematicElement {
 
     private static final long serialVersionUID = 8903585791760402815L;
-    private final Short id;
+    private final short id;
     private final Short lvl;
 
-    public Ench(Short id, Short lvl) {
+    public Ench(short id, short lvl) {
         this.id = id;
         this.lvl = lvl;
     }
