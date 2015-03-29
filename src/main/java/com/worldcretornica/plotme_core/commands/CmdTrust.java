@@ -78,10 +78,10 @@ public class CmdTrust extends PlotCommand {
                                 if (!event.isCancelled()) {
                                     IPlayer allowed2 = plugin.getServerBridge().getPlayerExact(trust);
                                     if (allowed2 != null) {
-                                        plot.addAllowed(allowed2.getUniqueId().toString());
+                                        plot.addAllowed(allowed2.getUniqueId().toString(), 0);
                                         plot.removeDenied(allowed2.getUniqueId().toString());
                                     } else {
-                                        plot.addAllowed(trust);
+                                        plot.addAllowed(trust, 0);
                                         plot.removeDenied(trust);
                                     }
                                     player.sendMessage(C("WordPlayer") + " " + trust + " " + C("MsgNowAllowed"));

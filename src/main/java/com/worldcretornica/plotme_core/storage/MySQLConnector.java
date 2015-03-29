@@ -71,8 +71,8 @@ public class MySQLConnector extends Database {
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS `plotmecore_denied` ("
                     + "`id` INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY ,"
                     + "`plot_id` INTEGER NOT NULL,"
-                    + "`denied` VARCHAR(50) NOT NULL,"
-                    + "UNIQUE INDEX `allowed` (plot_id,denied)"
+                    + "`player` VARCHAR(50) NOT NULL,"
+                    + "UNIQUE INDEX `allowed` (plot_id,player)"
                     + ");");
             connection.commit();
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS `plotmecore_allowed` ("

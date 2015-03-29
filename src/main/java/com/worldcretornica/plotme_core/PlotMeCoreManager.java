@@ -888,12 +888,6 @@ public class PlotMeCoreManager {
                         if (plot.getOwnerId().equals(uuid)) {
                             plot.setOwner(name);
                         }
-
-                        //Allowed
-                        plot.allowed().replace(name, name);
-
-                        //Denied
-                        plot.denied().replace(name, name);
                     }
                 }
             }

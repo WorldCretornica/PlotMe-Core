@@ -30,21 +30,16 @@ public class CmdExpired extends PlotCommand {
                     page = Integer.parseInt(args[1]);
                 }
 
-                //int maxPage = (int) Math.ceil(plugin.getSqlManager().getExpiredPlotCount(world.getName()) / 8);
-                //Temporary maxPage to allow for compile TODO: Remove this and fix this
-                int maxPage = 8;
-
-                List<Plot> expiredPlots = plugin.getSqlManager().getExpiredPlots(world.getName(), page, 8);
+                List<Plot> expiredPlots = plugin.getSqlManager().getExpiredPlots(world.getName());
 
                 if (expiredPlots.isEmpty()) {
                     player.sendMessage(C("MsgNoPlotExpired"));
                 } else {
-                    player.sendMessage(C("MsgExpiredPlotsPage") + " " + page + "/" + maxPage);
+                    player.sendMessage(C("MsgExpiredPlotsPage") + " " + page + "/" + expiredPlots.size() / 5);
 
-                    for (int i = (page - 1) * 8; i < expiredPlots.size() && i < page * 8; i++) {
+                    for (int i = (page - 1) * 5; i < expiredPlots.size() && i < page * 5; i++) {
                         Plot plot = expiredPlots.get(i);
-
-                        player.sendMessage(plot.getId() + " -> " + plot.getOwner() + " @ " + plot.getExpiredDate());
+                        player.sendMessage(plot.getId() + " -> " + plot.getOwner() + " @ " + plot.getExpiredDate().toString());
                     }
                 }
             } else {

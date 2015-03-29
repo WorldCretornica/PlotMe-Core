@@ -15,6 +15,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -349,13 +351,13 @@ public abstract class Database {
                             String plotName = setPlots.getString("plotName");
                             int plotLikes = setPlots.getInt("plotLikes");
                             Map<String, Map<String, String>> metadata = new HashMap<>();
-                            PlayerList allowed = new PlayerList();
+                            HashMap<String, Integer> allowed = new HashMap<>();
                             PlayerList denied = new PlayerList();
                             PlayerList likers = new PlayerList();
                             statementAllowed.setInt(1, internalID);
                             try (ResultSet setAllowed = statementAllowed.executeQuery()) {
                                 while (setAllowed.next()) {
-                                    allowed.put(setAllowed.getString("player"));
+                                    allowed.put(setAllowed.getString("player"), setAllowed.getInt("access"));
                                 }
                             }
                             statementDenied.setInt(1, internalID);
@@ -412,76 +414,58 @@ public abstract class Database {
             statementPlot.setString(1, world.toLowerCase());
             statementPlot.setInt(2, idX);
             statementPlot.setInt(3, idZ);
-            ResultSet setPlots = statementPlot.executeQuery();
-            if (setPlots.next()) {
-                int internalID = setPlots.getInt("id");
-                String byOwner = setPlots.getString("ownerID");
-                UUID ownerId = UUID.fromString(byOwner);
-                String owner = setPlots.getString("owner");
-                String biome = setPlots.getString("biome");
-                boolean finished = setPlots.getBoolean("finished");
-                String finishedDate = setPlots.getString("finishedDate");
-                boolean forSale = setPlots.getBoolean("forSale");
-                double price = setPlots.getDouble("price");
-                boolean protect = setPlots.getBoolean("protected");
-                Date expiredDate = setPlots.getDate("expiredDate");
-                String plotName = setPlots.getString("plotName");
-                int plotLikes = setPlots.getInt("plotLikes");
+            try (ResultSet setPlots = statementPlot.executeQuery()) {
+                if (setPlots.next()) {
+                    int internalID = setPlots.getInt("id");
+                    String byOwner = setPlots.getString("ownerID");
+                    UUID ownerId = UUID.fromString(byOwner);
+                    String owner = setPlots.getString("owner");
+                    String biome = setPlots.getString("biome");
+                    boolean finished = setPlots.getBoolean("finished");
+                    String finishedDate = setPlots.getString("finishedDate");
+                    boolean forSale = setPlots.getBoolean("forSale");
+                    double price = setPlots.getDouble("price");
+                    boolean protect = setPlots.getBoolean("protected");
+                    Date expiredDate = setPlots.getDate("expiredDate");
+                    String plotName = setPlots.getString("plotName");
+                    int plotLikes = setPlots.getInt("plotLikes");
 
-                PlayerList allowed = new PlayerList();
-                PlayerList trusted = new PlayerList();
-                PlayerList denied = new PlayerList();
-                Map<String, Map<String, String>> metadata = new HashMap<>();
+                    HashMap<String, Integer> allowed = new HashMap<>();
+                    PlayerList denied = new PlayerList();
+                    Map<String, Map<String, String>> metadata = new HashMap<>();
 
-                //Get Allowed Players
-                statementAllowed.setInt(1, internalID);
-
-                ResultSet setAllowed = statementAllowed.executeQuery();
-
-                while (setAllowed.next()) {
-                    int accessLevel = setAllowed.getInt("access");
-                    //This is for adding players
-                    if (accessLevel == 1) {
-                        allowed.add(setAllowed.getString("allowed"));
-                    } else if (accessLevel == 2) { //If the player is trusted only
-                        trusted.add(setAllowed.getString("allowed"));
+                    statementAllowed.setInt(1, internalID);
+                    try (ResultSet setAllowed = statementAllowed.executeQuery()) {
+                        while (setAllowed.next()) {
+                            allowed.put(setAllowed.getString("player"), setAllowed.getInt("access"));
+                        }
                     }
-                }
-                setAllowed.close();
-
-                //Get Denied Players
-                statementDenied.setInt(1, internalID);
-
-                ResultSet setDenied = statementDenied.executeQuery();
-
-                while (setDenied.next()) {
-                    byte[] byPlayerId = setDenied.getBytes("deniedID");
-                    if (byPlayerId == null) {
-                        denied.put(setDenied.getString("denied"));
-                    } else {
-                        denied.add(UUIDFetcher.fromBytes(byPlayerId).toString());
+                    statementDenied.setInt(1, internalID);
+                    try (ResultSet setDenied = statementDenied.executeQuery()) {
+                        while (setDenied.next()) {
+                            denied.put(setDenied.getString("denied"));
+                        }
                     }
-                }
-                setDenied.close();
 
-                statementMetadata.setInt(1, internalID);
+                    statementMetadata.setInt(1, internalID);
 
-                ResultSet setMetadata = statementMetadata.executeQuery();
+                    ResultSet setMetadata = statementMetadata.executeQuery();
 
-                while (setMetadata.next()) {
-                    String pluginname = setMetadata.getString("pluginName");
-                    String propertyname = setMetadata.getString("propertyName");
-                    String propertyvalue = setMetadata.getString("propertyValue");
-                    if (!metadata.containsKey(pluginname)) {
-                        metadata.put(pluginname, new HashMap<String, String>());
+                    while (setMetadata.next()) {
+                        String pluginname = setMetadata.getString("pluginName");
+                        String propertyname = setMetadata.getString("propertyName");
+                        String propertyvalue = setMetadata.getString("propertyValue");
+                        if (!metadata.containsKey(pluginname)) {
+                            metadata.put(pluginname, new HashMap<String, String>());
+                        }
+                        metadata.get(pluginname).put(propertyname, propertyvalue);
                     }
-                    metadata.get(pluginname).put(propertyname, propertyvalue);
+
+                    setMetadata.close();
+
+                    plot = new Plot(plugin, internalID, owner, ownerId, world, biome, expiredDate, allowed, denied, id, price, forSale, finished,
+                            finishedDate, protect, metadata, plotLikes, plotName);
                 }
-
-                setMetadata.close();
-
-                plot = new Plot(plugin, internalID, owner, ownerId, world, biome, expiredDate, allowed, denied, id, price, forSale, finished,
-                        finishedDate, protect, metadata, plotLikes, plotName);
             }
 
         } catch (SQLException e) {
@@ -560,7 +544,33 @@ public abstract class Database {
         return false;
     }
 
-    public List<Plot> getExpiredPlots(String name, int i, int i1) {
-        return null;
+    public List<Plot> getExpiredPlots(String world) {
+        List<Plot> ret = new ArrayList<>();
+
+        try (PreparedStatement statementExpired = getConnection().prepareStatement("SELECT * FROM plotmecore_plots WHERE LOWER(world) = ? AND "
+                + "protected = 0 AND finished = 0 AND expireddate < ? ORDER BY expireddate")) {
+            Calendar cal = Calendar.getInstance();
+            java.util.Date utilDate = cal.getTime();
+            Date sqlDate = new Date(utilDate.getTime());
+            statementExpired.setString(1, world.toLowerCase());
+            statementExpired.setDate(2, sqlDate);
+            try (ResultSet setPlots = statementExpired.executeQuery()) {
+                while (setPlots.next()) {
+                    PlotId id = new PlotId(setPlots.getInt("idX"), setPlots.getInt("idZ"));
+                    String owner = setPlots.getString("owner");
+                    Date expireddate = setPlots.getDate("expireddate");
+                    Plot plot = null;
+                    plot.setOwner(owner);
+                    plot.setId(id);
+                    plot.setExpiredDate(expireddate);
+
+                    ret.add(plot);
+                }
+            }
+        } catch (SQLException ex) {
+            plugin.getLogger().severe("ExpiredPlots Exception :");
+            plugin.getLogger().severe(ex.getMessage());
+        }
+        return ret;
     }
 }

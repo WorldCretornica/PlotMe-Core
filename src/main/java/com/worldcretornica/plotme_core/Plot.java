@@ -16,8 +16,8 @@ public class Plot {
     //TODO look into removing reference to plugin
 
     private final PlotMe_Core plugin;
-    private final PlayerList allowed;
     private final PlayerList denied;
+    private HashMap<String, Integer> allowed;
     private String owner;
     private UUID ownerId = UUID.randomUUID();
     private String world;
@@ -45,7 +45,6 @@ public class Plot {
         setProtected(false);
         setPlotName(null);
         setLikes(0);
-        this.allowed = new PlayerList();
         this.denied = new PlayerList();
     }
 
@@ -54,7 +53,7 @@ public class Plot {
         setOwner(owner);
         setOwnerId(uuid);
         setWorld(world.getName().toLowerCase());
-        allowed = new PlayerList();
+        allowed = new HashMap<>();
         denied = new PlayerList();
         setBiome("PLAINS");
         setId(plotId);
@@ -75,7 +74,8 @@ public class Plot {
         metadata = new HashMap<>();
     }
 
-    public Plot(PlotMe_Core plugin, int internalID, String owner, UUID ownerId, String world, String biome, Date expiredDate, PlayerList allowed,
+    public Plot(PlotMe_Core plugin, int internalID, String owner, UUID ownerId, String world, String biome, Date expiredDate,
+            HashMap<String, Integer> allowed,
             PlayerList
                     denied,
             PlotId id, double price, boolean forSale, boolean finished,
@@ -101,7 +101,8 @@ public class Plot {
         this.metadata = metadata;
     }
 
-    public Plot(PlotMe_Core plugin, int internalID, String owner, UUID ownerId, String world, String biome, Date expiredDate, PlayerList allowed,
+    public Plot(PlotMe_Core plugin, int internalID, String owner, UUID ownerId, String world, String biome, Date expiredDate,
+            HashMap<String, Integer> allowed,
             PlayerList
                     denied,
             PlayerList likers, PlotId id, double price, boolean forSale, boolean finished, String finishedDate, boolean protect,
@@ -182,17 +183,13 @@ public class Plot {
         ownerId = uuid;
     }
 
-    public String getAllowed() {
-        return allowed().getPlayerList();
-    }
-
     public String getDenied() {
         return denied().getPlayerList();
     }
 
-    public void addAllowed(String name) {
+    public void addAllowed(String name, int i) {
         if (!isAllowedConsulting(name)) {
-            allowed().put(name);
+            allowed().put(name, 1);
             plugin.getSqlManager().addPlotAllowed(name, getInternalID());
         }
     }
@@ -205,7 +202,7 @@ public class Plot {
     }
 
     public void removeAllowed(String name) {
-        if (allowed().contains(name)) {
+        if (allowed().containsKey(name)) {
             plugin.getSqlManager().deletePlotAllowed(getInternalID(), name);
 
             if (plugin.getServerBridge().getPlotWorldEdit() != null) {
@@ -229,18 +226,12 @@ public class Plot {
     }
 
     public void removeAllAllowed() {
-        List<String> list = allowed().getAllPlayers();
-        for (String n : list) {
-            plugin.getSqlManager().deleteAllAllowed(getInternalID());
-        }
+        plugin.getSqlManager().deleteAllAllowed(getInternalID());
         allowed().clear();
     }
 
     public void removeAllDenied() {
-        List<String> list = denied().getAllPlayers();
-        for (String n : list) {
-            plugin.getSqlManager().deleteAllDenied(getInternalID());
-        }
+        plugin.getSqlManager().deleteAllDenied(getInternalID());
         denied().clear();
     }
 
@@ -257,8 +248,28 @@ public class Plot {
     }
 
     private boolean isAllowedInternal(String name) {
-        List<String> list = allowed().getAllPlayers();
-        return this.getOwnerId().toString().equals(name) || list.contains(name) || list.contains("*");
+        if (allowed().containsKey(name)) {
+            Integer accessLevel = allowed().get(name);
+            if (accessLevel != null) {
+                if (accessLevel == 0) {
+                    return true;
+                } else if (accessLevel == 1) {
+                    return plugin.getServerBridge().getOfflinePlayer(this.getOwnerId()).isOnline();
+                }
+            }
+        } else if (allowed().containsKey("*")) {
+            Integer accessLevel = allowed().get("*");
+            if (accessLevel != null) {
+                if (accessLevel == 0) {
+                    return true;
+                } else if (accessLevel == 1) {
+                    return plugin.getServerBridge().getOfflinePlayer(this.getOwnerId()).isOnline();
+                }
+            }
+        } else {
+            return false;
+        }
+        return false;
     }
 
     public boolean isDeniedConsulting(String name) {
@@ -275,7 +286,7 @@ public class Plot {
         return !isAllowedInternal(name) && (list.contains("*") || list.contains(name));
     }
 
-    public PlayerList allowed() {
+    public HashMap<String, Integer> allowed() {
         return allowed;
     }
 
