@@ -12,6 +12,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public abstract class PlotEvent extends Event {
@@ -98,11 +99,11 @@ public abstract class PlotEvent extends Event {
      *
      * @return list of people allowed
      */
-    public List<String> getAllAllowed() {
+    public HashMap<String, Integer> getAllAllowed() {
         if (event.getPlot() != null) {
-            return event.getPlot().allowed().getAllPlayers();
+            return event.getPlot().allowed();
         } else {
-            return new ArrayList<>();
+            return new HashMap<>();
         }
     }
 
