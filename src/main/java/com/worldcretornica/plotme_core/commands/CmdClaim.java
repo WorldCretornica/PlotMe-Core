@@ -6,10 +6,10 @@ import com.worldcretornica.plotme_core.PlotId;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ICommandSender;
+import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotCreateEvent;
-import com.worldcretornica.plotme_core.utils.UUIDFetcher;
 import net.milkbowl.vault.economy.EconomyResponse;
 
 import java.util.UUID;
@@ -44,9 +44,12 @@ public class CmdClaim extends PlotCommand {
                 UUID playerUniqueId = player.getUniqueId();
 
                 if (args.length == 2 && player.hasPermission(PermissionNames.ADMIN_CLAIM_OTHER)) {
-                    serverBridge.getOfflinePlayer(args[1]);
+                    if (args[1].length() > 16 || !validUserPattern2.matcher(args[1]).matches()) {
+                        throw new IllegalArgumentException(C("InvalidCommandInput"));
+                    }
+                    IOfflinePlayer offlinePlayer = serverBridge.getOfflinePlayer(args[1]);
                     playerName = args[1];
-                    playerUniqueId = UUIDFetcher.getUUIDOf(playerName);
+                    playerUniqueId = offlinePlayer.getUniqueId();
                 }
 
                 int plotLimit = getPlotLimit(player);

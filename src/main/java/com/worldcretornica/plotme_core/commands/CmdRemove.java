@@ -26,8 +26,8 @@ public class CmdRemove extends PlotCommand {
     }
 
     public boolean execute(ICommandSender sender, String[] args) {
-        if (args.length < 2) {
-            //TODO add exception
+        if (args[1].length() > 16 || !validUserPattern.matcher(args[1]).matches()) {
+            throw new IllegalArgumentException(C("InvalidCommandInput"));
         }
         IPlayer player = (IPlayer) sender;
         if (player.hasPermission(PermissionNames.ADMIN_REMOVE) || player.hasPermission(PermissionNames.USER_REMOVE)) {

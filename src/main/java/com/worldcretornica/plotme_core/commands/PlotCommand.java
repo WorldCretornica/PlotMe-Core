@@ -17,7 +17,8 @@ public abstract class PlotCommand {
     final IServerBridge serverBridge;
 
     final PlotMeCoreManager manager;
-    final Pattern validUserPattern = Pattern.compile("^[a-zA-Z0-9_\\s]{2,16}$");
+    Pattern validUserPattern = Pattern.compile("(^[a-zA-Z0-9_]{2,16}$)|(^\\*$)");
+    Pattern validUserPattern2 = Pattern.compile("(^[a-zA-Z0-9_]{2,16}$)");
 
     public PlotCommand(PlotMe_Core instance) {
         plugin = instance;

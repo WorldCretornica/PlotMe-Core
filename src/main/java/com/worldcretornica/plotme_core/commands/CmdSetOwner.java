@@ -24,8 +24,8 @@ public class CmdSetOwner extends PlotCommand {
     }
 
     public boolean execute(ICommandSender sender, String[] args) {
-        if (args[1].length() > 16) {
-            throw new IllegalArgumentException("Player Name is too long!");
+        if (args[1].length() > 16 || !validUserPattern.matcher(args[1]).matches()) {
+            throw new IllegalArgumentException(C("InvalidCommandInput"));
         }
         IPlayer player = (IPlayer) sender;
         IWorld world = player.getWorld();
