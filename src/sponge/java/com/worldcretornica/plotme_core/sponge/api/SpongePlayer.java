@@ -7,6 +7,7 @@ import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import org.spongepowered.api.entity.player.Player;
 import org.spongepowered.api.item.inventory.ItemStack;
+import org.spongepowered.api.text.chat.ChatTypes;
 
 public class SpongePlayer extends SpongeUser implements IPlayer {
 
@@ -19,7 +20,7 @@ public class SpongePlayer extends SpongeUser implements IPlayer {
 
     @Override
     public void sendMessage(String message) {
-        //player.sendMessage(message);
+        player.sendMessage(ChatTypes.CHAT, message);
     }
 
     @Override
