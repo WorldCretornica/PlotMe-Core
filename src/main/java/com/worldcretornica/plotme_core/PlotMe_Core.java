@@ -29,6 +29,7 @@ public class PlotMe_Core {
     //Caption and Config File.
     private ConfigAccessor configFile;
     private ConfigAccessor captionFile;
+    private EventBus eventBus;
 
     public PlotMe_Core(IServerBridge serverObjectBuilder, AbstractSchematicUtil schematicutil) {
         this.serverBridge = serverObjectBuilder;
@@ -53,7 +54,8 @@ public class PlotMe_Core {
     }
 
     public void enable() {
-        EventBus plotmeEventBus = new EventBus(); //todo work on new event system
+        EventBus plotmeEventBus = new EventBus("PlotMe"); //todo work on new event system
+        setEventBus(plotmeEventBus);
         PlotMeCoreManager.getInstance().setPlugin(this);
         configFile = new ConfigAccessor(this, getServerBridge().getDataFolder(), "config.yml");
         captionFile = new ConfigAccessor(this, getServerBridge().getDataFolder(), "captions.yml");
@@ -266,4 +268,11 @@ public class PlotMe_Core {
         }
     }
 
+    public EventBus getEventBus() {
+        return eventBus;
+    }
+
+    public void setEventBus(EventBus eventBus) {
+        this.eventBus = eventBus;
+    }
 }
