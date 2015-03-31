@@ -43,7 +43,7 @@ public class SpongePlotListener {
     //This event is triggered for both placing and breaking blocks.
     @Subscribe
     public void onBlockChange(PlayerChangeBlockEvent event) {
-        SpongeLocation location = new SpongeLocation(event.getBlock().getLocation());
+        SpongeLocation location = new SpongeLocation(event.getBlock());
         if (manager.isPlotWorld(location)) {
             PlotId id = manager.getPlotId(location);
             Player player = event.getPlayer();

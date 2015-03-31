@@ -22,8 +22,6 @@ public interface ILocation {
 
     void setZ(double z);
 
-    IBlock getBlock();
-
     ILocation add(double x, double y, double z);
 
     ILocation subtract(double x, double y, double z);

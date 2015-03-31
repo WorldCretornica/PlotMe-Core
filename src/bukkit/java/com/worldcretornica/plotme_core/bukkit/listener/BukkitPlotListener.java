@@ -8,7 +8,6 @@ import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.PlotToClear;
 import com.worldcretornica.plotme_core.bukkit.PlotMe_CorePlugin;
-import com.worldcretornica.plotme_core.bukkit.api.BukkitBlock;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitEntity;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitLocation;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
@@ -242,16 +241,16 @@ public class BukkitPlotListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onPlayerInteract(PlayerInteractEvent event) {
 
-        BukkitBlock block = new BukkitBlock(event.getClickedBlock());
-        if (manager.isPlotWorld(block.getWorld())) {
+        BukkitLocation location = new BukkitLocation(event.getClickedBlock().getLocation());
+        if (manager.isPlotWorld(location)) {
             Player player = event.getPlayer();
 
-            PlotId plotId = manager.getPlotId(block.getLocation());
+            PlotId plotId = manager.getPlotId(location);
             if (plotId == null) {
                 event.setCancelled(true);
                 return;
             }
-            PlotToClear ptc = api.getPlotLocked(block.getWorld(), plotId);
+            PlotToClear ptc = api.getPlotLocked(location.getWorld(), plotId);
             if (ptc != null) {
                 switch (ptc.getReason()) {
                     case Clear:
@@ -267,7 +266,7 @@ public class BukkitPlotListener implements Listener {
                 event.setCancelled(true);
             } else {
                 boolean canBuild = !player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE);
-                PlotMapInfo pmi = manager.getMap(block.getWorld());
+                PlotMapInfo pmi = manager.getMap(location);
 
                 Plot plot = manager.getPlotById(plotId, pmi);
                 if (event.isBlockInHand() && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
@@ -281,7 +280,8 @@ public class BukkitPlotListener implements Listener {
                     }
                 } else {
                     boolean blocked = false;
-                    if (pmi.isProtectedBlock(block.getTypeId()) && !player.hasPermission("plotme.unblock." + block.getTypeId())) {
+                    if (pmi.isProtectedBlock(event.getClickedBlock().getTypeId()) && !player
+                            .hasPermission("plotme.unblock." + event.getClickedBlock().getTypeId())) {
                         blocked = true;
                     }
 

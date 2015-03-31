@@ -7,10 +7,13 @@ import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 
+import java.sql.Date;
+import java.util.Calendar;
 import java.util.UUID;
 
 public class CmdPlotList extends PlotCommand {
 
+    //todo rewrite this command
     public CmdPlotList(PlotMe_Core instance) {
         super(instance);
     }
@@ -53,16 +56,16 @@ public class CmdPlotList extends PlotCommand {
                         player.sendMessage("World: " + plot.getWorld());
                     }
 
-                    //                    // Is it expired?
-                    //                    if (plot.getExpiredDate() != null) {
-                    //                        String expiredDate = plot.getExpiredDate();
-                    //
-                    //                        if (expiredDate.before(Calendar.getInstance().getTime())) {
-                    //                            addition.append(" @" + plot.getExpiredDate());
-                    //                        } else {
-                    //                            addition.append(" @" + plot.getExpiredDate());
-                    //                        }
-                    //                    }
+                    // Is it expired?
+                    if (plot.getExpiredDate() != null) {
+                        Date expiredDate = plot.getExpiredDate();
+
+                        if (expiredDate.before(Calendar.getInstance().getTime())) {
+                            addition.append(" @" + plot.getExpiredDate());
+                        } else {
+                            addition.append(" @" + plot.getExpiredDate());
+                        }
+                    }
 
                     // Is it for sale?
                     if (plot.isForSale()) {
@@ -70,7 +73,7 @@ public class CmdPlotList extends PlotCommand {
                     }
 
                     // Is the plot owner the name?
-/*
+
                     if (plot.getOwner().equalsIgnoreCase(name)) {
                         if (plot.allowed().size() == 0) {
                             // Is the name the current player too?
@@ -81,16 +84,16 @@ public class CmdPlotList extends PlotCommand {
                             }
                         } else if (plot.getOwner().equalsIgnoreCase(player.getName())) {
                             player.sendMessage(plot.getId() + " -> " + C("WordYours") + addition + ", " + C("WordHelpers") + ": " + plot
-                                            .getAllowed().replace(",", ","));
+                                    .allowed().toString()); //todo fix this to work with allowed and trusted
                         } else {
                             player.sendMessage(plot.getId() + " -> " + plot.getOwner() + addition + ", " + C("WordHelpers") + ": " + plot
-                                            .getAllowed().replace(",", ","));
+                                    .allowed().toString()); //todo fix this to work with allowed and trusted
                         }
 
                         // Is the name allowed to build there?
                     } else if (plot.isAllowedConsulting(name)) {
                         StringBuilder helpers = new StringBuilder();
-                        for (String allowed : plot.allowed().getPlayers()) {
+                        for (String allowed : plot.allowed().keySet()) {
                             if (player.getName().equalsIgnoreCase(allowed)) {
                                 if (name.equalsIgnoreCase(player.getName())) {
                                     helpers.append("You").append(", ");
@@ -112,7 +115,7 @@ public class CmdPlotList extends PlotCommand {
                                             + ": " + helpers);
                         }
                     }
-*/
+
                 }
             } else {
                 player.sendMessage(C("MsgNotPlotWorld"));

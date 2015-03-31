@@ -1,7 +1,6 @@
 package com.worldcretornica.plotme_core.sponge.api;
 
 import com.flowpowered.math.vector.Vector3d;
-import com.worldcretornica.plotme_core.api.IBlock;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IWorld;
 import org.spongepowered.api.world.Location;
@@ -22,17 +21,17 @@ public class SpongeLocation implements ILocation {
 
     @Override
     public int getBlockX() {
-        return location.getBlock().getX();
+        return location.getBlockX();
     }
 
     @Override
     public int getBlockY() {
-        return location.getBlock().getY();
+        return location.getBlockY();
     }
 
     @Override
     public int getBlockZ() {
-        return location.getBlock().getZ();
+        return location.getBlockZ();
     }
 
     @Override
@@ -69,8 +68,8 @@ public class SpongeLocation implements ILocation {
     }
 
     @Override
-    public IBlock getBlock() {
-        return new SpongeBlockLoc(location.getBlock());
+    public String toString() {
+        return "World: " + ((World) location.getExtent()).getName() + " X/Y/Z: " + getX() + "," + getY() + "," + getZ();
     }
 
     @Override

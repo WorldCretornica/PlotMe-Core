@@ -1,5 +1,6 @@
 package com.worldcretornica.plotme_core;
 
+import com.google.common.eventbus.EventBus;
 import com.worldcretornica.configuration.ConfigAccessor;
 import com.worldcretornica.configuration.file.FileConfiguration;
 import com.worldcretornica.plotme_core.api.IPlotMe_GeneratorManager;
@@ -52,6 +53,7 @@ public class PlotMe_Core {
     }
 
     public void enable() {
+        EventBus plotmeEventBus = new EventBus(); //todo work on new event system
         PlotMeCoreManager.getInstance().setPlugin(this);
         configFile = new ConfigAccessor(this, getServerBridge().getDataFolder(), "config.yml");
         captionFile = new ConfigAccessor(this, getServerBridge().getDataFolder(), "captions.yml");
@@ -60,8 +62,6 @@ public class PlotMe_Core {
         setupSQL();
         serverBridge.setupHooks();
         serverBridge.setupListeners();
-        getSqlManager().startConnection();
-        getSqlManager().createTables();
         if (getConfig().getBoolean("coreDatabaseUpdate")) {
             getSqlManager().coreDatabaseUpdate();
         }
@@ -91,9 +91,9 @@ public class PlotMe_Core {
         // Get the config we will be working with
         FileConfiguration config = getConfig();
         // Do any config validation
-        if (config.getInt("NbClearSpools") > 50) {
-            getLogger().warning("Having more than 50 clear spools seems drastic, changing to 50");
-            config.set("NbClearSpools", 50);
+        if (config.getInt("NbClearSpools") > 20) {
+            getLogger().warning("Having more than 20 clear spools seems drastic, changing to 20");
+            config.set("NbClearSpools", 20);
         }
         //Check if the config doesn't have the worlds section. This should happen only if there is no config file for the plugin already.
         if (!config.contains("worlds")) {
@@ -129,14 +129,29 @@ public class PlotMe_Core {
      */
     private void setupSQL() {
         FileConfiguration config = getConfig();
+        boolean fileFound = false;
         if (config.getBoolean("usemySQL", false)) {
             String url = config.getString("mySQLconn");
             String user = config.getString("mySQLuname");
             String pass = config.getString("mySQLpass");
             setSqlManager(new MySQLConnector(this, url, user, pass));
+            getSqlManager().createTables();
         } else {
             setSqlManager(new SQLiteConnector(this));
             getSqlManager().createTables();
+            for (String file : getServerBridge().getDataFolder().list()) {
+                if (file.equalsIgnoreCase("plots.db")) {
+                    fileFound = true;
+                    break;
+                } else {
+                    fileFound = false;
+                }
+            }
+        }
+        getSqlManager().startConnection();
+        getSqlManager().createTables();
+        if (fileFound) {
+            getSqlManager().legacyConverter();
         }
     }
 

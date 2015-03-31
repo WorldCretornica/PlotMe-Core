@@ -2,7 +2,6 @@ package com.worldcretornica.plotme_core;
 
 import com.griefcraft.lwc.LWC;
 import com.griefcraft.model.Protection;
-import com.worldcretornica.plotme_core.api.IBlock;
 import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IEntity;
 import com.worldcretornica.plotme_core.api.ILocation;
@@ -559,16 +558,6 @@ public class PlotMeCoreManager {
     }
 
     /**
-     * Checks if the block is in a plotworld
-     *
-     * @param block block to get the location from
-     * @return true if world is plotworld, false otherwise
-     */
-
-    public boolean isPlotWorld(IBlock block) {
-        return isPlotWorld(block.getWorld());
-    }
-    /**
      * Creates a new plot
      *
      * @param world plotworld
@@ -697,8 +686,6 @@ public class PlotMeCoreManager {
     public void clear(IWorld world, Plot plot, ICommandSender sender, ClearReason reason) {
         PlotId id = plot.getId();
 
-        ILocation bottom = getGenManager(world).getBottom(world, id);
-        ILocation top = getGenManager(world).getTop(world, id);
         if (reason.equals(ClearReason.Clear)) {
             adjustWall(world, plot.getId(), true);
         } else {

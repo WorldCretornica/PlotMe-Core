@@ -70,62 +70,72 @@ public abstract class Database {
     public abstract void createTables();
 
     public void legacyConverter() {
-        plugin.getServerBridge().runTaskAsynchronously(new Runnable() {
-            @Override
-            public void run() {
-                try (Statement statement = connection.createStatement();
-                        PreparedStatement statement2 = connection.prepareStatement(SELECT_INTERNAL_ID
-                                + " AND LOWER(world) = ?"); PreparedStatement statement3 = connection.prepareStatement(
-                        "INSERT INTO plotmecore_allowed (plot_id, allowedID, allowed) VALUES (?,?,?)");
-                        PreparedStatement statement4 = connection
-                                .prepareStatement("INSERT INTO plotmecore_denied (plot_id, deniedID, denied) VALUES (?,?,?)")) {
-                    statement.executeUpdate("INSERT INTO plotmecore_plots (plotX, plotZ, world, ownerID, owner, biome, finished, finishedDate, "
-                            + "forSale, price, protected, expiredDate, topX,topZ, bottomX, bottomZ) SELECT idX,idZ,world,ownerid,owner,biome,"
-                            + "finished,finisheddate,forsale,customprice,protected,expireddate,topX,topZ,bottomX,bottomZ FROM `plotmePlots` WHERE "
-                            + "ownerid IS NOT NULL");
-                    statement.executeUpdate("");
-                    connection.commit();
-                    ResultSet allowedResult = statement.executeQuery("SELECT * FROM plotmeallowed");
-                    while (allowedResult.next()) {
-                        int idX = allowedResult.getInt("idX");
-                        int idZ = allowedResult.getInt("idZ");
-                        String world = allowedResult.getString("world").toLowerCase();
-                        statement2.setInt(1, idX);
-                        statement2.setInt(2, idZ);
-                        statement2.setString(3, world);
-                        ResultSet resultSet = statement2.executeQuery();
-                        while (resultSet.next()) {
-                            statement3.executeQuery("INSERT INTO plotmecore_allowed (plot_id, allowedID, allowed) VALUES (" + resultSet.getInt(1)
-                                    + "," + allowedResult.getBytes("playerid") + "," + allowedResult.getString("player") + ")");
-                        }
-                        resultSet.close();
-                    }
-                    connection.commit();
-                    allowedResult.close();
-                    ResultSet deniedResult = statement.executeQuery("SELECT * FROM plotmedenied");
-                    while (deniedResult.next()) {
-                        int idX = deniedResult.getInt("idX");
-                        int idZ = deniedResult.getInt("idZ");
-                        String world = deniedResult.getString("world").toLowerCase();
-                        statement2.setInt(1, idX);
-                        statement2.setInt(2, idZ);
-                        statement2.setString(3, world);
-                        ResultSet resultSet = statement2.executeQuery();
-                        while (resultSet.next()) {
-                            statement4.executeQuery("INSERT INTO plotmecore_denied (plot_id, allowedID, allowed) VALUES (" + resultSet.getInt(1)
-                                    + "," + deniedResult.getString("playerid") + "," + deniedResult.getString("player") + ")");
-                        }
-                        resultSet.close();
-                    }
-                    deniedResult.close();
-                    connection.commit();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+        if (true) {
+            plugin.getServerBridge().runTaskAsynchronously(new Runnable() {
+                @Override
+                public void run() {
+                    if (tableExists("plotmePlots")) {
 
-            }
-        });
+                    }
+
+                    try (Statement statement = connection.createStatement();
+                            PreparedStatement statement2 = connection.prepareStatement(SELECT_INTERNAL_ID
+                                    + " AND LOWER(world) = ?"); PreparedStatement statement3 = connection.prepareStatement(
+                            "INSERT INTO plotmecore_allowed (plot_id, allowedID, allowed) VALUES (?,?,?)");
+                            PreparedStatement statement4 = connection
+                                    .prepareStatement("INSERT INTO plotmecore_denied (plot_id, deniedID, denied) VALUES (?,?,?)")) {
+                        statement.executeUpdate("INSERT INTO plotmecore_plots (plotX, plotZ, world, ownerID, owner, biome, finished, finishedDate, "
+                                + "forSale, price, protected, expiredDate, topX,topZ, bottomX, bottomZ) SELECT idX,idZ,world,ownerid,owner,biome,"
+                                + "finished,finisheddate,forsale,customprice,protected,expireddate,topX,topZ,bottomX,bottomZ FROM `plotmePlots` "
+                                + "WHERE "
+                                + "ownerid IS NOT NULL");
+                        statement.executeUpdate("");
+                        connection.commit();
+                        ResultSet allowedResult = statement.executeQuery("SELECT * FROM plotmeallowed");
+                        while (allowedResult.next()) {
+                            int idX = allowedResult.getInt("idX");
+                            int idZ = allowedResult.getInt("idZ");
+                            String world = allowedResult.getString("world").toLowerCase();
+                            statement2.setInt(1, idX);
+                            statement2.setInt(2, idZ);
+                            statement2.setString(3, world);
+                            ResultSet resultSet = statement2.executeQuery();
+                            while (resultSet.next()) {
+                                statement3.executeQuery("INSERT INTO plotmecore_allowed (plot_id, allowedID, allowed) VALUES (" + resultSet.getInt(1)
+                                        + "," + allowedResult.getBytes("playerid") + "," + allowedResult.getString("player") + ")");
+                            }
+                            resultSet.close();
+                        }
+                        connection.commit();
+                        allowedResult.close();
+                        ResultSet deniedResult = statement.executeQuery("SELECT * FROM plotmedenied");
+                        while (deniedResult.next()) {
+                            int idX = deniedResult.getInt("idX");
+                            int idZ = deniedResult.getInt("idZ");
+                            String world = deniedResult.getString("world").toLowerCase();
+                            statement2.setInt(1, idX);
+                            statement2.setInt(2, idZ);
+                            statement2.setString(3, world);
+                            ResultSet resultSet = statement2.executeQuery();
+                            while (resultSet.next()) {
+                                statement4.executeQuery("INSERT INTO plotmecore_denied (plot_id, allowedID, allowed) VALUES (" + resultSet.getInt(1)
+                                        + "," + deniedResult.getString("playerid") + "," + deniedResult.getString("player") + ")");
+                            }
+                            resultSet.close();
+                        }
+                        deniedResult.close();
+                        connection.commit();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            });
+        }
     }
+
+
+    abstract boolean tableExists(String name);
 
     /**
      * Get the number of plots in the world
