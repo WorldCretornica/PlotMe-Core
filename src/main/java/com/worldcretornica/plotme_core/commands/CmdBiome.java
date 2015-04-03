@@ -49,32 +49,28 @@ public class CmdBiome extends PlotCommand {
 
                             double price = 0.0;
 
-                            InternalPlotBiomeChangeEvent event;
+                            InternalPlotBiomeChangeEvent event = new InternalPlotBiomeChangeEvent(world, plot, player, biomeName);
+                            serverBridge.getEventBus().post(event);
 
                             if (manager.isEconomyEnabled(pmi)) {
                                 price = pmi.getBiomeChangePrice();
                                 double balance = serverBridge.getBalance(player);
 
-                                if (balance >= price) {
-                                    event = serverBridge.getEventFactory().callPlotBiomeChangeEvent(world, plot, player, biomeName);
-                                    if (event.isCancelled()) {
-                                        return true;
-                                    } else {
-                                        EconomyResponse er = serverBridge.withdrawPlayer(player, price);
-
-                                        if (!er.transactionSuccess()) {
-                                            player.sendMessage(er.errorMessage);
-                                            serverBridge.getLogger().warning(er.errorMessage);
-                                            return true;
-                                        }
-                                    }
-                                } else {
+                                if (balance < price) {
                                     player.sendMessage(C("MsgNotEnoughBiome") + " " + C("WordMissing") + " " + plugin
                                             .moneyFormat(price - balance, false));
                                     return true;
+                                } else if (!event.isCancelled()) {
+                                    EconomyResponse er = serverBridge.withdrawPlayer(player, price);
+
+                                    if (!er.transactionSuccess()) {
+                                        player.sendMessage(er.errorMessage);
+                                        serverBridge.getLogger().warning(er.errorMessage);
+                                        return true;
+                                    }
+                                } else {
+                                    return true;
                                 }
-                            } else {
-                                event = serverBridge.getEventFactory().callPlotBiomeChangeEvent(world, plot, player, biomeName);
                             }
 
                             if (!event.isCancelled()) {

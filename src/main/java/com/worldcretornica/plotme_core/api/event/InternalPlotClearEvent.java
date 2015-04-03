@@ -4,7 +4,7 @@ import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 
-public class InternalPlotClearEvent extends InternalPlotEvent implements ICancellable {
+public class InternalPlotClearEvent extends InternalPlotEvent implements ICancellable, Event {
 
     private final IPlayer clearer;
     private boolean canceled;

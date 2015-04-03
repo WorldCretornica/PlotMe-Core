@@ -2,6 +2,7 @@ package com.worldcretornica.plotme_core.bukkit.api;
 
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.utils.DoubleHelper;
 import org.bukkit.Location;
 
 public class BukkitLocation implements ILocation {
@@ -74,6 +75,16 @@ public class BukkitLocation implements ILocation {
     @Override
     public ILocation add(double x, double y, double z) {
         return new BukkitLocation(location.add(x, y, z));
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 79 * hash + getWorld().hashCode();
+        hash = 79 * hash + DoubleHelper.hashCode(this.getX());
+        hash = 79 * hash + DoubleHelper.hashCode(this.getBlockY());
+        hash = 79 * hash + DoubleHelper.hashCode(this.getY());
+        return hash;
     }
 
     @Override

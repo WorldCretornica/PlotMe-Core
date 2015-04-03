@@ -4,7 +4,7 @@ import com.worldcretornica.configuration.ConfigAccessor;
 import com.worldcretornica.configuration.ConfigurationSection;
 import com.worldcretornica.configuration.file.YamlConfiguration;
 import com.worldcretornica.plotme_core.PlotWorldEdit;
-import com.worldcretornica.plotme_core.api.event.IEventFactory;
+import com.worldcretornica.plotme_core.api.event.eventbus.EventBus;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 
@@ -18,7 +18,13 @@ import java.util.logging.Logger;
 
 public abstract class IServerBridge {
 
+    private final EventBus eventBus = new EventBus(getLogger());
+
     private boolean usingLwc;
+
+    public EventBus getEventBus() {
+        return eventBus;
+    }
 
     public abstract IOfflinePlayer getOfflinePlayer(UUID uuid);
 
@@ -89,8 +95,6 @@ public abstract class IServerBridge {
     public abstract void runTaskLaterAsynchronously(Runnable runnable, long delay);
 
     public abstract boolean doesBiomeExist(String name);
-
-    public abstract IEventFactory getEventFactory();
 
     public abstract File getDataFolder();
 

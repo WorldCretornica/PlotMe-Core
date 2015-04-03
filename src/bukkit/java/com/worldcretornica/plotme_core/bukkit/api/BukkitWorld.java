@@ -30,4 +30,18 @@ public class BukkitWorld implements IWorld {
     public File getWorldFolder() {
         return world.getWorldFolder();
     }
+
+    @Override
+    public int hashCode() {
+        return world.getUID().hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        boolean result = false;
+        if (obj instanceof IWorld) {
+            result = this.hashCode() == obj.hashCode();
+        }
+        return result;
+    }
 }

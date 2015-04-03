@@ -1,10 +1,10 @@
 package com.worldcretornica.plotme_core.sponge;
 
-import com.google.common.base.Optional;
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.api.CommandExBase;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.entity.player.Player;
+import org.spongepowered.api.text.Text;
 import org.spongepowered.api.util.command.CommandCallable;
 import org.spongepowered.api.util.command.CommandException;
 import org.spongepowered.api.util.command.CommandSource;
@@ -57,53 +57,23 @@ public class SpongeCommand extends CommandExBase implements CommandCallable {
         return false;
     }
 
-    /**
-     * Get a short one-line description of this command.
-     *
-     * @return A description, if available
-     */
     @Override
-    public Optional<String> getShortDescription() {
-        return Optional.of("Generic PlotMe Help");
+    public String getShortDescription(CommandSource commandSource) {
+        return null;
     }
 
-    /**
-     * Get a longer help text about this command.
-     *
-     * @return A help text, if available
-     */
     @Override
-    public Optional<String> getHelp() {
-        return Optional.of("Generic PlotMe Help");
+    public Text getHelp(CommandSource commandSource) {
+        return null;
     }
 
-    /**
-     * Get the usage string of this command.
-     *
-     * <p>A usage string may look like
-     * {@code [-w &lt;world&gt;] &lt;var1&gt; &lt;var2&gt;}.</p>
-     *
-     * @return A usage string
-     */
     @Override
-    public String getUsage() {
-        return "Add this message later";
+    public String getUsage(CommandSource commandSource) {
+        return null;
     }
 
-    /**
-     * Get a list of suggestions based on input.
-     *
-     * <p>If a suggestion is chosen by the user, it will replace the last
-     * word.</p>
-     *
-     * @param source The command source
-     * @param arguments The arguments entered up to this point
-     * @return A list of suggestions
-     * @throws CommandException Thrown if there was a parsing error
-     */
     @Override
     public List<String> getSuggestions(CommandSource source, String arguments) throws CommandException {
-        //noinspection ConstantConditions
         return null;
     }
 }

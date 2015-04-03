@@ -68,14 +68,17 @@ public class CmdAuto extends PlotCommand {
                         if (manager.isPlotAvailable(id, pmi)) {
                             double price = 0.0;
 
-                            InternalPlotCreateEvent event;
-
+                            InternalPlotCreateEvent event = new InternalPlotCreateEvent(world, id, player);
+                            serverBridge.getEventBus().post(event);
                             if (manager.isEconomyEnabled(pmi)) {
                                 price = pmi.getClaimPrice();
                                 double balance = serverBridge.getBalance(player);
 
-                                if (balance >= price) {
-                                    event = serverBridge.getEventFactory().callPlotCreatedEvent(world, id, player);
+                                if (balance < price) {
+                                    player.sendMessage(C("MsgNotEnoughAuto") + " " + C("WordMissing") + " " + plugin
+                                            .moneyFormat(price - balance, false));
+                                    return true;
+                                } else {
 
                                     if (event.isCancelled()) {
                                         return true;
@@ -87,14 +90,9 @@ public class CmdAuto extends PlotCommand {
                                         serverBridge.getLogger().warning(er.errorMessage);
                                         return true;
                                     }
-                                } else {
-                                    player.sendMessage(C("MsgNotEnoughAuto") + " " + C("WordMissing") + " " + plugin
-                                            .moneyFormat(price - balance, false));
-                                    return true;
                                 }
-                            } else {
-                                event = serverBridge.getEventFactory().callPlotCreatedEvent(world, id, player);
                             }
+
                             if (!event.isCancelled()) {
                                 manager.createPlot(world, id, player.getName(), player.getUniqueId(), pmi);
 

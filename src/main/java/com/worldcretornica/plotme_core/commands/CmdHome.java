@@ -99,7 +99,7 @@ public class CmdHome extends PlotCommand {
 
                                         if (balance >= price) {
                                             location = (BukkitLocation) manager.getPlotHome(world, plot.getId());
-                                            event = serverBridge.getEventFactory().callPlotTeleportHomeEvent(world, plot, player, location);
+                                            event = new InternalPlotTeleportHomeEvent(world, plot, player, location);
 
                                             if (event.isCancelled()) {
                                                 return true;
@@ -117,7 +117,7 @@ public class CmdHome extends PlotCommand {
                                         }
                                     } else {
                                         location = (BukkitLocation) manager.getPlotHome(world, plot.getId());
-                                        event = serverBridge.getEventFactory().callPlotTeleportHomeEvent(world, plot, player, location);
+                                        event = new InternalPlotTeleportHomeEvent(world, plot, player, location);
                                     }
 
                                     if (!event.isCancelled()) {
@@ -144,7 +144,7 @@ public class CmdHome extends PlotCommand {
 
                                     if (balance >= price) {
                                         location = (BukkitLocation) manager.getPlotHome(world, plot.getId());
-                                        event = serverBridge.getEventFactory().callPlotTeleportHomeEvent(world, plot, player, location);
+                                        event = new InternalPlotTeleportHomeEvent(world, plot, player, location);
 
                                         if (!event.isCancelled()) {
                                             EconomyResponse er = serverBridge.withdrawPlayer(player, price);
@@ -161,7 +161,7 @@ public class CmdHome extends PlotCommand {
                                     }
                                 } else {
                                     location = (BukkitLocation) manager.getPlotHome(world, plot.getId());
-                                    event = serverBridge.getEventFactory().callPlotTeleportHomeEvent(world, plot, player, location);
+                                    event = new InternalPlotTeleportHomeEvent(world, plot, player, location);
                                 }
 
                                 if (!event.isCancelled()) {

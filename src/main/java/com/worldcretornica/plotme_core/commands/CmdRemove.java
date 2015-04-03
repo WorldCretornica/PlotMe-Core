@@ -51,33 +51,25 @@ public class CmdRemove extends PlotCommand {
 
                                 double price = 0.0;
 
-                                InternalPlotRemoveAllowedEvent event;
+                                InternalPlotRemoveAllowedEvent event = new InternalPlotRemoveAllowedEvent(world, plot, player, allowed);
+                                serverBridge.getEventBus().post(event);
 
-                                if (manager.isEconomyEnabled(pmi)) {
+                                if (manager.isEconomyEnabled(pmi) && !event.isCancelled()) {
                                     price = pmi.getRemovePlayerPrice();
-                                    double balance = serverBridge.getBalance(player);
 
-                                    if (balance >= price) {
-                                        event = serverBridge.getEventFactory().callPlotRemoveAllowedEvent(world, plot, player, allowed);
+                                    if (serverBridge.getBalance(player) >= price) {
+                                        EconomyResponse er = serverBridge.withdrawPlayer(player, price);
 
-                                        if (event.isCancelled()) {
+                                        if (!er.transactionSuccess()) {
+                                            player.sendMessage(er.errorMessage);
+                                            serverBridge.getLogger().warning(er.errorMessage);
                                             return true;
-                                        } else {
-                                            EconomyResponse er = serverBridge.withdrawPlayer(player, price);
-
-                                            if (!er.transactionSuccess()) {
-                                                player.sendMessage(er.errorMessage);
-                                                serverBridge.getLogger().warning(er.errorMessage);
-                                                return true;
-                                            }
                                         }
                                     } else {
                                         player.sendMessage(C("MsgNotEnoughRemove") + " " + C("WordMissing") + " " + plugin.moneyFormat(price -
-                                                balance, false));
+                                                serverBridge.getBalance(player), false));
                                         return true;
                                     }
-                                } else {
-                                    event = serverBridge.getEventFactory().callPlotRemoveAllowedEvent(world, plot, player, allowed);
                                 }
 
                                 if (!event.isCancelled()) {

@@ -8,7 +8,7 @@ import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
-import com.worldcretornica.plotme_core.api.event.InternalPlotAddAllowedEvent;
+import com.worldcretornica.plotme_core.api.event.InternalPlotAddTrustedEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
 
 //TODO DOES NOT WORK. CODE NEEDS TO BE MODIFIED FOR TRUST
@@ -48,34 +48,29 @@ public class CmdTrust extends PlotCommand {
                                 player.sendMessage(C("WordPlayer") + " " + trust + " " + C("MsgAlreadyAllowed"));
                             } else {
 
-                                InternalPlotAddAllowedEvent event;
+                                InternalPlotAddTrustedEvent event = new InternalPlotAddTrustedEvent(world, plot, player, trust);
+                                serverBridge.getEventBus().post(event);
                                 double advancedPrice = 0.0;
                                 if (manager.isEconomyEnabled(pmi)) {
                                     double price = pmi.getAddPlayerPrice();
                                     advancedPrice = price;
                                     double balance = serverBridge.getBalance(player);
 
-                                    if (balance >= price) {
-                                        event = serverBridge.getEventFactory().callPlotAddAllowedEvent(world, plot, player, trust);
-
-                                        if (!event.isCancelled()) {
-                                            EconomyResponse er = serverBridge.withdrawPlayer(player, price);
-
-                                            if (!er.transactionSuccess()) {
-                                                player.sendMessage(er.errorMessage);
-                                                serverBridge.getLogger().warning(er.errorMessage);
-                                                return true;
-                                            }
-                                        } else {
-                                            return true;
-                                        }
-                                    } else {
+                                    if (balance < price) {
                                         player.sendMessage(C("MsgNotEnoughAdd") + " " + C("WordMissing") + " " + plugin.moneyFormat(price - balance,
                                                 false));
                                         return true;
+                                    } else if (!event.isCancelled()) {
+                                        EconomyResponse er = serverBridge.withdrawPlayer(player, price);
+
+                                        if (!er.transactionSuccess()) {
+                                            player.sendMessage(er.errorMessage);
+                                            serverBridge.getLogger().warning(er.errorMessage);
+                                            return true;
+                                        }
+                                    } else {
+                                        return true;
                                     }
-                                } else {
-                                    event = serverBridge.getEventFactory().callPlotAddAllowedEvent(world, plot, player, trust);
                                 }
 
                                 if (!event.isCancelled()) {

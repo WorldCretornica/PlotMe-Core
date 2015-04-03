@@ -70,7 +70,7 @@ public class CmdClaim extends PlotCommand {
                         double balance = serverBridge.getBalance(player);
 
                         if (balance >= price) {
-                            event = serverBridge.getEventFactory().callPlotCreatedEvent(world, id, player);
+                            event = new InternalPlotCreateEvent(world, id, player);
 
                             if (event.isCancelled()) {
                                 return true;
@@ -89,7 +89,7 @@ public class CmdClaim extends PlotCommand {
                             return true;
                         }
                     } else {
-                        event = serverBridge.getEventFactory().callPlotCreatedEvent(world, id, player);
+                        event = new InternalPlotCreateEvent(world, id, player);
                     }
 
                     if (!event.isCancelled()) {

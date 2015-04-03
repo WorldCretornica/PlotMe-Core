@@ -5,22 +5,12 @@ import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 
-public class InternalPlotTeleportHomeEvent extends InternalPlotTeleportEvent {
+public class InternalPlotTeleportHomeEvent extends InternalPlotTeleportEvent implements ICancellable, Event {
 
     private boolean canceled;
 
     public InternalPlotTeleportHomeEvent(IWorld world, Plot plot, IPlayer player, ILocation location) {
         super(world, plot, player, location, plot.getId());
-    }
-
-    @Override
-    public boolean isCancelled() {
-        return canceled;
-    }
-
-    @Override
-    public void setCanceled(boolean cancel) {
-        canceled = cancel;
     }
 
     @Deprecated

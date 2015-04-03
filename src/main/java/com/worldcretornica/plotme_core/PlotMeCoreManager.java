@@ -8,6 +8,7 @@ import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IPlotMe_GeneratorManager;
 import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.api.event.InternalPlotLoadEvent;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -497,8 +498,9 @@ public class PlotMeCoreManager {
         PlotMapInfo pmi = getMap(world);
 
         if (pmi != null) {
+            InternalPlotLoadEvent event = new InternalPlotLoadEvent(world, plot);
+            plugin.getServerBridge().getEventBus().post(event);
             pmi.addPlot(id, plot);
-            plugin.getServerBridge().getEventFactory().callPlotLoadedEvent(world, plot);
         }
     }
 
@@ -513,7 +515,7 @@ public class PlotMeCoreManager {
     public void addPlot(IWorld world, PlotId id, Plot plot, PlotMapInfo pmi) {
         if (pmi != null) {
             pmi.addPlot(id, plot);
-            plugin.getServerBridge().getEventFactory().callPlotLoadedEvent(world, plot);
+            InternalPlotLoadEvent event = new InternalPlotLoadEvent(world, plot);
         }
     }
 

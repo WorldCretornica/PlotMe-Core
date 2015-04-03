@@ -4,7 +4,7 @@ import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 
-public class InternalPlotBiomeChangeEvent extends InternalPlotEvent implements ICancellable {
+public class InternalPlotBiomeChangeEvent extends InternalPlotEvent implements ICancellable, Event {
 
     private final IPlayer player;
     private boolean canceled;

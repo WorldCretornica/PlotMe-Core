@@ -17,7 +17,6 @@ public class PlotIDTest {
                 System.out.println(id.hashCode());
                 System.out.println(id);
                 Assert.assertEquals(id, id2);
-
             }
         }
     }

@@ -7,7 +7,7 @@ import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 
-public class InternalPlotMoveEvent extends InternalPlotEvent implements ICancellable {
+public class InternalPlotMoveEvent extends InternalPlotEvent implements ICancellable, Event {
 
     private final PlotId fromId;
     private final PlotId toId;

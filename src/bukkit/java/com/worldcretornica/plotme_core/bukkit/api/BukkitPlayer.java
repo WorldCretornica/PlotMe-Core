@@ -59,5 +59,4 @@ public class BukkitPlayer extends BukkitOfflinePlayer implements IPlayer {
     public void remove() {
         player.remove();
     }
-
 }

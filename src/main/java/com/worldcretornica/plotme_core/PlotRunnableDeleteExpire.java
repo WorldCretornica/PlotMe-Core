@@ -32,8 +32,8 @@ public class PlotRunnableDeleteExpire implements Runnable {
                 String ids = "";
 
                 for (Plot expiredPlot : expiredPlots) {
-                    InternalPlotResetEvent event = plugin.getServerBridge().getEventFactory().callPlotResetEvent(world, expiredPlot, sender);
-
+                    InternalPlotResetEvent event = new InternalPlotResetEvent(world, expiredPlot, sender);
+                    plugin.getServerBridge().getEventBus().post(event);
                     if (!event.isCancelled()) {
                         plotMeCoreManager.clear(world, expiredPlot, sender, ClearReason.Expired);
 

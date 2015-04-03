@@ -7,11 +7,9 @@ import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IServerBridge;
 import com.worldcretornica.plotme_core.api.IWorld;
-import com.worldcretornica.plotme_core.api.event.IEventFactory;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitMaterial;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitOfflinePlayer;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitWorld;
-import com.worldcretornica.plotme_core.bukkit.event.BukkitEventFactory;
 import com.worldcretornica.plotme_core.bukkit.listener.BukkitPlotDenyListener;
 import com.worldcretornica.plotme_core.bukkit.listener.BukkitPlotListener;
 import com.worldcretornica.plotme_core.bukkit.listener.BukkitPlotWorldEditListener;
@@ -37,13 +35,11 @@ import java.util.logging.Logger;
 public class BukkitServerBridge extends IServerBridge {
 
     private final PlotMe_CorePlugin plugin;
-    private final IEventFactory eventFactory;
     private Economy economy;
     private PlotWorldEdit plotworldedit;
 
     public BukkitServerBridge(PlotMe_CorePlugin instance) {
         plugin = instance;
-        eventFactory = new BukkitEventFactory();
     }
 
     @Override
@@ -161,7 +157,9 @@ public class BukkitServerBridge extends IServerBridge {
     public void setupListeners() {
         PluginManager pm = plugin.getServer().getPluginManager();
 
-        pm.registerEvents(new BukkitPlotListener(plugin), plugin);
+        BukkitPlotListener bukkitPlotListener = new BukkitPlotListener(plugin);
+        getEventBus().register(bukkitPlotListener);
+        pm.registerEvents(bukkitPlotListener, plugin);
         pm.registerEvents(new BukkitPlotDenyListener(plugin), plugin);
 
     }
@@ -220,12 +218,6 @@ public class BukkitServerBridge extends IServerBridge {
         @SuppressWarnings("deprecation")
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(player);
         return new BukkitOfflinePlayer(offlinePlayer);
-    }
-
-    @Override
-
-    public IEventFactory getEventFactory() {
-        return eventFactory;
     }
 
     @Override

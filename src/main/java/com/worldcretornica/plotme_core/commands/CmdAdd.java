@@ -52,31 +52,26 @@ public class CmdAdd extends PlotCommand {
                             if (plot.isAllowedConsulting(allowed)) {
                                 player.sendMessage(C("WordPlayer") + " " + allowed + " " + C("MsgAlreadyAllowed"));
                             } else {
-                                InternalPlotAddAllowedEvent event;
+                                InternalPlotAddAllowedEvent event = new InternalPlotAddAllowedEvent(world, plot, player, allowed);
+                                serverBridge.getEventBus().post(event);
                                 double price = 0.0;
                                 if (manager.isEconomyEnabled(pmi)) {
                                     price = pmi.getAddPlayerPrice();
                                     double balance = serverBridge.getBalance(player);
 
-                                    if (balance >= pmi.getAddPlayerPrice()) {
-                                        event = serverBridge.getEventFactory().callPlotAddAllowedEvent(world, plot, player, allowed);
-
-                                        if (!event.isCancelled()) {
-                                            EconomyResponse er = serverBridge.withdrawPlayer(player, price);
-
-                                            if (!er.transactionSuccess()) {
-                                                player.sendMessage(er.errorMessage);
-                                                serverBridge.getLogger().warning(er.errorMessage);
-                                                return true;
-                                            }
-                                        }
-                                    } else {
+                                    if (balance < pmi.getAddPlayerPrice()) {
                                         player.sendMessage(
                                                 C("MsgNotEnoughAdd") + " " + C("WordMissing") + " " + plugin.moneyFormat(price - balance, false));
                                         return true;
+                                    } else if (!event.isCancelled()) {
+                                        EconomyResponse er = serverBridge.withdrawPlayer(player, price);
+
+                                        if (!er.transactionSuccess()) {
+                                            player.sendMessage(er.errorMessage);
+                                            serverBridge.getLogger().warning(er.errorMessage);
+                                            return true;
+                                        }
                                     }
-                                } else {
-                                    event = serverBridge.getEventFactory().callPlotAddAllowedEvent(world, plot, player, allowed);
                                 }
 
                                 if (!event.isCancelled()) {

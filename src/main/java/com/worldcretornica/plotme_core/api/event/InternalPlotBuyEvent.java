@@ -4,7 +4,7 @@ import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 
-public class InternalPlotBuyEvent extends InternalPlotEvent implements ICancellable {
+public class InternalPlotBuyEvent extends InternalPlotEvent implements ICancellable, Event {
 
     private final IPlayer buyer;
     private final double price;

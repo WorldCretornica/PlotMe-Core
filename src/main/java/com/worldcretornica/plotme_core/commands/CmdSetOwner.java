@@ -57,7 +57,7 @@ public class CmdSetOwner extends PlotCommand {
 
 
                 if (!oldowner.equals(newOwnerId)) {
-                    InternalPlotOwnerChangeEvent event = serverBridge.getEventFactory().callPlotOwnerChangeEvent(world, plot, player, newOwner);
+                    InternalPlotOwnerChangeEvent event = new InternalPlotOwnerChangeEvent(world, plot, player, newOwner);
                     if (!event.isCancelled()) {
                         plot.setForSale(false);
                         manager.removeSellSign(world, id);
@@ -74,7 +74,7 @@ public class CmdSetOwner extends PlotCommand {
                 }
             } else {
                 InternalPlotCreateEvent event =
-                        serverBridge.getEventFactory().callPlotCreatedEvent(world, id, serverBridge.getPlayer(newOwnerId));
+                        new InternalPlotCreateEvent(world, id, serverBridge.getPlayer(newOwnerId));
                 if (!event.isCancelled()) {
                     manager.createPlot(world, id, newOwner, newOwnerId, pmi);
                     player.sendMessage(C("MsgOwnerChangedTo") + " " + newOwner);

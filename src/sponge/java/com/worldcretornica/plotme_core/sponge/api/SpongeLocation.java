@@ -3,6 +3,7 @@ package com.worldcretornica.plotme_core.sponge.api;
 import com.flowpowered.math.vector.Vector3d;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.utils.DoubleHelper;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
@@ -89,4 +90,15 @@ public class SpongeLocation implements ILocation {
     public Vector3d getPosition() {
         return location.getPosition();
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 79 * hash + getWorld().hashCode();
+        hash = 79 * hash + DoubleHelper.hashCode(this.getX());
+        hash = 79 * hash + DoubleHelper.hashCode(this.getBlockY());
+        hash = 79 * hash + DoubleHelper.hashCode(this.getY());
+        return hash;
+    }
+
 }

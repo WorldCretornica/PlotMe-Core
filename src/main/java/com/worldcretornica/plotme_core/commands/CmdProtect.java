@@ -41,7 +41,7 @@ public class CmdProtect extends PlotCommand {
                         InternalPlotProtectChangeEvent event;
 
                         if (plot.isProtected()) {
-                            event = serverBridge.getEventFactory().callPlotProtectChangeEvent(world, plot, player, false);
+                            event = new InternalPlotProtectChangeEvent(world, plot, player, false);
 
                             if (!event.isCancelled()) {
                                 plot.setProtected(false);
@@ -66,7 +66,7 @@ public class CmdProtect extends PlotCommand {
                                     player.sendMessage(C("MsgNotEnoughProtectPlot"));
                                     return true;
                                 } else {
-                                    event = serverBridge.getEventFactory().callPlotProtectChangeEvent(world, plot, player, true);
+                                    event = new InternalPlotProtectChangeEvent(world, plot, player, true);
 
                                     if (event.isCancelled()) {
                                         return true;
@@ -82,7 +82,7 @@ public class CmdProtect extends PlotCommand {
                                 }
 
                             } else {
-                                event = serverBridge.getEventFactory().callPlotProtectChangeEvent(world, plot, player, true);
+                                event = new InternalPlotProtectChangeEvent(world, plot, player, true);
                             }
 
                             if (!event.isCancelled()) {

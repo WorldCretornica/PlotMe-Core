@@ -1,6 +1,6 @@
 package com.worldcretornica.plotme_core.api.event;
 
-public class InternalPlotWorldLoadEvent {
+public class InternalPlotWorldLoadEvent implements Event {
 
     private final String world;
     private final int nbPlots;

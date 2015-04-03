@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class InternalPlotEvent {
+public class InternalPlotEvent implements Event {
 
     protected final IWorld world;
     private final Plot plot;

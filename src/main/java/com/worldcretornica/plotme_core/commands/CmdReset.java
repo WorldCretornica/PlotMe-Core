@@ -41,7 +41,7 @@ public class CmdReset extends PlotCommand {
                     player.sendMessage(C("MsgPlotProtectedCannotReset"));
                 } else if (player.getUniqueId().equals(plot.getOwnerId()) || player.hasPermission(PermissionNames.ADMIN_RESET)) {
 
-                    InternalPlotResetEvent event = serverBridge.getEventFactory().callPlotResetEvent(world, plot, player);
+                    InternalPlotResetEvent event = new InternalPlotResetEvent(world, plot, player);
 
                     if (!event.isCancelled()) {
                         manager.setBiome(world, id, "PLAINS");

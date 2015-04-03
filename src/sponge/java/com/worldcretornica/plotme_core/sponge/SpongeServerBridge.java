@@ -8,10 +8,8 @@ import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IServerBridge;
 import com.worldcretornica.plotme_core.api.IWorld;
-import com.worldcretornica.plotme_core.api.event.IEventFactory;
 import com.worldcretornica.plotme_core.sponge.api.SpongePlayer;
 import com.worldcretornica.plotme_core.sponge.api.SpongeWorld;
-import com.worldcretornica.plotme_core.sponge.event.SpongeEventFactory;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.spongepowered.api.entity.player.Player;
@@ -29,11 +27,9 @@ import java.util.logging.Logger;
 public class SpongeServerBridge extends IServerBridge {
 
     private final PlotMe_Sponge plugin;
-    private final IEventFactory eventFactory;
 
     public SpongeServerBridge(PlotMe_Sponge instance) {
         plugin = instance;
-        eventFactory = new SpongeEventFactory(plugin.getGame());
     }
 
     @Override
@@ -49,7 +45,7 @@ public class SpongeServerBridge extends IServerBridge {
 
     @Override
     public IPlayer getPlayer(UUID uuid) {
-        Player player = plugin.getGame().getServer().get().getPlayer(uuid).orNull();
+        Player player = plugin.getGame().getServer().getPlayer(uuid).orNull();
         if (player != null) {
             return new SpongePlayer(player);
         } else {
@@ -59,7 +55,7 @@ public class SpongeServerBridge extends IServerBridge {
 
     @Override
     public IPlayer getPlayerExact(String name) {
-        Player player = plugin.getGame().getServer().get().getPlayer(name).orNull();
+        Player player = plugin.getGame().getServer().getPlayer(name).orNull();
         if (player != null) {
             return new SpongePlayer(player);
         } else {
@@ -71,7 +67,7 @@ public class SpongeServerBridge extends IServerBridge {
     public Collection<IPlayer> getOnlinePlayers() {
         Collection<IPlayer> players = new ArrayList<>();
 
-        for (Player player : plugin.getGame().getServer().get().getOnlinePlayers()) {
+        for (Player player : plugin.getGame().getServer().getOnlinePlayers()) {
             players.add(new SpongePlayer(player));
         }
         return players;
@@ -138,7 +134,7 @@ public class SpongeServerBridge extends IServerBridge {
 
     @Override
     public IWorld getWorld(String worldName) {
-        World world = plugin.getGame().getServer().get().getWorld(worldName).orNull();
+        World world = plugin.getGame().getServer().getWorld(worldName).orNull();
         if (world != null) {
             return new SpongeWorld(world);
         } else {
@@ -177,11 +173,6 @@ public class SpongeServerBridge extends IServerBridge {
     }
 
     @Override
-    public IEventFactory getEventFactory() {
-        return eventFactory;
-    }
-
-    @Override
     public File getDataFolder() {
         return new File("config", "PlotMe");
     }
@@ -205,7 +196,7 @@ public class SpongeServerBridge extends IServerBridge {
     public Collection<IWorld> getWorlds() {
         Collection<IWorld> worlds = new ArrayList<>();
 
-        for (World world : plugin.getGame().getServer().get().getWorlds()) {
+        for (World world : plugin.getGame().getServer().getWorlds()) {
             worlds.add(new SpongeWorld(world));
         }
         return worlds;

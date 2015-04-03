@@ -62,7 +62,7 @@ public class CmdDeny extends PlotCommand {
                                     double balance = serverBridge.getBalance(player);
 
                                     if (balance >= price) {
-                                        event = serverBridge.getEventFactory().callPlotAddDeniedEvent(world, plot, player, denied);
+                                        event = new InternalPlotAddDeniedEvent(world, plot, player, denied);
 
                                         if (event.isCancelled()) {
                                             return true;
@@ -80,7 +80,7 @@ public class CmdDeny extends PlotCommand {
                                         return true;
                                     }
                                 } else {
-                                    event = serverBridge.getEventFactory().callPlotAddDeniedEvent(world, plot, player, denied);
+                                    event = new InternalPlotAddDeniedEvent(world, plot, player, denied);
                                 }
 
                                 if (!event.isCancelled()) {

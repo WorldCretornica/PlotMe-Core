@@ -51,7 +51,7 @@ public class CmdDispose extends PlotCommand {
                                     return true;
                                 }
 
-                                event = serverBridge.getEventFactory().callPlotDisposeEvent(world, plot, player);
+                                event = new InternalPlotDisposeEvent(world, plot, player);
 
                                 if (event.isCancelled()) {
                                     return true;
@@ -64,7 +64,7 @@ public class CmdDispose extends PlotCommand {
                                     return true;
                                 }
                             } else {
-                                event = serverBridge.getEventFactory().callPlotDisposeEvent(world, plot, player);
+                                event = new InternalPlotDisposeEvent(world, plot, player);
                             }
 
                             if (!event.isCancelled()) {

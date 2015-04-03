@@ -55,8 +55,7 @@ public class CmdTP extends PlotCommand {
                         } else {
                             ILocation location = manager.getPlotHome(world, id2);
                             Plot plot = manager.getPlotById(id2, world);
-                            InternalPlotTeleportEvent event =
-                                    serverBridge.getEventFactory().callPlotTeleportEvent(world, plot, player, location, id2);
+                            InternalPlotTeleportEvent event = new InternalPlotTeleportEvent(world, plot, player, location, id2);
 
                             if (!event.isCancelled()) {
                                 player.setLocation(location);

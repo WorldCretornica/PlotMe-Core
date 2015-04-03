@@ -7,6 +7,8 @@ import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ILocation;
+import com.worldcretornica.plotme_core.api.event.InternalPlotLoadEvent;
+import com.worldcretornica.plotme_core.api.event.InternalPlotWorldLoadEvent;
 import com.worldcretornica.plotme_core.utils.UUIDFetcher;
 
 import java.sql.Connection;
@@ -329,10 +331,9 @@ public abstract class Database {
 
                 for (PlotId id : plots.keySet()) {
                     pmi.addPlot(id, plots.get(id));
-                    plugin.getServerBridge().getEventFactory()
-                            .callPlotLoadedEvent(plugin.getServerBridge().getWorld(world), plots.get(id));
+                    InternalPlotLoadEvent event = new InternalPlotLoadEvent(plugin.getServerBridge().getWorld(world), plots.get(id));
                 }
-                plugin.getServerBridge().getEventFactory().callPlotWorldLoadEvent(world, pmi.getNbPlots());
+                InternalPlotWorldLoadEvent event = new InternalPlotWorldLoadEvent(world, pmi.getNbPlots());
             }
 
             private HashMap<PlotId, Plot> getPlots(String world) {

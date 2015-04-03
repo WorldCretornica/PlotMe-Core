@@ -1,6 +1,9 @@
 package com.worldcretornica.plotme_core.api.event;
 
-interface ICancellable {
+/**
+ * An interface for events that can be canceled
+ */
+public interface ICancellable {
 
     /**
      * Checks if the {@link InternalPlotEvent} is cancelled.
