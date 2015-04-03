@@ -14,11 +14,9 @@ public class ConfigAccessor {
 
     private final String fileName;
     private final File configFile;
-    private final Object plugin;
     private FileConfiguration fileConfiguration;
 
-    public ConfigAccessor(Object plugin, File pluginFolder, String fileName) {
-        this.plugin = plugin;
+    public ConfigAccessor(File pluginFolder, String fileName) {
         this.fileName = fileName;
         this.configFile = new File(pluginFolder, fileName);
     }
@@ -33,7 +31,7 @@ public class ConfigAccessor {
     }
 
     private InputStream getResource(String fileName) {
-        return plugin.getClass().getResourceAsStream(fileName);
+        return getClass().getClassLoader().getResourceAsStream(fileName);
     }
 
     public FileConfiguration getConfig() {
