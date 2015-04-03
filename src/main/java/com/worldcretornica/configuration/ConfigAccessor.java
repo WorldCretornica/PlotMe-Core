@@ -17,7 +17,7 @@ public class ConfigAccessor {
     private final Object plugin;
     private FileConfiguration fileConfiguration;
 
-    public ConfigAccessor(Object plugin, File pluginFolder, String fileName) {
+    public ConfigAccessor(Class plugin, File pluginFolder, String fileName) {
         this.plugin = plugin;
         this.fileName = fileName;
         this.configFile = new File(pluginFolder, fileName);

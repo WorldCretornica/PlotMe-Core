@@ -57,8 +57,8 @@ public class PlotMe_Core {
         EventBus plotmeEventBus = new EventBus("PlotMe"); //todo work on new event system
         setEventBus(plotmeEventBus);
         PlotMeCoreManager.getInstance().setPlugin(this);
-        configFile = new ConfigAccessor(this, getServerBridge().getDataFolder(), "config.yml");
-        captionFile = new ConfigAccessor(this, getServerBridge().getDataFolder(), "captions.yml");
+        configFile = new ConfigAccessor(PlotMe_Core.class, getServerBridge().getDataFolder(), "config.yml");
+        captionFile = new ConfigAccessor(PlotMe_Core.class, getServerBridge().getDataFolder(), "captions.yml");
         setupConfigFiles();
         serverBridge.setupCommands();
         setupSQL();
