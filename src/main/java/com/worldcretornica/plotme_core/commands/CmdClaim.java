@@ -63,15 +63,14 @@ public class CmdClaim extends PlotCommand {
 
                     double price = 0.0;
 
-                    InternalPlotCreateEvent event;
+                    InternalPlotCreateEvent event = new InternalPlotCreateEvent(world, id, player);
 
                     if (manager.isEconomyEnabled(pmi)) {
                         price = pmi.getClaimPrice();
                         double balance = serverBridge.getBalance(player);
 
                         if (balance >= price) {
-                            event = new InternalPlotCreateEvent(world, id, player);
-
+                            serverBridge.getEventBus().post(event);
                             if (event.isCancelled()) {
                                 return true;
                             }
@@ -89,7 +88,7 @@ public class CmdClaim extends PlotCommand {
                             return true;
                         }
                     } else {
-                        event = new InternalPlotCreateEvent(world, id, player);
+                        serverBridge.getEventBus().post(event);
                     }
 
                     if (!event.isCancelled()) {

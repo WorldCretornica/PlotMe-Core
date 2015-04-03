@@ -43,7 +43,7 @@ public class CmdDispose extends PlotCommand {
 
                             double cost = pmi.getDisposePrice();
 
-                            InternalPlotDisposeEvent event;
+                            InternalPlotDisposeEvent event = new InternalPlotDisposeEvent(world, plot, player);
 
                             if (manager.isEconomyEnabled(pmi)) {
                                 if (cost != 0 && serverBridge.getBalance(player) < cost) {
@@ -51,7 +51,7 @@ public class CmdDispose extends PlotCommand {
                                     return true;
                                 }
 
-                                event = new InternalPlotDisposeEvent(world, plot, player);
+                                serverBridge.getEventBus().post(event);
 
                                 if (event.isCancelled()) {
                                     return true;
@@ -64,7 +64,7 @@ public class CmdDispose extends PlotCommand {
                                     return true;
                                 }
                             } else {
-                                event = new InternalPlotDisposeEvent(world, plot, player);
+                                serverBridge.getEventBus().post(event);
                             }
 
                             if (!event.isCancelled()) {

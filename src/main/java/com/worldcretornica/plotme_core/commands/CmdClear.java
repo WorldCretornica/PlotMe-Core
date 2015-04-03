@@ -44,15 +44,14 @@ public class CmdClear extends PlotCommand {
 
                             double price = 0.0;
 
-                            InternalPlotClearEvent event;
+                            InternalPlotClearEvent event = new InternalPlotClearEvent(world, plot, player);
 
                             if (manager.isEconomyEnabled(pmi)) {
                                 price = pmi.getClearPrice();
                                 double balance = serverBridge.getBalance(player);
 
                                 if (balance >= price) {
-                                    event = new InternalPlotClearEvent(world, plot, player);
-
+                                    serverBridge.getEventBus().post(event);
                                     if (event.isCancelled()) {
                                         return true;
                                     } else {
@@ -71,7 +70,7 @@ public class CmdClear extends PlotCommand {
                                     return true;
                                 }
                             } else {
-                                event = new InternalPlotClearEvent(world, plot, player);
+                                serverBridge.getEventBus().post(event);
                             }
 
                             if (!event.isCancelled()) {

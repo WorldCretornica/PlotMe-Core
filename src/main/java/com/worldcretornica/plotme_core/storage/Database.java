@@ -332,8 +332,12 @@ public abstract class Database {
                 for (PlotId id : plots.keySet()) {
                     pmi.addPlot(id, plots.get(id));
                     InternalPlotLoadEvent event = new InternalPlotLoadEvent(plugin.getServerBridge().getWorld(world), plots.get(id));
+                    plugin.getServerBridge().getEventBus().post(event);
+
                 }
                 InternalPlotWorldLoadEvent event = new InternalPlotWorldLoadEvent(world, pmi.getNbPlots());
+                plugin.getServerBridge().getEventBus().post(event);
+
             }
 
             private HashMap<PlotId, Plot> getPlots(String world) {

@@ -35,6 +35,7 @@ public class CmdDone extends PlotCommand {
                         InternalPlotDoneChangeEvent
                                 event =
                                 new InternalPlotDoneChangeEvent(player.getWorld(), plot, player, plot.isFinished());
+                        serverBridge.getEventBus().post(event);
 
                         if (!event.isCancelled()) {
                             if (plot.isFinished()) {

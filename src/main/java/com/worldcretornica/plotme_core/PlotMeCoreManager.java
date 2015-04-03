@@ -516,6 +516,8 @@ public class PlotMeCoreManager {
         if (pmi != null) {
             pmi.addPlot(id, plot);
             InternalPlotLoadEvent event = new InternalPlotLoadEvent(world, plot);
+            plugin.getServerBridge().getEventBus().post(event);
+
         }
     }
 

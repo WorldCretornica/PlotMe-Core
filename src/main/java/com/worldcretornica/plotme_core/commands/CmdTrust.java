@@ -50,6 +50,8 @@ public class CmdTrust extends PlotCommand {
 
                                 InternalPlotAddTrustedEvent event = new InternalPlotAddTrustedEvent(world, plot, player, trust);
                                 serverBridge.getEventBus().post(event);
+
+                                serverBridge.getEventBus().post(event);
                                 double advancedPrice = 0.0;
                                 if (manager.isEconomyEnabled(pmi)) {
                                     double price = pmi.getAddPlayerPrice();

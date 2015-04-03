@@ -91,15 +91,15 @@ public class CmdHome extends PlotCommand {
 
                                     double price = 0.0;
 
-                                    InternalPlotTeleportHomeEvent event;
+                                    location = (BukkitLocation) manager.getPlotHome(world, plot.getId());
+                                    InternalPlotTeleportHomeEvent event = new InternalPlotTeleportHomeEvent(world, plot, player, location);
 
                                     if (manager.isEconomyEnabled(pmi)) {
                                         price = pmi.getPlotHomePrice();
                                         double balance = serverBridge.getBalance(player);
 
                                         if (balance >= price) {
-                                            location = (BukkitLocation) manager.getPlotHome(world, plot.getId());
-                                            event = new InternalPlotTeleportHomeEvent(world, plot, player, location);
+                                            serverBridge.getEventBus().post(event);
 
                                             if (event.isCancelled()) {
                                                 return true;
@@ -116,8 +116,7 @@ public class CmdHome extends PlotCommand {
                                             return true;
                                         }
                                     } else {
-                                        location = (BukkitLocation) manager.getPlotHome(world, plot.getId());
-                                        event = new InternalPlotTeleportHomeEvent(world, plot, player, location);
+                                        serverBridge.getEventBus().post(event);
                                     }
 
                                     if (!event.isCancelled()) {
@@ -136,15 +135,15 @@ public class CmdHome extends PlotCommand {
 
                                 double price = 0.0;
 
-                                InternalPlotTeleportHomeEvent event;
+                                location = (BukkitLocation) manager.getPlotHome(world, plot.getId());
+                                InternalPlotTeleportHomeEvent event = new InternalPlotTeleportHomeEvent(world, plot, player, location);
 
                                 if (manager.isEconomyEnabled(pmi)) {
                                     price = pmi.getPlotHomePrice();
                                     double balance = serverBridge.getBalance(player);
 
                                     if (balance >= price) {
-                                        location = (BukkitLocation) manager.getPlotHome(world, plot.getId());
-                                        event = new InternalPlotTeleportHomeEvent(world, plot, player, location);
+                                        serverBridge.getEventBus().post(event);
 
                                         if (!event.isCancelled()) {
                                             EconomyResponse er = serverBridge.withdrawPlayer(player, price);
@@ -160,8 +159,7 @@ public class CmdHome extends PlotCommand {
                                         return true;
                                     }
                                 } else {
-                                    location = (BukkitLocation) manager.getPlotHome(world, plot.getId());
-                                    event = new InternalPlotTeleportHomeEvent(world, plot, player, location);
+                                    serverBridge.getEventBus().post(event);
                                 }
 
                                 if (!event.isCancelled()) {

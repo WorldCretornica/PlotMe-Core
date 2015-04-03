@@ -55,6 +55,7 @@ public class CmdUndeny extends PlotCommand {
 
                                     if (balance >= price) {
                                         event = new InternalPlotRemoveDeniedEvent(world, plot, player, denied);
+                                        serverBridge.getEventBus().post(event);
 
                                         if (event.isCancelled()) {
                                             return true;
@@ -75,6 +76,8 @@ public class CmdUndeny extends PlotCommand {
                                     }
                                 } else {
                                     event = new InternalPlotRemoveDeniedEvent(world, plot, player, denied);
+                                    serverBridge.getEventBus().post(event);
+
                                 }
 
                                 if (!event.isCancelled()) {

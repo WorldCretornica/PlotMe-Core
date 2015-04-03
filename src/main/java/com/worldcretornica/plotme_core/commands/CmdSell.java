@@ -42,8 +42,8 @@ public class CmdSell extends PlotCommand {
                                 InternalPlotSellChangeEvent event;
 
                                 if (plot.isForSale()) {
-                                    event =
-                                            new InternalPlotSellChangeEvent(world, plot, player, plot.getPrice(), false);
+                                    event = new InternalPlotSellChangeEvent(world, plot, player, plot.getPrice(), false);
+                                    serverBridge.getEventBus().post(event);
 
                                     if (!event.isCancelled()) {
                                         plot.setPrice(0.0);
@@ -78,6 +78,7 @@ public class CmdSell extends PlotCommand {
                                         player.sendMessage(C("MsgInvalidAmount"));
                                     } else {
                                         event = new InternalPlotSellChangeEvent(world, plot, player, price, true);
+                                        serverBridge.getEventBus().post(event);
 
                                         if (!event.isCancelled()) {
                                             plot.setPrice(price);
