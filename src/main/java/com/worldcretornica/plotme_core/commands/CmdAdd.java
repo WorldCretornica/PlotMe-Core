@@ -77,10 +77,10 @@ public class CmdAdd extends PlotCommand {
                                 if (!event.isCancelled()) {
                                     IPlayer allowed2 = plugin.getServerBridge().getPlayerExact(allowed);
                                     if (allowed2 != null) {
-                                        plot.addAllowed(allowed2.getUniqueId().toString(), 0);
+                                        plot.addAllowed(allowed2.getUniqueId().toString());
                                         plot.removeDenied(allowed2.getUniqueId().toString());
                                     } else {
-                                        plot.addAllowed(allowed, 0);
+                                        plot.addAllowed(allowed);
                                         plot.removeDenied(allowed);
                                     }
                                     player.sendMessage(C("WordPlayer") + " " + allowed + " " + C("MsgNowAllowed"));

@@ -187,7 +187,7 @@ public class Plot {
         return denied().getPlayerList();
     }
 
-    public void addAllowed(String name, int i) {
+    public void addAllowed(String name) {
         if (!isAllowedConsulting(name)) {
             allowed().put(name, 1);
             plugin.getSqlManager().addPlotAllowed(name, getInternalID());

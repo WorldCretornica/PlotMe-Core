@@ -7,7 +7,9 @@ import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.PlotToClear;
+import com.worldcretornica.plotme_core.api.event.InternalPlotCreateEvent;
 import com.worldcretornica.plotme_core.api.event.InternalPlotWorldLoadEvent;
+import com.worldcretornica.plotme_core.api.event.eventbus.Order;
 import com.worldcretornica.plotme_core.api.event.eventbus.Subscribe;
 import com.worldcretornica.plotme_core.bukkit.PlotMe_CorePlugin;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitEntity;
@@ -764,13 +766,37 @@ public class BukkitPlotListener implements Listener {
     public void onSandCannon(EntityChangeBlockEvent event) {
         BukkitEntity entity = new BukkitEntity(event.getEntity());
         if (manager.isPlotWorld(entity) && event.getEntity().getType().equals(EntityType.FALLING_BLOCK)) {
+            //todo finish this
+        }
+    }
 
+    @Subscribe(order = Order.FIRST)
+    public void onPlotCreateFirst(InternalPlotCreateEvent event) {
+        if (api.getConfig().getBoolean("AdvancedLogging")) {
+            api.getLogger().info("First Plot Create Event");
+        }
+    }
+
+    @Subscribe(order = Order.EARLY)
+    public void onPlotCreateEarly(InternalPlotCreateEvent event) {
+        if (api.getConfig().getBoolean("AdvancedLogging")) {
+            api.getLogger().info("Early Plot Create Event");
+        }
+    }
+
+    @Subscribe(order = Order.LATE)
+    public void onPlotWorldLoad(InternalPlotCreateEvent event) {
+        if (api.getConfig().getBoolean("AdvancedLogging")) {
+            api.getLogger().info("Late Plot Create Event");
         }
     }
 
     @Subscribe
     public void onPlotWorldLoad(InternalPlotWorldLoadEvent event) {
-        api.getLogger().info("Done loading " + event.getNbPlots() + " plots for world " + event.getWorldName());
+        if (api.getConfig().getBoolean("AdvancedLogging")) {
+            api.getLogger().info("Done loading " + event.getNbPlots() + " plots for world " + event
+                    .getWorldName());
+        }
     }
 
     @EventHandler(ignoreCancelled = true)
