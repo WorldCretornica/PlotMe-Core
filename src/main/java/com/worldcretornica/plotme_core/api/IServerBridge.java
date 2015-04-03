@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 
 public abstract class IServerBridge {
 
-    private final EventBus eventBus = new EventBus(getLogger());
+    private final EventBus eventBus = new EventBus();
 
     private boolean usingLwc;
 

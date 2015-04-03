@@ -17,7 +17,6 @@
 package com.worldcretornica.plotme_core.api.event.eventbus;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static java.util.logging.Level.SEVERE;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -34,8 +33,6 @@ import java.lang.reflect.Modifier;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class EventBus implements EventManager {
 
@@ -58,11 +55,8 @@ public class EventBus implements EventManager {
                     return bakeHandlers(type);
                 }
             });
-    private final Logger logger;
 
-    public EventBus(Logger logger) {
-
-        this.logger = logger;
+    public EventBus() {
     }
 
     private static boolean isValidHandler(Method method) {
@@ -113,7 +107,7 @@ public class EventBus implements EventManager {
                     MethodEventHandler handler = new MethodEventHandler(subscribe.order(), object, method);
                     subscribers.add(new Subscriber(eventType, handler));
                 } else {
-                    logger.log(SEVERE, "The method {} has @Subscribe but has the wrong signature", method);
+                    //Just hope this doesn't happen. We can't log anything since the logger atm only works with Bukkit.
                 }
             }
         }
@@ -177,7 +171,7 @@ public class EventBus implements EventManager {
         try {
             handler.handleEvent(event);
         } catch (Throwable t) {
-            logger.log(Level.SEVERE, "A handler raised an error when handling an event", t);
+            //Just hope this doesn't happen. We can't log anything since the logger atm only works with Bukkit.
         }
     }
 

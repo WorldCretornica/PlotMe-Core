@@ -52,7 +52,6 @@ public class BukkitServerBridge extends IServerBridge {
      * @return logger
      */
     @Override
-
     public Logger getLogger() {
         return plugin.getLogger();
     }
