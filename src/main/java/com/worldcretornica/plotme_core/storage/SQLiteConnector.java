@@ -118,7 +118,7 @@ public class SQLiteConnector extends Database {
         }
     }
 
-    private Connection legacyConnection() {
+    Connection legacyConnection() {
         try {
             Class.forName("org.sqlite.JDBC");
             connection = DriverManager.getConnection("jdbc:sqlite:" + plugin.getServerBridge().getDataFolder().getAbsolutePath() + "/plots.db");
