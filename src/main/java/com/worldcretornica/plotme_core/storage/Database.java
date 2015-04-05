@@ -291,7 +291,7 @@ public abstract class Database {
     }
 
     public void addPlotDenied(String player, int plotInternalID) {
-        try (PreparedStatement ps = getConnection().prepareStatement("INSERT INTO plotmecore_denied (plot_id, denied) VALUES (?,?)")) {
+        try (PreparedStatement ps = getConnection().prepareStatement("INSERT INTO plotmecore_denied (plot_id, player) VALUES (?,?)")) {
             ps.setInt(1, plotInternalID);
             ps.setString(2, player);
             ps.execute();
@@ -305,7 +305,7 @@ public abstract class Database {
     }
 
     public void addPlotAllowed(String player, int plotInternalID) {
-        try (PreparedStatement ps = getConnection().prepareStatement("INSERT INTO plotmecore_allowed (plot_id, allowed, access) VALUES(?,?,?)")) {
+        try (PreparedStatement ps = getConnection().prepareStatement("INSERT INTO plotmecore_allowed (plot_id, player, access) VALUES(?,?,?)")) {
             ps.setInt(1, plotInternalID);
             ps.setString(2, player);
             ps.setInt(3, 0);
@@ -501,7 +501,7 @@ public abstract class Database {
                     statementDenied.setInt(1, internalID);
                     try (ResultSet setDenied = statementDenied.executeQuery()) {
                         while (setDenied.next()) {
-                            denied.put(setDenied.getString("denied"));
+                            denied.put(setDenied.getString("player"));
                         }
                     }
 
@@ -575,7 +575,7 @@ public abstract class Database {
 
     public void deletePlotDenied(int internalID, String name) {
         Connection connection = getConnection();
-        try (PreparedStatement statement = connection.prepareStatement("DELETE FROM plotmecore_denied WHERE plot_id = ? AND denied = ?")) {
+        try (PreparedStatement statement = connection.prepareStatement("DELETE FROM plotmecore_denied WHERE plot_id = ? AND player = ?")) {
             statement.setInt(1, internalID);
             statement.setString(2, name);
             statement.execute();

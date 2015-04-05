@@ -71,7 +71,7 @@ public class SQLiteConnector extends Database {
                     + "`plot_id` INTEGER NOT NULL,"
                     + "`player` VARCHAR(50) NOT NULL"
                     + ");");
-            statement.executeUpdate("CREATE UNIQUE INDEX IF NOT EXISTS `denied` ON plotmecore_denied(plot_id,denied)");
+            statement.executeUpdate("CREATE UNIQUE INDEX IF NOT EXISTS `denied` ON plotmecore_denied(plot_id,player)");
             connection.commit();
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS `plotmecore_allowed` ("
                     + "`id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
@@ -79,7 +79,7 @@ public class SQLiteConnector extends Database {
                     + "`player` VARCHAR(50) NOT NULL,"
                     + "`access` INTEGER NOT NULL DEFAULT '1'"
                     + ");");
-            statement.executeUpdate("CREATE UNIQUE INDEX IF NOT EXISTS `allowed` ON plotmecore_allowed(plot_id,allowed)");
+            statement.executeUpdate("CREATE UNIQUE INDEX IF NOT EXISTS `allowed` ON plotmecore_allowed(plot_id,player)");
             connection.commit();
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS plotmecore_likes ("
                     + "`id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
