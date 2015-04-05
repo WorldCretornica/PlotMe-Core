@@ -109,9 +109,8 @@ public class MySQLConnector extends Database {
      */
     @Deprecated
     boolean tableExists(String name) {
-        Connection conn = getConnection();
         try {
-            DatabaseMetaData dbm = conn.getMetaData();
+            DatabaseMetaData dbm = legacyConnection().getMetaData();
             try (ResultSet rs = dbm.getTables(null, null, name, null)) {
                 return rs.next();
             }

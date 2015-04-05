@@ -161,6 +161,7 @@ public abstract class Database {
                                                     }
                                                 }
                                             }
+                                            getConnection().commit();
                                         } catch (SQLException e) {
                                             e.printStackTrace();
                                         }
