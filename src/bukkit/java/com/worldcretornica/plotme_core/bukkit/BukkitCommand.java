@@ -23,25 +23,38 @@ public class BukkitCommand extends CommandExBase implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player) {
             if (args.length == 0) {
-                return commandMap.get("help").execute(plugin.wrapPlayer((Player) sender), args);
+                try {
+                    return commandMap.get("help").execute(plugin.wrapPlayer((Player) sender), args);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
             PlotCommand _command = commandMap.get(args[0]);
             if (_command == null) {
                 sender.sendMessage("PlotMe does not have a command by that name.");
                 return true;
             } else {
-                return _command.execute(new BukkitPlayer((Player) sender), args);
+                try {
+                    return _command.execute(new BukkitPlayer((Player) sender), args);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         } else {
             return handleConsoleCommands(sender, args);
         }
+        return false;
     }
 
     private boolean handleConsoleCommands(CommandSender sender, String[] args) {
         if (args.length == 0) {
             PlotCommand command = commandMap.get("reload");
             if (command != null) {
-                return command.execute(new BukkitCommandSender(sender), args);
+                try {
+                    return command.execute(new BukkitCommandSender(sender), args);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         } else {
             sender.sendMessage("You can only reload plotme from the console.");
@@ -49,7 +62,11 @@ public class BukkitCommand extends CommandExBase implements CommandExecutor {
         if ("reload".equalsIgnoreCase(args[0])) {
             PlotCommand command = commandMap.get("reload");
             if (command != null) {
-                return command.execute(new BukkitCommandSender(sender), args);
+                try {
+                    return command.execute(new BukkitCommandSender(sender), args);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
         return false;
