@@ -72,7 +72,7 @@ public abstract class Database {
     public abstract void createTables();
 
     public void legacyConverter() {
-        if (true) {
+        if (plugin.getConfig().getBoolean("Verison17DBUpdate")) {
             plugin.getServerBridge().runTaskAsynchronously(new Runnable() {
                 @Override
                 public void run() {
@@ -147,6 +147,20 @@ public abstract class Database {
                                                     }
                                                 }
                                             }
+                                            if (tableExists("plotmeMetadata")) {
+                                                try (ResultSet resultSet3 = statement.executeQuery("SELECT * FROM plotmeMetadata WHERE idX = " + idX
+                                                        + " AND idZ = " + idZ + " AND world = " + world)) {
+                                                    try (PreparedStatement migrateStatement3 = getConnection().prepareStatement("INSERT INTO "
+                                                            + "plotmecore_metadata (plot_id, pluginName, propertyName, propertyValue) VALUES (?,?,"
+                                                            + "?,?)")) {
+                                                        migrateStatement3.setInt(1, internalPlotID);
+                                                        migrateStatement3.setString(2, resultSet3.getString("pluginname"));
+                                                        migrateStatement3.setString(3, resultSet3.getString("propertyname"));
+                                                        migrateStatement3.setString(4, resultSet3.getString("propertyvalue"));
+                                                        migrateStatement3.execute();
+                                                    }
+                                                }
+                                            }
                                         } catch (SQLException e) {
                                             e.printStackTrace();
                                         }
@@ -156,8 +170,11 @@ public abstract class Database {
                             statement.execute("DROP TABLE IF EXISTS plotmeDenied");
                             statement.execute("DROP TABLE IF EXISTS plotmeAllowed");
                             statement.execute("DROP TABLE IF EXISTS plotmePlots");
+                            statement.execute("DROP TABLE IF EXISTS plotmeMetadata");
                             statement.execute("DROP TABLE IF EXISTS plotmeComments");
                             statement.execute("DROP TABLE IF EXISTS plotmeFreed");
+                            legacyConnection().commit();
+                            getConnection().commit();
                         } catch (SQLException e) {
                             e.printStackTrace();
                         }
@@ -183,6 +200,25 @@ public abstract class Database {
             ps.setString(1, world);
 
             ResultSet setNbPlots = ps.executeQuery();
+            if (setNbPlots.next()) {
+                plotCount = setNbPlots.getInt(1);
+            }
+        } catch (SQLException ex) {
+            plugin.getLogger().severe("PlotCount Exception :");
+            plugin.getLogger().severe(ex.getMessage());
+        }
+        return plotCount;
+    }
+
+    /**
+     * Get the number of plots in the database
+     * @return number of plots in the world
+     */
+    public int getTotalPlotCount() {
+        int plotCount = 0;
+        try (Statement statement = getConnection().createStatement()) {
+
+            ResultSet setNbPlots = statement.executeQuery("SELECT Count(*) as plotCount FROM plotmecore_plots");
             if (setNbPlots.next()) {
                 plotCount = setNbPlots.getInt(1);
             }
@@ -295,48 +331,23 @@ public abstract class Database {
         }
     }
 
+    private void deletePlotInternal(int internalID, String table) {
+        try (PreparedStatement ps = getConnection().prepareStatement("DELETE FROM " + table + " WHERE plot_id = ?")) {
+            ps.setInt(1, internalID);
+            ps.executeUpdate();
+            getConnection().commit();
+        } catch (SQLException e) {
+            plugin.getLogger().severe("Error deleting data from table " + table + " with the internal id " + internalID);
+            e.printStackTrace();
+        }
+    }
+
     public void deletePlot(int internalID) {
-        Connection connection = getConnection();
-        try (PreparedStatement ps = connection.prepareStatement("DELETE FROM plotmecore_allowed WHERE plot_id = ?")) {
-            ps.setInt(1, internalID);
-            ps.executeUpdate();
-            connection.commit();
-        } catch (SQLException e) {
-            plugin.getLogger().severe("Error deleting allowed data for plot with internal id " + internalID);
-            e.printStackTrace();
-        }
-        try (PreparedStatement ps = connection.prepareStatement("DELETE FROM plotmecore_metadata WHERE plot_id = ?")) {
-            ps.setInt(1, internalID);
-            ps.executeUpdate();
-            connection.commit();
-        } catch (SQLException e) {
-            plugin.getLogger().severe("Error deleting metadata for plot with internal id " + internalID);
-            e.printStackTrace();
-        }
-        try (PreparedStatement ps = connection.prepareStatement("DELETE FROM plotmecore_likes WHERE plot_id = ?")) {
-            ps.setInt(1, internalID);
-            ps.executeUpdate();
-            connection.commit();
-        } catch (SQLException e) {
-            plugin.getLogger().severe("Error deleting likes data for plot with internal id " + internalID);
-            e.printStackTrace();
-        }
-        try (PreparedStatement ps = connection.prepareStatement("DELETE FROM plotmecore_denied WHERE plot_id = ?")) {
-            ps.setInt(1, internalID);
-            ps.executeUpdate();
-            connection.commit();
-        } catch (SQLException e) {
-            plugin.getLogger().severe("Error deleting denied data for plot with internal id " + internalID);
-            e.printStackTrace();
-        }
-        try (PreparedStatement ps = connection.prepareStatement("DELETE FROM plotmecore_plots WHERE id = ?")) {
-            ps.setInt(1, internalID);
-            ps.executeUpdate();
-            connection.commit();
-        } catch (SQLException e) {
-            plugin.getLogger().severe("Error deleting plot with internal id " + internalID);
-            e.printStackTrace();
-        }
+        deletePlotInternal(internalID, "plotmecore_allowed");
+        deletePlotInternal(internalID, "plotmecore_denied");
+        deletePlotInternal(internalID, "plotmecore_metadata");
+        deletePlotInternal(internalID, "plotmecore_likes");
+        deletePlotInternal(internalID, "plotmecore_plots");
     }
 
     public List<Plot> getPlayerPlots(String name, UUID uuid) {
