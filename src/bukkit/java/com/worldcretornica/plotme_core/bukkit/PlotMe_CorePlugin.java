@@ -60,16 +60,16 @@ public class PlotMe_CorePlugin extends JavaPlugin {
             Metrics metrics = new Metrics(this);
             final PlotMeCoreManager manager = PlotMeCoreManager.getInstance();
 
-            Graph graphNbWorlds = metrics.createGraph("Plot worlds");
+            Graph graphNbWorlds = metrics.createGraph("PlotWorlds");
 
-            graphNbWorlds.addPlotter(new Metrics.Plotter("Number of plot worlds") {
+            graphNbWorlds.addPlotter(new Metrics.Plotter("Number of PlotWorlds") {
                 @Override
                 public int getValue() {
                     return manager.getPlotMaps().size();
                 }
             });
 
-            graphNbWorlds.addPlotter(new Metrics.Plotter("Average Plot size") {
+            graphNbWorlds.addPlotter(new Metrics.Plotter("Average Plot Size") {
                 @Override
                 public int getValue() {
 
@@ -93,13 +93,7 @@ public class PlotMe_CorePlugin extends JavaPlugin {
             graphNbWorlds.addPlotter(new Metrics.Plotter("Number of plots") {
                 @Override
                 public int getValue() {
-                    int nbPlot = 0;
-
-                    for (String map : manager.getPlotMaps().keySet()) {
-                        nbPlot += getAPI().getSqlManager().getPlotCount(map);
-                    }
-
-                    return nbPlot;
+                    return getAPI().getSqlManager().getTotalPlotCount();
                 }
             });
 

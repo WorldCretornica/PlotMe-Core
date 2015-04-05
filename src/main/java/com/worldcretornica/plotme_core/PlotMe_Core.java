@@ -138,6 +138,8 @@ public class PlotMe_Core {
             String pass = config.getString("mySQLpass");
             setSqlManager(new MySQLConnector(this, url, user, pass));
             getSqlManager().createTables();
+            getSqlManager().legacyConverter();
+            getConfig().set("Verison17DBUpdate", false);
         } else {
             setSqlManager(new SQLiteConnector(this));
             getSqlManager().createTables();
@@ -154,6 +156,8 @@ public class PlotMe_Core {
         getSqlManager().createTables();
         if (fileFound) {
             getSqlManager().legacyConverter();
+        } else {
+            getConfig().set("Verison17DBUpdate", false);
         }
     }
 

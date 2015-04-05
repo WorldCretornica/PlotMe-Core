@@ -91,9 +91,9 @@ public class SQLiteConnector extends Database {
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS `plotmecore_metadata` ("
                     + "`id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
                     + "`plot_id` INTEGER NOT NULL,"
-                    + "`pluginname` VARCHAR(100) NOT NULL,"
-                    + "`propertyname` VARCHAR(100) NOT NULL,"
-                    + "`propertyvalue` VARCHAR(255) DEFAULT NULL"
+                    + "`pluginName` VARCHAR(100) NOT NULL,"
+                    + "`propertyName` VARCHAR(100) NOT NULL,"
+                    + "`propertyValue` VARCHAR(255) DEFAULT NULL"
                     + ");");
             connection.commit();
         } catch (SQLException e) {
@@ -118,7 +118,7 @@ public class SQLiteConnector extends Database {
         }
     }
 
-    private Connection legacyConnection() {
+    Connection legacyConnection() {
         try {
             Class.forName("org.sqlite.JDBC");
             connection = DriverManager.getConnection("jdbc:sqlite:" + plugin.getServerBridge().getDataFolder().getAbsolutePath() + "/plots.db");

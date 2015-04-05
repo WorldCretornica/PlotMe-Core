@@ -9,7 +9,7 @@ NbClearSpools: 3
 NbBlocksPerClearStep: 50000
 AdvancedLogging: false
 PlotEnterAnnouncement: false
-Version17DatabaseUpdate: true
+Verison17DBUpdate: true
 mySQLConverter: true
 Version: 0.17
 

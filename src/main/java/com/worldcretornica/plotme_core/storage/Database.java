@@ -72,67 +72,116 @@ public abstract class Database {
     public abstract void createTables();
 
     public void legacyConverter() {
-        if (true) {
+        if (plugin.getConfig().getBoolean("Verison17DBUpdate")) {
             plugin.getServerBridge().runTaskAsynchronously(new Runnable() {
                 @Override
                 public void run() {
                     if (tableExists("plotmePlots")) {
+                        try (Statement statement = legacyConnection().createStatement()) {
+                            try (ResultSet resultSet = statement.executeQuery("SELECT * FROM plotmePlots")) {
+                                while (resultSet.next()) {
+                                    try (PreparedStatement migrateStatement = getConnection().prepareStatement(
+                                            "INSERT INTO plotmecore_plots(plotX, plotZ, world, ownerID, owner, biome, finished, finishedDate, "
+                                                    + "forSale, price, protected, expiredDate, topX, topZ, bottomX, bottomZ) VALUES (?,"
+                                                    + "?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)")) {
+                                        int idX = resultSet.getInt("idX");
+                                        migrateStatement.setInt(1, idX);
+                                        int idZ = resultSet.getInt("idZ");
+                                        migrateStatement.setInt(2, idZ);
+                                        String world = resultSet.getString("world");
+                                        migrateStatement.setString(3, world);
+                                        byte[] ownerBytesId = resultSet.getBytes("ownerId");
+                                        migrateStatement.setString(4, UUIDFetcher.fromBytes(ownerBytesId).toString());
+                                        migrateStatement.setString(5, resultSet.getString("owner"));
+                                        migrateStatement.setString(6, resultSet.getString("biome"));
+                                        migrateStatement.setBoolean(7, resultSet.getBoolean("finished"));
+                                        migrateStatement.setString(8, resultSet.getString("finisheddate"));
+                                        migrateStatement.setBoolean(9, resultSet.getBoolean("forsale"));
+                                        migrateStatement.setInt(10, resultSet.getInt("customprice"));
+                                        migrateStatement.setBoolean(11, resultSet.getBoolean("protected"));
+                                        migrateStatement.setDate(12, resultSet.getDate("expireddate"));
+                                        migrateStatement.setInt(13, resultSet.getInt("topX"));
+                                        migrateStatement.setInt(14, resultSet.getInt("topZ"));
+                                        migrateStatement.setInt(15, resultSet.getInt("bottomX"));
 
-                    }
+                                        try (ResultSet executePlots = migrateStatement.executeQuery()) {
+                                            int internalPlotID = executePlots.getInt("id");
+                                            if (tableExists("plotmeAllowed")) {
+                                                try (ResultSet resultSet1 = statement.executeQuery("SELECT * FROM plotmeAllowed WHERE idX = " + idX
+                                                        + " AND idZ = " + idZ + " AND world = " + world)) {
+                                                    UUID pId = UUIDFetcher.getUUIDOf(resultSet1.getString("player"));
+                                                    String player = null;
+                                                    if (resultSet1.getString("player").equalsIgnoreCase("*")) {
+                                                        player = resultSet1.getString("player");
+                                                    } else if (pId != null) {
+                                                        player = pId.toString();
+                                                    }
+                                                    if (player != null) {
+                                                        try (PreparedStatement migrateStatement2 = getConnection().prepareStatement("INSERT INTO "
+                                                                + "plotmecore_allowed (plot_id, player) VALUES (?,?)")) {
+                                                            migrateStatement2.setInt(1, internalPlotID);
+                                                            migrateStatement2.setString(2, player);
+                                                            migrateStatement2.execute();
+                                                        }
+                                                    }
+                                                }
 
-                    try (Statement statement = connection.createStatement();
-                            PreparedStatement statement2 = connection.prepareStatement(SELECT_INTERNAL_ID
-                                    + " AND LOWER(world) = ?"); PreparedStatement statement3 = connection.prepareStatement(
-                            "INSERT INTO plotmecore_allowed (plot_id, allowedID, allowed) VALUES (?,?,?)");
-                            PreparedStatement statement4 = connection
-                                    .prepareStatement("INSERT INTO plotmecore_denied (plot_id, deniedID, denied) VALUES (?,?,?)")) {
-                        statement.executeUpdate("INSERT INTO plotmecore_plots (plotX, plotZ, world, ownerID, owner, biome, finished, finishedDate, "
-                                + "forSale, price, protected, expiredDate, topX,topZ, bottomX, bottomZ) SELECT idX,idZ,world,ownerid,owner,biome,"
-                                + "finished,finisheddate,forsale,customprice,protected,expireddate,topX,topZ,bottomX,bottomZ FROM `plotmePlots` "
-                                + "WHERE "
-                                + "ownerid IS NOT NULL");
-                        statement.executeUpdate("");
-                        connection.commit();
-                        ResultSet allowedResult = statement.executeQuery("SELECT * FROM plotmeallowed");
-                        while (allowedResult.next()) {
-                            int idX = allowedResult.getInt("idX");
-                            int idZ = allowedResult.getInt("idZ");
-                            String world = allowedResult.getString("world").toLowerCase();
-                            statement2.setInt(1, idX);
-                            statement2.setInt(2, idZ);
-                            statement2.setString(3, world);
-                            ResultSet resultSet = statement2.executeQuery();
-                            while (resultSet.next()) {
-                                statement3.executeQuery("INSERT INTO plotmecore_allowed (plot_id, allowedID, allowed) VALUES (" + resultSet.getInt(1)
-                                        + "," + allowedResult.getBytes("playerid") + "," + allowedResult.getString("player") + ")");
+                                            }
+                                            if (tableExists("plotmeDenied")) {
+                                                try (ResultSet resultSet2 = statement.executeQuery("SELECT * FROM plotmeAllowed WHERE idX = " + idX
+                                                        + " AND idZ = " + idZ + " AND world = " + world)) {
+                                                    UUID pId = UUIDFetcher.getUUIDOf(resultSet2.getString("player"));
+                                                    String player = null;
+                                                    if (resultSet2.getString("player").equalsIgnoreCase("*")) {
+                                                        player = resultSet2.getString("player");
+                                                    } else if (pId != null) {
+                                                        player = pId.toString();
+                                                    }
+                                                    if (player != null) {
+                                                        try (PreparedStatement migrateStatement3 = getConnection().prepareStatement("INSERT INTO "
+                                                                + "plotmecore_denied (plot_id, player) VALUES (?,?)")) {
+                                                            migrateStatement3.setInt(1, internalPlotID);
+                                                            migrateStatement3.setString(2, player);
+                                                            migrateStatement3.execute();
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            if (tableExists("plotmeMetadata")) {
+                                                try (ResultSet resultSet3 = statement.executeQuery("SELECT * FROM plotmeMetadata WHERE idX = " + idX
+                                                        + " AND idZ = " + idZ + " AND world = " + world)) {
+                                                    try (PreparedStatement migrateStatement3 = getConnection().prepareStatement("INSERT INTO "
+                                                            + "plotmecore_metadata (plot_id, pluginName, propertyName, propertyValue) VALUES (?,?,"
+                                                            + "?,?)")) {
+                                                        migrateStatement3.setInt(1, internalPlotID);
+                                                        migrateStatement3.setString(2, resultSet3.getString("pluginname"));
+                                                        migrateStatement3.setString(3, resultSet3.getString("propertyname"));
+                                                        migrateStatement3.setString(4, resultSet3.getString("propertyvalue"));
+                                                        migrateStatement3.execute();
+                                                    }
+                                                }
+                                            }
+                                        } catch (SQLException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }
                             }
-                            resultSet.close();
+                            statement.execute("DROP TABLE IF EXISTS plotmeDenied");
+                            statement.execute("DROP TABLE IF EXISTS plotmeAllowed");
+                            statement.execute("DROP TABLE IF EXISTS plotmePlots");
+                            statement.execute("DROP TABLE IF EXISTS plotmeMetadata");
+                            statement.execute("DROP TABLE IF EXISTS plotmeComments");
+                            statement.execute("DROP TABLE IF EXISTS plotmeFreed");
+                            legacyConnection().commit();
+                            getConnection().commit();
+                        } catch (SQLException e) {
+                            e.printStackTrace();
                         }
-                        connection.commit();
-                        allowedResult.close();
-                        ResultSet deniedResult = statement.executeQuery("SELECT * FROM plotmedenied");
-                        while (deniedResult.next()) {
-                            int idX = deniedResult.getInt("idX");
-                            int idZ = deniedResult.getInt("idZ");
-                            String world = deniedResult.getString("world").toLowerCase();
-                            statement2.setInt(1, idX);
-                            statement2.setInt(2, idZ);
-                            statement2.setString(3, world);
-                            ResultSet resultSet = statement2.executeQuery();
-                            while (resultSet.next()) {
-                                statement4.executeQuery("INSERT INTO plotmecore_denied (plot_id, allowedID, allowed) VALUES (" + resultSet.getInt(1)
-                                        + "," + deniedResult.getString("playerid") + "," + deniedResult.getString("player") + ")");
-                            }
-                            resultSet.close();
-                        }
-                        deniedResult.close();
-                        connection.commit();
-                    } catch (SQLException e) {
-                        e.printStackTrace();
                     }
-
                 }
-            });
+                                                           }
+            );
         }
     }
 
@@ -151,6 +200,25 @@ public abstract class Database {
             ps.setString(1, world);
 
             ResultSet setNbPlots = ps.executeQuery();
+            if (setNbPlots.next()) {
+                plotCount = setNbPlots.getInt(1);
+            }
+        } catch (SQLException ex) {
+            plugin.getLogger().severe("PlotCount Exception :");
+            plugin.getLogger().severe(ex.getMessage());
+        }
+        return plotCount;
+    }
+
+    /**
+     * Get the number of plots in the database
+     * @return number of plots in the world
+     */
+    public int getTotalPlotCount() {
+        int plotCount = 0;
+        try (Statement statement = getConnection().createStatement()) {
+
+            ResultSet setNbPlots = statement.executeQuery("SELECT Count(*) as plotCount FROM plotmecore_plots");
             if (setNbPlots.next()) {
                 plotCount = setNbPlots.getInt(1);
             }
@@ -263,48 +331,22 @@ public abstract class Database {
         }
     }
 
+    private void deletePlotInternal(int internalID, String table) {
+        try (PreparedStatement ps = getConnection().prepareStatement("DELETE FROM " + table + " WHERE plot_id = ?")) {
+            ps.setInt(1, internalID);
+            ps.executeUpdate();
+            getConnection().commit();
+        } catch (SQLException e) {
+            plugin.getLogger().severe("Error deleting data from table " + table + " with the internal id " + internalID);
+            e.printStackTrace();
+        }
+    }
     public void deletePlot(int internalID) {
-        Connection connection = getConnection();
-        try (PreparedStatement ps = connection.prepareStatement("DELETE FROM plotmecore_allowed WHERE plot_id = ?")) {
-            ps.setInt(1, internalID);
-            ps.executeUpdate();
-            connection.commit();
-        } catch (SQLException e) {
-            plugin.getLogger().severe("Error deleting allowed data for plot with internal id " + internalID);
-            e.printStackTrace();
-        }
-        try (PreparedStatement ps = connection.prepareStatement("DELETE FROM plotmecore_metadata WHERE plot_id = ?")) {
-            ps.setInt(1, internalID);
-            ps.executeUpdate();
-            connection.commit();
-        } catch (SQLException e) {
-            plugin.getLogger().severe("Error deleting metadata for plot with internal id " + internalID);
-            e.printStackTrace();
-        }
-        try (PreparedStatement ps = connection.prepareStatement("DELETE FROM plotmecore_likes WHERE plot_id = ?")) {
-            ps.setInt(1, internalID);
-            ps.executeUpdate();
-            connection.commit();
-        } catch (SQLException e) {
-            plugin.getLogger().severe("Error deleting likes data for plot with internal id " + internalID);
-            e.printStackTrace();
-        }
-        try (PreparedStatement ps = connection.prepareStatement("DELETE FROM plotmecore_denied WHERE plot_id = ?")) {
-            ps.setInt(1, internalID);
-            ps.executeUpdate();
-            connection.commit();
-        } catch (SQLException e) {
-            plugin.getLogger().severe("Error deleting denied data for plot with internal id " + internalID);
-            e.printStackTrace();
-        }
-        try (PreparedStatement ps = connection.prepareStatement("DELETE FROM plotmecore_plots WHERE id = ?")) {
-            ps.setInt(1, internalID);
-            ps.executeUpdate();
-            connection.commit();
-        } catch (SQLException e) {
-            plugin.getLogger().severe("Error deleting plot with internal id " + internalID);
-            e.printStackTrace();
-        }
+        deletePlotInternal(internalID, "plotmecore_allowed");
+        deletePlotInternal(internalID, "plotmecore_denied");
+        deletePlotInternal(internalID, "plotmecore_metadata");
+        deletePlotInternal(internalID, "plotmecore_likes");
+        deletePlotInternal(internalID, "plotmecore_plots");
     }
 
     public List<Plot> getPlayerPlots(String name, UUID uuid) {
@@ -588,4 +630,6 @@ public abstract class Database {
         }
         return ret;
     }
+
+    abstract Connection legacyConnection();
 }
