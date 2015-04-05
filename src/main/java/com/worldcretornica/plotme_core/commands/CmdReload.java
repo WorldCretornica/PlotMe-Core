@@ -13,7 +13,7 @@ public class CmdReload extends PlotCommand {
         return "reload";
     }
 
-    public boolean execute(ICommandSender sender, String[] args) {
+    public boolean execute(ICommandSender sender, String[] args) throws Exception{
 
         if (sender.hasPermission("plotme.admin.reload")) {
             plugin.reload();

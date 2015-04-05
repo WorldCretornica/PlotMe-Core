@@ -13,7 +13,7 @@ public class CmdLike extends PlotCommand {
         return "like";
     }
 
-    public boolean execute(ICommandSender sender, String[] args) {
+    public boolean execute(ICommandSender sender, String[] args) throws Exception{
         return true;
     }
 

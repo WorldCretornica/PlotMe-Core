@@ -24,7 +24,7 @@ public class CmdClaim extends PlotCommand {
         return "claim";
     }
 
-    public boolean execute(ICommandSender sender, String[] args) {
+    public boolean execute(ICommandSender sender, String[] args) throws Exception{
         IPlayer player = (IPlayer) sender;
         if (player.hasPermission(PermissionNames.USER_CLAIM) || player.hasPermission(PermissionNames.ADMIN_CLAIM_OTHER)) {
             IWorld world = player.getWorld();

@@ -21,7 +21,7 @@ public class CmdDispose extends PlotCommand {
         return "dispose";
     }
 
-    public boolean execute(ICommandSender sender, String[] args) {
+    public boolean execute(ICommandSender sender, String[] args) throws Exception{
         IPlayer player = (IPlayer) sender;
         if (player.hasPermission(PermissionNames.ADMIN_DISPOSE) || player.hasPermission(PermissionNames.USER_DISPOSE)) {
             IWorld world = player.getWorld();

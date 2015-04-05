@@ -28,7 +28,7 @@ public class CmdMiddle extends PlotCommand {
         return Arrays.asList("center", "mid");
     }
 
-    public boolean execute(ICommandSender sender, String[] args) {
+    public boolean execute(ICommandSender sender, String[] args) throws Exception{
         IPlayer player = (IPlayer) sender;
         if (player.hasPermission(PermissionNames.USER_MIDDLE) || player.hasPermission(PermissionNames.ADMIN_MIDDLE_OTHER)) {
             if (manager.isPlotWorld(player)) {

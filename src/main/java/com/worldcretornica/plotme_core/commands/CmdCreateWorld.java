@@ -15,7 +15,7 @@ public class CmdCreateWorld extends PlotCommand {
     }
 
     @Override
-    public boolean execute(ICommandSender sender, String[] args) {
+    public boolean execute(ICommandSender sender, String[] args) throws Exception{
         return false;
     }
 

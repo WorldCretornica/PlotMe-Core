@@ -21,7 +21,7 @@ public class CmdBuy extends PlotCommand {
         return "buy";
     }
 
-    public boolean execute(ICommandSender sender, String[] args) {
+    public boolean execute(ICommandSender sender, String[] args) throws Exception{
         IPlayer player = (IPlayer) sender;
         IWorld world = player.getWorld();
         if (manager.isPlotWorld(world)) {

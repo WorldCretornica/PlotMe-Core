@@ -18,7 +18,7 @@ public class CmdDoneList extends PlotCommand {
         return "donelist";
     }
 
-    public boolean execute(ICommandSender sender, String[] args) {
+    public boolean execute(ICommandSender sender, String[] args) throws Exception{
         IPlayer player = (IPlayer) sender;
         if (manager.isPlotWorld(player)) {
             if (player.hasPermission(PermissionNames.ADMIN_DONE)) {

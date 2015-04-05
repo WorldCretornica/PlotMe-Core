@@ -22,7 +22,7 @@ public class CmdPlotList extends PlotCommand {
         return "list";
     }
 
-    public boolean execute(ICommandSender sender, String[] args) {
+    public boolean execute(ICommandSender sender, String[] args) throws Exception{
         IPlayer player = (IPlayer) sender;
         if (player.hasPermission(PermissionNames.USER_LIST)) {
             if (manager.isPlotWorld(player)) {

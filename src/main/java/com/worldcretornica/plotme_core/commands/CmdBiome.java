@@ -21,7 +21,7 @@ public class CmdBiome extends PlotCommand {
         return "biome";
     }
 
-    public boolean execute(ICommandSender sender, String[] args) {
+    public boolean execute(ICommandSender sender, String[] args) throws Exception{
         IPlayer player = (IPlayer) sender;
         if (player.hasPermission(PermissionNames.USER_BIOME)) {
             IWorld world = player.getWorld();

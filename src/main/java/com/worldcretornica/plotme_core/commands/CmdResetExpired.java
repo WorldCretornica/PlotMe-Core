@@ -15,7 +15,7 @@ public class CmdResetExpired extends PlotCommand {
         return "resetexpired";
     }
 
-    public boolean execute(ICommandSender sender, String[] args) {
+    public boolean execute(ICommandSender sender, String[] args) throws Exception{
         IPlayer player = (IPlayer) sender;
         if (plugin.getWorldCurrentlyProcessingExpired() != null) {
             serverBridge.getLogger().info(C("MsgAlreadyProcessingPlots"));

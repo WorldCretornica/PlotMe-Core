@@ -26,7 +26,7 @@ public class CmdInfo extends PlotCommand {
         return "info";
     }
 
-    public boolean execute(ICommandSender sender, String[] args) {
+    public boolean execute(ICommandSender sender, String[] args) throws Exception{
         IPlayer player = (IPlayer) sender;
         if (player.hasPermission(PermissionNames.USER_INFO)) {
             IWorld world = player.getWorld();

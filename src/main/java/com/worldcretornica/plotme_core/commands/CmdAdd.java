@@ -24,7 +24,7 @@ public class CmdAdd extends PlotCommand {
         return "add";
     }
 
-    public boolean execute(ICommandSender sender, String[] args) {
+    public boolean execute(ICommandSender sender, String[] args) throws Exception{
         if (args[1].length() > 16 || !validUserPattern.matcher(args[1]).matches()) {
             throw new IllegalArgumentException(C("InvalidCommandInput"));
         }
