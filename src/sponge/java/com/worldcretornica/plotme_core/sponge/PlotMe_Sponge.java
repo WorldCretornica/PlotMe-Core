@@ -6,14 +6,18 @@ import com.worldcretornica.plotme_core.api.IServerBridge;
 import com.worldcretornica.plotme_core.sponge.api.SpongePlayer;
 import com.worldcretornica.plotme_core.sponge.listener.SpongePlotDenyListener;
 import com.worldcretornica.plotme_core.sponge.listener.SpongePlotListener;
+import org.slf4j.Logger;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.entity.player.Player;
 import org.spongepowered.api.event.state.PreInitializationEvent;
 import org.spongepowered.api.event.state.ServerStartedEvent;
 import org.spongepowered.api.event.state.ServerStoppingEvent;
 import org.spongepowered.api.plugin.Plugin;
+import org.spongepowered.api.service.config.ConfigDir;
 import org.spongepowered.api.util.event.Subscribe;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -21,13 +25,31 @@ import java.util.UUID;
 public class PlotMe_Sponge {
 
     private final HashMap<UUID, SpongePlayer> spongePlayerMap = new HashMap<>();
+
+    @Inject
     private Game game;
+
+    @Inject
+    @ConfigDir(sharedRoot = false)
+    private File configDir;
+    @Inject
+    private Logger logger;
     private PlotMe_Core plotme;
     private IServerBridge serverObjectBuilder;
 
     @Subscribe
     public void onInit(PreInitializationEvent event) {
-        // TODO -> start plugin: load config, assign variables
+        File pmStorage = new File(configDir, "plotme.conf");
+        if (!configDir.isDirectory()) {
+            configDir.mkdirs();
+        }
+        if (!pmStorage.isFile()) {
+            try {
+                pmStorage.createNewFile();
+            } catch (IOException e) {
+                logger.error("Error creating config files.");
+            }
+        }
 
     }
 
@@ -50,7 +72,6 @@ public class PlotMe_Sponge {
         return plotme;
     }
 
-    @Inject
     public Game getGame() {
         return game;
     }
