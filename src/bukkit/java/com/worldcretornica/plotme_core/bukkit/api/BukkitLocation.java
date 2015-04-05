@@ -82,8 +82,8 @@ public class BukkitLocation implements ILocation {
         int hash = 7;
         hash = 79 * hash + getWorld().hashCode();
         hash = 79 * hash + DoubleHelper.hashCode(this.getX());
-        hash = 79 * hash + DoubleHelper.hashCode(this.getBlockY());
         hash = 79 * hash + DoubleHelper.hashCode(this.getY());
+        hash = 79 * hash + DoubleHelper.hashCode(this.getZ());
         return hash;
     }
 
