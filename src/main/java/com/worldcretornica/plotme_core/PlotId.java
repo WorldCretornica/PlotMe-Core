@@ -1,12 +1,15 @@
 package com.worldcretornica.plotme_core;
 
 
+import com.worldcretornica.plotme_core.api.IWorld;
+
 public class PlotId {
 
     private final int x;
     private final int z;
+    private Object world;
 
-    public PlotId(int x, int z) {
+    public PlotId(int x, int z, IWorld world) {
         this.x = x;
         this.z = z;
     }
@@ -58,14 +61,29 @@ public class PlotId {
         boolean result = false;
         if (obj instanceof PlotId) {
             PlotId me = (PlotId) obj;
-            result = this.getX() == me.getX() && this.getZ() == me.getZ();
+            if (this.getX() == me.getX()) {
+                if (this.getZ() == me.getZ()) {
+                    result = this.getWorld() == me.getWorld();
+                } else {
+                    result = false;
+                }
+            } else {
+                result = false;
+            }
         }
         return result;
     }
 
     @Override
     public int hashCode() {
-        return (31 * (31 + getX()) + getZ());
+        int hash = 7;
+        hash = 31 * hash + getX();
+        hash = 31 * hash + getZ();
+        return 31 * (31 + getX()) + getZ();
+    }
+
+    public Object getWorld() {
+        return world;
     }
 }
 

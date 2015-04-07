@@ -1,7 +1,7 @@
 package com.worldcretornica.plotme_core;
 
 import com.worldcretornica.configuration.ConfigAccessor;
-import com.worldcretornica.configuration.ConfigurationSection;
+import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;

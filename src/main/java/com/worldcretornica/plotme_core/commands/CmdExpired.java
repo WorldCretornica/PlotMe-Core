@@ -30,7 +30,7 @@ public class CmdExpired extends PlotCommand {
                     page = Integer.parseInt(args[1]);
                 }
 
-                List<Plot> expiredPlots = plugin.getSqlManager().getExpiredPlots(world.getName());
+                List<Plot> expiredPlots = plugin.getSqlManager().getExpiredPlots(world);
 
                 if (expiredPlots.isEmpty()) {
                     player.sendMessage(C("MsgNoPlotExpired"));

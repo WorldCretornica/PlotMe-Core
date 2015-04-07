@@ -24,7 +24,7 @@ public class PlotRunnableDeleteExpire implements Runnable {
 
         if (plugin.getWorldCurrentlyProcessingExpired() != null) {
             IWorld world = plugin.getWorldCurrentlyProcessingExpired();
-            List<Plot> expiredPlots = sqlmanager.getExpiredPlots(world.getName());
+            List<Plot> expiredPlots = sqlmanager.getExpiredPlots(world);
 
             if (expiredPlots.isEmpty()) {
                 plugin.setCounterExpired(0);

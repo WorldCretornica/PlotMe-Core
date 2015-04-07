@@ -21,11 +21,14 @@ import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 import java.io.File;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -38,22 +41,14 @@ public class BukkitServerBridge extends IServerBridge {
     private Economy economy;
     private PlotWorldEdit plotworldedit;
 
-    public BukkitServerBridge(PlotMe_CorePlugin instance) {
+    public BukkitServerBridge(PlotMe_CorePlugin instance, Logger logger) {
+        super(logger);
         plugin = instance;
     }
 
     @Override
     public IOfflinePlayer getOfflinePlayer(UUID uuid) {
         return new BukkitOfflinePlayer(Bukkit.getOfflinePlayer(uuid));
-    }
-
-    /**
-     * PlotMe Logger
-     * @return logger
-     */
-    @Override
-    public Logger getLogger() {
-        return plugin.getLogger();
     }
 
     @Override
@@ -359,6 +354,11 @@ public class BukkitServerBridge extends IServerBridge {
 
     public File getWorldFolder() {
         return plugin.getServer().getWorldContainer();
+    }
+
+    public ConfigurationSection getDefaultWorld() {
+        return org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(
+                new InputStreamReader(getClass().getClassLoader().getResourceAsStream("default-world.yml"), StandardCharsets.UTF_8));
     }
 
     @Override

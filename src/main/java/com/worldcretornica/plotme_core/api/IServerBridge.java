@@ -1,12 +1,12 @@
 package com.worldcretornica.plotme_core.api;
 
 import com.worldcretornica.configuration.ConfigAccessor;
-import com.worldcretornica.configuration.ConfigurationSection;
-import com.worldcretornica.configuration.file.YamlConfiguration;
 import com.worldcretornica.plotme_core.PlotWorldEdit;
 import com.worldcretornica.plotme_core.api.event.eventbus.EventBus;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.InputStreamReader;
@@ -19,8 +19,13 @@ import java.util.logging.Logger;
 public abstract class IServerBridge {
 
     private final EventBus eventBus = new EventBus();
+    private final Logger logger;
 
     private boolean usingLwc;
+
+    public IServerBridge(Logger bridgeLogger) {
+        logger = bridgeLogger;
+    }
 
     public EventBus getEventBus() {
         return eventBus;
@@ -42,7 +47,9 @@ public abstract class IServerBridge {
 
     public abstract Collection<IPlayer> getOnlinePlayers();
 
-    public abstract Logger getLogger();
+    public Logger getLogger() {
+        return logger;
+    }
 
     public abstract int scheduleSyncRepeatingTask(Runnable func, long l, long l2);
 
@@ -99,7 +106,7 @@ public abstract class IServerBridge {
     public abstract File getDataFolder();
 
     public void saveResource(boolean replace) {
-        YamlConfiguration.loadConfig(
+        YamlConfiguration.loadConfiguration(
                 new InputStreamReader(getClass().getClassLoader().getResourceAsStream("default-world.yml"), StandardCharsets.UTF_8));
     }
 
@@ -132,10 +139,7 @@ public abstract class IServerBridge {
         return configSection;
     }
 
-    public ConfigurationSection getDefaultWorld() {
-        return YamlConfiguration
-                .loadConfig(new InputStreamReader(getClass().getClassLoader().getResourceAsStream("default-world.yml"), StandardCharsets.UTF_8));
-    }
+    public abstract ConfigurationSection getDefaultWorld();
 
     public abstract File getWorldFolder();
 

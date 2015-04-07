@@ -88,6 +88,15 @@ public class BukkitLocation implements ILocation {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        boolean result = false;
+        if (obj instanceof ILocation) {
+            result = this.hashCode() == obj.hashCode();
+        }
+        return result;
+    }
+
+    @Override
     public ILocation subtract(double x, double y, double z) {
         return new BukkitLocation(location.subtract(x, y, z));
     }

@@ -48,4 +48,8 @@ public class BukkitOfflinePlayer implements IOfflinePlayer {
         return offlineplayer.isOnline();
     }
 
+    @Override
+    public String toString() {
+        return "BukkitOfflinePlayer{ name= " + getName() + " uuid = " + getUniqueId().toString() + " }";
+    }
 }

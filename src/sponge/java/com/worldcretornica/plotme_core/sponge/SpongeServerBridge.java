@@ -1,8 +1,8 @@
 package com.worldcretornica.plotme_core.sponge;
 
 import com.worldcretornica.configuration.ConfigAccessor;
-import com.worldcretornica.configuration.ConfigurationSection;
 import com.worldcretornica.plotme_core.PlotWorldEdit;
+import com.worldcretornica.plotme_core.api.BridgeLogger;
 import com.worldcretornica.plotme_core.api.IMaterial;
 import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import com.worldcretornica.plotme_core.api.IPlayer;
@@ -12,6 +12,7 @@ import com.worldcretornica.plotme_core.sponge.api.SpongePlayer;
 import com.worldcretornica.plotme_core.sponge.api.SpongeWorld;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
+import org.bukkit.configuration.ConfigurationSection;
 import org.spongepowered.api.entity.player.Player;
 import org.spongepowered.api.service.command.CommandService;
 import org.spongepowered.api.world.World;
@@ -27,9 +28,12 @@ import java.util.logging.Logger;
 public class SpongeServerBridge extends IServerBridge {
 
     private final PlotMe_Sponge plugin;
+    private final BridgeLogger bridgeLogger;
 
-    public SpongeServerBridge(PlotMe_Sponge instance) {
+    public SpongeServerBridge(PlotMe_Sponge instance, BridgeLogger bridgeLogger) {
+        super(bridgeLogger);
         plugin = instance;
+        this.bridgeLogger = bridgeLogger;
     }
 
     @Override
@@ -75,8 +79,7 @@ public class SpongeServerBridge extends IServerBridge {
 
     @Override
     public Logger getLogger() {
-        // TODO Auto-generated method stub
-        return null;
+        return bridgeLogger;
     }
 
     @Override
@@ -178,12 +181,6 @@ public class SpongeServerBridge extends IServerBridge {
     }
 
     @Override
-    public void saveResource(boolean replace) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
     public List<String> getBiomes() {
         List<String> biomes = new ArrayList<>();
         for (BiomeType type : plugin.getGame().getRegistry().getBiomes()) {
@@ -219,6 +216,11 @@ public class SpongeServerBridge extends IServerBridge {
     @Override
     public ConfigurationSection loadDefaultConfig(ConfigAccessor configFile, String world) {
         // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public ConfigurationSection getDefaultWorld() {
         return null;
     }
 

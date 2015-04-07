@@ -1,7 +1,6 @@
 package com.worldcretornica.configuration;
 
-import com.worldcretornica.configuration.file.FileConfiguration;
-import com.worldcretornica.configuration.file.YamlConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -14,7 +13,7 @@ public class ConfigAccessor {
 
     private final String fileName;
     private final File configFile;
-    private FileConfiguration fileConfiguration;
+    private YamlConfiguration fileConfiguration;
 
     public ConfigAccessor(File pluginFolder, String fileName) {
         this.fileName = fileName;
@@ -22,11 +21,11 @@ public class ConfigAccessor {
     }
 
     public void reloadFile() {
-        fileConfiguration = YamlConfiguration.loadConfig(configFile);
+        fileConfiguration = YamlConfiguration.loadConfiguration(configFile);
 
         // Look for defaults in the jar
         InputStream defConfigStream = getResource(fileName);
-        YamlConfiguration defConfig = YamlConfiguration.loadConfig(new InputStreamReader(defConfigStream));
+        YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(defConfigStream));
         fileConfiguration.setDefaults(defConfig);
     }
 
@@ -34,7 +33,7 @@ public class ConfigAccessor {
         return getClass().getClassLoader().getResourceAsStream(fileName);
     }
 
-    public FileConfiguration getConfig() {
+    public YamlConfiguration getConfig() {
         if (fileConfiguration == null) {
             this.reloadFile();
         }
@@ -46,7 +45,7 @@ public class ConfigAccessor {
         if (fileConfiguration != null) {
             try {
                 getConfig().save(configFile);
-            } catch (IOException ex) {
+            } catch (IOException ignored) {
             }
         }
     }

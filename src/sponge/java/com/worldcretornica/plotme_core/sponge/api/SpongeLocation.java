@@ -101,4 +101,13 @@ public class SpongeLocation implements ILocation {
         return hash;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        boolean result = false;
+        if (obj instanceof ILocation) {
+            result = this.hashCode() == obj.hashCode();
+        }
+        return result;
+    }
+
 }

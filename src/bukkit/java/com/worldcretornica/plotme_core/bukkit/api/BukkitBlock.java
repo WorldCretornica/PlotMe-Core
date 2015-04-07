@@ -67,4 +67,8 @@ public class BukkitBlock implements IBlock {
         block.setTypeId(id, applyPhysics);
     }
 
+    @Override
+    public String toString() {
+        return "Bukkit Block: " + getTypeId() + ":" + getData();
+    }
 }

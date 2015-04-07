@@ -26,7 +26,7 @@ public class CmdBuy extends PlotCommand {
         IWorld world = player.getWorld();
         if (manager.isPlotWorld(world)) {
             if (manager.isEconomyEnabled(world)) {
-                if (player.hasPermission(PermissionNames.USER_BUY) || player.hasPermission("PlotMe.admin.buy")) {
+                if (player.hasPermission(PermissionNames.USER_BUY)) {
                     PlotId id = manager.getPlotId(player);
 
                     if (id == null) {

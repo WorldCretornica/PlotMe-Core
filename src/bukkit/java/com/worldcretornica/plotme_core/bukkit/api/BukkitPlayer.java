@@ -59,4 +59,10 @@ public class BukkitPlayer extends BukkitOfflinePlayer implements IPlayer {
     public void remove() {
         player.remove();
     }
+
+    @Override
+    public String toString() {
+        return "Bukkit Player{ name= " + getName() + " uuid = " + getUniqueId().toString() + " }";
+    }
+
 }
