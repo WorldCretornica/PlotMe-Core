@@ -13,7 +13,6 @@
     <build>
         <defaultGoal>clean package install</defaultGoal>
         <finalName>${project.name}</finalName>
-        <testSourceDirectory>src/test/java</testSourceDirectory>
         <sourceDirectory>src/main/java</sourceDirectory>
         <resources>
             <resource>
@@ -194,17 +193,6 @@
             <artifactId>junit</artifactId>
             <version>4.12</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.yaml</groupId>
-            <artifactId>snakeyaml</artifactId>
-            <version>1.15</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>bukkit</artifactId>
-            <version>1.8.3-R0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
 

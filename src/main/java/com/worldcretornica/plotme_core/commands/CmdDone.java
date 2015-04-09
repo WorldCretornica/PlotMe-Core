@@ -27,8 +27,8 @@ public class CmdDone extends PlotCommand {
                 if (id == null) {
                     player.sendMessage(C("MsgNoPlotFound"));
                     return true;
-                } else if (!manager.isPlotAvailable(id, player)) {
-                    Plot plot = manager.getPlotById(id, player);
+                } else if (!manager.isPlotAvailable(id)) {
+                    Plot plot = manager.getPlotById(id);
                     String name = player.getName();
 
                     if (player.getUniqueId().equals(plot.getOwnerId()) || player.hasPermission(PermissionNames.ADMIN_DONE)) {

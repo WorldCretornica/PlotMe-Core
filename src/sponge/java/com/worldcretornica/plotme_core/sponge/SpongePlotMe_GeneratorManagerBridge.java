@@ -4,11 +4,9 @@ import com.worldcretornica.plotme_core.PlotId;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IPlotMe_GeneratorManager;
-import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.sponge.api.ISpongePlotMe_GeneratorManager;
 import com.worldcretornica.plotme_core.sponge.api.SpongeLocation;
 import com.worldcretornica.plotme_core.sponge.api.SpongePlayer;
-import com.worldcretornica.plotme_core.sponge.api.SpongeWorld;
 import com.worldcretornica.schematic.Schematic;
 import org.spongepowered.api.entity.player.Player;
 
@@ -45,73 +43,68 @@ public class SpongePlotMe_GeneratorManagerBridge implements IPlotMe_GeneratorMan
     }
 
     @Override
-    public void fillRoad(PlotId id1, PlotId id2, IWorld world) {
-        generatorManager.fillroad(id1, id2, ((SpongeWorld) world).getWorld());
+    public void fillRoad(PlotId id1, PlotId id2) {
+        generatorManager.fillroad(id1, id2);
     }
 
     @Override
-    public void fillMiddleRoad(PlotId id1, PlotId id2, IWorld world) {
-        generatorManager.fillmiddleroad(id1, id2, ((SpongeWorld) world).getWorld());
+    public void fillMiddleRoad(PlotId id1, PlotId id2) {
+        generatorManager.fillmiddleroad(id1, id2);
     }
 
     @Override
-    public void setOwnerDisplay(IWorld world, PlotId id, String line1, String line2, String line3, String line4) {
-        generatorManager.setOwnerDisplay(((SpongeWorld) world).getWorld(), id, line1, line2, line3, line4);
+    public void setOwnerDisplay(PlotId id, String line1, String line2, String line3, String line4) {
+        generatorManager.setOwnerDisplay(id, line1, line2, line3, line4);
     }
 
     @Override
-    public void setSellerDisplay(IWorld world, PlotId id, String line1, String line2, String line3, String line4) {
-        generatorManager.setSellerDisplay(((SpongeWorld) world).getWorld(), id, line1, line2, line3, line4);
+    public void setSellerDisplay(PlotId id, String line1, String line2, String line3, String line4) {
+        generatorManager.setSellerDisplay(id, line1, line2, line3, line4);
     }
 
     @Override
-    public void removeOwnerDisplay(IWorld world, PlotId id) {
-        generatorManager.removeOwnerDisplay(((SpongeWorld) world).getWorld(), id);
+    public void removeOwnerDisplay(PlotId id) {
+        generatorManager.removeOwnerDisplay(id);
     }
 
     @Override
-    public void removeSellerDisplay(IWorld world, PlotId id) {
-        generatorManager.removeSellerDisplay(((SpongeWorld) world).getWorld(), id);
+    public void removeSellerDisplay(PlotId id) {
+        generatorManager.removeSellerDisplay(id);
     }
 
     @Override
-    public ILocation getPlotBottomLoc(IWorld world, PlotId id) {
-        return new SpongeLocation(generatorManager.getPlotBottomLoc(((SpongeWorld) world).getWorld(), id));
+    public ILocation getPlotBottomLoc(PlotId id) {
+        return new SpongeLocation(generatorManager.getPlotBottomLoc(id));
     }
 
     @Override
-    public ILocation getPlotTopLoc(IWorld world, PlotId id) {
-        return new SpongeLocation(generatorManager.getPlotTopLoc(((SpongeWorld) world).getWorld(), id));
+    public ILocation getPlotTopLoc(PlotId id) {
+        return new SpongeLocation(generatorManager.getPlotTopLoc(id));
     }
 
     @Override
-    public void refreshPlotChunks(IWorld world, PlotId id) {
-        generatorManager.refreshPlotChunks(((SpongeWorld) world).getWorld(), id);
+    public void refreshPlotChunks(PlotId id) {
+        generatorManager.refreshPlotChunks(id);
     }
 
     @Override
-    public ILocation getTop(IWorld world, PlotId id) {
-        return new SpongeLocation(generatorManager.getTop(((SpongeWorld) world).getWorld(), id));
+    public ILocation getTop(PlotId id) {
+        return new SpongeLocation(generatorManager.getTop(id));
     }
 
     @Override
-    public ILocation getBottom(IWorld world, PlotId id) {
-        return new SpongeLocation(generatorManager.getBottom(((SpongeWorld) world).getWorld(), id));
+    public ILocation getBottom(PlotId id) {
+        return new SpongeLocation(generatorManager.getBottom(id));
     }
 
     @Override
-    public Long[] clear(IWorld world, PlotId id, long maxBlocks, Long[] start) {
-        return generatorManager.clear(((SpongeWorld) world).getWorld(), id, maxBlocks, start);
+    public Long[] clear(PlotId id, long maxBlocks, Long[] start) {
+        return generatorManager.clear(id, maxBlocks, start);
     }
 
     @Override
-    public void adjustPlotFor(IWorld world, PlotId id, boolean claimed, boolean protect, boolean auctioned, boolean forSale) {
-        generatorManager.adjustPlotFor(((SpongeWorld) world).getWorld(), id, claimed, protect, forSale);
-    }
-
-    @Override
-    public void adjustPlotFor(IWorld world, PlotId id, boolean claimed, boolean protect, boolean forSale) {
-        generatorManager.adjustPlotFor(((SpongeWorld) world).getWorld(), id, claimed, protect, forSale);
+    public void adjustPlotFor(PlotId id, boolean claimed, boolean protect, boolean forSale) {
+        generatorManager.adjustPlotFor(id, claimed, protect, forSale);
     }
 
     @Override
@@ -120,33 +113,33 @@ public class SpongePlotMe_GeneratorManagerBridge implements IPlotMe_GeneratorMan
     }
 
     @Override
-    public boolean movePlot(IWorld world, PlotId idFrom, PlotId idTo) {
-        return generatorManager.movePlot(((SpongeWorld) world).getWorld(), idFrom, idTo);
+    public boolean movePlot(PlotId idFrom, PlotId idTo) {
+        return generatorManager.movePlot(idFrom, idTo);
     }
 
     @Override
-    public int bottomX(PlotId id, IWorld world) {
-        return generatorManager.bottomX(id, ((SpongeWorld) world).getWorld());
+    public int bottomX(PlotId id) {
+        return generatorManager.bottomX(id);
     }
 
     @Override
-    public int bottomZ(PlotId id, IWorld world) {
-        return generatorManager.bottomZ(id, ((SpongeWorld) world).getWorld());
+    public int bottomZ(PlotId id) {
+        return generatorManager.bottomZ(id);
     }
 
     @Override
-    public int topX(PlotId id, IWorld world) {
-        return generatorManager.topX(id, ((SpongeWorld) world).getWorld());
+    public int topX(PlotId id) {
+        return generatorManager.topX(id);
     }
 
     @Override
-    public int topZ(PlotId id, IWorld world) {
-        return generatorManager.topZ(id, ((SpongeWorld) world).getWorld());
+    public int topZ(PlotId id) {
+        return generatorManager.topZ(id);
     }
 
     @Override
-    public ILocation getPlotHome(IWorld world, PlotId id) {
-        return new SpongeLocation(generatorManager.getPlotHome(((SpongeWorld) world).getWorld(), id));
+    public ILocation getPlotHome(PlotId id) {
+        return new SpongeLocation(generatorManager.getPlotHome(id));
     }
 
     @Override
@@ -160,12 +153,12 @@ public class SpongePlotMe_GeneratorManagerBridge implements IPlotMe_GeneratorMan
     }
 
     @Override
-    public ILocation getPlotMiddle(IWorld world, PlotId id) {
-        return new SpongeLocation(generatorManager.getPlotMiddle(((SpongeWorld) world).getWorld(), id));
+    public ILocation getPlotMiddle(PlotId id) {
+        return new SpongeLocation(generatorManager.getPlotMiddle(id));
     }
 
     @Override
-    public Schematic getPlotSchematic(IWorld world, PlotId id) {
-        return generatorManager.getPlotSchematic(((SpongeWorld) world).getWorld(), id);
+    public Schematic getPlotSchematic(PlotId id) {
+        return generatorManager.getPlotSchematic(id);
     }
 }

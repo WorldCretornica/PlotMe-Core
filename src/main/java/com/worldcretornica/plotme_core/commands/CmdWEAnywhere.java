@@ -19,17 +19,15 @@ public class CmdWEAnywhere extends PlotCommand {
 
     public boolean execute(ICommandSender sender, String[] args) throws Exception{
         IPlayer player = (IPlayer) sender;
-        if (player.hasPermission(PermissionNames.ADMIN_WEANYWHERE) && plugin.getServerBridge().getPlotWorldEdit() != null) {
+        if (player.hasPermission(PermissionNames.ADMIN_WEANYWHERE) && plugin.getServerBridge().isUsingWEdit()) {
             String name = player.getName();
             UUID uuid = player.getUniqueId();
             boolean defaultWEAnywhere = plugin.getConfig().getBoolean("defaultWEAnywhere");
             boolean playerIgnoringWELimit = manager.isPlayerIgnoringWELimit(player);
             if (playerIgnoringWELimit && !defaultWEAnywhere || !playerIgnoringWELimit && defaultWEAnywhere) {
                 manager.removePlayerIgnoringWELimit(uuid);
-                plugin.getServerBridge().getPlotWorldEdit().setMask(player);
             } else {
                 manager.addPlayerIgnoringWELimit(uuid);
-                plugin.getServerBridge().getPlotWorldEdit().removeMask(player);
             }
             if (manager.isPlayerIgnoringWELimit(player)) {
                 player.sendMessage(C("MsgWorldEditAnywhere"));

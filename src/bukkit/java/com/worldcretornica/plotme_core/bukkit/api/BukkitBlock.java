@@ -3,19 +3,24 @@ package com.worldcretornica.plotme_core.bukkit.api;
 import com.worldcretornica.plotme_core.api.IBlock;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.api.Vector;
 import org.bukkit.block.Block;
 
 public class BukkitBlock implements IBlock {
 
     private final Block block;
+    private final Vector coords;
+    private final ILocation location;
 
     public BukkitBlock(Block block) {
         this.block = block;
+        coords = new Vector(block.getX(),block.getY(),block.getZ());
+        location = new ILocation(getWorld(),coords);
     }
 
     @Override
     public ILocation getLocation() {
-        return new BukkitLocation(block.getLocation());
+        return location;
     }
 
     @Override
@@ -70,5 +75,9 @@ public class BukkitBlock implements IBlock {
     @Override
     public String toString() {
         return "Bukkit Block: " + getTypeId() + ":" + getData();
+    }
+
+    public Vector getPosition() {
+        return coords;
     }
 }

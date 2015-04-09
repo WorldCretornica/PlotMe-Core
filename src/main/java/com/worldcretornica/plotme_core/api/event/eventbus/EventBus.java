@@ -16,8 +16,6 @@
 
 package com.worldcretornica.plotme_core.api.event.eventbus;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -30,6 +28,7 @@ import com.worldcretornica.plotme_core.api.event.ICancellable;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -52,7 +51,20 @@ public class EventBus implements EventManager {
 
                 @Override
                 public HandlerCache load(Class<?> type) throws Exception {
-                    return bakeHandlers(type);
+                    List<MethodEventHandler> registrations = Lists.newArrayList();
+                    Set<Class<?>> types = (Set) TypeToken.of(type).getTypes().rawTypes();
+
+                    synchronized (EventBus.this.lock) {
+                        for (Class<?> type1 : types) {
+                            if (Event.class.isAssignableFrom(type1)) {
+                                registrations.addAll(EventBus.this.handlersByEvent.get(type1));
+                            }
+                        }
+                    }
+
+                    Collections.sort(registrations);
+
+                    return new HandlerCache(registrations);
                 }
             });
 
@@ -61,49 +73,30 @@ public class EventBus implements EventManager {
 
     private static boolean isValidHandler(Method method) {
         Class<?>[] paramTypes = method.getParameterTypes();
-        return !Modifier.isStatic(method.getModifiers())
-                && !Modifier.isAbstract(method.getModifiers())
-                && !Modifier.isInterface(method.getDeclaringClass().getModifiers())
-                && method.getReturnType() == void.class
-                && paramTypes.length == 1
-                && Event.class.isAssignableFrom(paramTypes[0]);
-    }
-
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    private HandlerCache bakeHandlers(Class<?> rootType) {
-        List<MethodEventHandler> registrations = Lists.newArrayList();
-        Set<Class<?>> types = (Set) TypeToken.of(rootType).getTypes().rawTypes();
-
-        synchronized (this.lock) {
-            for (Class<?> type : types) {
-                if (Event.class.isAssignableFrom(type)) {
-                    registrations.addAll(this.handlersByEvent.get(type));
+        if (!Modifier.isStatic(method.getModifiers()) && !Modifier.isAbstract(method.getModifiers())) {
+            if (!Modifier.isInterface(method.getDeclaringClass().getModifiers()) && method.getReturnType() == void.class) {
+                if (paramTypes.length == 1 && Event.class.isAssignableFrom(paramTypes[0])) {
+                    return true;
                 }
             }
         }
-
-        Collections.sort(registrations);
-
-        return new HandlerCache(registrations);
+        return false;
     }
 
     private HandlerCache getHandlerCache(Class<?> type) {
         return this.handlersCache.getUnchecked(type);
     }
 
-    @SuppressWarnings("unchecked")
     private List<Subscriber> findAllSubscribers(Object object) {
-        List<Subscriber> subscribers = Lists.newArrayList();
+        List<Subscriber> subscribers = new ArrayList<>();
         Class<?> type = object.getClass();
-
         for (Method method : type.getMethods()) {
             Subscribe subscribe = method.getAnnotation(Subscribe.class);
-
-            if (subscribe != null) {
+            if (method.isAnnotationPresent(Subscribe.class)) {
                 Class<?>[] paramTypes = method.getParameterTypes();
 
                 if (isValidHandler(method)) {
-                    Class<Event> eventType = (Class<Event>) paramTypes[0];
+                    Class<?> eventType = paramTypes[0];
                     MethodEventHandler handler = new MethodEventHandler(subscribe.order(), object, method);
                     subscribers.add(new Subscriber(eventType, handler));
                 } else {
@@ -177,8 +170,6 @@ public class EventBus implements EventManager {
 
     @Override
     public void register(Object object) {
-        checkNotNull(object, "object");
-
         registerAll(findAllSubscribers(object));
     }
 

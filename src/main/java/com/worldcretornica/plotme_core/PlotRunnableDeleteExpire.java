@@ -35,14 +35,14 @@ public class PlotRunnableDeleteExpire implements Runnable {
                     InternalPlotResetEvent event = new InternalPlotResetEvent(world, expiredPlot, sender);
                     plugin.getServerBridge().getEventBus().post(event);
                     if (!event.isCancelled()) {
-                        plotMeCoreManager.clear(world, expiredPlot, sender, ClearReason.Expired);
+                        plotMeCoreManager.clear(expiredPlot, sender, ClearReason.Expired);
 
                         PlotId id = expiredPlot.getId();
                         ids += id + ", ";
 
-                        plotMeCoreManager.removePlot(world, id);
-                        plotMeCoreManager.removeOwnerSign(world, id);
-                        plotMeCoreManager.removeSellSign(world, id);
+                        plotMeCoreManager.removePlot(id);
+                        plotMeCoreManager.removeOwnerSign(id);
+                        plotMeCoreManager.removeSellSign(id);
 
                         sqlmanager.deletePlot(expiredPlot.getInternalID());
 

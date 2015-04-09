@@ -7,8 +7,8 @@ import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.sponge.PlotMe_Sponge;
 import com.worldcretornica.plotme_core.sponge.api.SpongeLocation;
 import com.worldcretornica.plotme_core.sponge.api.SpongePlayer;
+import org.spongepowered.api.event.Subscribe;
 import org.spongepowered.api.event.entity.player.PlayerMoveEvent;
-import org.spongepowered.api.util.event.Subscribe;
 
 public class SpongePlotDenyListener {
 
@@ -30,7 +30,7 @@ public class SpongePlotDenyListener {
             PlotId idTo = manager.getPlotId(to);
 
             if (idTo != null) {
-                Plot plot = manager.getPlotById(idTo, player);
+                Plot plot = manager.getPlotById(idTo);
 
                 if (plot != null && plot.isDeniedInternal(player.getName())) {
                     event.getPlayer().setLocation(event.getOldLocation());

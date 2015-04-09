@@ -4,15 +4,23 @@ import com.worldcretornica.plotme_core.api.IItemStack;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.api.Vector;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 public class BukkitPlayer extends BukkitOfflinePlayer implements IPlayer {
 
     private final Player player;
+    private final Vector coords;
+    private final BukkitWorld world;
+    private final ILocation loc;
 
     public BukkitPlayer(Player player) {
         super(player);
         this.player = player;
+        coords = BukkitConverter.locationToVector(player.getLocation());
+        world = BukkitConverter.adapt(player.getWorld());
+        loc = new ILocation(world, getPosition());
     }
 
     /**
@@ -33,17 +41,17 @@ public class BukkitPlayer extends BukkitOfflinePlayer implements IPlayer {
 
     @Override
     public IWorld getWorld() {
-        return new BukkitWorld(player.getWorld());
+        return world;
     }
 
     @Override
     public ILocation getLocation() {
-        return new BukkitLocation(player.getLocation());
+        return loc;
     }
 
     @Override
     public void setLocation(ILocation location) {
-        player.teleport(((BukkitLocation) location).getLocation());
+        player.teleport(new Location(((BukkitWorld) location.getWorld()).getWorld(), location.getX(), location.getY(), location.getZ()));
     }
 
     public Player getPlayer() {
@@ -65,4 +73,8 @@ public class BukkitPlayer extends BukkitOfflinePlayer implements IPlayer {
         return "Bukkit Player{ name= " + getName() + " uuid = " + getUniqueId().toString() + " }";
     }
 
+
+    public Vector getPosition() {
+        return coords;
+    }
 }

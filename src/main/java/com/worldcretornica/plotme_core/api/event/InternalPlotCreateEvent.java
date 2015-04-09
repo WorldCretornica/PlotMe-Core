@@ -38,11 +38,11 @@ public class InternalPlotCreateEvent extends InternalPlotEvent implements ICance
 
     @Override
     public ILocation getUpperBound() {
-        return PlotMeCoreManager.getInstance().getPlotTopLoc(world, plotId);
+        return PlotMeCoreManager.getInstance().getPlotTopLoc(plotId);
     }
 
     @Override
     public ILocation getLowerBound() {
-        return PlotMeCoreManager.getInstance().getPlotBottomLoc(world, plotId);
+        return PlotMeCoreManager.getInstance().getPlotBottomLoc(plotId);
     }
 }

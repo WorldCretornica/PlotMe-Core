@@ -23,6 +23,9 @@ public class CmdTrust extends PlotCommand {
     }
 
     public boolean execute(ICommandSender sender, String[] args) throws Exception{
+        if (args.length < 2 && args.length >= 3) {
+            throw new BadUsageException(getUsage());
+        }
         if (args[1].length() > 16 || !validUserPattern.matcher(args[1]).matches()) {
             throw new IllegalArgumentException(C("InvalidCommandInput"));
         }
@@ -36,66 +39,64 @@ public class CmdTrust extends PlotCommand {
                     player.sendMessage(C("MsgNoPlotFound"));
                     return true;
                 } else if (!manager.isPlotAvailable(id, pmi)) {
-                    if (args.length < 2) {
-                        player.sendMessage(getUsage());
-                    } else {
-                        Plot plot = manager.getPlotById(id, pmi);
+                    Plot plot = manager.getPlotById(id, pmi);
+                    if (plot == null) {
+                        return true;
+                    }
+                    String trust = args[1];
 
-                        String trust = args[1];
+                    if (player.getUniqueId().equals(plot.getOwnerId()) || player.hasPermission(PermissionNames.ADMIN_TRUST)) {
+                        if (plot.isAllowedConsulting(trust)) {
+                            player.sendMessage(C("WordPlayer") + " " + trust + " " + C("MsgAlreadyAllowed"));
+                        } else {
 
-                        if (player.getUniqueId().equals(plot.getOwnerId()) || player.hasPermission(PermissionNames.ADMIN_TRUST)) {
-                            if (plot.isAllowedConsulting(trust)) {
-                                player.sendMessage(C("WordPlayer") + " " + trust + " " + C("MsgAlreadyAllowed"));
-                            } else {
+                            InternalPlotAddTrustedEvent event = new InternalPlotAddTrustedEvent(world, plot, player, trust);
+                            serverBridge.getEventBus().post(event);
 
-                                InternalPlotAddTrustedEvent event = new InternalPlotAddTrustedEvent(world, plot, player, trust);
-                                serverBridge.getEventBus().post(event);
+                            serverBridge.getEventBus().post(event);
+                            double advancedPrice = 0.0;
+                            if (manager.isEconomyEnabled(pmi)) {
+                                double price = pmi.getAddPlayerPrice();
+                                advancedPrice = price;
+                                double balance = serverBridge.getBalance(player);
 
-                                serverBridge.getEventBus().post(event);
-                                double advancedPrice = 0.0;
-                                if (manager.isEconomyEnabled(pmi)) {
-                                    double price = pmi.getAddPlayerPrice();
-                                    advancedPrice = price;
-                                    double balance = serverBridge.getBalance(player);
+                                if (balance < price) {
+                                    player.sendMessage(C("MsgNotEnoughAdd") + " " + C("WordMissing") + " " + plugin.moneyFormat(price - balance,
+                                            false));
+                                    return true;
+                                } else if (!event.isCancelled()) {
+                                    EconomyResponse er = serverBridge.withdrawPlayer(player, price);
 
-                                    if (balance < price) {
-                                        player.sendMessage(C("MsgNotEnoughAdd") + " " + C("WordMissing") + " " + plugin.moneyFormat(price - balance,
-                                                false));
-                                        return true;
-                                    } else if (!event.isCancelled()) {
-                                        EconomyResponse er = serverBridge.withdrawPlayer(player, price);
-
-                                        if (!er.transactionSuccess()) {
-                                            player.sendMessage(er.errorMessage);
-                                            serverBridge.getLogger().warning(er.errorMessage);
-                                            return true;
-                                        }
-                                    } else {
+                                    if (!er.transactionSuccess()) {
+                                        player.sendMessage(er.errorMessage);
+                                        serverBridge.getLogger().warning(er.errorMessage);
                                         return true;
                                     }
-                                }
-
-                                if (!event.isCancelled()) {
-                                    IPlayer allowed2 = plugin.getServerBridge().getPlayerExact(trust);
-                                    if (allowed2 != null) {
-                                        plot.addAllowed(allowed2.getUniqueId().toString());
-                                        plot.removeDenied(allowed2.getUniqueId().toString());
-                                    } else {
-                                        plot.addAllowed(trust);
-                                        plot.removeDenied(trust);
-                                    }
-                                    player.sendMessage(C("WordPlayer") + " " + trust + " " + C("MsgNowAllowed"));
-
-                                    if (isAdvancedLogging()) {
-                                        serverBridge.getLogger()
-                                                .info(player.getName() + " " + C("MsgAddedPlayer") + " " + trust + " " + C("MsgToPlot") + " "
-                                                        + id);
-                                    }
+                                } else {
+                                    return true;
                                 }
                             }
-                        } else {
-                            player.sendMessage(C("MsgThisPlot") + "(" + id + ") " + C("MsgNotYoursNotAllowedAdd"));
+
+                            if (!event.isCancelled()) {
+                                IPlayer allowed2 = plugin.getServerBridge().getPlayerExact(trust);
+                                if (allowed2 != null) {
+                                    plot.addAllowed(allowed2.getUniqueId().toString());
+                                    plot.removeDenied(allowed2.getUniqueId().toString());
+                                } else {
+                                    plot.addAllowed(trust);
+                                    plot.removeDenied(trust);
+                                }
+                                player.sendMessage(C("WordPlayer") + " " + trust + " " + C("MsgNowAllowed"));
+
+                                if (isAdvancedLogging()) {
+                                    serverBridge.getLogger()
+                                            .info(player.getName() + " " + C("MsgAddedPlayer") + " " + trust + " " + C("MsgToPlot") + " "
+                                                    + id);
+                                }
+                            }
                         }
+                    } else {
+                        player.sendMessage(C("MsgThisPlot") + "(" + id + ") " + C("MsgNotYoursNotAllowedAdd"));
                     }
                 } else {
                     player.sendMessage(C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));

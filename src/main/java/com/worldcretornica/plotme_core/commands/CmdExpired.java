@@ -2,6 +2,7 @@ package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
+import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
@@ -24,22 +25,25 @@ public class CmdExpired extends PlotCommand {
         if (player.hasPermission(PermissionNames.ADMIN_EXPIRED)) {
             IWorld world = player.getWorld();
             if (manager.isPlotWorld(world)) {
-                int page = 1;
+                PlotMapInfo pmi = manager.getMap(player);
+                if (pmi.getDaysToExpiration() != 0) {
+                    int page = 1;
 
-                if (args.length == 2) {
-                    page = Integer.parseInt(args[1]);
-                }
+                    if (args.length == 2) {
+                        page = Integer.parseInt(args[1]);
+                    }
 
-                List<Plot> expiredPlots = plugin.getSqlManager().getExpiredPlots(world);
+                    List<Plot> expiredPlots = plugin.getSqlManager().getExpiredPlots(world);
 
-                if (expiredPlots.isEmpty()) {
-                    player.sendMessage(C("MsgNoPlotExpired"));
-                } else {
-                    player.sendMessage(C("MsgExpiredPlotsPage") + " " + page + "/" + expiredPlots.size() / 5);
+                    if (expiredPlots.isEmpty()) {
+                        player.sendMessage(C("MsgNoPlotExpired"));
+                    } else {
+                        player.sendMessage(C("MsgExpiredPlotsPage") + " " + page + "/" + expiredPlots.size() / 5);
 
-                    for (int i = (page - 1) * 5; i < expiredPlots.size() && i < page * 5; i++) {
-                        Plot plot = expiredPlots.get(i);
-                        player.sendMessage(plot.getId() + " -> " + plot.getOwner() + " @ " + plot.getExpiredDate().toString());
+                        for (int i = (page - 1) * 5; i < expiredPlots.size() && i < page * 5; i++) {
+                            Plot plot = expiredPlots.get(i);
+                            player.sendMessage(plot.getId() + " -> " + plot.getOwner() + " @ " + plot.getExpiredDate().toString());
+                        }
                     }
                 }
             } else {

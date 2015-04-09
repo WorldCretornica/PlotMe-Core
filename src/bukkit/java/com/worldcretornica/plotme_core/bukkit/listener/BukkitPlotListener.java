@@ -7,18 +7,23 @@ import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.PlotToClear;
+import com.worldcretornica.plotme_core.api.IEntity;
+import com.worldcretornica.plotme_core.api.ILocation;
+import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.event.InternalPlotCreateEvent;
 import com.worldcretornica.plotme_core.api.event.InternalPlotWorldLoadEvent;
 import com.worldcretornica.plotme_core.api.event.eventbus.Order;
 import com.worldcretornica.plotme_core.api.event.eventbus.Subscribe;
 import com.worldcretornica.plotme_core.bukkit.PlotMe_CorePlugin;
+import com.worldcretornica.plotme_core.bukkit.api.BukkitBlock;
+import com.worldcretornica.plotme_core.bukkit.api.BukkitConverter;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitEntity;
-import com.worldcretornica.plotme_core.bukkit.api.BukkitLocation;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
+import com.worldcretornica.plotme_core.bukkit.api.BukkitWorld;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.BlockState;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -27,6 +32,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDamageEvent;
+import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockFadeEvent;
 import org.bukkit.event.block.BlockFormEvent;
 import org.bukkit.event.block.BlockFromToEvent;
@@ -70,10 +76,12 @@ public class BukkitPlotListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent event) {
-        Player player = event.getPlayer();
-        BukkitLocation location = new BukkitLocation(event.getBlock().getLocation());
+        IPlayer player = plugin.wrapPlayer(event.getPlayer());
+        Location bloc = event.getBlock().getLocation();
 
-        if (manager.isPlotWorld(location)) {
+        ILocation location = new ILocation(player.getWorld(), bloc.getX(), bloc.getY(), bloc.getZ());
+
+        if (manager.isPlotWorld(player.getWorld())) {
             boolean canBuild = !player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE);
             PlotId id = manager.getPlotId(location);
 
@@ -83,7 +91,7 @@ public class BukkitPlotListener implements Listener {
                     event.setCancelled(true);
                 }
             } else {
-                PlotToClear ptc = api.getPlotLocked(location.getWorld(), id);
+                PlotToClear ptc = api.getPlotLocked(id);
 
                 if (ptc != null) {
                     switch (ptc.getReason()) {
@@ -99,8 +107,7 @@ public class BukkitPlotListener implements Listener {
                     }
                     event.setCancelled(true);
                 } else {
-                    Plot plot = manager.getMap(location).getPlot(id);
-
+                    Plot plot = manager.getPlotById(id);
                     if (plot == null || !plot.isAllowed(player.getUniqueId())) {
                         if (canBuild) {
                             player.sendMessage(api.C("ErrCannotBuild"));
@@ -116,8 +123,9 @@ public class BukkitPlotListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onBlockPlace(BlockPlaceEvent event) {
-        Player player = event.getPlayer();
-        BukkitLocation location = new BukkitLocation(event.getBlockPlaced().getLocation());
+        IPlayer player = plugin.wrapPlayer(event.getPlayer());
+        Location bloc = event.getBlockPlaced().getLocation();
+        ILocation location = new ILocation(player.getWorld(), bloc.getX(), bloc.getY(), bloc.getZ());
 
         if (manager.isPlotWorld(location)) {
             boolean canBuild = !player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE);
@@ -129,7 +137,7 @@ public class BukkitPlotListener implements Listener {
                     event.setCancelled(true);
                 }
             } else {
-                PlotToClear ptc = api.getPlotLocked(location.getWorld(), id);
+                PlotToClear ptc = api.getPlotLocked(id);
 
                 if (ptc != null) {
                     switch (ptc.getReason()) {
@@ -162,8 +170,8 @@ public class BukkitPlotListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onBucketEmptyEvent(PlayerBucketEmptyEvent event) {
-        Player player = event.getPlayer();
-        BukkitLocation location = new BukkitLocation(event.getBlockClicked().getLocation());
+        IPlayer player = plugin.wrapPlayer(event.getPlayer());
+        ILocation location = new ILocation(player.getWorld(), BukkitConverter.locationToVector(event.getBlockClicked().getLocation()));
 
         if (!player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE) && manager.isPlotWorld(location)) {
             PlotId id =
@@ -172,7 +180,7 @@ public class BukkitPlotListener implements Listener {
                 player.sendMessage(api.C("ErrCannotBuild"));
                 event.setCancelled(true);
             } else {
-                PlotToClear ptc = api.getPlotLocked(location.getWorld(), id);
+                PlotToClear ptc = api.getPlotLocked(id);
 
                 if (ptc != null) {
                     switch (ptc.getReason()) {
@@ -188,7 +196,7 @@ public class BukkitPlotListener implements Listener {
                     }
                     event.setCancelled(true);
                 } else {
-                    Plot plot = manager.getPlotById(id, location.getWorld());
+                    Plot plot = manager.getPlotById(id);
 
                     if (plot == null || !plot.isAllowed(player.getUniqueId())) {
                         player.sendMessage(api.C("ErrCannotBuild"));
@@ -201,8 +209,9 @@ public class BukkitPlotListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onBucketFillEvent(PlayerBucketFillEvent event) {
-        Player player = event.getPlayer();
-        BukkitLocation location = new BukkitLocation(event.getBlockClicked().getLocation());
+        IPlayer player = plugin.wrapPlayer(event.getPlayer());
+        Location bloc = event.getBlockClicked().getLocation();
+        ILocation location = new ILocation(player.getWorld(), bloc.getX(), bloc.getY(), bloc.getZ());
 
         if (manager.isPlotWorld(location)) {
             if (!player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE)) {
@@ -212,7 +221,7 @@ public class BukkitPlotListener implements Listener {
                     player.sendMessage(api.C("ErrCannotBuild"));
                     event.setCancelled(true);
                 } else {
-                    PlotToClear ptc = api.getPlotLocked(location.getWorld(), id);
+                    PlotToClear ptc = api.getPlotLocked(id);
 
                     if (ptc != null) {
                         switch (ptc.getReason()) {
@@ -228,7 +237,7 @@ public class BukkitPlotListener implements Listener {
                         }
                         event.setCancelled(true);
                     } else {
-                        Plot plot = manager.getPlotById(id, location.getWorld());
+                        Plot plot = manager.getPlotById(id);
 
                         if (plot == null || !plot.isAllowed(player.getUniqueId())) {
                             player.sendMessage(api.C("ErrCannotBuild"));
@@ -243,17 +252,15 @@ public class BukkitPlotListener implements Listener {
     @SuppressWarnings("deprecation")
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onPlayerInteract(PlayerInteractEvent event) {
-
-        BukkitLocation location = new BukkitLocation(event.getClickedBlock().getLocation());
+        IPlayer player = plugin.wrapPlayer(event.getPlayer());
+        ILocation location = new ILocation(player.getWorld(), BukkitConverter.locationToVector(event.getClickedBlock().getLocation()));
         if (manager.isPlotWorld(location)) {
-            Player player = event.getPlayer();
-
             PlotId plotId = manager.getPlotId(location);
             if (plotId == null) {
                 event.setCancelled(true);
                 return;
             }
-            PlotToClear ptc = api.getPlotLocked(location.getWorld(), plotId);
+            PlotToClear ptc = api.getPlotLocked(plotId);
             if (ptc != null) {
                 switch (ptc.getReason()) {
                     case Clear:
@@ -317,15 +324,15 @@ public class BukkitPlotListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onBlockSpread(BlockSpreadEvent event) {
-        BukkitLocation location = new BukkitLocation(event.getBlock().getLocation());
+        BukkitBlock block = new BukkitBlock(event.getBlock());
 
-        if (manager.isPlotWorld(location)) {
-            PlotId id = manager.getPlotId(location);
+        if (manager.isPlotWorld(block.getWorld())) {
+            PlotId id = manager.getPlotId(block.getLocation());
 
             if (id == null) {
                 event.setCancelled(true);
             } else {
-                PlotToClear ptc = api.getPlotLocked(location.getWorld(), id);
+                PlotToClear ptc = api.getPlotLocked(id);
 
                 if (ptc != null) {
                     event.setCancelled(true);
@@ -336,15 +343,15 @@ public class BukkitPlotListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onBlockForm(BlockFormEvent event) {
-        BukkitLocation location = new BukkitLocation(event.getBlock().getLocation());
+        BukkitBlock block = new BukkitBlock(event.getBlock());
 
-        if (manager.isPlotWorld(location)) {
-            PlotId id = manager.getPlotId(location);
+        if (manager.isPlotWorld(block.getWorld())) {
+            PlotId id = manager.getPlotId(block.getLocation());
 
             if (id == null) {
                 event.setCancelled(true);
             } else {
-                PlotToClear ptc = api.getPlotLocked(location.getWorld(), id);
+                PlotToClear ptc = api.getPlotLocked(id);
 
                 if (ptc != null) {
                     event.setCancelled(true);
@@ -355,15 +362,15 @@ public class BukkitPlotListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onBlockDamage(BlockDamageEvent event) {
-        BukkitLocation location = new BukkitLocation(event.getBlock().getLocation());
+        BukkitBlock block = new BukkitBlock(event.getBlock());
 
-        if (manager.isPlotWorld(location)) {
-            PlotId id = manager.getPlotId(location);
+        if (manager.isPlotWorld(block.getWorld())) {
+            PlotId id = manager.getPlotId(block.getLocation());
 
             if (id == null) {
                 event.setCancelled(true);
             } else {
-                PlotToClear ptc = api.getPlotLocked(location.getWorld(), id);
+                PlotToClear ptc = api.getPlotLocked(id);
 
                 if (ptc != null) {
                     event.setCancelled(true);
@@ -374,15 +381,15 @@ public class BukkitPlotListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onBlockFade(BlockFadeEvent event) {
-        BukkitLocation location = new BukkitLocation(event.getBlock().getLocation());
+        BukkitBlock block = new BukkitBlock(event.getBlock());
 
-        if (manager.isPlotWorld(location)) {
-            PlotId id = manager.getPlotId(location);
+        if (manager.isPlotWorld(block.getWorld())) {
+            PlotId id = manager.getPlotId(block.getLocation());
 
             if (id == null) {
                 event.setCancelled(true);
             } else {
-                PlotToClear ptc = api.getPlotLocked(location.getWorld(), id);
+                PlotToClear ptc = api.getPlotLocked(id);
 
                 if (ptc != null) {
                     event.setCancelled(true);
@@ -393,13 +400,13 @@ public class BukkitPlotListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onBlockFromTo(BlockFromToEvent event) {
-        BukkitLocation location = new BukkitLocation(event.getToBlock().getLocation());
-        if (manager.isPlotWorld(location)) {
-            PlotId id = manager.getPlotId(location);
+        BukkitBlock block = new BukkitBlock(event.getToBlock());
+        if (manager.isPlotWorld(block.getWorld())) {
+            PlotId id = manager.getPlotId(block.getLocation());
             if (id == null) {
                 event.setCancelled(true);
             } else {
-                PlotToClear ptc = api.getPlotLocked(location.getWorld(), id);
+                PlotToClear ptc = api.getPlotLocked(id);
 
                 if (ptc != null) {
                     event.setCancelled(true);
@@ -410,15 +417,15 @@ public class BukkitPlotListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onBlockGrow(BlockGrowEvent event) {
-        BukkitLocation location = new BukkitLocation(event.getBlock().getLocation());
+        BukkitBlock block = new BukkitBlock(event.getBlock());
 
-        if (manager.isPlotWorld(location)) {
-            PlotId id = manager.getPlotId(location);
+        if (manager.isPlotWorld(block.getWorld())) {
+            PlotId id = manager.getPlotId(block.getLocation());
 
             if (id == null) {
                 event.setCancelled(true);
             } else {
-                PlotToClear ptc = api.getPlotLocked(location.getWorld(), id);
+                PlotToClear ptc = api.getPlotLocked(id);
 
                 if (ptc != null) {
                     event.setCancelled(true);
@@ -429,13 +436,14 @@ public class BukkitPlotListener implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onBlockPistonExtend(BlockPistonExtendEvent event) {
-        BukkitLocation location = new BukkitLocation(event.getBlock().getLocation());
-        if (manager.isPlotWorld(location)) {
+        BukkitWorld world = BukkitConverter.adapt(event.getBlock().getWorld());
+        if (manager.isPlotWorld(world)) {
             BlockFace face = event.getDirection();
 
             for (Block block : event.getBlocks()) {
-                PlotId id = manager.getPlotId(new BukkitLocation(block.getLocation().add(face.getModX(), face.getModY(), face.getModZ())));
-
+                PlotId id = manager.getPlotId(new ILocation(world, BukkitConverter.locationToVector(
+                        block.getLocation().add(face.getModX(), face.getModY(),
+                                face.getModZ()))));
                 if (id == null) {
                     event.setCancelled(true);
                 }
@@ -445,11 +453,11 @@ public class BukkitPlotListener implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onBlockPistonRetract(BlockPistonRetractEvent event) {
-        BukkitLocation location = new BukkitLocation(event.getBlock().getLocation());
-        if (manager.isPlotWorld(location)) {
+        BukkitWorld world = BukkitConverter.adapt(event.getBlock().getWorld());
+        if (manager.isPlotWorld(world)) {
             List<Block> blocks = event.getBlocks();
             for (Block moved : blocks) {
-                PlotId id = manager.getPlotId(new BukkitLocation(moved.getLocation()));
+                PlotId id = manager.getPlotId(new ILocation(world, BukkitConverter.locationToVector(moved.getLocation())));
                 if (id == null) {
                     event.setCancelled(true);
                 }
@@ -459,23 +467,19 @@ public class BukkitPlotListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onStructureGrow(StructureGrowEvent event) {
-        List<BlockState> blocks = event.getBlocks();
+        BukkitWorld world = new BukkitWorld(event.getWorld());
+        if (manager.isPlotWorld(world)) {
+            for (int i = 0; i < event.getBlocks().size(); i++) {
+                PlotId id = manager.getPlotId(new ILocation(world, BukkitConverter.locationToVector(event.getBlocks().get(i).getLocation())));
+                if (id == null) {
+                    event.getBlocks().remove(i);
+                    i--;
+                } else {
+                    PlotToClear ptc = api.getPlotLocked(id);
 
-        BukkitLocation location = new BukkitLocation(event.getLocation());
-        if (!manager.isPlotWorld(location)) {
-            return;
-        }
-
-        for (int i = 0; i < blocks.size(); i++) {
-            PlotId id = manager.getPlotId(new BukkitLocation(blocks.get(i).getLocation()));
-            if (id == null) {
-                blocks.remove(i);
-                i--;
-            } else {
-                PlotToClear ptc = api.getPlotLocked(location.getWorld(), id);
-
-                if (ptc != null) {
-                    event.setCancelled(true);
+                    if (ptc != null) {
+                        event.setCancelled(true);
+                    }
                 }
             }
         }
@@ -483,18 +487,40 @@ public class BukkitPlotListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onEntityExplode(EntityExplodeEvent event) {
-        BukkitLocation location = new BukkitLocation(event.getLocation());
+        IEntity entity = plugin.wrapEntity(event.getEntity());
+        if (manager.isPlotWorld(entity)) {
+            PlotMapInfo pmi = manager.getMap(entity.getLocation());
 
-        PlotMapInfo pmi = manager.getMap(location);
+            if (pmi != null && pmi.isDisableExplosion()) {
+                event.setCancelled(true);
+            } else {
+                PlotId id = manager.getPlotId(entity.getLocation());
+                if (id == null) {
+                    event.setCancelled(true);
+                } else {
+                    PlotToClear ptc = api.getPlotLocked(id);
+
+                    if (ptc != null) {
+                        event.setCancelled(true);
+                    }
+                }
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onBlockExplode(BlockExplodeEvent event) {
+        BukkitBlock location = new BukkitBlock(event.getBlock());
+        PlotMapInfo pmi = manager.getMap(location.getLocation());
 
         if (pmi != null && pmi.isDisableExplosion()) {
             event.setCancelled(true);
         } else {
-            PlotId id = manager.getPlotId(location);
+            PlotId id = manager.getPlotId(location.getLocation());
             if (id == null) {
                 event.setCancelled(true);
             } else {
-                PlotToClear ptc = api.getPlotLocked(location.getWorld(), id);
+                PlotToClear ptc = api.getPlotLocked(id);
 
                 if (ptc != null) {
                     event.setCancelled(true);
@@ -508,20 +534,20 @@ public class BukkitPlotListener implements Listener {
         if (event.getIgnitingEntity() == null) {
             return;
         }
-        BukkitLocation location = new BukkitLocation(event.getBlock().getLocation());
+        BukkitBlock block = new BukkitBlock(event.getBlock());
 
-        PlotMapInfo pmi = manager.getMap(location);
+        PlotMapInfo pmi = manager.getMap(block.getLocation());
 
         if (pmi != null) {
             if (pmi.isDisableIgnition()) {
                 event.setCancelled(true);
             } else {
-                PlotId id = manager.getPlotId(location);
+                PlotId id = manager.getPlotId(block.getLocation());
 
                 if (id == null) {
                     event.setCancelled(true);
                 } else {
-                    PlotToClear ptc = api.getPlotLocked(location.getWorld(), id);
+                    PlotToClear ptc = api.getPlotLocked(id);
 
                     if (ptc != null) {
                         event.setCancelled(true);
@@ -544,10 +570,10 @@ public class BukkitPlotListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onHangingPlace(HangingPlaceEvent event) {
-        Player player = event.getPlayer();
-        BukkitLocation location = new BukkitLocation(event.getBlock().getLocation());
+        IPlayer player = plugin.wrapPlayer(event.getPlayer());
+        ILocation location = new ILocation(player.getWorld(), BukkitConverter.locationToVector(event.getBlock().getLocation()));
 
-        if (manager.isPlotWorld(location)) {
+        if (manager.isPlotWorld(location.getWorld())) {
             PlotId id = manager.getPlotId(location);
             boolean canBuild = !player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE);
 
@@ -557,7 +583,7 @@ public class BukkitPlotListener implements Listener {
                     event.setCancelled(true);
                 }
             } else {
-                PlotToClear ptc = api.getPlotLocked(location.getWorld(), id);
+                PlotToClear ptc = api.getPlotLocked(id);
 
                 if (ptc != null) {
                     switch (ptc.getReason()) {
@@ -573,7 +599,7 @@ public class BukkitPlotListener implements Listener {
                     }
                     event.setCancelled(true);
                 } else {
-                    Plot plot = manager.getPlotById(id, location.getWorld());
+                    Plot plot = manager.getPlotById(id);
 
                     if (plot == null || !plot.isAllowed(player.getUniqueId())) {
                         if (canBuild) {
@@ -605,7 +631,7 @@ public class BukkitPlotListener implements Listener {
                         event.setCancelled(true);
                     }
                 } else {
-                    PlotToClear ptc = api.getPlotLocked(player.getWorld(), id);
+                    PlotToClear ptc = api.getPlotLocked(id);
                     if (ptc != null) {
                         switch (ptc.getReason()) {
                             case Clear:
@@ -620,7 +646,7 @@ public class BukkitPlotListener implements Listener {
                         }
                         event.setCancelled(true);
                     } else {
-                        Plot plot = manager.getPlotById(id, player.getWorld());
+                        Plot plot = manager.getPlotById(id);
 
                         if (plot == null || !plot.isAllowed(player.getUniqueId())) {
                             if (canBuild) {
@@ -638,8 +664,9 @@ public class BukkitPlotListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
-        Player player = event.getPlayer();
-        BukkitLocation location = new BukkitLocation(event.getRightClicked().getLocation());
+        IPlayer player = plugin.wrapPlayer(event.getPlayer());
+        Location clickLoc = event.getRightClicked().getLocation();
+        ILocation location = new ILocation(player.getWorld(), clickLoc.getX(), clickLoc.getY(), clickLoc.getZ());
         if (manager.isPlotWorld(location)) {
             //Citizens Support
             if (event.getRightClicked().hasMetadata("NPC") && event.getRightClicked().getMetadata("NPC").get(0).asBoolean()) {
@@ -654,7 +681,7 @@ public class BukkitPlotListener implements Listener {
                     event.setCancelled(true);
                 }
             } else {
-                Plot plot = manager.getPlotById(id, location.getWorld());
+                Plot plot = manager.getPlotById(id);
 
                 if (plot == null) {
                     if (cannotBuildAnywhere) {
@@ -684,12 +711,12 @@ public class BukkitPlotListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onCreatureSpawn(CreatureSpawnEvent event) {
-        BukkitLocation location = new BukkitLocation(event.getLocation());
+        IEntity entity = plugin.wrapEntity(event.getEntity());
 
-        if (manager.isPlotWorld(location)) {
-            PlotId id = manager.getPlotId(location);
+        if (manager.isPlotWorld(entity.getLocation())) {
+            PlotId id = manager.getPlotId(entity.getLocation());
             if (id != null) {
-                PlotToClear plotLocked = api.getPlotLocked(location.getWorld(), id);
+                PlotToClear plotLocked = api.getPlotLocked(id);
 
                 if (plotLocked != null) {
                     event.setCancelled(true);
@@ -700,13 +727,12 @@ public class BukkitPlotListener implements Listener {
 
     @EventHandler
     public void onEntityDamagebyEntity(EntityDamageByEntityEvent event) {
-        BukkitEntity entity = new BukkitEntity(event.getDamager());
+        IEntity entity = plugin.wrapEntity(event.getDamager());
         if (manager.isPlotWorld(entity)) {
-            if (!(event.getDamager() instanceof Player)) {
+            if (!(entity instanceof IPlayer)) {
                 event.setCancelled(true);
             } else {
-                Player player = (Player) event.getDamager();
-                BukkitPlayer bukkitPlayer = (BukkitPlayer) plugin.wrapPlayer(player);
+                IPlayer player = (IPlayer) entity;
                 boolean cantBuild = !player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE);
                 PlotId id = manager.getPlotId(entity.getLocation());
                 if (id == null) {
@@ -715,14 +741,14 @@ public class BukkitPlotListener implements Listener {
                         event.setCancelled(true);
                     }
                 } else {
-                    Plot plot = manager.getPlotById(id, bukkitPlayer);
+                    Plot plot = manager.getPlotById(id);
                     if (plot == null || !plot.isAllowed(player.getUniqueId())) {
                         if (cantBuild) {
-                            bukkitPlayer.sendMessage(api.C("ErrCannotBuild"));
+                            player.sendMessage(api.C("ErrCannotBuild"));
                             event.setCancelled(true);
                         }
                     } else {
-                        plot.resetExpire(manager.getMap(bukkitPlayer).getDaysToExpiration());
+                        plot.resetExpire(manager.getMap(player).getDaysToExpiration());
                     }
                 }
 
@@ -732,8 +758,8 @@ public class BukkitPlotListener implements Listener {
 
     @EventHandler
     public void onArmorStand(PlayerArmorStandManipulateEvent event) {
-        Player player = event.getPlayer();
-        BukkitLocation location = new BukkitLocation(event.getRightClicked().getLocation());
+        IPlayer player = plugin.wrapPlayer(event.getPlayer());
+        ILocation location = new ILocation(player.getWorld(), BukkitConverter.locationToVector(event.getRightClicked().getLocation()));
 
         if (manager.isPlotWorld(location)) {
             boolean cannotBuildAnywhere = !player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE);
@@ -745,7 +771,7 @@ public class BukkitPlotListener implements Listener {
                     event.setCancelled(true);
                 }
             } else {
-                Plot plot = manager.getPlotById(id, location.getWorld());
+                Plot plot = manager.getPlotById(id);
 
                 if (plot == null) {
                     if (cannotBuildAnywhere) {

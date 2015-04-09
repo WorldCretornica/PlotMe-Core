@@ -57,7 +57,7 @@ public class InternalPlotEvent implements Event {
      */
     public ILocation getUpperBound() {
         if (getPlot() != null) {
-            return PlotMeCoreManager.getInstance().getPlotTopLoc(world, getPlot().getId());
+            return PlotMeCoreManager.getInstance().getPlotTopLoc(getPlot().getId());
         } else {
             return null;
         }
@@ -70,7 +70,7 @@ public class InternalPlotEvent implements Event {
      */
     public ILocation getLowerBound() {
         if (getPlot() != null) {
-            return PlotMeCoreManager.getInstance().getPlotBottomLoc(world, getPlot().getId());
+            return PlotMeCoreManager.getInstance().getPlotBottomLoc(getPlot().getId());
         } else {
             return null;
         }
@@ -111,7 +111,7 @@ public class InternalPlotEvent implements Event {
      */
     public ILocation getHomeLocation() {
         if (getPlot() != null) {
-            return PlotMeCoreManager.getInstance().getPlotHome(world, getPlot().getId());
+            return PlotMeCoreManager.getInstance().getPlotHome(getPlot().getId());
         } else {
             return null;
         }

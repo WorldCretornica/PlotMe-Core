@@ -4,8 +4,9 @@ import com.worldcretornica.plotme_core.api.IWorld;
 import org.spongepowered.api.world.World;
 
 import java.io.File;
+import java.util.UUID;
 
-public class SpongeWorld implements IWorld {
+public class SpongeWorld extends IWorld {
 
     private final World world;
 
@@ -28,16 +29,7 @@ public class SpongeWorld implements IWorld {
     }
 
     @Override
-    public int hashCode() {
-        return world.getUniqueId().hashCode();
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        boolean result = false;
-        if (obj instanceof IWorld) {
-            result = this.hashCode() == obj.hashCode();
-        }
-        return result;
+    public UUID getUUID() {
+        return world.getUniqueId();
     }
 }

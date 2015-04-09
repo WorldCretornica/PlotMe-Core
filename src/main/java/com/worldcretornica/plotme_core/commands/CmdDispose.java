@@ -72,11 +72,11 @@ public class CmdDispose extends PlotCommand {
                                     manager.removePlot(pmi, id);
                                 }
 
-                                manager.removeOwnerSign(world, id);
-                                manager.removeSellSign(world, id);
+                                manager.removeOwnerSign(id);
+                                manager.removeSellSign(id);
 
                                 plugin.getSqlManager().deletePlot(plot.getInternalID());
-                                manager.adjustWall(world, id, false);
+                                manager.adjustWall(id, false);
                                 player.sendMessage(C("MsgPlotDisposedAnyoneClaim"));
 
                                 if (isAdvancedLogging()) {

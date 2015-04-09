@@ -3,6 +3,7 @@ package com.worldcretornica.plotme_core.commands;
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotId;
+import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
@@ -20,19 +21,20 @@ public class CmdAddTime extends PlotCommand {
     public boolean execute(ICommandSender sender, String[] args) throws Exception{
         IPlayer player = (IPlayer) sender;
         if (player.hasPermission(PermissionNames.ADMIN_ADDTIME)) {
-            if (manager.getMap(player).getDaysToExpiration() != 0) {
-                if (manager.isPlotWorld(player)) {
+            if (manager.isPlotWorld(player)) {
+                PlotMapInfo pmi = manager.getMap(player);
+                if (pmi.getDaysToExpiration() != 0) {
                     PlotId id = manager.getPlotId(player);
-
                     if (id == null) {
                         player.sendMessage(C("MsgNoPlotFound"));
                         return true;
-                    } else if (!manager.isPlotAvailable(id, player)) {
-                        Plot plot = manager.getPlotById(id, player);
+                    }
+                    if (!manager.isPlotAvailable(id, pmi)) {
+                        Plot plot = manager.getPlotById(id, pmi);
                         if (plot != null) {
                             String name = player.getName();
 
-                            plot.resetExpire(manager.getMap(player).getDaysToExpiration());
+                            plot.resetExpire(pmi.getDaysToExpiration());
                             player.sendMessage(C("MsgPlotExpirationReset"));
 
                             if (isAdvancedLogging()) {
@@ -44,11 +46,10 @@ public class CmdAddTime extends PlotCommand {
                         return true;
                     }
                 } else {
-                    player.sendMessage(C("MsgNotPlotWorld"));
                     return true;
                 }
             } else {
-                player.sendMessage("Plots don't expire in this world");
+                player.sendMessage(C("MsgNotPlotWorld"));
                 return true;
             }
         } else {

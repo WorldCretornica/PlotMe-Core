@@ -28,7 +28,6 @@ class HandlerCache {
     private final List<EventHandler> handlers;
     private final EnumMap<Order, List<EventHandler>> orderGrouped;
 
-    @SuppressWarnings("unchecked")
     HandlerCache(List<MethodEventHandler> registrations) {
         this.handlers = Lists.newArrayList();
         for (MethodEventHandler reg : registrations) {

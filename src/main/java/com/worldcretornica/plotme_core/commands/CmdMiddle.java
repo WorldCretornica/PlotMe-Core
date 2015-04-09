@@ -38,7 +38,7 @@ public class CmdMiddle extends PlotCommand {
                     player.sendMessage(C("MsgNoPlotFound"));
                     return true;
                 }
-                Plot plot = manager.getPlotById(id, player);
+                Plot plot = manager.getPlotById(id);
 
                 if (plot == null) {
                     player.sendMessage(C("MsgNoPlotFound"));

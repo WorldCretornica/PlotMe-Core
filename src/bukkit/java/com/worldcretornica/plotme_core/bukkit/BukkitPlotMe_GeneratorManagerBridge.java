@@ -4,8 +4,6 @@ import com.worldcretornica.plotme_core.PlotId;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IPlotMe_GeneratorManager;
-import com.worldcretornica.plotme_core.api.IWorld;
-import com.worldcretornica.plotme_core.bukkit.api.BukkitLocation;
 import com.worldcretornica.plotme_core.bukkit.api.IBukkitPlotMe_GeneratorManager;
 import com.worldcretornica.schematic.Schematic;
 
@@ -35,75 +33,69 @@ public class BukkitPlotMe_GeneratorManagerBridge implements IPlotMe_GeneratorMan
     }
 
     @Override
-    public void fillRoad(PlotId id1, PlotId id2, IWorld world) {
-        generatorManager.fillRoad(id1, id2, world);
+    public void fillRoad(PlotId id1, PlotId id2) {
+        generatorManager.fillRoad(id1, id2);
     }
 
     @Override
-    public void fillMiddleRoad(PlotId id1, PlotId id2, IWorld world) {
-        generatorManager.fillMiddleRoad(id1, id2, world);
+    public void fillMiddleRoad(PlotId id1, PlotId id2) {
+        generatorManager.fillMiddleRoad(id1, id2);
     }
 
     @Override
-    public void setOwnerDisplay(IWorld world, PlotId id, String line1, String line2, String line3, String line4) {
-        generatorManager.setOwnerDisplay(world, id, line1, line2, line3, line4);
+    public void setOwnerDisplay(PlotId id, String line1, String line2, String line3, String line4) {
+        generatorManager.setOwnerDisplay(id, line1, line2, line3, line4);
     }
 
     @Override
-    public void setSellerDisplay(IWorld world, PlotId id, String line1, String line2, String line3, String line4) {
-        generatorManager.setSellerDisplay(world, id, line1, line2, line3, line4);
+    public void setSellerDisplay(PlotId id, String line1, String line2, String line3, String line4) {
+        generatorManager.setSellerDisplay(id, line1, line2, line3, line4);
     }
 
 
     @Override
-    public void removeOwnerDisplay(IWorld world, PlotId id) {
-        generatorManager.removeOwnerDisplay(world, id);
+    public void removeOwnerDisplay(PlotId id) {
+        generatorManager.removeOwnerDisplay(id);
     }
 
     @Override
-    public void removeSellerDisplay(IWorld world, PlotId id) {
-        generatorManager.removeSellerDisplay(world, id);
+    public void removeSellerDisplay(PlotId id) {
+        generatorManager.removeSellerDisplay(id);
     }
 
     @Override
-    public ILocation getPlotBottomLoc(IWorld world, PlotId id) {
-        return new BukkitLocation(generatorManager.getPlotBottomLoc(world, id));
+    public ILocation getPlotBottomLoc(PlotId id) {
+        return generatorManager.getPlotBottomLoc(id);
     }
 
     @Override
-    public ILocation getPlotTopLoc(IWorld world, PlotId id) {
-        return new BukkitLocation(generatorManager.getPlotTopLoc(world, id));
+    public ILocation getPlotTopLoc(PlotId id) {
+        return generatorManager.getPlotTopLoc(id);
     }
 
     @Override
-    public void refreshPlotChunks(IWorld world, PlotId id) {
-        generatorManager.refreshPlotChunks(world, id);
+    public void refreshPlotChunks(PlotId id) {
+        generatorManager.refreshPlotChunks(id);
     }
 
     @Override
-    public ILocation getTop(IWorld world, PlotId id) {
-        return new BukkitLocation(generatorManager.getTop(world, id));
+    public ILocation getTop(PlotId id) {
+        return generatorManager.getTop(id);
     }
 
     @Override
-    public ILocation getBottom(IWorld world, PlotId id) {
-        return new BukkitLocation(generatorManager.getBottom(world, id));
+    public ILocation getBottom(PlotId id) {
+        return generatorManager.getBottom(id);
     }
 
     @Override
-    public Long[] clear(IWorld world, PlotId id, long maxBlocks, Long[] start) {
-        return generatorManager.clear(world, id, maxBlocks, start);
-    }
-
-    @Deprecated
-    @Override
-    public void adjustPlotFor(IWorld world, PlotId id, boolean claimed, boolean protect, boolean auctioned, boolean forSale) {
-        adjustPlotFor(world, id, claimed, protect, forSale);
+    public Long[] clear(PlotId id, long maxBlocks, Long[] start) {
+        return generatorManager.clear(id, maxBlocks, start);
     }
 
     @Override
-    public void adjustPlotFor(IWorld world, PlotId id, boolean claimed, boolean protect, boolean forSale) {
-        generatorManager.adjustPlotFor(world, id, claimed, protect, forSale);
+    public void adjustPlotFor(PlotId id, boolean claimed, boolean protect, boolean forSale) {
+        generatorManager.adjustPlotFor(id, claimed, protect, forSale);
     }
 
     @Override
@@ -112,33 +104,33 @@ public class BukkitPlotMe_GeneratorManagerBridge implements IPlotMe_GeneratorMan
     }
 
     @Override
-    public boolean movePlot(IWorld world, PlotId idFrom, PlotId idTo) {
-        return generatorManager.movePlot(world, idFrom, idTo);
+    public boolean movePlot(PlotId idFrom, PlotId idTo) {
+        return generatorManager.movePlot(idFrom, idTo);
     }
 
     @Override
-    public int bottomX(PlotId id, IWorld world) {
-        return generatorManager.bottomX(id, world);
+    public int bottomX(PlotId id) {
+        return generatorManager.bottomX(id);
     }
 
     @Override
-    public int bottomZ(PlotId id, IWorld world) {
-        return generatorManager.bottomZ(id, world);
+    public int bottomZ(PlotId id) {
+        return generatorManager.bottomZ(id);
     }
 
     @Override
-    public int topX(PlotId id, IWorld world) {
-        return generatorManager.topX(id, world);
+    public int topX(PlotId id) {
+        return generatorManager.topX(id);
     }
 
     @Override
-    public int topZ(PlotId id, IWorld world) {
-        return generatorManager.topZ(id, world);
+    public int topZ(PlotId id) {
+        return generatorManager.topZ(id);
     }
 
     @Override
-    public ILocation getPlotHome(IWorld world, PlotId id) {
-        return new BukkitLocation(generatorManager.getPlotHome(world, id));
+    public ILocation getPlotHome(PlotId id) {
+        return generatorManager.getPlotHome(id);
     }
 
     @Override
@@ -152,12 +144,12 @@ public class BukkitPlotMe_GeneratorManagerBridge implements IPlotMe_GeneratorMan
     }
 
     @Override
-    public ILocation getPlotMiddle(IWorld world, PlotId id) {
-        return new BukkitLocation(generatorManager.getPlotMiddle(world, id));
+    public ILocation getPlotMiddle(PlotId id) {
+        return generatorManager.getPlotMiddle(id);
     }
 
     @Override
-    public Schematic getPlotSchematic(IWorld world, PlotId id) {
-        return generatorManager.getPlotSchematic(world, id);
+    public Schematic getPlotSchematic(PlotId id) {
+        return generatorManager.getPlotSchematic(id);
     }
 }

@@ -17,53 +17,53 @@ public interface ISpongePlotMe_GeneratorManager {
 
     List<Player> getPlayersInPlot(PlotId id);
 
-    void fillroad(PlotId id1, PlotId id2, World world);
+    void fillroad(PlotId id1, PlotId id2);
 
-    void fillmiddleroad(PlotId id1, PlotId id2, World world);
+    void fillmiddleroad(PlotId id1, PlotId id2);
 
-    void setOwnerDisplay(World world, PlotId id, String line1, String line2, String line3, String line4);
+    void setOwnerDisplay(PlotId id, String line1, String line2, String line3, String line4);
 
-    void setSellerDisplay(World world, PlotId id, String line1, String line2, String line3, String line4);
+    void setSellerDisplay(PlotId id, String line1, String line2, String line3, String line4);
 
-    void removeOwnerDisplay(World world, PlotId id);
+    void removeOwnerDisplay(PlotId id);
 
-    void removeSellerDisplay(World world, PlotId id);
+    void removeSellerDisplay(PlotId id);
 
     void removeAuctionDisplay(World world, PlotId id);
 
-    Location getPlotBottomLoc(World world, PlotId id);
+    Location getPlotBottomLoc(PlotId id);
 
-    Location getPlotTopLoc(World world, PlotId id);
+    Location getPlotTopLoc(PlotId id);
 
     void setBiome(World world, PlotId id, BiomeType biome);
 
-    void refreshPlotChunks(World world, PlotId id);
+    void refreshPlotChunks(PlotId id);
 
-    Location getTop(World world, PlotId id);
+    Location getTop(PlotId id);
 
-    Location getBottom(World world, PlotId id);
+    Location getBottom(PlotId id);
 
     void clear(Location bottom, Location top);
 
     Long[] clear(Location bottom, Location top, long maxBlocks, Long[] start);
 
-    Long[] clear(World world, PlotId id, long maxBlocks, Long[] start);
+    Long[] clear(PlotId id, long maxBlocks, Long[] start);
 
-    void adjustPlotFor(World world, PlotId id, boolean claimed, boolean protect, boolean forSale);
+    void adjustPlotFor(PlotId id, boolean claimed, boolean protect, boolean forSale);
 
     boolean isBlockInPlot(PlotId id, Location location);
 
-    boolean movePlot(World world, PlotId idFrom, PlotId idTo);
+    boolean movePlot(PlotId idFrom, PlotId idTo);
 
-    int bottomX(PlotId id, World world);
+    int bottomX(PlotId id);
 
-    int bottomZ(PlotId id, World world);
+    int bottomZ(PlotId id);
 
-    int topX(PlotId id, World world);
+    int topX(PlotId id);
 
-    int topZ(PlotId id, World world);
+    int topZ(PlotId id);
 
-    Location getPlotHome(World world, PlotId id);
+    Location getPlotHome(PlotId id);
 
     boolean isValidId(String id);
 
@@ -71,7 +71,7 @@ public interface ISpongePlotMe_GeneratorManager {
 
     int getGroundHeight();
 
-    Location getPlotMiddle(World world, PlotId id);
+    Location getPlotMiddle(PlotId id);
 
-    Schematic getPlotSchematic(World world, PlotId id);
+    Schematic getPlotSchematic(PlotId id);
 }

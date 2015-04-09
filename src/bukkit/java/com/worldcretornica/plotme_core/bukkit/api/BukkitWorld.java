@@ -4,8 +4,9 @@ import com.worldcretornica.plotme_core.api.IWorld;
 import org.bukkit.World;
 
 import java.io.File;
+import java.util.UUID;
 
-public class BukkitWorld implements IWorld {
+public class BukkitWorld extends IWorld {
 
     private final World world;
 
@@ -32,16 +33,7 @@ public class BukkitWorld implements IWorld {
     }
 
     @Override
-    public int hashCode() {
-        return world.getUID().hashCode();
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        boolean result = false;
-        if (obj instanceof IWorld) {
-            result = this.hashCode() == obj.hashCode();
-        }
-        return result;
+    public UUID getUUID() {
+        return world.getUID();
     }
 }

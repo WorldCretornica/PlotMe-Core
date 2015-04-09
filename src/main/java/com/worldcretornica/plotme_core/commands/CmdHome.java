@@ -5,10 +5,10 @@ import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ICommandSender;
+import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotTeleportHomeEvent;
-import com.worldcretornica.plotme_core.bukkit.api.BukkitLocation;
 import net.milkbowl.vault.economy.EconomyResponse;
 
 import java.util.Collections;
@@ -45,13 +45,13 @@ public class CmdHome extends PlotCommand {
                 String worldName = world.getName();
 
                 int nb = 1;
-                if (args[0].contains(":")) {
-                    if (args[0].split(":").length == 1 || args[0].split(":")[1].isEmpty()) {
+                if (args[1].contains(":")) {
+                    if (args[1].split(":").length == 1 || args[0].split(":")[1].isEmpty()) {
                         player.sendMessage(getUsage());
                         return true;
                     }
                     try {
-                        nb = Integer.parseInt(args[0].split(":")[1]);
+                        nb = Integer.parseInt(args[1].split(":")[1]);
                     } catch (NumberFormatException e) {
                         player.sendMessage(getUsage());
                         return true;
@@ -84,14 +84,14 @@ public class CmdHome extends PlotCommand {
                     int i = nb - 1;
 
                     for (Plot plot : plugin.getSqlManager().getOwnedPlots(world.getName(), uuid, playerName)) {
-                        BukkitLocation location;
+                        ILocation location;
                         if (uuid == null) {
                             if (plot.getOwner().equalsIgnoreCase(playerName)) {
                                 if (i == 0) {
 
                                     double price = 0.0;
 
-                                    location = (BukkitLocation) manager.getPlotHome(world, plot.getId());
+                                    location = manager.getPlotHome(plot.getId());
                                     InternalPlotTeleportHomeEvent event = new InternalPlotTeleportHomeEvent(world, plot, player, location);
 
                                     if (manager.isEconomyEnabled(pmi)) {
@@ -135,7 +135,7 @@ public class CmdHome extends PlotCommand {
 
                                 double price = 0.0;
 
-                                location = (BukkitLocation) manager.getPlotHome(world, plot.getId());
+                                location = manager.getPlotHome(plot.getId());
                                 InternalPlotTeleportHomeEvent event = new InternalPlotTeleportHomeEvent(world, plot, player, location);
 
                                 if (manager.isEconomyEnabled(pmi)) {

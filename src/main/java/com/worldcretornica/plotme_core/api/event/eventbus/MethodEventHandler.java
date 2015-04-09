@@ -29,8 +29,8 @@ public class MethodEventHandler extends EventHandler {
     /**
      * Create a new event handler.
      *
-     * @param priority the priority
-     * @param method the method
+     * @param priority the priority of the event
+     * @param method the method with the subscribe annotation
      */
     public MethodEventHandler(Order priority, Object object, Method method) {
         super(priority);

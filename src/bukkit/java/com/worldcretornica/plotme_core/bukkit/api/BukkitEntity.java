@@ -3,6 +3,8 @@ package com.worldcretornica.plotme_core.bukkit.api;
 import com.worldcretornica.plotme_core.api.IEntity;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.api.Vector;
+import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 
 import java.util.UUID;
@@ -10,25 +12,25 @@ import java.util.UUID;
 public class BukkitEntity implements IEntity {
 
     private final Entity entity;
+    private final Vector coords;
+    private final ILocation loc;
+    private final BukkitWorld world;
 
     public BukkitEntity(Entity entity) {
         this.entity = entity;
+        coords = BukkitConverter.locationToVector(entity.getLocation());
+        world = BukkitConverter.adapt(entity.getWorld());
+        loc = new ILocation(world, getPosition());
     }
 
     @Override
     public ILocation getLocation() {
-        return new BukkitLocation(entity.getLocation());
+        return loc;
     }
 
     @Override
     public void setLocation(ILocation location) {
-        BukkitLocation loc = null;
-        if (location instanceof BukkitLocation) {
-            loc = (BukkitLocation) location;
-        }
-        if (loc != null) {
-            entity.teleport(loc.getLocation());
-        }
+        entity.teleport(new Location(((BukkitWorld) location.getWorld()).getWorld(), location.getX(), location.getY(), location.getZ()));
     }
 
     /**
@@ -38,7 +40,7 @@ public class BukkitEntity implements IEntity {
      */
     @Override
     public IWorld getWorld() {
-        return new BukkitWorld(entity.getWorld());
+        return world;
     }
 
     @Override
@@ -61,4 +63,7 @@ public class BukkitEntity implements IEntity {
         return entity.getName();
     }
 
+    public Vector getPosition() {
+        return coords;
+    }
 }

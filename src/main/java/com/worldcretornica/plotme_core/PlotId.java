@@ -7,11 +7,12 @@ public class PlotId {
 
     private final int x;
     private final int z;
-    private Object world;
+    private IWorld world;
 
     public PlotId(int x, int z, IWorld world) {
         this.x = x;
         this.z = z;
+        this.world = world;
     }
 
     public PlotId(String id) throws NumberFormatException {
@@ -47,6 +48,10 @@ public class PlotId {
         return z;
     }
 
+    public IWorld getWorld() {
+        return world;
+    }
+
     public String getID() {
         return x + ";" + z;
     }
@@ -61,29 +66,17 @@ public class PlotId {
         boolean result = false;
         if (obj instanceof PlotId) {
             PlotId me = (PlotId) obj;
-            if (this.getX() == me.getX()) {
-                if (this.getZ() == me.getZ()) {
-                    result = this.getWorld() == me.getWorld();
-                } else {
-                    result = false;
-                }
-            } else {
-                result = false;
-            }
+            result = this.getX() == me.getX() && this.getZ() == me.getZ() && this.getWorld() == me.getWorld();
         }
         return result;
     }
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 31 * hash + getX();
-        hash = 31 * hash + getZ();
-        return 31 * (31 + getX()) + getZ();
-    }
-
-    public Object getWorld() {
-        return world;
+        int hash = world.hashCode();
+        hash += getX();
+        hash += getZ();
+        return hash;
     }
 }
 

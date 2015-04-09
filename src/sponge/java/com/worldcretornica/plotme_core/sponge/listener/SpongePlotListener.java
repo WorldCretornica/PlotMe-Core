@@ -12,6 +12,7 @@ import com.worldcretornica.plotme_core.sponge.api.SpongeLocation;
 import com.worldcretornica.plotme_core.sponge.api.SpongeWorld;
 import org.spongepowered.api.entity.player.Player;
 import org.spongepowered.api.entity.projectile.source.ProjectileSource;
+import org.spongepowered.api.event.Subscribe;
 import org.spongepowered.api.event.block.BlockBurnEvent;
 import org.spongepowered.api.event.block.BlockDispenseEvent;
 import org.spongepowered.api.event.block.BlockIgniteEvent;
@@ -25,7 +26,6 @@ import org.spongepowered.api.event.block.LeafDecayEvent;
 import org.spongepowered.api.event.entity.ProjectileLaunchEvent;
 import org.spongepowered.api.event.entity.player.PlayerChangeBlockEvent;
 import org.spongepowered.api.event.entity.player.PlayerInteractEvent;
-import org.spongepowered.api.util.event.Subscribe;
 
 public class SpongePlotListener {
 
@@ -51,7 +51,7 @@ public class SpongePlotListener {
             if (id == null) {
                 event.setCancelled(true);
             } else {
-                PlotToClear ptc = api.getPlotLocked(location.getWorld(), id);
+                PlotToClear ptc = api.getPlotLocked(id);
                 if (ptc != null) {
                     switch (ptc.getReason()) {
                         case Clear:

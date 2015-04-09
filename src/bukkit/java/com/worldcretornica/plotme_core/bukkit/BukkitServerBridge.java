@@ -1,7 +1,6 @@
 package com.worldcretornica.plotme_core.bukkit;
 
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
-import com.worldcretornica.plotme_core.PlotWorldEdit;
 import com.worldcretornica.plotme_core.api.IMaterial;
 import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import com.worldcretornica.plotme_core.api.IPlayer;
@@ -12,7 +11,7 @@ import com.worldcretornica.plotme_core.bukkit.api.BukkitOfflinePlayer;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitWorld;
 import com.worldcretornica.plotme_core.bukkit.listener.BukkitPlotDenyListener;
 import com.worldcretornica.plotme_core.bukkit.listener.BukkitPlotListener;
-import com.worldcretornica.plotme_core.bukkit.listener.BukkitPlotWorldEditListener;
+import com.worldcretornica.plotme_core.bukkit.listener.PlotWorldEditListener;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
@@ -39,7 +38,6 @@ public class BukkitServerBridge extends IServerBridge {
 
     private final PlotMe_CorePlugin plugin;
     private Economy economy;
-    private PlotWorldEdit plotworldedit;
 
     public BukkitServerBridge(PlotMe_CorePlugin instance, Logger logger) {
         super(logger);
@@ -78,22 +76,8 @@ public class BukkitServerBridge extends IServerBridge {
         }
 
         if (pluginManager.getPlugin("WorldEdit") != null) {
-
             WorldEditPlugin worldEdit = (WorldEditPlugin) pluginManager.getPlugin("WorldEdit");
-            if (worldEdit.getDescription().getVersion().startsWith("6")) {
-                PlotWorldEdit we = null;
-                try {
-                    we = new PlotWorldEdit(worldEdit);
-                    setPlotWorldEdit(we);
-                } catch (SecurityException | IllegalArgumentException unused) {
-                    getLogger().warning("Unable to hook to WorldEdit properly, please contact the developer of plotme with your WorldEdit version.");
-                    setPlotWorldEdit(null);
-                }
-                worldEdit.getWorldEdit().getEventBus().register(new PlotMeWorldEdit(plugin));
-                pluginManager.registerEvents(new BukkitPlotWorldEditListener(worldEdit, we, plugin), plugin);
-            } else {
-                getLogger().warning("You are using an unsupported version of worldedit. The PlotMe WorldEdit Listener not be enabled.");
-            }
+            worldEdit.getWorldEdit().getEventBus().register(new PlotWorldEditListener(plugin));
         }
 
         setUsingLwc(pluginManager.getPlugin("LWC") != null);
@@ -119,15 +103,6 @@ public class BukkitServerBridge extends IServerBridge {
     }
 
     @Override
-    public PlotWorldEdit getPlotWorldEdit() {
-        return plotworldedit;
-    }
-
-    private void setPlotWorldEdit(PlotWorldEdit plotworldedit) {
-        this.plotworldedit = plotworldedit;
-    }
-
-    @Override
     public IWorld getWorld(String worldName) {
         World world = Bukkit.getWorld(worldName);
         if (world == null) {
@@ -144,7 +119,6 @@ public class BukkitServerBridge extends IServerBridge {
     @Override
     public void unHook() {
         economy = null;
-        plotworldedit = null;
     }
 
     @Override
@@ -216,7 +190,7 @@ public class BukkitServerBridge extends IServerBridge {
 
     @Override
     public File getDataFolder() {
-        return new File("plugins","PlotMe");
+        return new File("plugins", "PlotMe");
     }
 
     @Override

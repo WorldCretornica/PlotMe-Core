@@ -5,8 +5,12 @@ package com.worldcretornica.plotme_core.commands;
  */
 public class CommandException extends Exception {
 
+    public CommandException(String message) {
+        super(message);
+    }
+
     @Override
-    public String getLocalizedMessage() {
-        return super.getLocalizedMessage();
+    public String getMessage() {
+        return super.getMessage();
     }
 }

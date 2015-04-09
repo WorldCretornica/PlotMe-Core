@@ -1,7 +1,6 @@
 package com.worldcretornica.plotme_core.sponge;
 
 import com.worldcretornica.configuration.ConfigAccessor;
-import com.worldcretornica.plotme_core.PlotWorldEdit;
 import com.worldcretornica.plotme_core.api.BridgeLogger;
 import com.worldcretornica.plotme_core.api.IMaterial;
 import com.worldcretornica.plotme_core.api.IOfflinePlayer;
@@ -129,11 +128,6 @@ public class SpongeServerBridge extends IServerBridge {
         return null;
     }
 
-    @Override
-    public PlotWorldEdit getPlotWorldEdit() {
-        // TODO Auto-generated method stub
-        return null;
-    }
 
     @Override
     public IWorld getWorld(String worldName) {
@@ -183,7 +177,7 @@ public class SpongeServerBridge extends IServerBridge {
     @Override
     public List<String> getBiomes() {
         List<String> biomes = new ArrayList<>();
-        for (BiomeType type : plugin.getGame().getRegistry().getBiomes()) {
+        for (BiomeType type : plugin.getGame().getRegistry().getAllOf(BiomeType.class)) {
             biomes.add(type.getName());
         }
         return biomes;

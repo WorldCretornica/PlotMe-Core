@@ -32,8 +32,8 @@ public class CmdBuy extends PlotCommand {
                     if (id == null) {
                         player.sendMessage(C("MsgNoPlotFound"));
                         return true;
-                    } else if (!manager.isPlotAvailable(id, world)) {
-                        Plot plot = manager.getPlotById(id, world);
+                    } else if (!manager.isPlotAvailable(id)) {
+                        Plot plot = manager.getPlotById(id);
 
                         if (plot.isForSale()) {
                             String buyer = player.getName();
@@ -93,9 +93,9 @@ public class CmdBuy extends PlotCommand {
                                                 plot.updateField("customprice", 0);
                                                 plot.updateField("forsale", false);
 
-                                                manager.adjustWall(world, id, true);
-                                                manager.removeSellSign(world, id);
-                                                manager.setOwnerSign(world, plot);
+                                                manager.adjustWall(id, true);
+                                                manager.removeSellSign(id);
+                                                manager.setOwnerSign(plot);
 
                                                 player.sendMessage(C("MsgPlotBought") + " " + plugin.moneyFormat(-cost, true));
 

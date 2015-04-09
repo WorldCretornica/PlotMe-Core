@@ -74,7 +74,7 @@ public class CmdClear extends PlotCommand {
                             }
 
                             if (!event.isCancelled()) {
-                                manager.clear(world, plot, player, ClearReason.Clear);
+                                manager.clear(plot, player, ClearReason.Clear);
 
                                 if (isAdvancedLogging()) {
                                     if (price == 0) {

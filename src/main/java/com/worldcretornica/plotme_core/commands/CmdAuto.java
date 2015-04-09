@@ -94,9 +94,9 @@ public class CmdAuto extends PlotCommand {
                             }
 
                             if (!event.isCancelled()) {
-                                manager.createPlot(world, id, player.getName(), player.getUniqueId(), pmi);
+                                manager.createPlot(id, player.getName(), player.getUniqueId(), pmi);
 
-                                player.setLocation(manager.getPlotHome(world, id));
+                                player.setLocation(manager.getPlotHome(id));
 
                                 player.sendMessage(C("MsgThisPlotYours") + " " + C("WordUse") + " /plotme home " + C("MsgToGetToIt"));
 

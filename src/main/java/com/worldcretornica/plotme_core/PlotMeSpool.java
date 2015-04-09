@@ -1,7 +1,6 @@
 package com.worldcretornica.plotme_core;
 
 import com.worldcretornica.plotme_core.api.IPlotMe_GeneratorManager;
-import com.worldcretornica.plotme_core.api.IWorld;
 
 public class PlotMeSpool implements Runnable {
 
@@ -21,25 +20,25 @@ public class PlotMeSpool implements Runnable {
     @Override
     public void run() {
         if (getPlotToClear() != null) {
-            IWorld world = getPlotToClear().getWorld();
-            IPlotMe_GeneratorManager genmanager = plotMeCoreManager.getGenManager(world);
+            IPlotMe_GeneratorManager genmanager = plotMeCoreManager.getGenManager(getPlotToClear().getPlotId());
 
             if (currentClear == null) {
-                currentClear = genmanager.clear(world, getPlotToClear().getPlotId(), plugin.getConfig().getInt("NbBlocksPerClearStep"), null);
+                currentClear = genmanager.clear(getPlotToClear().getPlotId(), plugin.getConfig().getInt("NbBlocksPerClearStep"), null);
             } else {
-                currentClear = genmanager.clear(world, getPlotToClear().getPlotId(), plugin.getConfig().getInt("NbBlocksPerClearStep"), currentClear);
+                currentClear = genmanager.clear(getPlotToClear().getPlotId(), plugin.getConfig().getInt("NbBlocksPerClearStep"), currentClear);
             }
             if (currentClear == null) {
                 if (getPlotToClear().getReason() == ClearReason.Clear) {
-                    genmanager.adjustPlotFor(world, getPlotToClear().getPlotId(), true, false, false);
+                    genmanager.adjustPlotFor(getPlotToClear().getPlotId(), true, false, false);
                 } else {
-                    genmanager.adjustPlotFor(world, getPlotToClear().getPlotId(), false, false, false);
+                    genmanager.adjustPlotFor(getPlotToClear().getPlotId(), false, false, false);
                 }
                 if (plugin.getServerBridge().isUsingLwc()) {
-                    plotMeCoreManager.removeLWC(world, getPlotToClear().getPlotId());
+                    plotMeCoreManager.removeLWC(getPlotToClear().getPlotId());
                 }
-                genmanager.refreshPlotChunks(world, getPlotToClear().getPlotId());
+                genmanager.refreshPlotChunks(getPlotToClear().getPlotId());
 
+                assert plotToClear != null;
                 plotToClear.getRequester().sendMessage(plugin.C("WordPlot") + " " + getPlotToClear().getPlotId() + " " + plugin.C("WordCleared"));
 
                 plugin.removePlotToClear(getPlotToClear(), taskId);

@@ -45,8 +45,8 @@ public class CmdReset extends PlotCommand {
                     serverBridge.getEventBus().post(event);
 
                     if (!event.isCancelled()) {
-                        manager.setBiome(world, id, "PLAINS");
-                        manager.clear(world, plot, player, ClearReason.Reset);
+                        manager.setBiome(id, "PLAINS");
+                        manager.clear(plot, player, ClearReason.Reset);
 
                         if (manager.isEconomyEnabled(pmi) && pmi.isRefundClaimPriceOnReset()) {
                             IPlayer playerOwner = serverBridge.getPlayer(plot.getOwnerId());
@@ -68,8 +68,8 @@ public class CmdReset extends PlotCommand {
                             manager.removePlot(pmi, id);
                         }
 
-                        manager.removeOwnerSign(world, id);
-                        manager.removeSellSign(world, id);
+                        manager.removeOwnerSign(id);
+                        manager.removeSellSign(id);
                         plugin.getSqlManager().deletePlot(plot.getInternalID());
 
                         if (isAdvancedLogging()) {

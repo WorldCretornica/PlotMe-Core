@@ -37,7 +37,7 @@ public class CmdDoneList extends PlotCommand {
                     page = maxPage;
                 }
 
-                List<Plot> donePlots = null; //= plugin.getSqlManager().getDonePlots(player.getWorld().getName(), page, 8);
+                List<Plot> donePlots = plugin.getSqlManager().getFinishedPlots(player.getWorld().getName(), page, 8);
 
                 if (donePlots.isEmpty()) {
                     player.sendMessage(C("MsgNoPlotsFinished"));

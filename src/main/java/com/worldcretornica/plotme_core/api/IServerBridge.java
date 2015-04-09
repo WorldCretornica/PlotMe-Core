@@ -1,7 +1,6 @@
 package com.worldcretornica.plotme_core.api;
 
 import com.worldcretornica.configuration.ConfigAccessor;
-import com.worldcretornica.plotme_core.PlotWorldEdit;
 import com.worldcretornica.plotme_core.api.event.eventbus.EventBus;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
@@ -22,6 +21,7 @@ public abstract class IServerBridge {
     private final Logger logger;
 
     private boolean usingLwc;
+    private boolean usingWEdit;
 
     public IServerBridge(Logger bridgeLogger) {
         logger = bridgeLogger;
@@ -73,14 +73,20 @@ public abstract class IServerBridge {
 
     public abstract EconomyResponse depositPlayer(IOfflinePlayer currentBidder, double currentBid);
 
-    public abstract PlotWorldEdit getPlotWorldEdit();
-
     public boolean isUsingLwc() {
         return usingLwc;
     }
 
     protected void setUsingLwc(boolean usingLwc) {
         this.usingLwc = usingLwc;
+    }
+
+    public boolean isUsingWEdit() {
+        return usingWEdit;
+    }
+
+    public void setUsingWEdit(boolean usingWEdit) {
+        this.usingWEdit = usingWEdit;
     }
 
     /**

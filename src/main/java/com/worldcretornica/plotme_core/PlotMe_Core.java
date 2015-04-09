@@ -220,12 +220,12 @@ public class PlotMe_Core {
         getLogger().info("removed taskid " + taskId);
     }
 
-    public PlotToClear getPlotLocked(IWorld world, PlotId id) {
+    public PlotToClear getPlotLocked(PlotId id) {
         if (plotsToClear.isEmpty()) {
             return null;
         }
         for (PlotToClear ptc : plotsToClear.toArray(new PlotToClear[plotsToClear.size()])) {
-            if (ptc.getWorld() == world && ptc.getPlotId().equals(id)) {
+            if (ptc.getPlotId().equals(id)) {
                 return ptc;
             }
         }

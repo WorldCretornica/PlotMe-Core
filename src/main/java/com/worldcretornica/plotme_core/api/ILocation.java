@@ -1,29 +1,86 @@
 package com.worldcretornica.plotme_core.api;
 
-public interface ILocation {
+public class ILocation {
 
-    IWorld getWorld();
+    private final Vector pos;
 
-    int getBlockX();
+    private IWorld world;
 
-    int getBlockY();
+    public ILocation(IWorld world) {
+        this(world, new Vector());
+    }
 
-    int getBlockZ();
+    public ILocation(IWorld world, Vector vector) {
+        pos = vector;
+        this.world = world;
+    }
 
-    double getX();
+    public ILocation(IWorld world, double x, double y, double z) {
+        this(world, new Vector(x, y, z));
+    }
 
-    void setX(double x);
+    public ILocation(IWorld world, int x, int y, int z) {
+        this(world, (double) x, (double) y, (double) z);
+    }
 
-    double getY();
+    public IWorld getWorld() {
+        return world;
+    }
 
-    void setY(double y);
+    public int getBlockX() {
+        return pos.getBlockX();
+    }
 
-    double getZ();
+    public int getBlockY() {
+        return pos.getBlockY();
+    }
 
-    void setZ(double z);
+    public int getBlockZ() {
+        return pos.getBlockZ();
+    }
 
-    ILocation add(double x, double y, double z);
+    public double getX() {
+        return pos.getX();
+    }
 
-    ILocation subtract(double x, double y, double z);
+    void setX(double x) {
+        pos.setX(x);
+    }
+
+    public Vector getPos() {
+        return pos;
+    }
+
+    public double getY() {
+        return pos.getY();
+    }
+
+    public void setY(double y) {
+        pos.setY(y);
+    }
+
+    public double getZ() {
+        return pos.getZ();
+    }
+
+    void setZ(double z) {
+        pos.setZ(z);
+    }
+
+    public ILocation add(double x, double y, double z) {
+        return new ILocation(getWorld(), pos.add(x, y, z));
+    }
+
+    public ILocation subtract(double x, double y, double z) {
+        return new ILocation(getWorld(), pos.subtract(x, y, z));
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        result = 31 * this.getWorld().hashCode() + pos.hashCode();
+        return result;
+    }
+
 
 }

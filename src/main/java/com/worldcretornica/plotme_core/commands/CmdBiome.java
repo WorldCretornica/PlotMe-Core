@@ -75,7 +75,7 @@ public class CmdBiome extends PlotCommand {
 
                             if (!event.isCancelled()) {
                                 plot.setBiome(biomeName);
-                                manager.setBiome(world, id, biomeName.toUpperCase());
+                                manager.setBiome(id, biomeName.toUpperCase());
 
                                 player.sendMessage(C("MsgBiomeSet") + " " + biomeName + " " + plugin.moneyFormat(-price, true));
 

@@ -201,9 +201,10 @@ public abstract class Database {
 
             ps.setString(1, world);
 
-            ResultSet setNbPlots = ps.executeQuery();
-            if (setNbPlots.next()) {
-                plotCount = setNbPlots.getInt(1);
+            try(ResultSet setNbPlots = ps.executeQuery()) {
+                if (setNbPlots.next()) {
+                    plotCount = setNbPlots.getInt(1);
+                }
             }
         } catch (SQLException ex) {
             plugin.getLogger().severe("PlotCount Exception :");
@@ -218,9 +219,8 @@ public abstract class Database {
      */
     public int getTotalPlotCount() {
         int plotCount = 0;
-        try (Statement statement = getConnection().createStatement()) {
-
-            ResultSet setNbPlots = statement.executeQuery("SELECT Count(*) as plotCount FROM plotmecore_plots");
+        try (Statement statement = getConnection().createStatement(); ResultSet setNbPlots = statement.executeQuery(
+                "SELECT Count(*) as plotCount FROM plotmecore_plots")) {
             if (setNbPlots.next()) {
                 plotCount = setNbPlots.getInt(1);
             }
@@ -238,9 +238,10 @@ public abstract class Database {
             ps.setString(1, world);
             ps.setBytes(2, UUIDFetcher.toBytes(uuid));
 
-            ResultSet setNbPlots = ps.executeQuery();
-            if (setNbPlots.next()) {
-                plotCount = setNbPlots.getInt(1);
+            try(ResultSet setNbPlots = ps.executeQuery()) {
+                if (setNbPlots.next()) {
+                    plotCount = setNbPlots.getInt(1);
+                }
             }
         } catch (SQLException ex) {
             plugin.getLogger().severe("PlotCount Exception :");
@@ -277,11 +278,11 @@ public abstract class Database {
             getConnection().commit();
             ps2.setInt(1, id.getX());
             ps2.setInt(2, id.getZ());
-            ResultSet getID = ps2.executeQuery();
-            while (getID.next()) {
-                plot.setInternalID(getID.getInt(1));
+            try(ResultSet getID = ps2.executeQuery()) {
+                while (getID.next()) {
+                    plot.setInternalID(getID.getInt(1));
+                }
             }
-
         } catch (SQLException ex) {
             plugin.getLogger().severe("Insert Exception :");
             plugin.getLogger().severe(ex.getMessage());
@@ -513,19 +514,18 @@ public abstract class Database {
 
                     statementMetadata.setInt(1, internalID);
 
-                    ResultSet setMetadata = statementMetadata.executeQuery();
+                    try(ResultSet setMetadata = statementMetadata.executeQuery()) {
 
-                    while (setMetadata.next()) {
-                        String pluginname = setMetadata.getString("pluginName");
-                        String propertyname = setMetadata.getString("propertyName");
-                        String propertyvalue = setMetadata.getString("propertyValue");
-                        if (!metadata.containsKey(pluginname)) {
-                            metadata.put(pluginname, new HashMap<String, String>());
+                        while (setMetadata.next()) {
+                            String pluginname = setMetadata.getString("pluginName");
+                            String propertyname = setMetadata.getString("propertyName");
+                            String propertyvalue = setMetadata.getString("propertyValue");
+                            if (!metadata.containsKey(pluginname)) {
+                                metadata.put(pluginname, new HashMap<String, String>());
+                            }
+                            metadata.get(pluginname).put(propertyname, propertyvalue);
                         }
-                        metadata.get(pluginname).put(propertyname, propertyvalue);
                     }
-
-                    setMetadata.close();
 
                     plot = new Plot(plugin, internalID, owner, ownerId, world, biome, expiredDate, allowed, denied, id, price, forSale, finished,
                             finishedDate, protect, metadata, plotLikes, plotName);
@@ -635,4 +635,8 @@ public abstract class Database {
     }
 
     abstract Connection legacyConnection();
+
+    public List<Plot> getFinishedPlots(String name, int page, int i) {
+        return null;
+    }
 }

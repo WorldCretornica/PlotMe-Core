@@ -204,18 +204,6 @@ public class Plot {
     public void removeAllowed(String name) {
         if (allowed().containsKey(name)) {
             plugin.getSqlManager().deletePlotAllowed(getInternalID(), name);
-
-            if (plugin.getServerBridge().getPlotWorldEdit() != null) {
-                IPlayer player = (IPlayer) plugin.getServerBridge().getOfflinePlayer(name);
-
-                if (player != null && PlotMeCoreManager.getInstance().isPlotWorld(player.getWorld())) {
-                    if (PlotMeCoreManager.getInstance().isPlayerIgnoringWELimit(player)) {
-                        plugin.getServerBridge().getPlotWorldEdit().removeMask(player);
-                    } else {
-                        plugin.getServerBridge().getPlotWorldEdit().setMask(player);
-                    }
-                }
-            }
         }
     }
 
