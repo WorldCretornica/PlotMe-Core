@@ -3,9 +3,7 @@ package com.worldcretornica.plotme_core.storage;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -98,36 +96,6 @@ public class SQLiteConnector extends Database {
             connection.commit();
         } catch (SQLException e) {
             e.printStackTrace();
-        }
-    }
-
-    /**
-     * @deprecated Legacy Code for 0.16.3 to 0.17 Update. To be removed in 0.18 or 0.19
-     */
-    @Deprecated
-    boolean tableExists(String name) {
-        try (Connection conn = legacyConnection()) {
-            DatabaseMetaData dbm = conn.getMetaData();
-            try (ResultSet rs = dbm.getTables(null, null, name, null)) {
-                return rs.next();
-            }
-        } catch (SQLException ex) {
-            plugin.getLogger().severe("Table Check Exception :");
-            plugin.getLogger().severe(ex.getMessage());
-            return false;
-        }
-    }
-
-    Connection legacyConnection() {
-        try {
-            Class.forName("org.sqlite.JDBC");
-            connection = DriverManager.getConnection("jdbc:sqlite:" + plugin.getServerBridge().getDataFolder().getAbsolutePath() + "/plots.db");
-            connection.setAutoCommit(false);
-            return connection;
-        } catch (ClassNotFoundException | SQLException e) {
-            plugin.getLogger().severe("Could not establish a connection to the PlotMe SQLite database:");
-            plugin.getLogger().severe(e.getMessage());
-            return connection;
         }
     }
 }

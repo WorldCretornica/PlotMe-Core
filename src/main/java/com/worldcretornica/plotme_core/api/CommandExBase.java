@@ -39,7 +39,7 @@ public class CommandExBase {
     protected final HashMap<String, PlotCommand> commandMap = new HashMap<>();
     protected final PlotMe_Core api;
 
-    public CommandExBase(PlotMe_Core api) {
+    protected CommandExBase(PlotMe_Core api) {
         this.api = api;
         registerCommand(new CmdAdd(api));
         registerCommand(new CmdAddTime(api));

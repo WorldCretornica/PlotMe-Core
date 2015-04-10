@@ -3,9 +3,9 @@ package com.worldcretornica.plotme_core.commands;
 /**
  * Created by Matthew on 3/25/2015.
  */
-public class CommandException extends Exception {
+class CommandException extends Exception {
 
-    public CommandException(String message) {
+    CommandException(String message) {
         super(message);
     }
 

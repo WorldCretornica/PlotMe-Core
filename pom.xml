@@ -94,11 +94,6 @@
 
     <repositories>
         <repository>
-            <id>Sonatype-public</id>
-            <name>SnakeYAML repository</name>
-            <url>http://oss.sonatype.org/content/groups/public/</url>
-        </repository>
-        <repository>
             <id>spigot-repo</id>
             <name>Bukkit and Spigot Repository</name>
             <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>

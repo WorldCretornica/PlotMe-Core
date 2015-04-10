@@ -24,9 +24,12 @@ public class ConfigAccessor {
         fileConfiguration = YamlConfiguration.loadConfiguration(configFile);
 
         // Look for defaults in the jar
-        InputStream defConfigStream = getResource(fileName);
-        YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(defConfigStream));
-        fileConfiguration.setDefaults(defConfig);
+        try (InputStream defConfigStream = getResource(fileName)) {
+            YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(defConfigStream));
+            fileConfiguration.setDefaults(defConfig);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private InputStream getResource(String fileName) {

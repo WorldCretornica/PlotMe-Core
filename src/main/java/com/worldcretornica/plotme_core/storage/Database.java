@@ -29,9 +29,9 @@ public abstract class Database {
 
     public static final String SELECT_INTERNAL_ID = "SELECT id FROM plotmecore_plots WHERE plotX = ? AND plotZ = ?";
     private static final String SELECT_PLOT_COUNT = "SELECT Count(*) as plotCount FROM plotmecore_plots WHERE LOWER(world) = ?";
-    public final PlotMe_Core plugin;
+    final PlotMe_Core plugin;
 
-    public Connection connection;
+    Connection connection;
 
     public Database(PlotMe_Core plugin) {
         this.plugin = plugin;
@@ -58,7 +58,7 @@ public abstract class Database {
      * The database connection
      * @return the connection to the database
      */
-    public Connection getConnection() {
+    Connection getConnection() {
         try {
             if (connection == null || connection.isClosed()) {
                 return startConnection();
@@ -71,124 +71,6 @@ public abstract class Database {
     }
 
     public abstract void createTables();
-
-    public void legacyConverter() {
-        if (plugin.getConfig().getBoolean("Verison17DBUpdate")) {
-            plugin.getServerBridge().runTaskAsynchronously(new Runnable() {
-                @Override
-                public void run() {
-                    if (tableExists("plotmePlots")) {
-                        try (Statement statement = legacyConnection().createStatement()) {
-                            try (ResultSet resultSet = statement.executeQuery("SELECT * FROM plotmePlots")) {
-                                while (resultSet.next()) {
-                                    try (PreparedStatement migrateStatement = getConnection().prepareStatement(
-                                            "INSERT INTO plotmecore_plots(plotX, plotZ, world, ownerID, owner, biome, finished, finishedDate, "
-                                                    + "forSale, price, protected, expiredDate, topX, topZ, bottomX, bottomZ) VALUES (?,"
-                                                    + "?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)")) {
-                                        int idX = resultSet.getInt("idX");
-                                        migrateStatement.setInt(1, idX);
-                                        int idZ = resultSet.getInt("idZ");
-                                        migrateStatement.setInt(2, idZ);
-                                        String world = resultSet.getString("world");
-                                        migrateStatement.setString(3, world);
-                                        byte[] ownerBytesId = resultSet.getBytes("ownerId");
-                                        migrateStatement.setString(4, UUIDFetcher.fromBytes(ownerBytesId).toString());
-                                        migrateStatement.setString(5, resultSet.getString("owner"));
-                                        migrateStatement.setString(6, resultSet.getString("biome"));
-                                        migrateStatement.setBoolean(7, resultSet.getBoolean("finished"));
-                                        migrateStatement.setString(8, resultSet.getString("finisheddate"));
-                                        migrateStatement.setBoolean(9, resultSet.getBoolean("forsale"));
-                                        migrateStatement.setInt(10, resultSet.getInt("customprice"));
-                                        migrateStatement.setBoolean(11, resultSet.getBoolean("protected"));
-                                        migrateStatement.setDate(12, resultSet.getDate("expireddate"));
-                                        migrateStatement.setInt(13, resultSet.getInt("topX"));
-                                        migrateStatement.setInt(14, resultSet.getInt("topZ"));
-                                        migrateStatement.setInt(15, resultSet.getInt("bottomX"));
-
-                                        try (ResultSet executePlots = migrateStatement.executeQuery()) {
-                                            int internalPlotID = executePlots.getInt("id");
-                                            if (tableExists("plotmeAllowed")) {
-                                                try (ResultSet resultSet1 = statement.executeQuery("SELECT * FROM plotmeAllowed WHERE idX = " + idX
-                                                        + " AND idZ = " + idZ + " AND world = " + world)) {
-                                                    UUID pId = UUIDFetcher.getUUIDOf(resultSet1.getString("player"));
-                                                    String player = null;
-                                                    if (resultSet1.getString("player").equalsIgnoreCase("*")) {
-                                                        player = resultSet1.getString("player");
-                                                    } else if (pId != null) {
-                                                        player = pId.toString();
-                                                    }
-                                                    if (player != null) {
-                                                        try (PreparedStatement migrateStatement2 = getConnection().prepareStatement("INSERT INTO "
-                                                                + "plotmecore_allowed (plot_id, player) VALUES (?,?)")) {
-                                                            migrateStatement2.setInt(1, internalPlotID);
-                                                            migrateStatement2.setString(2, player);
-                                                            migrateStatement2.execute();
-                                                        }
-                                                    }
-                                                }
-
-                                            }
-                                            if (tableExists("plotmeDenied")) {
-                                                try (ResultSet resultSet2 = statement.executeQuery("SELECT * FROM plotmeAllowed WHERE idX = " + idX
-                                                        + " AND idZ = " + idZ + " AND world = " + world)) {
-                                                    UUID pId = UUIDFetcher.getUUIDOf(resultSet2.getString("player"));
-                                                    String player = null;
-                                                    if (resultSet2.getString("player").equalsIgnoreCase("*")) {
-                                                        player = resultSet2.getString("player");
-                                                    } else if (pId != null) {
-                                                        player = pId.toString();
-                                                    }
-                                                    if (player != null) {
-                                                        try (PreparedStatement migrateStatement3 = getConnection().prepareStatement("INSERT INTO "
-                                                                + "plotmecore_denied (plot_id, player) VALUES (?,?)")) {
-                                                            migrateStatement3.setInt(1, internalPlotID);
-                                                            migrateStatement3.setString(2, player);
-                                                            migrateStatement3.execute();
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                            if (tableExists("plotmeMetadata")) {
-                                                try (ResultSet resultSet3 = statement.executeQuery("SELECT * FROM plotmeMetadata WHERE idX = " + idX
-                                                        + " AND idZ = " + idZ + " AND world = " + world)) {
-                                                    try (PreparedStatement migrateStatement3 = getConnection().prepareStatement("INSERT INTO "
-                                                            + "plotmecore_metadata (plot_id, pluginName, propertyName, propertyValue) VALUES (?,?,"
-                                                            + "?,?)")) {
-                                                        migrateStatement3.setInt(1, internalPlotID);
-                                                        migrateStatement3.setString(2, resultSet3.getString("pluginname"));
-                                                        migrateStatement3.setString(3, resultSet3.getString("propertyname"));
-                                                        migrateStatement3.setString(4, resultSet3.getString("propertyvalue"));
-                                                        migrateStatement3.execute();
-                                                    }
-                                                }
-                                            }
-                                            getConnection().commit();
-                                        } catch (SQLException e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
-                                }
-                            }
-                            statement.execute("DROP TABLE IF EXISTS plotmeDenied");
-                            statement.execute("DROP TABLE IF EXISTS plotmeAllowed");
-                            statement.execute("DROP TABLE IF EXISTS plotmePlots");
-                            statement.execute("DROP TABLE IF EXISTS plotmeMetadata");
-                            statement.execute("DROP TABLE IF EXISTS plotmeComments");
-                            statement.execute("DROP TABLE IF EXISTS plotmeFreed");
-                            legacyConnection().commit();
-                            getConnection().commit();
-                        } catch (SQLException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-                                                           }
-            );
-        }
-    }
-
-
-    abstract boolean tableExists(String name);
 
     /**
      * Get the number of plots in the world
@@ -633,8 +515,6 @@ public abstract class Database {
         }
         return ret;
     }
-
-    abstract Connection legacyConnection();
 
     public List<Plot> getFinishedPlots(String name, int page, int i) {
         return null;

@@ -62,7 +62,7 @@ public abstract class PlotCommand {
 
     public abstract String getUsage();
 
-    protected boolean isAdvancedLogging() {
+    boolean isAdvancedLogging() {
         return plugin.getConfig().getBoolean("AdvancedLogging");
     }
 

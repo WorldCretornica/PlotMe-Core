@@ -136,34 +136,18 @@ public class PlotMe_Core {
      */
     private void setupSQL() {
         FileConfiguration config = getConfig();
-        boolean fileFound = false;
         if (config.getBoolean("usemySQL", false)) {
             String url = config.getString("mySQLconn");
             String user = config.getString("mySQLuname");
             String pass = config.getString("mySQLpass");
             setSqlManager(new MySQLConnector(this, url, user, pass));
             getSqlManager().createTables();
-            getSqlManager().legacyConverter();
-            getConfig().set("Verison17DBUpdate", false);
         } else {
             setSqlManager(new SQLiteConnector(this));
             getSqlManager().createTables();
-            for (String file : getServerBridge().getDataFolder().list()) {
-                if (file.equalsIgnoreCase("plots.db")) {
-                    fileFound = true;
-                    break;
-                } else {
-                    fileFound = false;
-                }
-            }
         }
         getSqlManager().startConnection();
         getSqlManager().createTables();
-        if (fileFound) {
-            getSqlManager().legacyConverter();
-        } else {
-            getConfig().set("Verison17DBUpdate", false);
-        }
     }
 
     public void addManager(String world, IPlotMe_GeneratorManager manager) {

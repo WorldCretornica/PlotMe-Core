@@ -3,9 +3,7 @@ package com.worldcretornica.plotme_core.storage;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -103,27 +101,4 @@ public class MySQLConnector extends Database {
             e.printStackTrace();
         }
     }
-
-    /**
-     * @deprecated Legacy Code for 0.16.3 to 0.17 Update. To be removed in 0.18 or 0.19
-     */
-    @Deprecated
-    boolean tableExists(String name) {
-        try {
-            DatabaseMetaData dbm = legacyConnection().getMetaData();
-            try (ResultSet rs = dbm.getTables(null, null, name, null)) {
-                return rs.next();
-            }
-        } catch (SQLException ex) {
-            plugin.getLogger().severe("Table Check Exception :");
-            plugin.getLogger().severe("  " + ex.getMessage());
-            return false;
-        }
-    }
-
-    @Override
-    Connection legacyConnection() {
-        return getConnection();
-    }
-
 }

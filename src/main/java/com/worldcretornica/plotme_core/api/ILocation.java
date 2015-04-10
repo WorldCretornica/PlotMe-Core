@@ -4,7 +4,7 @@ public class ILocation {
 
     private final Vector pos;
 
-    private IWorld world;
+    private final IWorld world;
 
     public ILocation(IWorld world) {
         this(world, new Vector());
