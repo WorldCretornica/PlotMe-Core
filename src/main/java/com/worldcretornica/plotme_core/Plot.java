@@ -2,6 +2,7 @@ package com.worldcretornica.plotme_core;
 
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.utils.UUIDFetcher;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
@@ -224,7 +225,7 @@ public class Plot {
     }
 
     public boolean isAllowedConsulting(String name) {
-        if ("*".equals(name)) {
+        if ("*".equalsIgnoreCase(name)) {
             return isAllowedInternal(name);
         }
         UUID player = plugin.getServerBridge().getOfflinePlayer(name).getUniqueId();
@@ -241,8 +242,8 @@ public class Plot {
             if (accessLevel != null) {
                 if (accessLevel == 0) {
                     return true;
-                } else if (accessLevel == 1) {
-                    return plugin.getServerBridge().getOfflinePlayer(this.getOwnerId()).isOnline();
+                } else if (!"*".equalsIgnoreCase(name) && accessLevel == 1) {
+                    return plugin.getServerBridge().getPlayer(UUIDFetcher.getUUIDOf(name)).isOnline();
                 }
             }
         } else if (allowed().containsKey("*")) {
@@ -250,8 +251,6 @@ public class Plot {
             if (accessLevel != null) {
                 if (accessLevel == 0) {
                     return true;
-                } else if (accessLevel == 1) {
-                    return plugin.getServerBridge().getOfflinePlayer(this.getOwnerId()).isOnline();
                 }
             }
         } else {

@@ -25,8 +25,8 @@ import java.util.List;
 
 class HandlerCache {
 
-    private final List<EventHandler> handlers;
-    private final EnumMap<Order, List<EventHandler>> orderGrouped;
+    private final List<MethodEventHandler> handlers;
+    private final EnumMap<Order, List<MethodEventHandler>> orderGrouped;
 
     HandlerCache(List<MethodEventHandler> registrations) {
         this.handlers = Lists.newArrayList();
@@ -36,18 +36,18 @@ class HandlerCache {
 
         this.orderGrouped = Maps.newEnumMap(Order.class);
         for (Order order : Order.values()) {
-            this.orderGrouped.put(order, new ArrayList<EventHandler>());
+            this.orderGrouped.put(order, new ArrayList<MethodEventHandler>());
         }
         for (MethodEventHandler reg : registrations) {
             this.orderGrouped.get(reg.getPriority()).add(reg);
         }
     }
 
-    public List<EventHandler> getHandlers() {
+    public List<MethodEventHandler> getHandlers() {
         return this.handlers;
     }
 
-    public List<EventHandler> getHandlersByOrder(Order order) {
+    public List<MethodEventHandler> getHandlersByOrder(Order order) {
         return this.orderGrouped.get(order);
     }
 

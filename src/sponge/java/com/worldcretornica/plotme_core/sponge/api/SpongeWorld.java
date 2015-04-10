@@ -1,6 +1,11 @@
 package com.worldcretornica.plotme_core.sponge.api;
 
+import com.flowpowered.math.vector.Vector3i;
+import com.google.common.base.Optional;
+import com.worldcretornica.plotme_core.api.IBlock;
+import com.worldcretornica.plotme_core.api.IChunk;
 import com.worldcretornica.plotme_core.api.IWorld;
+import org.spongepowered.api.world.Chunk;
 import org.spongepowered.api.world.World;
 
 import java.io.File;
@@ -31,5 +36,25 @@ public class SpongeWorld extends IWorld {
     @Override
     public UUID getUUID() {
         return world.getUniqueId();
+    }
+
+    @Override
+    public IChunk getChunkAt(int x, int z) {
+        Optional<Chunk> chunk = world.getChunk(new Vector3i(x, 0, z));
+        if (chunk.orNull() != null) {
+            return new SpongeChunk(chunk.get());
+        }
+        return null;
+    }
+
+    @Override
+    public void refreshChunk(int x, int z) {
+        //Todo not possible yet
+    }
+
+    @Override
+    public IBlock getBlockAt(int x, int y, int z) {
+        //Todo not possible yet
+        return null;
     }
 }

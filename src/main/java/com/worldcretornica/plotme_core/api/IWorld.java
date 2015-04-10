@@ -31,4 +31,9 @@ public abstract class IWorld {
         return result;
     }
 
+    public abstract IChunk getChunkAt(int x, int z);
+
+    public abstract void refreshChunk(int x, int z);
+
+    public abstract IBlock getBlockAt(int x, int y, int z);
 }

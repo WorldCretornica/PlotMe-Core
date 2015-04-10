@@ -51,23 +51,9 @@ public class EventBus implements EventManager {
 
                 @Override
                 public HandlerCache load(Class<?> type) throws Exception {
-                    List<MethodEventHandler> registrations = Lists.newArrayList();
-                    Set<Class<?>> types = (Set) TypeToken.of(type).getTypes().rawTypes();
-
-                    synchronized (EventBus.this.lock) {
-                        for (Class<?> type1 : types) {
-                            if (Event.class.isAssignableFrom(type1)) {
-                                registrations.addAll(EventBus.this.handlersByEvent.get(type1));
-                            }
-                        }
-                    }
-
-                    Collections.sort(registrations);
-
-                    return new HandlerCache(registrations);
+                    return bakeHandlers(type);
                 }
             });
-
     public EventBus() {
     }
 
@@ -81,6 +67,24 @@ public class EventBus implements EventManager {
             }
         }
         return false;
+    }
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    private HandlerCache bakeHandlers(Class<?> rootType) {
+        List<MethodEventHandler> registrations = Lists.newArrayList();
+        Set<Class<?>> types = (Set) TypeToken.of(rootType).getTypes().rawTypes();
+
+        synchronized (this.lock) {
+            for (Class<?> type : types) {
+                if (Event.class.isAssignableFrom(type)) {
+                    registrations.addAll(this.handlersByEvent.get(type));
+                }
+            }
+        }
+
+        Collections.sort(registrations);
+
+        return new HandlerCache(registrations);
     }
 
     private HandlerCache getHandlerCache(Class<?> type) {
@@ -160,7 +164,7 @@ public class EventBus implements EventManager {
         }
     }
 
-    private void callListener(EventHandler handler, Event event) {
+    private void callListener(MethodEventHandler handler, Event event) {
         try {
             handler.handleEvent(event);
         } catch (Throwable t) {
@@ -181,7 +185,7 @@ public class EventBus implements EventManager {
     @Override
     public boolean post(Event event) {
         for (Order order : Order.values()) {
-            for (EventHandler handler : getHandlerCache(event.getClass()).getHandlersByOrder(order)) {
+            for (MethodEventHandler handler : getHandlerCache(event.getClass()).getHandlersByOrder(order)) {
                 callListener(handler, event);
             }
         }

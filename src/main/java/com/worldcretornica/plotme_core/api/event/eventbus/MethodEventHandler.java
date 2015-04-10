@@ -19,12 +19,14 @@ package com.worldcretornica.plotme_core.api.event.eventbus;
 import com.worldcretornica.plotme_core.api.event.Event;
 import com.worldcretornica.plotme_core.api.event.ICancellable;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-public class MethodEventHandler extends EventHandler {
+public class MethodEventHandler implements Comparable<MethodEventHandler> {
 
     private final Object object;
     private final Method method;
+    private final Order priority;
 
     /**
      * Create a new event handler.
@@ -33,12 +35,17 @@ public class MethodEventHandler extends EventHandler {
      * @param method the method with the subscribe annotation
      */
     public MethodEventHandler(Order priority, Object object, Method method) {
-        super(priority);
+        this.priority = priority;
         this.object = object;
         this.method = method;
     }
 
-    @Override
+    /**
+     * Dispatch the event.
+     *
+     * @param event the event object
+     * @throws Exception an exception that may be thrown
+     */
     public void dispatch(Event event) throws Exception {
         if ((event instanceof ICancellable) && ((ICancellable) event).isCancelled()) {
             return;
@@ -66,6 +73,43 @@ public class MethodEventHandler extends EventHandler {
         int result = object != null ? object.hashCode() : 0;
         result = 31 * result + method.hashCode();
         return result;
+    }
+
+    /**
+     * Get the priority.
+     *
+     * @return the priority
+     */
+    public Order getPriority() {
+        return priority;
+    }
+
+    /**
+     * Dispatch the given event.
+     *
+     * <p>Subclasses should override {@link #dispatch(Event)}.</p>
+     *
+     * @param event the event
+     * @throws InvocationTargetException thrown if an exception is thrown during dispatch
+     */
+    public final void handleEvent(Event event) throws InvocationTargetException {
+        try {
+            dispatch(event);
+        } catch (Throwable t) {
+            throw new InvocationTargetException(t);
+        }
+    }
+
+    @Override
+    public int compareTo(MethodEventHandler o) {
+        return getPriority().ordinal() - o.getPriority().ordinal();
+    }
+
+    @Override
+    public String toString() {
+        return "EventHandler{" +
+                "priority=" + priority +
+                '}';
     }
 
 }

@@ -82,5 +82,7 @@ public class ILocation {
         return result;
     }
 
-
+    public IBlock getBlock() {
+        return world.getBlockAt(getBlockX(), getBlockY(), getBlockZ());
+    }
 }

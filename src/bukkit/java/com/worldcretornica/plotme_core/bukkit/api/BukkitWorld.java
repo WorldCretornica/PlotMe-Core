@@ -1,5 +1,7 @@
 package com.worldcretornica.plotme_core.bukkit.api;
 
+import com.worldcretornica.plotme_core.api.IBlock;
+import com.worldcretornica.plotme_core.api.IChunk;
 import com.worldcretornica.plotme_core.api.IWorld;
 import org.bukkit.World;
 
@@ -35,5 +37,20 @@ public class BukkitWorld extends IWorld {
     @Override
     public UUID getUUID() {
         return world.getUID();
+    }
+
+    @Override
+    public IChunk getChunkAt(int x, int z) {
+        return new BukkitChunk(world.getChunkAt(x, z));
+    }
+
+    @Override
+    public void refreshChunk(int x, int z) {
+        world.refreshChunk(x, z);
+    }
+
+    @Override
+    public IBlock getBlockAt(int x, int y, int z) {
+        return new BukkitBlock(world.getBlockAt(x, y, z));
     }
 }

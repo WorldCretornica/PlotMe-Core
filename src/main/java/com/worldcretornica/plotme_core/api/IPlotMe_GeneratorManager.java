@@ -37,6 +37,8 @@ public interface IPlotMe_GeneratorManager {
 
     Long[] clear(PlotId id, long maxBlocks, Long[] start);
 
+    Long[] clear(ILocation bottom, ILocation top, long maxBlocks, Long[] start);
+
     void adjustPlotFor(PlotId id, boolean claimed, boolean protect, boolean forSale);
 
     boolean isBlockInPlot(PlotId id, ILocation blockLocation);

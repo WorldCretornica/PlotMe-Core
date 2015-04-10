@@ -26,7 +26,7 @@ public class CmdTrust extends PlotCommand {
         if (args.length < 2 && args.length >= 3) {
             throw new BadUsageException(getUsage());
         }
-        if (args[1].length() > 16 || !validUserPattern.matcher(args[1]).matches()) {
+        if (args[1].length() > 16 || !validUserPattern.matcher(args[1]).matches() || "*".equalsIgnoreCase(args[1])) {
             throw new IllegalArgumentException(C("InvalidCommandInput"));
         }
         IPlayer player = (IPlayer) sender;
