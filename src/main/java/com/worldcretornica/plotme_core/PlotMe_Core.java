@@ -204,17 +204,17 @@ public class PlotMe_Core {
         getLogger().info("removed taskid " + taskId);
     }
 
-    public PlotToClear getPlotLocked(PlotId id) {
+    public boolean isPlotLocked(PlotId id) {
         if (plotsToClear.isEmpty()) {
-            return null;
+            return false;
         }
         for (PlotToClear ptc : plotsToClear.toArray(new PlotToClear[plotsToClear.size()])) {
             if (ptc.getPlotId().equals(id)) {
-                return ptc;
+                return true;
             }
         }
 
-        return null;
+        return false;
     }
 
     public IServerBridge getServerBridge() {

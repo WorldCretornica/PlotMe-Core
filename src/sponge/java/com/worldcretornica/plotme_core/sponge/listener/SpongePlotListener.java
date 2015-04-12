@@ -6,7 +6,6 @@ import com.worldcretornica.plotme_core.PlotId;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.PlotToClear;
 import com.worldcretornica.plotme_core.sponge.PlotMe_Sponge;
 import com.worldcretornica.plotme_core.sponge.api.SpongeLocation;
 import com.worldcretornica.plotme_core.sponge.api.SpongeWorld;
@@ -51,19 +50,8 @@ public class SpongePlotListener {
             if (id == null) {
                 event.setCancelled(true);
             } else {
-                PlotToClear ptc = api.getPlotLocked(id);
-                if (ptc != null) {
-                    switch (ptc.getReason()) {
-                        case Clear:
-                            //player.sendMessage(api.C("MsgPlotLockedClear"));
-                            break;
-                        case Reset:
-                            //player.sendMessage(api.C("MsgPlotLockedReset"));
-                            break;
-                        case Expired:
-                            //player.sendMessage(api.C("MsgPlotLockedExpired"));
-                            break;
-                    }
+                boolean ptc = api.isPlotLocked(id);
+                if (ptc) {
                     event.setCancelled(true);
                 } else {
                     Plot plot = manager.getMap(location).getPlot(id);

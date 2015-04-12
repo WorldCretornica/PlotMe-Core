@@ -6,7 +6,6 @@ import com.worldcretornica.plotme_core.PlotId;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.PlotToClear;
 import com.worldcretornica.plotme_core.api.IEntity;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
@@ -91,20 +90,10 @@ public class BukkitPlotListener implements Listener {
                     event.setCancelled(true);
                 }
             } else {
-                PlotToClear ptc = api.getPlotLocked(id);
+                boolean ptc = api.isPlotLocked(id);
 
-                if (ptc != null) {
-                    switch (ptc.getReason()) {
-                        case Clear:
-                            player.sendMessage(api.C("MsgPlotLockedClear"));
-                            break;
-                        case Reset:
-                            player.sendMessage(api.C("MsgPlotLockedReset"));
-                            break;
-                        case Expired:
-                            player.sendMessage(api.C("MsgPlotLockedExpired"));
-                            break;
-                    }
+                if (ptc) {
+                    player.sendMessage(api.C("PlotLocked"));
                     event.setCancelled(true);
                 } else {
                     Plot plot = manager.getPlotById(id);
@@ -137,20 +126,10 @@ public class BukkitPlotListener implements Listener {
                     event.setCancelled(true);
                 }
             } else {
-                PlotToClear ptc = api.getPlotLocked(id);
+                boolean ptc = api.isPlotLocked(id);
 
-                if (ptc != null) {
-                    switch (ptc.getReason()) {
-                        case Clear:
-                            player.sendMessage(api.C("MsgPlotLockedClear"));
-                            break;
-                        case Reset:
-                            player.sendMessage(api.C("MsgPlotLockedReset"));
-                            break;
-                        case Expired:
-                            player.sendMessage(api.C("MsgPlotLockedExpired"));
-                            break;
-                    }
+                if (ptc) {
+                    player.sendMessage(api.C("PlotLocked"));
                     event.setCancelled(true);
                 } else {
                     Plot plot = manager.getMap(location).getPlot(id);
@@ -180,20 +159,10 @@ public class BukkitPlotListener implements Listener {
                 player.sendMessage(api.C("ErrCannotBuild"));
                 event.setCancelled(true);
             } else {
-                PlotToClear ptc = api.getPlotLocked(id);
+                boolean ptc = api.isPlotLocked(id);
 
-                if (ptc != null) {
-                    switch (ptc.getReason()) {
-                        case Clear:
-                            player.sendMessage(api.C("MsgPlotLockedClear"));
-                            break;
-                        case Reset:
-                            player.sendMessage(api.C("MsgPlotLockedReset"));
-                            break;
-                        case Expired:
-                            player.sendMessage(api.C("MsgPlotLockedExpired"));
-                            break;
-                    }
+                if (ptc) {
+                    player.sendMessage(api.C("PlotLocked"));
                     event.setCancelled(true);
                 } else {
                     Plot plot = manager.getPlotById(id);
@@ -221,20 +190,10 @@ public class BukkitPlotListener implements Listener {
                     player.sendMessage(api.C("ErrCannotBuild"));
                     event.setCancelled(true);
                 } else {
-                    PlotToClear ptc = api.getPlotLocked(id);
+                    boolean ptc = api.isPlotLocked(id);
 
-                    if (ptc != null) {
-                        switch (ptc.getReason()) {
-                            case Clear:
-                                player.sendMessage(api.C("MsgPlotLockedClear"));
-                                break;
-                            case Reset:
-                                player.sendMessage(api.C("MsgPlotLockedReset"));
-                                break;
-                            case Expired:
-                                player.sendMessage(api.C("MsgPlotLockedExpired"));
-                                break;
-                        }
+                    if (ptc) {
+                        player.sendMessage(api.C("PlotLocked"));
                         event.setCancelled(true);
                     } else {
                         Plot plot = manager.getPlotById(id);
@@ -260,19 +219,10 @@ public class BukkitPlotListener implements Listener {
                 event.setCancelled(true);
                 return;
             }
-            PlotToClear ptc = api.getPlotLocked(plotId);
-            if (ptc != null) {
-                switch (ptc.getReason()) {
-                    case Clear:
-                        player.sendMessage(api.C("MsgPlotLockedClear"));
-                        break;
-                    case Reset:
-                        player.sendMessage(api.C("MsgPlotLockedReset"));
-                        break;
-                    case Expired:
-                        player.sendMessage(api.C("MsgPlotLockedExpired"));
-                        break;
-                }
+            boolean ptc = api.isPlotLocked(plotId);
+
+            if (ptc) {
+                player.sendMessage(api.C("PlotLocked"));
                 event.setCancelled(true);
             } else {
                 boolean canBuild = !player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE);
@@ -332,9 +282,9 @@ public class BukkitPlotListener implements Listener {
             if (id == null) {
                 event.setCancelled(true);
             } else {
-                PlotToClear ptc = api.getPlotLocked(id);
+                boolean ptc = api.isPlotLocked(id);
 
-                if (ptc != null) {
+                if (ptc) {
                     event.setCancelled(true);
                 }
             }
@@ -351,9 +301,9 @@ public class BukkitPlotListener implements Listener {
             if (id == null) {
                 event.setCancelled(true);
             } else {
-                PlotToClear ptc = api.getPlotLocked(id);
+                boolean ptc = api.isPlotLocked(id);
 
-                if (ptc != null) {
+                if (ptc) {
                     event.setCancelled(true);
                 }
             }
@@ -370,9 +320,9 @@ public class BukkitPlotListener implements Listener {
             if (id == null) {
                 event.setCancelled(true);
             } else {
-                PlotToClear ptc = api.getPlotLocked(id);
+                boolean ptc = api.isPlotLocked(id);
 
-                if (ptc != null) {
+                if (ptc) {
                     event.setCancelled(true);
                 }
             }
@@ -389,9 +339,9 @@ public class BukkitPlotListener implements Listener {
             if (id == null) {
                 event.setCancelled(true);
             } else {
-                PlotToClear ptc = api.getPlotLocked(id);
+                boolean ptc = api.isPlotLocked(id);
 
-                if (ptc != null) {
+                if (ptc) {
                     event.setCancelled(true);
                 }
             }
@@ -406,9 +356,9 @@ public class BukkitPlotListener implements Listener {
             if (id == null) {
                 event.setCancelled(true);
             } else {
-                PlotToClear ptc = api.getPlotLocked(id);
+                boolean ptc = api.isPlotLocked(id);
 
-                if (ptc != null) {
+                if (ptc) {
                     event.setCancelled(true);
                 }
             }
@@ -425,9 +375,9 @@ public class BukkitPlotListener implements Listener {
             if (id == null) {
                 event.setCancelled(true);
             } else {
-                PlotToClear ptc = api.getPlotLocked(id);
+                boolean ptc = api.isPlotLocked(id);
 
-                if (ptc != null) {
+                if (ptc) {
                     event.setCancelled(true);
                 }
             }
@@ -475,9 +425,9 @@ public class BukkitPlotListener implements Listener {
                     event.getBlocks().remove(i);
                     i--;
                 } else {
-                    PlotToClear ptc = api.getPlotLocked(id);
+                    boolean ptc = api.isPlotLocked(id);
 
-                    if (ptc != null) {
+                    if (ptc) {
                         event.setCancelled(true);
                     }
                 }
@@ -498,9 +448,9 @@ public class BukkitPlotListener implements Listener {
                 if (id == null) {
                     event.setCancelled(true);
                 } else {
-                    PlotToClear ptc = api.getPlotLocked(id);
+                    boolean ptc = api.isPlotLocked(id);
 
-                    if (ptc != null) {
+                    if (ptc) {
                         event.setCancelled(true);
                     }
                 }
@@ -520,9 +470,9 @@ public class BukkitPlotListener implements Listener {
             if (id == null) {
                 event.setCancelled(true);
             } else {
-                PlotToClear ptc = api.getPlotLocked(id);
+                boolean ptc = api.isPlotLocked(id);
 
-                if (ptc != null) {
+                if (ptc) {
                     event.setCancelled(true);
                 }
             }
@@ -547,9 +497,9 @@ public class BukkitPlotListener implements Listener {
                 if (id == null) {
                     event.setCancelled(true);
                 } else {
-                    PlotToClear ptc = api.getPlotLocked(id);
+                    boolean ptc = api.isPlotLocked(id);
 
-                    if (ptc != null) {
+                    if (ptc) {
                         event.setCancelled(true);
                     } else {
                         Player player = null;
@@ -583,20 +533,10 @@ public class BukkitPlotListener implements Listener {
                     event.setCancelled(true);
                 }
             } else {
-                PlotToClear ptc = api.getPlotLocked(id);
+                boolean ptc = api.isPlotLocked(id);
 
-                if (ptc != null) {
-                    switch (ptc.getReason()) {
-                        case Clear:
-                            player.sendMessage(api.C("MsgPlotLockedClear"));
-                            break;
-                        case Reset:
-                            player.sendMessage(api.C("MsgPlotLockedReset"));
-                            break;
-                        case Expired:
-                            player.sendMessage(api.C("MsgPlotLockedExpired"));
-                            break;
-                    }
+                if (ptc) {
+                    player.sendMessage(api.C("PlotLocked"));
                     event.setCancelled(true);
                 } else {
                     Plot plot = manager.getPlotById(id);
@@ -612,6 +552,7 @@ public class BukkitPlotListener implements Listener {
                 }
             }
         }
+
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -631,19 +572,10 @@ public class BukkitPlotListener implements Listener {
                         event.setCancelled(true);
                     }
                 } else {
-                    PlotToClear ptc = api.getPlotLocked(id);
-                    if (ptc != null) {
-                        switch (ptc.getReason()) {
-                            case Clear:
-                                player.sendMessage(api.C("MsgPlotLockedClear"));
-                                break;
-                            case Reset:
-                                player.sendMessage(api.C("MsgPlotLockedReset"));
-                                break;
-                            case Expired:
-                                player.sendMessage(api.C("MsgPlotLockedExpired"));
-                                break;
-                        }
+                    boolean ptc = api.isPlotLocked(id);
+
+                    if (ptc) {
+                        player.sendMessage(api.C("PlotLocked"));
                         event.setCancelled(true);
                     } else {
                         Plot plot = manager.getPlotById(id);
@@ -716,9 +648,9 @@ public class BukkitPlotListener implements Listener {
         if (manager.isPlotWorld(entity.getLocation())) {
             PlotId id = manager.getPlotId(entity.getLocation());
             if (id != null) {
-                PlotToClear plotLocked = api.getPlotLocked(id);
+                boolean plotLocked = api.isPlotLocked(id);
 
-                if (plotLocked != null) {
+                if (plotLocked) {
                     event.setCancelled(true);
                 }
             }
