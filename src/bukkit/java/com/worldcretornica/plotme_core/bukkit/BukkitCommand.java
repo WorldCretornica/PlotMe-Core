@@ -29,6 +29,10 @@ public class BukkitCommand extends CommandExBase implements CommandExecutor {
                     e.printStackTrace();
                 }
             }
+            if (args[0] == null) {
+                api.getLogger().severe("A critical command error occurred.");
+                return false;
+            }
             PlotCommand _command = commandMap.get(args[0]);
             if (_command == null) {
                 sender.sendMessage("PlotMe does not have a command by that name.");

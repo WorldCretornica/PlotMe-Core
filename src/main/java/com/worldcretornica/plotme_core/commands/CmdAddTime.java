@@ -19,6 +19,9 @@ public class CmdAddTime extends PlotCommand {
     }
 
     public boolean execute(ICommandSender sender, String[] args) throws Exception{
+        if (args.length > 1) {
+            throw new BadUsageException(getUsage());
+        }
         IPlayer player = (IPlayer) sender;
         if (player.hasPermission(PermissionNames.ADMIN_ADDTIME)) {
             if (manager.isPlotWorld(player)) {
