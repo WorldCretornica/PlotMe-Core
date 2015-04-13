@@ -22,6 +22,9 @@ public class CmdDispose extends PlotCommand {
     }
 
     public boolean execute(ICommandSender sender, String[] args) throws Exception{
+        if (args.length > 1) {
+            throw new BadUsageException(getUsage());
+        }
         IPlayer player = (IPlayer) sender;
         if (player.hasPermission(PermissionNames.ADMIN_DISPOSE) || player.hasPermission(PermissionNames.USER_DISPOSE)) {
             IWorld world = player.getWorld();
@@ -46,7 +49,7 @@ public class CmdDispose extends PlotCommand {
                             InternalPlotDisposeEvent event = new InternalPlotDisposeEvent(world, plot, player);
 
                             if (manager.isEconomyEnabled(pmi)) {
-                                if (cost != 0 && serverBridge.getBalance(player) < cost) {
+                                if (serverBridge.has(player, cost)) {
                                     player.sendMessage(C("MsgNotEnoughDispose"));
                                     return true;
                                 }

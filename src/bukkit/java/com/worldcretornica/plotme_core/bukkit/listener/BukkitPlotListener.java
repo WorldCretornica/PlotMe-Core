@@ -730,31 +730,23 @@ public class BukkitPlotListener implements Listener {
 
     @Subscribe(order = Order.FIRST)
     public void onPlotCreateFirst(InternalPlotCreateEvent event) {
-        if (api.getConfig().getBoolean("AdvancedLogging")) {
             api.getLogger().info("First Plot Create Event");
-        }
     }
 
     @Subscribe(order = Order.EARLY)
     public void onPlotCreateEarly(InternalPlotCreateEvent event) {
-        if (api.getConfig().getBoolean("AdvancedLogging")) {
             api.getLogger().info("Early Plot Create Event");
-        }
     }
 
     @Subscribe(order = Order.LATE)
     public void onPlotWorldLoad(InternalPlotCreateEvent event) {
-        if (api.getConfig().getBoolean("AdvancedLogging")) {
             api.getLogger().info("Late Plot Create Event");
-        }
     }
 
     @Subscribe
     public void onPlotWorldLoad(InternalPlotWorldLoadEvent event) {
-        if (api.getConfig().getBoolean("AdvancedLogging")) {
             api.getLogger().info("Done loading " + event.getNbPlots() + " plots for world " + event
                     .getWorldName());
-        }
     }
 
     @EventHandler(ignoreCancelled = true)

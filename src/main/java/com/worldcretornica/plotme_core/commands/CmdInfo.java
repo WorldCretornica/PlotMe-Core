@@ -7,6 +7,7 @@ import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.utils.NameFetcher;
 
 import java.util.Collections;
 import java.util.List;
@@ -27,6 +28,9 @@ public class CmdInfo extends PlotCommand {
     }
 
     public boolean execute(ICommandSender sender, String[] args) throws Exception{
+        if (args.length > 1) {
+            throw new BadUsageException(getUsage());
+        }
         IPlayer player = (IPlayer) sender;
         if (player.hasPermission(PermissionNames.USER_INFO)) {
             IWorld world = player.getWorld();
@@ -89,7 +93,12 @@ public class CmdInfo extends PlotCommand {
                     }
 
                     if (plot.denied().size() > 0) {
-                        player.sendMessage(C("InfoDenied") + ": " + plot.getDenied());
+                        if (plot.denied().contains("*")) {
+                            player.sendMessage(C("InfoDenied") + ": " + plot.denied().toString());
+                        }
+
+                        NameFetcher nameFetcher = new NameFetcher(plot.getDenied());
+                        player.sendMessage(C("InfoDenied") + ": " + nameFetcher.call().toString());
                     }
 
                     if (manager.isEconomyEnabled(world)) {

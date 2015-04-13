@@ -8,7 +8,6 @@ import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.storage.Database;
 import com.worldcretornica.plotme_core.storage.MySQLConnector;
 import com.worldcretornica.plotme_core.storage.SQLiteConnector;
-import net.milkbowl.vault.economy.Economy;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -208,7 +207,7 @@ public class PlotMe_Core {
         if (plotsToClear.isEmpty()) {
             return false;
         }
-        for (PlotToClear ptc : plotsToClear.toArray(new PlotToClear[plotsToClear.size()])) {
+        for (PlotToClear ptc : plotsToClear) {
             if (ptc.getPlotId().equals(id)) {
                 return true;
             }
@@ -231,34 +230,6 @@ public class PlotMe_Core {
 
     public YamlConfiguration getConfig() {
         return configFile.getConfig();
-    }
-
-    public String moneyFormat(double price, boolean showSign) {
-        if (price == 0) {
-            return "";
-        }
-
-        String format = String.valueOf(Math.round(Math.abs(price)));
-
-        Economy economy = getServerBridge().getEconomy();
-
-        if (economy != null) {
-            if (price <= 1.0 && price >= -1.0) {
-                format = format + " " + economy.currencyNameSingular();
-            } else {
-                format = format + " " + economy.currencyNamePlural();
-            }
-        }
-
-        if (showSign) {
-            if (price > 0.0) {
-                return ("+" + format);
-            } else {
-                return ("-" + format);
-            }
-        } else {
-            return format;
-        }
     }
 
     public EventBus getEventBus() {

@@ -54,11 +54,9 @@ public class CmdBiome extends PlotCommand {
 
                             if (manager.isEconomyEnabled(pmi)) {
                                 price = pmi.getBiomeChangePrice();
-                                double balance = serverBridge.getBalance(player);
 
-                                if (balance < price) {
-                                    player.sendMessage(C("MsgNotEnoughBiome") + " " + C("WordMissing") + " " + plugin
-                                            .moneyFormat(price - balance, false));
+                                if (serverBridge.has(player, price)) {
+                                    player.sendMessage("It costs " + serverBridge.getEconomy().format(price) + " to change the biome.");
                                     return true;
                                 } else if (!event.isCancelled()) {
                                     EconomyResponse er = serverBridge.withdrawPlayer(player, price);
@@ -77,7 +75,7 @@ public class CmdBiome extends PlotCommand {
                                 plot.setBiome(biomeName);
                                 manager.setBiome(id, biomeName.toUpperCase());
 
-                                player.sendMessage(C("MsgBiomeSet") + " " + biomeName + " " + plugin.moneyFormat(-price, true));
+                                player.sendMessage(C("MsgBiomeSet") + " " + biomeName + " " + serverBridge.getEconomy().format(price));
 
                                 if (isAdvancedLogging()) {
                                     if (price == 0) {

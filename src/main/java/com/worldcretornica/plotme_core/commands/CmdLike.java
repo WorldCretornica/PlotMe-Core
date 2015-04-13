@@ -14,6 +14,9 @@ public class CmdLike extends PlotCommand {
     }
 
     public boolean execute(ICommandSender sender, String[] args) throws Exception{
+        if (args.length > 1) {
+            throw new BadUsageException(getUsage());
+        }
         return true;
     }
 

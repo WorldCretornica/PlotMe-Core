@@ -18,6 +18,10 @@ public class CmdWEAnywhere extends PlotCommand {
     }
 
     public boolean execute(ICommandSender sender, String[] args) throws Exception{
+        if (args.length > 1) {
+            throw new BadUsageException(getUsage());
+        }
+
         IPlayer player = (IPlayer) sender;
         if (player.hasPermission(PermissionNames.ADMIN_WEANYWHERE) && plugin.getServerBridge().isUsingWEdit()) {
             String name = player.getName();

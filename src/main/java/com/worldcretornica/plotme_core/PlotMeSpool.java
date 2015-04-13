@@ -51,7 +51,7 @@ public class PlotMeSpool implements Runnable {
         this.taskId = taskId;
     }
 
-    public PlotToClear getPlotToClear() {
+    private PlotToClear getPlotToClear() {
         return plotToClear;
     }
 }

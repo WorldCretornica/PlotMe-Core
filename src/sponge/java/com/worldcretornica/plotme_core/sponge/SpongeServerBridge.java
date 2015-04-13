@@ -111,7 +111,7 @@ public class SpongeServerBridge extends IServerBridge {
     }
 
     @Override
-    public double getBalance(IPlayer player) {
+    public boolean has(IPlayer player, double price) {
         // TODO Auto-generated method stub
         return 0;
     }

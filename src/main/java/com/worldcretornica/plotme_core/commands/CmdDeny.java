@@ -60,8 +60,7 @@ public class CmdDeny extends PlotCommand {
 
                             if (manager.isEconomyEnabled(pmi)) {
                                 price = pmi.getDenyPlayerPrice();
-                                double balance = serverBridge.getBalance(player);
-                                if (balance >= price) {
+                                if (serverBridge.has(player, price)) {
                                     serverBridge.getEventBus().post(event);
                                     if (event.isCancelled()) {
                                         return true;
@@ -74,8 +73,8 @@ public class CmdDeny extends PlotCommand {
                                         return true;
                                     }
                                 } else {
-                                    player.sendMessage(C("MsgNotEnoughDeny") + " " + C("WordMissing") + " " + plugin.moneyFormat(price -
-                                            balance, false));
+                                    player.sendMessage(
+                                            C("MsgNotEnoughDeny") + " " + C("WordMissing") + " " + serverBridge.getEconomy().format(price));
                                     return true;
                                 }
                             } else {
@@ -107,7 +106,7 @@ public class CmdDeny extends PlotCommand {
                                 }
 
                                 player.sendMessage(
-                                        C("WordPlayer") + " " + denied + " " + C("MsgNowDenied") + " " + plugin.moneyFormat(-price, true));
+                                        C("WordPlayer") + " " + denied + " " + C("MsgNowDenied") + " " + serverBridge.getEconomy().format(price));
 
                                 if (isAdvancedLogging()) {
                                     if (price == 0) {

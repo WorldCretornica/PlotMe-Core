@@ -194,8 +194,8 @@ public class BukkitServerBridge extends IServerBridge {
     }
 
     @Override
-    public double getBalance(IPlayer player) {
-        return getEconomy().getBalance(((BukkitOfflinePlayer) player).getOfflinePlayer());
+    public boolean has(IPlayer player, double price) {
+        return getEconomy().has(((BukkitOfflinePlayer) player).getOfflinePlayer(), price);
     }
 
     @Override

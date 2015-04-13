@@ -22,6 +22,9 @@ public class CmdBuy extends PlotCommand {
     }
 
     public boolean execute(ICommandSender sender, String[] args) throws Exception{
+        if (args.length > 1) {
+            throw new BadUsageException(getUsage());
+        }
         IPlayer player = (IPlayer) sender;
         IWorld world = player.getWorld();
         if (manager.isPlotWorld(world)) {
@@ -52,7 +55,7 @@ public class CmdBuy extends PlotCommand {
                                 } else {
                                     double cost = plot.getPrice();
 
-                                    if (serverBridge.getBalance(player) < cost) {
+                                    if (serverBridge.has(player, cost)) {
                                         player.sendMessage(C("MsgNotEnoughBuy"));
                                     } else {
                                         InternalPlotBuyEvent event = new InternalPlotBuyEvent(world, plot, player, cost);
@@ -73,7 +76,8 @@ public class CmdBuy extends PlotCommand {
                                                         for (IPlayer onlinePlayers : serverBridge.getOnlinePlayers()) {
                                                             if (onlinePlayers.getName().equalsIgnoreCase(oldOwner)) {
                                                                 onlinePlayers.sendMessage(C("WordPlot") + " " + id + " "
-                                                                        + C("MsgSoldTo") + " " + buyer + ". " + plugin.moneyFormat(cost, true));
+                                                                        + C("MsgSoldTo") + " " + buyer + ". " + serverBridge.getEconomy().format
+                                                                        (cost));
                                                                 break;
                                                             }
                                                         }
@@ -97,7 +101,7 @@ public class CmdBuy extends PlotCommand {
                                                 manager.removeSellSign(id);
                                                 manager.setOwnerSign(plot);
 
-                                                player.sendMessage(C("MsgPlotBought") + " " + plugin.moneyFormat(-cost, true));
+                                                player.sendMessage(C("MsgPlotBought") + " " + serverBridge.getEconomy().format(cost));
 
                                                 if (isAdvancedLogging()) {
                                                     plugin.getLogger()

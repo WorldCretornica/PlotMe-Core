@@ -65,9 +65,10 @@ public abstract class IServerBridge {
      * Gets balance of a player
      *
      * @param player of the player
+     * @param price
      * @return Amount currently held in players account
      */
-    public abstract double getBalance(IPlayer player);
+    public abstract boolean has(IPlayer player, double price);
 
     public abstract EconomyResponse withdrawPlayer(IPlayer player, double price);
 

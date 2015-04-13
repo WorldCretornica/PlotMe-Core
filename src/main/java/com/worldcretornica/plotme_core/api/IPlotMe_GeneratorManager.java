@@ -41,7 +41,7 @@ public interface IPlotMe_GeneratorManager {
 
     void adjustPlotFor(PlotId id, boolean claimed, boolean protect, boolean forSale);
 
-    boolean isBlockInPlot(PlotId id, ILocation blockLocation);
+    boolean isBlockInPlot(PlotId id, Vector location);
 
     boolean movePlot(PlotId idFrom, PlotId idTo);
 

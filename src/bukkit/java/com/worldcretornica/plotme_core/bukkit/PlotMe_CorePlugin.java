@@ -1,6 +1,5 @@
 package com.worldcretornica.plotme_core.bukkit;
 
-import com.worldcretornica.configuration.ConfigAccessor;
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IEntity;
@@ -25,8 +24,6 @@ public class PlotMe_CorePlugin extends JavaPlugin {
     private final HashMap<UUID, BukkitPlayer> bukkitPlayerMap = new HashMap<>();
     private PlotMe_Core plotme;
     private IServerBridge serverObjectBuilder;
-    private ConfigAccessor configFile;
-    private ConfigAccessor captionFile;
 
     @Override
     public void onDisable() {
@@ -41,9 +38,6 @@ public class PlotMe_CorePlugin extends JavaPlugin {
             getPluginLoader().disablePlugin(this);
             return;
         }
-        configFile = new ConfigAccessor(getDataFolder(), "config.yml");
-        captionFile = new ConfigAccessor(getDataFolder(), "captions.yml");
-
         plotme = new PlotMe_Core(serverObjectBuilder, new SchematicUtil(this), getDataFolder());
         getAPI().enable();
         doMetric();

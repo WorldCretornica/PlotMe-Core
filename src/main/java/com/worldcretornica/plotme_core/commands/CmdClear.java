@@ -23,6 +23,9 @@ public class CmdClear extends PlotCommand {
     }
 
     public boolean execute(ICommandSender sender, String[] args) throws Exception{
+        if (args.length > 1) {
+            throw new BadUsageException(getUsage());
+        }
         IPlayer player = (IPlayer) sender;
         if (player.hasPermission(PermissionNames.ADMIN_CLEAR) || player.hasPermission(PermissionNames.USER_CLEAR)) {
             IWorld world = player.getWorld();
@@ -48,9 +51,8 @@ public class CmdClear extends PlotCommand {
 
                             if (manager.isEconomyEnabled(pmi)) {
                                 price = pmi.getClearPrice();
-                                double balance = serverBridge.getBalance(player);
 
-                                if (balance >= price) {
+                                if (serverBridge.has(player, price)) {
                                     serverBridge.getEventBus().post(event);
                                     if (event.isCancelled()) {
                                         return true;
@@ -65,8 +67,7 @@ public class CmdClear extends PlotCommand {
                                     }
                                 } else {
                                     player.sendMessage(
-                                            C("MsgNotEnoughClear") + " " + C("WordMissing") + " " + (price - balance) + " " + serverBridge
-                                                    .getEconomy().currencyNamePlural());
+                                            C("MsgNotEnoughClear") + " " + C("WordMissing") + " " + serverBridge.getEconomy().format(price));
                                     return true;
                                 }
                             } else {

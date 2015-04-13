@@ -23,10 +23,9 @@ public class PlotMeCoreManager {
     private static final PlotMeCoreManager INSTANCE = new PlotMeCoreManager();
     private final HashMap<String, PlotMapInfo> plotmaps;
     private PlotMe_Core plugin;
-    private HashSet<UUID> playersignoringwelimit;
+    private HashSet<UUID> playersignoringwelimit = new HashSet<>();
 
     private PlotMeCoreManager() {
-        setPlayersIgnoringWELimit(new HashSet<UUID>());
         plotmaps = new HashMap<>();
     }
 
@@ -241,7 +240,7 @@ public class PlotMeCoreManager {
         if (!plugin.getConfig().getBoolean("globalUseEconomy") || plugin.getServerBridge().getEconomy() == null) {
             return false;
         }
-        return pmi != null && pmi.canUseEconomy();
+        return pmi.canUseEconomy();
     }
 
     /**
@@ -388,7 +387,11 @@ public class PlotMeCoreManager {
      * @return plot
      */
     public Plot getPlotById(PlotId id, PlotMapInfo pmi) {
-        return pmi.getPlot(id);
+        if (pmi != null) {
+            return pmi.getPlot(id);
+        } else {
+            return null;
+        }
     }
 
     /**

@@ -43,7 +43,7 @@ public class ILocation {
         return pos.getX();
     }
 
-    void setX(double x) {
+    public void setX(double x) {
         pos.setX(x);
     }
 
@@ -63,7 +63,7 @@ public class ILocation {
         return pos.getZ();
     }
 
-    void setZ(double z) {
+    public void setZ(double z) {
         pos.setZ(z);
     }
 

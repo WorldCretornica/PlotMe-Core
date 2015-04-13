@@ -57,7 +57,7 @@ public class CmdRemove extends PlotCommand {
                             if (manager.isEconomyEnabled(pmi) && !event.isCancelled()) {
                                 price = pmi.getRemovePlayerPrice();
 
-                                if (serverBridge.getBalance(player) >= price) {
+                                if (serverBridge.has(player, price)) {
                                     EconomyResponse er = serverBridge.withdrawPlayer(player, price);
 
                                     if (!er.transactionSuccess()) {
@@ -66,8 +66,8 @@ public class CmdRemove extends PlotCommand {
                                         return true;
                                     }
                                 } else {
-                                    player.sendMessage(C("MsgNotEnoughRemove") + " " + C("WordMissing") + " " + plugin.moneyFormat(price -
-                                            serverBridge.getBalance(player), false));
+                                    player.sendMessage(C("MsgNotEnoughRemove") + " " + C("WordMissing") + " " + serverBridge.getEconomy().format(
+                                            price));
                                     return true;
                                 }
                             }
@@ -76,7 +76,7 @@ public class CmdRemove extends PlotCommand {
                                 plot.removeAllowed(allowed);
 
                                 player.sendMessage(
-                                        C("WordPlayer") + " " + allowed + " " + C("WordRemoved") + ". " + plugin.moneyFormat(-price, true));
+                                        C("WordPlayer") + " " + allowed + " " + C("WordRemoved") + ". " + serverBridge.getEconomy().format(price));
 
                                 if (isAdvancedLogging()) {
                                     if (price == 0) {

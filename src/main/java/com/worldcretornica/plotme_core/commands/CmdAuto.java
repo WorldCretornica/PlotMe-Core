@@ -72,11 +72,9 @@ public class CmdAuto extends PlotCommand {
                             serverBridge.getEventBus().post(event);
                             if (manager.isEconomyEnabled(pmi)) {
                                 price = pmi.getClaimPrice();
-                                double balance = serverBridge.getBalance(player);
 
-                                if (balance < price) {
-                                    player.sendMessage(C("MsgNotEnoughAuto") + " " + C("WordMissing") + " " + plugin
-                                            .moneyFormat(price - balance, false));
+                                if (serverBridge.has(player, price)) {
+                                    player.sendMessage("It costs " + serverBridge.getEconomy().format(price) + " to use the auto command.");
                                     return true;
                                 } else {
 

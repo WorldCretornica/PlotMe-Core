@@ -9,10 +9,12 @@ import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.InternalPlotAddAllowedEvent;
+import com.worldcretornica.plotme_core.utils.UUIDFetcher;
 import net.milkbowl.vault.economy.EconomyResponse;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 public class CmdAdd extends PlotCommand {
 
@@ -31,10 +33,12 @@ public class CmdAdd extends PlotCommand {
         if (args[1].length() > 16 || !validUserPattern.matcher(args[1]).matches()) {
             throw new IllegalArgumentException(C("InvalidCommandInput"));
         }
+
+        //Start of the actual command
         IPlayer player = (IPlayer) sender;
         if (player.hasPermission(PermissionNames.ADMIN_ADD) || player.hasPermission(PermissionNames.USER_ADD)) {
             IWorld world = player.getWorld();
-            if (manager.isPlotWorld(world)) {
+            if (manager.isPlotWorld(player)) {
                 PlotId id = manager.getPlotId(player);
                 if (id == null) {
                     player.sendMessage(C("MsgNoPlotFound"));
@@ -48,6 +52,7 @@ public class CmdAdd extends PlotCommand {
                         return true;
                     }
                     String allowed = args[1];
+                    UUID fetchAllowedID = UUIDFetcher.getUUIDOf(allowed);
                     if (player.getUniqueId().equals(plot.getOwnerId()) || player.hasPermission(PermissionNames.ADMIN_ADD)) {
                         if (plot.isAllowedConsulting(allowed)) {
                             player.sendMessage(C("WordPlayer") + " " + allowed + " " + C("MsgAlreadyAllowed"));
@@ -57,12 +62,10 @@ public class CmdAdd extends PlotCommand {
                             double price = 0.0;
                             if (manager.isEconomyEnabled(pmi)) {
                                 price = pmi.getAddPlayerPrice();
-                                double balance = serverBridge.getBalance(player);
 
-                                if (balance < pmi.getAddPlayerPrice()) {
-                                    player.sendMessage(
-                                            C("MsgNotEnoughAdd") + " " + C("WordMissing") + " " + plugin
-                                                    .moneyFormat(price - balance, false));
+                                if (serverBridge.has(player, pmi.getAddPlayerPrice())) {
+                                    player.sendMessage("It costs " + serverBridge.getEconomy().format(price) + " to add a player to "
+                                            + "the plot.");
                                     return true;
                                 } else if (!event.isCancelled()) {
                                     EconomyResponse er = serverBridge.withdrawPlayer(player, price);

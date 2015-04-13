@@ -8,7 +8,6 @@ import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.bukkit.PlotMe_CorePlugin;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitConverter;
-import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -46,7 +45,7 @@ public class BukkitPlotDenyListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerJoin(PlayerJoinEvent event) {
-        BukkitPlayer player = (BukkitPlayer) plugin.wrapPlayer(event.getPlayer());
+        IPlayer player = plugin.wrapPlayer(event.getPlayer());
 
         if (manager.isPlotWorld(player) && !player.hasPermission(PermissionNames.ADMIN_BYPASSDENY)) {
             PlotId id = manager.getPlotId(player);

@@ -9,8 +9,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -24,6 +26,13 @@ public class NameFetcher implements Callable<Map<UUID, String>> {
 
     public NameFetcher(List<UUID> uuids) {
         this.uuids = ImmutableList.copyOf(uuids);
+    }
+
+    public NameFetcher(HashSet<String> denied) {
+        uuids = new ArrayList<>();
+        for (String uuid : denied) {
+            uuids.add(UUID.fromString(uuid));
+        }
     }
 
     public static String getNameOf(String name) {

@@ -67,9 +67,8 @@ public class CmdClaim extends PlotCommand {
 
                     if (manager.isEconomyEnabled(pmi)) {
                         price = pmi.getClaimPrice();
-                        double balance = serverBridge.getBalance(player);
 
-                        if (balance >= price) {
+                        if (serverBridge.has(player, price)) {
                             serverBridge.getEventBus().post(event);
                             if (event.isCancelled()) {
                                 return true;
@@ -83,8 +82,7 @@ public class CmdClaim extends PlotCommand {
                             }
                         } else {
                             player.sendMessage(
-                                    C("MsgNotEnoughBuy") + " " + C("WordMissing") + " " + (price - balance) + " " + serverBridge.getEconomy()
-                                            .currencyNamePlural());
+                                    C("MsgNotEnoughBuy") + " " + C("WordMissing") + " " + serverBridge.getEconomy().format(price));
                             return true;
                         }
                     } else {
@@ -97,11 +95,11 @@ public class CmdClaim extends PlotCommand {
                         //plugin.getPlotMeCoreManager().adjustLinkedPlots(id, world);
                         if (playerName.equalsIgnoreCase(player.getName())) {
                             player.sendMessage(
-                                    C("MsgThisPlotYours") + " " + C("WordUse") + " /plotme home " + C("MsgToGetToIt") + " " + plugin.moneyFormat
-                                            (-price, true));
+                                    C("MsgThisPlotYours") + " " + C("WordUse") + " /plotme home " + C("MsgToGetToIt") + " " + serverBridge
+                                            .getEconomy().format(price));
                         } else {
                             player.sendMessage(C("MsgThisPlotIsNow") + " " + playerName + C("WordPossessive") + ". " + C("WordUse")
-                                    + " /plotme home " + C("MsgToGetToIt") + " " + plugin.moneyFormat(-price, true));
+                                    + " /plotme home " + C("MsgToGetToIt") + " " + serverBridge.getEconomy().format(price));
                         }
 
                         if (isAdvancedLogging()) {

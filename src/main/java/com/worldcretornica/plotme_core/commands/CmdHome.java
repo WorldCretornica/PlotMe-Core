@@ -96,9 +96,8 @@ public class CmdHome extends PlotCommand {
 
                                     if (manager.isEconomyEnabled(pmi)) {
                                         price = pmi.getPlotHomePrice();
-                                        double balance = serverBridge.getBalance(player);
 
-                                        if (balance >= price) {
+                                        if (serverBridge.has(player, price)) {
                                             serverBridge.getEventBus().post(event);
 
                                             if (event.isCancelled()) {
@@ -111,8 +110,8 @@ public class CmdHome extends PlotCommand {
                                                 return true;
                                             }
                                         } else {
-                                            player.sendMessage(C("MsgNotEnoughTp") + " " + C("WordMissing") + " " + plugin.moneyFormat(price -
-                                                    balance, false));
+                                            player.sendMessage(
+                                                    C("MsgNotEnoughTp") + " " + C("WordMissing") + " " + serverBridge.getEconomy().format(price));
                                             return true;
                                         }
                                     } else {
@@ -123,7 +122,7 @@ public class CmdHome extends PlotCommand {
                                         player.setLocation(event.getHomeLocation());
 
                                         if (price != 0) {
-                                            player.sendMessage(plugin.moneyFormat(-price, true));
+                                            player.sendMessage(serverBridge.getEconomy().format(price));
                                         }
                                     }
                                     return true;
@@ -140,9 +139,8 @@ public class CmdHome extends PlotCommand {
 
                                 if (manager.isEconomyEnabled(pmi)) {
                                     price = pmi.getPlotHomePrice();
-                                    double balance = serverBridge.getBalance(player);
 
-                                    if (balance >= price) {
+                                    if (serverBridge.has(player, price)) {
                                         serverBridge.getEventBus().post(event);
 
                                         if (!event.isCancelled()) {
@@ -154,8 +152,8 @@ public class CmdHome extends PlotCommand {
                                             }
                                         }
                                     } else {
-                                        player.sendMessage(C("MsgNotEnoughTp") + " " + C("WordMissing") + " " + plugin.moneyFormat(price - balance,
-                                                false));
+                                        player.sendMessage(
+                                                C("MsgNotEnoughTp") + " " + C("WordMissing") + " " + serverBridge.getEconomy().format(price));
                                         return true;
                                     }
                                 } else {
@@ -166,7 +164,7 @@ public class CmdHome extends PlotCommand {
                                     player.setLocation(event.getHomeLocation());
 
                                     if (price != 0) {
-                                        player.sendMessage(plugin.moneyFormat(-price, true));
+                                        player.sendMessage(serverBridge.getEconomy().format(price));
                                     }
                                 }
                                 return true;

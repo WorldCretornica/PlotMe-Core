@@ -13,8 +13,10 @@ public class CmdReload extends PlotCommand {
         return "reload";
     }
 
-    public boolean execute(ICommandSender sender, String[] args) throws Exception{
-
+    public boolean execute(ICommandSender sender, String[] args) throws Exception {
+        if (args.length > 1) {
+            throw new BadUsageException(getUsage());
+        }
         if (sender.hasPermission("plotme.admin.reload")) {
             plugin.reload();
             sender.sendMessage(C("MsgReloadedSuccess"));
@@ -26,6 +28,6 @@ public class CmdReload extends PlotCommand {
 
     @Override
     public String getUsage() {
-        return C("WordUsage") + ": /plotme reload";
+        return C("CmdRemoveUsage");
     }
 }

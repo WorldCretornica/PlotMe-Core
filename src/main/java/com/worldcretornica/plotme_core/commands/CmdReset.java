@@ -23,6 +23,9 @@ public class CmdReset extends PlotCommand {
     }
 
     public boolean execute(ICommandSender sender, String[] args) throws Exception{
+        if (args.length > 1) {
+            throw new BadUsageException(getUsage());
+        }
         IPlayer player = (IPlayer) sender;
         if (player.hasPermission(PermissionNames.ADMIN_RESET) || player.hasPermission("PlotMe.use.reset")) {
             IWorld world = player.getWorld();
@@ -55,8 +58,7 @@ public class CmdReset extends PlotCommand {
 
                             if (er.transactionSuccess()) {
                                 playerOwner.sendMessage(
-                                        C("WordPlot") + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner() + " " + C("MsgWasReset")
-                                                + " " + plugin.moneyFormat(pmi.getClaimPrice(), true));
+                                        C("WordPlot") + " " + id + " " + C("MsgOwnedBy") + " " + plot.getOwner() + " " + C("MsgWasReset"));
                             } else {
                                 player.sendMessage(er.errorMessage);
                                 serverBridge.getLogger().warning(er.errorMessage);

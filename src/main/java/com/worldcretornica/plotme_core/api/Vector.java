@@ -9,11 +9,11 @@ public class Vector implements Comparable<Vector> {
     private double y;
     private double z;
 
-    Vector() {
+    public Vector() {
         this(0, 0, 0);
     }
 
-    Vector(int x, int y, int z) {
+    public Vector(int x, int y, int z) {
         this((double) x, (double) y, (double) z);
     }
 

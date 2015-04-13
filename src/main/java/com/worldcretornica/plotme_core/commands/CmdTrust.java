@@ -54,15 +54,11 @@ public class CmdTrust extends PlotCommand {
                             serverBridge.getEventBus().post(event);
 
                             serverBridge.getEventBus().post(event);
-                            double advancedPrice = 0.0;
                             if (manager.isEconomyEnabled(pmi)) {
                                 double price = pmi.getAddPlayerPrice();
-                                advancedPrice = price;
-                                double balance = serverBridge.getBalance(player);
 
-                                if (balance < price) {
-                                    player.sendMessage(C("MsgNotEnoughAdd") + " " + C("WordMissing") + " " + plugin.moneyFormat(price - balance,
-                                            false));
+                                if (serverBridge.has(player, price)) {
+                                    player.sendMessage(C("MsgNotEnoughAdd") + " " + C("WordMissing") + " " + serverBridge.getEconomy().format(price));
                                     return true;
                                 } else if (!event.isCancelled()) {
                                     EconomyResponse er = serverBridge.withdrawPlayer(player, price);

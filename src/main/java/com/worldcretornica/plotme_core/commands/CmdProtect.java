@@ -22,6 +22,9 @@ public class CmdProtect extends PlotCommand {
     }
 
     public boolean execute(ICommandSender sender, String[] args) throws Exception{
+        if (args.length > 1) {
+            throw new BadUsageException(getUsage());
+        }
         IPlayer player = (IPlayer) sender;
         if (player.hasPermission(PermissionNames.ADMIN_PROTECT) || player.hasPermission(PermissionNames.USER_PROTECT)) {
             IWorld world = player.getWorld();
@@ -61,7 +64,7 @@ public class CmdProtect extends PlotCommand {
                             double cost = pmi.getProtectPrice();
 
                             if (manager.isEconomyEnabled(pmi)) {
-                                if (serverBridge.getBalance(player) < cost) {
+                                if (serverBridge.has(player, cost)) {
                                     player.sendMessage(C("MsgNotEnoughProtectPlot"));
                                     return true;
                                 } else {
@@ -91,8 +94,7 @@ public class CmdProtect extends PlotCommand {
 
                                 plot.updateField("protected", true);
 
-                                double price = -cost;
-                                player.sendMessage(C("MsgPlotNowProtected") + " " + plugin.moneyFormat(price, true));
+                                player.sendMessage(C("MsgPlotNowProtected") + " " + serverBridge.getEconomy().format(cost));
 
                                 if (isAdvancedLogging()) {
                                     serverBridge.getLogger().info(name + " " + C("MsgProtectedPlot") + " " + id);

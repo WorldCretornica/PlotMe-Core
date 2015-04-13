@@ -5,9 +5,8 @@ import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IWorld;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
 
 public class InternalPlotEvent implements Event {
 
@@ -95,11 +94,11 @@ public class InternalPlotEvent implements Event {
      *
      * @return list of people denied
      */
-    public List<String> getAllDenied() {
+    public HashSet<String> getAllDenied() {
         if (getPlot() != null) {
-            return getPlot().denied().getAllPlayers();
+            return getPlot().denied();
         } else {
-            return new ArrayList<>();
+            return new HashSet<>();
         }
     }
 

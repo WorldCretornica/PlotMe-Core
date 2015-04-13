@@ -11,7 +11,6 @@ public class InternalPlotMoveEvent extends InternalPlotEvent implements ICancell
 
     private final PlotId fromId;
     private final PlotId toId;
-    private final IWorld world;
     private final IPlayer mover;
     private boolean canceled;
 
@@ -19,7 +18,6 @@ public class InternalPlotMoveEvent extends InternalPlotEvent implements ICancell
         super(null, world);
         this.fromId = fromId;
         this.toId = toId;
-        this.world = world;
         this.mover = mover;
     }
 

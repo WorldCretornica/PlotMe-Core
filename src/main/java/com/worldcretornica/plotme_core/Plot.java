@@ -8,7 +8,7 @@ import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.UUID;
 
@@ -17,7 +17,7 @@ public class Plot {
     //TODO look into removing reference to plugin
 
     private final PlotMe_Core plugin;
-    private final PlayerList denied;
+    private final HashSet<String> denied;
     private HashMap<String, Integer> allowed;
     private String owner;
     private UUID ownerId = UUID.randomUUID();
@@ -46,7 +46,7 @@ public class Plot {
         setProtected(false);
         setPlotName(null);
         setLikes(0);
-        this.denied = new PlayerList();
+        this.denied = new HashSet<>();
     }
 
     public Plot(PlotMe_Core plugin, String owner, UUID uuid, IWorld world, PlotId plotId, int days) {
@@ -55,7 +55,7 @@ public class Plot {
         setOwnerId(uuid);
         setWorld(world.getName().toLowerCase());
         allowed = new HashMap<>();
-        denied = new PlayerList();
+        denied = new HashSet<>();
         setBiome("PLAINS");
         setId(plotId);
 
@@ -77,7 +77,7 @@ public class Plot {
 
     public Plot(PlotMe_Core plugin, int internalID, String owner, UUID ownerId, String world, String biome, Date expiredDate,
             HashMap<String, Integer> allowed,
-            PlayerList
+            HashSet<String>
                     denied,
             PlotId id, double price, boolean forSale, boolean finished,
             String finishedDate, boolean protect,
@@ -104,9 +104,9 @@ public class Plot {
 
     public Plot(PlotMe_Core plugin, int internalID, String owner, UUID ownerId, String world, String biome, Date expiredDate,
             HashMap<String, Integer> allowed,
-            PlayerList
+            HashSet<String>
                     denied,
-            PlayerList likers, PlotId id, double price, boolean forSale, boolean finished, String finishedDate, boolean protect,
+            HashSet<String> likers, PlotId id, double price, boolean forSale, boolean finished, String finishedDate, boolean protect,
             Map<String, Map<String, String>> metadata, int plotLikes, String plotName) {
         this.plugin = plugin;
         setInternalID(internalID);
@@ -184,8 +184,8 @@ public class Plot {
         ownerId = uuid;
     }
 
-    public String getDenied() {
-        return denied().getPlayerList();
+    public HashSet<String> getDenied() {
+        return denied();
     }
 
     public void addAllowed(String name) {
@@ -197,7 +197,7 @@ public class Plot {
 
     public void addDenied(String name) {
         if (!isDeniedConsulting(name)) {
-            denied().put(name);
+            denied().add(name);
             plugin.getSqlManager().addPlotDenied(name, getInternalID());
         }
     }
@@ -240,16 +240,16 @@ public class Plot {
         if (allowed().containsKey(name)) {
             Integer accessLevel = allowed().get(name);
             if (accessLevel != null) {
-                if (accessLevel == 0) {
+                if (accessLevel == AccessLevel.ALLOWED.getLevel()) {
                     return true;
-                } else if (!"*".equalsIgnoreCase(name) && accessLevel == 1) {
+                } else if (!"*".equalsIgnoreCase(name) && accessLevel == AccessLevel.TRUSTED.getLevel()) {
                     return plugin.getServerBridge().getPlayer(UUIDFetcher.getUUIDOf(name)).isOnline();
                 }
             }
         } else if (allowed().containsKey("*")) {
             Integer accessLevel = allowed().get("*");
             if (accessLevel != null) {
-                if (accessLevel == 0) {
+                if (accessLevel == AccessLevel.ALLOWED.getLevel()) {
                     return true;
                 }
             }
@@ -269,7 +269,7 @@ public class Plot {
     }
 
     public boolean isDeniedInternal(String name) {
-        List<String> list = denied().getAllPlayers();
+        HashSet<String> list = denied();
         return !isAllowedInternal(name) && (list.contains("*") || list.contains(name));
     }
 
@@ -277,7 +277,7 @@ public class Plot {
         return allowed;
     }
 
-    public PlayerList denied() {
+    public HashSet<String> denied() {
         return denied;
     }
 
@@ -392,5 +392,20 @@ public class Plot {
 
     public void setPlotName(String plotName) {
         this.plotName = plotName;
+    }
+
+    enum AccessLevel {
+        ALLOWED(0),
+        TRUSTED(1);
+
+        private final int level;
+
+        AccessLevel(int accessLevel) {
+            level = accessLevel;
+        }
+
+        public int getLevel() {
+            return level;
+        }
     }
 }

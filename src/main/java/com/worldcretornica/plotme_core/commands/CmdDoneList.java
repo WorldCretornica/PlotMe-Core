@@ -6,7 +6,7 @@ import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 
-import java.util.List;
+import java.util.HashSet;
 
 public class CmdDoneList extends PlotCommand {
 
@@ -37,7 +37,7 @@ public class CmdDoneList extends PlotCommand {
                     page = maxPage;
                 }
 
-                List<Plot> donePlots = plugin.getSqlManager().getFinishedPlots(player.getWorld().getName(), page, 8);
+                HashSet<Plot> donePlots = plugin.getSqlManager().getFinishedPlots(player.getWorld().getName(), page, 8);
 
                 if (donePlots.isEmpty()) {
                     player.sendMessage(C("MsgNoPlotsFinished"));
