@@ -1,10 +1,10 @@
 package com.worldcretornica.plotme_core;
 
-import com.google.common.eventbus.EventBus;
 import com.worldcretornica.configuration.ConfigAccessor;
 import com.worldcretornica.plotme_core.api.IPlotMe_GeneratorManager;
 import com.worldcretornica.plotme_core.api.IServerBridge;
 import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.api.event.eventbus.EventBus;
 import com.worldcretornica.plotme_core.storage.Database;
 import com.worldcretornica.plotme_core.storage.MySQLConnector;
 import com.worldcretornica.plotme_core.storage.SQLiteConnector;
@@ -58,7 +58,7 @@ public class PlotMe_Core {
     }
 
     public void enable() {
-        EventBus plotmeEventBus = new EventBus("PlotMe"); //todo work on new event system
+        EventBus plotmeEventBus = new EventBus();
         setEventBus(plotmeEventBus);
         PlotMeCoreManager.getInstance().setPlugin(this);
         configFile = new ConfigAccessor(pluginFolder, "config.yml");

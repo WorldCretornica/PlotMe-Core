@@ -17,7 +17,6 @@ import com.worldcretornica.plotme_core.api.IPlayer;
 
 public class PlotMeWorldEdit extends AbstractDelegateExtent {
 
-    private final PlotMe_CorePlugin plugin;
     private final Extent extent;
     private final Actor actor;
     private final PlotMeCoreManager manager = PlotMeCoreManager.getInstance();
@@ -25,7 +24,6 @@ public class PlotMeWorldEdit extends AbstractDelegateExtent {
 
     public PlotMeWorldEdit(PlotMe_CorePlugin plugin, Extent extent, Actor actor) {
         super(extent);
-        this.plugin = plugin;
         this.extent = extent;
         this.actor = actor;
         player = plugin.wrapPlayer(((BukkitPlayer) actor).getPlayer());
@@ -42,11 +40,7 @@ public class PlotMeWorldEdit extends AbstractDelegateExtent {
             PlotId id = manager.getPlotId(loc);
             if (id != null) {
                 Plot plot = manager.getPlotById(id);
-                if (plot != null && plot.isAllowed(actor.getUniqueId())) {
-                    return extent.setBlock(location, block);
-                } else {
-                    return false;
-                }
+                return plot != null && plot.isAllowed(actor.getUniqueId()) && extent.setBlock(location, block);
             } else {
                 return false;
             }
@@ -62,11 +56,7 @@ public class PlotMeWorldEdit extends AbstractDelegateExtent {
             PlotId id = manager.getPlotId(loc);
             if (id != null) {
                 Plot plot = manager.getPlotById(id);
-                if (plot != null && plot.isAllowed(actor.getUniqueId())) {
-                    return extent.setBiome(position, biome);
-                } else {
-                    return false;
-                }
+                return plot != null && plot.isAllowed(actor.getUniqueId()) && extent.setBiome(position, biome);
             } else {
                 return false;
             }

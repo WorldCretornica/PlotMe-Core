@@ -88,13 +88,13 @@ public class CmdInfo extends PlotCommand {
                                 + " " + C("InfoProtected") + ": " + C("WordNo"));
                     }
 
-                    if (plot.allowed().size() > 0) {
-                        player.sendMessage(C("InfoAllowed") + ": " + plot.allowed().keySet().toString());
+                    if (plot.getAllowed().size() > 0) {
+                        player.sendMessage(C("InfoAllowed") + ": " + plot.getAllowed().keySet().toString());
                     }
 
-                    if (plot.denied().size() > 0) {
-                        if (plot.denied().contains("*")) {
-                            player.sendMessage(C("InfoDenied") + ": " + plot.denied().toString());
+                    if (plot.getDenied().size() > 0) {
+                        if (plot.getDenied().contains("*")) {
+                            player.sendMessage(C("InfoDenied") + ": " + plot.getDenied().toString());
                         }
 
                         NameFetcher nameFetcher = new NameFetcher(plot.getDenied());

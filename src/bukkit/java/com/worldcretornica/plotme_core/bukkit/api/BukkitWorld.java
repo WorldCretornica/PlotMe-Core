@@ -8,7 +8,7 @@ import org.bukkit.World;
 import java.io.File;
 import java.util.UUID;
 
-public class BukkitWorld extends IWorld {
+public class BukkitWorld implements IWorld {
 
     private final World world;
 
@@ -35,8 +35,22 @@ public class BukkitWorld extends IWorld {
     }
 
     @Override
+    public int hashCode() {
+        return getUUID().hashCode();
+    }
+
+    @Override
     public UUID getUUID() {
         return world.getUID();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        boolean result = false;
+        if (obj instanceof IWorld) {
+            result = this.hashCode() == obj.hashCode();
+        }
+        return result;
     }
 
     @Override

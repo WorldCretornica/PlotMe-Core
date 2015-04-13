@@ -5,9 +5,6 @@ import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IWorld;
 
-import java.util.HashMap;
-import java.util.HashSet;
-
 public class InternalPlotEvent implements Event {
 
     protected final IWorld world;
@@ -46,59 +43,6 @@ public class InternalPlotEvent implements Event {
             return getPlot().getOwner();
         } else {
             return "";
-        }
-    }
-
-    /**
-     * Returns the location of the upper corner of the plot used in the event
-     *
-     * @return location of the upper corner
-     */
-    public ILocation getUpperBound() {
-        if (getPlot() != null) {
-            return PlotMeCoreManager.getInstance().getPlotTopLoc(getPlot().getId());
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * Returns the location of the lower corner of the plot used in the event
-     *
-     * @return location of the lower corner
-     */
-    public ILocation getLowerBound() {
-        if (getPlot() != null) {
-            return PlotMeCoreManager.getInstance().getPlotBottomLoc(getPlot().getId());
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * Returns the list of people allowed to build on this plot. The function
-     * returns an empty Set if the plot is null.
-     *
-     * @return list of people allowed
-     */
-    public HashMap<String, Integer> getAllAllowed() {
-        if (getPlot() != null) {
-            return getPlot().allowed();
-        } else {
-            return new HashMap<>();
-        }
-    }
-    /**
-     * Returns the list of people denied from building on this plot. The
-     * function returns an empty Set if the plot is null.
-     *
-     * @return list of people denied
-     */
-    public HashSet<String> getAllDenied() {
-        if (getPlot() != null) {
-            return getPlot().denied();
-        } else {
-            return new HashSet<>();
         }
     }
 

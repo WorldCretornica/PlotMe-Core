@@ -4,36 +4,28 @@ package com.worldcretornica.plotme_core.api;
 import java.io.File;
 import java.util.UUID;
 
-public abstract class IWorld {
+public interface IWorld {
 
     /**
      * Get the name of the world
      *
      * @return world name
      */
-    public abstract String getName();
+    String getName();
 
-    public abstract File getWorldFolder();
-
-    @Override
-    public int hashCode() {
-        return getUUID().hashCode();
-    }
-
-    public abstract UUID getUUID();
+    File getWorldFolder();
 
     @Override
-    public boolean equals(Object obj) {
-        boolean result = false;
-        if (obj instanceof IWorld) {
-            result = this.hashCode() == obj.hashCode();
-        }
-        return result;
-    }
+    int hashCode();
 
-    public abstract IChunk getChunkAt(int x, int z);
+    UUID getUUID();
 
-    public abstract void refreshChunk(int x, int z);
+    @Override
+    boolean equals(Object obj);
 
-    public abstract IBlock getBlockAt(int x, int y, int z);
+    IChunk getChunkAt(int x, int z);
+
+    void refreshChunk(int x, int z);
+
+    IBlock getBlockAt(int x, int y, int z);
 }

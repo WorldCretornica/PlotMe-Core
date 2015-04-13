@@ -112,7 +112,7 @@ public class CmdUndeny extends PlotCommand {
     }
 
     private boolean undenyAll(Plot plot, IPlayer player, PlotMapInfo pmi) {
-        if (plot.denied().size() > 0) {
+        if (plot.getDenied().size() > 0) {
             double price = pmi.getUndenyPlayerPrice();
             InternalPlotRemoveDeniedEvent event = new InternalPlotRemoveDeniedEvent(player.getWorld(), plot, player, "*");
             if (manager.isEconomyEnabled(pmi)) {

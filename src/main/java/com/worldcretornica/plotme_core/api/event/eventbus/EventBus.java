@@ -36,7 +36,7 @@ import java.util.Set;
 public class EventBus implements EventManager {
 
     private final Object lock = new Object();
-    private final Multimap<Class<?>, MethodEventHandler> handlersByEvent = HashMultimap.create();
+    private final Multimap<Class<? extends Event>, MethodEventHandler> handlersByEvent = HashMultimap.create();
 
     /**
      * A cache of all the handlers for an event type for quick event posting.
@@ -46,11 +46,11 @@ public class EventBus implements EventManager {
      * removed.
      *
      */
-    private final LoadingCache<Class<?>, HandlerCache> handlersCache =
-            CacheBuilder.newBuilder().build(new CacheLoader<Class<?>, HandlerCache>() {
+    private final LoadingCache<Class<? extends Event>, HandlerCache> handlersCache =
+            CacheBuilder.newBuilder().build(new CacheLoader<Class<? extends Event>, HandlerCache>() {
 
                 @Override
-                public HandlerCache load(Class<?> type) throws Exception {
+                public HandlerCache load(Class<? extends Event> type) throws Exception {
                     return bakeHandlers(type);
                 }
             });
@@ -69,15 +69,14 @@ public class EventBus implements EventManager {
         return false;
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    private HandlerCache bakeHandlers(Class<?> rootType) {
-        List<MethodEventHandler> registrations = Lists.newArrayList();
+    private HandlerCache bakeHandlers(Class<? extends Event> rootType) {
+        final List<MethodEventHandler> registrations = Lists.newArrayList();
         Set<Class<?>> types = (Set) TypeToken.of(rootType).getTypes().rawTypes();
 
         synchronized (this.lock) {
             for (Class<?> type : types) {
                 if (Event.class.isAssignableFrom(type)) {
-                    registrations.addAll(this.handlersByEvent.get(type));
+                    registrations.addAll(this.handlersByEvent.get((Class<? extends Event>) type));
                 }
             }
         }
@@ -87,7 +86,7 @@ public class EventBus implements EventManager {
         return new HandlerCache(registrations);
     }
 
-    private HandlerCache getHandlerCache(Class<?> type) {
+    private HandlerCache getHandlerCache(Class<? extends Event> type) {
         return this.handlersCache.getUnchecked(type);
     }
 
@@ -100,7 +99,8 @@ public class EventBus implements EventManager {
                 Class<?>[] paramTypes = method.getParameterTypes();
 
                 if (isValidHandler(method)) {
-                    Class<?> eventType = paramTypes[0];
+                    //noinspection unchecked
+                    Class<? extends Event> eventType = (Class<? extends Event>) paramTypes[0];
                     MethodEventHandler handler = new MethodEventHandler(subscribe.order(), object, method);
                     subscribers.add(new Subscriber(eventType, handler));
                 } else {
@@ -112,7 +112,7 @@ public class EventBus implements EventManager {
         return subscribers;
     }
 
-    public boolean register(Class<?> type, MethodEventHandler handler) {
+    public boolean register(Class<? extends Event> type, MethodEventHandler handler) {
         return register(new Subscriber(type, handler));
     }
 
@@ -138,7 +138,7 @@ public class EventBus implements EventManager {
         }
     }
 
-    public boolean unregister(Class<?> type, MethodEventHandler handler) {
+    public boolean unregister(Class<? extends Event> type, MethodEventHandler handler) {
         return unregister(new Subscriber(type, handler));
     }
 

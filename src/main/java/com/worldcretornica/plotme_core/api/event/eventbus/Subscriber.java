@@ -16,17 +16,19 @@
 
 package com.worldcretornica.plotme_core.api.event.eventbus;
 
+import com.worldcretornica.plotme_core.api.event.Event;
+
 class Subscriber {
 
-    private final Class<?> eventClass;
+    private final Class<? extends Event> eventClass;
     private final MethodEventHandler handler;
 
-    Subscriber(Class<?> eventClass, MethodEventHandler handler) {
+    Subscriber(Class<? extends Event> eventClass, MethodEventHandler handler) {
         this.eventClass = eventClass;
         this.handler = handler;
     }
 
-    public Class<?> getEventClass() {
+    public Class<? extends Event> getEventClass() {
         return this.eventClass;
     }
 

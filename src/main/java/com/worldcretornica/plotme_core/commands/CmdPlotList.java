@@ -75,7 +75,7 @@ public class CmdPlotList extends PlotCommand {
                     // Is the plot owner the name?
 
                     if (plot.getOwner().equalsIgnoreCase(name)) {
-                        if (plot.allowed().size() == 0) {
+                        if (plot.getAllowed().size() == 0) {
                             // Is the name the current player too?
                             if (name.equalsIgnoreCase(player.getName())) {
                                 player.sendMessage(plot.getId() + " -> " + C("WordYours") + addition);
@@ -84,16 +84,16 @@ public class CmdPlotList extends PlotCommand {
                             }
                         } else if (plot.getOwner().equalsIgnoreCase(player.getName())) {
                             player.sendMessage(plot.getId() + " -> " + C("WordYours") + addition + ", " + C("WordHelpers") + ": " + plot
-                                    .allowed().toString()); //todo fix this to work with allowed and trusted
+                                    .getAllowed().toString()); //todo fix this to work with allowed and trusted
                         } else {
                             player.sendMessage(plot.getId() + " -> " + plot.getOwner() + addition + ", " + C("WordHelpers") + ": " + plot
-                                    .allowed().toString()); //todo fix this to work with allowed and trusted
+                                    .getAllowed().toString()); //todo fix this to work with allowed and trusted
                         }
 
                         // Is the name allowed to build there?
                     } else if (plot.isAllowedConsulting(name)) {
                         StringBuilder helpers = new StringBuilder();
-                        for (String allowed : plot.allowed().keySet()) {
+                        for (String allowed : plot.getAllowed().keySet()) {
                             if (player.getName().equalsIgnoreCase(allowed)) {
                                 if (name.equalsIgnoreCase(player.getName())) {
                                     helpers.append("You").append(", ");

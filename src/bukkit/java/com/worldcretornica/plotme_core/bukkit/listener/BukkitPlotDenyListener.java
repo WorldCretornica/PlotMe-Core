@@ -36,7 +36,7 @@ public class BukkitPlotDenyListener implements Listener {
             if (idTo != null) {
                 Plot plot = manager.getPlotById(idTo);
 
-                if (plot != null && plot.isDeniedInternal(player.getName())) {
+                if (plot != null && plot.isDenied(player.getUniqueId())) {
                     event.setTo(event.getFrom());
                 }
             }

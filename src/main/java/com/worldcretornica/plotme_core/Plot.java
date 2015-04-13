@@ -185,43 +185,43 @@ public class Plot {
     }
 
     public HashSet<String> getDenied() {
-        return denied();
+        return denied;
     }
 
     public void addAllowed(String name) {
         if (!isAllowedConsulting(name)) {
-            allowed().put(name, 1);
+            getAllowed().put(name, 1);
             plugin.getSqlManager().addPlotAllowed(name, getInternalID());
         }
     }
 
     public void addDenied(String name) {
         if (!isDeniedConsulting(name)) {
-            denied().add(name);
+            getDenied().add(name);
             plugin.getSqlManager().addPlotDenied(name, getInternalID());
         }
     }
 
     public void removeAllowed(String name) {
-        if (allowed().containsKey(name)) {
+        if (getAllowed().containsKey(name)) {
             plugin.getSqlManager().deletePlotAllowed(getInternalID(), name);
         }
     }
 
     public void removeDenied(String name) {
-        if (denied().contains(name)) {
+        if (getDenied().contains(name)) {
             plugin.getSqlManager().deletePlotDenied(getInternalID(), name);
         }
     }
 
     public void removeAllAllowed() {
         plugin.getSqlManager().deleteAllAllowed(getInternalID());
-        allowed().clear();
+        getAllowed().clear();
     }
 
     public void removeAllDenied() {
         plugin.getSqlManager().deleteAllDenied(getInternalID());
-        denied().clear();
+        getDenied().clear();
     }
 
     public boolean isAllowedConsulting(String name) {
@@ -237,8 +237,8 @@ public class Plot {
     }
 
     private boolean isAllowedInternal(String name) {
-        if (allowed().containsKey(name)) {
-            Integer accessLevel = allowed().get(name);
+        if (getAllowed().containsKey(name)) {
+            Integer accessLevel = getAllowed().get(name);
             if (accessLevel != null) {
                 if (accessLevel == AccessLevel.ALLOWED.getLevel()) {
                     return true;
@@ -246,8 +246,8 @@ public class Plot {
                     return plugin.getServerBridge().getPlayer(UUIDFetcher.getUUIDOf(name)).isOnline();
                 }
             }
-        } else if (allowed().containsKey("*")) {
-            Integer accessLevel = allowed().get("*");
+        } else if (getAllowed().containsKey("*")) {
+            Integer accessLevel = getAllowed().get("*");
             if (accessLevel != null) {
                 if (accessLevel == AccessLevel.ALLOWED.getLevel()) {
                     return true;
@@ -269,16 +269,11 @@ public class Plot {
     }
 
     public boolean isDeniedInternal(String name) {
-        HashSet<String> list = denied();
-        return !isAllowedInternal(name) && (list.contains("*") || list.contains(name));
+        return getDenied().contains("*") || getDenied().contains(name);
     }
 
-    public HashMap<String, Integer> allowed() {
+    public HashMap<String, Integer> getAllowed() {
         return allowed;
-    }
-
-    public HashSet<String> denied() {
-        return denied;
     }
 
     private void updateFinished(String finishTime, boolean isFinished) {

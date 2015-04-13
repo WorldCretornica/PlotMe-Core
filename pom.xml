@@ -14,6 +14,7 @@
         <defaultGoal>clean package install</defaultGoal>
         <finalName>${project.name}</finalName>
         <sourceDirectory>src/main/java</sourceDirectory>
+        <testSourceDirectory>src/main/test</testSourceDirectory>
         <resources>
             <resource>
                 <filtering>true</filtering>
