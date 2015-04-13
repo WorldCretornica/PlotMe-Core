@@ -4,16 +4,21 @@ import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 
-public class PlotPlayerAddEvent extends InternalPlotEvent implements ICancellable, Event {
+public class PlotAddAllowedEvent extends PlotEvent implements ICancellable, Event {
 
     private final IPlayer player;
-    private final String addedPlayer;
+    private String allowedPlayer;
     private boolean canceled;
 
-    public PlotPlayerAddEvent(IWorld world, Plot plot, IPlayer player, String addedPlayer) {
+    public PlotAddAllowedEvent(IWorld world, Plot plot, IPlayer player, String allowed) {
         super(plot, world);
         this.player = player;
-        this.addedPlayer = addedPlayer;
+        this.allowedPlayer = allowed;
+    }
+
+
+    public IPlayer getPlayer() {
+        return player;
     }
 
     @Override
@@ -26,16 +31,11 @@ public class PlotPlayerAddEvent extends InternalPlotEvent implements ICancellabl
         this.canceled = canceled;
     }
 
-    public IPlayer getPlayer() {
-        return player;
-    }
-
     /**
-     * Get the UUID as a string of the player that was added to the plot.
-     * By addded, the player can be either added to the trusted, denied, or allowed list.
+     * Get the UUID as a string of the player that was allowed to the plot.
      * @return the UUID as a string of the player added
      */
-    public String getAddedPlayer() {
-        return addedPlayer;
+    public String getAllowedPlayer() {
+        return allowedPlayer;
     }
 }

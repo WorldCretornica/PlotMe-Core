@@ -8,7 +8,7 @@ import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
-import com.worldcretornica.plotme_core.api.event.InternalPlotAddAllowedEvent;
+import com.worldcretornica.plotme_core.api.event.PlotAddAllowedEvent;
 import com.worldcretornica.plotme_core.utils.UUIDFetcher;
 import net.milkbowl.vault.economy.EconomyResponse;
 
@@ -57,7 +57,7 @@ public class CmdAdd extends PlotCommand {
                         if (plot.isAllowedConsulting(allowed)) {
                             player.sendMessage(C("WordPlayer") + " " + allowed + " " + C("MsgAlreadyAllowed"));
                         } else {
-                            InternalPlotAddAllowedEvent event = new InternalPlotAddAllowedEvent(world, plot, player, allowed);
+                            PlotAddAllowedEvent event = new PlotAddAllowedEvent(world, plot, player, allowed);
                             serverBridge.getEventBus().post(event);
                             double price = 0.0;
                             if (manager.isEconomyEnabled(pmi)) {

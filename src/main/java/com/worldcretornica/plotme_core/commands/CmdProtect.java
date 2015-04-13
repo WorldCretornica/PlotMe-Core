@@ -8,7 +8,7 @@ import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
-import com.worldcretornica.plotme_core.api.event.InternalPlotProtectChangeEvent;
+import com.worldcretornica.plotme_core.api.event.PlotProtectChangeEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
 
 public class CmdProtect extends PlotCommand {
@@ -41,10 +41,10 @@ public class CmdProtect extends PlotCommand {
                     String name = player.getName();
 
                     if (player.getUniqueId().equals(plot.getOwnerId()) || player.hasPermission(PermissionNames.ADMIN_PROTECT)) {
-                        InternalPlotProtectChangeEvent event;
+                        PlotProtectChangeEvent event;
 
                         if (plot.isProtected()) {
-                            event = new InternalPlotProtectChangeEvent(world, plot, player, false);
+                            event = new PlotProtectChangeEvent(world, plot, player, false);
                             serverBridge.getEventBus().post(event);
 
                             if (!event.isCancelled()) {
@@ -68,7 +68,7 @@ public class CmdProtect extends PlotCommand {
                                     player.sendMessage(C("MsgNotEnoughProtectPlot"));
                                     return true;
                                 } else {
-                                    event = new InternalPlotProtectChangeEvent(world, plot, player, true);
+                                    event = new PlotProtectChangeEvent(world, plot, player, true);
                                     serverBridge.getEventBus().post(event);
                                     if (!event.isCancelled()) {
                                         EconomyResponse er = serverBridge.withdrawPlayer(player, cost);
@@ -84,7 +84,7 @@ public class CmdProtect extends PlotCommand {
                                 }
 
                             } else {
-                                event = new InternalPlotProtectChangeEvent(world, plot, player, true);
+                                event = new PlotProtectChangeEvent(world, plot, player, true);
                                 serverBridge.getEventBus().post(event);
                             }
 

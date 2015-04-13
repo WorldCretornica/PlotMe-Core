@@ -4,16 +4,16 @@ import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 
-public class InternalPlotRemoveDeniedEvent extends InternalPlotEvent implements ICancellable, Event {
+public class PlotBiomeChangeEvent extends PlotEvent implements ICancellable, Event {
 
     private final IPlayer player;
-    private final String denied;
     private boolean canceled;
+    private String biome;
 
-    public InternalPlotRemoveDeniedEvent(IWorld world, Plot plot, IPlayer player, String denied) {
+    public PlotBiomeChangeEvent(IWorld world, Plot plot, IPlayer player, String biome) {
         super(plot, world);
         this.player = player;
-        this.denied = denied;
+        this.biome = biome;
     }
 
     @Override
@@ -30,7 +30,11 @@ public class InternalPlotRemoveDeniedEvent extends InternalPlotEvent implements 
         return player;
     }
 
-    public String getRemovedDenied() {
-        return denied;
+    public String getBiome() {
+        return biome;
+    }
+
+    public void setBiome(String biome) {
+        this.biome = biome;
     }
 }

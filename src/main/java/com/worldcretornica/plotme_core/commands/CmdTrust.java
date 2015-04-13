@@ -8,7 +8,7 @@ import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
-import com.worldcretornica.plotme_core.api.event.InternalPlotAddTrustedEvent;
+import com.worldcretornica.plotme_core.api.event.PlotAddTrustedEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
 
 //TODO DOES NOT WORK. CODE NEEDS TO BE MODIFIED FOR TRUST
@@ -50,7 +50,7 @@ public class CmdTrust extends PlotCommand {
                             player.sendMessage(C("WordPlayer") + " " + trust + " " + C("MsgAlreadyAllowed"));
                         } else {
 
-                            InternalPlotAddTrustedEvent event = new InternalPlotAddTrustedEvent(world, plot, player, trust);
+                            PlotAddTrustedEvent event = new PlotAddTrustedEvent(world, plot, player, trust);
                             serverBridge.getEventBus().post(event);
 
                             serverBridge.getEventBus().post(event);

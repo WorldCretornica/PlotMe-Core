@@ -9,7 +9,7 @@ import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
-import com.worldcretornica.plotme_core.api.event.InternalPlotClearEvent;
+import com.worldcretornica.plotme_core.api.event.PlotClearEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
 
 public class CmdClear extends PlotCommand {
@@ -47,7 +47,7 @@ public class CmdClear extends PlotCommand {
 
                             double price = 0.0;
 
-                            InternalPlotClearEvent event = new InternalPlotClearEvent(world, plot, player);
+                            PlotClearEvent event = new PlotClearEvent(world, plot, player);
 
                             if (manager.isEconomyEnabled(pmi)) {
                                 price = pmi.getClearPrice();

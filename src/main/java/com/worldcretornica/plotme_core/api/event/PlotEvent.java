@@ -5,12 +5,12 @@ import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IWorld;
 
-public class InternalPlotEvent implements Event {
+public class PlotEvent implements Event {
 
     protected final IWorld world;
     private final Plot plot;
 
-    public InternalPlotEvent(Plot plot, IWorld world) {
+    public PlotEvent(Plot plot, IWorld world) {
         this.plot = plot;
         this.world = world;
     }

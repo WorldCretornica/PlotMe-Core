@@ -1,11 +1,11 @@
 package com.worldcretornica.plotme_core.api.event;
 
-public class InternalPlotWorldLoadEvent implements Event {
+public class PlotWorldLoadEvent implements Event {
 
     private final String world;
     private final int nbPlots;
 
-    public InternalPlotWorldLoadEvent(String world, int nbPlots) {
+    public PlotWorldLoadEvent(String world, int nbPlots) {
         this.world = world;
         this.nbPlots = nbPlots;
     }

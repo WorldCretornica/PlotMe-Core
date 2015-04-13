@@ -8,7 +8,7 @@ import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
-import com.worldcretornica.plotme_core.api.event.InternalPlotBiomeChangeEvent;
+import com.worldcretornica.plotme_core.api.event.PlotBiomeChangeEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
 
 public class CmdBiome extends PlotCommand {
@@ -49,7 +49,7 @@ public class CmdBiome extends PlotCommand {
 
                             double price = 0.0;
 
-                            InternalPlotBiomeChangeEvent event = new InternalPlotBiomeChangeEvent(world, plot, player, biomeName);
+                            PlotBiomeChangeEvent event = new PlotBiomeChangeEvent(world, plot, player, biomeName);
                             serverBridge.getEventBus().post(event);
 
                             if (manager.isEconomyEnabled(pmi)) {

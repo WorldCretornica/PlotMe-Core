@@ -6,7 +6,7 @@ import com.worldcretornica.plotme_core.PlotId;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
-import com.worldcretornica.plotme_core.api.event.InternalPlotDoneChangeEvent;
+import com.worldcretornica.plotme_core.api.event.PlotDoneChangeEvent;
 
 public class CmdDone extends PlotCommand {
 
@@ -32,9 +32,9 @@ public class CmdDone extends PlotCommand {
                     String name = player.getName();
 
                     if (player.getUniqueId().equals(plot.getOwnerId()) || player.hasPermission(PermissionNames.ADMIN_DONE)) {
-                        InternalPlotDoneChangeEvent
+                        PlotDoneChangeEvent
                                 event =
-                                new InternalPlotDoneChangeEvent(player.getWorld(), plot, player, plot.isFinished());
+                                new PlotDoneChangeEvent(player.getWorld(), plot, player, plot.isFinished());
                         serverBridge.getEventBus().post(event);
 
                         if (!event.isCancelled()) {

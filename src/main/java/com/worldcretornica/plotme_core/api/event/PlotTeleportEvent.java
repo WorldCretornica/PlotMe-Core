@@ -6,14 +6,14 @@ import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 
-public class InternalPlotTeleportEvent extends InternalPlotEvent implements ICancellable, Event {
+public class PlotTeleportEvent extends PlotEvent implements ICancellable, Event {
 
     private final IPlayer player;
     private final PlotId plotId;
     private final ILocation location;
     private boolean canceled;
 
-    public InternalPlotTeleportEvent(IWorld world, Plot plot, IPlayer player, ILocation location, PlotId plotId) {
+    public PlotTeleportEvent(IWorld world, Plot plot, IPlayer player, ILocation location, PlotId plotId) {
         super(plot, world);
         this.player = player;
         this.location = location;

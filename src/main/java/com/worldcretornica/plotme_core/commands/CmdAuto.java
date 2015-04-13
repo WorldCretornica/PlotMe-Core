@@ -7,7 +7,7 @@ import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
-import com.worldcretornica.plotme_core.api.event.InternalPlotCreateEvent;
+import com.worldcretornica.plotme_core.api.event.PlotCreateEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
 
 public class CmdAuto extends PlotCommand {
@@ -68,7 +68,7 @@ public class CmdAuto extends PlotCommand {
                         if (manager.isPlotAvailable(id, pmi)) {
                             double price = 0.0;
 
-                            InternalPlotCreateEvent event = new InternalPlotCreateEvent(world, id, player);
+                            PlotCreateEvent event = new PlotCreateEvent(world, id, player);
                             serverBridge.getEventBus().post(event);
                             if (manager.isEconomyEnabled(pmi)) {
                                 price = pmi.getClaimPrice();

@@ -4,16 +4,18 @@ import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 
-public class InternalPlotBuyEvent extends InternalPlotEvent implements ICancellable, Event {
+public class PlotSellChangeEvent extends PlotEvent implements ICancellable, Event {
 
-    private final IPlayer buyer;
+    private final IPlayer seller;
     private final double price;
+    private final boolean isForSale;
     private boolean canceled;
 
-    public InternalPlotBuyEvent(IWorld world, Plot plot, IPlayer buyer, double price) {
+    public PlotSellChangeEvent(IWorld world, Plot plot, IPlayer seller, double price, boolean isForSale) {
         super(plot, world);
-        this.buyer = buyer;
+        this.seller = seller;
         this.price = price;
+        this.isForSale = isForSale;
     }
 
     @Override
@@ -27,19 +29,14 @@ public class InternalPlotBuyEvent extends InternalPlotEvent implements ICancella
     }
 
     public IPlayer getPlayer() {
-        return buyer;
+        return seller;
     }
 
     public double getPrice() {
         return price;
     }
 
-    public String getPreviousOwner() {
-        return getPlot().getOwner();
-    }
-
-    @Override
-    public String getOwner() {
-        return buyer.getName();
+    public boolean isForSale() {
+        return isForSale;
     }
 }

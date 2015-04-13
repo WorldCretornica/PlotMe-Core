@@ -8,7 +8,7 @@ import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
-import com.worldcretornica.plotme_core.api.event.InternalPlotDisposeEvent;
+import com.worldcretornica.plotme_core.api.event.PlotDisposeEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
 
 public class CmdDispose extends PlotCommand {
@@ -46,7 +46,7 @@ public class CmdDispose extends PlotCommand {
 
                             double cost = pmi.getDisposePrice();
 
-                            InternalPlotDisposeEvent event = new InternalPlotDisposeEvent(world, plot, player);
+                            PlotDisposeEvent event = new PlotDisposeEvent(world, plot, player);
 
                             if (manager.isEconomyEnabled(pmi)) {
                                 if (serverBridge.has(player, cost)) {

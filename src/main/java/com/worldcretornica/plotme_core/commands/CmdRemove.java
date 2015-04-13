@@ -8,7 +8,7 @@ import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
-import com.worldcretornica.plotme_core.api.event.InternalPlotRemoveAllowedEvent;
+import com.worldcretornica.plotme_core.api.event.PlotRemoveAllowedEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
 
 import java.util.Collections;
@@ -51,7 +51,7 @@ public class CmdRemove extends PlotCommand {
 
                             double price = 0.0;
 
-                            InternalPlotRemoveAllowedEvent event = new InternalPlotRemoveAllowedEvent(world, plot, player, allowed);
+                            PlotRemoveAllowedEvent event = new PlotRemoveAllowedEvent(world, plot, player, allowed);
                             serverBridge.getEventBus().post(event);
 
                             if (manager.isEconomyEnabled(pmi) && !event.isCancelled()) {

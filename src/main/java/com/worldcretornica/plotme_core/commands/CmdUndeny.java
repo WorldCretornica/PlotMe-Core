@@ -8,7 +8,7 @@ import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
-import com.worldcretornica.plotme_core.api.event.InternalPlotRemoveDeniedEvent;
+import com.worldcretornica.plotme_core.api.event.PlotRemoveDeniedEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
 
 public class CmdUndeny extends PlotCommand {
@@ -47,7 +47,7 @@ public class CmdUndeny extends PlotCommand {
                         }
                         if (plot.isDeniedConsulting(denied)) {
                             double price = 0.0;
-                            InternalPlotRemoveDeniedEvent event = new InternalPlotRemoveDeniedEvent(world, plot, player, denied);
+                            PlotRemoveDeniedEvent event = new PlotRemoveDeniedEvent(world, plot, player, denied);
 
                             if (manager.isEconomyEnabled(pmi)) {
                                 price = pmi.getUndenyPlayerPrice();
@@ -114,7 +114,7 @@ public class CmdUndeny extends PlotCommand {
     private boolean undenyAll(Plot plot, IPlayer player, PlotMapInfo pmi) {
         if (plot.getDenied().size() > 0) {
             double price = pmi.getUndenyPlayerPrice();
-            InternalPlotRemoveDeniedEvent event = new InternalPlotRemoveDeniedEvent(player.getWorld(), plot, player, "*");
+            PlotRemoveDeniedEvent event = new PlotRemoveDeniedEvent(player.getWorld(), plot, player, "*");
             if (manager.isEconomyEnabled(pmi)) {
 
                 //noinspection ConstantConditions

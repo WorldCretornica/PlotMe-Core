@@ -9,8 +9,8 @@ import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IEntity;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
-import com.worldcretornica.plotme_core.api.event.InternalPlotCreateEvent;
-import com.worldcretornica.plotme_core.api.event.InternalPlotWorldLoadEvent;
+import com.worldcretornica.plotme_core.api.event.PlotCreateEvent;
+import com.worldcretornica.plotme_core.api.event.PlotWorldLoadEvent;
 import com.worldcretornica.plotme_core.api.event.eventbus.Order;
 import com.worldcretornica.plotme_core.api.event.eventbus.Subscribe;
 import com.worldcretornica.plotme_core.bukkit.PlotMe_CorePlugin;
@@ -730,22 +730,22 @@ public class BukkitPlotListener implements Listener {
     }
 
     @Subscribe(order = Order.FIRST)
-    public void onPlotCreateFirst(InternalPlotCreateEvent event) {
+    public void onPlotCreateFirst(PlotCreateEvent event) {
             api.getLogger().info("First Plot Create Event");
     }
 
     @Subscribe(order = Order.EARLY)
-    public void onPlotCreateEarly(InternalPlotCreateEvent event) {
+    public void onPlotCreateEarly(PlotCreateEvent event) {
             api.getLogger().info("Early Plot Create Event");
     }
 
     @Subscribe(order = Order.LATE)
-    public void onPlotWorldLoad(InternalPlotCreateEvent event) {
+    public void onPlotWorldLoad(PlotCreateEvent event) {
             api.getLogger().info("Late Plot Create Event");
     }
 
     @Subscribe
-    public void onPlotWorldLoad(InternalPlotWorldLoadEvent event) {
+    public void onPlotWorldLoad(PlotWorldLoadEvent event) {
             api.getLogger().info("Done loading " + event.getNbPlots() + " plots for world " + event
                     .getWorldName());
     }

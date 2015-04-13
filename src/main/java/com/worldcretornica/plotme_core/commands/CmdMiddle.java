@@ -8,7 +8,7 @@ import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
-import com.worldcretornica.plotme_core.api.event.InternalPlotTeleportMiddleEvent;
+import com.worldcretornica.plotme_core.api.event.PlotTeleportMiddleEvent;
 
 import java.util.Arrays;
 import java.util.List;
@@ -48,7 +48,7 @@ public class CmdMiddle extends PlotCommand {
 
                 } else if (plot.isAllowed(player.getUniqueId()) || player.hasPermission(PermissionNames.ADMIN_MIDDLE_OTHER)) {
                     ILocation middleloc = manager.getPlotMiddle(world, plot.getId());
-                    InternalPlotTeleportMiddleEvent event = new InternalPlotTeleportMiddleEvent(world, plot, player, middleloc);
+                    PlotTeleportMiddleEvent event = new PlotTeleportMiddleEvent(world, plot, player, middleloc);
                     serverBridge.getEventBus().post(event);
                     if (!event.isCancelled()) {
                         player.setLocation(event.getMiddleLocation());

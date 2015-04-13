@@ -8,7 +8,7 @@ import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
-import com.worldcretornica.plotme_core.api.event.InternalPlotAddDeniedEvent;
+import com.worldcretornica.plotme_core.api.event.PlotAddDeniedEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
 
 import java.util.List;
@@ -56,7 +56,7 @@ public class CmdDeny extends PlotCommand {
 
                             double price = 0.0;
 
-                            InternalPlotAddDeniedEvent event = new InternalPlotAddDeniedEvent(world, plot, player, denied);
+                            PlotAddDeniedEvent event = new PlotAddDeniedEvent(world, plot, player, denied);
 
                             if (manager.isEconomyEnabled(pmi)) {
                                 price = pmi.getDenyPlayerPrice();

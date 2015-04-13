@@ -7,8 +7,8 @@ import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IWorld;
-import com.worldcretornica.plotme_core.api.event.InternalPlotLoadEvent;
-import com.worldcretornica.plotme_core.api.event.InternalPlotWorldLoadEvent;
+import com.worldcretornica.plotme_core.api.event.PlotLoadEvent;
+import com.worldcretornica.plotme_core.api.event.PlotWorldLoadEvent;
 import com.worldcretornica.plotme_core.utils.UUIDFetcher;
 
 import java.sql.Connection;
@@ -257,11 +257,11 @@ public abstract class Database {
 
                 for (PlotId id : plots.keySet()) {
                     pmi.addPlot(id, plots.get(id));
-                    InternalPlotLoadEvent event = new InternalPlotLoadEvent(plugin.getServerBridge().getWorld(world), plots.get(id));
+                    PlotLoadEvent event = new PlotLoadEvent(plugin.getServerBridge().getWorld(world), plots.get(id));
                     plugin.getServerBridge().getEventBus().post(event);
 
                 }
-                InternalPlotWorldLoadEvent event = new InternalPlotWorldLoadEvent(world, pmi.getNbPlots());
+                PlotWorldLoadEvent event = new PlotWorldLoadEvent(world, pmi.getNbPlots());
                 plugin.getServerBridge().getEventBus().post(event);
 
             }

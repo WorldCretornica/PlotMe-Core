@@ -8,8 +8,8 @@ import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
-import com.worldcretornica.plotme_core.api.event.InternalPlotCreateEvent;
-import com.worldcretornica.plotme_core.api.event.InternalPlotOwnerChangeEvent;
+import com.worldcretornica.plotme_core.api.event.PlotCreateEvent;
+import com.worldcretornica.plotme_core.api.event.PlotOwnerChangeEvent;
 
 import java.util.UUID;
 
@@ -60,7 +60,7 @@ public class CmdSetOwner extends PlotCommand {
 
 
                 if (!oldowner.equals(newOwnerId)) {
-                    InternalPlotOwnerChangeEvent event = new InternalPlotOwnerChangeEvent(world, plot, player, newOwner);
+                    PlotOwnerChangeEvent event = new PlotOwnerChangeEvent(world, plot, player, newOwner);
                     serverBridge.getEventBus().post(event);
 
                     if (!event.isCancelled()) {
@@ -78,8 +78,8 @@ public class CmdSetOwner extends PlotCommand {
                     player.sendMessage("This person already owns this plot!"); //TODO add caption for this
                 }
             } else {
-                InternalPlotCreateEvent event =
-                        new InternalPlotCreateEvent(world, id, serverBridge.getPlayer(newOwnerId));
+                PlotCreateEvent event =
+                        new PlotCreateEvent(world, id, serverBridge.getPlayer(newOwnerId));
                 serverBridge.getEventBus().post(event);
                 if (!event.isCancelled()) {
                     manager.createPlot(id, newOwner, newOwnerId, pmi);

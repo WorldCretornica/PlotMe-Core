@@ -8,7 +8,7 @@ import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
-import com.worldcretornica.plotme_core.api.event.InternalPlotTeleportHomeEvent;
+import com.worldcretornica.plotme_core.api.event.PlotTeleportHomeEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
 
 import java.util.Collections;
@@ -92,7 +92,7 @@ public class CmdHome extends PlotCommand {
                                     double price = 0.0;
 
                                     location = manager.getPlotHome(plot.getId());
-                                    InternalPlotTeleportHomeEvent event = new InternalPlotTeleportHomeEvent(world, plot, player, location);
+                                    PlotTeleportHomeEvent event = new PlotTeleportHomeEvent(world, plot, player, location);
 
                                     if (manager.isEconomyEnabled(pmi)) {
                                         price = pmi.getPlotHomePrice();
@@ -135,7 +135,7 @@ public class CmdHome extends PlotCommand {
                                 double price = 0.0;
 
                                 location = manager.getPlotHome(plot.getId());
-                                InternalPlotTeleportHomeEvent event = new InternalPlotTeleportHomeEvent(world, plot, player, location);
+                                PlotTeleportHomeEvent event = new PlotTeleportHomeEvent(world, plot, player, location);
 
                                 if (manager.isEconomyEnabled(pmi)) {
                                     price = pmi.getPlotHomePrice();

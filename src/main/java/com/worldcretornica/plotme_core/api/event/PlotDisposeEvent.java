@@ -4,16 +4,14 @@ import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 
-public class InternalPlotProtectChangeEvent extends InternalPlotEvent implements ICancellable, Event {
+public class PlotDisposeEvent extends PlotEvent implements ICancellable, Event {
 
-    private final IPlayer player;
-    private final boolean _protected;
+    private final IPlayer disposer;
     private boolean canceled;
 
-    public InternalPlotProtectChangeEvent(IWorld world, Plot plot, IPlayer player, boolean protect) {
+    public PlotDisposeEvent(IWorld world, Plot plot, IPlayer disposer) {
         super(plot, world);
-        this.player = player;
-        _protected = protect;
+        this.disposer = disposer;
     }
 
     @Override
@@ -27,10 +25,6 @@ public class InternalPlotProtectChangeEvent extends InternalPlotEvent implements
     }
 
     public IPlayer getPlayer() {
-        return player;
-    }
-
-    public boolean isProtected() {
-        return _protected;
+        return disposer;
     }
 }

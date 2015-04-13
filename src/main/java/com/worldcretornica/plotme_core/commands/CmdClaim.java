@@ -9,7 +9,7 @@ import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
-import com.worldcretornica.plotme_core.api.event.InternalPlotCreateEvent;
+import com.worldcretornica.plotme_core.api.event.PlotCreateEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
 
 import java.util.UUID;
@@ -63,7 +63,7 @@ public class CmdClaim extends PlotCommand {
 
                     double price = 0.0;
 
-                    InternalPlotCreateEvent event = new InternalPlotCreateEvent(world, id, player);
+                    PlotCreateEvent event = new PlotCreateEvent(world, id, player);
 
                     if (manager.isEconomyEnabled(pmi)) {
                         price = pmi.getClaimPrice();

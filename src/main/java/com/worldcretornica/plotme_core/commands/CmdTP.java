@@ -8,7 +8,7 @@ import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
-import com.worldcretornica.plotme_core.api.event.InternalPlotTeleportEvent;
+import com.worldcretornica.plotme_core.api.event.PlotTeleportEvent;
 
 import java.util.Collections;
 import java.util.List;
@@ -55,7 +55,7 @@ public class CmdTP extends PlotCommand {
                         } else {
                             ILocation location = manager.getPlotHome(id2);
                             Plot plot = manager.getPlotById(id2);
-                            InternalPlotTeleportEvent event = new InternalPlotTeleportEvent(world, plot, player, location, id2);
+                            PlotTeleportEvent event = new PlotTeleportEvent(world, plot, player, location, id2);
                             serverBridge.getEventBus().post(event);
 
                             if (!event.isCancelled()) {

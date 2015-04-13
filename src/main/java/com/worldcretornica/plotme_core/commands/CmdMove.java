@@ -6,7 +6,7 @@ import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
-import com.worldcretornica.plotme_core.api.event.InternalPlotMoveEvent;
+import com.worldcretornica.plotme_core.api.event.PlotMoveEvent;
 
 public class CmdMove extends PlotCommand {
 
@@ -39,7 +39,7 @@ public class CmdMove extends PlotCommand {
                 } else {
                     PlotId id1 = new PlotId(plot1);
                     PlotId id2 = new PlotId(plot2);
-                    InternalPlotMoveEvent event = new InternalPlotMoveEvent(world, id1, id2, player);
+                    PlotMoveEvent event = new PlotMoveEvent(world, id1, id2, player);
                     serverBridge.getEventBus().post(event);
                     if (!event.isCancelled()) {
                         if (manager.movePlot(id1, id2)) {

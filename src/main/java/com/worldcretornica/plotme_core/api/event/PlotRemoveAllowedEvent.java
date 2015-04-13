@@ -4,16 +4,16 @@ import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 
-public class InternalPlotOwnerChangeEvent extends InternalPlotEvent implements ICancellable, Event {
+public class PlotRemoveAllowedEvent extends PlotEvent implements ICancellable, Event {
 
     private final IPlayer player;
-    private final String newOwner;
+    private final String removed;
     private boolean canceled;
 
-    public InternalPlotOwnerChangeEvent(IWorld world, Plot plot, IPlayer player, String newOwner) {
+    public PlotRemoveAllowedEvent(IWorld world, Plot plot, IPlayer player, String removed) {
         super(plot, world);
         this.player = player;
-        this.newOwner = newOwner;
+        this.removed = removed;
     }
 
     @Override
@@ -30,7 +30,7 @@ public class InternalPlotOwnerChangeEvent extends InternalPlotEvent implements I
         return player;
     }
 
-    public String getNewOwner() {
-        return newOwner;
+    public String getRemovedAllowed() {
+        return removed;
     }
 }

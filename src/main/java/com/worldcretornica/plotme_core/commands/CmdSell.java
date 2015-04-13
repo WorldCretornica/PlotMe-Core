@@ -8,7 +8,7 @@ import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
-import com.worldcretornica.plotme_core.api.event.InternalPlotSellChangeEvent;
+import com.worldcretornica.plotme_core.api.event.PlotSellChangeEvent;
 
 public class CmdSell extends PlotCommand {
 
@@ -39,10 +39,10 @@ public class CmdSell extends PlotCommand {
 
                             if (player.getUniqueId().equals(plot.getOwnerId()) || player.hasPermission(PermissionNames.ADMIN_SELL)) {
 
-                                InternalPlotSellChangeEvent event;
+                                PlotSellChangeEvent event;
 
                                 if (plot.isForSale()) {
-                                    event = new InternalPlotSellChangeEvent(world, plot, player, plot.getPrice(), false);
+                                    event = new PlotSellChangeEvent(world, plot, player, plot.getPrice(), false);
                                     serverBridge.getEventBus().post(event);
 
                                     if (!event.isCancelled()) {
@@ -77,7 +77,7 @@ public class CmdSell extends PlotCommand {
                                     if (price < 0.0) {
                                         player.sendMessage(C("MsgInvalidAmount"));
                                     } else {
-                                        event = new InternalPlotSellChangeEvent(world, plot, player, price, true);
+                                        event = new PlotSellChangeEvent(world, plot, player, price, true);
                                         serverBridge.getEventBus().post(event);
 
                                         if (!event.isCancelled()) {

@@ -2,7 +2,7 @@ package com.worldcretornica.plotme_core;
 
 import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IWorld;
-import com.worldcretornica.plotme_core.api.event.InternalPlotResetEvent;
+import com.worldcretornica.plotme_core.api.event.PlotResetEvent;
 import com.worldcretornica.plotme_core.storage.Database;
 
 import java.util.HashSet;
@@ -32,7 +32,7 @@ public class PlotRunnableDeleteExpire implements Runnable {
                 String ids = "";
 
                 for (Plot expiredPlot : expiredPlots) {
-                    InternalPlotResetEvent event = new InternalPlotResetEvent(world, expiredPlot, sender);
+                    PlotResetEvent event = new PlotResetEvent(world, expiredPlot, sender);
                     plugin.getServerBridge().getEventBus().post(event);
                     if (!event.isCancelled()) {
                         plotMeCoreManager.clear(expiredPlot, sender, ClearReason.Expired);

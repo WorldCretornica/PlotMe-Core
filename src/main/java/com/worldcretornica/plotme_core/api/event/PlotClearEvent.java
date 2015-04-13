@@ -1,17 +1,17 @@
 package com.worldcretornica.plotme_core.api.event;
 
 import com.worldcretornica.plotme_core.Plot;
-import com.worldcretornica.plotme_core.api.ICommandSender;
+import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 
-public class InternalPlotResetEvent extends InternalPlotEvent implements ICancellable, Event {
+public class PlotClearEvent extends PlotEvent implements ICancellable, Event {
 
-    private final ICommandSender reseter;
+    private final IPlayer clearer;
     private boolean canceled;
 
-    public InternalPlotResetEvent(IWorld world, Plot plot, ICommandSender reseter) {
+    public PlotClearEvent(IWorld world, Plot plot, IPlayer clearer) {
         super(plot, world);
-        this.reseter = reseter;
+        this.clearer = clearer;
     }
 
     @Override
@@ -24,7 +24,7 @@ public class InternalPlotResetEvent extends InternalPlotEvent implements ICancel
         canceled = cancel;
     }
 
-    public ICommandSender getReseter() {
-        return reseter;
+    public IPlayer getPlayer() {
+        return clearer;
     }
 }

@@ -8,7 +8,7 @@ import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
-import com.worldcretornica.plotme_core.api.event.InternalPlotBuyEvent;
+import com.worldcretornica.plotme_core.api.event.PlotBuyEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
 
 public class CmdBuy extends PlotCommand {
@@ -58,7 +58,7 @@ public class CmdBuy extends PlotCommand {
                                     if (serverBridge.has(player, cost)) {
                                         player.sendMessage(C("MsgNotEnoughBuy"));
                                     } else {
-                                        InternalPlotBuyEvent event = new InternalPlotBuyEvent(world, plot, player, cost);
+                                        PlotBuyEvent event = new PlotBuyEvent(world, plot, player, cost);
                                         serverBridge.getEventBus().post(event);
 
                                         if (!event.isCancelled()) {

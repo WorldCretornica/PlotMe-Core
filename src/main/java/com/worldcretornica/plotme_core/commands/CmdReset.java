@@ -9,7 +9,7 @@ import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
-import com.worldcretornica.plotme_core.api.event.InternalPlotResetEvent;
+import com.worldcretornica.plotme_core.api.event.PlotResetEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
 
 public class CmdReset extends PlotCommand {
@@ -44,7 +44,7 @@ public class CmdReset extends PlotCommand {
                     player.sendMessage(C("MsgPlotProtectedCannotReset"));
                 } else if (player.getUniqueId().equals(plot.getOwnerId()) || player.hasPermission(PermissionNames.ADMIN_RESET)) {
 
-                    InternalPlotResetEvent event = new InternalPlotResetEvent(world, plot, player);
+                    PlotResetEvent event = new PlotResetEvent(world, plot, player);
                     serverBridge.getEventBus().post(event);
 
                     if (!event.isCancelled()) {
