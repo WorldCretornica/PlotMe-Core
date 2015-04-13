@@ -41,6 +41,7 @@ import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.BlockSpreadEvent;
+import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -761,6 +762,41 @@ public class BukkitPlotListener implements Listener {
 
         if (p != null) {
             manager.UpdatePlayerNameFromId(p.getUniqueId(), p.getName());
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onSignEdit(SignChangeEvent event) {
+        IPlayer player = plugin.wrapPlayer(event.getPlayer());
+        ILocation location = new ILocation(player.getWorld(), event.getBlock().getX(), event.getBlock().getY(), event.getBlock().getZ());
+
+        if (manager.isPlotWorld(location)) {
+            PlotId id = manager.getPlotId(location);
+
+            if (id == null) {
+                if (!player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE)) {
+                    player.sendMessage(api.C("ErrCannotBuild"));
+                    event.setCancelled(true);
+                }
+            } else {
+                boolean ptc = api.isPlotLocked(id);
+
+                if (ptc) {
+                    player.sendMessage(api.C("PlotLocked"));
+                    event.setCancelled(true);
+                } else {
+                    Plot plot = manager.getPlotById(id);
+
+                    if (plot == null || !plot.isAllowed(player.getUniqueId())) {
+                        if (!player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE)) {
+                            player.sendMessage(api.C("ErrCannotBuild"));
+                            event.setCancelled(true);
+                        }
+                    } else {
+                        plot.resetExpire(manager.getMap(location).getDaysToExpiration());
+                    }
+                }
+            }
         }
     }
 }
