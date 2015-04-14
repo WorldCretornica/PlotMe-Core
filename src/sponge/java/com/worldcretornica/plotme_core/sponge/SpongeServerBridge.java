@@ -113,7 +113,7 @@ public class SpongeServerBridge extends IServerBridge {
     @Override
     public boolean has(IPlayer player, double price) {
         // TODO Auto-generated method stub
-        return 0;
+        return false;
     }
 
     @Override

@@ -1,14 +1,7 @@
 package com.worldcretornica.plotme_core.sponge.listener;
 
-import com.worldcretornica.plotme_core.PermissionNames;
-import com.worldcretornica.plotme_core.Plot;
-import com.worldcretornica.plotme_core.PlotId;
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.sponge.PlotMe_Sponge;
-import com.worldcretornica.plotme_core.sponge.api.SpongeLocation;
-import com.worldcretornica.plotme_core.sponge.api.SpongePlayer;
-import org.spongepowered.api.event.Subscribe;
-import org.spongepowered.api.event.entity.player.PlayerMoveEvent;
 
 public class SpongePlotDenyListener {
 
@@ -17,26 +10,6 @@ public class SpongePlotDenyListener {
 
     public SpongePlotDenyListener(PlotMe_Sponge plotMe_sponge) {
         plugin = plotMe_sponge;
-
-    }
-
-    @Subscribe
-    public void onPlayerMove(PlayerMoveEvent event) {
-        SpongePlayer player = plugin.wrapPlayer(event.getPlayer());
-
-        if (manager.isPlotWorld(player) && !player.hasPermission(PermissionNames.ADMIN_BYPASSDENY)) {
-            SpongeLocation to = new SpongeLocation(event.getNewLocation());
-
-            PlotId idTo = manager.getPlotId(to);
-
-            if (idTo != null) {
-                Plot plot = manager.getPlotById(idTo);
-
-                if (plot != null && plot.isDeniedInternal(player.getName())) {
-                    event.getPlayer().setLocation(event.getOldLocation());
-                }
-            }
-        }
 
     }
 }

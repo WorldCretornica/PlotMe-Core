@@ -4,6 +4,7 @@ import com.worldcretornica.plotme_core.api.IEntity;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IWorld;
 import org.spongepowered.api.entity.Entity;
+import org.spongepowered.api.world.Location;
 
 import java.util.UUID;
 
@@ -21,18 +22,13 @@ public class SpongeEntity implements IEntity {
 
     @Override
     public ILocation getLocation() {
-        return new SpongeLocation(entity.getLocation());
+        Location location = entity.getLocation();
+        return new ILocation(getWorld(), location.getX(), location.getY(), location.getZ());
     }
 
     @Override
     public void setLocation(ILocation location) {
-        SpongeLocation loc = null;
-        if (location instanceof SpongeLocation) {
-            loc = (SpongeLocation) location;
-        }
-        if (loc != null) {
-            entity.setLocation(loc.getLocation());
-        }
+
     }
 
     @Override

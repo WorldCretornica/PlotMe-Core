@@ -2,6 +2,7 @@ package com.worldcretornica.plotme_core.storage;
 
 import com.worldcretornica.plotme_core.PlotMe_Core;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -21,7 +22,8 @@ public class SQLiteConnector extends Database {
     public Connection startConnection() {
         try {
             Class.forName("org.sqlite.JDBC");
-            connection = DriverManager.getConnection("jdbc:sqlite:" + plugin.getServerBridge().getDataFolder().getAbsolutePath() + "/plotmecore.db");
+            connection = DriverManager.getConnection(
+                    "jdbc:sqlite:" + plugin.getServerBridge().getDataFolder().getAbsolutePath() + File.separatorChar + "plotmecore.db");
             connection.setAutoCommit(false);
             return connection;
         } catch (ClassNotFoundException | SQLException e) {

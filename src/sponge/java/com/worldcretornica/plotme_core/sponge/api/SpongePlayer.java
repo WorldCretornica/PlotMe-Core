@@ -8,6 +8,7 @@ import com.worldcretornica.plotme_core.api.IWorld;
 import org.spongepowered.api.entity.player.Player;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.text.chat.ChatTypes;
+import org.spongepowered.api.world.Location;
 
 public class SpongePlayer extends SpongeUser implements IPlayer {
 
@@ -35,12 +36,12 @@ public class SpongePlayer extends SpongeUser implements IPlayer {
 
     @Override
     public ILocation getLocation() {
-        return new SpongeLocation(player.getLocation());
+        Location location = player.getLocation();
+        return new ILocation(getWorld(), location.getX(), location.getY(), location.getZ());
     }
 
     @Override
     public void setLocation(ILocation location) {
-        player.setLocation(((SpongeLocation) location).getLocation());
     }
 
     public Player getPlayer() {
