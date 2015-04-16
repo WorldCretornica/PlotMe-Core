@@ -6,7 +6,9 @@ import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.Vector;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
+import org.bukkit.metadata.MetadataValue;
 
+import java.util.List;
 import java.util.UUID;
 
 public class BukkitEntity implements IEntity {
@@ -65,5 +67,13 @@ public class BukkitEntity implements IEntity {
 
     public Vector getPosition() {
         return coords;
+    }
+
+    public void setMetadata(String string, MetadataValue value) {
+        entity.setMetadata(string, value);
+    }
+
+    public List<MetadataValue> getMetadata(String string) {
+        return entity.getMetadata(string);
     }
 }

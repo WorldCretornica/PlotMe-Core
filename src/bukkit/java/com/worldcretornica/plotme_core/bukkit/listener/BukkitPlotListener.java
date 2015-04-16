@@ -58,6 +58,8 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.world.StructureGrowEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.metadata.MetadataValue;
 
 import java.util.List;
 import java.util.UUID;
@@ -724,8 +726,22 @@ public class BukkitPlotListener implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onSandCannon(EntityChangeBlockEvent event) {
         BukkitEntity entity = new BukkitEntity(event.getEntity());
-        if (manager.isPlotWorld(entity) && event.getEntity().getType().equals(EntityType.FALLING_BLOCK)) {
-            //todo finish this
+        if (manager.isPlotWorld(entity) && event.getEntityType().equals(EntityType.FALLING_BLOCK)) {
+            if (event.getTo().equals(Material.AIR)) {
+                entity.setMetadata("plotFallBlock", new FixedMetadataValue(plugin, event.getBlock().getLocation()));
+            } else {
+                List<MetadataValue> values = entity.getMetadata("plotFallBlock");
+
+                if (!values.isEmpty()) {
+
+                    Location spawn = (Location) (values.get(0).value());
+                    Location createdNew = event.getBlock().getLocation();
+
+                    if (spawn.getBlockX() != createdNew.getBlockX() || spawn.getBlockZ() != createdNew.getBlockZ()) {
+                        event.setCancelled(true);
+                    }
+                }
+            }
         }
     }
 
