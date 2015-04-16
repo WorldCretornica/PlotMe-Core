@@ -24,6 +24,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -45,6 +46,7 @@ import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
@@ -521,7 +523,7 @@ public class BukkitPlotListener implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onHangingPlace(HangingPlaceEvent event) {
         IPlayer player = plugin.wrapPlayer(event.getPlayer());
         ILocation location = new ILocation(player.getWorld(), BukkitConverter.locationToVector(event.getBlock().getLocation()));
@@ -558,7 +560,7 @@ public class BukkitPlotListener implements Listener {
 
     }
 
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onHangingBreakByEntity(HangingBreakByEntityEvent event) {
 
         if (event.getRemover() instanceof Player) {
@@ -661,32 +663,42 @@ public class BukkitPlotListener implements Listener {
     }
 
     @EventHandler
-    public void onEntityDamagebyEntity(EntityDamageByEntityEvent event) {
-        IEntity entity = plugin.wrapEntity(event.getDamager());
+    public void onEntityDamage(EntityDamageEvent event) {
+        IEntity entity = plugin.wrapEntity(event.getEntity());
         if (manager.isPlotWorld(entity)) {
-            if (!(entity instanceof IPlayer)) {
-                event.setCancelled(true);
-            } else {
-                IPlayer player = (IPlayer) entity;
-                boolean cantBuild = !player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE);
-                PlotId id = manager.getPlotId(entity.getLocation());
-                if (id == null) {
-                    if (cantBuild) {
-                        player.sendMessage(api.C("ErrCannotBuild"));
-                        event.setCancelled(true);
-                    }
-                } else {
-                    Plot plot = manager.getPlotById(id);
-                    if (plot == null || !plot.isAllowed(player.getUniqueId())) {
-                        if (cantBuild) {
-                            player.sendMessage(api.C("ErrCannotBuild"));
+            //Don't protect Monsters!
+            if (event.getEntity() instanceof Monster) {
+                return;
+            }
+            //This includes everything except for Monsters which were excluded above.
+            if (event.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)) {
+                if (event instanceof EntityDamageByEntityEvent) {
+                    EntityDamageByEntityEvent damageByEntityEvent = (EntityDamageByEntityEvent) event;
+                    //Specific to Players to allow PVP. event.getEntity() is the damaged entity
+                    if (event.getEntity() instanceof Player) {
+                        //Don't allow PVP on the roads. Only allow pvp if both entities are in the plot.
+                        PlotId id = manager.getPlotId(entity.getLocation());
+                        IEntity damager = plugin.wrapEntity(damageByEntityEvent.getDamager());
+                        PlotId id2 = manager.getPlotId(damager.getLocation());
+                        if (id == null) {
                             event.setCancelled(true);
                         }
+                        if (id2 == null) {
+                            event.setCancelled(true);
+                        }
+                        return;
                     } else {
-                        plot.resetExpire(manager.getMap(player).getDaysToExpiration());
+                        PlotId id = manager.getPlotId(entity.getLocation());
+                        if (id == null) {
+                            event.setCancelled(true);
+                        } else {
+                            Plot plot = manager.getPlotById(id);
+                            if (plot == null || !plot.isAllowed(damageByEntityEvent.getDamager().getUniqueId())) {
+                                event.setCancelled(true);
+                            }
+                        }
                     }
                 }
-
             }
         }
     }
@@ -747,32 +759,32 @@ public class BukkitPlotListener implements Listener {
 
     @Subscribe(order = Order.FIRST)
     public void onPlotCreateFirst(PlotCreateEvent event) {
-            api.getLogger().info("First Plot Create Event");
+        api.getLogger().info("First Plot Create Event");
     }
 
     @Subscribe(order = Order.EARLY)
     public void onPlotCreateEarly(PlotCreateEvent event) {
-            api.getLogger().info("Early Plot Create Event");
+        api.getLogger().info("Early Plot Create Event");
     }
 
     @Subscribe(order = Order.LATE)
     public void onPlotWorldLoad(PlotCreateEvent event) {
-            api.getLogger().info("Late Plot Create Event");
+        api.getLogger().info("Late Plot Create Event");
     }
 
     @Subscribe
     public void onPlotWorldLoad(PlotWorldLoadEvent event) {
-            api.getLogger().info("Done loading " + event.getNbPlots() + " plots for world " + event
-                    .getWorldName());
+        api.getLogger().info("Done loading " + event.getNbPlots() + " plots for world " + event
+                .getWorldName());
     }
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerQuit(PlayerQuitEvent event) {
         UUID playerUUID = event.getPlayer().getUniqueId();
         plugin.removePlayer(playerUUID);
     }
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player p = event.getPlayer();
 

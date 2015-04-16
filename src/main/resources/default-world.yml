@@ -29,8 +29,6 @@ PreventedItems:
 economy:
     UseEconomy: false
     CanPutOnSale: false
-    RefundClaimPriceOnReset: false
-    RefundClaimPriceOnSetOwner: false
     ClaimPrice: 0.0
     ClearPrice: 0.0
     AddPlayerPrice: 0.0
