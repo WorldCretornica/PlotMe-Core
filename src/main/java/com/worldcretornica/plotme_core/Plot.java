@@ -31,19 +31,6 @@ public class Plot {
     private int internalID;
     private String plotName;
 
-    public Plot() {
-        setBiome("PLAINS");
-
-        setExpiredDate(null);
-        setPrice(0.0);
-        setForSale(false);
-        setFinishedDate(null);
-        setProtected(false);
-        setPlotName(null);
-        setLikes(0);
-        this.denied = new HashSet<>();
-    }
-
     public Plot(String owner, UUID uuid, IWorld world, PlotId plotId, int days) {
         setOwner(owner);
         setOwnerId(uuid);
@@ -67,32 +54,6 @@ public class Plot {
         setFinishedDate(null);
         setProtected(false);
         metadata = new HashMap<>();
-    }
-
-    public Plot(int internalID, String owner, UUID ownerId, String world, String biome, Date expiredDate,
-            HashMap<String, Integer> allowed,
-            HashSet<String>
-                    denied,
-            PlotId id, double price, boolean forSale, boolean finished,
-            String finishedDate, boolean protect,
-            Map<String, Map<String, String>> metadata, int plotLikes, String plotName) {
-        setInternalID(internalID);
-        setOwner(owner);
-        setOwnerId(ownerId);
-        setWorld(world);
-        setBiome(biome);
-        setExpiredDate(expiredDate);
-        setFinished(finished);
-        this.allowed = allowed;
-        setId(id);
-        setPrice(price);
-        setForSale(forSale);
-        setFinishedDate(finishedDate);
-        setProtected(protect);
-        setLikes(plotLikes);
-        setPlotName(plotName);
-        this.denied = denied;
-        this.metadata = metadata;
     }
 
     public Plot(int internalID, String owner, UUID ownerId, String world, String biome, Date expiredDate,
