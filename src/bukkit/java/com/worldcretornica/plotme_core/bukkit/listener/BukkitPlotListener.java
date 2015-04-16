@@ -686,7 +686,6 @@ public class BukkitPlotListener implements Listener {
                         if (id2 == null) {
                             event.setCancelled(true);
                         }
-                        return;
                     } else {
                         PlotId id = manager.getPlotId(entity.getLocation());
                         if (id == null) {

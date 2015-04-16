@@ -5,10 +5,12 @@ import com.griefcraft.model.Protection;
 import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IEntity;
 import com.worldcretornica.plotme_core.api.ILocation;
+import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IPlotMe_GeneratorManager;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.PlotLoadEvent;
+import com.worldcretornica.plotme_core.storage.Database;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -41,6 +43,9 @@ public class PlotMeCoreManager {
         plugin = instance;
     }
 
+    public Database getSQLManager() {
+        return plugin.getSqlManager();
+    }
     /**
      * Removes the plot from the plotmap
      *  @param pmi plotmap
@@ -485,7 +490,7 @@ public class PlotMeCoreManager {
      * @throws NullPointerException If the <code>id</code> argument is <code>null</code>
      */
     public Plot createPlot(PlotId id, String owner, UUID uuid, PlotMapInfo pmi) {
-        Plot plot = new Plot(plugin, owner, uuid, id.getWorld(), id, pmi.getDaysToExpiration());
+        Plot plot = new Plot(owner, uuid, id.getWorld(), id, pmi.getDaysToExpiration());
 
         setOwnerSign(plot);
         addPlot(id, plot, pmi);
@@ -818,5 +823,9 @@ public class PlotMeCoreManager {
      */
     public boolean setPlotProperty(Plot plot, String pluginname, String property, String value) {
         return plot.setPlotProperty(pluginname, property, value);
+    }
+
+    public IOfflinePlayer getOfflinePlayer(String name) {
+        return plugin.getServerBridge().getOfflinePlayer(name);
     }
 }

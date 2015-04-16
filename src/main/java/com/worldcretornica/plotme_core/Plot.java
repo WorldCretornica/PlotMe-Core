@@ -1,8 +1,7 @@
 package com.worldcretornica.plotme_core;
 
-import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
-import com.worldcretornica.plotme_core.utils.UUIDFetcher;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
@@ -14,9 +13,6 @@ import java.util.UUID;
 
 public class Plot {
 
-    //TODO look into removing reference to plugin
-
-    private final PlotMe_Core plugin;
     private final HashSet<String> denied;
     private HashMap<String, Integer> allowed;
     private String owner;
@@ -35,8 +31,7 @@ public class Plot {
     private int internalID;
     private String plotName;
 
-    public Plot(PlotMe_Core plugin) {
-        this.plugin = plugin;
+    public Plot() {
         setBiome("PLAINS");
 
         setExpiredDate(null);
@@ -49,8 +44,7 @@ public class Plot {
         this.denied = new HashSet<>();
     }
 
-    public Plot(PlotMe_Core plugin, String owner, UUID uuid, IWorld world, PlotId plotId, int days) {
-        this.plugin = plugin;
+    public Plot(String owner, UUID uuid, IWorld world, PlotId plotId, int days) {
         setOwner(owner);
         setOwnerId(uuid);
         setWorld(world.getName().toLowerCase());
@@ -75,14 +69,13 @@ public class Plot {
         metadata = new HashMap<>();
     }
 
-    public Plot(PlotMe_Core plugin, int internalID, String owner, UUID ownerId, String world, String biome, Date expiredDate,
+    public Plot(int internalID, String owner, UUID ownerId, String world, String biome, Date expiredDate,
             HashMap<String, Integer> allowed,
             HashSet<String>
                     denied,
             PlotId id, double price, boolean forSale, boolean finished,
             String finishedDate, boolean protect,
             Map<String, Map<String, String>> metadata, int plotLikes, String plotName) {
-        this.plugin = plugin;
         setInternalID(internalID);
         setOwner(owner);
         setOwnerId(ownerId);
@@ -102,13 +95,12 @@ public class Plot {
         this.metadata = metadata;
     }
 
-    public Plot(PlotMe_Core plugin, int internalID, String owner, UUID ownerId, String world, String biome, Date expiredDate,
+    public Plot(int internalID, String owner, UUID ownerId, String world, String biome, Date expiredDate,
             HashMap<String, Integer> allowed,
             HashSet<String>
                     denied,
             HashSet<String> likers, PlotId id, double price, boolean forSale, boolean finished, String finishedDate, boolean protect,
             Map<String, Map<String, String>> metadata, int plotLikes, String plotName) {
-        this.plugin = plugin;
         setInternalID(internalID);
         setOwner(owner);
         setOwnerId(ownerId);
@@ -191,36 +183,36 @@ public class Plot {
     public void addAllowed(String name) {
         if (!isAllowedConsulting(name)) {
             getAllowed().put(name, 1);
-            plugin.getSqlManager().addPlotAllowed(name, getInternalID());
+            PlotMeCoreManager.getInstance().getSQLManager().addPlotAllowed(name, getInternalID());
         }
     }
 
     public void addDenied(String name) {
         if (!isDeniedConsulting(name)) {
             getDenied().add(name);
-            plugin.getSqlManager().addPlotDenied(name, getInternalID());
+            PlotMeCoreManager.getInstance().getSQLManager().addPlotDenied(name, getInternalID());
         }
     }
 
     public void removeAllowed(String name) {
         if (getAllowed().containsKey(name)) {
-            plugin.getSqlManager().deletePlotAllowed(getInternalID(), name);
+            PlotMeCoreManager.getInstance().getSQLManager().deletePlotAllowed(getInternalID(), name);
         }
     }
 
     public void removeDenied(String name) {
         if (getDenied().contains(name)) {
-            plugin.getSqlManager().deletePlotDenied(getInternalID(), name);
+            PlotMeCoreManager.getInstance().getSQLManager().deletePlotDenied(getInternalID(), name);
         }
     }
 
     public void removeAllAllowed() {
-        plugin.getSqlManager().deleteAllAllowed(getInternalID());
+        PlotMeCoreManager.getInstance().getSQLManager().deleteAllAllowed(getInternalID());
         getAllowed().clear();
     }
 
     public void removeAllDenied() {
-        plugin.getSqlManager().deleteAllDenied(getInternalID());
+        PlotMeCoreManager.getInstance().getSQLManager().deleteAllDenied(getInternalID());
         getDenied().clear();
     }
 
@@ -228,7 +220,7 @@ public class Plot {
         if ("*".equalsIgnoreCase(name)) {
             return isAllowedInternal(name);
         }
-        UUID player = plugin.getServerBridge().getOfflinePlayer(name).getUniqueId();
+        UUID player = PlotMeCoreManager.getInstance().getOfflinePlayer(name).getUniqueId();
         return player != null && isAllowedInternal(name);
     }
 
@@ -243,7 +235,7 @@ public class Plot {
                 if (accessLevel == AccessLevel.ALLOWED.getLevel()) {
                     return true;
                 } else if (!"*".equalsIgnoreCase(name) && accessLevel == AccessLevel.TRUSTED.getLevel()) {
-                    return plugin.getServerBridge().getPlayer(UUIDFetcher.getUUIDOf(name)).isOnline();
+                    return PlotMeCoreManager.getInstance().getOfflinePlayer(name).isOnline();
                 }
             }
         } else if (getAllowed().containsKey("*")) {
@@ -260,7 +252,7 @@ public class Plot {
     }
 
     public boolean isDeniedConsulting(String name) {
-        IPlayer player = plugin.getServerBridge().getPlayerExact(name);
+        IOfflinePlayer player = PlotMeCoreManager.getInstance().getOfflinePlayer(name);
         return player != null && isDeniedInternal(name);
     }
 
@@ -282,7 +274,7 @@ public class Plot {
     }
 
     public void updateField(String field, Object value) {
-        plugin.getSqlManager().updatePlot(getId(), getWorld(), field, value);
+        PlotMeCoreManager.getInstance().getSQLManager().updatePlot(getId(), getWorld(), field, value);
     }
 
     public final String getWorld() {
@@ -358,7 +350,7 @@ public class Plot {
             metadata.put(pluginname, new HashMap<String, String>());
         }
         metadata.get(pluginname).put(property, value);
-        return plugin.getSqlManager().savePlotProperty(getId(), this.world, pluginname, property, value);
+        return PlotMeCoreManager.getInstance().getSQLManager().savePlotProperty(getId(), this.world, pluginname, property, value);
     }
 
     public Map<String, Map<String, String>> getAllPlotProperties() {

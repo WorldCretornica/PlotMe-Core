@@ -328,7 +328,7 @@ public abstract class Database {
                             }
 
                             Plot plot =
-                                    new Plot(plugin, internalID, owner, ownerId, world.getName().toLowerCase(), biome, expiredDate, allowed, denied,
+                                    new Plot(internalID, owner, ownerId, world.getName().toLowerCase(), biome, expiredDate, allowed, denied,
                                             likers, id, price, forSale, finished, finishedDate, protect, metadata, plotLikes, plotName);
                             ret.put(id, plot);
                         }
@@ -413,7 +413,7 @@ public abstract class Database {
                         }
                     }
 
-                    plot = new Plot(plugin, internalID, owner, ownerId, world, biome, expiredDate, allowed, denied, likers, id, price, forSale,
+                    plot = new Plot(internalID, owner, ownerId, world, biome, expiredDate, allowed, denied, likers, id, price, forSale,
                             finished,
                             finishedDate, protect, metadata, plotLikes, plotName);
                 }
