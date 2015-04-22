@@ -90,7 +90,7 @@ public class CmdClaim extends PlotCommand {
                     }
 
                     if (!event.isCancelled()) {
-                        Plot plot = manager.createPlot(id, playerName, playerUniqueId, pmi);
+                        Plot plot = manager.createPlot(id, world, playerName, playerUniqueId, pmi);
 
                         //plugin.getPlotMeCoreManager().adjustLinkedPlots(id, world);
                         if (playerName.equalsIgnoreCase(player.getName())) {

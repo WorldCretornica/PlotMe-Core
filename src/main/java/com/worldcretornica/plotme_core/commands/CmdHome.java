@@ -91,7 +91,7 @@ public class CmdHome extends PlotCommand {
 
                                     double price = 0.0;
 
-                                    location = manager.getPlotHome(plot.getId());
+                                    location = manager.getPlotHome(plot.getId(), player.getWorld());
                                     PlotTeleportHomeEvent event = new PlotTeleportHomeEvent(world, plot, player, location);
 
                                     if (manager.isEconomyEnabled(pmi)) {
@@ -134,7 +134,7 @@ public class CmdHome extends PlotCommand {
 
                                 double price = 0.0;
 
-                                location = manager.getPlotHome(plot.getId());
+                                location = manager.getPlotHome(plot.getId(), player.getWorld());
                                 PlotTeleportHomeEvent event = new PlotTeleportHomeEvent(world, plot, player, location);
 
                                 if (manager.isEconomyEnabled(pmi)) {

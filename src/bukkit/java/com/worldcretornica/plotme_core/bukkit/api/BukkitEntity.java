@@ -22,7 +22,7 @@ public class BukkitEntity implements IEntity {
         this.entity = entity;
         coords = BukkitConverter.locationToVector(entity.getLocation());
         world = BukkitConverter.adapt(entity.getWorld());
-        loc = new ILocation(world, getPosition());
+        loc = new ILocation(world, coords);
     }
 
     @Override

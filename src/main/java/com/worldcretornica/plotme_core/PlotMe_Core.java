@@ -5,15 +5,16 @@ import com.worldcretornica.plotme_core.api.IPlotMe_GeneratorManager;
 import com.worldcretornica.plotme_core.api.IServerBridge;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.eventbus.EventBus;
+import com.worldcretornica.plotme_core.bukkit.SchematicUtil;
 import com.worldcretornica.plotme_core.storage.Database;
 import com.worldcretornica.plotme_core.storage.MySQLConnector;
 import com.worldcretornica.plotme_core.storage.SQLiteConnector;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class PlotMe_Core {
@@ -21,8 +22,7 @@ public class PlotMe_Core {
     //Bridge
     private final IServerBridge serverBridge;
     private final AbstractSchematicUtil schematicutil;
-    private final File pluginFolder;
-    private final HashMap<String, IPlotMe_GeneratorManager> managers = new HashMap<>();
+    private final HashMap<IWorld, IPlotMe_GeneratorManager> managers = new HashMap<>();
     //Spool stuff
     private final ConcurrentLinkedQueue<PlotToClear> plotsToClear = new ConcurrentLinkedQueue<>();
     private IWorld worldcurrentlyprocessingexpired;
@@ -34,14 +34,13 @@ public class PlotMe_Core {
     private EventBus eventBus;
 
 
-    public PlotMe_Core(IServerBridge serverObjectBuilder, AbstractSchematicUtil schematicutil, File pluginFolder) {
+    public PlotMe_Core(IServerBridge serverObjectBuilder) {
         this.serverBridge = serverObjectBuilder;
-        this.schematicutil = schematicutil;
-        this.pluginFolder = pluginFolder;
+        this.schematicutil = new SchematicUtil(this);
     }
 
-    public IPlotMe_GeneratorManager getGenManager(String name) {
-        return managers.get(name.toLowerCase());
+    public IPlotMe_GeneratorManager getGenManager(IWorld world) {
+        return managers.get(world);
     }
 
     public AbstractSchematicUtil getSchematicUtil() {
@@ -61,8 +60,8 @@ public class PlotMe_Core {
         EventBus plotmeEventBus = new EventBus();
         setEventBus(plotmeEventBus);
         PlotMeCoreManager.getInstance().setPlugin(this);
-        configFile = new ConfigAccessor(pluginFolder, "config.yml");
-        captionFile = new ConfigAccessor(pluginFolder, "captions.yml");
+        configFile = new ConfigAccessor(getServerBridge().getDataFolder(), "config.yml");
+        captionFile = new ConfigAccessor(getServerBridge().getDataFolder(), "captions.yml");
         setupConfigFiles();
         serverBridge.setupCommands();
         setupSQL();
@@ -82,8 +81,8 @@ public class PlotMe_Core {
         setupSQL();
         PlotMeCoreManager.getInstance().getPlotMaps().clear();
 
-        for (String worldname : managers.keySet()) {
-            setupWorld(worldname.toLowerCase());
+        for (IWorld world : managers.keySet()) {
+            setupWorld(world);
         }
     }
 
@@ -119,9 +118,8 @@ public class PlotMe_Core {
         }
     }
 
-    private void setupWorld(String world) {
-        getServerBridge().loadDefaultConfig(configFile, "worlds." + world);
-        configFile.saveConfig();
+    private void setupWorld(IWorld world) {
+        getServerBridge().loadDefaultConfig(configFile, "worlds." + world.getName().toLowerCase());
         PlotMapInfo pmi = new PlotMapInfo(this, configFile, world);
         PlotMeCoreManager.getInstance().addPlotMap(world, pmi);
     }
@@ -149,12 +147,12 @@ public class PlotMe_Core {
         getSqlManager().createTables();
     }
 
-    public void addManager(String world, IPlotMe_GeneratorManager manager) {
-        managers.put(world.toLowerCase(), manager);
-        setupWorld(world.toLowerCase());
+    public void addManager(IWorld world, IPlotMe_GeneratorManager manager) {
+        managers.put(world, manager);
+        setupWorld(world);
     }
 
-    public IPlotMe_GeneratorManager removeManager(String world) {
+    public IPlotMe_GeneratorManager removeManager(IWorld world) {
         return managers.remove(world);
     }
 
@@ -169,6 +167,7 @@ public class PlotMe_Core {
     public String C(String caption) {
         return addColor(this.getCaptionConfig().getString(caption, "Missing caption: " + caption));
     }
+
     private String addColor(String string) {
         return getServerBridge().addColor('&', string);
     }
@@ -191,7 +190,7 @@ public class PlotMe_Core {
 
     public void addPlotToClear(PlotToClear plotToClear) {
         plotsToClear.offer(plotToClear);
-        getLogger().info("plot to clear add " + plotToClear.getPlotId());
+        getLogger().log(Level.INFO, "plot to clear add {0}", plotToClear.getPlotId());
         PlotMeSpool pms = new PlotMeSpool(this, plotToClear);
         pms.setTaskId(serverBridge.scheduleSyncRepeatingTask(pms, 40, 60));
     }
@@ -200,15 +199,15 @@ public class PlotMe_Core {
         plotsToClear.remove(plotToClear);
 
         serverBridge.cancelTask(taskId);
-        getLogger().info("removed taskid " + taskId);
+        getLogger().log(Level.INFO, "removed taskid {0}", taskId);
     }
 
-    public boolean isPlotLocked(PlotId id) {
+    public boolean isPlotLocked(Plot plot) {
         if (plotsToClear.isEmpty()) {
             return false;
         }
         for (PlotToClear ptc : plotsToClear) {
-            if (ptc.getPlotId().equals(id)) {
+            if (ptc.getPlot().equals(plot)) {
                 return true;
             }
         }

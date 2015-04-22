@@ -53,7 +53,7 @@ public class CmdSell extends PlotCommand {
                                         plot.updateField("forsale", false);
 
                                         manager.adjustWall(player);
-                                        manager.removeSellSign(id);
+                                        manager.removeSellSign(id, world);
 
                                         player.sendMessage(C("MsgPlotNoLongerSale"));
 
@@ -88,7 +88,7 @@ public class CmdSell extends PlotCommand {
                                             plot.updateField("forsale", true);
 
                                             manager.adjustWall(player);
-                                            manager.setSellSign(plot);
+                                            manager.setSellSign(plot, world);
 
                                             player.sendMessage(C("MsgPlotForSale"));
 

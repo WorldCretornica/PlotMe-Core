@@ -40,4 +40,6 @@ public interface IEntity extends IActor {
     UUID getUniqueId();
 
     String getName();
+
+    Vector getPosition();
 }

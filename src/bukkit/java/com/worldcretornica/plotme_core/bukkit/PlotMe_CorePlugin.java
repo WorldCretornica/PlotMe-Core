@@ -6,9 +6,9 @@ import com.worldcretornica.plotme_core.api.IEntity;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IPlotMe_GeneratorManager;
 import com.worldcretornica.plotme_core.api.IServerBridge;
+import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitEntity;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -33,12 +33,9 @@ public class PlotMe_CorePlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        getLogger().info("Enabling PlotMe...Waiting for generator data.");
         serverObjectBuilder = new BukkitServerBridge(this, getLogger());
-        if (Bukkit.getVersion().contains("1.7")) {
-            getPluginLoader().disablePlugin(this);
-            return;
-        }
-        plotme = new PlotMe_Core(serverObjectBuilder, new SchematicUtil(this), getDataFolder());
+        plotme = new PlotMe_Core(serverObjectBuilder);
         getAPI().enable();
         doMetric();
     }
@@ -75,7 +72,7 @@ public class PlotMe_CorePlugin extends JavaPlugin {
                     if (!manager.getPlotMaps().isEmpty()) {
                         int totalPlotSize = 0;
 
-                        for (String plotter : manager.getPlotMaps().keySet()) {
+                        for (IWorld plotter : manager.getPlotMaps().keySet()) {
                             IPlotMe_GeneratorManager genmanager = plotme.getGenManager(plotter);
                             if (genmanager != null) {
                                 totalPlotSize += genmanager.getPlotSize();
@@ -114,7 +111,7 @@ public class PlotMe_CorePlugin extends JavaPlugin {
         } else {
             BukkitPlayer bukkitplayer = new BukkitPlayer(player);
             bukkitPlayerMap.put(player.getUniqueId(), bukkitplayer);
-            return bukkitplayer;
+            return getServerObjectBuilder().getPlayer(player.getUniqueId());
         }
     }
 

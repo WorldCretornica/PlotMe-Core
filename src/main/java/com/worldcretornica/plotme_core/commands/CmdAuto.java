@@ -64,7 +64,7 @@ public class CmdAuto extends PlotCommand {
 
                 for (int i = 0; i < maxPlots; i++) {
                     if (-limit / 2 <= x && x <= limit / 2 && -limit / 2 <= z && z <= limit / 2) {
-                        PlotId id = new PlotId(x, z, world);
+                        PlotId id = new PlotId(x, z);
                         if (manager.isPlotAvailable(id, pmi)) {
                             double price = 0.0;
 
@@ -92,9 +92,9 @@ public class CmdAuto extends PlotCommand {
                             }
 
                             if (!event.isCancelled()) {
-                                manager.createPlot(id, player.getName(), player.getUniqueId(), pmi);
+                                manager.createPlot(id, world, player.getName(), player.getUniqueId(), pmi);
 
-                                player.setLocation(manager.getPlotHome(id));
+                                player.setLocation(manager.getPlotHome(id, player.getWorld()));
 
                                 player.sendMessage(C("MsgThisPlotYours") + " " + C("WordUse") + " /plotme home " + C("MsgToGetToIt"));
 

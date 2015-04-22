@@ -4,11 +4,14 @@ import com.flowpowered.math.vector.Vector3i;
 import com.google.common.base.Optional;
 import com.worldcretornica.plotme_core.api.IBlock;
 import com.worldcretornica.plotme_core.api.IChunk;
+import com.worldcretornica.plotme_core.api.IEntity;
 import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.api.Vector;
 import org.spongepowered.api.world.Chunk;
 import org.spongepowered.api.world.World;
 
 import java.io.File;
+import java.util.List;
 import java.util.UUID;
 
 public class SpongeWorld implements IWorld {
@@ -69,6 +72,22 @@ public class SpongeWorld implements IWorld {
     @Override
     public IBlock getBlockAt(int x, int y, int z) {
         //Todo not possible yet
+        return null;
+    }
+
+    @Override
+    public IBlock getBlockAt(double x, double y, double z) {
+        //TODO
+        return null;
+    }
+
+    @Override
+    public IBlock getBlockAt(Vector add) {
+        return null;
+    }
+
+    @Override
+    public List<IEntity> getEntities() {
         return null;
     }
 }

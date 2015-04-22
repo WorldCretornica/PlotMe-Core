@@ -1,7 +1,10 @@
 package com.worldcretornica.plotme_core.bukkit;
 
 import com.worldcretornica.plotme_core.AbstractSchematicUtil;
+import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.api.IBlock;
 import com.worldcretornica.plotme_core.api.ILocation;
+import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitWorld;
 import com.worldcretornica.schematic.Attribute;
 import com.worldcretornica.schematic.Display;
@@ -73,7 +76,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 
@@ -97,12 +99,10 @@ import java.util.UUID;
 
 public class SchematicUtil extends AbstractSchematicUtil {
 
-    private final Plugin plugin;
+    private final PlotMe_Core plugin;
 
-    @SuppressWarnings("deprecation")
-    public SchematicUtil(Plugin instance) {
+    public SchematicUtil(PlotMe_Core instance) {
         this.plugin = instance;
-
         blockPlacedLast.add(Material.SAPLING.getId());
         blockPlacedLast.add(Material.BED.getId());
         blockPlacedLast.add(Material.POWERED_RAIL.getId());
@@ -156,11 +156,11 @@ public class SchematicUtil extends AbstractSchematicUtil {
     @Override
     public Schematic loadCompiledSchematic(String file) {
 
-        File pluginsFolder = plugin.getDataFolder().getParentFile();
-        File coreFolder = new File(pluginsFolder, "PlotMe\\PlotSchematic");
+        File pluginsFolder = plugin.getServerBridge().getDataFolder().getParentFile();
+        File coreFolder = new File(pluginsFolder, "PlotSchematic");
         coreFolder.mkdirs();
 
-        String filename = coreFolder.getAbsolutePath() + "\\" + file + ".plotschematic";
+        String filename = coreFolder.getAbsolutePath() + File.separatorChar + file + ".plotschematic";
 
         File file2 = new File(filename);
 
@@ -229,11 +229,11 @@ public class SchematicUtil extends AbstractSchematicUtil {
     @Override
     public void saveCompiledSchematic(Schematic schem, String file) {
 
-        File pluginsFolder = plugin.getDataFolder().getParentFile();
-        File coreFolder = new File(pluginsFolder, "PlotMe\\PlotSchematic");
+        File pluginsFolder = plugin.getServerBridge().getDataFolder().getParentFile();
+        File coreFolder = new File(pluginsFolder, "PlotSchematic");
         coreFolder.mkdirs();
 
-        String filename = coreFolder.getAbsolutePath() + "\\" + file + ".plotschematic";
+        String filename = coreFolder.getAbsolutePath() + File.separatorChar + file + ".plotschematic";
 
         try (ObjectOutput output = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(filename)))) {
             output.writeObject(schem);
@@ -244,14 +244,13 @@ public class SchematicUtil extends AbstractSchematicUtil {
     }
 
     @Override
-    public void pasteSchematic(ILocation loc, Schematic schem) {
-        pasteSchematicBlocks(loc, schem, true);
-        pasteSchematicEntities(loc, schem);
+    public void pasteSchematic(IWorld world, com.worldcretornica.plotme_core.api.Vector loc, Schematic schem) {
+        pasteSchematicBlocks(world, loc, schem, true);
+        pasteSchematicEntities(world, loc, schem);
     }
 
     @SuppressWarnings("deprecation")
-    private void pasteSchematicBlocks(ILocation loc, Schematic schematic, boolean setBlock) {
-        World world = ((BukkitWorld) loc.getWorld()).getWorld();
+    private void pasteSchematicBlocks(IWorld world, com.worldcretornica.plotme_core.api.Vector loc, Schematic schematic, boolean setBlock) {
         int[] blocks = schematic.getBlocks();
         byte[] blockData = schematic.getData();
 
@@ -267,12 +266,12 @@ public class SchematicUtil extends AbstractSchematicUtil {
                 for (int z = 0; z < length; ++z) {
                     int index = y * width * length + z * width + x;
 
-                    Block block = world.getBlockAt(x + loc.getBlockX(), y + loc.getBlockY(), z + loc.getBlockZ());
+                    IBlock block = world.getBlockAt(x + loc.getBlockX(), y + loc.getBlockY(), z + loc.getBlockZ());
 
                     if (!blockPlacedLast.contains(blocks[index])) {
                         try {
                             if (setBlock) {
-                                block.setTypeIdAndData(blocks[index], blockData[index], false);
+                                block.setTypeIdAndData((short) blocks[index], blockData[index], false);
                             }
                             block.setData(blockData[index], false);
                         } catch (NullPointerException e) {
@@ -565,7 +564,6 @@ public class SchematicUtil extends AbstractSchematicUtil {
         byte dir = 0;
         byte direction = 0;
         byte invulnerable = 0;
-        byte onground = 0;
         byte canpickuploot = 0;
         byte color = 0;
         byte customnamevisible = 0;
@@ -1161,9 +1159,7 @@ public class SchematicUtil extends AbstractSchematicUtil {
     }
 
     @SuppressWarnings("deprecation")
-    private void pasteSchematicEntities(ILocation loc, Schematic schematic) {
-        World world = ((BukkitWorld) loc.getWorld()).getWorld();
-
+    private void pasteSchematicEntities(IWorld world, com.worldcretornica.plotme_core.api.Vector loc, Schematic schematic) {
         List<Entity> entities = schematic.getEntities();
         List<TileEntity> tileentities = schematic.getTileEntities();
         int originX = schematic.getOriginX();
@@ -1172,7 +1168,7 @@ public class SchematicUtil extends AbstractSchematicUtil {
 
         try {
             for (Entity e : entities) {
-                createEntity(e, loc, originX, originY, originZ);
+                createEntity(world, e, loc, originX, originY, originZ);
             }
         } catch (Exception e) {
             //plugin.getLogger().warning("err:" + e.getMessage());
@@ -1181,7 +1177,7 @@ public class SchematicUtil extends AbstractSchematicUtil {
 
         for (TileEntity te : tileentities) {
 
-            Block block = world.getBlockAt(te.getX() + loc.getBlockX(), te.getY() + loc.getBlockY(), te.getZ() + loc.getBlockZ());
+            IBlock block = world.getBlockAt(te.getX() + loc.getBlockX(), te.getY() + loc.getBlockY(), te.getZ() + loc.getBlockZ());
             List<Item> items = te.getItems();
             // Commented are unused
 
@@ -1210,7 +1206,7 @@ public class SchematicUtil extends AbstractSchematicUtil {
                 Skull skull = (Skull) bs;
 
                 BlockFace bf = BlockFace.NORTH;
-                Byte rot = te.getRot();
+                byte rot = te.getRot();
                 if (rot == 0) {
                     bf = BlockFace.NORTH;
                 } else if (rot == 1) {
@@ -1307,12 +1303,11 @@ public class SchematicUtil extends AbstractSchematicUtil {
         }
     }
 
-    private org.bukkit.entity.Entity createEntity(Entity e, ILocation loc, int originX, int originY, int originZ) {
+    private org.bukkit.entity.Entity createEntity(IWorld world, Entity e, com.worldcretornica.plotme_core.api.Vector loc, int originX, int originY,
+            int originZ) {
         try {
             @SuppressWarnings("deprecation")
             EntityType entitytype = EntityType.fromName(e.getId());
-            World world = ((BukkitWorld) loc.getWorld()).getWorld();
-
             org.bukkit.entity.Entity ent = null;
 
             if (entitytype != null && e.getPos() != null && e.getPos().size() == 3) {
@@ -1324,7 +1319,7 @@ public class SchematicUtil extends AbstractSchematicUtil {
 
                 //Set properties, unused are commented out
 
-                //Byte dir = e.getDir();
+                Byte dir = e.getDir();
                 //Byte direction = e.getDirection();
                 //Byte invulnerable = e.getInvulnerable();
                 //Byte onground = e.getOnGround();
@@ -1473,7 +1468,7 @@ public class SchematicUtil extends AbstractSchematicUtil {
                 }
 
                 if (riding != null) {
-                    ent.setPassenger(createEntity(riding, loc, originX, originY, originZ));
+                    ent.setPassenger(createEntity(world, riding, loc, originX, originY, originZ));
                 }
                 ent.setFallDistance(falldistance);
                 ent.setFireTicks(fire);
@@ -1740,7 +1735,7 @@ public class SchematicUtil extends AbstractSchematicUtil {
             }
 
             return ent;
-        } catch (Exception ex) {
+        } catch (IllegalArgumentException ex) {
             plugin.getLogger().info("failed to create entity ");
             ex.printStackTrace();
             return null;
@@ -1922,266 +1917,262 @@ public class SchematicUtil extends AbstractSchematicUtil {
     }
 
     @SuppressWarnings("deprecation")
-    public Schematic createCompiledSchematic(ILocation loc1, ILocation loc2) {
+    public Schematic createCompiledSchematic(IWorld world, com.worldcretornica.plotme_core.api.Vector loc1, com.worldcretornica.plotme_core.api
+            .Vector loc2) {
 
         Schematic schem;
 
-        if (loc1.getWorld().equals(loc2.getWorld())) {
-            int minX = Math.min(loc1.getBlockX(), loc2.getBlockX());
-            int maxX = Math.max(loc1.getBlockX(), loc2.getBlockX());
-            int minY = Math.min(loc1.getBlockY(), loc2.getBlockY());
-            int maxY = Math.max(loc1.getBlockY(), loc2.getBlockY());
-            int minZ = Math.min(loc1.getBlockZ(), loc2.getBlockZ());
-            int maxZ = Math.max(loc1.getBlockZ(), loc2.getBlockZ());
+        int minX = Math.min(loc1.getBlockX(), loc2.getBlockX());
+        int maxX = Math.max(loc1.getBlockX(), loc2.getBlockX());
+        int minY = Math.min(loc1.getBlockY(), loc2.getBlockY());
+        int maxY = Math.max(loc1.getBlockY(), loc2.getBlockY());
+        int minZ = Math.min(loc1.getBlockZ(), loc2.getBlockZ());
+        int maxZ = Math.max(loc1.getBlockZ(), loc2.getBlockZ());
 
-            Short length = (short) (maxZ - minZ + 1);
-            Short width = (short) (maxX - minX + 1);
-            Short height = (short) (maxY - minY + 1);
+        short length = (short) (maxZ - minZ + 1);
+        short width = (short) (maxX - minX + 1);
+        short height = (short) (maxY - minY + 1);
 
-            World world = ((BukkitWorld) loc1.getWorld()).getWorld();
-            int[] blocks = new int[length * width * height];
-            byte[] blockData = new byte[length * width * height];
+        int[] blocks = new int[length * width * height];
+        byte[] blockData = new byte[length * width * height];
 
-            List<Entity> entities = new ArrayList<>();
-            List<TileEntity> tileentities = new ArrayList<>();
+        List<Entity> entities = new ArrayList<>();
+        List<TileEntity> tileentities = new ArrayList<>();
 
-            for (int x = 0; x < width; ++x) {
-                for (int z = 0; z < length; ++z) {
-                    for (int y = 0; y < height; ++y) {
-                        int index = y * width * length + z * width + x;
+        for (int x = 0; x < width; ++x) {
+            for (int z = 0; z < length; ++z) {
+                for (int y = 0; y < height; ++y) {
+                    int index = y * width * length + z * width + x;
 
-                        Block block = world.getBlockAt(x + minX, y + minY, z + minZ);
+                    IBlock block = world.getBlockAt(x + minX, y + minY, z + minZ);
 
-                        blocks[index] = block.getTypeId();
-                        blockData[index] = block.getData();
+                    blocks[index] = block.getTypeId();
+                    blockData[index] = block.getData();
 
-                        boolean isTileEntity = false;
+                    boolean isTileEntity = false;
 
-                        BlockState bs = block.getState();
+                    BlockState bs = block.getState();
 
-                        byte rot = 0;
-                        byte skulltype = 0;
-                        byte note = 0;
+                    byte rot = 0;
+                    byte skulltype = 0;
+                    byte note = 0;
 
-                        int record = 0;
-                        int outputsignal = 0;
-                        int transfercooldown = 0;
-                        int levels = 0;
-                        int primary = 0;
-                        int secondary = 0;
-                        int base = 0;
+                    int record = 0;
+                    int outputsignal = 0;
+                    int transfercooldown = 0;
+                    int levels = 0;
+                    int primary = 0;
+                    int secondary = 0;
+                    int base = 0;
 
-                        RecordItem recorditem = null;
+                    RecordItem recorditem = null;
 
-                        short delay = 0;
-                        short maxnearbyentities = 0;
-                        short maxspawndelay = 0;
-                        short minspawndelay = 0;
-                        short requiredplayerrange = 0;
-                        short spawncount = 0;
-                        short spawnrange = 0;
-                        short burntime = 0;
-                        short cooktime = 0;
-                        short brewtime = 0;
+                    short delay = 0;
+                    short maxnearbyentities = 0;
+                    short maxspawndelay = 0;
+                    short minspawndelay = 0;
+                    short requiredplayerrange = 0;
+                    short spawncount = 0;
+                    short spawnrange = 0;
+                    short burntime = 0;
+                    short cooktime = 0;
+                    short brewtime = 0;
 
-                        String entityid = null;
-                        String customname = null;
-                        String id = null;
-                        String text1 = null;
-                        String text2 = null;
-                        String text3 = null;
-                        String text4 = null;
-                        String command = null;
+                    String entityid = null;
+                    String customname = null;
+                    String id = null;
+                    String text1 = null;
+                    String text2 = null;
+                    String text3 = null;
+                    String text4 = null;
+                    String command = null;
 
-                        List<Item> items = null;
-                        List<Pattern> patterns = null;
+                    List<Item> items = null;
+                    List<Pattern> patterns = null;
 
-                        if (bs instanceof Skull) {
-                            Skull skull = (Skull) bs;
+                    if (bs instanceof Skull) {
+                        Skull skull = (Skull) bs;
 
-                            switch (skull.getRotation()) {
-                                case NORTH:
-                                    rot = 0;
-                                    break;
-                                case NORTH_NORTH_EAST:
-                                    rot = 1;
-                                    break;
-                                case UP:
-                                    break;
-                                case DOWN:
-                                    break;
-                                case NORTH_EAST:
-                                    rot = 2;
-                                    break;
-                                case EAST_NORTH_EAST:
-                                    rot = 3;
-                                    break;
-                                case EAST:
-                                    rot = 4;
-                                    break;
-                                case EAST_SOUTH_EAST:
-                                    rot = 5;
-                                    break;
-                                case SOUTH_EAST:
-                                    rot = 6;
-                                    break;
-                                case SOUTH_SOUTH_EAST:
-                                    rot = 7;
-                                    break;
-                                case SOUTH:
-                                    rot = 8;
-                                    break;
-                                case SOUTH_SOUTH_WEST:
-                                    rot = 9;
-                                    break;
-                                case SOUTH_WEST:
-                                    rot = 10;
-                                    break;
-                                case WEST_SOUTH_WEST:
-                                    rot = 11;
-                                    break;
-                                case WEST:
-                                    rot = 12;
-                                    break;
-                                case WEST_NORTH_WEST:
-                                    rot = 13;
-                                    break;
-                                case NORTH_WEST:
-                                    rot = 14;
-                                    break;
-                                case NORTH_NORTH_WEST:
-                                    rot = 15;
-                                    break;
-                                case SELF:
-                                    break;
-                                default:
-                                    rot = 0;
-                                    break;
-                            }
-
-                            skulltype = (byte) skull.getSkullType().ordinal();
-
-                            isTileEntity = true;
+                        switch (skull.getRotation()) {
+                            case NORTH:
+                                rot = 0;
+                                break;
+                            case NORTH_NORTH_EAST:
+                                rot = 1;
+                                break;
+                            case UP:
+                                break;
+                            case DOWN:
+                                break;
+                            case NORTH_EAST:
+                                rot = 2;
+                                break;
+                            case EAST_NORTH_EAST:
+                                rot = 3;
+                                break;
+                            case EAST:
+                                rot = 4;
+                                break;
+                            case EAST_SOUTH_EAST:
+                                rot = 5;
+                                break;
+                            case SOUTH_EAST:
+                                rot = 6;
+                                break;
+                            case SOUTH_SOUTH_EAST:
+                                rot = 7;
+                                break;
+                            case SOUTH:
+                                rot = 8;
+                                break;
+                            case SOUTH_SOUTH_WEST:
+                                rot = 9;
+                                break;
+                            case SOUTH_WEST:
+                                rot = 10;
+                                break;
+                            case WEST_SOUTH_WEST:
+                                rot = 11;
+                                break;
+                            case WEST:
+                                rot = 12;
+                                break;
+                            case WEST_NORTH_WEST:
+                                rot = 13;
+                                break;
+                            case NORTH_WEST:
+                                rot = 14;
+                                break;
+                            case NORTH_NORTH_WEST:
+                                rot = 15;
+                                break;
+                            case SELF:
+                                break;
+                            default:
+                                rot = 0;
+                                break;
                         }
 
-                        if (bs instanceof CreatureSpawner) {
-                            CreatureSpawner spawner = (CreatureSpawner) bs;
+                        skulltype = (byte) skull.getSkullType().ordinal();
 
-                            entityid = spawner.getCreatureTypeName();
-                            delay = (short) spawner.getDelay();
+                        isTileEntity = true;
+                    }
 
-                            isTileEntity = true;
-                        }
+                    if (bs instanceof CreatureSpawner) {
+                        CreatureSpawner spawner = (CreatureSpawner) bs;
 
-                        if (bs instanceof Furnace) {
-                            Furnace furnace = (Furnace) bs;
+                        entityid = spawner.getCreatureTypeName();
+                        delay = (short) spawner.getDelay();
 
-                            burntime = furnace.getBurnTime();
-                            cooktime = furnace.getCookTime();
+                        isTileEntity = true;
+                    }
 
-                            isTileEntity = true;
-                        }
+                    if (bs instanceof Furnace) {
+                        Furnace furnace = (Furnace) bs;
 
-                        if (bs instanceof Sign) {
-                            Sign sign = (Sign) bs;
-                            text1 = sign.getLine(0);
-                            text2 = sign.getLine(1);
-                            text3 = sign.getLine(2);
-                            text4 = sign.getLine(3);
+                        burntime = furnace.getBurnTime();
+                        cooktime = furnace.getCookTime();
 
-                            isTileEntity = true;
-                        }
+                        isTileEntity = true;
+                    }
 
-                        if (bs instanceof CommandBlock) {
-                            CommandBlock cb = (CommandBlock) bs;
+                    if (bs instanceof Sign) {
+                        Sign sign = (Sign) bs;
+                        text1 = sign.getLine(0);
+                        text2 = sign.getLine(1);
+                        text3 = sign.getLine(2);
+                        text4 = sign.getLine(3);
 
-                            command = cb.getCommand();
+                        isTileEntity = true;
+                    }
 
-                            isTileEntity = true;
-                        }
+                    if (bs instanceof CommandBlock) {
+                        CommandBlock cb = (CommandBlock) bs;
 
-                        if (bs instanceof BrewingStand) {
-                            BrewingStand brew = (BrewingStand) bs;
+                        command = cb.getCommand();
 
-                            brewtime = (short) brew.getBrewingTime();
+                        isTileEntity = true;
+                    }
 
-                            isTileEntity = true;
-                        }
+                    if (bs instanceof BrewingStand) {
+                        BrewingStand brew = (BrewingStand) bs;
 
-                        if (bs instanceof Jukebox) {
-                            Jukebox jb = (Jukebox) bs;
+                        brewtime = (short) brew.getBrewingTime();
 
-                            record = jb.getPlaying().getId();
+                        isTileEntity = true;
+                    }
 
-                            isTileEntity = true;
-                        }
+                    if (bs instanceof Jukebox) {
+                        Jukebox jb = (Jukebox) bs;
 
-                        if (bs instanceof NoteBlock) {
-                            NoteBlock nb = (NoteBlock) bs;
+                        record = jb.getPlaying().getId();
 
-                            note = nb.getRawNote();
+                        isTileEntity = true;
+                    }
 
-                            isTileEntity = true;
-                        }
+                    if (bs instanceof NoteBlock) {
+                        NoteBlock nb = (NoteBlock) bs;
 
-                        if (bs instanceof InventoryHolder) {
+                        note = nb.getRawNote();
 
-                            InventoryHolder ih = (InventoryHolder) bs;
-                            Inventory inventory = ih.getInventory();
+                        isTileEntity = true;
+                    }
 
-                            if (inventory.getSize() > 0) {
-                                items = new ArrayList<>();
+                    if (bs instanceof InventoryHolder) {
 
-                                for (byte slot = 0; slot < inventory.getSize(); slot++) {
-                                    ItemStack is = inventory.getItem(slot);
-                                    if (is != null) {
-                                        Item item = getItem(is, slot);
-                                        items.add(item);
-                                    }
+                        InventoryHolder ih = (InventoryHolder) bs;
+                        Inventory inventory = ih.getInventory();
+
+                        if (inventory.getSize() > 0) {
+                            items = new ArrayList<>();
+
+                            for (byte slot = 0; slot < inventory.getSize(); slot++) {
+                                ItemStack is = inventory.getItem(slot);
+                                if (is != null) {
+                                    Item item = getItem(is, slot);
+                                    items.add(item);
                                 }
                             }
-
-                            isTileEntity = true;
                         }
 
-                        if (bs instanceof Banner) {
-                            Banner banner = (Banner) bs;
-                            patterns = new ArrayList<>();
-                            base = (int) banner.getBaseColor().getDyeData();
+                        isTileEntity = true;
+                    }
 
-                            for (org.bukkit.block.banner.Pattern pattern : banner.getPatterns()) {
-                                patterns.add(new Pattern((int) pattern.getColor().getDyeData(), pattern.getPattern().getIdentifier()));
-                            }
+                    if (bs instanceof Banner) {
+                        Banner banner = (Banner) bs;
+                        patterns = new ArrayList<>();
+                        base = (int) banner.getBaseColor().getDyeData();
 
-                            isTileEntity = true;
+                        for (org.bukkit.block.banner.Pattern pattern : banner.getPatterns()) {
+                            patterns.add(new Pattern((int) pattern.getColor().getDyeData(), pattern.getPattern().getIdentifier()));
                         }
 
-                        if (isTileEntity) {
-                            TileEntity te = new TileEntity(x, y, z, customname, id, items, rot, skulltype, delay, maxnearbyentities, maxspawndelay,
-                                    minspawndelay, requiredplayerrange, spawncount, spawnrange, entityid, burntime, cooktime,
-                                    text1, text2, text3, text4, note, record, recorditem, brewtime, command, outputsignal,
-                                    transfercooldown, levels, primary, secondary, patterns, base);
-                            tileentities.add(te);
-                        }
+                        isTileEntity = true;
+                    }
+
+                    if (isTileEntity) {
+                        TileEntity te = new TileEntity(x, y, z, customname, id, items, rot, skulltype, delay, maxnearbyentities, maxspawndelay,
+                                minspawndelay, requiredplayerrange, spawncount, spawnrange, entityid, burntime, cooktime,
+                                text1, text2, text3, text4, note, record, recorditem, brewtime, command, outputsignal,
+                                transfercooldown, levels, primary, secondary, patterns, base);
+                        tileentities.add(te);
                     }
                 }
             }
-
-            for (org.bukkit.entity.Entity bukkitentity : world.getEntities()) {
-                Location entloc = bukkitentity.getLocation();
-
-                if (entloc.getX() >= minX && entloc.getX() <= maxX &&
-                        entloc.getY() >= minY && entloc.getY() <= maxY &&
-                        entloc.getZ() >= minZ && entloc.getZ() <= maxZ &&
-                        !(bukkitentity instanceof Player)) {
-                    entities.add(getEntity(bukkitentity, minX, minY, minZ));
-                }
-            }
-
-            schem = new Schematic(blocks, blockData, "Alpha", width, length, height, entities, tileentities, "", 0, 0, 0);
-        } else {
-            schem = null;
         }
+
+        for (org.bukkit.entity.Entity bukkitentity : world.getEntities()) {
+            Location entloc = bukkitentity.getLocation();
+
+            if (entloc.getX() >= minX && entloc.getX() <= maxX &&
+                    entloc.getY() >= minY && entloc.getY() <= maxY &&
+                    entloc.getZ() >= minZ && entloc.getZ() <= maxZ &&
+                    !(bukkitentity instanceof Player)) {
+                entities.add(getEntity(bukkitentity, minX, minY, minZ));
+            }
+        }
+
+        schem = new Schematic(blocks, blockData, "Alpha", width, length, height, entities, tileentities, "", 0, 0, 0);
 
         return schem;
     }
@@ -2192,7 +2183,7 @@ public class SchematicUtil extends AbstractSchematicUtil {
         final int id;
         final byte data;
 
-        public LastBlock(Block block, int id, byte data) {
+        public LastBlock(IBlock block, int id, byte data) {
             this.block = block;
             this.id = id;
             this.data = data;

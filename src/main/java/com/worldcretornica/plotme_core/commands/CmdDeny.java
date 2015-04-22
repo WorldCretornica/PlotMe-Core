@@ -86,21 +86,21 @@ public class CmdDeny extends PlotCommand {
                                 plot.removeAllowed(denied);
 
                                 if ("*".equals(denied)) {
-                                    List<IPlayer> playersInPlot = manager.getPlayersInPlot(id);
+                                    List<IPlayer> playersInPlot = manager.getPlayersInPlot(id, world);
 
                                     for (IPlayer iPlayer : playersInPlot) {
                                         if (!plot.isAllowed(iPlayer.getUniqueId())) {
-                                            iPlayer.setLocation(manager.getPlotHome(plot.getId()));
+                                            iPlayer.setLocation(manager.getPlotHome(plot.getId(), player.getWorld()));
                                         }
                                     }
                                 } else {
-                                    IPlayer deniedPlayer = serverBridge.getPlayerExact(denied);
+                                    IPlayer deniedPlayer = serverBridge.getPlayer(denied);
 
                                     if (deniedPlayer != null && deniedPlayer.getWorld().equals(world)) {
                                         PlotId plotId = manager.getPlotId(deniedPlayer);
 
                                         if (plotId.equals(id)) {
-                                            deniedPlayer.setLocation(manager.getPlotHome(plot.getId()));
+                                            deniedPlayer.setLocation(manager.getPlotHome(plot.getId(), player.getWorld()));
                                         }
                                     }
                                 }

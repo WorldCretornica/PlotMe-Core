@@ -43,7 +43,7 @@ public abstract class IServerBridge {
      */
     public abstract IPlayer getPlayer(UUID uuid);
 
-    public abstract IPlayer getPlayerExact(String name);
+    public abstract IPlayer getPlayer(String name);
 
     public abstract Collection<IPlayer> getOnlinePlayers();
 

@@ -13,7 +13,6 @@ import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.configuration.ConfigurationSection;
 import org.spongepowered.api.entity.player.Player;
-import org.spongepowered.api.service.command.CommandService;
 import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.biome.BiomeType;
 
@@ -57,7 +56,7 @@ public class SpongeServerBridge extends IServerBridge {
     }
 
     @Override
-    public IPlayer getPlayerExact(String name) {
+    public IPlayer getPlayer(String name) {
         Player player = plugin.getGame().getServer().getPlayer(name).orNull();
         if (player != null) {
             return new SpongePlayer(player);
@@ -141,9 +140,6 @@ public class SpongeServerBridge extends IServerBridge {
 
     @Override
     public void setupCommands() {
-        CommandService cmdService = plugin.getGame().getCommandDispatcher();
-        cmdService.register(plugin, new SpongeCommand(plugin), "plotme");
-
     }
 
     @Override
@@ -171,7 +167,7 @@ public class SpongeServerBridge extends IServerBridge {
 
     @Override
     public File getDataFolder() {
-        return new File("config", "PlotMe");
+        return plugin.getConfigDir();
     }
 
     @Override

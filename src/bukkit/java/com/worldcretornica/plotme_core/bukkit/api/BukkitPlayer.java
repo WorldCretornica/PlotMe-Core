@@ -73,7 +73,6 @@ public class BukkitPlayer extends BukkitOfflinePlayer implements IPlayer {
         return "Bukkit Player{ name= " + getName() + " uuid = " + getUniqueId().toString() + " }";
     }
 
-
     public Vector getPosition() {
         return coords;
     }

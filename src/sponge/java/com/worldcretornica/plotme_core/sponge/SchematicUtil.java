@@ -1,7 +1,8 @@
 package com.worldcretornica.plotme_core.sponge;
 
 import com.worldcretornica.plotme_core.AbstractSchematicUtil;
-import com.worldcretornica.plotme_core.api.ILocation;
+import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.api.Vector;
 import com.worldcretornica.schematic.Schematic;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,7 +18,7 @@ public class SchematicUtil extends AbstractSchematicUtil {
     }
 
     @Override
-    public void pasteSchematic(ILocation loc, Schematic schem) {
+    public void pasteSchematic(IWorld world, Vector loc, Schematic schem) {
 
     }
 
@@ -29,7 +30,7 @@ public class SchematicUtil extends AbstractSchematicUtil {
 
     @Nullable
     @Override
-    public Schematic createCompiledSchematic(ILocation loc1, ILocation loc2) {
+    public Schematic createCompiledSchematic(IWorld world, Vector loc1, Vector loc2) {
         return null;
     }
 

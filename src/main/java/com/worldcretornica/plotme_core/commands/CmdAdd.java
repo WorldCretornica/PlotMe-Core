@@ -79,7 +79,7 @@ public class CmdAdd extends PlotCommand {
                             }
 
                             if (!event.isCancelled()) {
-                                IPlayer allowed2 = plugin.getServerBridge().getPlayerExact(allowed);
+                                IPlayer allowed2 = plugin.getServerBridge().getPlayer(allowed);
                                 if (allowed2 != null) {
                                     plot.addAllowed(allowed2.getUniqueId().toString());
                                     plot.removeDenied(allowed2.getUniqueId().toString());

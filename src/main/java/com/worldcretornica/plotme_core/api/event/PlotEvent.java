@@ -54,7 +54,7 @@ public class PlotEvent implements Event {
      */
     public ILocation getHomeLocation() {
         if (getPlot() != null) {
-            return PlotMeCoreManager.getInstance().getPlotHome(getPlot().getId());
+            return PlotMeCoreManager.getInstance().getPlotHome(getPlot().getId(), player.getWorld());
         } else {
             return null;
         }

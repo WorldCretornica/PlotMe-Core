@@ -65,12 +65,12 @@ public class CmdSetOwner extends PlotCommand {
 
                     if (!event.isCancelled()) {
                         plot.setForSale(false);
-                        manager.removeSellSign(id);
+                        manager.removeSellSign(id, world);
                         plot.resetExpire(pmi.getDaysToExpiration());
                         plot.updateField("forsale", false);
                         plot.setOwner(newOwner);
                         plot.setOwnerId(newOwnerId);
-                        manager.setOwnerSign(plot);
+                        manager.setOwnerSign(world, plot);
                         //todo new function to change the plot owner in database or just modify the plot class to do this.
                         player.sendMessage(C("MsgOwnerChangedTo") + " " + newOwner);
                     }
@@ -82,7 +82,7 @@ public class CmdSetOwner extends PlotCommand {
                         new PlotCreateEvent(world, id, serverBridge.getPlayer(newOwnerId));
                 serverBridge.getEventBus().post(event);
                 if (!event.isCancelled()) {
-                    manager.createPlot(id, newOwner, newOwnerId, pmi);
+                    manager.createPlot(id, world, newOwner, newOwnerId, pmi);
                     player.sendMessage(C("MsgOwnerChangedTo") + " " + newOwner);
                 }
             }

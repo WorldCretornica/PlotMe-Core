@@ -32,11 +32,11 @@ public class PlotMoveEvent extends PlotEvent implements ICancellable, Event {
 
     @Override
     public Plot getPlot() {
-        return PlotMeCoreManager.getInstance().getPlotById(fromId);
+        return PlotMeCoreManager.getInstance().getPlotById(fromId, world);
     }
 
     public Plot getPlotTo() {
-        return PlotMeCoreManager.getInstance().getPlotById(toId);
+        return PlotMeCoreManager.getInstance().getPlotById(toId, world);
     }
 
     public IPlayer getPlayer() {

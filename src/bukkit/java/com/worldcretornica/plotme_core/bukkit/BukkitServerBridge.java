@@ -8,10 +8,10 @@ import com.worldcretornica.plotme_core.api.IServerBridge;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitMaterial;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitOfflinePlayer;
+import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitWorld;
 import com.worldcretornica.plotme_core.bukkit.listener.BukkitPlotDenyListener;
 import com.worldcretornica.plotme_core.bukkit.listener.BukkitPlotListener;
-import com.worldcretornica.plotme_core.bukkit.listener.PlotWorldEditListener;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
@@ -170,14 +170,13 @@ public class BukkitServerBridge extends IServerBridge {
      * @param playerName Player name
      * @return returns a an instance of IPlayer if found, otherwise null
      */
-    @Deprecated
     @Override
-    public IPlayer getPlayerExact(String playerName) {
-        Player player = Bukkit.getPlayerExact(playerName);
+    public IPlayer getPlayer(String playerName) {
+        Player player = Bukkit.getPlayer(playerName);
         if (player == null) {
             return null;
         } else {
-            return plugin.wrapPlayer(player);
+            return new BukkitPlayer(player);
         }
     }
 
@@ -188,9 +187,13 @@ public class BukkitServerBridge extends IServerBridge {
         return new BukkitOfflinePlayer(offlinePlayer);
     }
 
+    protected IPlayer internalGetPlayer(String name) {
+
+    }
+
     @Override
     public File getDataFolder() {
-        return new File("plugins", "PlotMe");
+        return plugin.getDataFolder();
     }
 
     @Override

@@ -6,7 +6,7 @@ public class PlotMeSpool implements Runnable {
 
     private final PlotMe_Core plugin;
     private final PlotMeCoreManager plotMeCoreManager;
-    private Long[] currentClear;
+    private long[] currentClear;
 
     private PlotToClear plotToClear;
     private int taskId;
@@ -20,7 +20,7 @@ public class PlotMeSpool implements Runnable {
     @Override
     public void run() {
         if (getPlotToClear() != null) {
-            IPlotMe_GeneratorManager genmanager = plotMeCoreManager.getGenManager(getPlotToClear().getPlotId());
+            IPlotMe_GeneratorManager genmanager = plotMeCoreManager.getGenManager(getPlotToClear().getWorld());
 
             if (currentClear == null) {
                 currentClear = genmanager.clear(getPlotToClear().getPlotId(), plugin.getConfig().getInt("NbBlocksPerClearStep"), null);
@@ -32,9 +32,6 @@ public class PlotMeSpool implements Runnable {
                     genmanager.adjustPlotFor(getPlotToClear().getPlotId(), true, false, false);
                 } else {
                     genmanager.adjustPlotFor(getPlotToClear().getPlotId(), false, false, false);
-                }
-                if (plugin.getServerBridge().isUsingLwc()) {
-                    plotMeCoreManager.removeLWC(getPlotToClear().getPlotId());
                 }
                 genmanager.refreshPlotChunks(getPlotToClear().getPlotId());
 

@@ -1,6 +1,7 @@
 package com.worldcretornica.plotme_core;
 
 import com.worldcretornica.configuration.ConfigAccessor;
+import com.worldcretornica.plotme_core.api.IWorld;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.List;
@@ -11,17 +12,19 @@ public class PlotMapInfo {
     private final PlotMe_Core plugin;
 
     private final ConcurrentHashMap<PlotId, Plot> plots;
-    private final String world;
+    private final String worldName;
     private final ConfigurationSection config;
     private final ConfigAccessor configFile;
+    private final IWorld world;
 
-    public PlotMapInfo(PlotMe_Core instance, ConfigAccessor config, String world) {
+    public PlotMapInfo(PlotMe_Core instance, ConfigAccessor config, IWorld world) {
         plugin = instance;
-        this.world = world.toLowerCase();
+        this.world = world;
+        this.worldName = world.getName().toLowerCase();
         this.configFile = config;
         this.config = config.getConfig().getConfigurationSection("worlds." + world);
         plots = new ConcurrentHashMap<>(1000, 0.75f, 5);
-        plugin.getSqlManager().loadPlotsAsynchronously(this.world);
+        plugin.getSqlManager().loadPlotsAsynchronously(this.worldName);
     }
 
     public int getNbPlots() {
@@ -33,7 +36,7 @@ public class PlotMapInfo {
             return null;
         }
         if (!plots.containsKey(id)) {
-            Plot plot = plugin.getSqlManager().getPlot(world, id);
+            Plot plot = plugin.getSqlManager().getPlot(worldName, id);
             if (plot == null) {
                 return null;
             }
@@ -147,20 +150,6 @@ public class PlotMapInfo {
 
     public boolean isRefundClaimPriceOnReset() {
         return getEconomySection().getBoolean("RefundClaimPriceOnReset");
-    }
-
-    public void setRefundClaimPriceOnReset(boolean refundClaimPriceOnReset) {
-        getEconomySection().set("RefundClaimPriceOnReset", refundClaimPriceOnReset);
-        configFile.saveConfig();
-    }
-
-    public boolean isRefundClaimPriceOnSetOwner() {
-        return getEconomySection().getBoolean("RefundClaimPriceOnSetOwner");
-    }
-
-    public void setRefundClaimPriceOnSetOwner(boolean refundClaimPriceOnSetOwner) {
-        getEconomySection().set("RefundClaimPriceOnSetOwner", refundClaimPriceOnSetOwner);
-        configFile.saveConfig();
     }
 
     public double getClaimPrice() {
@@ -287,6 +276,10 @@ public class PlotMapInfo {
     public void setDisableIgnition(boolean disableIgnition) {
         config.set("DisableIgnition", disableIgnition);
         configFile.saveConfig();
+    }
+
+    public IWorld getWorld() {
+        return world;
     }
 
 }

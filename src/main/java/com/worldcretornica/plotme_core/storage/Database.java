@@ -5,8 +5,8 @@ import com.worldcretornica.plotme_core.PlotId;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.api.Vector;
 import com.worldcretornica.plotme_core.api.event.PlotLoadEvent;
 import com.worldcretornica.plotme_core.api.event.PlotWorldLoadEvent;
 import com.worldcretornica.plotme_core.utils.UUIDFetcher;
@@ -111,7 +111,8 @@ public abstract class Database {
         return plotCount;
     }
 
-    public int getPlotCount(String world, UUID uuid) {
+    public int getPlotCount(String worldIC, UUID uuid) {
+        String world = worldIC.toLowerCase();
         int plotCount = 0;
         try (PreparedStatement ps = getConnection().prepareStatement(SELECT_PLOT_COUNT + " AND ownerID = ?")) {
 
@@ -130,15 +131,15 @@ public abstract class Database {
         return plotCount;
     }
 
-    public void addPlot(Plot plot, PlotId id, ILocation plotTopLoc, ILocation plotBottomLoc) {
+    public void addPlot(Plot plot, Vector plotTopLoc, Vector plotBottomLoc) {
         try (PreparedStatement ps = getConnection().prepareStatement(
                 "INSERT INTO plotmecore_plots(plotX, plotZ, world, ownerID, owner, biome, finished, finishedDate, forSale, price, protected, "
                         + "expiredDate, topX, topZ, bottomX, bottomZ, plotLikes) VALUES (?,?,?,?,?,?,?,?,"
                         + "?,?,?,?,?,?,?,?,?)");
                 PreparedStatement ps2 = getConnection().prepareStatement(SELECT_INTERNAL_ID)) {
 
-            ps.setInt(1, id.getX());
-            ps.setInt(2, id.getZ());
+            ps.setInt(1, plot.getId().getX());
+            ps.setInt(2, plot.getId().getZ());
             ps.setString(3, plot.getWorld().toLowerCase());
             ps.setString(4, plot.getOwnerId().toString());
             ps.setString(5, plot.getOwner());
@@ -156,8 +157,8 @@ public abstract class Database {
             ps.setInt(17, plot.getLikes());
             ps.executeUpdate();
             getConnection().commit();
-            ps2.setInt(1, id.getX());
-            ps2.setInt(2, id.getZ());
+            ps2.setInt(1, plot.getId().getX());
+            ps2.setInt(2, plot.getId().getZ());
             try (ResultSet getID = ps2.executeQuery()) {
                 while (getID.next()) {
                     plot.setInternalID(getID.getInt(1));
@@ -253,7 +254,7 @@ public abstract class Database {
                 IWorld w = plugin.getServerBridge().getWorld(world);
                 HashMap<PlotId, Plot> plots = getPlots(w);
 
-                PlotMapInfo pmi = PlotMeCoreManager.getInstance().getMap(world);
+                PlotMapInfo pmi = PlotMeCoreManager.getInstance().getMap(w);
 
                 for (PlotId id : plots.keySet()) {
                     pmi.addPlot(id, plots.get(id));
@@ -279,7 +280,7 @@ public abstract class Database {
                     try (ResultSet setPlots = statementPlot.executeQuery()) {
                         while (setPlots.next()) {
                             int internalID = setPlots.getInt("id");
-                            PlotId id = new PlotId(setPlots.getInt("plotX"), setPlots.getInt("plotZ"), world);
+                            PlotId id = new PlotId(setPlots.getInt("plotX"), setPlots.getInt("plotZ"));
                             String owner = setPlots.getString("owner");
                             UUID ownerId = UUID.fromString(setPlots.getString("ownerID"));
                             String biome = setPlots.getString("biome");
@@ -291,14 +292,18 @@ public abstract class Database {
                             boolean protect = setPlots.getBoolean("protected");
                             String plotName = setPlots.getString("plotName");
                             int plotLikes = setPlots.getInt("plotLikes");
-                            Map<String, Map<String, String>> metadata = new HashMap<>();
-                            HashMap<String, Integer> allowed = new HashMap<>();
+                            int topX = setPlots.getInt("topX");
+                            int topZ = setPlots.getInt("topZ");
+                            int bottomX = setPlots.getInt("bottomX");
+                            int bottomZ = setPlots.getInt("bottomZ");
+                            HashMap<String, Map<String, String>> metadata = new HashMap<>();
+                            HashMap<String, Plot.AccessLevel> allowed = new HashMap<>();
                             HashSet<String> denied = new HashSet<>();
                             HashSet<String> likers = new HashSet<>();
                             statementAllowed.setInt(1, internalID);
                             try (ResultSet setAllowed = statementAllowed.executeQuery()) {
                                 while (setAllowed.next()) {
-                                    allowed.put(setAllowed.getString("player"), setAllowed.getInt("access"));
+                                    allowed.put(setAllowed.getString("player"), Plot.AccessLevel.getAccessLevel(setAllowed.getInt("access")));
                                 }
                             }
                             statementDenied.setInt(1, internalID);
@@ -329,7 +334,8 @@ public abstract class Database {
 
                             Plot plot =
                                     new Plot(internalID, owner, ownerId, world.getName().toLowerCase(), biome, expiredDate, allowed, denied,
-                                            likers, id, price, forSale, finished, finishedDate, protect, metadata, plotLikes, plotName);
+                                            likers, id, price, forSale, finished, finishedDate, protect, metadata, plotLikes, plotName, topX, bottomX,
+                                            topZ, bottomZ);
                             ret.put(id, plot);
                         }
                     }
@@ -371,8 +377,12 @@ public abstract class Database {
                     Date expiredDate = setPlots.getDate("expiredDate");
                     String plotName = setPlots.getString("plotName");
                     int plotLikes = setPlots.getInt("plotLikes");
+                    int topX = setPlots.getInt("topX");
+                    int topZ = setPlots.getInt("topZ");
+                    int bottomX = setPlots.getInt("bottomX");
+                    int bottomZ = setPlots.getInt("bottomZ");
 
-                    HashMap<String, Integer> allowed = new HashMap<>();
+                    HashMap<String, Plot.AccessLevel> allowed = new HashMap<>();
                     HashSet<String> denied = new HashSet<>();
                     HashSet<String> likers = new HashSet<>();
                     Map<String, Map<String, String>> metadata = new HashMap<>();
@@ -380,7 +390,7 @@ public abstract class Database {
                     statementAllowed.setInt(1, internalID);
                     try (ResultSet setAllowed = statementAllowed.executeQuery()) {
                         while (setAllowed.next()) {
-                            allowed.put(setAllowed.getString("player"), setAllowed.getInt("access"));
+                            allowed.put(setAllowed.getString("player"), Plot.AccessLevel.getAccessLevel(setAllowed.getInt("access")));
                         }
                     }
 
@@ -415,7 +425,7 @@ public abstract class Database {
 
                     plot = new Plot(internalID, owner, ownerId, world, biome, expiredDate, allowed, denied, likers, id, price, forSale,
                             finished,
-                            finishedDate, protect, metadata, plotLikes, plotName);
+                            finishedDate, protect, metadata, plotLikes, plotName, topX, bottomX, topZ, bottomZ);
                 }
             }
 
@@ -503,7 +513,7 @@ public abstract class Database {
             statementExpired.setDate(2, sqlDate);
             try (ResultSet setPlots = statementExpired.executeQuery()) {
                 while (setPlots.next()) {
-                    PlotId id = new PlotId(setPlots.getInt("idX"), setPlots.getInt("idZ"), world);
+                    PlotId id = new PlotId(setPlots.getInt("idX"), setPlots.getInt("idZ"));
                     String owner = setPlots.getString("owner");
                     Date expireddate = setPlots.getDate("expireddate");
                     Plot plot = null;

@@ -13,12 +13,17 @@ import java.util.UUID;
 
 public class Plot {
 
-    private final HashSet<String> denied;
-    private HashMap<String, Integer> allowed;
+    private final int topX;
+    private final int bottomX;
+    private final int topZ;
+    private final int bottomZ;
+    private final HashMap<String, Plot.AccessLevel> allowed = new HashMap<>();
+    private final HashSet<String> denied = new HashSet<>();
+    private final HashMap<String, Map<String, String>> metadata = new HashMap<>();
     private String owner;
     private UUID ownerId = UUID.randomUUID();
     private String world;
-    private String biome;
+    private String biome = "PLAINS";
     private Date expiredDate;
     private boolean finished;
     private PlotId id;
@@ -26,7 +31,6 @@ public class Plot {
     private boolean forSale;
     private String finishedDate;
     private boolean protect;
-    private Map<String, Map<String, String>> metadata;
     private int likes;
     private int internalID;
     private String plotName;
@@ -35,9 +39,6 @@ public class Plot {
         setOwner(owner);
         setOwnerId(uuid);
         setWorld(world.getName().toLowerCase());
-        allowed = new HashMap<>();
-        denied = new HashSet<>();
-        setBiome("PLAINS");
         setId(plotId);
 
         if (days == 0) {
@@ -53,15 +54,14 @@ public class Plot {
         setForSale(false);
         setFinishedDate(null);
         setProtected(false);
-        metadata = new HashMap<>();
     }
 
     public Plot(int internalID, String owner, UUID ownerId, String world, String biome, Date expiredDate,
-            HashMap<String, Integer> allowed,
+            HashMap<String, AccessLevel> allowed,
             HashSet<String>
                     denied,
             HashSet<String> likers, PlotId id, double price, boolean forSale, boolean finished, String finishedDate, boolean protect,
-            Map<String, Map<String, String>> metadata, int plotLikes, String plotName) {
+            Map<String, Map<String, String>> metadata, int plotLikes, String plotName, int topX, int bottomX, int topZ, int bottomZ) {
         setInternalID(internalID);
         setOwner(owner);
         setOwnerId(ownerId);
@@ -69,7 +69,7 @@ public class Plot {
         setBiome(biome);
         setExpiredDate(expiredDate);
         setFinished(finished);
-        this.allowed = allowed;
+        this.allowed.putAll(allowed);
         setId(id);
         setPrice(price);
         setForSale(forSale);
@@ -77,8 +77,12 @@ public class Plot {
         setProtected(protect);
         setLikes(plotLikes);
         setPlotName(plotName);
-        this.denied = denied;
-        this.metadata = metadata;
+        this.denied.addAll(denied);
+        this.metadata.putAll(metadata);
+        this.topX = topX;
+        this.bottomX = bottomX;
+        this.topZ = topZ;
+        this.bottomZ = bottomZ;
     }
 
     public void resetExpire(int days) {
@@ -143,7 +147,7 @@ public class Plot {
 
     public void addAllowed(String name) {
         if (!isAllowedConsulting(name)) {
-            getAllowed().put(name, 1);
+            getAllowed().put(name, AccessLevel.ALLOWED);
             PlotMeCoreManager.getInstance().getSQLManager().addPlotAllowed(name, getInternalID());
         }
     }
@@ -191,23 +195,16 @@ public class Plot {
 
     private boolean isAllowedInternal(String name) {
         if (getAllowed().containsKey(name)) {
-            Integer accessLevel = getAllowed().get(name);
-            if (accessLevel != null) {
-                if (accessLevel == AccessLevel.ALLOWED.getLevel()) {
-                    return true;
-                } else if (!"*".equalsIgnoreCase(name) && accessLevel == AccessLevel.TRUSTED.getLevel()) {
+            AccessLevel accessLevel = getAllowed().get(name);
+            if (accessLevel == AccessLevel.ALLOWED) {
+                return true;
+            } else if (!"*".equalsIgnoreCase(name)) {
+                if (accessLevel == AccessLevel.TRUSTED) {
                     return PlotMeCoreManager.getInstance().getOfflinePlayer(name).isOnline();
                 }
             }
-        } else if (getAllowed().containsKey("*")) {
-            Integer accessLevel = getAllowed().get("*");
-            if (accessLevel != null) {
-                if (accessLevel == AccessLevel.ALLOWED.getLevel()) {
-                    return true;
-                }
-            }
         } else {
-            return false;
+            return getAllowed().containsKey("*");
         }
         return false;
     }
@@ -225,7 +222,7 @@ public class Plot {
         return getDenied().contains("*") || getDenied().contains(name);
     }
 
-    public HashMap<String, Integer> getAllowed() {
+    public HashMap<String, Plot.AccessLevel> getAllowed() {
         return allowed;
     }
 
@@ -342,7 +339,24 @@ public class Plot {
         this.plotName = plotName;
     }
 
-    enum AccessLevel {
+    public int getTopX() {
+        return topX;
+    }
+
+
+    public int getTopZ() {
+        return topZ;
+    }
+
+    public int getBottomX() {
+        return bottomX;
+    }
+
+    public int getBottomZ() {
+        return bottomZ;
+    }
+
+    public enum AccessLevel {
         ALLOWED(0),
         TRUSTED(1);
 
@@ -350,6 +364,17 @@ public class Plot {
 
         AccessLevel(int accessLevel) {
             level = accessLevel;
+        }
+
+        public static AccessLevel getAccessLevel(int level) {
+            switch (level) {
+                case 0:
+                    return ALLOWED;
+                case 1:
+                    return TRUSTED;
+                default:
+                    return ALLOWED;
+            }
         }
 
         public int getLevel() {

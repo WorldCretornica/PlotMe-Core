@@ -5,18 +5,24 @@ import com.worldcretornica.plotme_core.api.IItemStack;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.api.Vector;
 import org.spongepowered.api.entity.player.Player;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.text.chat.ChatTypes;
-import org.spongepowered.api.world.Location;
 
 public class SpongePlayer extends SpongeUser implements IPlayer {
 
     private final Player player;
+    private SpongeWorld world;
+    private ILocation iLocation;
+    private Vector pos;
 
     public SpongePlayer(Player player) {
         super(player);
         this.player = player;
+        world = new SpongeWorld(player.getWorld());
+        pos = new Vector(player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ());
+        iLocation = new ILocation(world, pos);
     }
 
     @Override
@@ -31,13 +37,12 @@ public class SpongePlayer extends SpongeUser implements IPlayer {
 
     @Override
     public IWorld getWorld() {
-        return new SpongeWorld(player.getWorld());
+        return world;
     }
 
     @Override
     public ILocation getLocation() {
-        Location location = player.getLocation();
-        return new ILocation(getWorld(), location.getX(), location.getY(), location.getZ());
+        return iLocation;
     }
 
     @Override
@@ -61,5 +66,10 @@ public class SpongePlayer extends SpongeUser implements IPlayer {
     @Override
     public void remove() {
         player.remove();
+    }
+
+    @Override
+    public Vector getPosition() {
+        return pos;
     }
 }

@@ -2,7 +2,6 @@ package com.worldcretornica.plotme_core.bukkit.listener;
 
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
-import com.worldcretornica.plotme_core.PlotId;
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
@@ -31,14 +30,10 @@ public class BukkitPlotDenyListener implements Listener {
         if (manager.isPlotWorld(player) && !player.hasPermission(PermissionNames.ADMIN_BYPASSDENY)) {
             ILocation to = new ILocation(player.getWorld(), BukkitConverter.locationToVector(event.getTo()));
 
-            PlotId idTo = manager.getPlotId(to);
+            Plot plot = manager.getPlot(to);
 
-            if (idTo != null) {
-                Plot plot = manager.getPlotById(idTo);
-
-                if (plot != null && plot.isDenied(player.getUniqueId())) {
-                    event.setTo(event.getFrom());
-                }
+            if (plot != null && plot.isDenied(player.getUniqueId())) {
+                event.setTo(event.getFrom());
             }
         }
     }
@@ -48,14 +43,11 @@ public class BukkitPlotDenyListener implements Listener {
         IPlayer player = plugin.wrapPlayer(event.getPlayer());
 
         if (manager.isPlotWorld(player) && !player.hasPermission(PermissionNames.ADMIN_BYPASSDENY)) {
-            PlotId id = manager.getPlotId(player);
 
-            if (id != null) {
-                Plot plot = manager.getPlotById(id);
+            Plot plot = manager.getPlot(player);
 
-                if (plot != null && plot.isDenied(player.getUniqueId())) {
-                    player.setLocation(manager.getPlotHome(plot.getId()));
-                }
+            if (plot != null && plot.isDenied(player.getUniqueId())) {
+                player.setLocation(manager.getPlotHome(plot.getId(), player.getWorld()));
             }
         }
     }

@@ -41,4 +41,6 @@ public interface IBlock {
 
     @Deprecated
     BlockState getState();
+
+    void setData(byte b, boolean b1);
 }

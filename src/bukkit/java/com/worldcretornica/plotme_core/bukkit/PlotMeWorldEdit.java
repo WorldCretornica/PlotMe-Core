@@ -10,7 +10,6 @@ import com.sk89q.worldedit.extent.AbstractDelegateExtent;
 import com.sk89q.worldedit.extent.Extent;
 import com.sk89q.worldedit.world.biome.BaseBiome;
 import com.worldcretornica.plotme_core.Plot;
-import com.worldcretornica.plotme_core.PlotId;
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
@@ -37,13 +36,8 @@ public class PlotMeWorldEdit extends AbstractDelegateExtent {
             return extent.setBlock(location, block);
         } else {
             ILocation loc = new ILocation(player.getWorld(), location.getX(), location.getY(), location.getZ());
-            PlotId id = manager.getPlotId(loc);
-            if (id != null) {
-                Plot plot = manager.getPlotById(id);
-                return plot != null && plot.isAllowed(actor.getUniqueId()) && extent.setBlock(location, block);
-            } else {
-                return false;
-            }
+            Plot plot = manager.getPlot(loc);
+            return plot != null && plot.isAllowed(actor.getUniqueId()) && extent.setBlock(location, block);
         }
     }
 
@@ -53,13 +47,8 @@ public class PlotMeWorldEdit extends AbstractDelegateExtent {
             return extent.setBiome(position, biome);
         } else {
             ILocation loc = new ILocation(player.getWorld(), position.getX(), 0, position.getZ());
-            PlotId id = manager.getPlotId(loc);
-            if (id != null) {
-                Plot plot = manager.getPlotById(id);
-                return plot != null && plot.isAllowed(actor.getUniqueId()) && extent.setBiome(position, biome);
-            } else {
-                return false;
-            }
+            Plot plot = manager.getPlot(loc);
+            return plot != null && plot.isAllowed(actor.getUniqueId()) && extent.setBiome(position, biome);
         }
     }
 }

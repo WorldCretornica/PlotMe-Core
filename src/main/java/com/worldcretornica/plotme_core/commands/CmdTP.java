@@ -53,8 +53,8 @@ public class CmdTP extends PlotCommand {
                         if (!manager.isPlotWorld(world)) {
                             player.sendMessage(C("MsgNoPlotworldFound"));
                         } else {
-                            ILocation location = manager.getPlotHome(id2);
-                            Plot plot = manager.getPlotById(id2);
+                            ILocation location = manager.getPlotHome(id2, player.getWorld());
+                            Plot plot = manager.getPlotById(id2, world);
                             PlotTeleportEvent event = new PlotTeleportEvent(world, plot, player, location, id2);
                             serverBridge.getEventBus().post(event);
 

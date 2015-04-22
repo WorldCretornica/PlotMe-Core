@@ -5,6 +5,7 @@ public class ILocation {
     private final Vector pos;
 
     private final IWorld world;
+    private int topZ;
 
     public ILocation(IWorld world) {
         this(world, new Vector());
@@ -85,4 +86,5 @@ public class ILocation {
     public IBlock getBlock() {
         return world.getBlockAt(getBlockX(), getBlockY(), getBlockZ());
     }
+
 }

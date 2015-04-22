@@ -41,8 +41,8 @@ public class CmdInfo extends PlotCommand {
                     player.sendMessage(C("MsgNoPlotFound"));
                     return true;
                 }
-                if (!manager.isPlotAvailable(id)) {
-                    Plot plot = manager.getPlotById(id);
+                if (!manager.isPlotAvailable(id, world)) {
+                    Plot plot = manager.getPlotById(id, world);
 
                     player.sendMessage("Internal ID: " + plot.getInternalID());
                     player.sendMessage("ID: " + id + " " + C("InfoOwner") + ": " + plot.getOwner()
@@ -108,10 +108,10 @@ public class CmdInfo extends PlotCommand {
                             player.sendMessage(C("InfoForSale") + ": " + C("WordNo"));
                         }
                     }
-                    int bottomX = manager.bottomX(id);
-                    int bottomZ = manager.bottomZ(id);
-                    int topX = manager.topX(id);
-                    int topZ = manager.topZ(id);
+                    int bottomX = manager.bottomX(id, world);
+                    int bottomZ = manager.bottomZ(id, world);
+                    int topX = manager.topX(id, world);
+                    int topZ = manager.topZ(id, world);
 
                     player.sendMessage(C("WordBottom") + ": " + bottomX + "," + bottomZ);
                     player.sendMessage(C("WordTop") + ": " + topX + "," + topZ);

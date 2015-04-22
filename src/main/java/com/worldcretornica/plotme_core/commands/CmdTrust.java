@@ -74,7 +74,7 @@ public class CmdTrust extends PlotCommand {
                             }
 
                             if (!event.isCancelled()) {
-                                IPlayer allowed2 = plugin.getServerBridge().getPlayerExact(trust);
+                                IPlayer allowed2 = plugin.getServerBridge().getPlayer(trust);
                                 if (allowed2 != null) {
                                     plot.addAllowed(allowed2.getUniqueId().toString());
                                     plot.removeDenied(allowed2.getUniqueId().toString());

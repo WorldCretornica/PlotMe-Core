@@ -14,11 +14,13 @@ public class BukkitBlock implements IBlock {
     private final Block block;
     private final Vector coords;
     private final ILocation location;
+    private final BukkitWorld world;
 
     public BukkitBlock(Block block) {
         this.block = block;
         coords = new Vector(block.getX(),block.getY(),block.getZ());
-        location = new ILocation(getWorld(),coords);
+        world = new BukkitWorld(block.getWorld());
+        location = new ILocation(world, coords);
     }
 
     @Override
@@ -28,7 +30,7 @@ public class BukkitBlock implements IBlock {
 
     @Override
     public IWorld getWorld() {
-        return new BukkitWorld(block.getWorld());
+        return world;
     }
 
     @Override
@@ -102,6 +104,11 @@ public class BukkitBlock implements IBlock {
     @Override
     public BlockState getState() {
         return block.getState();
+    }
+
+    @Override
+    public void setData(byte b, boolean b1) {
+        block.setData(b, b1);
     }
 
     @Override

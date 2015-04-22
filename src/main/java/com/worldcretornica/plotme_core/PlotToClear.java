@@ -1,15 +1,20 @@
 package com.worldcretornica.plotme_core;
 
 import com.worldcretornica.plotme_core.api.ICommandSender;
+import com.worldcretornica.plotme_core.api.IWorld;
 
 public class PlotToClear {
 
+    private final Plot plot;
     private final PlotId plotId;
     private final ClearReason reason;
     private final ICommandSender requester;
+    private IWorld world;
 
-    public PlotToClear(PlotId id, ClearReason reason, ICommandSender requester) {
+    public PlotToClear(Plot plot, PlotId id, IWorld world, ClearReason reason, ICommandSender requester) {
+        this.plot = plot;
         this.plotId = id;
+        this.world = world;
         this.reason = reason;
         this.requester = requester;
     }
@@ -26,4 +31,11 @@ public class PlotToClear {
         return requester;
     }
 
+    public IWorld getWorld() {
+        return world;
+    }
+
+    public Plot getPlot() {
+        return plot;
+    }
 }

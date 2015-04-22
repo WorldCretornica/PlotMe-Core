@@ -1,6 +1,7 @@
 package com.worldcretornica.plotme_core;
 
-import com.worldcretornica.plotme_core.api.ILocation;
+import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.api.Vector;
 import com.worldcretornica.schematic.Schematic;
 import com.worldcretornica.schematic.jnbt.Tag;
 
@@ -17,11 +18,11 @@ public abstract class AbstractSchematicUtil {
     // List of blocks that should be placed last in world generation
     protected final Collection<Integer> blockPlacedLast = new HashSet<>();
 
-    public abstract void pasteSchematic(ILocation loc, Schematic schem);
+    public abstract void pasteSchematic(IWorld world, Vector loc, Schematic schem);
 
     public abstract Schematic loadSchematic(File file) throws IOException, IllegalArgumentException;
 
-    public abstract Schematic createCompiledSchematic(ILocation loc1, ILocation loc2);
+    public abstract Schematic createCompiledSchematic(IWorld world, Vector loc1, Vector loc2);
 
     public abstract void saveCompiledSchematic(Schematic schem, String name);
 

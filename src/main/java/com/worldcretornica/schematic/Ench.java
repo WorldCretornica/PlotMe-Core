@@ -5,18 +5,18 @@ public class Ench extends AbstractSchematicElement {
 
     private static final long serialVersionUID = 8903585791760402815L;
     private final short id;
-    private final Short lvl;
+    private final short lvl;
 
     public Ench(short id, short lvl) {
         this.id = id;
         this.lvl = lvl;
     }
 
-    public Short getId() {
+    public short getId() {
         return id;
     }
 
-    public Short getLvl() {
+    public short getLvl() {
         return lvl;
     }
 

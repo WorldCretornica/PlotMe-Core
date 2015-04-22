@@ -9,10 +9,9 @@ public class PlotId {
     private final int z;
     private IWorld world;
 
-    public PlotId(int x, int z, IWorld world) {
+    public PlotId(int x, int z) {
         this.x = x;
         this.z = z;
-        this.world = world;
     }
 
     public PlotId(String id) throws NumberFormatException {
@@ -52,6 +51,10 @@ public class PlotId {
         return world;
     }
 
+    public String getWorldName() {
+        return world.getName().toLowerCase();
+    }
+
     public String getID() {
         return x + ";" + z;
     }
@@ -66,17 +69,14 @@ public class PlotId {
         boolean result = false;
         if (obj instanceof PlotId) {
             PlotId me = (PlotId) obj;
-            result = this.getX() == me.getX() && this.getZ() == me.getZ() && this.getWorld() == me.getWorld();
+            result = this.getX() == me.getX() && this.getZ() == me.getZ();
         }
         return result;
     }
 
     @Override
     public int hashCode() {
-        int hash = world.hashCode();
-        hash += getX();
-        hash += getZ();
-        return hash;
+        return getX() + getZ();
     }
 }
 

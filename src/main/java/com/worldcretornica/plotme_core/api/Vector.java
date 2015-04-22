@@ -79,4 +79,12 @@ public class Vector implements Comparable<Vector> {
     public Vector subtract(double x, double y, double z) {
         return new Vector(this.x - x, this.y - y, this.z - z);
     }
+
+    public Vector add(Vector vector) {
+        return add(vector.getX(), vector.getY(), vector.getZ());
+    }
+
+    public Vector subtract(Vector vector) {
+        return subtract(vector.getX(), vector.getY(), vector.getZ());
+    }
 }

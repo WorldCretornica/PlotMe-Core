@@ -1,7 +1,12 @@
 package com.worldcretornica.plotme_core.api;
 
 
+import org.bukkit.Location;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+
 import java.io.File;
+import java.util.List;
 import java.util.UUID;
 
 public interface IWorld {
@@ -28,4 +33,12 @@ public interface IWorld {
     void refreshChunk(int x, int z);
 
     IBlock getBlockAt(int x, int y, int z);
+
+    IBlock getBlockAt(double x, double y, double z);
+
+    IBlock getBlockAt(Vector add);
+
+    List<IEntity> getEntities();
+
+    Entity spawnEntity(Location etloc, EntityType entitytype);
 }

@@ -1,7 +1,6 @@
 package com.worldcretornica.plotme_core.sponge;
 
 import com.google.inject.Inject;
-import com.worldcretornica.configuration.ConfigAccessor;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.BridgeLogger;
 import com.worldcretornica.plotme_core.api.IServerBridge;
@@ -44,13 +43,9 @@ public class PlotMe_Sponge {
     private Logger logger;
     private PlotMe_Core plotme;
     private IServerBridge serverObjectBuilder;
-    private ConfigAccessor configFile;
-    private ConfigAccessor captionFile;
 
     @Subscribe
     public void onInit(PreInitializationEvent event) {
-        configFile = new ConfigAccessor(configDir, "config.conf");
-        captionFile = new ConfigAccessor(configDir, "captions.conf");
 
         File pmStorage = new File(configDir, "config.conf");
         this.pmConfigLoader = HoconConfigurationLoader.builder().setFile(pmStorage).build();
@@ -77,13 +72,17 @@ public class PlotMe_Sponge {
         game.getEventManager().register(this, new SpongePlotDenyListener(this));
         serverObjectBuilder = new SpongeServerBridge(this, new BridgeLogger(logger));
 
-        plotme = new PlotMe_Core(serverObjectBuilder, new SchematicUtil(this), configDir);
+        plotme = new PlotMe_Core(serverObjectBuilder);
     }
 
     @Subscribe
     public void onStop(ServerStoppingEvent event) {
         // TODO -> stop plugin: save config (if changed), clean up
 
+    }
+
+    public File getConfigDir() {
+        return configDir;
     }
 
     public PlotMe_Core getAPI() {

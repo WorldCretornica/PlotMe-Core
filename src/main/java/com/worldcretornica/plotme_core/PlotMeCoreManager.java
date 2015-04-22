@@ -9,6 +9,7 @@ import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IPlotMe_GeneratorManager;
 import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.api.Vector;
 import com.worldcretornica.plotme_core.api.event.PlotLoadEvent;
 import com.worldcretornica.plotme_core.storage.Database;
 
@@ -23,7 +24,7 @@ import javax.inject.Singleton;
 public class PlotMeCoreManager {
 
     private static final PlotMeCoreManager INSTANCE = new PlotMeCoreManager();
-    private final HashMap<String, PlotMapInfo> plotmaps;
+    private final HashMap<IWorld, PlotMapInfo> plotmaps;
     private PlotMe_Core plugin;
     private HashSet<UUID> playersignoringwelimit = new HashSet<>();
 
@@ -46,27 +47,32 @@ public class PlotMeCoreManager {
     public Database getSQLManager() {
         return plugin.getSqlManager();
     }
+
     /**
      * Removes the plot from the plotmap
-     *  @param pmi plotmap
-     * @param id plot id
+     * @param pmi plotmap
+     * @param plot plot id
      */
-    public void removePlot(PlotMapInfo pmi, PlotId id) {
-        pmi.removePlot(id);
+    public void deletePlot(PlotMapInfo pmi, Plot plot) {
+        removeSellSign(plot, pmi.getWorld());
+        removeOwnerSign(plot, pmi.getWorld());
+
+        pmi.removePlot(plot.getId());
     }
 
     /**
      * Sets the sign for the plot owner
      *
+     * @param world
      * @param plot  plot to set sign on
      */
-    public void setOwnerSign(Plot plot) {
+    public void setOwnerSign(IWorld world, Plot plot) {
         PlotId id = plot.getId();
         String line1 = "ID: " + id.toString();
         String line2 = "";
         String line3 = plot.getOwner();
         String line4 = "";
-        getGenManager(id).setOwnerDisplay(plot.getId(), line1, line2, line3, line4);
+        getGenManager(world).setOwnerDisplay(id, line1, line2, line3, line4);
     }
 
     /**
@@ -79,7 +85,7 @@ public class PlotMeCoreManager {
         if (getGenManager(location.getWorld()) == null) {
             return null;
         }
-        return getGenManager(location.getWorld()).getPlotId(location);
+        return getGenManager(location.getWorld()).getPlotId(location.getPos());
 
     }
 
@@ -99,118 +105,126 @@ public class PlotMeCoreManager {
 
     /**
      * Removes the owner sign from the plot.
-     *  @param id    plot id to remove the sign from
+     * @param id    plot id to remove the sign from
      */
-    public void removeOwnerSign(PlotId id) {
-        getGenManager(id).removeOwnerDisplay(id);
+    public void removeOwnerSign(Plot plot, IWorld world) {
+        getGenManager(world).removeOwnerDisplay(plot.getId());
     }
 
     /**
      * Remove the sell sign from the plot
-     *  @param id    plot id to remove the sign from
+     * @param plot    plot id to remove the sign from
+     * @param world
      */
-    public void removeSellSign(PlotId id) {
-        getGenManager(id).removeSellerDisplay(id);
+    public void removeSellSign(Plot plot, IWorld world) {
+        getGenManager(world).removeSellerDisplay(plot.getId());
     }
 
     /**
      * Set the sell sign on the plot
      *
      * @param plot  plot to add sign to
+     * @param world
      */
-    public void setSellSign(Plot plot) {
+    public void setSellSign(Plot plot, IWorld world) {
         String line1 = plugin.C("SignForSale");
         String line2 = plugin.C("SignPrice");
         String line3 = String.valueOf(plot.getPrice());
         String line4 = "/plotme buy";
 
-        getGenManager(plot.getId()).setSellerDisplay(plot.getId(), line1, line2, line3, line4);
+        getGenManager(world).setSellerDisplay(plot.getId(), line1, line2, line3, line4);
     }
 
     /**
      * Gets the bottom corner of the plot
+     *
+     * @param world
      * @param id PlotID
      * @return bottom location of the plot
      */
-    public ILocation getPlotBottomLoc(PlotId id) {
-        return getGenManager(id).getPlotBottomLoc(id);
+    public Vector getPlotBottomLoc(IWorld world, PlotId id) {
+        return getGenManager(world).getPlotBottomLoc(id);
     }
 
     /**
      * Gets the top corner of the plot
+     *
+     * @param world
      * @param id PlotID
      * @return top location of the plot
      */
-    public ILocation getPlotTopLoc(PlotId id) {
-        return getGenManager(id).getPlotTopLoc(id);
+    public Vector getPlotTopLoc(IWorld world, PlotId id) {
+        return getGenManager(world).getPlotTopLoc(id);
     }
 
     /**
      * Get the x coordinate at the bottom of the plot
      *
      * @param id    plot id
+     * @param world
      * @return bottom x coordinate of the plot
      */
-    public int bottomX(PlotId id) {
-        return getGenManager(id).bottomX(id);
+    public int bottomX(PlotId id, IWorld world) {
+        return getGenManager(world).bottomX(id);
     }
 
     /**
      * Get the x coordinate at the top of the plot
      *
      * @param id    plot id
+     * @param world
      * @return top x coordinate of the plot
      */
-    public int topX(PlotId id) {
-        return getGenManager(id).topX(id);
+    public int topX(PlotId id, IWorld world) {
+        return getGenManager(world).topX(id);
     }
 
     /**
      * Get the z coordinate at the bottom of the plot
      *
      * @param id    plot id
+     * @param world
      * @return bottom z coordinate of the plot
      */
-    public int bottomZ(PlotId id) {
-        return getGenManager(id).bottomZ(id);
+    public int bottomZ(PlotId id, IWorld world) {
+        return getGenManager(world).bottomZ(id);
     }
 
     /**
      * Get the z coordinate at the top of the plot
      *
      * @param id    plot id
+     * @param world
      * @return top z coordinate of the plot
      */
-    public int topZ(PlotId id) {
-        return getGenManager(id).topZ(id);
+    public int topZ(PlotId id, IWorld world) {
+        return getGenManager(world).topZ(id);
     }
 
     /**
      * Get the plot home location of a plot
      *
      * @param id    plot id to get home of
+     * @param world
      * @return an ILocation of the plot home location
      */
-    public ILocation getPlotHome(PlotId id) {
-        return getGenManager(id).getPlotHome(id);
+    public ILocation getPlotHome(PlotId id, IWorld world) {
+        return getGenManager(world).getPlotHome(id);
     }
 
     /**
      * Get the players in the Plot
      *
      * @param id    plot id
+     * @param world
      * @return a list of players in the plot
      */
-    public List<IPlayer> getPlayersInPlot(PlotId id) {
-        return getGenManager(id).getPlayersInPlot(id);
+    public List<IPlayer> getPlayersInPlot(PlotId id, IWorld world) {
+        return getGenManager(world).getPlayersInPlot(id);
     }
 
     public IPlotMe_GeneratorManager getGenManager(IWorld world) {
-        return plugin.getGenManager(world.getName());
-    }
-
-    public IPlotMe_GeneratorManager getGenManager(PlotId id) {
-        return getGenManager(id.getWorld());
+        return plugin.getGenManager(world);
     }
 
     /**
@@ -222,17 +236,6 @@ public class PlotMeCoreManager {
      */
     public int getOwnedPlotCount(UUID uuid, String world) {
         return plugin.getSqlManager().getPlotCount(world, uuid);
-    }
-
-    /**
-     * Checks if the plotworld has economy features enabled
-     *
-     * @param world world name
-     * @return true if economy enabled
-     */
-    public boolean isEconomyEnabled(String world) {
-        PlotMapInfo pmi = getMap(world);
-        return isEconomyEnabled(pmi);
     }
 
     /**
@@ -256,7 +259,8 @@ public class PlotMeCoreManager {
      */
 
     public boolean isEconomyEnabled(IWorld world) {
-        return isEconomyEnabled(world.getName().toLowerCase());
+        PlotMapInfo pmi = getMap(world);
+        return isEconomyEnabled(pmi);
     }
 
     /**
@@ -265,17 +269,7 @@ public class PlotMeCoreManager {
      * @return PlotMapInfo for the plotworld, if the world doesn't exist then it will return null
      */
     public PlotMapInfo getMap(IWorld world) {
-        String worldName = world.getName().toLowerCase();
-        return getPlotMaps().get(worldName);
-    }
-
-    /**
-     * Get the PlotMap based on the world given
-     * @param world plotworld
-     * @return PlotMapInfo for the plotworld, if the world doesn't exist then it will return null
-     */
-    public PlotMapInfo getMap(String world) {
-        return getPlotMaps().get(world.toLowerCase());
+        return getPlotMaps().get(world);
     }
 
     /**
@@ -284,8 +278,7 @@ public class PlotMeCoreManager {
      * @return PlotMapInfo for the plotworld, if the world doesn't exist then it will return null
      */
     public PlotMapInfo getMap(ILocation location) {
-        String worldName = location.getWorld().getName().toLowerCase();
-        return getMap(worldName);
+        return getMap(location.getWorld());
     }
 
     /**
@@ -294,8 +287,7 @@ public class PlotMeCoreManager {
      * @return PlotMapInfo for the plotworld, if the world doesn't exist then it will return null
      */
     public PlotMapInfo getMap(IEntity player) {
-        String world = player.getWorld().getName();
-        return getMap(world);
+        return getMap(player.getWorld());
     }
 
 /*
@@ -372,10 +364,11 @@ public class PlotMeCoreManager {
      * Gets the plot with the given id in the given world.
      *
      * @param id plot id
+     * @param world
      * @return plot
      */
-    public Plot getPlotById(PlotId id) {
-        PlotMapInfo pmi = getMap(id.getWorld());
+    public Plot getPlotById(PlotId id, IWorld world) {
+        PlotMapInfo pmi = getMap(world);
 
         if (pmi == null) {
             return null;
@@ -403,7 +396,7 @@ public class PlotMeCoreManager {
      * Plot to remove from plotmap.
      *  @param id ID
      */
-    public void removePlot(PlotId id) {
+    public void deletePlot(PlotId id) {
         PlotMapInfo pmi = getMap(id.getWorld());
 
         if (pmi != null) {
@@ -413,12 +406,12 @@ public class PlotMeCoreManager {
 
     /**
      * Plot to add to loaded plotmap.
-     *
-     * @param id ID
+     *  @param id ID
      * @param plot Plot to be added
+     * @param world
      */
-    public void addPlot(PlotId id, Plot plot) {
-        PlotMapInfo pmi = getMap(id.getWorld());
+    public void addPlot(PlotId id, Plot plot, IWorld world) {
+        PlotMapInfo pmi = getMap(world);
         addPlot(id, plot, pmi);
     }
 
@@ -432,7 +425,7 @@ public class PlotMeCoreManager {
     public void addPlot(PlotId id, Plot plot, PlotMapInfo pmi) {
         if (pmi != null) {
             pmi.addPlot(id, plot);
-            PlotLoadEvent event = new PlotLoadEvent(id.getWorld(), plot);
+            PlotLoadEvent event = new PlotLoadEvent(world, plot);
             plugin.getServerBridge().getEventBus().post(event);
 
         }
@@ -444,8 +437,7 @@ public class PlotMeCoreManager {
      * @return plotworld
      */
     public IWorld getFirstWorld() {
-        String firstWorld = (String) getPlotMaps().keySet().toArray()[0];
-        return plugin.getServerBridge().getWorld(firstWorld);
+        return (IWorld) getPlotMaps().keySet().toArray()[0];
     }
 
     /**
@@ -455,7 +447,7 @@ public class PlotMeCoreManager {
      * @return true if world is plotworld, false otherwise
      */
     public boolean isPlotWorld(IWorld world) {
-        return getPlotMaps().containsKey(world.getName().toLowerCase());
+        return getPlotMaps().containsKey(world);
     }
 
     /**
@@ -482,65 +474,67 @@ public class PlotMeCoreManager {
      * Creates a new plot
      *
      * @param id    plot id
-     * @param owner owner name
+     * @param world
+     *@param owner owner name
      * @param uuid  owner uuid
-     * @param pmi   plotmap to add the plot to
-     * @return the new plot created
+     * @param pmi   plotmap to add the plot to    @return the new plot created
      *
      * @throws NullPointerException If the <code>id</code> argument is <code>null</code>
      */
-    public Plot createPlot(PlotId id, String owner, UUID uuid, PlotMapInfo pmi) {
-        Plot plot = new Plot(owner, uuid, id.getWorld(), id, pmi.getDaysToExpiration());
+    public Plot createPlot(PlotId id, IWorld world, String owner, UUID uuid, PlotMapInfo pmi) {
+        Plot plot = new Plot(owner, uuid, world, id, pmi.getDaysToExpiration());
 
-        setOwnerSign(plot);
+        setOwnerSign(world, plot);
         addPlot(id, plot, pmi);
-        adjustWall(id, true);
+        adjustWall(id, world, true);
 
-        plugin.getSqlManager().addPlot(plot, id, getPlotTopLoc(id), getPlotBottomLoc(id));
+        plugin.getSqlManager().addPlot(plot, getPlotTopLoc(world, id), getPlotBottomLoc(world, id));
         return plot;
     }
 
     /**
      * Move a plot from one location to another
      *
+     *
+     * @param world
      * @param idFrom the id of the plot to be moved
      * @param idTo   the id the plot will be moved to
      * @return true if successful, false otherwise
      */
-    public boolean movePlot(PlotId idFrom, PlotId idTo) {
+    public boolean movePlot(IWorld world, PlotId idFrom, PlotId idTo) {
 
-        if (!getGenManager(idFrom).movePlot(idFrom, idTo)) {
+        if (!getGenManager(world).movePlot(idFrom, idTo)) {
             return false;
         }
 
-        Plot plotFrom = getPlotById(idFrom);
-        Plot plotTo = getPlotById(idTo);
+        Plot plotFrom = getPlotById(idFrom, world);
+        Plot plotTo = getPlotById(idTo, world);
 
         if (plotFrom != null) {
             if (plotTo != null) {
                 plugin.getSqlManager().deletePlot(plotTo.getInternalID());
-                removePlot(idFrom);
-                removePlot(idTo);
+                deletePlot(idFrom);
+                deletePlot(idTo);
                 plugin.getSqlManager().deletePlot(plotFrom.getInternalID());
 
                 plotTo.setId(idFrom);
-                plugin.getSqlManager().addPlot(plotTo, idFrom, getPlotTopLoc(idFrom), getPlotBottomLoc(idFrom));
-                addPlot(idFrom, plotTo);
+                plugin.getSqlManager().addPlot(plotTo, getPlotTopLoc(world, idFrom), getPlotBottomLoc(world, idFrom));
+                addPlot(idFrom, plotTo, world);
 
                 plotFrom.setId(idTo);
-                plugin.getSqlManager().addPlot(plotFrom, idTo, getPlotTopLoc(idTo), getPlotBottomLoc(idTo));
-                addPlot(idTo, plotFrom);
+                plugin.getSqlManager().addPlot(plotFrom, getPlotTopLoc(world, idTo), getPlotBottomLoc(world, idTo));
+                addPlot(idTo, plotFrom, world);
 
-                setOwnerSign(plotFrom);
-                removeSellSign(plotFrom.getId());
-                setOwnerSign(plotTo);
-                removeSellSign(plotTo.getId());
+                setOwnerSign(world, plotFrom);
+                removeSellSign(plotFrom.getId(), world);
+                setOwnerSign(world, plotTo);
+                removeSellSign(plotTo.getId(), world);
 
             } else {
-                movePlotToEmpty(plotFrom, idTo);
+                movePlotToEmpty(world, plotFrom, idTo);
             }
         } else if (plotTo != null) {
-            movePlotToEmpty(plotTo, idFrom);
+            movePlotToEmpty(world, plotTo, idFrom);
         }
 
         return true;
@@ -549,42 +543,38 @@ public class PlotMeCoreManager {
     /**
      * Move a plot to an spot where there is no plot existing.
      */
-    private void movePlotToEmpty(Plot filledPlot, PlotId idDestination) {
+    private void movePlotToEmpty(IWorld world, Plot filledPlot, PlotId idDestination) {
         PlotId idFrom = filledPlot.getId();
         plugin.getSqlManager().deletePlot(filledPlot.getInternalID());
-        removePlot(idFrom);
+        deletePlot(idFrom);
 
         filledPlot.setId(idDestination);
         plugin.getSqlManager()
-                .addPlot(filledPlot, idDestination, getPlotTopLoc(idDestination), getPlotBottomLoc(idDestination));
-        addPlot(idDestination, filledPlot);
+                .addPlot(filledPlot, getPlotTopLoc(world, idDestination), getPlotBottomLoc(world, idDestination));
+        addPlot(idDestination, filledPlot, world);
 
-        setOwnerSign(filledPlot);
-        setSellSign(filledPlot);
-        removeOwnerSign(idFrom);
-        removeSellSign(idFrom);
+        setOwnerSign(world, filledPlot);
+        setSellSign(filledPlot, world);
+        removeOwnerSign(idFrom, world);
+        removeSellSign(idFrom, world);
     }
 
     /**
      * Remove any LWC Data that may be on the plot.
-     *  @param id Plot ID
+     * @param world
+     * @param id Plot ID
      */
-    public void removeLWC(PlotId id) {
-        ILocation bottom = getGenManager(id).getBottom(id);
-        ILocation top = getGenManager(id).getTop(id);
-        final int x1 = bottom.getBlockX();
-        final int y1 = bottom.getBlockY();
-        final int z1 = bottom.getBlockZ();
-        final int x2 = top.getBlockX();
-        final int y2 = top.getBlockY();
-        final int z2 = top.getBlockZ();
-        final String worldName = id.getWorld().getName();
+    public void removeLWC(final Plot plot) {
+        final int x1 = plot.getBottomX();
+        final int z1 = plot.getBottomZ();
+        final int x2 = plot.getTopX();
+        final int z2 = plot.getBottomZ();
 
         plugin.getServerBridge().runTaskAsynchronously(new Runnable() {
             @Override
             public void run() {
                 LWC lwc = LWC.getInstance();
-                List<Protection> protections = lwc.getPhysicalDatabase().loadProtections(worldName, x1, x2, y1, y2, z1, z2);
+                List<Protection> protections = lwc.getPhysicalDatabase().loadProtections(plot.getWorld(), x1, x2, 0, 256, z1, z2);
 
                 for (Protection protection : protections) {
                     protection.remove();
@@ -595,20 +585,22 @@ public class PlotMeCoreManager {
 
     /**
      * Clears a plot
-     *
-     * @param plot   the plot to be cleared
+     *  @param plot   the plot to be cleared
+     * @param world
      * @param sender the sender of the command
      * @param reason The reason they will be cleared. The cause can be: EXPIRED, RESET, CLEAR
      */
-    public void clear(Plot plot, ICommandSender sender, ClearReason reason) {
+    public void clear(Plot plot, IWorld world, ICommandSender sender, ClearReason reason) {
         PlotId id = plot.getId();
-
-        if (reason.equals(ClearReason.Clear)) {
-            adjustWall(plot.getId(), true);
-        } else {
-            adjustWall(plot.getId(), false);
+        if (plugin.getServerBridge().isUsingLwc()) {
+            removeLWC(plot);
         }
-        plugin.addPlotToClear(new PlotToClear(id, reason, sender));
+        if (reason.equals(ClearReason.Clear)) {
+            adjustWall(plot, world, true);
+        } else {
+            adjustWall(plot, world, false);
+        }
+        plugin.addPlotToClear(new PlotToClear(plot, id, world, reason, sender));
     }
 
     /**
@@ -632,10 +624,11 @@ public class PlotMeCoreManager {
      * Checks if the plot is claimed or not
      *
      * @param id    the plot id to be checked
+     * @param world
      * @return true if the plot is unclaimed, false otherwise
      */
-    public boolean isPlotAvailable(PlotId id) {
-        PlotMapInfo pmi = getMap(id.getWorld().getName());
+    public boolean isPlotAvailable(PlotId id, IWorld world) {
+        PlotMapInfo pmi = getMap(world);
 
         return pmi != null && pmi.getPlot(id) == null;
     }
@@ -650,24 +643,21 @@ public class PlotMeCoreManager {
         if (id == null) {
             player.sendMessage(plugin.C("MsgNoPlotFound"));
         } else {
-            Plot plot = getPlotById(id);
+            Plot plot = getPlotById(id, player.getWorld());
 
-            getGenManager(id).adjustPlotFor(id, true, plot.isProtected(), plot.isForSale());
+            getGenManager(player.getWorld()).adjustPlotFor(id, true, plot.isProtected(), plot.isForSale());
         }
     }
 
     /**
      * Updates the blocks on the plot border
-     *
-     * @param id      plot id
+     * @param plot      plot id
+     * @param world
      * @param claimed is the plot claimed
      */
-    public void adjustWall(PlotId id, boolean claimed) {
-        Plot plot = getPlotById(id);
-
-        getGenManager(id).adjustPlotFor(id, claimed, plot.isProtected(), plot.isForSale());
+    public void adjustWall(Plot plot, IWorld world, boolean claimed) {
+        getGenManager(world).adjustPlotFor(plot.getId(), claimed, plot.isProtected(), plot.isForSale());
     }
-
     public void setBiome(PlotId id, String biome) {
         plugin.getSqlManager().updatePlot(id, id.getWorld().getName(), "biome", biome.toUpperCase());
     }
@@ -710,28 +700,17 @@ public class PlotMeCoreManager {
      *
      * @return the active plotworlds
      */
-    public HashMap<String, PlotMapInfo> getPlotMaps() {
+    public HashMap<IWorld, PlotMapInfo> getPlotMaps() {
         return plotmaps;
     }
 
     /**
      * Register the plotworld the plotmap
-     *
-     * @param world name of a plotworld
+     *  @param world name of a plotworld
      * @param map   {@link PlotMapInfo} information
      */
-    public void addPlotMap(String world, PlotMapInfo map) {
-        getPlotMaps().put(world.toLowerCase(), map);
-    }
-
-    /**
-     * Remove a plotmap.
-     * Likely to be used if a world is deleted.
-     *
-     * @param world name of a plotworld
-     */
-    public void removePlotMap(String world) {
-        getPlotMaps().remove(world.toLowerCase());
+    public void addPlotMap(IWorld world, PlotMapInfo map) {
+        getPlotMaps().put(world, map);
     }
 
 
@@ -750,7 +729,7 @@ public class PlotMeCoreManager {
      * @param id    plot id
      * @return location as an ILocation
      */
-    public ILocation getPlotMiddle(IWorld world, PlotId id) {
+    public Vector getPlotMiddle(IWorld world, PlotId id) {
         return getGenManager(world).getPlotMiddle(id);
     }
 
@@ -781,9 +760,13 @@ public class PlotMeCoreManager {
      * @param property Name of the property to get the value of
      * @return Value of the property
      */
-    public String getPlotProperty(PlotId id, String pluginname, String property) {
-        Plot plot = getPlotById(id);
-        return getPlotProperty(plot, pluginname, property);
+    public String getPlotProperty(PlotId id, IWorld world, String pluginname, String property) {
+        Plot plot = getPlotById(id, world);
+        if (plot == null) {
+            return null;
+        } else {
+            return getPlotProperty(plot, pluginname, property);
+        }
     }
 
     /**
@@ -807,9 +790,9 @@ public class PlotMeCoreManager {
      * @param value Value of the property
      * @return If the property was set successfully
      */
-    public boolean setPlotProperty(PlotId id, String pluginname, String property, String value) {
-        Plot plot = getPlotById(id);
-        return plot.setPlotProperty(pluginname, property, value);
+    public boolean setPlotProperty(PlotId id, IWorld world, String pluginname, String property, String value) {
+        Plot plot = getPlotById(id, world);
+        return plot != null && plot.setPlotProperty(pluginname, property, value);
     }
 
     /**
@@ -827,5 +810,35 @@ public class PlotMeCoreManager {
 
     public IOfflinePlayer getOfflinePlayer(String name) {
         return plugin.getServerBridge().getOfflinePlayer(name);
+    }
+
+    public Plot getPlot(ILocation location) {
+        PlotId id = getPlotId(location);
+        if (id == null) {
+            return null;
+        }
+        return getPlotById(id, location.getWorld());
+    }
+
+    public Plot getPlot(IPlayer player) {
+        PlotId id = getPlotId(player);
+        if (id == null) {
+            return null;
+        }
+        return getPlotById(id, player.getWorld());
+    }
+
+    public boolean isPlotAvailable(ILocation location) {
+        PlotId id = getPlotId(location);
+        if (id != null) {
+            if (getPlotById(id, location) == null) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private Plot getPlotById(PlotId id, ILocation location) {
+        return getPlotById(id, location.getWorld());
     }
 }

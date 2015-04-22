@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface IPlotMe_GeneratorManager {
 
-    PlotId getPlotId(ILocation location);
+    PlotId getPlotId(Vector loc);
 
     PlotId getPlotId(IPlayer player);
 
@@ -25,19 +25,19 @@ public interface IPlotMe_GeneratorManager {
 
     void removeSellerDisplay(PlotId id);
 
-    ILocation getPlotBottomLoc(PlotId id);
+    Vector getPlotBottomLoc(PlotId id);
 
-    ILocation getPlotTopLoc(PlotId id);
+    Vector getPlotTopLoc(PlotId id);
 
     void refreshPlotChunks(PlotId id);
 
-    ILocation getTop(PlotId id);
+    Vector getTop(PlotId id);
 
-    ILocation getBottom(PlotId id);
+    Vector getBottom(PlotId id);
 
-    Long[] clear(PlotId id, long maxBlocks, Long[] start);
+    long[] clear(PlotId id, long maxBlocks, long[] start);
 
-    Long[] clear(ILocation bottom, ILocation top, long maxBlocks, Long[] start);
+    long[] clear(Vector bottom, Vector top, long maxBlocks, long[] start);
 
     void adjustPlotFor(PlotId id, boolean claimed, boolean protect, boolean forSale);
 
@@ -59,7 +59,7 @@ public interface IPlotMe_GeneratorManager {
 
     int getGroundHeight();
 
-    ILocation getPlotMiddle(PlotId id);
+    Vector getPlotMiddle(PlotId id);
 
     Schematic getPlotSchematic(PlotId id);
 }
