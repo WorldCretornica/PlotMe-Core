@@ -1,0 +1,15 @@
+	#wrapper {
+		opacity: 1;
+	}
+	#overlay {
+		opacity: 1;
+	}
+	#header {
+		opacity: 1;
+	}
+		#header nav li {
+			opacity: 1;
+		}
+	#footer {
+		background-image: url("images/footer.svg");
+	}
