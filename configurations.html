@@ -9,7 +9,7 @@ title: "PlotMe | PlotMe Core Config"
                     class="octicon octicon-link"></span></a>PlotMe-Core 0.16 Configuration</h3>
             
             <h4>Storage</h4>
-            <p style="text-align:center;">If you are using SQLite and want to upgrade to mySQL, you must be aware that it is <strong>NOT</strong> possible to convert back to SQLite.</p>
+            <p>If you are using SQLite and want to upgrade to mySQL, you must be aware that it is <strong>NOT</strong> possible to convert back to SQLite.</p>
 
         <table class="tftable" border="2">
             <tr>
@@ -307,6 +307,176 @@ worlds:
     DisableIgnition: true
     UseProgressiveClear: false
     Projectiles: true
+</pre>
+<br>
+<h3><a id="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages" aria-hidden="true"><span
+                    class="octicon octicon-link"></span></a>PlotMe Default-Generator 0.16 Configuration</h3>
+
+        <table class="tftable" border="2">
+            <tr>
+                <th>Config</th>
+                <th>Explanation</th>
+            </tr>
+            <tr>
+                <td><code>worlds</code></td>
+                <td>The beginning of world settings</td>
+            </tr>
+            <tr>
+                <td><code>RoadMainBlock</code></td>
+                <td>The first stripe of the plotme road.
+                </td>
+            </tr>
+            <tr>
+                <td><code>ProtectedWallBlock</code></td>
+                <td>The block to be used for the plot border when a plot is protected.
+                </td>
+            </tr>
+            <tr>
+                <td><code>PlotFloorBlock</code></td>
+                <td>The block to be used for the floor of the plot.</td>
+            </tr>
+            <tr>
+                <td><code>GroundHeight</code></td>
+                <td>The height of the ground for the world</td>
+            </tr>
+            <tr>
+                <td><code>UnclaimedBorder</code></td>
+                <td>The block to be used for the plot border if the plot is unclaimed.
+                </td>
+            </tr>
+            <tr>
+                <td><code>ForSaleWallBlock</code></td>
+                <td>The block to be used for the plot border if the plot is on sale.
+                </td>
+            </tr>
+            <tr>
+                <td><code>AuctionWallBlock</code></td>
+                <td>The block to be used for the plot border if the plot is auctioned.
+                </td>
+            </tr>
+            <tr>
+                <td><code>PlotSize</code></td>
+                <td>The size of each plot</td>
+            </tr>
+            <tr>
+                <td><code>RoadAltBlock</code></td>
+                <td>The second stripe to be used on the plot road.
+                </td>
+            </tr>
+            <tr>
+                <td><code>WallBlock</code></td>
+                <td>The block to be used for the plot border when a plot is claimed.
+                </td>
+            </tr>
+            <tr>
+                <td><code>FillBlock</code></td>
+                <td>The block that the plot is filled with. Typically dirt.
+                </td>
+            </tr>
+            <tr>
+                <td><code>PathWidth</code></td>
+                <td>The width of the roads between plots.
+                </td>
+            </tr>
+            <tr>
+                <td><code>ClearPricePrice</code></td>
+                <td>The cost to clear a plot.
+                </td>
+            </tr>
+            <tr>
+                <td><code>AddPlayerPrice</code></td>
+                <td>The cost to add a player to a plot.
+                </td>
+            </tr>
+            <tr>
+                <td><code>DenyPlayerPrice</code></td>
+                <td>The cost to deny a player from a plot.
+                </td>
+            </tr>
+            <tr>
+                <td><code>RemovePlayerPrice</code></td>
+                <td>The cost to remove a player from a plot.
+                </td>
+            </tr>
+            <tr>
+                <td><code>UndenyPlayerPrice</code></td>
+                <td>The cost to undeny a player from a plot.
+                </td>
+            </tr>
+            <tr>
+                <td><code>PlotHomePrice</code></td>
+                <td>The cost to teleport a player to their home plot.
+                </td>
+            </tr>
+            <tr>
+                <td><code>SellToPlayerPrice</code></td>
+                <td>The price to sell a plot to a player.
+                </td>
+            </tr>
+            <tr>
+                <td><code>BiomeChangePrice</code></td>
+                <td>The price to change the biome of a plot.
+                </td>
+            </tr>
+            <tr>
+                <td><code>ProtectPrice</code></td>
+                <td>The price to protect a plot.
+                </td>
+            </tr>
+            <tr>
+                <td><code>DisposePrice</code></td>
+                <td>The price to dispose a plot.
+                </td>
+            </tr>
+            <tr>
+                <td><code>DisableExplosion</code></td>
+                <td>True if explosions are disabled in the world.
+                </td>
+            </tr>
+            <tr>
+                <td><code>DisableIgnition</code></td>
+                <td>True if fire is disabled in the world.
+                </td>
+            </tr>
+            <tr>
+                <td><code>UseProgressiveClear</code></td>
+                <td>A lag free gradual plot clearing and resetting process.
+                </td>
+            </tr>
+            <tr>
+                <td><code>Projectiles</code></td>
+                <td>True if projectiles are enabled in the world.
+                </td>
+            </tr>
+            <tr>
+                <td><code>XTranslation</code></td>
+                <td>The spawn point on the x-axis of the plotworld.
+                </td>
+            </tr>
+            <tr>
+                <td><code>ZTranslation</code></td>
+                <td>The spawn point on the z-axis of the plotworld.
+                </td>
+            </tr>
+        </table>
+        <h4>Example PlotMe Configuration File</h4>
+<pre>
+worlds:
+  creative:
+    RoadMainBlock: '5'
+    ProtectedWallBlock: '44:4'
+    PlotFloorBlock: '2'
+    GroundHeight: 64
+    UnclaimedBorder: '44:7'
+    ForSaleWallBlock: '44:1'
+    PlotSize: 32
+    ZTranslation: 0
+    RoadAltBlock: '5:2'
+    WallBlock: '44'
+    FillBlock: '3'
+    PathWidth: 7
+    XTranslation: 0
+    AuctionWallBlock: '44:1'
 </pre>
     </section>
 </div>
