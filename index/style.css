@@ -91,7 +91,7 @@
 		-o-transform: translate3d(0,0,0);
 		-ms-transform: translate3d(0,0,0);
 		transform: translate3d(0,0,0);
-		background: url("images/bg.jpg");
+		background: #348cb2 url("images/bg.jpg") bottom left;
 		background-repeat: repeat-x;
 		height: 100%;
 		left: 0;
@@ -106,7 +106,7 @@
 	@keyframes bg { 0% { -moz-transform: translate3d(0,0,0); -webkit-transform: translate3d(0,0,0); -o-transform: translate3d(0,0,0); -ms-transform: translate3d(0,0,0); transform: translate3d(0,0,0); } 100% { -moz-transform: translate3d(-2250px,0,0); -webkit-transform: translate3d(-2250px,0,0); -o-transform: translate3d(-2250px,0,0); -ms-transform: translate3d(-2250px,0,0); transform: translate3d(-2250px,0,0); } }
 
 	#bg {
-		background-size: 2250px auto;
+		background-size: auto;
 		width: 6750px;
 	}
 
@@ -168,7 +168,7 @@
     background: #f0f0f0 no-repeat 100% 5%;
     margin-top: 15px;
     position: absolute;
-    top: 75px;
+    top: 85px;
     z-index: 100;
     text-decoration: none;
     color: gray;
