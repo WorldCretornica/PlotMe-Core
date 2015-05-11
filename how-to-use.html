@@ -4,17 +4,20 @@ title: "PlotMe | Setup"
 {% include header.html %}
 <div id="main_content_wrap" class="outer">
     <section id="main_content" class="inner">
-        <h3><a id="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages" aria-hidden="true"><span class="octicon octicon-link"></span></a>Welcome to PlotMe wiki.</h3>
+        <h3><a aria-hidden="true"><span
+                class="octicon octicon-link"></span></a>Welcome to PlotMe wiki.</h3>
         <ol>
             <li>Put PlotMe-Core.jar and PlotMe-DefaultGenerator.jar in your plugins folder</li>
             <li>Run your server to generate the PlotMe folder</li>
             <li>Feel free to change settings in the config.yml file in that folder</li>
-            <li>In the PlotMe folder, there will be another folder by the name of PlotMe-DefaultGenerator. Open that folder and feel free to change the generation settings in the config.yml file.</li>
+            <li>In the PlotMe folder, there will be another folder by the name of PlotMe-DefaultGenerator. Open that folder and feel free to change
+                the generation settings in the config.yml file.
+            </li>
             <li>Use the command, <i>/plotme reload</i>, to reload the settings.</li>
         </ol>
         <p>
             <strong>The world names in the config.yml files must be in lowercase! That is extremely important.</strong>
-                <br>
+            <br>
             <strong>You must have your worlds defined in both the Generator config and the PlotMe config.</strong>
         </p>
 
@@ -26,7 +29,8 @@ title: "PlotMe | Setup"
 
         <h3>Creating a PlotWorld without Multiverse</h3>
 
-        <p>This is very simple. All you need to do is add the following code snippit in your bukkit.yml file. The following snippit is only an example and should be adapted based on names you set for your plotworlds.</p>
+        <p>This is very simple. All you need to do is add the following code snippit in your bukkit.yml file. The following snippit is only an example
+            and should be adapted based on names you set for your plotworlds.</p>
         <h4>Bukkit.yml Settings</h4>
 <pre>worlds:
     plotworld:
@@ -34,8 +38,10 @@ title: "PlotMe | Setup"
     plotworld2:
         generator: PlotMe-DefaultGenerator</pre>
         <h3>If it doesn't work</h3>
-        <p>In rare cases, Multiverse can fail loading your plotworld. To make sure this doesn't happen, it's safe to add the bukkit.yml settings as shown above</p>
-    
+
+        <p>In rare cases, Multiverse can fail loading your plotworld. To make sure this doesn't happen, it's safe to add the bukkit.yml settings as
+            shown above</p>
+
         <h3>Video Tutorial by Koz4Christ</h3>
         <iframe width="560" height="315" src="https://www.youtube.com/embed/c74550Zlp84" frameborder="0" allowfullscreen></iframe>
 
@@ -46,19 +52,21 @@ title: "PlotMe | Setup"
             <li>Delete your PlotMe.jar file from your plugins folder</li>
             <li>Download the newest PlotMe version from Spigot</li>
             <li>Unzip the folder and move PlotMe-Core.jar and PlotMe-DefaultGenerator.jar to your plugins folder</li>
-            <li>Upgrading to the new generator if you do not have Multiverse or MultiWorld:</li>
-            <ul>
-                <li>Open your bukkit.yml file</li>
-                <li>For each plotworld, change the generator name from "PlotMe" to "PlotMe-DefaultGenerator"</li>
-            </ul>
-            <li>Upgrading to the new generator if you do have Multiverse or MultiWorld:</li>
-            <ul>
-                <li>Open the worlds.yml file found inside the Multiverse or MultiWorld folder.</li>
-                <li>For each plotworld, change the generator name from "PlotMe" to "PlotMe-DefaultGenerator"</li>
-                <li>If this does not work, copy and paste the bukkit.yml information from the setup page in your
-                    bukkit.yml file.
-                </li>
-            </ul>
+            <li>Upgrading to the new generator if you do not have Multiverse or MultiWorld:
+                <ul>
+                    <li>Open your bukkit.yml file</li>
+                    <li>For each plotworld, change the generator name from "PlotMe" to "PlotMe-DefaultGenerator"</li>
+                </ul>
+            </li>
+            <li>Upgrading to the new generator if you do have Multiverse or MultiWorld:
+                <ul>
+                    <li>Open the worlds.yml file found inside the Multiverse or MultiWorld folder.</li>
+                    <li>For each plotworld, change the generator name from "PlotMe" to "PlotMe-DefaultGenerator"</li>
+                    <li>If this does not work, copy and paste the bukkit.yml information from the setup page in your
+                        bukkit.yml file.
+                    </li>
+                </ul>
+            </li>
             <li>If you modified the PlotMe config file or renamed the jar files, you did something wrong.</li>
             <li>If you completed all the steps above then you should be able to run PlotMe 0.15.2 or 0.16</li>
         </ol>
