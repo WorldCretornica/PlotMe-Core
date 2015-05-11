@@ -22,6 +22,9 @@
 			animation: none !important;
 		}
 
+	nav {
+		color: turquoise;
+
 	a {
 		-moz-transition: border-color 0.2s ease-in-out;
 		-webkit-transition: border-color 0.2s ease-in-out;
@@ -91,7 +94,7 @@
 		-o-transform: translate3d(0,0,0);
 		-ms-transform: translate3d(0,0,0);
 		transform: translate3d(0,0,0);
-		background: #348cb2 url("images/bg.jpg") repeat-x bottom left;
+		background: #7FA5EB url("images/bg.jpg") repeat-x bottom left;
 		height: 100%;
 		left: 0;
 		opacity: 1;
