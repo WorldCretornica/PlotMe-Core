@@ -2,13 +2,11 @@
 		position: relative;
 		border: solid 1px white;
 		border-radius: 100%;
-		-ms-behavior: url("css/ie/pie.htc");
+		-ms-behavior: url("pie.htc");
 	}
 		#header nav a:before {
 			border: 0;
 		}
 	#footer {
-		background-image: url("images/footer.png");
-		background-position: bottom left;
-		background-repeat: repeat-x;
+		background: url("images/footer.png") repeat-x bottom left;
 	}

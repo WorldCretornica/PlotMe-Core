@@ -45,7 +45,7 @@
 		.icon:before {
 			-moz-osx-font-smoothing: grayscale;
 			-webkit-font-smoothing: antialiased;
-			font-family: FontAwesome;
+			font-family: FontAwesome, sans-serif;
 			font-style: normal;
 			font-weight: normal;
 			text-transform: none !important;
@@ -91,8 +91,7 @@
 		-o-transform: translate3d(0,0,0);
 		-ms-transform: translate3d(0,0,0);
 		transform: translate3d(0,0,0);
-		background: #348cb2 url("images/bg.jpg") bottom left;
-		background-repeat: repeat-x;
+		background: #348cb2 url("images/bg.jpg") repeat-x bottom left;
 		height: 100%;
 		left: 0;
 		opacity: 1;
@@ -123,10 +122,7 @@
 		-o-animation: overlay 1.5s 1.5s forwards;
 		-ms-animation: overlay 1.5s 1.5s forwards;
 		animation: overlay 1.5s 1.5s forwards;
-		background-attachment: fixed, fixed;
-		background-image: url("images/overlay-pattern.png"), url("images/overlay.svg");
-		background-position: top left, center center;
-		background-repeat: repeat, no-repeat;
+		background: url("images/overlay-pattern.png"), url("images/overlay.svg") repeat, no-repeat fixed, fixed top left, center center;
 		background-size: auto, cover;
 		height: 100%;
 		left: 0;
