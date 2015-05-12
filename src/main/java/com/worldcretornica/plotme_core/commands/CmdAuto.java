@@ -77,7 +77,6 @@ public class CmdAuto extends PlotCommand {
                                     player.sendMessage("It costs " + serverBridge.getEconomy().format(price) + " to use the auto command.");
                                     return true;
                                 } else {
-
                                     if (event.isCancelled()) {
                                         return true;
                                     }

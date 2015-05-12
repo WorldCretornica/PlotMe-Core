@@ -8,4 +8,11 @@ public class PlotMeAPI {
         return new EventBus();
     }
 
+    String getPlotMeVersion() {
+        return "0.17-Snapshot"; //Todo Update this with Maven/Gradle build information
+    }
+
+    
+
+
 }

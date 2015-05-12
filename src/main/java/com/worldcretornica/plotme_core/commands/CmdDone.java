@@ -2,7 +2,6 @@ package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
-import com.worldcretornica.plotme_core.PlotId;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
@@ -22,13 +21,9 @@ public class CmdDone extends PlotCommand {
         IPlayer player = (IPlayer) sender;
         if (player.hasPermission(PermissionNames.USER_DONE) || player.hasPermission(PermissionNames.ADMIN_DONE)) {
             if (manager.isPlotWorld(player)) {
-                PlotId id = manager.getPlotId(player);
+                Plot plot = manager.getPlot(player);
 
-                if (id == null) {
-                    player.sendMessage(C("MsgNoPlotFound"));
-                    return true;
-                } else if (!manager.isPlotAvailable(id, world)) {
-                    Plot plot = manager.getPlotById(id, world);
+                if (plot != null) {
                     String name = player.getName();
 
                     if (player.getUniqueId().equals(plot.getOwnerId()) || player.hasPermission(PermissionNames.ADMIN_DONE)) {
@@ -43,20 +38,20 @@ public class CmdDone extends PlotCommand {
                                 player.sendMessage(C("MsgUnmarkFinished"));
 
                                 if (isAdvancedLogging()) {
-                                    serverBridge.getLogger().info(name + " " + C("WordMarked") + " " + id + " " + C("WordFinished"));
+                                    serverBridge.getLogger().info(name + " " + C("WordMarked") + " " + plot.getId() + " " + C("WordFinished"));
                                 }
                             } else {
                                 plot.setFinished();
                                 player.sendMessage(C("MsgMarkFinished"));
 
                                 if (isAdvancedLogging()) {
-                                    serverBridge.getLogger().info(name + " " + C("WordMarked") + " " + id + " " + C("WordUnfinished"));
+                                    serverBridge.getLogger().info(name + " " + C("WordMarked") + " " + plot.getId() + " " + C("WordUnfinished"));
                                 }
                             }
                         }
                     }
                 } else {
-                    player.sendMessage(C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
+                    player.sendMessage(C("MsgThisPlot") + "(" + plot.getId() + ") " + C("MsgHasNoOwner"));
                 }
             } else {
 

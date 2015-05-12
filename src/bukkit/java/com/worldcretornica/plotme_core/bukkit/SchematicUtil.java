@@ -3,6 +3,7 @@ package com.worldcretornica.plotme_core.bukkit;
 import com.worldcretornica.plotme_core.AbstractSchematicUtil;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IBlock;
+import com.worldcretornica.plotme_core.api.IEntity;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitWorld;
@@ -96,11 +97,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.zip.GZIPInputStream;
 
 public class SchematicUtil extends AbstractSchematicUtil {
 
     private final PlotMe_Core plugin;
 
+    @SuppressWarnings("deprecation")
     public SchematicUtil(PlotMe_Core instance) {
         this.plugin = instance;
         blockPlacedLast.add(Material.SAPLING.getId());
@@ -384,81 +387,72 @@ public class SchematicUtil extends AbstractSchematicUtil {
         return ent;
     }
 
-    private Leash getLeash(CompoundTag leashelement) {
+    private Leash getLeash(CompoundTag leashelement) throws Exception {
         Map<String, Tag> leash = leashelement.getValue();
-        Integer x = getChildTag(leash, "X", IntTag.class, Integer.class);
-        Integer y = getChildTag(leash, "Y", IntTag.class, Integer.class);
-        Integer z = getChildTag(leash, "Z", IntTag.class, Integer.class);
+        int x = getChildTag(leash, "X", IntTag.class).getValue();
+        int y = getChildTag(leash, "Y", IntTag.class).getValue();
+        int z = getChildTag(leash, "Z", IntTag.class).getValue();
 
         return new Leash(x, y, z);
     }
 
-    private Modifier getModifier(CompoundTag modifierelement) {
+    private Modifier getModifier(CompoundTag modifierelement) throws Exception {
         Map<String, Tag> modifier = modifierelement.getValue();
-        Integer operation = getChildTag(modifier, "Operation", IntTag.class, Integer.class);
-        Double amount = getChildTag(modifier, "Amount", DoubleTag.class, Double.class);
-        String name = getChildTag(modifier, "Name", StringTag.class, String.class);
+        int operation = getChildTag(modifier, "Operation", IntTag.class).getValue();
+        double amount = getChildTag(modifier, "Amount", DoubleTag.class).getValue();
+        String name = getChildTag(modifier, "Name", StringTag.class).getValue();
 
         return new Modifier(operation, amount, name);
     }
 
-    private List<Modifier> getModifiers(Map<String, Tag> attribute) {
-        List<?> modifierlist = getChildTag(attribute, "Modifiers", ListTag.class, List.class);
+    private List<Modifier> getModifiers(Map<String, Tag> attribute) throws Exception {
+        List<Tag> modifierlist = getChildTag(attribute, "Modifiers", ListTag.class).getValue();
 
-        if (modifierlist != null) {
-            List<Modifier> modifiers = new ArrayList<>();
+        List<Modifier> modifiers = new ArrayList<>();
 
-            for (Object modifierelement : modifierlist) {
-                if (modifierelement instanceof CompoundTag) {
-                    modifiers.add(getModifier((CompoundTag) modifierelement));
-                }
+        for (Tag modifierelement : modifierlist) {
+            if (modifierelement instanceof CompoundTag) {
+                modifiers.add(getModifier((CompoundTag) modifierelement));
             }
-
-            return modifiers;
-        } else {
-            return null;
         }
+        return modifiers;
     }
 
-    private Item getItem(CompoundTag itemElement) {
+    private Item getItem(CompoundTag itemElement) throws Exception {
         Map<String, Tag> item = itemElement.getValue();
-        Byte count = getChildTag(item, "Count", ByteTag.class, Byte.class);
-        Byte slot = getChildTag(item, "Slot", ByteTag.class, Byte.class);
-        Short damage = getChildTag(item, "Damage", ShortTag.class, Short.class);
-        Short itemid = getChildTag(item, "id", ShortTag.class, Short.class);
+        byte count = getChildTag(item, "Count", ByteTag.class).getValue();
+        byte slot = getChildTag(item, "Slot", ByteTag.class).getValue();
+        short damage = getChildTag(item, "Damage", ShortTag.class).getValue();
+        short itemid = getChildTag(item, "id", ShortTag.class).getValue();
 
         ItemTag tag = getItemTag(item);
 
         return new Item(count, slot, damage, itemid, tag);
     }
 
-    private List<Item> getItems(Map<String, Tag> entity) {
-        List<?> itemsList = getChildTag(entity, "Items", ListTag.class, List.class);
+    private List<Item> getItems(Map<String, Tag> entity) throws Exception {
+        List<Tag> itemsList = getChildTag(entity, "Items", ListTag.class).getValue();
 
-        if (itemsList != null) {
-            List<Item> items = new ArrayList<>();
+        List<Item> items = new ArrayList<>();
 
-            for (Object itemElement : itemsList) {
-                if (itemElement instanceof CompoundTag) {
-                    items.add(getItem((CompoundTag) itemElement));
-                }
+        for (Tag itemElement : itemsList) {
+            if (itemElement instanceof CompoundTag) {
+                items.add(getItem((CompoundTag) itemElement));
             }
-
-            return items;
-        } else {
-            return null;
         }
+
+        return items;
     }
 
-    private ItemTag getItemTag(Map<String, Tag> item) {
+    private ItemTag getItemTag(Map<String, Tag> item) throws Exception {
         CompoundTag itemtagElement = getChildTag(item, "tag", CompoundTag.class);
 
         if (itemtagElement != null) {
             Map<String, Tag> itemtag = itemtagElement.getValue();
-            Integer repaircost = getChildTag(itemtag, "RepairCost", IntTag.class, Integer.class);
-            String author = getChildTag(itemtag, "author", StringTag.class, String.class);
-            String title = getChildTag(itemtag, "title", StringTag.class, String.class);
-            List<String> pages = convert(getChildTag(itemtag, "pages", ListTag.class, List.class), String.class);
+            Integer repaircost = getChildTag(itemtag, "RepairCost", IntTag.class).getValue();
+            String author = getChildTag(itemtag, "author", StringTag.class).getValue();
+            String title = getChildTag(itemtag, "title", StringTag.class).getValue();
+            List<String> pages = convert(getChildTag(itemtag, "pages", ListTag.class).getValue(), String.class);
             Display display = getDisplay(itemtag);
             List<Ench> enchants = getEnchant(itemtag);
 
@@ -468,13 +462,13 @@ public class SchematicUtil extends AbstractSchematicUtil {
         }
     }
 
-    private Display getDisplay(Map<String, Tag> itemtag) {
+    private Display getDisplay(Map<String, Tag> itemtag) throws Exception {
         CompoundTag displayElement = getChildTag(itemtag, "display", CompoundTag.class);
 
         if (displayElement != null) {
             Map<String, Tag> display = displayElement.getValue();
-            String name = getChildTag(display, "Name", StringTag.class, String.class);
-            List<String> lore = convert(getChildTag(display, "Lore", ListTag.class, List.class), String.class);
+            String name = getChildTag(display, "Name", StringTag.class).getValue();
+            List<String> lore = convert(getChildTag(display, "Lore", ListTag.class).getValue(), String.class);
 
             return new Display(name, lore);
         } else {
@@ -482,81 +476,69 @@ public class SchematicUtil extends AbstractSchematicUtil {
         }
     }
 
-    private Ench getEnchant(CompoundTag enchantelement) {
+    private Ench getEnchant(CompoundTag enchantelement) throws Exception {
         Map<String, Tag> enchant = enchantelement.getValue();
-        Short id = getChildTag(enchant, "id", ShortTag.class, Short.class);
-        Short lvl = getChildTag(enchant, "lvl", ShortTag.class, Short.class);
+        short id = getChildTag(enchant, "id", ShortTag.class).getValue();
+        short lvl = getChildTag(enchant, "lvl", ShortTag.class).getValue();
         return new Ench(id, lvl);
     }
 
-    private List<Ench> getEnchant(Map<String, Tag> enchanttag) {
-        List<?> enchantList = getChildTag(enchanttag, "ench", ListTag.class, List.class);
+    private List<Ench> getEnchant(Map<String, Tag> enchanttag) throws Exception {
+        List<Tag> enchantList = getChildTag(enchanttag, "ench", ListTag.class).getValue();
 
-        if (enchantList != null) {
-            List<Ench> enchants = new ArrayList<>();
+        List<Ench> enchants = new ArrayList<>();
 
-            for (Object enchantelement : enchantList) {
-                if (enchantelement instanceof CompoundTag) {
-                    enchants.add(getEnchant((CompoundTag) enchantelement));
-                }
+        for (Tag enchantelement : enchantList) {
+            if (enchantelement instanceof CompoundTag) {
+                enchants.add(getEnchant((CompoundTag) enchantelement));
             }
-
-            return enchants;
-        } else {
-            return null;
         }
+
+        return enchants;
     }
 
-    private List<Item> getEquipment(Map<String, Tag> entity) {
-        List<?> equipmentlist = getChildTag(entity, "Equipment", ListTag.class, List.class);
+    private List<Item> getEquipment(Map<String, Tag> entity) throws Exception {
+        List<Tag> equipmentlist = getChildTag(entity, "Equipment", ListTag.class).getValue();
 
-        if (equipmentlist != null) {
-            List<Item> items = new ArrayList<>();
+        List<Item> items = new ArrayList<>();
 
-            for (Object equipmentelement : equipmentlist) {
-                if (equipmentelement instanceof CompoundTag) {
-                    items.add(getItem((CompoundTag) equipmentelement));
-                } else {
-                    items.add(null);
-                }
+        for (Object equipmentelement : equipmentlist) {
+            if (equipmentelement instanceof CompoundTag) {
+                items.add(getItem((CompoundTag) equipmentelement));
+            } else {
+                items.add(null);
             }
-
-            return items;
-        } else {
-            return null;
         }
+
+        return items;
     }
 
-    private Attribute getAttribute(CompoundTag attributeelement) {
+    private Attribute getAttribute(CompoundTag attributeelement) throws Exception {
         Map<String, Tag> attribute = attributeelement.getValue();
-        Double base = getChildTag(attribute, "Base", DoubleTag.class, Double.class);
-        String name = getChildTag(attribute, "Name", StringTag.class, String.class);
+        double base = getChildTag(attribute, "Base", DoubleTag.class).getValue();
+        String name = getChildTag(attribute, "Name", StringTag.class).getValue();
         List<Modifier> modifiers = getModifiers(attribute);
         return new Attribute(base, name, modifiers);
     }
 
-    private List<Attribute> getAttributes(Map<String, Tag> entity) {
-        List<?> attributelist = getChildTag(entity, "Attributes", ListTag.class, List.class);
+    private List<Attribute> getAttributes(Map<String, Tag> entity) throws Exception {
+        List<Tag> attributelist = getChildTag(entity, "Attributes", ListTag.class).getValue();
 
-        if (attributelist != null) {
-            List<Attribute> attributes = new ArrayList<>();
+        List<Attribute> attributes = new ArrayList<>();
 
-            for (Object attributeelement : attributelist) {
-                if (attributeelement instanceof CompoundTag) {
-                    attributes.add(getAttribute((CompoundTag) attributeelement));
-                }
+        for (Tag attributeelement : attributelist) {
+            if (attributeelement instanceof CompoundTag) {
+                attributes.add(getAttribute((CompoundTag) attributeelement));
             }
-
-            return attributes;
-        } else {
-            return null;
         }
+
+        return attributes;
     }
 
     @SuppressWarnings("deprecation")
-    private Entity getEntity(org.bukkit.entity.Entity bukkitentity, int minX, int minY, int minZ) {
+    private Entity getEntity(IEntity bukkitentity, int minX, int minY, int minZ) {
 
-        Location entLoc = bukkitentity.getLocation();
+        ILocation entLoc = bukkitentity.getLocation();
         double x = entLoc.getX() - minX;
         double y = entLoc.getY() - minY;
         double z = entLoc.getZ() - minZ;
@@ -1019,13 +1001,14 @@ public class SchematicUtil extends AbstractSchematicUtil {
     }
 
     @Override
-    public Schematic loadSchematic(File file) throws IOException, IllegalArgumentException {
+    public Schematic loadSchematic(File file) throws Exception {
 
         Schematic schem = loadCompiledSchematic(file.getName());
 
         if (schem == null) {
 
-            try (NBTInputStream nbtStream = new NBTInputStream(new FileInputStream(file))) {
+            try (FileInputStream f = new FileInputStream(file); BufferedInputStream b = new BufferedInputStream(f); NBTInputStream nbtStream = new
+                    NBTInputStream(new GZIPInputStream(b))) {
 
                 CompoundTag schematicTag = (CompoundTag) nbtStream.readTag();
                 if (!"Schematic".equals(schematicTag.getName())) {
@@ -1037,118 +1020,115 @@ public class SchematicUtil extends AbstractSchematicUtil {
                     throw new IllegalArgumentException("Schematic file is missing a \"Blocks\" tag");
                 }
 
-                Short width = getChildTag(schematic, "Width", ShortTag.class, Short.class);
-                Short length = getChildTag(schematic, "Length", ShortTag.class, Short.class);
-                Short height = getChildTag(schematic, "Height", ShortTag.class, Short.class);
-                String roomauthor = getChildTag(schematic, "RoomAuthor", StringTag.class, String.class);
+                Short width = getChildTag(schematic, "Width", ShortTag.class).getValue();
+                Short length = getChildTag(schematic, "Length", ShortTag.class).getValue();
+                Short height = getChildTag(schematic, "Height", ShortTag.class).getValue();
 
-                Integer originx = getChildTag(schematic, "WEOriginX", IntTag.class, Integer.class);
-                Integer originy = getChildTag(schematic, "WEOriginY", IntTag.class, Integer.class);
-                Integer originz = getChildTag(schematic, "WEOriginZ", IntTag.class, Integer.class);
+                Integer originx = getChildTag(schematic, "WEOriginX", IntTag.class).getValue();
+                Integer originy = getChildTag(schematic, "WEOriginY", IntTag.class).getValue();
+                Integer originz = getChildTag(schematic, "WEOriginZ", IntTag.class).getValue();
 
-                String materials = getChildTag(schematic, "Materials", StringTag.class, String.class);
+                String materials = getChildTag(schematic, "Materials", StringTag.class).getValue();
                 if (!"Alpha".equals(materials)) {
                     throw new IllegalArgumentException("Schematic file is not an Alpha schematic");
                 }
 
-                byte[] rawblocks = getChildTag(schematic, "Blocks", ByteArrayTag.class, byte[].class);
+                byte[] rawblocks = getChildTag(schematic, "Blocks", ByteArrayTag.class).getValue();
+                byte[] blockData = getChildTag(schematic, "Data", ByteArrayTag.class).getValue();
+                byte[] addId = new byte[0];
                 int[] blocks = new int[rawblocks.length];
-
-                for (int ctr = 0; ctr < rawblocks.length; ctr++) {
-                    int blockid = rawblocks[ctr] & 0xff;
-
-                    //if(blockid < 0) blockid = 256 + blockid;
-
-                    blocks[ctr] = blockid;
+                if (schematic.containsKey("AddBlocks")) {
+                    addId = getChildTag(schematic, "AddBlocks", ByteArrayTag.class).getValue();
                 }
 
-                byte[] blockData = getChildTag(schematic, "Data", ByteArrayTag.class, byte[].class);
+                for (int index = 0; index < rawblocks.length; index++) {
+                    if ((index >> 1) >= addId.length) {
+                        blocks[index] = (short) (rawblocks[index] & 0xFF);
+                    } else if ((index & 1) == 0) {
+                        blocks[index] = (short) (((addId[index >> 1] & 0x0F) << 8) + (rawblocks[index] & 0xFF));
+                    } else {
+                        blocks[index] = (short) (((addId[index >> 1] & 0xF0) << 4) + (rawblocks[index] & 0xFF));
+                    }
+                }
 
-                List<Entity> entities = null;
-                List<TileEntity> tileentities = null;
 
                 // Load Entities
-                List<?> entitiesList = getChildTag(schematic, "Entities", ListTag.class, List.class);
+                List<Tag> entitiesList = getChildTag(schematic, "Entities", ListTag.class).getValue();
 
-                if (entitiesList != null) {
-                    entities = new ArrayList<>();
+                List<Entity> entities = new ArrayList<>();
 
-                    for (Object tag : entitiesList) {
-                        if (tag instanceof CompoundTag) {
-                            entities.add(getEntity((CompoundTag) tag));
-                        }
+                for (Tag tag : entitiesList) {
+                    if (tag instanceof CompoundTag) {
+                        entities.add(getEntity((CompoundTag) tag));
                     }
                 }
 
                 // Load TileEntities
-                List<?> tileentitiesList = getChildTag(schematic, "TileEntities", ListTag.class, List.class);
+                List<Tag> tileentitiesList = getChildTag(schematic, "TileEntities", ListTag.class).getValue();
 
-                if (tileentitiesList != null) {
-                    tileentities = new ArrayList<>();
+                List<TileEntity> tileentities = new ArrayList<>();
 
-                    for (Object entityElement : tileentitiesList) {
-                        if (entityElement instanceof CompoundTag) {
-                            Map<String, Tag> tileentity = ((CompoundTag) entityElement).getValue();
+                for (Tag entityElement : tileentitiesList) {
+                    if (entityElement instanceof CompoundTag) {
+                        Map<String, Tag> tileentity = ((CompoundTag) entityElement).getValue();
+                        byte rot = getChildTag(tileentity, "Rot", ByteTag.class).getValue();
+                        Byte skulltype = getChildTag(tileentity, "SkullType", ByteTag.class).getValue();
+                        Byte note = getChildTag(tileentity, "note", ByteTag.class).getValue();
 
-                            Byte rot = getChildTag(tileentity, "Rot", ByteTag.class, Byte.class);
-                            Byte skulltype = getChildTag(tileentity, "SkullType", ByteTag.class, Byte.class);
-                            Byte note = getChildTag(tileentity, "note", ByteTag.class, Byte.class);
+                        int x = getChildTag(tileentity, "x", IntTag.class).getValue();
+                        int y = getChildTag(tileentity, "y", IntTag.class).getValue();
+                        int z = getChildTag(tileentity, "z", IntTag.class).getValue();
+                        int record = getChildTag(tileentity, "Record", IntTag.class).getValue();
+                        int outputsignal = getChildTag(tileentity, "OutputSignal", IntTag.class).getValue();
+                        int transfercooldown = getChildTag(tileentity, "TransferCooldown", IntTag.class).getValue();
+                        int levels = getChildTag(tileentity, "Levels", IntTag.class).getValue();
+                        int primary = getChildTag(tileentity, "Primary", IntTag.class).getValue();
+                        int secondary = getChildTag(tileentity, "Secondary", IntTag.class).getValue();
+                        int base = getChildTag(tileentity, "Base", IntTag.class).getValue();
 
-                            Integer x = getChildTag(tileentity, "x", IntTag.class, Integer.class);
-                            Integer y = getChildTag(tileentity, "y", IntTag.class, Integer.class);
-                            Integer z = getChildTag(tileentity, "z", IntTag.class, Integer.class);
-                            Integer record = getChildTag(tileentity, "Record", IntTag.class, Integer.class);
-                            Integer outputsignal = getChildTag(tileentity, "OutputSignal", IntTag.class, Integer.class);
-                            Integer transfercooldown = getChildTag(tileentity, "TransferCooldown", IntTag.class, Integer.class);
-                            Integer levels = getChildTag(tileentity, "Levels", IntTag.class, Integer.class);
-                            Integer primary = getChildTag(tileentity, "Primary", IntTag.class, Integer.class);
-                            Integer secondary = getChildTag(tileentity, "Secondary", IntTag.class, Integer.class);
-                            Integer base = getChildTag(tileentity, "Base", IntTag.class, Integer.class);
+                        RecordItem recorditem = null;
 
-                            RecordItem recorditem = null;
+                        short delay = getChildTag(tileentity, "Delay", ShortTag.class).getValue();
+                        short maxnearbyentities = getChildTag(tileentity, "MaxNearbyEntities", ShortTag.class).getValue();
+                        short maxspawndelay = getChildTag(tileentity, "MaxSpawnDelay", ShortTag.class).getValue();
+                        short minspawndelay = getChildTag(tileentity, "MinSpawnDelay", ShortTag.class).getValue();
+                        short requiredplayerrange = getChildTag(tileentity, "RequiredPlayerRange", ShortTag.class).getValue();
+                        short spawncount = getChildTag(tileentity, "SpawnCount", ShortTag.class).getValue();
+                        short spawnrange = getChildTag(tileentity, "SpawnRange", ShortTag.class).getValue();
+                        short burntime = getChildTag(tileentity, "BurnTime", ShortTag.class).getValue();
+                        short cooktime = getChildTag(tileentity, "CookTime", ShortTag.class).getValue();
+                        short brewtime = getChildTag(tileentity, "BrewTime", ShortTag.class).getValue();
 
-                            Short delay = getChildTag(tileentity, "Delay", ShortTag.class, Short.class);
-                            Short maxnearbyentities = getChildTag(tileentity, "MaxNearbyEntities", ShortTag.class, Short.class);
-                            Short maxspawndelay = getChildTag(tileentity, "MaxSpawnDelay", ShortTag.class, Short.class);
-                            Short minspawndelay = getChildTag(tileentity, "MinSpawnDelay", ShortTag.class, Short.class);
-                            Short requiredplayerrange = getChildTag(tileentity, "RequiredPlayerRange", ShortTag.class, Short.class);
-                            Short spawncount = getChildTag(tileentity, "SpawnCount", ShortTag.class, Short.class);
-                            Short spawnrange = getChildTag(tileentity, "SpawnRange", ShortTag.class, Short.class);
-                            Short burntime = getChildTag(tileentity, "BurnTime", ShortTag.class, Short.class);
-                            Short cooktime = getChildTag(tileentity, "CookTime", ShortTag.class, Short.class);
-                            Short brewtime = getChildTag(tileentity, "BrewTime", ShortTag.class, Short.class);
+                        String entityid = getChildTag(tileentity, "EntityId", StringTag.class).getValue();
+                        String customname = getChildTag(tileentity, "CustomName", StringTag.class).getValue();
+                        String id = getChildTag(tileentity, "id", StringTag.class).getValue();
+                        String text1 = getChildTag(tileentity, "Text1", StringTag.class).getValue();
+                        String text2 = getChildTag(tileentity, "Text2", StringTag.class).getValue();
+                        String text3 = getChildTag(tileentity, "Text3", StringTag.class).getValue();
+                        String text4 = getChildTag(tileentity, "Text4", StringTag.class).getValue();
+                        String command = getChildTag(tileentity, "Command", StringTag.class).getValue();
 
-                            String entityid = getChildTag(tileentity, "EntityId", StringTag.class, String.class);
-                            String customname = getChildTag(tileentity, "CustomName", StringTag.class, String.class);
-                            String id = getChildTag(tileentity, "id", StringTag.class, String.class);
-                            String text1 = getChildTag(tileentity, "Text1", StringTag.class, String.class);
-                            String text2 = getChildTag(tileentity, "Text2", StringTag.class, String.class);
-                            String text3 = getChildTag(tileentity, "Text3", StringTag.class, String.class);
-                            String text4 = getChildTag(tileentity, "Text4", StringTag.class, String.class);
-                            String command = getChildTag(tileentity, "Command", StringTag.class, String.class);
+                        List<Item> items = getItems(tileentity);
+                        List<Pattern> patterns = getPatterns(tileentity);
 
-                            List<Item> items = getItems(tileentity);
-                            List<Pattern> patterns = getPatterns(tileentity);
-
-                            if (tileentity.containsKey("RecordItem")) {
-                                Map<String, Tag> recorditemtag = getChildTag(tileentity, "RecordItem", CompoundTag.class).getValue();
-                                Byte count = getChildTag(recorditemtag, "Count", ByteTag.class, Byte.class);
-                                Short damage = getChildTag(recorditemtag, "Damage", ShortTag.class, Short.class);
-                                Short recorditemid = getChildTag(recorditemtag, "id", ShortTag.class, Short.class);
-                                recorditem = new RecordItem(count, damage, recorditemid);
-                            }
-
-                            tileentities.add(new TileEntity(x, y, z, customname, id, items, rot, skulltype, delay, maxnearbyentities,
-                                    maxspawndelay, minspawndelay, requiredplayerrange, spawncount, spawnrange, entityid,
-                                    burntime, cooktime,
-                                    text1, text2, text3, text4, note, record, recorditem, brewtime, command, outputsignal,
-                                    transfercooldown, levels, primary, secondary, patterns, base));
+                        if (tileentity.containsKey("RecordItem")) {
+                            Map<String, Tag> recorditemtag = getChildTag(tileentity, "RecordItem", CompoundTag.class).getValue();
+                            byte count = getChildTag(recorditemtag, "Count", ByteTag.class).getValue();
+                            short damage = getChildTag(recorditemtag, "Damage", ShortTag.class).getValue();
+                            short recorditemid = getChildTag(recorditemtag, "id", ShortTag.class).getValue();
+                            recorditem = new RecordItem(count, damage, recorditemid);
                         }
+
+                        tileentities.add(new TileEntity(x, y, z, customname, id, items, rot, skulltype, delay, maxnearbyentities,
+                                maxspawndelay, minspawndelay, requiredplayerrange, spawncount, spawnrange, entityid,
+                                burntime, cooktime,
+                                text1, text2, text3, text4, note, record, recorditem, brewtime, command, outputsignal,
+                                transfercooldown, levels, primary, secondary, patterns, base));
                     }
                 }
 
                 schem =
-                        new Schematic(blocks, blockData, materials, width, length, height, entities, tileentities, roomauthor, originx,
+                        new Schematic(blocks, blockData, materials, width, length, height, entities, tileentities, originx,
                                 originy, originz);
 
                 saveCompiledSchematic(schem, file.getName());
@@ -1322,7 +1302,7 @@ public class SchematicUtil extends AbstractSchematicUtil {
                 Byte dir = e.getDir();
                 //Byte direction = e.getDirection();
                 //Byte invulnerable = e.getInvulnerable();
-                //Byte onground = e.getOnGround();
+                byte onground = e.getOnGround();
                 byte canpickuploot = e.getCanPickupLoot();
                 byte color = e.getColor();
                 byte customnamevisible = e.getCustomNameVisible();
@@ -1742,80 +1722,80 @@ public class SchematicUtil extends AbstractSchematicUtil {
         }
     }
 
-    private Entity getEntity(CompoundTag tag) {
+    private Entity getEntity(CompoundTag tag) throws Exception {
         Map<String, Tag> entity = tag.getValue();
 
-        Byte dir = getChildTag(entity, "Dir", ByteTag.class, Byte.class);
-        Byte direction = getChildTag(entity, "Direction", ByteTag.class, Byte.class);
-        Byte invulnerable = getChildTag(entity, "Invulnerable", ByteTag.class, Byte.class);
-        Byte onground = getChildTag(entity, "OnGround", ByteTag.class, Byte.class);
-        Byte canpickuploot = getChildTag(entity, "CanPickUpLoot", ByteTag.class, Byte.class);
-        Byte color = getChildTag(entity, "Color", ByteTag.class, Byte.class);
-        Byte customnamevisible = getChildTag(entity, "CustomNameVisible", ByteTag.class, Byte.class);
-        Byte leashed = getChildTag(entity, "Leashed", ByteTag.class, Byte.class);
-        Byte persistencerequired = getChildTag(entity, "PersistenceRequired", ByteTag.class, Byte.class);
-        Byte sheared = getChildTag(entity, "Sheared", ByteTag.class, Byte.class);
-        Byte skeletontype = getChildTag(entity, "SkeletonType", ByteTag.class, Byte.class);
-        Byte isbaby = getChildTag(entity, "IsBaby", ByteTag.class, Byte.class);
-        Byte itemrotation = getChildTag(entity, "ItemRotation", ByteTag.class, Byte.class);
-        Byte agelocked = getChildTag(entity, "AgeLocked", ByteTag.class, Byte.class);
-        Byte invisible = getChildTag(entity, "Invisible", ByteTag.class, Byte.class);
-        Byte nobaseplate = getChildTag(entity, "NoBasePlate", ByteTag.class, Byte.class);
-        Byte nogravity = getChildTag(entity, "NoGravity", ByteTag.class, Byte.class);
-        Byte showarms = getChildTag(entity, "ShowArms", ByteTag.class, Byte.class);
-        Byte silent = getChildTag(entity, "Silent", ByteTag.class, Byte.class);
-        Byte small = getChildTag(entity, "Small", ByteTag.class, Byte.class);
-        Byte elder = getChildTag(entity, "Elder", ByteTag.class, Byte.class);
-        Byte bred = getChildTag(entity, "Bred", ByteTag.class, Byte.class);
-        Byte chestedhorse = getChildTag(entity, "ChestHorse", ByteTag.class, Byte.class);
-        Byte eatinghaystack = getChildTag(entity, "EatingHaystack", ByteTag.class, Byte.class);
-        Byte hasreproduced = getChildTag(entity, "HasReproduced", ByteTag.class, Byte.class);
-        Byte tame = getChildTag(entity, "Tame", ByteTag.class, Byte.class);
-        Byte facing = getChildTag(entity, "Facing", ByteTag.class, Byte.class);
+        byte dir = getChildTag(entity, "Dir", ByteTag.class).getValue();
+        byte direction = getChildTag(entity, "Direction", ByteTag.class).getValue();
+        byte invulnerable = getChildTag(entity, "Invulnerable", ByteTag.class).getValue();
+        byte onground = getChildTag(entity, "OnGround", ByteTag.class).getValue();
+        byte canpickuploot = getChildTag(entity, "CanPickUpLoot", ByteTag.class).getValue();
+        byte color = getChildTag(entity, "Color", ByteTag.class).getValue();
+        byte customnamevisible = getChildTag(entity, "CustomNameVisible", ByteTag.class).getValue();
+        byte leashed = getChildTag(entity, "Leashed", ByteTag.class).getValue();
+        byte persistencerequired = getChildTag(entity, "PersistenceRequired", ByteTag.class).getValue();
+        byte sheared = getChildTag(entity, "Sheared", ByteTag.class).getValue();
+        byte skeletontype = getChildTag(entity, "SkeletonType", ByteTag.class).getValue();
+        byte isbaby = getChildTag(entity, "IsBaby", ByteTag.class).getValue();
+        byte itemrotation = getChildTag(entity, "ItemRotation", ByteTag.class).getValue();
+        byte agelocked = getChildTag(entity, "AgeLocked", ByteTag.class).getValue();
+        byte invisible = getChildTag(entity, "Invisible", ByteTag.class).getValue();
+        byte nobaseplate = getChildTag(entity, "NoBasePlate", ByteTag.class).getValue();
+        byte nogravity = getChildTag(entity, "NoGravity", ByteTag.class).getValue();
+        byte showarms = getChildTag(entity, "ShowArms", ByteTag.class).getValue();
+        byte silent = getChildTag(entity, "Silent", ByteTag.class).getValue();
+        byte small = getChildTag(entity, "Small", ByteTag.class).getValue();
+        byte elder = getChildTag(entity, "Elder", ByteTag.class).getValue();
+        byte bred = getChildTag(entity, "Bred", ByteTag.class).getValue();
+        byte chestedhorse = getChildTag(entity, "ChestHorse", ByteTag.class).getValue();
+        byte eatinghaystack = getChildTag(entity, "EatingHaystack", ByteTag.class).getValue();
+        byte hasreproduced = getChildTag(entity, "HasReproduced", ByteTag.class).getValue();
+        byte tame = getChildTag(entity, "Tame", ByteTag.class).getValue();
+        byte facing = getChildTag(entity, "Facing", ByteTag.class).getValue();
 
-        Double pushx = getChildTag(entity, "PushX", DoubleTag.class, Double.class);
-        Double pushz = getChildTag(entity, "PushZ", DoubleTag.class, Double.class);
+        double pushx = getChildTag(entity, "PushX", DoubleTag.class).getValue();
+        double pushz = getChildTag(entity, "PushZ", DoubleTag.class).getValue();
 
-        Float falldistance = getChildTag(entity, "FallDistance", FloatTag.class, Float.class);
-        Float absorptionamount = getChildTag(entity, "AbsorptionAmount", FloatTag.class, Float.class);
-        Float healf = getChildTag(entity, "HealF", FloatTag.class, Float.class);
-        Float itemdropchance = getChildTag(entity, "ItemDropChance", FloatTag.class, Float.class);
+        float falldistance = getChildTag(entity, "FallDistance", FloatTag.class).getValue();
+        float absorptionamount = getChildTag(entity, "AbsorptionAmount", FloatTag.class).getValue();
+        float healf = getChildTag(entity, "HealF", FloatTag.class).getValue();
+        float itemdropchance = getChildTag(entity, "ItemDropChance", FloatTag.class).getValue();
 
-        Integer dimension = getChildTag(entity, "Dimension", IntTag.class, Integer.class);
-        Integer portalcooldown = getChildTag(entity, "PortalCooldown", IntTag.class, Integer.class);
-        Integer tilex = getChildTag(entity, "TileX", IntTag.class, Integer.class);
-        Integer tiley = getChildTag(entity, "TileY", IntTag.class, Integer.class);
-        Integer tilez = getChildTag(entity, "TileZ", IntTag.class, Integer.class);
-        Integer inlove = getChildTag(entity, "InLove", IntTag.class, Integer.class);
-        Integer transfercooldown = getChildTag(entity, "TransferCooldown", IntTag.class, Integer.class);
-        Integer tntfuse = getChildTag(entity, "TNTFuse", IntTag.class, Integer.class);
-        Integer forcedage = getChildTag(entity, "ForcedAge", IntTag.class, Integer.class);
-        Integer hurtbytimestamp = getChildTag(entity, "HurtByTimestamp", IntTag.class, Integer.class);
-        Integer morecarrotsticks = getChildTag(entity, "MoreCarrotTicks", IntTag.class, Integer.class);
-        Integer rabbittype = getChildTag(entity, "RabbitType", IntTag.class, Integer.class);
-        Integer disabledslots = getChildTag(entity, "DisabledSlots", IntTag.class, Integer.class);
-        Integer temper = getChildTag(entity, "Temper", IntTag.class, Integer.class);
-        Integer type = getChildTag(entity, "Type", IntTag.class, Integer.class);
-        Integer variant = getChildTag(entity, "Variant", IntTag.class, Integer.class);
+        int dimension = getChildTag(entity, "Dimension", IntTag.class).getValue();
+        int portalcooldown = getChildTag(entity, "PortalCooldown", IntTag.class).getValue();
+        int tilex = getChildTag(entity, "TileX", IntTag.class).getValue();
+        int tiley = getChildTag(entity, "TileY", IntTag.class).getValue();
+        int tilez = getChildTag(entity, "TileZ", IntTag.class).getValue();
+        int inlove = getChildTag(entity, "InLove", IntTag.class).getValue();
+        int transfercooldown = getChildTag(entity, "TransferCooldown", IntTag.class).getValue();
+        int tntfuse = getChildTag(entity, "TNTFuse", IntTag.class).getValue();
+        int forcedage = getChildTag(entity, "ForcedAge", IntTag.class).getValue();
+        int hurtbytimestamp = getChildTag(entity, "HurtByTimestamp", IntTag.class).getValue();
+        int morecarrotsticks = getChildTag(entity, "MoreCarrotTicks", IntTag.class).getValue();
+        int rabbittype = getChildTag(entity, "RabbitType", IntTag.class).getValue();
+        int disabledslots = getChildTag(entity, "DisabledSlots", IntTag.class).getValue();
+        int temper = getChildTag(entity, "Temper", IntTag.class).getValue();
+        int type = getChildTag(entity, "Type", IntTag.class).getValue();
+        int variant = getChildTag(entity, "Variant", IntTag.class).getValue();
 
-        Short air = getChildTag(entity, "Air", ShortTag.class, Short.class);
-        Short fire = getChildTag(entity, "Fire", ShortTag.class, Short.class);
-        Short attacktime = getChildTag(entity, "AttachTime", ShortTag.class, Short.class);
-        Short deathtime = getChildTag(entity, "DeathTime", ShortTag.class, Short.class);
-        Short health = getChildTag(entity, "Health", ShortTag.class, Short.class);
-        Short hurttime = getChildTag(entity, "HurtTime", ShortTag.class, Short.class);
-        Short fuel = getChildTag(entity, "Fuel", ShortTag.class, Short.class);
+        short air = getChildTag(entity, "Air", ShortTag.class).getValue();
+        short fire = getChildTag(entity, "Fire", ShortTag.class).getValue();
+        short attacktime = getChildTag(entity, "AttachTime", ShortTag.class).getValue();
+        short deathtime = getChildTag(entity, "DeathTime", ShortTag.class).getValue();
+        short health = getChildTag(entity, "Health", ShortTag.class).getValue();
+        short hurttime = getChildTag(entity, "HurtTime", ShortTag.class).getValue();
+        short fuel = getChildTag(entity, "Fuel", ShortTag.class).getValue();
 
-        String id = getChildTag(entity, "id", StringTag.class, String.class);
-        String motive = getChildTag(entity, "Motive", StringTag.class, String.class);
-        String customname = getChildTag(entity, "CustomName", StringTag.class, String.class);
-        String owneruuid = getChildTag(entity, "OwnerUUID", StringTag.class, String.class);
+        String id = getChildTag(entity, "id", StringTag.class).getValue();
+        String motive = getChildTag(entity, "Motive", StringTag.class).getValue();
+        String customname = getChildTag(entity, "CustomName", StringTag.class).getValue();
+        String owneruuid = getChildTag(entity, "OwnerUUID", StringTag.class).getValue();
 
-        List<Double> motion = convert(getChildTag(entity, "Motion", ListTag.class, List.class), Double.class);
-        List<Double> pos = convert(getChildTag(entity, "Pos", ListTag.class, List.class), Double.class);
-        List<Float> rotation = convert(getChildTag(entity, "Rotation", ListTag.class, List.class), float.class);
+        List<Double> motion = convert(getChildTag(entity, "Motion", ListTag.class).getValue(), Double.class);
+        List<Double> pos = convert(getChildTag(entity, "Pos", ListTag.class).getValue(), Double.class);
+        List<Float> rotation = convert(getChildTag(entity, "Rotation", ListTag.class).getValue(), float.class);
         List<Attribute> attributes = getAttributes(entity);
-        List<Float> dropchances = convert(getChildTag(entity, "DropChances", ListTag.class, List.class), float.class);
+        List<Float> dropchances = convert(getChildTag(entity, "DropChances", ListTag.class).getValue(), float.class);
         List<Item> equipments = getEquipment(entity);
         Item itemheld = null;
         Item feetarmor = null;
@@ -1833,15 +1813,11 @@ public class SchematicUtil extends AbstractSchematicUtil {
 
         List<Item> items = getItems(entity);
 
-        Integer age = null; //Handled lower
+        int age; //Handled lower
         try {
-            age = getChildTag(entity, "Age", IntTag.class, Integer.class);
+            age = getChildTag(entity, "Age", IntTag.class).getValue();
         } catch (IllegalArgumentException e) {
-            Short shortAge = getChildTag(entity, "Age", ShortTag.class, Short.class);
-
-            if (shortAge != null) {
-                age = shortAge.intValue();
-            }
+            age = getChildTag(entity, "Age", ShortTag.class).getValue();
         }
 
         CompoundTag itemtag = getChildTag(entity, "Item", CompoundTag.class);
@@ -1878,40 +1854,36 @@ public class SchematicUtil extends AbstractSchematicUtil {
                 facing);
     }
 
-    private Pose getPose(CompoundTag poseelement) {
+    private Pose getPose(CompoundTag poseelement) throws Exception {
         Map<String, Tag> pose = poseelement.getValue();
-        List<Float> body = convert(getChildTag(pose, "body", ListTag.class, List.class), float.class);
-        List<Float> head = convert(getChildTag(pose, "head", ListTag.class, List.class), Float.class);
-        List<Float> leftarm = convert(getChildTag(pose, "leftarm", ListTag.class, List.class), Float.class);
-        List<Float> rightarm = convert(getChildTag(pose, "rightarm", ListTag.class, List.class), Float.class);
-        List<Float> leftleg = convert(getChildTag(pose, "leftleg", ListTag.class, List.class), Float.class);
-        List<Float> rightleg = convert(getChildTag(pose, "rightleg", ListTag.class, List.class), Float.class);
+        List<Float> body = convert(getChildTag(pose, "body", ListTag.class).getValue(), Float.class);
+        List<Float> head = convert(getChildTag(pose, "head", ListTag.class).getValue(), Float.class);
+        List<Float> leftarm = convert(getChildTag(pose, "leftarm", ListTag.class).getValue(), Float.class);
+        List<Float> rightarm = convert(getChildTag(pose, "rightarm", ListTag.class).getValue(), Float.class);
+        List<Float> leftleg = convert(getChildTag(pose, "leftleg", ListTag.class).getValue(), Float.class);
+        List<Float> rightleg = convert(getChildTag(pose, "rightleg", ListTag.class).getValue(), Float.class);
 
         return new Pose(body, head, leftarm, rightarm, leftleg, rightleg);
     }
 
-    private List<Pattern> getPatterns(Map<String, Tag> entity) {
-        List<?> patternsList = getChildTag(entity, "Patterns", ListTag.class, List.class);
+    private List<Pattern> getPatterns(Map<String, Tag> entity) throws Exception {
+        List<Tag> patternsList = getChildTag(entity, "Patterns", ListTag.class).getValue();
 
-        if (patternsList != null) {
-            List<Pattern> patterns = new ArrayList<>();
+        List<Pattern> patterns = new ArrayList<>();
 
-            for (Object patternElement : patternsList) {
-                if (patternElement instanceof CompoundTag) {
-                    patterns.add(getPattern((CompoundTag) patternElement));
-                }
+        for (Tag patternElement : patternsList) {
+            if (patternElement instanceof CompoundTag) {
+                patterns.add(getPattern((CompoundTag) patternElement));
             }
-
-            return patterns;
-        } else {
-            return null;
         }
+
+        return patterns;
     }
 
-    private Pattern getPattern(CompoundTag patternElement) {
+    private Pattern getPattern(CompoundTag patternElement) throws Exception {
         Map<String, Tag> patternmap = patternElement.getValue();
-        Integer color = getChildTag(patternmap, "Color", IntTag.class, Integer.class);
-        String pattern = getChildTag(patternmap, "Pattern", StringTag.class, String.class);
+        int color = getChildTag(patternmap, "Color", IntTag.class).getValue();
+        String pattern = getChildTag(patternmap, "Pattern", StringTag.class).getValue();
 
         return new Pattern(color, pattern);
     }
@@ -2161,8 +2133,8 @@ public class SchematicUtil extends AbstractSchematicUtil {
             }
         }
 
-        for (org.bukkit.entity.Entity bukkitentity : world.getEntities()) {
-            Location entloc = bukkitentity.getLocation();
+        for (IEntity bukkitentity : world.getEntities()) {
+            ILocation entloc = bukkitentity.getLocation();
 
             if (entloc.getX() >= minX && entloc.getX() <= maxX &&
                     entloc.getY() >= minY && entloc.getY() <= maxY &&
@@ -2172,7 +2144,7 @@ public class SchematicUtil extends AbstractSchematicUtil {
             }
         }
 
-        schem = new Schematic(blocks, blockData, "Alpha", width, length, height, entities, tileentities, "", 0, 0, 0);
+        schem = new Schematic(blocks, blockData, "Alpha", width, length, height, entities, tileentities, 0, 0, 0);
 
         return schem;
     }

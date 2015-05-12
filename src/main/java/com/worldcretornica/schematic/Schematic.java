@@ -14,13 +14,12 @@ public class Schematic extends AbstractSchematicElement {
     private final short height;
     private final List<Entity> entities;
     private final List<TileEntity> tileentities;
-    private final String schemauthor;
     private final int originx;
     private final int originy;
     private final int originz;
 
     public Schematic(int[] blocks, byte[] data, String materials, short width, short length, short height, List<Entity> entities,
-            List<TileEntity> tileentities, String roomauthor, int originx, int originy, int originz) {
+            List<TileEntity> tileentities, int originx, int originy, int originz) {
         this.blocks = blocks;
         this.data = data;
         this.materials = materials;
@@ -29,7 +28,6 @@ public class Schematic extends AbstractSchematicElement {
         this.height = height;
         this.entities = entities;
         this.tileentities = tileentities;
-        this.schemauthor = roomauthor;
         this.originx = originx;
         this.originy = originy;
         this.originz = originz;
@@ -67,10 +65,6 @@ public class Schematic extends AbstractSchematicElement {
         return tileentities;
     }
 
-    public String getAuthor() {
-        return schemauthor;
-    }
-
     public int getOriginX() {
         return originx;
     }
@@ -93,7 +87,6 @@ public class Schematic extends AbstractSchematicElement {
                 ", height=" + Sanitize(height) +
                 ", entities=" + Sanitize(entities) +
                 ", tileentities=" + Sanitize(tileentities) +
-                ", roomauthor=" + Sanitize(schemauthor) +
                 ", originx=" + Sanitize(originx) +
                 ", originy=" + Sanitize(originy) +
                 ", originz=" + Sanitize(originz) + "}";

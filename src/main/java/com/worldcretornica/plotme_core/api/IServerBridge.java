@@ -1,5 +1,6 @@
 package com.worldcretornica.plotme_core.api;
 
+import com.google.common.base.Optional;
 import com.worldcretornica.configuration.ConfigAccessor;
 import com.worldcretornica.plotme_core.api.event.eventbus.EventBus;
 import net.milkbowl.vault.economy.Economy;
@@ -59,7 +60,7 @@ public abstract class IServerBridge {
 
     public abstract void setupHooks();
 
-    public abstract Economy getEconomy();
+    public abstract Optional<Economy> getEconomy();
 
     /**
      * Gets balance of a player

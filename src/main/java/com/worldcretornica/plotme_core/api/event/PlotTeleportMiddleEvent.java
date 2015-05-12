@@ -4,10 +4,11 @@ import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.api.Vector;
 
 public class PlotTeleportMiddleEvent extends PlotTeleportEvent implements ICancellable, Event {
 
-    public PlotTeleportMiddleEvent(IWorld world, Plot plot, IPlayer player, ILocation middlelocation) {
+    public PlotTeleportMiddleEvent(IWorld world, Plot plot, IPlayer player, Vector middlelocation) {
         super(world, plot, player, middlelocation, plot.getId());
     }
 

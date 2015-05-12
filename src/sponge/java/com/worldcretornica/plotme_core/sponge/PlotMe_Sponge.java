@@ -7,6 +7,7 @@ import com.worldcretornica.plotme_core.api.IServerBridge;
 import com.worldcretornica.plotme_core.sponge.api.SpongePlayer;
 import com.worldcretornica.plotme_core.sponge.listener.SpongePlotDenyListener;
 import com.worldcretornica.plotme_core.sponge.listener.SpongePlotListener;
+import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
@@ -18,52 +19,64 @@ import org.spongepowered.api.event.state.PreInitializationEvent;
 import org.spongepowered.api.event.state.ServerStartedEvent;
 import org.spongepowered.api.event.state.ServerStoppingEvent;
 import org.spongepowered.api.plugin.Plugin;
+import org.spongepowered.api.service.ServiceManager;
+import org.spongepowered.api.service.ServiceReference;
 import org.spongepowered.api.service.config.ConfigDir;
+import org.spongepowered.api.service.config.DefaultConfig;
+import org.spongepowered.api.service.scheduler.AsynchronousScheduler;
+import org.spongepowered.api.service.sql.SqlService;
+import org.spongepowered.api.util.command.spec.CommandSpec;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.UUID;
 
-@Plugin(id = "PlotMeCore", name = "PlotMe", version = "0.17")
+@Plugin(id = "PlotMe", name = "PlotMe-Core", version = "0.17")
 public class PlotMe_Sponge {
 
     private final HashMap<UUID, SpongePlayer> spongePlayerMap = new HashMap<>();
 
     @Inject
     private Game game;
+    @Inject
+    private ServiceManager services;
 
     @Inject
     @ConfigDir(sharedRoot = false)
     private File configDir;
     // The config manager for the mail storage file
-    private ConfigurationLoader<CommentedConfigurationNode> pmConfigLoader;
+    @Inject
+    @DefaultConfig(sharedRoot = false)
+    private ConfigurationLoader<CommentedConfigurationNode> configLoader;
     private CommentedConfigurationNode pmStorageConfig;
     @Inject
     private Logger logger;
     private PlotMe_Core plotme;
     private IServerBridge serverObjectBuilder;
+    private ServiceReference<SqlService> sql;
+    private ServiceReference<AsynchronousScheduler> aSync;
+    private CommentedConfigurationNode rawConfig;
+    private ConfigurationNode fallbackConfig;
 
     @Subscribe
     public void onInit(PreInitializationEvent event) {
+        sql = services.potentiallyProvide(SqlService.class);
+        aSync = services.potentiallyProvide(AsynchronousScheduler.class);
+        configDir.mkdirs();
+        load();
+        game.getCommandDispatcher().register(this, CommandSpec.builder()., "plotme");
+    }
 
-        File pmStorage = new File(configDir, "config.conf");
-        this.pmConfigLoader = HoconConfigurationLoader.builder().setFile(pmStorage).build();
+    private void load() {
         try {
-            pmStorageConfig = pmConfigLoader.load();
+            rawConfig = configLoader.load();
+            fallbackConfig = loadDefaultConfiguration();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if (!configDir.isDirectory()) {
-            configDir.mkdirs();
-        }
-        if (!pmStorage.isFile()) {
-            try {
-                pmStorage.createNewFile();
-            } catch (IOException e) {
-                logger.error("Error creating config files.");
-            }
-        }
+        rawConfig.mergeValuesFrom(fallbackConfig);
     }
 
     @Subscribe
@@ -73,6 +86,11 @@ public class PlotMe_Sponge {
         serverObjectBuilder = new SpongeServerBridge(this, new BridgeLogger(logger));
 
         plotme = new PlotMe_Core(serverObjectBuilder);
+        setupCommands();
+    }
+
+    private void setupCommands() {
+        game.getCommandDispatcher().register(this, CommandSpec.builder()., )
     }
 
     @Subscribe
@@ -105,6 +123,13 @@ public class PlotMe_Sponge {
             spongePlayerMap.put(player.getUniqueId(), spongePlayer);
             return spongePlayer;
         }
+
+    }
+
+    ConfigurationNode loadDefaultConfiguration() throws IOException {
+        URL defaultConfig = PlotMe_Sponge.class.getResource("default.conf");
+        HoconConfigurationLoader loader = HoconConfigurationLoader.builder().setURL(defaultConfig).build();
+        return loader.load();
 
     }
 }

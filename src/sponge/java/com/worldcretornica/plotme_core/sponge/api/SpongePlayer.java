@@ -13,16 +13,10 @@ import org.spongepowered.api.text.chat.ChatTypes;
 public class SpongePlayer extends SpongeUser implements IPlayer {
 
     private final Player player;
-    private SpongeWorld world;
-    private ILocation iLocation;
-    private Vector pos;
 
     public SpongePlayer(Player player) {
         super(player);
         this.player = player;
-        world = new SpongeWorld(player.getWorld());
-        pos = new Vector(player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ());
-        iLocation = new ILocation(world, pos);
     }
 
     @Override
@@ -37,12 +31,12 @@ public class SpongePlayer extends SpongeUser implements IPlayer {
 
     @Override
     public IWorld getWorld() {
-        return world;
+        return new SpongeWorld(player.getWorld());
     }
 
     @Override
     public ILocation getLocation() {
-        return iLocation;
+        return new ILocation(getWorld(), getPosition());
     }
 
     @Override
@@ -70,6 +64,6 @@ public class SpongePlayer extends SpongeUser implements IPlayer {
 
     @Override
     public Vector getPosition() {
-        return pos;
+        return new Vector(player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ());
     }
 }

@@ -1,7 +1,7 @@
 package com.worldcretornica.plotme_core;
 
 import com.worldcretornica.plotme_core.api.IOfflinePlayer;
-import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.api.Vector;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
@@ -24,21 +24,22 @@ public class Plot {
     private UUID ownerId = UUID.randomUUID();
     private String world;
     private String biome = "PLAINS";
-    private Date expiredDate;
-    private boolean finished;
+    private Date expiredDate = null;
+    private boolean finished = false;
     private PlotId id;
-    private double price;
-    private boolean forSale;
-    private String finishedDate;
-    private boolean protect;
-    private int likes;
-    private int internalID;
+    private double price = 0.0;
+    private boolean forSale = false;
+    private String finishedDate = null;
+    private boolean protect = false;
+    private int likes = 0;
+    private int internalID = 0;
     private String plotName;
+    private HashSet<String> likers;
 
-    public Plot(String owner, UUID uuid, IWorld world, PlotId plotId, int days) {
+    public Plot(String owner, UUID uuid, String world, PlotId plotId, int days, Vector plotTopLoc, Vector plotBottomLoc) {
         setOwner(owner);
         setOwnerId(uuid);
-        setWorld(world.getName().toLowerCase());
+        setWorld(world.toLowerCase());
         setId(plotId);
 
         if (days == 0) {
@@ -49,11 +50,10 @@ public class Plot {
             java.util.Date utlDate = cal.getTime();
             expiredDate = new Date(utlDate.getTime());
         }
-
-        setPrice(0.0);
-        setForSale(false);
-        setFinishedDate(null);
-        setProtected(false);
+        topX = plotTopLoc.getBlockX();
+        topZ = plotTopLoc.getBlockZ();
+        bottomX = plotBottomLoc.getBlockX();
+        bottomZ = plotBottomLoc.getBlockZ();
     }
 
     public Plot(int internalID, String owner, UUID ownerId, String world, String biome, Date expiredDate,
@@ -75,6 +75,7 @@ public class Plot {
         setForSale(forSale);
         setFinishedDate(finishedDate);
         setProtected(protect);
+        setLikers(likers);
         setLikes(plotLikes);
         setPlotName(plotName);
         this.denied.addAll(denied);
@@ -354,6 +355,10 @@ public class Plot {
 
     public int getBottomZ() {
         return bottomZ;
+    }
+
+    public void setLikers(HashSet<String> likers) {
+        this.likers = likers;
     }
 
     public enum AccessLevel {

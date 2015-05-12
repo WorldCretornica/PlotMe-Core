@@ -12,7 +12,6 @@
 
     <build>
         <defaultGoal>clean package install</defaultGoal>
-        <finalName>${project.name}</finalName>
         <sourceDirectory>src/main/java</sourceDirectory>
         <testSourceDirectory>src/main/test</testSourceDirectory>
         <resources>
@@ -138,7 +137,7 @@
         </dependency>
         <dependency>
             <groupId>org.bukkit</groupId>
-            <artifactId>bukkit</artifactId>
+            <artifactId>craftbukkit</artifactId>
             <version>1.8.3-R0.1-SNAPSHOT</version>
             <type>jar</type>
             <scope>provided</scope>
@@ -195,8 +194,8 @@
     </scm>
 
     <issueManagement>
-        <url>https://github.com/WorldCretornica/PlotMe-Core/issues</url>
         <system>GitHub</system>
+        <url>https://github.com/WorldCretornica/PlotMe-Core/issues</url>
     </issueManagement>
 
     <ciManagement>

@@ -11,16 +11,10 @@ import org.bukkit.entity.Player;
 public class BukkitPlayer extends BukkitOfflinePlayer implements IPlayer {
 
     private final Player player;
-    private final Vector coords;
-    private final BukkitWorld world;
-    private final ILocation loc;
 
     public BukkitPlayer(Player player) {
         super(player);
         this.player = player;
-        coords = BukkitConverter.locationToVector(player.getLocation());
-        world = BukkitConverter.adapt(player.getWorld());
-        loc = new ILocation(world, getPosition());
     }
 
     /**
@@ -41,12 +35,12 @@ public class BukkitPlayer extends BukkitOfflinePlayer implements IPlayer {
 
     @Override
     public IWorld getWorld() {
-        return world;
+        return new BukkitWorld(player.getWorld());
     }
 
     @Override
     public ILocation getLocation() {
-        return loc;
+        return new ILocation(getWorld(), getPosition());
     }
 
     @Override
@@ -74,6 +68,6 @@ public class BukkitPlayer extends BukkitOfflinePlayer implements IPlayer {
     }
 
     public Vector getPosition() {
-        return coords;
+        return BukkitConverter.locationToVector(player.getLocation());
     }
 }

@@ -75,8 +75,11 @@ public class CmdUndeny extends PlotCommand {
                             }
 
                             if (!event.isCancelled()) {
-                                plot.removeDenied(denied);
-
+                                if ("*".equalsIgnoreCase(denied)) {
+                                    plot.removeAllAllowed();
+                                } else {
+                                    plot.removeDenied(denied);
+                                }
                                 player.sendMessage(
                                         C("WordPlayer") + " " + denied + " " + C("MsgNowUndenied") + " " + serverBridge.getEconomy().format(price));
 

@@ -5,8 +5,10 @@ import com.worldcretornica.plotme_core.api.IChunk;
 import com.worldcretornica.plotme_core.api.IEntity;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.Vector;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -31,6 +33,11 @@ public class BukkitWorld implements IWorld {
         return world.getName();
     }
 
+    /**
+     * Get the handle to the world as part of the Bukkit/Spigot API.
+     *
+     * @return world
+     */
     public World getWorld() {
         return world;
     }
@@ -85,6 +92,11 @@ public class BukkitWorld implements IWorld {
             bukkitEntites.add(new BukkitEntity(entity));
         }
         return bukkitEntites;
+    }
+
+    @Override
+    public Entity spawnEntity(Location etloc, EntityType entitytype) {
+        return world.spawnEntity(etloc, entitytype);
     }
 
     public IBlock getBlockAt(double x, double y, double z) {

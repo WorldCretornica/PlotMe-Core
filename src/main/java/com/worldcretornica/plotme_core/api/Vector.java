@@ -5,7 +5,6 @@ import com.worldcretornica.plotme_core.utils.DoubleHelper;
 public class Vector implements Comparable<Vector> {
 
     private double x;
-
     private double y;
     private double z;
 

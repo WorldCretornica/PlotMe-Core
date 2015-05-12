@@ -12,25 +12,19 @@ import org.bukkit.block.BlockState;
 public class BukkitBlock implements IBlock {
 
     private final Block block;
-    private final Vector coords;
-    private final ILocation location;
-    private final BukkitWorld world;
 
     public BukkitBlock(Block block) {
         this.block = block;
-        coords = new Vector(block.getX(),block.getY(),block.getZ());
-        world = new BukkitWorld(block.getWorld());
-        location = new ILocation(world, coords);
     }
 
     @Override
     public ILocation getLocation() {
-        return location;
+        return new ILocation(getWorld(), getPosition());
     }
 
     @Override
     public IWorld getWorld() {
-        return world;
+        return new BukkitWorld(block.getWorld());
     }
 
     @Override
@@ -117,6 +111,6 @@ public class BukkitBlock implements IBlock {
     }
 
     public Vector getPosition() {
-        return coords;
+        return new Vector(block.getX(), block.getY(), block.getZ());
     }
 }

@@ -40,17 +40,9 @@ public class CmdAdd extends PlotCommand {
             IWorld world = player.getWorld();
             if (manager.isPlotWorld(player)) {
                 PlotId id = manager.getPlotId(player);
-                if (id == null) {
-                    player.sendMessage(C("MsgNoPlotFound"));
-                    return true;
-                }
                 PlotMapInfo pmi = manager.getMap(world);
-                if (!manager.isPlotAvailable(id, pmi)) {
-                    Plot plot = manager.getPlotById(id, pmi);
-                    if (plot == null) {
-                        player.sendMessage("Something is terribly wrong. Report to admin.");
-                        return true;
-                    }
+                Plot plot = manager.getPlot(player);
+                if (plot != null) {
                     String allowed = args[1];
                     UUID fetchAllowedID = UUIDFetcher.getUUIDOf(allowed);
                     if (player.getUniqueId().equals(plot.getOwnerId()) || player.hasPermission(PermissionNames.ADMIN_ADD)) {
@@ -94,21 +86,21 @@ public class CmdAdd extends PlotCommand {
                                         serverBridge.getLogger()
                                                 .info(player.getName() + " " + C("MsgAddedPlayer") + " " + allowed + " " + C("MsgToPlot")
                                                         + " "
-                                                        + id);
+                                                        + plot.getId());
                                     } else {
                                         serverBridge.getLogger()
                                                 .info(player.getName() + " " + C("MsgAddedPlayer") + " " + allowed + " " + C("MsgToPlot")
                                                         + " "
-                                                        + id + (" " + C("WordFor") + " " + price));
+                                                        + plot.getId() + (" " + C("WordFor") + " " + price));
                                     }
                                 }
                             }
                         }
                     } else {
-                        player.sendMessage(C("MsgThisPlot") + "(" + id + ") " + C("MsgNotYoursNotAllowedAdd"));
+                        player.sendMessage(C("MsgThisPlot") + "(" + plot.getId() + ") " + C("MsgNotYoursNotAllowedAdd"));
                     }
                 } else {
-                    player.sendMessage(C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
+                    player.sendMessage(C("MsgThisPlot") + "(" + plot.getId() + ") " + C("MsgHasNoOwner"));
                 }
             } else {
                 player.sendMessage(C("MsgNotPlotWorld"));

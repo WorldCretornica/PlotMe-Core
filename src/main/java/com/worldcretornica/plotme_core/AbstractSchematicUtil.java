@@ -6,7 +6,6 @@ import com.worldcretornica.schematic.Schematic;
 import com.worldcretornica.schematic.jnbt.Tag;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -20,7 +19,7 @@ public abstract class AbstractSchematicUtil {
 
     public abstract void pasteSchematic(IWorld world, Vector loc, Schematic schem);
 
-    public abstract Schematic loadSchematic(File file) throws IOException, IllegalArgumentException;
+    public abstract Schematic loadSchematic(File file) throws Exception;
 
     public abstract Schematic createCompiledSchematic(IWorld world, Vector loc1, Vector loc2);
 
@@ -28,25 +27,9 @@ public abstract class AbstractSchematicUtil {
 
     public abstract Schematic loadCompiledSchematic(String name);
 
-    protected <T extends Tag, K> K getChildTag(Map<String, Tag> items, String key, Class<T> expected, Class<K> result) {
+    protected <T extends Tag> T getChildTag(Map<String, Tag> items, String key, Class<T> expected) throws Exception {
         if (!items.containsKey(key)) {
-            return null;
-        }
-        Tag tag = items.get(key);
-        if (!expected.isInstance(tag)) {
-            throw new IllegalArgumentException(
-                    tag.getName() + " tag is not of tag type " + expected.getName() + System.lineSeparator() + "tag is: " + tag);
-        }
-        Object obj = expected.cast(tag).getValue();
-        if (!result.isInstance(obj)) {
-            return null;
-        }
-        return result.cast(obj);
-    }
-
-    protected <T extends Tag> T getChildTag(Map<String, Tag> items, String key, Class<T> expected) {
-        if (!items.containsKey(key)) {
-            return null;
+            throw new Exception(String.format("Schematic file is missing the %s tag.", key));
         }
         Tag tag = items.get(key);
         if (!expected.isInstance(tag)) {
@@ -56,26 +39,23 @@ public abstract class AbstractSchematicUtil {
         return expected.cast(tag);
     }
 
-    private <T> T convert(Object obj, Class<T> expected) {
-        if (!(obj instanceof Tag)) {
+    private <T> T convert(Tag obj, Class<T> expected) {
+        if (obj == null) {
             return null;
         } else {
-
-            Tag tag = (Tag) obj;
-
-            if (!expected.isInstance(tag.getValue())) {
+            if (!expected.isInstance(obj.getValue())) {
                 throw new IllegalArgumentException(
-                        tag.getName() + " tag is not of tag type " + expected.getName() + System.lineSeparator() + "tag is: " + tag);
+                        obj.getName() + " tag is not of tag type " + expected.getName() + System.lineSeparator() + "tag is: " + obj);
             }
 
-            return expected.cast(tag.getValue());
+            return expected.cast(obj.getValue());
         }
     }
 
-    protected <T> List<T> convert(List<?> tagList, Class<T> expected) {
+    protected <T> List<T> convert(List<Tag> tagList, Class<T> expected) {
         if (tagList != null) {
             List<T> newlist = new ArrayList<>();
-            for (Object tag : tagList) {
+            for (Tag tag : tagList) {
                 newlist.add(convert(tag, expected));
             }
             return newlist;

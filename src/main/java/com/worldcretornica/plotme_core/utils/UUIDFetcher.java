@@ -1,6 +1,6 @@
 package com.worldcretornica.plotme_core.utils;
 
-import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -26,11 +26,11 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
     private static final String PROFILE_URL = "https://api.mojang.com/profiles/minecraft";
     private static final String PROFILE_AT_TIME_URL = "https://api.mojang.com/users/profiles/minecraft/@USERNAME@?at=1420156800";
     private final JSONParser jsonParser = new JSONParser();
-    private final List<String> names;
+    private final ArrayList<String> names = new ArrayList<>();
     private final boolean rateLimiting;
 
     public UUIDFetcher(List<String> names, boolean rateLimiting) {
-        this.names = ImmutableList.copyOf(names);
+        this.names.addAll(names);
         this.rateLimiting = rateLimiting;
     }
 
@@ -97,9 +97,10 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
     public Map<String, UUID> call() {
         Map<String, UUID> uuidMap = new HashMap<>();
         int requests = (int) Math.ceil(names.size() / PROFILES_PER_REQUEST);
-        //        int retries = 0;
+        for (ArrayList<String> map : Iterables.partition(names, 2)) {
+            int failedAttempts = 0;
+            boolean failed;
 
-        for (int i = 0; i < requests; i++) {
             List<String> missinguuid = new ArrayList<>();
 
             //First step, get people that didn't change name
@@ -107,7 +108,6 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
             while (!success) {
                 try {
                     HttpURLConnection connection = createConnection();
-                    List<String> sublist = names.subList(i * 100, Math.min((i + 1) * 100, names.size()));
                     String body = JSONArray.toJSONString(sublist);
                     writeBody(connection, body);
                     JSONArray array = (JSONArray) jsonParser.parse(new InputStreamReader(connection.getInputStream()));
@@ -132,12 +132,6 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
                         Thread.sleep(90000L);
                     } catch (InterruptedException ignored) {
                     }
-                    //                    if (retries > 0 && retries % 10 == 0) {
-                    //                        //Bukkit.getLogger().warning("The UUID fetcher has been trying for " + retries + " times to get UUIDs
-                    // .");
-                    //                    }
-                    //                    retries += 1;
-
                 }
             }
 
@@ -156,12 +150,6 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
                                 Thread.sleep(90000L);
                             } catch (InterruptedException ignored) {
                             }
-                            //                            if (retries > 0 && retries % 20 == 0) {
-                            //                                Bukkit.getLogger().warning("The UUID fetcher has been trying for " + retries + "
-                            // times to get UUIDs.");
-                            //                            }
-                            //                            retries += 1;
-
                         }
 
                         if (connection != null) {
@@ -190,7 +178,6 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
                 } catch (InterruptedException ignored) {
                 }
             }
-            //            retries = 0;
         }
         return uuidMap;
     }

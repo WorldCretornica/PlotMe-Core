@@ -7,10 +7,14 @@ import com.worldcretornica.plotme_core.api.IChunk;
 import com.worldcretornica.plotme_core.api.IEntity;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.Vector;
+import org.bukkit.Location;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.spongepowered.api.world.Chunk;
 import org.spongepowered.api.world.World;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -88,6 +92,15 @@ public class SpongeWorld implements IWorld {
 
     @Override
     public List<IEntity> getEntities() {
+        ArrayList<IEntity> entities = new ArrayList<>();
+        for (org.spongepowered.api.entity.Entity entity : world.getEntities()) {
+            entities.add(new SpongeEntity(entity));
+        }
+        return entities;
+    }
+
+    @Override
+    public Entity spawnEntity(Location etloc, EntityType entitytype) {
         return null;
     }
 }

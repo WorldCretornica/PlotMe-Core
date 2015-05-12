@@ -29,9 +29,9 @@ public class PlotMeSpool implements Runnable {
             }
             if (currentClear == null) {
                 if (getPlotToClear().getReason() == ClearReason.Clear) {
-                    genmanager.adjustPlotFor(getPlotToClear().getPlotId(), true, false, false);
+                    genmanager.adjustPlotFor(getPlotToClear().getPlot(), true, false, false);
                 } else {
-                    genmanager.adjustPlotFor(getPlotToClear().getPlotId(), false, false, false);
+                    genmanager.adjustPlotFor(getPlotToClear().getPlot(), false, false, false);
                 }
                 genmanager.refreshPlotChunks(getPlotToClear().getPlotId());
 

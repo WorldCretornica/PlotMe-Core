@@ -2,7 +2,6 @@ package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
-import com.worldcretornica.plotme_core.PlotId;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ICommandSender;
@@ -25,7 +24,7 @@ public class CmdRemove extends PlotCommand {
         return "remove";
     }
 
-    public boolean execute(ICommandSender sender, String[] args) throws Exception{
+    public boolean execute(ICommandSender sender, String[] args) throws Exception {
         if (args.length < 2 && args.length >= 3) {
             throw new BadUsageException(getUsage());
         }
@@ -37,12 +36,11 @@ public class CmdRemove extends PlotCommand {
             IWorld world = player.getWorld();
             if (manager.isPlotWorld(world)) {
                 PlotMapInfo pmi = manager.getMap(world);
-                PlotId id = manager.getPlotId(player);
-                if (id == null) {
+                Plot plot = manager.getPlot(player);
+                if (plot == null) {
                     player.sendMessage(C("MsgNoPlotFound"));
                     return true;
-                } else if (!manager.isPlotAvailable(id, pmi)) {
-                    Plot plot = manager.getPlotById(id, pmi);
+                } else {
                     UUID playerUniqueId = player.getUniqueId();
                     String allowed = args[1];
 
@@ -73,18 +71,23 @@ public class CmdRemove extends PlotCommand {
                             }
 
                             if (!event.isCancelled()) {
-                                plot.removeAllowed(allowed);
-
+                                if ("*".equalsIgnoreCase(allowed)) {
+                                    plot.removeAllAllowed();
+                                } else {
+                                    plot.removeAllowed(allowed);
+                                }
                                 player.sendMessage(
                                         C("WordPlayer") + " " + allowed + " " + C("WordRemoved") + ". " + serverBridge.getEconomy().format(price));
 
                                 if (isAdvancedLogging()) {
                                     if (price == 0) {
                                         serverBridge.getLogger()
-                                                .info(allowed + " " + C("MsgRemovedPlayer") + " " + allowed + " " + C("MsgFromPlot") + " " + id);
+                                                .info(allowed + " " + C("MsgRemovedPlayer") + " " + allowed + " " + C("MsgFromPlot") + " " + plot
+                                                        .getId());
                                     } else {
                                         serverBridge.getLogger()
-                                                .info(allowed + " " + C("MsgRemovedPlayer") + " " + allowed + " " + C("MsgFromPlot") + " " + id
+                                                .info(allowed + " " + C("MsgRemovedPlayer") + " " + allowed + " " + C("MsgFromPlot") + " " + plot
+                                                        .getId()
                                                         + (" " + C("WordFor") + " " + price));
                                     }
                                 }
@@ -93,10 +96,8 @@ public class CmdRemove extends PlotCommand {
                             player.sendMessage(C("WordPlayer") + " " + args[1] + " " + C("MsgWasNotAllowed"));
                         }
                     } else {
-                        player.sendMessage(C("MsgThisPlot") + "(" + id + ") " + C("MsgNotYoursNotAllowedRemove"));
+                        player.sendMessage(C("MsgThisPlot") + "(" + plot.getId() + ") " + C("MsgNotYoursNotAllowedRemove"));
                     }
-                } else {
-                    player.sendMessage(C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
                 }
             } else {
                 player.sendMessage(C("MsgNotPlotWorld"));

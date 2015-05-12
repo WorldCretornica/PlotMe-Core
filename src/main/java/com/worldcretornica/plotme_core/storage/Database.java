@@ -242,7 +242,7 @@ public abstract class Database {
 
     }
 
-    public HashSet<Plot> getOwnedPlots(String name, UUID uuid, String playerName) {
+    public HashSet<Plot> getOwnedPlots(String world, UUID uuid, String playerName) {
         return null;
     }
 

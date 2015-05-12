@@ -2,7 +2,6 @@ package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
-import com.worldcretornica.plotme_core.PlotId;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ICommandSender;
@@ -30,13 +29,9 @@ public class CmdDispose extends PlotCommand {
             IWorld world = player.getWorld();
             PlotMapInfo pmi = manager.getMap(world);
             if (manager.isPlotWorld(world)) {
-                PlotId id = manager.getPlotId(player);
-                if (id == null) {
-                    player.sendMessage(C("MsgNoPlotFound"));
-                    return true;
-                } else if (!manager.isPlotAvailable(id, pmi)) {
-                    Plot plot = manager.getPlotById(id, pmi);
+                Plot plot = manager.getPlot(player);
 
+                if (plot != null) {
                     if (plot.isProtected()) {
                         player.sendMessage(C("MsgPlotProtectedNotDisposed"));
                     } else {
@@ -71,27 +66,23 @@ public class CmdDispose extends PlotCommand {
                             }
 
                             if (!event.isCancelled()) {
-                                if (!manager.isPlotAvailable(id, pmi)) {
-                                    manager.deletePlot(pmi, id);
-                                }
+                                manager.deletePlot(pmi, plot);
 
-                                manager.removeOwnerSign(id, world);
-                                manager.removeSellSign(id, world);
+                                manager.removeOwnerSign(plot, world);
+                                manager.removeSellSign(plot, world);
 
                                 plugin.getSqlManager().deletePlot(plot.getInternalID());
-                                manager.adjustWall(id, world, false);
+                                manager.adjustWall(plot, world, false);
                                 player.sendMessage(C("MsgPlotDisposedAnyoneClaim"));
 
                                 if (isAdvancedLogging()) {
-                                    serverBridge.getLogger().info(name + " " + C("MsgDisposedPlot") + " " + id);
+                                    serverBridge.getLogger().info(name + " " + C("MsgDisposedPlot") + " " + plot.getId());
                                 }
                             }
                         } else {
-                            player.sendMessage(C("MsgThisPlot") + "(" + id + ") " + C("MsgNotYoursCannotDispose"));
+                            player.sendMessage(C("MsgThisPlot") + "(" + plot.getId() + ") " + C("MsgNotYoursCannotDispose"));
                         }
                     }
-                } else {
-                    player.sendMessage(C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
                 }
             } else {
                 player.sendMessage(C("MsgNotPlotWorld"));

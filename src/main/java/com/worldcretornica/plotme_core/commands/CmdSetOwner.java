@@ -2,13 +2,11 @@ package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
-import com.worldcretornica.plotme_core.PlotId;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
-import com.worldcretornica.plotme_core.api.event.PlotCreateEvent;
 import com.worldcretornica.plotme_core.api.event.PlotOwnerChangeEvent;
 
 import java.util.UUID;
@@ -34,9 +32,9 @@ public class CmdSetOwner extends PlotCommand {
         IWorld world = player.getWorld();
         if (player.hasPermission(PermissionNames.ADMIN_SETOWNER) && manager.isPlotWorld(world)) {
             PlotMapInfo pmi = manager.getMap(world);
-            PlotId id = manager.getPlotId(player);
-            if (id == null) {
-                player.sendMessage(C("MsgNoPlotFound"));
+            Plot plot = manager.getPlot(player);
+            if (plot == null) {
+                player.sendMessage("Set Owner only works on claimed plots");
                 return true;
             }
             String newOwner = null;
@@ -54,37 +52,26 @@ public class CmdSetOwner extends PlotCommand {
                 return true;
             }
 
-            if (!manager.isPlotAvailable(id, pmi)) {
-                Plot plot = manager.getPlotById(id, pmi);
-                UUID oldowner = plot.getOwnerId();
+            UUID oldowner = plot.getOwnerId();
 
 
-                if (!oldowner.equals(newOwnerId)) {
-                    PlotOwnerChangeEvent event = new PlotOwnerChangeEvent(world, plot, player, newOwner);
-                    serverBridge.getEventBus().post(event);
-
-                    if (!event.isCancelled()) {
-                        plot.setForSale(false);
-                        manager.removeSellSign(id, world);
-                        plot.resetExpire(pmi.getDaysToExpiration());
-                        plot.updateField("forsale", false);
-                        plot.setOwner(newOwner);
-                        plot.setOwnerId(newOwnerId);
-                        manager.setOwnerSign(world, plot);
-                        //todo new function to change the plot owner in database or just modify the plot class to do this.
-                        player.sendMessage(C("MsgOwnerChangedTo") + " " + newOwner);
-                    }
-                } else {
-                    player.sendMessage("This person already owns this plot!"); //TODO add caption for this
-                }
-            } else {
-                PlotCreateEvent event =
-                        new PlotCreateEvent(world, id, serverBridge.getPlayer(newOwnerId));
+            if (!oldowner.equals(newOwnerId)) {
+                PlotOwnerChangeEvent event = new PlotOwnerChangeEvent(world, plot, player, newOwner);
                 serverBridge.getEventBus().post(event);
+
                 if (!event.isCancelled()) {
-                    manager.createPlot(id, world, newOwner, newOwnerId, pmi);
+                    plot.setForSale(false);
+                    manager.removeSellSign(plot, world);
+                    plot.resetExpire(pmi.getDaysToExpiration());
+                    plot.updateField("forsale", false);
+                    plot.setOwner(newOwner);
+                    plot.setOwnerId(newOwnerId);
+                    manager.setOwnerSign(world, plot);
+                    //todo new function to change the plot owner in database or just modify the plot class to do this.
                     player.sendMessage(C("MsgOwnerChangedTo") + " " + newOwner);
                 }
+            } else {
+                player.sendMessage("This person already owns this plot!"); //TODO add caption for this
             }
             return true;
         } else {

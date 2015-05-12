@@ -1,5 +1,6 @@
 package com.worldcretornica.plotme_core.bukkit;
 
+import com.google.common.base.Optional;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.worldcretornica.plotme_core.api.IMaterial;
 import com.worldcretornica.plotme_core.api.IOfflinePlayer;
@@ -37,7 +38,6 @@ import java.util.logging.Logger;
 public class BukkitServerBridge extends IServerBridge {
 
     private final PlotMe_CorePlugin plugin;
-    private Economy economy;
 
     public BukkitServerBridge(PlotMe_CorePlugin instance, Logger logger) {
         super(logger);
@@ -71,10 +71,6 @@ public class BukkitServerBridge extends IServerBridge {
     public void setupHooks() {
         PluginManager pluginManager = plugin.getServer().getPluginManager();
 
-        if (pluginManager.getPlugin("Vault") != null) {
-            setupEconomy();
-        }
-
         if (pluginManager.getPlugin("WorldEdit") != null) {
             WorldEditPlugin worldEdit = (WorldEditPlugin) pluginManager.getPlugin("WorldEdit");
             worldEdit.getWorldEdit().getEventBus().register(new PlotWorldEditListener(plugin));
@@ -88,18 +84,12 @@ public class BukkitServerBridge extends IServerBridge {
      * @return
      */
     @Override
-    public Economy getEconomy() {
-        return economy;
-    }
-
-    /**
-     * Register economy with Vault
-     */
-    private void setupEconomy() {
+    public Optional<Economy> getEconomy() {
         RegisteredServiceProvider<Economy> economyProvider = plugin.getServer().getServicesManager().getRegistration(Economy.class);
         if (economyProvider != null) {
-            economy = economyProvider.getProvider();
+            return Optional.of(economyProvider.getProvider());
         }
+        return Optional.absent();
     }
 
     @Override
@@ -118,7 +108,6 @@ public class BukkitServerBridge extends IServerBridge {
 
     @Override
     public void unHook() {
-        economy = null;
     }
 
     @Override
@@ -188,7 +177,7 @@ public class BukkitServerBridge extends IServerBridge {
     }
 
     protected IPlayer internalGetPlayer(String name) {
-
+        return null;
     }
 
     @Override
@@ -198,18 +187,30 @@ public class BukkitServerBridge extends IServerBridge {
 
     @Override
     public boolean has(IPlayer player, double price) {
-        return getEconomy().has(((BukkitOfflinePlayer) player).getOfflinePlayer(), price);
+        if (getEconomy().isPresent()) {
+            return getEconomy().get().has(((BukkitOfflinePlayer) player).getOfflinePlayer(), price);
+        } else {
+            return false;
+        }
     }
 
     @Override
     public EconomyResponse withdrawPlayer(IPlayer player, double price) {
-        return getEconomy().withdrawPlayer(((BukkitOfflinePlayer) player).getOfflinePlayer(), price);
+        if (getEconomy().isPresent()) {
+            return getEconomy().get().withdrawPlayer(((BukkitOfflinePlayer) player).getOfflinePlayer(), price);
+        } else {
+            return null;
+        }
     }
 
     @Override
 
-    public EconomyResponse depositPlayer(IOfflinePlayer currentBidder, double currentBid) {
-        return getEconomy().depositPlayer(((BukkitOfflinePlayer) currentBidder).getOfflinePlayer(), currentBid);
+    public EconomyResponse depositPlayer(IOfflinePlayer player, double price) {
+        if (getEconomy().isPresent()) {
+            return getEconomy().get().depositPlayer(((BukkitOfflinePlayer) player).getOfflinePlayer(), price);
+        } else {
+            return null;
+        }
     }
 
     @Override

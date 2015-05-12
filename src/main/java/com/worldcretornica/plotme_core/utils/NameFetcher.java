@@ -1,6 +1,5 @@
 package com.worldcretornica.plotme_core.utils;
 
-import com.google.common.collect.ImmutableList;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -22,17 +21,14 @@ public class NameFetcher implements Callable<Map<UUID, String>> {
 
     private static final String PROFILE_URL = "https://sessionserver.mojang.com/session/minecraft/profile/";
     private final JSONParser jsonParser = new JSONParser();
-    private final List<UUID> uuids;
+    private final List<UUID> uuids = new ArrayList<>();
 
     public NameFetcher(List<UUID> uuids) {
-        this.uuids = ImmutableList.copyOf(uuids);
+        this.uuids.addAll(uuids);
     }
 
     public NameFetcher(HashSet<String> denied) {
-        uuids = new ArrayList<>();
-        for (String uuid : denied) {
-            uuids.add(UUID.fromString(uuid));
-        }
+        uuids.addAll(denied);
     }
 
     public static String getNameOf(String name) {

@@ -31,16 +31,14 @@ public class CmdSell extends PlotCommand {
                     if (player.hasPermission(PermissionNames.USER_SELL) || player.hasPermission(PermissionNames.ADMIN_SELL)) {
                         PlotId id = manager.getPlotId(player);
 
-                        if (id == null) {
+                        Plot plot = manager.getPlot(player);
+                        if (plot == null) {
                             player.sendMessage(C("MsgNoPlotFound"));
                             return true;
-                        } else if (!manager.isPlotAvailable(id, pmi)) {
-                            Plot plot = manager.getPlotById(id, pmi);
-
+                        } else {
                             if (player.getUniqueId().equals(plot.getOwnerId()) || player.hasPermission(PermissionNames.ADMIN_SELL)) {
 
                                 PlotSellChangeEvent event;
-
                                 if (plot.isForSale()) {
                                     event = new PlotSellChangeEvent(world, plot, player, plot.getPrice(), false);
                                     serverBridge.getEventBus().post(event);
@@ -53,13 +51,14 @@ public class CmdSell extends PlotCommand {
                                         plot.updateField("forsale", false);
 
                                         manager.adjustWall(player);
-                                        manager.removeSellSign(id, world);
+                                        manager.removeSellSign(plot, world);
 
                                         player.sendMessage(C("MsgPlotNoLongerSale"));
 
                                         if (isAdvancedLogging()) {
                                             serverBridge.getLogger()
-                                                    .info(player.getName() + " " + C("MsgRemovedPlot") + " " + id + " " + C("MsgFromBeingSold"));
+                                                    .info(player.getName() + " " + C("MsgRemovedPlot") + " " + plot.getId() + " " + C(
+                                                            "MsgFromBeingSold"));
                                         }
                                     }
                                 } else {
@@ -103,8 +102,6 @@ public class CmdSell extends PlotCommand {
                             } else {
                                 player.sendMessage(C("MsgDoNotOwnPlot"));
                             }
-                        } else {
-                            player.sendMessage(C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
                         }
                     } else {
                         player.sendMessage(C("MsgPermissionDenied"));

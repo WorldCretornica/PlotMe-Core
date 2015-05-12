@@ -15,19 +15,15 @@ public class BukkitEntity implements IEntity {
 
     private final Entity entity;
     private final Vector coords;
-    private final ILocation loc;
-    private final BukkitWorld world;
 
     public BukkitEntity(Entity entity) {
         this.entity = entity;
         coords = BukkitConverter.locationToVector(entity.getLocation());
-        world = BukkitConverter.adapt(entity.getWorld());
-        loc = new ILocation(world, coords);
     }
 
     @Override
     public ILocation getLocation() {
-        return loc;
+        return new ILocation(getWorld(), getPosition());
     }
 
     @Override
@@ -42,7 +38,7 @@ public class BukkitEntity implements IEntity {
      */
     @Override
     public IWorld getWorld() {
-        return world;
+        return new BukkitWorld(entity.getWorld());
     }
 
     @Override

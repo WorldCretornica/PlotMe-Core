@@ -1,5 +1,6 @@
 package com.worldcretornica.plotme_core.api;
 
+import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotId;
 import com.worldcretornica.schematic.Schematic;
 
@@ -39,7 +40,7 @@ public interface IPlotMe_GeneratorManager {
 
     long[] clear(Vector bottom, Vector top, long maxBlocks, long[] start);
 
-    void adjustPlotFor(PlotId id, boolean claimed, boolean protect, boolean forSale);
+    void adjustPlotFor(Plot id, boolean claimed, boolean protect, boolean forSale);
 
     boolean isBlockInPlot(PlotId id, Vector location);
 

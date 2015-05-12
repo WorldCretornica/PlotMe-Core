@@ -2,7 +2,6 @@ package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
-import com.worldcretornica.plotme_core.PlotId;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ICommandSender;
@@ -27,10 +26,8 @@ public class CmdBiome extends PlotCommand {
             IWorld world = player.getWorld();
             PlotMapInfo pmi = manager.getMap(world);
             if (manager.isPlotWorld(world)) {
-                PlotId id = manager.getPlotId(player);
-                if (id == null){
-                    return true;
-                } else if (!manager.isPlotAvailable(id, pmi)) {
+                Plot plot = manager.getPlot(player);
+                if (plot != null) {
 
                     if (args.length == 2) {
 
@@ -42,7 +39,6 @@ public class CmdBiome extends PlotCommand {
                             return true;
                         }
 
-                        Plot plot = manager.getPlotById(id, pmi);
                         String playerName = player.getName();
 
                         if (player.getUniqueId().equals(plot.getOwnerId()) || player.hasPermission("PlotMe.admin")) {
@@ -73,26 +69,28 @@ public class CmdBiome extends PlotCommand {
 
                             if (!event.isCancelled()) {
                                 plot.setBiome(biomeName);
-                                manager.setBiome(id, biomeName.toUpperCase());
+                                manager.setBiome(plot.getId(), biomeName.toUpperCase());
 
                                 player.sendMessage(C("MsgBiomeSet") + " " + biomeName + " " + serverBridge.getEconomy().format(price));
 
                                 if (isAdvancedLogging()) {
                                     if (price == 0) {
-                                        serverBridge.getLogger().info(playerName + " " + C("MsgChangedBiome") + " " + id + " " + C("WordTo") + " "
+                                        serverBridge.getLogger()
+                                                .info(playerName + " " + C("MsgChangedBiome") + " " + plot.getId() + " " + C("WordTo") + " "
                                                 + biomeName);
                                     } else {
-                                        serverBridge.getLogger().info(playerName + " " + C("MsgChangedBiome") + " " + id + " " + C("WordTo") + " "
+                                        serverBridge.getLogger()
+                                                .info(playerName + " " + C("MsgChangedBiome") + " " + plot.getId() + " " + C("WordTo") + " "
                                                 + biomeName + (" " + C("WordFor") + " " + price));
                                     }
                                 }
                             }
                         } else {
-                            player.sendMessage(C("MsgThisPlot") + "(" + id + ") " + C("MsgNotYoursNotAllowedBiome"));
+                            player.sendMessage(C("MsgThisPlot") + "(" + plot.getId() + ") " + C("MsgNotYoursNotAllowedBiome"));
                         }
                     }
                 } else {
-                    player.sendMessage(C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
+                    player.sendMessage(C("MsgThisPlot") + "(" + plot.getId() + ") " + C("MsgHasNoOwner"));
                 }
             } else {
                 player.sendMessage(C("MsgNotPlotWorld"));

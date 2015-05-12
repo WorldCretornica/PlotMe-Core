@@ -5,21 +5,16 @@ import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.Vector;
 import org.spongepowered.api.entity.Entity;
+import org.spongepowered.api.world.Location;
 
 import java.util.UUID;
 
 public class SpongeEntity implements IEntity {
 
     private final Entity entity;
-    private final Vector pos;
-    private final ILocation location;
-    private final SpongeWorld world;
 
     public SpongeEntity(Entity entity) {
         this.entity = entity;
-        pos = new Vector(entity.getLocation().getX(), entity.getLocation().getY(), entity.getLocation().getZ());
-        world = new SpongeWorld(entity.getWorld());
-        location = new ILocation(world, pos);
     }
 
     public Entity getEntity() {
@@ -28,17 +23,17 @@ public class SpongeEntity implements IEntity {
 
     @Override
     public ILocation getLocation() {
-        return location;
+        return new ILocation(getWorld(), getPosition());
     }
 
     @Override
     public void setLocation(ILocation location) {
-
+        entity.setLocation(new Location(entity.getWorld(), location.getX(), location.getY(), location.getZ()));
     }
 
     @Override
     public IWorld getWorld() {
-        return world;
+        return new SpongeWorld(entity.getWorld());
     }
 
     @Override
@@ -58,6 +53,6 @@ public class SpongeEntity implements IEntity {
 
     @Override
     public Vector getPosition() {
-        return pos;
+        return new Vector(entity.getLocation().getX(), entity.getLocation().getY(), entity.getLocation().getZ());
     }
 }
