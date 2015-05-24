@@ -9,19 +9,26 @@ import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IServerBridge;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.sponge.api.SpongePlayer;
+import com.worldcretornica.plotme_core.sponge.api.SpongeUser;
 import com.worldcretornica.plotme_core.sponge.api.SpongeWorld;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.configuration.ConfigurationSection;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.api.entity.player.Player;
+import org.spongepowered.api.entity.player.User;
+import org.spongepowered.api.service.profile.GameProfileResolver;
+import org.spongepowered.api.service.user.UserStorage;
 import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.biome.BiomeType;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 import java.util.logging.Logger;
 
 public class SpongeServerBridge extends IServerBridge {
@@ -37,12 +44,35 @@ public class SpongeServerBridge extends IServerBridge {
 
     @Override
     public IOfflinePlayer getOfflinePlayer(UUID uuid) {
+        Optional<GameProfileResolver> service = plugin.getGame().getServiceManager().provide(GameProfileResolver.class);
+        Optional<UserStorage> service2 = plugin.getGame().getServiceManager().provide(UserStorage.class);
+        if (service.isPresent() && service2.isPresent()) {
+            try {
+                Optional<User> userOptional = service2.get().get(service.get().get(uuid).get());
+                if (userOptional.isPresent()) {
+                    return new SpongeUser(userOptional.get());
+                }
+            } catch (InterruptedException | ExecutionException e) {
+                //I think this is highly unlikely
+            }
+        }
         return null;
     }
 
     @Override
     public IOfflinePlayer getOfflinePlayer(String player) {
-        // TODO Auto-generated method stub
+        Optional<GameProfileResolver> service = plugin.getGame().getServiceManager().provide(GameProfileResolver.class);
+        Optional<UserStorage> service2 = plugin.getGame().getServiceManager().provide(UserStorage.class);
+        if (service.isPresent() && service2.isPresent()) {
+            try {
+                Optional<User> userOptional = service2.get().get(service.get().get(player).get());
+                if (userOptional.isPresent()) {
+                    return new SpongeUser(userOptional.get());
+                }
+            } catch (InterruptedException | ExecutionException e) {
+                //I think this is highly unlikely
+            }
+        }
         return null;
     }
 
@@ -64,6 +94,12 @@ public class SpongeServerBridge extends IServerBridge {
         } else {
             return null;
         }
+    }
+
+    @Nullable
+    @Override
+    public IPlayer getPlayerExact(String name) {
+        return null;
     }
 
     @Override
@@ -161,11 +197,6 @@ public class SpongeServerBridge extends IServerBridge {
     }
 
     @Override
-    public boolean doesBiomeExist(String name) {
-        return true;
-    }
-
-    @Override
     public File getDataFolder() {
         return plugin.getConfigDir();
     }
@@ -221,7 +252,19 @@ public class SpongeServerBridge extends IServerBridge {
 
     @Override
     public List<IOfflinePlayer> getOfflinePlayers() {
-        return null;
+        Optional<GameProfileResolver> service = plugin.getGame().getServiceManager().provide(GameProfileResolver.class);
+        Optional<UserStorage> service2 = plugin.getGame().getServiceManager().provide(UserStorage.class);
+        ArrayList<IOfflinePlayer> users = new ArrayList<>();
+        if (service.isPresent() && service2.isPresent()) {
+            for (org.spongepowered.api.GameProfile profile : service2.get().getAll()) {
+                Optional<User> userOptional = service2.get().get(profile);
+                if (userOptional.isPresent()) {
+                    users.add(new SpongeUser(userOptional.get()));
+                }
+            }
+            return users;
+        }
+        return Collections.emptyList();
     }
 
     @Override
