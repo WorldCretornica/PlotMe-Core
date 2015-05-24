@@ -68,6 +68,6 @@ public class BukkitPlayer extends BukkitOfflinePlayer implements IPlayer {
     }
 
     public Vector getPosition() {
-        return BukkitConverter.locationToVector(player.getLocation());
+        return BukkitUtil.locationToVector(player.getLocation());
     }
 }

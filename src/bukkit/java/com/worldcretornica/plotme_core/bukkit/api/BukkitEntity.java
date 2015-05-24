@@ -18,7 +18,7 @@ public class BukkitEntity implements IEntity {
 
     public BukkitEntity(Entity entity) {
         this.entity = entity;
-        coords = BukkitConverter.locationToVector(entity.getLocation());
+        coords = BukkitUtil.locationToVector(entity.getLocation());
     }
 
     @Override

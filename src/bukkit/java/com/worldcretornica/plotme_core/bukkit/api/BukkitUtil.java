@@ -6,9 +6,10 @@ import org.bukkit.Location;
 import org.bukkit.World;
 
 /**
- * Created by Matthew on 4/8/2015.
+ * A utility class that allows the conversion of any object from the Bukkit API to an
+ * object that can be used in the PlotMe API.
  */
-public class BukkitConverter {
+public class BukkitUtil {
 
     public static Location toBukkitLocation(ILocation location) {
         return new Location(null, 0, 0, 0);
