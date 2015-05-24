@@ -14,6 +14,9 @@ commands:
       aliases: [p,plot]
       permission-message: "You do not have the required permissions to use this PlotMe Command."
 permissions:
+    plotme.weanywhere:
+      description: Players with this permission gain the ability to worldedit anywhere in a plotworld
+      default: true
     plotme.use:
       description: Gives default user commands
       children:
@@ -45,7 +48,6 @@ permissions:
         plotme.admin.remove: true
         plotme.admin.setowner: true
         plotme.admin.move: true
-        plotme.admin.weanywhere: true
         plotme.admin.list: true
         plotme.admin.sell: true
         plotme.admin.dispose: true

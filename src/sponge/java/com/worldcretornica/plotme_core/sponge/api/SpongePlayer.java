@@ -9,6 +9,7 @@ import com.worldcretornica.plotme_core.api.Vector;
 import org.spongepowered.api.entity.player.Player;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.text.chat.ChatTypes;
+import org.spongepowered.api.util.Tristate;
 
 public class SpongePlayer extends SpongeUser implements IPlayer {
 
@@ -26,7 +27,7 @@ public class SpongePlayer extends SpongeUser implements IPlayer {
 
     @Override
     public boolean hasPermission(String permission) {
-        return player.hasPermission(permission);
+        return player.getData().setPermission(player.getActiveContexts(), permission, Tristate.UNDEFINED);
     }
 
     @Override

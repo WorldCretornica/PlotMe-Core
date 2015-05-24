@@ -23,7 +23,7 @@ public class CmdBiomes extends PlotCommand {
             if (player.hasPermission(PermissionNames.USER_BIOME)) {
                 List<String> biomes = serverBridge.getBiomes();
 
-                int pages = biomes.size() / 19 + 1;
+                int pages = (biomes.size() / 19) + 1;
                 int page = 1;
 
                 if (args.length > 1) {

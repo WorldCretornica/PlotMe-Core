@@ -52,6 +52,7 @@ public class BukkitBlock implements IBlock {
     @Deprecated
     @Override
     public String getBiome() {
+
         return block.getBiome().toString();
     }
 

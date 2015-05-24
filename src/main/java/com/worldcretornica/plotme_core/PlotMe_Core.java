@@ -67,9 +67,6 @@ public class PlotMe_Core {
         setupSQL();
         serverBridge.setupHooks();
         serverBridge.setupListeners();
-        if (getConfig().getBoolean("coreDatabaseUpdate")) {
-            getSqlManager().coreDatabaseUpdate();
-        }
         //getSqlManager().plotConvertToUUIDAsynchronously();
     }
 
@@ -138,13 +135,10 @@ public class PlotMe_Core {
             String user = config.getString("mySQLuname");
             String pass = config.getString("mySQLpass");
             setSqlManager(new MySQLConnector(this, url, user, pass));
-            getSqlManager().createTables();
         } else {
             setSqlManager(new SQLiteConnector(this));
-            getSqlManager().createTables();
         }
         getSqlManager().startConnection();
-        getSqlManager().createTables();
     }
 
     public void addManager(IWorld world, IPlotMe_GeneratorManager manager) {

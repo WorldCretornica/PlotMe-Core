@@ -46,6 +46,8 @@ public abstract class IServerBridge {
 
     public abstract IPlayer getPlayer(String name);
 
+    public abstract IPlayer getPlayerExact(String name);
+
     public abstract Collection<IPlayer> getOnlinePlayers();
 
     public Logger getLogger() {
@@ -83,14 +85,6 @@ public abstract class IServerBridge {
         this.usingLwc = usingLwc;
     }
 
-    public boolean isUsingWEdit() {
-        return usingWEdit;
-    }
-
-    public void setUsingWEdit(boolean usingWEdit) {
-        this.usingWEdit = usingWEdit;
-    }
-
     /**
      * Gets the world with the given name.
      *
@@ -109,7 +103,9 @@ public abstract class IServerBridge {
 
     public abstract void runTaskLaterAsynchronously(Runnable runnable, long delay);
 
-    public abstract boolean doesBiomeExist(String name);
+    public boolean getBiome(String name) {
+
+    }
 
     public abstract File getDataFolder();
 

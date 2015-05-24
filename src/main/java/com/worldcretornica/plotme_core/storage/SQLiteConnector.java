@@ -5,6 +5,7 @@ import com.worldcretornica.plotme_core.PlotMe_Core;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -37,6 +38,7 @@ public class SQLiteConnector extends Database {
     public void createTables() {
         Connection connection = getConnection();
         try (Statement statement = connection.createStatement()) {
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS plotmecore_nextplotid (nextid INT(15));");
             //MySQL specific plot table creation.
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS `plotmecore_plots` ("
                     + "`id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
@@ -95,6 +97,15 @@ public class SQLiteConnector extends Database {
                     + "`propertyName` VARCHAR(100) NOT NULL,"
                     + "`propertyValue` VARCHAR(255) DEFAULT NULL"
                     + ");");
+            connection.commit();
+            try (ResultSet results = statement.executeQuery("SELECT * FROM plotmecore_nextplotid;")) {
+                if (!results.next()) {
+                    statement.execute("INSERT INTO plotmecore_nextplotid VALUES(1);");
+                    this.nextPlotId = 1;
+                } else {
+                    this.nextPlotId = results.getLong("nextid");
+                }
+            }
             connection.commit();
         } catch (SQLException e) {
             e.printStackTrace();

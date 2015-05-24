@@ -31,6 +31,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Logger;
@@ -70,7 +71,9 @@ public class BukkitServerBridge extends IServerBridge {
     @Override
     public void setupHooks() {
         PluginManager pluginManager = plugin.getServer().getPluginManager();
-
+        if (pluginManager.getPlugin("Vault") != null) {
+            setEconomy();
+        }
         if (pluginManager.getPlugin("WorldEdit") != null) {
             WorldEditPlugin worldEdit = (WorldEditPlugin) pluginManager.getPlugin("WorldEdit");
             worldEdit.getWorldEdit().getEventBus().register(new PlotWorldEditListener(plugin));
@@ -85,7 +88,7 @@ public class BukkitServerBridge extends IServerBridge {
      */
     @Override
     public Optional<Economy> getEconomy() {
-        RegisteredServiceProvider<Economy> economyProvider = plugin.getServer().getServicesManager().getRegistration(Economy.class);
+        RegisteredServiceProvider<Economy> economyProvider = Bukkit.getServer().getServicesManager().getRegistration(Economy.class);
         if (economyProvider != null) {
             return Optional.of(economyProvider.getProvider());
         }
@@ -150,6 +153,16 @@ public class BukkitServerBridge extends IServerBridge {
             return null;
         } else {
             return plugin.wrapPlayer(player);
+        }
+    }
+
+    @Override
+    public IPlayer getPlayerExact(String name) {
+        Player player = Bukkit.getPlayerExact(name);
+        if (player == null) {
+            return null;
+        } else {
+            return new BukkitPlayer(player);
         }
     }
 
@@ -226,11 +239,49 @@ public class BukkitServerBridge extends IServerBridge {
 
     @Override
     public List<String> getBiomes() {
-        List<String> biomes = new ArrayList<>();
-        for (Biome biome : Biome.values()) {
-            biomes.add(biome.name());
-        }
-        return biomes;
+        List<String> biomes = new ArrayList<>(39);
+        biomes.add("Ocean");
+        biomes.add("Plains");
+        biomes.add("Desert");
+        biomes.add("Extreme Hills");
+        biomes.add("Forest");
+        biomes.add("Tiaga");
+        biomes.add("Forest");
+        biomes.add("Swampland");
+        biomes.add("River");
+        biomes.add("Hell");
+        biomes.add("The End");
+        biomes.add("FrozenOcean");
+        biomes.add("FrozenRiver");
+        biomes.add("Ice Plains");
+        biomes.add("Ice Mountains");
+        biomes.add("MushroomIsland");
+        biomes.add("MushroomIslandShore");
+        biomes.add("Beach");
+        biomes.add("DesertHills");
+        biomes.add("ForestHills");
+        biomes.add("TiagaHills");
+        biomes.add("Extreme Hills Edge");
+        biomes.add("Jungle");
+        biomes.add("JungleHills");
+        biomes.add("JungleEdge");
+        biomes.add("Deep Ocean");
+        biomes.add("Stone Beach");
+        biomes.add("Cold Beach");
+        biomes.add("Birch Forest");
+        biomes.add("Birch Forest Hills");
+        biomes.add("Roofed Forest");
+        biomes.add("Cold Taiga");
+        biomes.add("Cold Taiga Hills");
+        biomes.add("Mega Taiga");
+        biomes.add("Mega Taiga Hills");
+        biomes.add("Extreme Hills+");
+        biomes.add("Savanna");
+        biomes.add("Savanna Plateau");
+        biomes.add("Mesa");
+        biomes.add("Mesa Plateau F");
+        biomes.add("Mesa Plateau");
+        return Collections.unmodifiableList(biomes);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.worldcretornica.plotme_core.sponge;
 
+import com.google.common.base.Optional;
 import com.worldcretornica.configuration.ConfigAccessor;
 import com.worldcretornica.plotme_core.api.BridgeLogger;
 import com.worldcretornica.plotme_core.api.IMaterial;
@@ -104,9 +105,8 @@ public class SpongeServerBridge extends IServerBridge {
     }
 
     @Override
-    public Economy getEconomy() {
-        // TODO Auto-generated method stub
-        return null;
+    public Optional<Economy> getEconomy() {
+        return Optional.absent();
     }
 
     @Override

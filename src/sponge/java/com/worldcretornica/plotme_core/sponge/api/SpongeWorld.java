@@ -80,18 +80,18 @@ public class SpongeWorld implements IWorld {
     }
 
     @Override
-    public IBlock getBlockAt(double x, double y, double z) {
-        //TODO
-        return null;
-    }
-
-    @Override
     public IBlock getBlockAt(Vector add) {
         return null;
     }
 
     @Override
+    public void getBiome(Vector position) {
+        world.getBiome(position.getBlockX(), position.getBlockZ()).
+    }
+
+    @Override
     public List<IEntity> getEntities() {
+        world.getBiome().
         ArrayList<IEntity> entities = new ArrayList<>();
         for (org.spongepowered.api.entity.Entity entity : world.getEntities()) {
             entities.add(new SpongeEntity(entity));

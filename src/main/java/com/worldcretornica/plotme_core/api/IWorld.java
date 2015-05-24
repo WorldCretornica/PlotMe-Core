@@ -34,9 +34,9 @@ public interface IWorld {
 
     IBlock getBlockAt(int x, int y, int z);
 
-    IBlock getBlockAt(double x, double y, double z);
-
     IBlock getBlockAt(Vector add);
+
+    void getBiome(Vector position);
 
     List<IEntity> getEntities();
 

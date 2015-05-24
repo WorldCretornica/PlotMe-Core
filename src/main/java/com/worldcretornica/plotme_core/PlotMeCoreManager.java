@@ -250,10 +250,10 @@ public class PlotMeCoreManager {
      * @return true if economy enabled
      */
     public boolean isEconomyEnabled(PlotMapInfo pmi) {
-        if (!plugin.getConfig().getBoolean("globalUseEconomy") || plugin.getServerBridge().getEconomy() == null) {
-            return false;
+        if (plugin.getConfig().getBoolean("globalUseEconomy") && plugin.getServerBridge().getEconomy().isPresent()) {
+            return pmi.canUseEconomy();
         }
-        return pmi.canUseEconomy();
+        return false;
     }
 
     /**
@@ -365,6 +365,7 @@ public class PlotMeCoreManager {
     }
 */
 
+
     /**
      * Gets the plot with the given id in the given world.
      *
@@ -415,19 +416,20 @@ public class PlotMeCoreManager {
      * @param plot Plot to be added
      * @param world
      */
-    public void addPlot(PlotId id, Plot plot, IWorld world) {
+    public void loadPlot(PlotId id, Plot plot, IWorld world) {
         PlotMapInfo pmi = getMap(world);
-        addPlot(id, plot, pmi);
+        loadPlot(id, plot, pmi);
     }
 
     /**
-     * Plot to add to loaded plotmap.
+     * Adds to the plot into memory in the specified plotmap.
+     * This is NOT the same as saving the plot to the database for longtime storage.
      *
      * @param id ID
      * @param plot Plot to be added
      * @param pmi Plot Map to add the plot to
      */
-    public void addPlot(PlotId id, Plot plot, PlotMapInfo pmi) {
+    public void loadPlot(PlotId id, Plot plot, PlotMapInfo pmi) {
         if (pmi != null) {
             pmi.addPlot(id, plot);
             PlotLoadEvent event = new PlotLoadEvent(pmi.getWorld(), plot);
@@ -480,22 +482,22 @@ public class PlotMeCoreManager {
      *
      * @param id    plot id
      * @param world
-     *@param owner owner name
+     * @param owner owner name
      * @param uuid  owner uuid
      * @param pmi   plotmap to add the plot to    @return the new plot created
      *
      * @throws NullPointerException If the <code>id</code> argument is <code>null</code>
      */
     public Plot createPlot(PlotId id, IWorld world, String owner, UUID uuid, PlotMapInfo pmi) {
-        Plot plot = new Plot(owner, uuid, world.getName().toLowerCase(), id, pmi.getDaysToExpiration(), this.getPlotTopLoc(world, id),
-                this.getPlotBottomLoc
-                        (world, id));
+        Plot plot = new Plot(owner, uuid, pmi.getWorld().getName().toLowerCase(), id, pmi.getDaysToExpiration(), this.getPlotTopLoc(world, id),
+                this.getPlotBottomLoc(world, id));
+
 
         setOwnerSign(world, plot);
-        addPlot(id, plot, pmi);
+        loadPlot(id, plot, pmi);
         adjustWall(plot, world, true);
 
-        plugin.getSqlManager().addPlot(plot, getPlotTopLoc(world, id), getPlotBottomLoc(world, id));
+        plugin.getSqlManager().addPlot(plot);
         return plot;
     }
 
@@ -525,12 +527,12 @@ public class PlotMeCoreManager {
                 plugin.getSqlManager().deletePlot(plotFrom.getInternalID());
 
                 plotTo.setId(idFrom);
-                plugin.getSqlManager().addPlot(plotTo, getPlotTopLoc(world, idFrom), getPlotBottomLoc(world, idFrom));
-                addPlot(idFrom, plotTo, world);
+                plugin.getSqlManager().addPlot(plotTo);
+                loadPlot(idFrom, plotTo, world);
 
                 plotFrom.setId(idTo);
-                plugin.getSqlManager().addPlot(plotFrom, getPlotTopLoc(world, idTo), getPlotBottomLoc(world, idTo));
-                addPlot(idTo, plotFrom, world);
+                plugin.getSqlManager().addPlot(plotFrom);
+                loadPlot(idTo, plotFrom, world);
 
                 setOwnerSign(world, plotFrom);
                 removeSellSign(plotFrom, world);
@@ -556,9 +558,8 @@ public class PlotMeCoreManager {
         deletePlot(idFrom);
 
         filledPlot.setId(idDestination);
-        plugin.getSqlManager()
-                .addPlot(filledPlot, getPlotTopLoc(world, idDestination), getPlotBottomLoc(world, idDestination));
-        addPlot(idDestination, filledPlot, world);
+        plugin.getSqlManager().addPlot(filledPlot);
+        loadPlot(idDestination, filledPlot, world);
 
         setOwnerSign(world, filledPlot);
         setSellSign(filledPlot, world);
@@ -661,6 +662,7 @@ public class PlotMeCoreManager {
     public void adjustWall(Plot plot, IWorld world, boolean claimed) {
         getGenManager(world).adjustPlotFor(plot, claimed, plot.isProtected(), plot.isForSale());
     }
+
     public void setBiome(PlotId id, String biome) {
         plugin.getSqlManager().updatePlot(id, id.getWorld().getName(), "biome", biome.toUpperCase());
     }
@@ -673,10 +675,6 @@ public class PlotMeCoreManager {
      */
     public HashSet<UUID> getPlayersIgnoringWELimit() {
         return playersignoringwelimit;
-    }
-
-    public void setPlayersIgnoringWELimit(HashSet<UUID> playersignoringwelimit) {
-        this.playersignoringwelimit = playersignoringwelimit;
     }
 
     /**

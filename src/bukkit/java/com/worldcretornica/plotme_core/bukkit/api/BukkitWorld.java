@@ -82,7 +82,7 @@ public class BukkitWorld implements IWorld {
 
     @Override
     public IBlock getBlockAt(Vector add) {
-        return getBlockAt(add.getX(), add.getY(), add.getZ());
+        return getBlockAt(add.getBlockX(), add.getBlockY(), add.getBlockZ());
     }
 
     @Override
@@ -99,7 +99,4 @@ public class BukkitWorld implements IWorld {
         return world.spawnEntity(etloc, entitytype);
     }
 
-    public IBlock getBlockAt(double x, double y, double z) {
-        return getBlockAt((int) x, (int) y, (int) z);
-    }
 }

@@ -20,21 +20,22 @@ public class Plot {
     private final HashMap<String, Plot.AccessLevel> allowed = new HashMap<>();
     private final HashSet<String> denied = new HashSet<>();
     private final HashMap<String, Map<String, String>> metadata = new HashMap<>();
-    private String owner;
+    private String owner = "Unknown";
     private UUID ownerId = UUID.randomUUID();
-    private String world;
+    private String world = "Unknown";
     private String biome = "PLAINS";
     private Date expiredDate = null;
     private boolean finished = false;
-    private PlotId id;
+    private PlotId id = new PlotId(0, 0);
     private double price = 0.0;
     private boolean forSale = false;
     private String finishedDate = null;
     private boolean protect = false;
     private int likes = 0;
-    private int internalID = 0;
+    //defaults to 0 until it is saved to the database
+    private long internalID = 0;
     private String plotName;
-    private HashSet<String> likers;
+    private HashSet<String> likers = new HashSet<>();
 
     public Plot(String owner, UUID uuid, String world, PlotId plotId, int days, Vector plotTopLoc, Vector plotBottomLoc) {
         setOwner(owner);
@@ -268,18 +269,31 @@ public class Plot {
         this.id = id;
     }
 
+    /**
+     * Retrieves the price of the plot.
+     * If {@link #isForSale()} is false then this should return 0
+     * @return the price of the plot
+     */
     public final double getPrice() {
         return price;
     }
 
-    public final void setPrice(double customPrice) {
-        this.price = customPrice;
+    public final void setPrice(double price) {
+        this.price = price;
     }
 
+    /**
+     * Checks if this plot is able to be sold
+     * @return true if it is for sale, false otherwise
+     */
     public final boolean isForSale() {
         return forSale;
     }
 
+    /**
+     * Sets if this plot can be sold or not
+     * @param forSale true if it can be sold, false if it cannot be sold
+     */
     public final void setForSale(boolean forSale) {
         this.forSale = forSale;
     }
@@ -316,11 +330,21 @@ public class Plot {
         return metadata;
     }
 
-    public int getInternalID() {
+    /**
+     * Retrieves the unique internal id for this plot.
+     * Commonly used for database lookups and debugging.
+     * Normal users should not be concerned about this number nor should they need to see it.
+     * @return unique internal id
+     */
+    public long getInternalID() {
         return internalID;
     }
 
-    public void setInternalID(int internalID) {
+    /**
+     * Sets the unique internal id for this plot.
+     * @param internalID unique long value
+     */
+    public void setInternalID(long internalID) {
         this.internalID = internalID;
     }
 

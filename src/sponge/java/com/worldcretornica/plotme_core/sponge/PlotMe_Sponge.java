@@ -1,6 +1,7 @@
 package com.worldcretornica.plotme_core.sponge;
 
 import com.google.inject.Inject;
+import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.BridgeLogger;
 import com.worldcretornica.plotme_core.api.IServerBridge;
@@ -23,14 +24,19 @@ import org.spongepowered.api.service.ServiceManager;
 import org.spongepowered.api.service.ServiceReference;
 import org.spongepowered.api.service.config.ConfigDir;
 import org.spongepowered.api.service.config.DefaultConfig;
+import org.spongepowered.api.service.permission.PermissionService;
 import org.spongepowered.api.service.scheduler.AsynchronousScheduler;
 import org.spongepowered.api.service.sql.SqlService;
+import org.spongepowered.api.text.Texts;
+import org.spongepowered.api.util.command.args.CommandElement;
 import org.spongepowered.api.util.command.spec.CommandSpec;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 @Plugin(id = "PlotMe", name = "PlotMe-Core", version = "0.17")
@@ -62,6 +68,9 @@ public class PlotMe_Sponge {
 
     @Subscribe
     public void onInit(PreInitializationEvent event) {
+        if (game.getServiceManager().provide(PermissionService.class).isPresent()){
+            game.getServiceManager().provide(PermissionService.class).get().
+        }
         sql = services.potentiallyProvide(SqlService.class);
         aSync = services.potentiallyProvide(AsynchronousScheduler.class);
         configDir.mkdirs();
@@ -90,7 +99,10 @@ public class PlotMe_Sponge {
     }
 
     private void setupCommands() {
-        game.getCommandDispatcher().register(this, CommandSpec.builder()., )
+        HashMap<List<String>, CommandSpec> subCommands = new HashMap<>();
+        subCommands.put(Arrays.asList("add", "+"), CommandSpec.builder().setDescription(Texts.of("Plot Add")).setExtendedDescription(Texts.of
+                ("Plot Add")).setPermission(PermissionNames.USER_ADD).setArguments(CommandElement))
+        game.getCommandDispatcher().register(this, CommandSpec.builder().setChildren(), )
     }
 
     @Subscribe

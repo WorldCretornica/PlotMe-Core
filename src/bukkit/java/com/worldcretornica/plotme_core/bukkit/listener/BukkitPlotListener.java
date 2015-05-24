@@ -89,12 +89,13 @@ public class BukkitPlotListener implements Listener {
         ILocation location = new ILocation(player.getWorld(), bloc.getX(), bloc.getY(), bloc.getZ());
 
         if (manager.isPlotWorld(location)) {
+            if (player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE)) {
+                return;
+            }
             Plot plot = manager.getPlot(location);
             if (plot == null || !plot.isAllowed(player.getUniqueId())) {
-                if (!player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE)) {
-                    player.sendMessage(api.C("ErrCannotBuild"));
-                    event.setCancelled(true);
-                }
+                player.sendMessage(api.C("ErrCannotBuild"));
+                event.setCancelled(true);
             } else if (api.isPlotLocked(plot)) {
                 player.sendMessage(api.C("PlotLocked"));
                 event.setCancelled(true);

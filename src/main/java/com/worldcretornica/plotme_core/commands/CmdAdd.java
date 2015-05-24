@@ -2,19 +2,17 @@ package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
-import com.worldcretornica.plotme_core.PlotId;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ICommandSender;
+import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.PlotAddAllowedEvent;
-import com.worldcretornica.plotme_core.utils.UUIDFetcher;
 import net.milkbowl.vault.economy.EconomyResponse;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
 
 public class CmdAdd extends PlotCommand {
 
@@ -39,14 +37,12 @@ public class CmdAdd extends PlotCommand {
         if (player.hasPermission(PermissionNames.ADMIN_ADD) || player.hasPermission(PermissionNames.USER_ADD)) {
             IWorld world = player.getWorld();
             if (manager.isPlotWorld(player)) {
-                PlotId id = manager.getPlotId(player);
                 PlotMapInfo pmi = manager.getMap(world);
                 Plot plot = manager.getPlot(player);
                 if (plot != null) {
-                    String allowed = args[1];
-                    UUID fetchAllowedID = UUIDFetcher.getUUIDOf(allowed);
+                    IOfflinePlayer allowed = resolvePlayerByName(args[1]);
                     if (player.getUniqueId().equals(plot.getOwnerId()) || player.hasPermission(PermissionNames.ADMIN_ADD)) {
-                        if (plot.isAllowedConsulting(allowed)) {
+                        if (plot.isAllowedConsulting(allowed.getUniqueId())) {
                             player.sendMessage(C("WordPlayer") + " " + allowed + " " + C("MsgAlreadyAllowed"));
                         } else {
                             PlotAddAllowedEvent event = new PlotAddAllowedEvent(world, plot, player, allowed);
@@ -56,7 +52,7 @@ public class CmdAdd extends PlotCommand {
                                 price = pmi.getAddPlayerPrice();
 
                                 if (serverBridge.has(player, pmi.getAddPlayerPrice())) {
-                                    player.sendMessage("It costs " + serverBridge.getEconomy().format(price) + " to add a player to "
+                                    player.sendMessage("It costs " + serverBridge.getEconomy().get().format(price) + " to add a player to "
                                             + "the plot.");
                                     return true;
                                 } else if (!event.isCancelled()) {

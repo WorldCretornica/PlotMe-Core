@@ -1,13 +1,16 @@
 package com.worldcretornica.plotme_core.commands;
 
+import com.google.common.base.Charsets;
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ICommandSender;
+import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IServerBridge;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 public abstract class PlotCommand {
@@ -68,5 +71,18 @@ public abstract class PlotCommand {
 
     public List getAliases() {
         return Collections.emptyList();
+    }
+
+    protected IOfflinePlayer resolvePlayerByName(String name) {
+        IOfflinePlayer targetPlayer = serverBridge.getPlayer(name);
+        if (targetPlayer != null) {
+            return targetPlayer;
+        }
+
+        targetPlayer = serverBridge.getOfflinePlayer(bestMatchID);
+        if (!targetPlayer.getUniqueId().equals(UUID.nameUUIDFromBytes("InvalidUsername".getBytes(Charsets.UTF_8)))) {
+            return targetPlayer;
+        }
+        return null;
     }
 }
