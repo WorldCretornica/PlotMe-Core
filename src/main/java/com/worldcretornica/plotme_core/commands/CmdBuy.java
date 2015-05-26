@@ -68,9 +68,9 @@ public class CmdBuy extends PlotCommand {
 
                                                     if (er2.transactionSuccess()) {
                                                         for (IPlayer onlinePlayers : serverBridge.getOnlinePlayers()) {
-                                                            if (onlinePlayers.getName().equalsIgnoreCase(oldOwner)) {
+                                                            if (onlinePlayers.getName().equals(oldOwner)) {
                                                                 onlinePlayers.sendMessage(C("WordPlot") + " " + plot.getId() + " "
-                                                                        + C("MsgSoldTo") + " " + buyer + ". " + serverBridge.getEconomy().format
+                                                                        + C("MsgSoldTo") + " " + buyer + ". " + serverBridge.getEconomy().get().format
                                                                         (cost));
                                                                 break;
                                                             }
@@ -95,7 +95,7 @@ public class CmdBuy extends PlotCommand {
                                                 manager.removeSellSign(plot, world);
                                                 manager.setOwnerSign(world, plot);
 
-                                                player.sendMessage(C("MsgPlotBought") + " " + serverBridge.getEconomy().format(cost));
+                                                player.sendMessage(C("MsgPlotBought") + " " + serverBridge.getEconomy().get().format(cost));
 
                                                 if (isAdvancedLogging()) {
                                                     plugin.getLogger()

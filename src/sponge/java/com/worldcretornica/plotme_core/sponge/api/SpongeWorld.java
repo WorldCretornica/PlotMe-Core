@@ -85,7 +85,7 @@ public class SpongeWorld implements IWorld {
 
     @Override
     public void getBiome(Vector position) {
-        world.getBiome(position.getBlockX(), position.getBlockZ()).
+        //TODO
     }
 
     @Override

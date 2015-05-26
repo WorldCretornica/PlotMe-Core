@@ -86,7 +86,7 @@ public class CmdHome extends PlotCommand {
                     for (Plot plot : plugin.getSqlManager().getOwnedPlots(world.getName(), uuid)) {
                         ILocation location;
                         if (uuid == null) {
-                            if (plot.getOwner().equalsIgnoreCase(playerName)) {
+                            if (plot.getOwner().equals(playerName)) {
                                 if (i == 0) {
 
                                     double price = 0.0;
@@ -174,12 +174,12 @@ public class CmdHome extends PlotCommand {
                     }
 
                     if (nb > 0) {
-                        if (playerName.equalsIgnoreCase(player.getName())) {
+                        if (playerName.equals(player.getName())) {
                             player.sendMessage(C("MsgPlotNotFound") + " #" + nb);
                         } else {
                             player.sendMessage(playerName + " " + C("MsgDoesNotHavePlot") + " #" + nb);
                         }
-                    } else if (!playerName.equalsIgnoreCase(player.getName())) {
+                    } else if (!playerName.equals(player.getName())) {
                         player.sendMessage(playerName + " " + C("MsgDoesNotHavePlot"));
                     } else {
                         player.sendMessage(C("MsgYouHaveNoPlot"));

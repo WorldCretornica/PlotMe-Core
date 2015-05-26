@@ -24,11 +24,9 @@ import org.spongepowered.api.service.ServiceManager;
 import org.spongepowered.api.service.ServiceReference;
 import org.spongepowered.api.service.config.ConfigDir;
 import org.spongepowered.api.service.config.DefaultConfig;
-import org.spongepowered.api.service.permission.PermissionService;
 import org.spongepowered.api.service.scheduler.AsynchronousScheduler;
 import org.spongepowered.api.service.sql.SqlService;
 import org.spongepowered.api.text.Texts;
-import org.spongepowered.api.util.command.args.CommandElement;
 import org.spongepowered.api.util.command.spec.CommandSpec;
 
 import java.io.File;
@@ -68,14 +66,10 @@ public class PlotMe_Sponge {
 
     @Subscribe
     public void onInit(PreInitializationEvent event) {
-        if (game.getServiceManager().provide(PermissionService.class).isPresent()){
-            game.getServiceManager().provide(PermissionService.class).get().
-        }
         sql = services.potentiallyProvide(SqlService.class);
         aSync = services.potentiallyProvide(AsynchronousScheduler.class);
         configDir.mkdirs();
         load();
-        game.getCommandDispatcher().register(this, CommandSpec.builder()., "plotme");
     }
 
     private void load() {
@@ -100,9 +94,9 @@ public class PlotMe_Sponge {
 
     private void setupCommands() {
         HashMap<List<String>, CommandSpec> subCommands = new HashMap<>();
-        subCommands.put(Arrays.asList("add", "+"), CommandSpec.builder().setDescription(Texts.of("Plot Add")).setExtendedDescription(Texts.of
-                ("Plot Add")).setPermission(PermissionNames.USER_ADD).setArguments(CommandElement))
-        game.getCommandDispatcher().register(this, CommandSpec.builder().setChildren(), )
+        subCommands.put(Arrays.asList("add", "+"), CommandSpec.builder().description(Texts.of("Plot Add")).extendedDescription(Texts.of
+                ("Plot Add")).permission(PermissionNames.USER_ADD).build());
+        game.getCommandDispatcher().register(this, CommandSpec.builder().build());
     }
 
     @Subscribe

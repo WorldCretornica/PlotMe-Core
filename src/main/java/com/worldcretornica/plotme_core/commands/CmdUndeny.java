@@ -28,7 +28,7 @@ public class CmdUndeny extends PlotCommand {
         if (args[1].length() > 16 || !validUserPattern.matcher(args[1]).matches()) {
             throw new IllegalArgumentException(C("InvalidCommandInput"));
         }
-        if ("*".equalsIgnoreCase(args[1]) && plugin.getConfig().getBoolean("disableWildCard")) {
+        if ("*".equals(args[1]) && plugin.getConfig().getBoolean("disableWildCard")) {
             sender.sendMessage("Wildcards are disabled.");
             return true;
         }
@@ -47,7 +47,7 @@ public class CmdUndeny extends PlotCommand {
                     Plot plot = manager.getPlotById(id, pmi);
                     String denied = args[1];
                     if (player.getUniqueId().equals(plot.getOwnerId()) || player.hasPermission(PermissionNames.ADMIN_DENY)) {
-                        if ("*".equalsIgnoreCase(denied)) {
+                        if ("*".equals(denied)) {
                             return undenyAll(plot, player, pmi);
                         }
                         if (plot.isDeniedConsulting(denied)) {
@@ -72,7 +72,8 @@ public class CmdUndeny extends PlotCommand {
                                         }
                                     }
                                 } else {
-                                    player.sendMessage("It costs " + serverBridge.getEconomy().format(price) + " to undeny a player from the plot.");
+                                    player.sendMessage("It costs " + serverBridge.getEconomy().get().format(price) + " to undeny a player from the "
+                                            + "plot.");
                                     return true;
                                 }
                             } else {
@@ -80,13 +81,14 @@ public class CmdUndeny extends PlotCommand {
                             }
 
                             if (!event.isCancelled()) {
-                                if ("*".equalsIgnoreCase(denied)) {
+                                if ("*".equals(denied)) {
                                     plot.removeAllAllowed();
                                 } else {
                                     plot.removeDenied(denied);
                                 }
                                 player.sendMessage(
-                                        C("WordPlayer") + " " + denied + " " + C("MsgNowUndenied") + " " + serverBridge.getEconomy().format(price));
+                                        C("WordPlayer") + " " + denied + " " + C("MsgNowUndenied") + " " + serverBridge.getEconomy().get().format
+                                                (price));
 
                                 if (isAdvancedLogging()) {
                                     if (price != 0) {
@@ -140,7 +142,7 @@ public class CmdUndeny extends PlotCommand {
                         return true;
                     }
                 } else {
-                    player.sendMessage("It costs " + serverBridge.getEconomy().format(price) + " to undeny a player from the plot.");
+                    player.sendMessage("It costs " + serverBridge.getEconomy().get().format(price) + " to undeny a player from the plot.");
                     return true;
                 }
             } else {

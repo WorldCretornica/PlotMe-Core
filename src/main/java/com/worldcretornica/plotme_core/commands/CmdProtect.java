@@ -94,7 +94,7 @@ public class CmdProtect extends PlotCommand {
 
                                 plot.updateField("protected", true);
 
-                                player.sendMessage(C("MsgPlotNowProtected") + " " + serverBridge.getEconomy().format(cost));
+                                player.sendMessage(C("MsgPlotNowProtected") + " " + serverBridge.getEconomy().get().format(cost));
 
                                 if (isAdvancedLogging()) {
                                     serverBridge.getLogger().info(name + " " + C("MsgProtectedPlot") + " " + id);

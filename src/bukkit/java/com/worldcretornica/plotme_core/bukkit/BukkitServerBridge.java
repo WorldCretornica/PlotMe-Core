@@ -20,7 +20,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
-import org.bukkit.block.Biome;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
@@ -132,18 +131,6 @@ public class BukkitServerBridge extends IServerBridge {
     @Override
     public void runTaskLaterAsynchronously(Runnable runnable, long delay) {
         Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, runnable, delay);
-    }
-
-    @Override
-    public boolean doesBiomeExist(String name) {
-
-        for (Biome biome : Biome.values()) {
-            if (biome.name().equalsIgnoreCase(name)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     @Override

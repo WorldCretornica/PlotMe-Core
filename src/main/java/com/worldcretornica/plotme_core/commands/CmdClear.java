@@ -67,7 +67,7 @@ public class CmdClear extends PlotCommand {
                                     }
                                 } else {
                                     player.sendMessage(
-                                            C("MsgNotEnoughClear") + " " + C("WordMissing") + " " + serverBridge.getEconomy().format(price));
+                                            C("MsgNotEnoughClear") + " " + C("WordMissing") + " " + serverBridge.getEconomy().get().format(price));
                                     return true;
                                 }
                             } else {

@@ -29,7 +29,7 @@ public class CmdTrust extends PlotCommand {
         if (args[1].length() > 16 || !validUserPattern.matcher(args[1]).matches() || "*".equalsIgnoreCase(args[1])) {
             throw new IllegalArgumentException(C("InvalidCommandInput"));
         }
-        if ("*".equalsIgnoreCase(args[1]) && plugin.getConfig().getBoolean("disableWildCard")) {
+        if ("*".equals(args[1]) && plugin.getConfig().getBoolean("disableWildCard")) {
             sender.sendMessage("Wildcards are disabled.");
             return true;
         }
@@ -52,7 +52,7 @@ public class CmdTrust extends PlotCommand {
 
                     if (player.getUniqueId().equals(plot.getOwnerId()) || player.hasPermission(PermissionNames.ADMIN_TRUST)) {
                         if (plot.isAllowedConsulting(trust)) {
-                            player.sendMessage(C("WordPlayer") + " " + trust + " " + C("MsgAlreadyAllowed"));
+                            player.sendMessage(C("WordPlayer") + " " + trust + " " + C("MsgAlreadyTrusted"));
                         } else {
 
                             PlotAddTrustedEvent event = new PlotAddTrustedEvent(world, plot, player, trust);
@@ -63,7 +63,8 @@ public class CmdTrust extends PlotCommand {
                                 double price = pmi.getAddPlayerPrice();
 
                                 if (serverBridge.has(player, price)) {
-                                    player.sendMessage(C("MsgNotEnoughAdd") + " " + C("WordMissing") + " " + serverBridge.getEconomy().format(price));
+                                    player.sendMessage(C("MsgNotEnoughAdd") + " " + C("WordMissing") + " " + serverBridge.getEconomy().get().format
+                                            (price));
                                     return true;
                                 } else if (!event.isCancelled()) {
                                     EconomyResponse er = serverBridge.withdrawPlayer(player, price);
@@ -81,10 +82,10 @@ public class CmdTrust extends PlotCommand {
                             if (!event.isCancelled()) {
                                 IPlayer allowed2 = plugin.getServerBridge().getPlayer(trust);
                                 if (allowed2 != null) {
-                                    plot.addAllowed(allowed2.getUniqueId().toString());
+                                    plot.addTrusted(allowed2.getUniqueId().toString());
                                     plot.removeDenied(allowed2.getUniqueId().toString());
                                 } else {
-                                    plot.addAllowed(trust);
+                                    plot.addTrusted(trust);
                                     plot.removeDenied(trust);
                                 }
                                 player.sendMessage(C("WordPlayer") + " " + trust + " " + C("MsgNowAllowed"));

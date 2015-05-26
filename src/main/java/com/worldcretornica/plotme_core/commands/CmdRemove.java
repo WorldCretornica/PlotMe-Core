@@ -31,7 +31,7 @@ public class CmdRemove extends PlotCommand {
         if (args[1].length() > 16 || !validUserPattern.matcher(args[1]).matches()) {
             throw new IllegalArgumentException(C("InvalidCommandInput"));
         }
-        if ("*".equalsIgnoreCase(args[1]) && plugin.getConfig().getBoolean("disableWildCard")) {
+        if ("*".equals(args[1]) && plugin.getConfig().getBoolean("disableWildCard")) {
             sender.sendMessage("Wildcards are disabled.");
             return true;
         }
@@ -68,20 +68,22 @@ public class CmdRemove extends PlotCommand {
                                         return true;
                                     }
                                 } else {
-                                    player.sendMessage(C("MsgNotEnoughRemove") + " " + C("WordMissing") + " " + serverBridge.getEconomy().format(
-                                            price));
+                                    player.sendMessage(C("MsgNotEnoughRemove") + " " + C("WordMissing") + " " + serverBridge.getEconomy().get()
+                                            .format(
+                                                    price));
                                     return true;
                                 }
                             }
 
                             if (!event.isCancelled()) {
-                                if ("*".equalsIgnoreCase(allowed)) {
+                                if ("*".equals(allowed)) {
                                     plot.removeAllAllowed();
                                 } else {
                                     plot.removeAllowed(allowed);
                                 }
                                 player.sendMessage(
-                                        C("WordPlayer") + " " + allowed + " " + C("WordRemoved") + ". " + serverBridge.getEconomy().format(price));
+                                        C("WordPlayer") + " " + allowed + " " + C("WordRemoved") + ". " + serverBridge.getEconomy().get().format
+                                                (price));
 
                                 if (isAdvancedLogging()) {
                                     if (price == 0) {

@@ -30,7 +30,7 @@ public class CmdDeny extends PlotCommand {
         if (args[1].length() > 16 || !validUserPattern.matcher(args[1]).matches()) {
             throw new IllegalArgumentException(C("InvalidCommandInput"));
         }
-        if ("*".equalsIgnoreCase(args[1]) && plugin.getConfig().getBoolean("disableWildCard")) {
+        if ("*".equals(args[1]) && plugin.getConfig().getBoolean("disableWildCard")) {
             sender.sendMessage("Wildcards are disabled.");
             return true;
         }
@@ -49,7 +49,7 @@ public class CmdDeny extends PlotCommand {
                     String denied = args[1];
 
                     if (player.getUniqueId().equals(plot.getOwnerId()) || player.hasPermission(PermissionNames.ADMIN_DENY)) {
-                        if (plot.getOwner().equalsIgnoreCase(denied)) {
+                        if (plot.getOwner().equals(denied)) {
                             player.sendMessage(C("MsgCannotDenyOwner"));
                             return true;
                         }

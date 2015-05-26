@@ -82,7 +82,7 @@ public class CmdClaim extends PlotCommand {
                             }
                         } else {
                             player.sendMessage(
-                                    C("MsgNotEnoughBuy") + " " + C("WordMissing") + " " + serverBridge.getEconomy().format(price));
+                                    C("MsgNotEnoughBuy") + " " + C("WordMissing") + " " + serverBridge.getEconomy().get().format(price));
                             return true;
                         }
                     } else {
@@ -93,13 +93,13 @@ public class CmdClaim extends PlotCommand {
                         Plot plot = manager.createPlot(id, world, playerName, playerUniqueId, pmi);
 
                         //plugin.getPlotMeCoreManager().adjustLinkedPlots(id, world);
-                        if (playerName.equalsIgnoreCase(player.getName())) {
+                        if (playerName.equals(player.getName())) {
                             player.sendMessage(
                                     C("MsgThisPlotYours") + " " + C("WordUse") + " /plotme home " + C("MsgToGetToIt") + " " + serverBridge
-                                            .getEconomy().format(price));
+                                            .getEconomy().get().format(price));
                         } else {
                             player.sendMessage(C("MsgThisPlotIsNow") + " " + playerName + C("WordPossessive") + ". " + C("WordUse")
-                                    + " /plotme home " + C("MsgToGetToIt") + " " + serverBridge.getEconomy().format(price));
+                                    + " /plotme home " + C("MsgToGetToIt") + " " + serverBridge.getEconomy().get().format(price));
                         }
 
                         if (isAdvancedLogging()) {

@@ -74,15 +74,15 @@ public class CmdPlotList extends PlotCommand {
 
                     // Is the plot owner the name?
 
-                    if (plot.getOwner().equalsIgnoreCase(name)) {
+                    if (plot.getOwner().equals(name)) {
                         if (plot.getAllowed().size() == 0) {
                             // Is the name the current player too?
-                            if (name.equalsIgnoreCase(player.getName())) {
+                            if (name.equals(player.getName())) {
                                 player.sendMessage(plot.getId() + " -> " + C("WordYours") + addition);
                             } else {
                                 player.sendMessage(plot.getId() + " -> " + plot.getOwner() + addition);
                             }
-                        } else if (plot.getOwner().equalsIgnoreCase(player.getName())) {
+                        } else if (plot.getOwner().equals(player.getName())) {
                             player.sendMessage(plot.getId() + " -> " + C("WordYours") + addition + ", " + C("WordHelpers") + ": " + plot
                                     .getAllowed().toString()); //todo fix this to work with allowed and trusted
                         } else {
@@ -94,8 +94,8 @@ public class CmdPlotList extends PlotCommand {
                     } else if (plot.isAllowedConsulting(name)) {
                         StringBuilder helpers = new StringBuilder();
                         for (String allowed : plot.getAllowed().keySet()) {
-                            if (player.getName().equalsIgnoreCase(allowed)) {
-                                if (name.equalsIgnoreCase(player.getName())) {
+                            if (player.getName().equals(allowed)) {
+                                if (name.equals(player.getName())) {
                                     helpers.append("You").append(", ");
                                 } else {
                                     helpers.append(args[1]).append(", ");
@@ -108,7 +108,7 @@ public class CmdPlotList extends PlotCommand {
                             helpers.delete(helpers.length() - 2, helpers.length());
                         }
 
-                        if (plot.getOwner().equalsIgnoreCase(player.getName())) {
+                        if (plot.getOwner().equals(player.getName())) {
                             player.sendMessage(plot.getId() + " -> " + C("WordYours") + addition + ", " + C("WordHelpers") + ": " + helpers);
                         } else {
                             player.sendMessage(plot.getId() + " -> " + plot.getOwner() + C("WordPossessive") + addition + ", " + C("WordHelpers")

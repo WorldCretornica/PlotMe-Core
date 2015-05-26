@@ -188,7 +188,7 @@ public class Plot {
     }
 
     public boolean isAllowedConsulting(String name) {
-        if ("*".equalsIgnoreCase(name)) {
+        if ("*".equals(name)) {
             return isAllowedInternal(name);
         }
         UUID player = PlotMeCoreManager.getInstance().getOfflinePlayer(name).getUniqueId();
@@ -204,7 +204,7 @@ public class Plot {
             AccessLevel accessLevel = getAllowed().get(name);
             if (accessLevel == AccessLevel.ALLOWED) {
                 return true;
-            } else if (!"*".equalsIgnoreCase(name)) {
+            } else if (!"*".equals(name)) {
                 if (accessLevel == AccessLevel.TRUSTED) {
                     return PlotMeCoreManager.getInstance().getOfflinePlayer(name).isOnline();
                 }
@@ -390,6 +390,10 @@ public class Plot {
 
     public String getCreatedDate() {
         return createdDate;
+    }
+
+    public void addTrusted(String s) {
+
     }
 
     public enum AccessLevel {

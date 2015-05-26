@@ -41,13 +41,13 @@ public class CmdSetOwner extends PlotCommand {
             //If the player by the name given is not online, stop the command from executing.
             UUID newOwnerId = null;
             for (IPlayer online : serverBridge.getOnlinePlayers()) {
-                if (online.getName().equalsIgnoreCase(args[1])) {
+                if (online.getName().equals(args[1])) {
                     newOwner = online.getName();
                     newOwnerId = online.getUniqueId();
                     break;
                 }
             }
-            if (newOwnerId == null || newOwner == null) {
+            if (newOwnerId == null) {
                 player.sendMessage(C("MsgNoPlayerFound"));
                 return true;
             }
