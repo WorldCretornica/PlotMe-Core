@@ -31,6 +31,10 @@ public class CmdAdd extends PlotCommand {
         if (args[1].length() > 16 || !validUserPattern.matcher(args[1]).matches()) {
             throw new IllegalArgumentException(C("InvalidCommandInput"));
         }
+        if ("*".equalsIgnoreCase(args[1]) && plugin.getConfig().getBoolean("disableWildCard")) {
+            sender.sendMessage("Wildcards are disabled.");
+            return true;
+        }
 
         //Start of the actual command
         IPlayer player = (IPlayer) sender;

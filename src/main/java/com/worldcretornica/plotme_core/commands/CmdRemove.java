@@ -31,6 +31,10 @@ public class CmdRemove extends PlotCommand {
         if (args[1].length() > 16 || !validUserPattern.matcher(args[1]).matches()) {
             throw new IllegalArgumentException(C("InvalidCommandInput"));
         }
+        if ("*".equalsIgnoreCase(args[1]) && plugin.getConfig().getBoolean("disableWildCard")) {
+            sender.sendMessage("Wildcards are disabled.");
+            return true;
+        }
         IPlayer player = (IPlayer) sender;
         if (player.hasPermission(PermissionNames.ADMIN_REMOVE) || player.hasPermission(PermissionNames.USER_REMOVE)) {
             IWorld world = player.getWorld();

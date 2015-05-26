@@ -14,7 +14,6 @@ import org.spongepowered.api.world.Chunk;
 import org.spongepowered.api.world.World;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -91,12 +90,7 @@ public class SpongeWorld implements IWorld {
 
     @Override
     public List<IEntity> getEntities() {
-        world.getBiome().
-        ArrayList<IEntity> entities = new ArrayList<>();
-        for (org.spongepowered.api.entity.Entity entity : world.getEntities()) {
-            entities.add(new SpongeEntity(entity));
-        }
-        return entities;
+        return null;
     }
 
     @Override

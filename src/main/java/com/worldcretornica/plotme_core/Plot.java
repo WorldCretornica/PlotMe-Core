@@ -36,6 +36,7 @@ public class Plot {
     private long internalID = 0;
     private String plotName;
     private HashSet<String> likers = new HashSet<>();
+    private String createdDate;
 
     public Plot(String owner, UUID uuid, String world, PlotId plotId, int days, Vector plotTopLoc, Vector plotBottomLoc) {
         setOwner(owner);
@@ -55,6 +56,7 @@ public class Plot {
         topZ = plotTopLoc.getBlockZ();
         bottomX = plotBottomLoc.getBlockX();
         bottomZ = plotBottomLoc.getBlockZ();
+        createdDate = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
     }
 
     public Plot(int internalID, String owner, UUID ownerId, String world, String biome, Date expiredDate,
@@ -62,7 +64,8 @@ public class Plot {
             HashSet<String>
                     denied,
             HashSet<String> likers, PlotId id, double price, boolean forSale, boolean finished, String finishedDate, boolean protect,
-            Map<String, Map<String, String>> metadata, int plotLikes, String plotName, int topX, int bottomX, int topZ, int bottomZ) {
+            Map<String, Map<String, String>> metadata, int plotLikes, String plotName, int topX, int bottomX, int topZ, int bottomZ,
+            String createdDate) {
         setInternalID(internalID);
         setOwner(owner);
         setOwnerId(ownerId);
@@ -85,6 +88,7 @@ public class Plot {
         this.bottomX = bottomX;
         this.topZ = topZ;
         this.bottomZ = bottomZ;
+        this.createdDate = createdDate;
     }
 
     public void resetExpire(int days) {
@@ -368,7 +372,6 @@ public class Plot {
         return topX;
     }
 
-
     public int getTopZ() {
         return topZ;
     }
@@ -383,6 +386,10 @@ public class Plot {
 
     public void setLikers(HashSet<String> likers) {
         this.likers = likers;
+    }
+
+    public String getCreatedDate() {
+        return createdDate;
     }
 
     public enum AccessLevel {

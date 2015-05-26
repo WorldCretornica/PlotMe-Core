@@ -42,7 +42,7 @@ public class CmdPlotList extends PlotCommand {
                 String oldWorld = "";
 
                 // Get plots of that player
-                for (Plot plot : plugin.getSqlManager().getPlayerPlots(name, uuid)) {
+                for (Plot plot : plugin.getSqlManager().getPlayerPlots(uuid)) {
                     IWorld world = serverBridge.getWorld(plot.getWorld());
                     if (world != null) {
                         manager.getMap(world).addPlot(plot.getId(), plot);

@@ -6,4 +6,5 @@ package com.worldcretornica.plotme_core.storage;
  */
 public class PlotStorage {
 
+
 }

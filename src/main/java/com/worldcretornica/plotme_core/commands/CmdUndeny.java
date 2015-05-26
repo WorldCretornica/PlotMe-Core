@@ -28,6 +28,11 @@ public class CmdUndeny extends PlotCommand {
         if (args[1].length() > 16 || !validUserPattern.matcher(args[1]).matches()) {
             throw new IllegalArgumentException(C("InvalidCommandInput"));
         }
+        if ("*".equalsIgnoreCase(args[1]) && plugin.getConfig().getBoolean("disableWildCard")) {
+            sender.sendMessage("Wildcards are disabled.");
+            return true;
+        }
+
         IPlayer player = (IPlayer) sender;
         if (player.hasPermission(PermissionNames.ADMIN_DENY) || player.hasPermission(PermissionNames.USER_DENY)) {
             IWorld world = player.getWorld();

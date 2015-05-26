@@ -136,8 +136,8 @@ public abstract class Database {
     public void addPlot(Plot plot) {
         try (PreparedStatement ps = getConnection().prepareStatement(
                 "INSERT INTO plotmecore_plots(id,plotX, plotZ, world, ownerID, owner, biome, finished, finishedDate, forSale, price, protected, "
-                        + "expiredDate, topX, topZ, bottomX, bottomZ, plotLikes) VALUES (?,?,?,?,?,?,?,?,"
-                        + "?,?,?,?,?,?,?,?,?,?)")) {
+                        + "expiredDate, topX, topZ, bottomX, bottomZ, plotLikes, createdDate) VALUES (?,?,?,?,?,?,?,?,"
+                        + "?,?,?,?,?,?,?,?,?,?,?)")) {
             if (plot.getInternalID() == 0) {
                 ps.setLong(1, nextPlotId);
                 plot.setInternalID(nextPlotId);
@@ -160,6 +160,7 @@ public abstract class Database {
             ps.setInt(15, plot.getBottomX());
             ps.setInt(16, plot.getBottomZ());
             ps.setInt(17, plot.getLikes());
+            ps.setString(18, plot.getCreatedDate());
             ps.executeUpdate();
             getConnection().commit();
         } catch (SQLException ex) {
@@ -232,7 +233,7 @@ public abstract class Database {
         deletePlotInternal(internalID, "plotmecore_plots");
     }
 
-    public HashSet<Plot> getPlayerPlots(String name, UUID uuid) {
+    public HashSet<Plot> getPlayerPlots(UUID uuid) {
         return null;
     }
 
@@ -248,7 +249,12 @@ public abstract class Database {
         PreparedStatement statementMetadata = null;
         ResultSet setPlots = null;
 
-        try {
+        try (PreparedStatement statementPlot = connection.prepareStatement("SELECT * FROM plotmecore_plots WHERE LOWER(world) = ? AND plotX = ? and "
+                + "plotZ = ?");
+                PreparedStatement statementAllowed = connection.prepareStatement("SELECT * FROM plotmecore_allowed WHERE plot_id = ?");
+                PreparedStatement statementDenied = connection.prepareStatement("SELECT * FROM plotmecore_denied WHERE plot_id = ?");
+                PreparedStatement statementLikes = connection.prepareStatement("SELECT * FROM plotmecore_likes WHERE plot_id = ?");
+                PreparedStatement statementMetadata = connection.prepareStatement("SELECT * FROM plotmecore_metadata WHERE plot_id = ?")) {
             Connection conn = getConnection();
 
             String query = "SELECT * FROM plotmecore_plots WHERE ownerID = ? AND world = ?";
@@ -263,13 +269,14 @@ public abstract class Database {
             while (setPlots.next()) {
                 long internalID = setPlots.getLong("id");
                 PlotId id = new PlotId(setPlots.getInt("plotX"), setPlots.getInt("plotZ"));
-                String world = setPlots.getString("world").toLowerCase();
+                String world1 = setPlots.getString("world").toLowerCase();
                 String biome = setPlots.getString("biome");
-                Date expireddate = setPlots.getDate("expireddate");
+                Date expireddate = setPlots.getDate("expiredDate");
                 boolean finished = setPlots.getBoolean("finished");
-                double customprice = setPlots.getDouble("customprice");
+                double customprice = setPlots.getDouble("price");
                 boolean forsale = setPlots.getBoolean("forsale");
-                String finisheddate = setPlots.getString("finisheddate");
+                String finisheddate = setPlots.getString("finishedDate");
+                String createddate = setPlots.getString("createdDate");
                 boolean protect = setPlots.getBoolean("protected");
                 String currworld = setPlots.getString("world");
                 String owner = setPlots.getString("owner");
@@ -279,11 +286,8 @@ public abstract class Database {
 
                 UUID ownerId = UUIDFetcher.fromBytes(byOwner);
 
-                statementAllowed = conn.prepareStatement("SELECT * FROM plotmeAllowed WHERE LOWER(world) = ? AND idX = ? AND idZ = ?");
-                statementAllowed.setString(1, currworld.toLowerCase());
-                statementAllowed.setInt(2, id.getX());
-                statementAllowed.setInt(3, id.getZ());
-
+                statementAllowed = conn.prepareStatement("SELECT * FROM plotmecore_allowed WHERE plot_id = ?");
+                statementAllowed.setLong(1, internalID);
                 ResultSet setAllowed = statementAllowed.executeQuery();
 
                 while (setAllowed.next()) {
@@ -399,6 +403,7 @@ public abstract class Database {
                             Date expiredDate = setPlots.getDate("expiredDate");
                             boolean finished = setPlots.getBoolean("finished");
                             String finishedDate = setPlots.getString("finishedDate");
+                            String createdDate = setPlots.getString("createdDate");
                             double price = setPlots.getDouble("price");
                             boolean forSale = setPlots.getBoolean("forSale");
                             boolean protect = setPlots.getBoolean("protected");
@@ -447,7 +452,7 @@ public abstract class Database {
                             Plot plot =
                                     new Plot(internalID, owner, ownerId, world.getName().toLowerCase(), biome, expiredDate, allowed, denied,
                                             likers, id, price, forSale, finished, finishedDate, protect, metadata, plotLikes, plotName, topX, bottomX,
-                                            topZ, bottomZ);
+                                            topZ, bottomZ, createdDate);
                             ret.put(id, plot);
                         }
                     }
@@ -483,6 +488,7 @@ public abstract class Database {
                     String biome = setPlots.getString("biome");
                     boolean finished = setPlots.getBoolean("finished");
                     String finishedDate = setPlots.getString("finishedDate");
+                    String createdDate = setPlots.getString("createdDate");
                     boolean forSale = setPlots.getBoolean("forSale");
                     double price = setPlots.getDouble("price");
                     boolean protect = setPlots.getBoolean("protected");
@@ -537,7 +543,7 @@ public abstract class Database {
 
                     plot = new Plot(internalID, owner, ownerId, world, biome, expiredDate, allowed, denied, likers, id, price, forSale,
                             finished,
-                            finishedDate, protect, metadata, plotLikes, plotName, topX, bottomX, topZ, bottomZ);
+                            finishedDate, protect, metadata, plotLikes, plotName, topX, bottomX, topZ, bottomZ, createdDate);
                 }
             }
 
@@ -579,7 +585,7 @@ public abstract class Database {
     public void deleteAllAllowed(long internalID) {
         Connection connection = getConnection();
         try (PreparedStatement statement = connection.prepareStatement("DELETE FROM plotmecore_allowed WHERE plot_id = ?")) {
-            statement.setInt(1, internalID);
+            statement.setLong(1, internalID);
             statement.execute();
             connection.commit();
         } catch (SQLException e) {
