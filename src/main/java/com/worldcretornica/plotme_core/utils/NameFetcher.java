@@ -8,44 +8,39 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 
-public class NameFetcher implements Callable<Map<UUID, String>> {
+public class NameFetcher implements Callable<Map<String, String>> {
 
     private static final String PROFILE_URL = "https://sessionserver.mojang.com/session/minecraft/profile/";
     private final JSONParser jsonParser = new JSONParser();
-    private final List<UUID> uuids = new ArrayList<>();
+    private final HashSet<String> uuids = new HashSet<>();
 
-    public NameFetcher(List<UUID> uuids) {
-        this.uuids.addAll(uuids);
-    }
-
-    public NameFetcher(HashSet<String> denied) {
+    public NameFetcher(Set<String> denied) {
         uuids.addAll(denied);
     }
 
     public static String getNameOf(String name) {
-        return new NameFetcher(Collections.singletonList(UUID.fromString(name))).call().get(UUID.fromString(name));
+        return new NameFetcher(Collections.singleton(name)).call().get(name);
     }
 
     public static String getNameOf(UUID id) {
-        return new NameFetcher(Collections.singletonList(id)).call().get(id);
+        return new NameFetcher(Collections.singleton(id.toString())).call().get(id.toString());
     }
 
     @Override
-    public Map<UUID, String> call() {
-        Map<UUID, String> uuidStringMap = new HashMap<>();
-        for (UUID uuid : uuids) {
+    public Map<String, String> call() {
+        Map<String, String> uuidStringMap = new HashMap<>();
+        for (String uuid : uuids) {
             HttpURLConnection connection = null;
             try {
-                connection = (HttpURLConnection) new URL(PROFILE_URL + uuid.toString().replace("-", "")).openConnection();
+                connection = (HttpURLConnection) new URL(PROFILE_URL + uuid.replace("-", "")).openConnection();
             } catch (IOException e) {
                 e.printStackTrace();
             }
