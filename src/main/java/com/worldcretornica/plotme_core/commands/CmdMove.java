@@ -1,6 +1,7 @@
 package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.PermissionNames;
+import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotId;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ICommandSender;
@@ -29,7 +30,7 @@ public class CmdMove extends PlotCommand {
                 String plot1 = args[1];
                 String plot2 = args[2];
                 if (plot1.equals(plot2)) {
-                    player.sendMessage("You can' do that!");
+                    player.sendMessage("You can't do that!");
                     return true;
                 }
                 IWorld world = player.getWorld();
@@ -38,7 +39,21 @@ public class CmdMove extends PlotCommand {
                     player.sendMessage("Something you typed is wrong!");
                 } else {
                     PlotId id1 = new PlotId(plot1);
+                    final Plot plot_1 = manager.getPlotById(id1, world);
+                    if (plot_1 != null) {
+                        if (plot_1.isProtected()) {
+                            player.sendMessage("You can't do that!");
+                            return true;
+                        }
+                    }
                     PlotId id2 = new PlotId(plot2);
+                    final Plot plot_2 = manager.getPlotById(id2, world);
+                    if (plot_2 != null) {
+                        if (plot_2.isProtected()) {
+                            player.sendMessage("You can't do that!");
+                            return true;
+                        }
+                    }
                     PlotMoveEvent event = new PlotMoveEvent(world, id1, id2, player);
                     serverBridge.getEventBus().post(event);
                     if (!event.isCancelled()) {

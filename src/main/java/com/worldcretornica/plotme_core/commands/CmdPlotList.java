@@ -75,7 +75,7 @@ public class CmdPlotList extends PlotCommand {
                     // Is the plot owner the name?
 
                     if (plot.getOwner().equals(name)) {
-                        if (plot.getAllowed().size() == 0) {
+                        if (plot.getMembers().size() == 0) {
                             // Is the name the current player too?
                             if (name.equals(player.getName())) {
                                 player.sendMessage(plot.getId() + " -> " + C("WordYours") + addition);
@@ -84,16 +84,16 @@ public class CmdPlotList extends PlotCommand {
                             }
                         } else if (plot.getOwner().equals(player.getName())) {
                             player.sendMessage(plot.getId() + " -> " + C("WordYours") + addition + ", " + C("WordHelpers") + ": " + plot
-                                    .getAllowed().toString()); //todo fix this to work with allowed and trusted
+                                    .getMembers().toString()); //todo fix this to work with allowed and trusted
                         } else {
                             player.sendMessage(plot.getId() + " -> " + plot.getOwner() + addition + ", " + C("WordHelpers") + ": " + plot
-                                    .getAllowed().toString()); //todo fix this to work with allowed and trusted
+                                    .getMembers().toString()); //todo fix this to work with allowed and trusted
                         }
 
                         // Is the name allowed to build there?
                     } else if (plot.isAllowedConsulting(name)) {
                         StringBuilder helpers = new StringBuilder();
-                        for (String allowed : plot.getAllowed().keySet()) {
+                        for (String allowed : plot.getMembers().keySet()) {
                             if (player.getName().equals(allowed)) {
                                 if (name.equals(player.getName())) {
                                     helpers.append("You").append(", ");

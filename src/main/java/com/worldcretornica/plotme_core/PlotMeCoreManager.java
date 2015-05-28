@@ -13,6 +13,8 @@ import com.worldcretornica.plotme_core.api.Vector;
 import com.worldcretornica.plotme_core.api.event.PlotLoadEvent;
 import com.worldcretornica.plotme_core.storage.Database;
 
+import java.sql.Date;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -402,8 +404,8 @@ public class PlotMeCoreManager {
      * Plot to remove from plotmap.
      *  @param id ID
      */
-    public void deletePlot(PlotId id) {
-        PlotMapInfo pmi = getMap(id.getWorld());
+    public void deletePlot(IWorld world, PlotId id) {
+        PlotMapInfo pmi = getMap(world);
 
         if (pmi != null) {
             pmi.removePlot(id);
@@ -489,8 +491,16 @@ public class PlotMeCoreManager {
      * @throws NullPointerException If the <code>id</code> argument is <code>null</code>
      */
     public Plot createPlot(PlotId id, IWorld world, String owner, UUID uuid, PlotMapInfo pmi) {
-        Plot plot = new Plot(owner, uuid, pmi.getWorld().getName().toLowerCase(), id, pmi.getDaysToExpiration(), this.getPlotTopLoc(world, id),
-                this.getPlotBottomLoc(world, id));
+
+        Plot plot = new Plot(owner, uuid, pmi.getWorld(), id, this.getPlotTopLoc(world, id), this.getPlotBottomLoc(world, id));
+        if (pmi.getDaysToExpiration() == 0) {
+            plot.setExpiredDate(null);
+        } else {
+            Calendar cal = Calendar.getInstance();
+            cal.add(Calendar.DAY_OF_YEAR, pmi.getDaysToExpiration());
+            java.util.Date utlDate = cal.getTime();
+            plot.setExpiredDate(new Date(utlDate.getTime()));
+        }
 
 
         setOwnerSign(world, plot);
@@ -522,8 +532,8 @@ public class PlotMeCoreManager {
         if (plotFrom != null) {
             if (plotTo != null) {
                 plugin.getSqlManager().deletePlot(plotTo.getInternalID());
-                deletePlot(idFrom);
-                deletePlot(idTo);
+                deletePlot(world, idFrom);
+                deletePlot(world, idTo);
                 plugin.getSqlManager().deletePlot(plotFrom.getInternalID());
 
                 plotTo.setId(idFrom);
@@ -555,7 +565,7 @@ public class PlotMeCoreManager {
     private void movePlotToEmpty(IWorld world, Plot filledPlot, PlotId idDestination) {
         PlotId idFrom = filledPlot.getId();
         plugin.getSqlManager().deletePlot(filledPlot.getInternalID());
-        deletePlot(idFrom);
+        deletePlot(world, idFrom);
 
         filledPlot.setId(idDestination);
         plugin.getSqlManager().addPlot(filledPlot);
@@ -580,7 +590,7 @@ public class PlotMeCoreManager {
             @Override
             public void run() {
                 LWC lwc = LWC.getInstance();
-                List<Protection> protections = lwc.getPhysicalDatabase().loadProtections(plot.getWorld(), x1, x2, 0, 256, z1, z2);
+                List<Protection> protections = lwc.getPhysicalDatabase().loadProtections(plot.getWorld().getName(), x1, x2, 0, 256, z1, z2);
 
                 for (Protection protection : protections) {
                     protection.remove();
@@ -663,8 +673,8 @@ public class PlotMeCoreManager {
         getGenManager(world).adjustPlotFor(plot, claimed, plot.isProtected(), plot.isForSale());
     }
 
-    public void setBiome(PlotId id, String biome) {
-        plugin.getSqlManager().updatePlot(id, id.getWorld().getName(), "biome", biome.toUpperCase());
+    public void setBiome(PlotId id, IWorld world, String biome) {
+        plugin.getSqlManager().updatePlot(id, world, "biome", biome.toUpperCase());
     }
 
 
@@ -790,8 +800,8 @@ public class PlotMeCoreManager {
         return plot.setPlotProperty(pluginname, property, value);
     }
 
-    public IOfflinePlayer getOfflinePlayer(String name) {
-        return plugin.getServerBridge().getOfflinePlayer(name);
+    public IOfflinePlayer getPlayer(String name) {
+        return plugin.getServerBridge().getPlayer(name);
     }
 
     public Plot getPlot(ILocation location) {

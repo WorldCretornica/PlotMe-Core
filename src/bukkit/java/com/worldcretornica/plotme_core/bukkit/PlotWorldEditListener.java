@@ -8,13 +8,6 @@ import com.worldcretornica.plotme_core.bukkit.api.BukkitWorld;
 
 public class PlotWorldEditListener {
 
-    private final PlotMe_CorePlugin plugin;
-
-    public PlotWorldEditListener(PlotMe_CorePlugin plugin) {
-
-        this.plugin = plugin;
-    }
-
     @Subscribe
     public void worldEditListener(EditSessionEvent event) {
         Actor actor = event.getActor();
@@ -25,7 +18,7 @@ public class PlotWorldEditListener {
         BukkitWorld plotmeWorld = new BukkitWorld(((com.sk89q.worldedit.bukkit.BukkitWorld) event.getWorld()).getWorld());
         if (PlotMeCoreManager.getInstance().isPlotWorld(plotmeWorld)) {
             if (actor != null && actor.isPlayer()) {
-                event.setExtent(new PlotMeWorldEdit(plugin, event.getExtent(), event.getActor()));
+                event.setExtent(new PlotMeWorldEdit(event.getExtent(), event.getActor()));
             }
         }
     }

@@ -40,7 +40,7 @@ public class PlotRunnableDeleteExpire implements Runnable {
                         PlotId id = expiredPlot.getId();
                         ids += id + ", ";
 
-                        plotMeCoreManager.deletePlot(id);
+                        plotMeCoreManager.deletePlot(world, id);
                         plotMeCoreManager.removeOwnerSign(expiredPlot, world);
                         plotMeCoreManager.removeSellSign(expiredPlot, world);
 

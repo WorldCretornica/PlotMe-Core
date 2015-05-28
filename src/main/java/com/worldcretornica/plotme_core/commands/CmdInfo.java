@@ -91,8 +91,8 @@ public class CmdInfo extends PlotCommand {
                                 + " " + C("InfoProtected") + ": " + C("WordNo"));
                     }
 
-                    if (plot.getAllowed().size() > 0) {
-                        player.sendMessage(C("InfoAllowed") + ": " + plot.getAllowed().keySet().toString());
+                    if (plot.getMembers().size() > 0) {
+                        player.sendMessage(C("InfoAllowed") + ": " + plot.getMembers().keySet().toString());
                     }
 
                     if (plot.getDenied().size() > 0) {

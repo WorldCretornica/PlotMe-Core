@@ -33,6 +33,7 @@ public class PlotAddAllowedEvent extends PlotEvent implements ICancellable, Even
 
     /**
      * Get the UUID as a string of the player that was allowed to the plot.
+     * This can also return the character '*' if everyone is added to the plot.
      * @return the UUID as a string of the player added
      */
     public String getAllowedPlayer() {

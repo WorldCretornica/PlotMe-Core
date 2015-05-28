@@ -1,13 +1,10 @@
 package com.worldcretornica.plotme_core;
 
 
-import com.worldcretornica.plotme_core.api.IWorld;
-
 public class PlotId {
 
     private final int x;
     private final int z;
-    private IWorld world;
 
     public PlotId(int x, int z) {
         this.x = x;
@@ -45,14 +42,6 @@ public class PlotId {
 
     public int getZ() {
         return z;
-    }
-
-    public IWorld getWorld() {
-        return world;
-    }
-
-    public String getWorldName() {
-        return world.getName().toLowerCase();
     }
 
     public String getID() {

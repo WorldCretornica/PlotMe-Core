@@ -37,17 +37,8 @@ public class CmdSetOwner extends PlotCommand {
                 player.sendMessage("Set Owner only works on claimed plots");
                 return true;
             }
-            String newOwner = null;
-            //If the player by the name given is not online, stop the command from executing.
-            UUID newOwnerId = null;
-            for (IPlayer online : serverBridge.getOnlinePlayers()) {
-                if (online.getName().equals(args[1])) {
-                    newOwner = online.getName();
-                    newOwnerId = online.getUniqueId();
-                    break;
-                }
-            }
-            if (newOwnerId == null) {
+            IPlayer newOwner = serverBridge.getPlayer(args[1]);
+            if (newOwner == null) {
                 player.sendMessage(C("MsgNoPlayerFound"));
                 return true;
             }
@@ -55,7 +46,7 @@ public class CmdSetOwner extends PlotCommand {
             UUID oldowner = plot.getOwnerId();
 
 
-            if (!oldowner.equals(newOwnerId)) {
+            if (!plot.getOwnerId().equals(newOwner.getUniqueId())) {
                 PlotOwnerChangeEvent event = new PlotOwnerChangeEvent(world, plot, player, newOwner);
                 serverBridge.getEventBus().post(event);
 
@@ -64,8 +55,8 @@ public class CmdSetOwner extends PlotCommand {
                     manager.removeSellSign(plot, world);
                     plot.resetExpire(pmi.getDaysToExpiration());
                     plot.updateField("forsale", false);
-                    plot.setOwner(newOwner);
-                    plot.setOwnerId(newOwnerId);
+                    plot.setOwner(newOwner.getName());
+                    plot.setOwnerId(newOwner.getUniqueId());
                     manager.setOwnerSign(world, plot);
                     //todo new function to change the plot owner in database or just modify the plot class to do this.
                     player.sendMessage(C("MsgOwnerChangedTo") + " " + newOwner);

@@ -7,10 +7,10 @@ import com.worldcretornica.plotme_core.api.IWorld;
 public class PlotOwnerChangeEvent extends PlotEvent implements ICancellable, Event {
 
     private final IPlayer player;
-    private final String newOwner;
+    private final IPlayer newOwner;
     private boolean canceled;
 
-    public PlotOwnerChangeEvent(IWorld world, Plot plot, IPlayer player, String newOwner) {
+    public PlotOwnerChangeEvent(IWorld world, Plot plot, IPlayer player, IPlayer newOwner) {
         super(plot, world);
         this.player = player;
         this.newOwner = newOwner;
@@ -30,7 +30,7 @@ public class PlotOwnerChangeEvent extends PlotEvent implements ICancellable, Eve
         return player;
     }
 
-    public String getNewOwner() {
+    public IPlayer getNewOwner() {
         return newOwner;
     }
 }

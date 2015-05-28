@@ -22,7 +22,6 @@ public abstract class IServerBridge {
     private final Logger logger;
 
     private boolean usingLwc;
-    private boolean usingWEdit;
 
     public IServerBridge(Logger bridgeLogger) {
         logger = bridgeLogger;
@@ -34,8 +33,6 @@ public abstract class IServerBridge {
 
     public abstract IOfflinePlayer getOfflinePlayer(UUID uuid);
 
-    public abstract IOfflinePlayer getOfflinePlayer(String player);
-
     /**
      * Gets the player from the given UUID.
      *
@@ -45,8 +42,6 @@ public abstract class IServerBridge {
     public abstract IPlayer getPlayer(UUID uuid);
 
     public abstract IPlayer getPlayer(String name);
-
-    public abstract IPlayer getPlayerExact(String name);
 
     public abstract Collection<IPlayer> getOnlinePlayers();
 
@@ -91,13 +86,9 @@ public abstract class IServerBridge {
      * @param worldName the name of the world
      * @return a world with the given name, or null if none exists
      */
-    public abstract IWorld getWorld(String worldName);
+    public abstract IWorld getWorld(String worldName) {
 
-    public abstract void setupCommands();
-
-    public abstract void unHook();
-
-    public abstract void setupListeners();
+    }
 
     public abstract void runTaskAsynchronously(Runnable runnable);
 
@@ -146,8 +137,6 @@ public abstract class IServerBridge {
     public abstract ConfigurationSection getDefaultWorld();
 
     public abstract File getWorldFolder();
-
-    public abstract List<IOfflinePlayer> getOfflinePlayers();
 
     public abstract String addColor(char c, String string);
 }

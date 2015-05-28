@@ -50,7 +50,6 @@ public class PlotMe_Core {
     public void disable() {
         getSqlManager().closeConnection();
         PlotMeCoreManager.getInstance().getPlotMaps().clear();
-        serverBridge.unHook();
         setWorldCurrentlyProcessingExpired(null);
         plotsToClear.clear();
         managers.clear();
@@ -63,10 +62,8 @@ public class PlotMe_Core {
         configFile = new ConfigAccessor(getServerBridge().getDataFolder(), "config.yml");
         captionFile = new ConfigAccessor(getServerBridge().getDataFolder(), "captions.yml");
         setupConfigFiles();
-        serverBridge.setupCommands();
         setupSQL();
         serverBridge.setupHooks();
-        serverBridge.setupListeners();
         //getSqlManager().plotConvertToUUIDAsynchronously();
     }
 
@@ -119,6 +116,7 @@ public class PlotMe_Core {
         getServerBridge().loadDefaultConfig(configFile, "worlds." + world.getName().toLowerCase());
         PlotMapInfo pmi = new PlotMapInfo(this, configFile, world);
         PlotMeCoreManager.getInstance().addPlotMap(world, pmi);
+        getSqlManager().loadPlotsAsynchronously(world);
     }
 
     public FileConfiguration getCaptionConfig() {
@@ -141,6 +139,9 @@ public class PlotMe_Core {
         getSqlManager().startConnection();
     }
 
+    /**
+     * The point where the generator activates PlotMe
+     */
     public void addManager(IWorld world, IPlotMe_GeneratorManager manager) {
         managers.put(world, manager);
         setupWorld(world);

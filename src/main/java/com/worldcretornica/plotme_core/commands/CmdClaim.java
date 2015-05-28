@@ -12,8 +12,6 @@ import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.PlotCreateEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
 
-import java.util.UUID;
-
 public class CmdClaim extends PlotCommand {
 
     public CmdClaim(PlotMe_Core instance) {
@@ -35,28 +33,29 @@ public class CmdClaim extends PlotCommand {
                 if (id == null) {
                     player.sendMessage(C("MsgCannotClaimRoad"));
                     return true;
-                }
-                if (!manager.isPlotAvailable(id, pmi)) {
+                } else if (!manager.isPlotAvailable(id, pmi)) {
                     player.sendMessage(C("MsgThisPlotOwned"));
                     return true;
                 }
-                String playerName = player.getName();
-                UUID playerUniqueId = player.getUniqueId();
 
+                IOfflinePlayer futurePlotOwner = player;
                 if (args.length == 2 && player.hasPermission(PermissionNames.ADMIN_CLAIM_OTHER)) {
                     if (args[1].length() > 16 || !validUserPattern2.matcher(args[1]).matches()) {
                         throw new IllegalArgumentException(C("InvalidCommandInput"));
                     }
-                    IOfflinePlayer offlinePlayer = serverBridge.getOfflinePlayer(args[1]);
-                    playerName = args[1];
-                    playerUniqueId = offlinePlayer.getUniqueId();
+                    if (serverBridge.getPlayer(args[1]) == null) {
+                        player.sendMessage("No player found by that name.");
+                        return true;
+                    } else {
+                        futurePlotOwner = serverBridge.getPlayer(args[1]);
+                    }
                 }
 
                 int plotLimit = getPlotLimit(player);
 
                 int plotsOwned = manager.getOwnedPlotCount(player.getUniqueId(), world.getName().toLowerCase());
 
-                if (playerName.equals(player.getName()) && plotLimit != -1 && plotsOwned >= plotLimit) {
+                if (player.getUniqueId().equals(futurePlotOwner.getUniqueId()) && plotLimit != -1 && plotsOwned >= plotLimit) {
                     player.sendMessage(C("MsgAlreadyReachedMaxPlots") + " (" + plotsOwned + "/" + getPlotLimit(player)
                             + "). " + C("WordUse") + " /plotme home " + C("MsgToGetToIt"));
                 } else {
@@ -90,24 +89,24 @@ public class CmdClaim extends PlotCommand {
                     }
 
                     if (!event.isCancelled()) {
-                        Plot plot = manager.createPlot(id, world, playerName, playerUniqueId, pmi);
+                        Plot plot = manager.createPlot(id, world, player.getName(), player.getUniqueId(), pmi);
 
                         //plugin.getPlotMeCoreManager().adjustLinkedPlots(id, world);
-                        if (playerName.equals(player.getName())) {
+                        if (player.getUniqueId().equals(futurePlotOwner.getUniqueId())) {
                             player.sendMessage(
                                     C("MsgThisPlotYours") + " " + C("WordUse") + " /plotme home " + C("MsgToGetToIt") + " " + serverBridge
                                             .getEconomy().get().format(price));
                         } else {
-                            player.sendMessage(C("MsgThisPlotIsNow") + " " + playerName + C("WordPossessive") + ". " + C("WordUse")
+                            player.sendMessage(C("MsgThisPlotIsNow") + " " + player.getName() + C("WordPossessive") + ". " + C("WordUse")
                                     + " /plotme home " + C("MsgToGetToIt") + " " + serverBridge.getEconomy().get().format(price));
                         }
 
                         if (isAdvancedLogging()) {
                             if (price == 0) {
-                                serverBridge.getLogger().info(playerName + " " + C("MsgClaimedPlot") + " " + id);
+                                serverBridge.getLogger().info(player.getName() + " " + C("MsgClaimedPlot") + " " + id);
                             } else {
                                 serverBridge.getLogger()
-                                        .info(playerName + " " + C("MsgClaimedPlot") + " " + id + (" " + C("WordFor") + " " + price));
+                                        .info(player.getName() + " " + C("MsgClaimedPlot") + " " + id + (" " + C("WordFor") + " " + price));
                             }
                         }
                     }

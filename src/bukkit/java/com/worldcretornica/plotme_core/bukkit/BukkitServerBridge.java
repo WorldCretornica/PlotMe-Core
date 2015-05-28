@@ -9,16 +9,12 @@ import com.worldcretornica.plotme_core.api.IServerBridge;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitMaterial;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitOfflinePlayer;
-import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitWorld;
-import com.worldcretornica.plotme_core.bukkit.listener.BukkitPlotDenyListener;
-import com.worldcretornica.plotme_core.bukkit.listener.BukkitPlotListener;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -37,11 +33,8 @@ import java.util.logging.Logger;
 
 public class BukkitServerBridge extends IServerBridge {
 
-    private final PlotMe_CorePlugin plugin;
-
-    public BukkitServerBridge(PlotMe_CorePlugin instance, Logger logger) {
+    public BukkitServerBridge(Logger logger) {
         super(logger);
-        plugin = instance;
     }
 
     @Override
@@ -51,7 +44,7 @@ public class BukkitServerBridge extends IServerBridge {
 
     @Override
     public int scheduleSyncRepeatingTask(Runnable func, long l, long l2) {
-        return Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, func, l, l2);
+        return Bukkit.getScheduler().scheduleSyncRepeatingTask(PlotMe_CorePlugin.getInstance(), func, l, l2);
     }
 
     @Override
@@ -61,7 +54,7 @@ public class BukkitServerBridge extends IServerBridge {
 
     @Override
     public void scheduleSyncDelayedTask(Runnable task, int i) {
-        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, task, i);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(PlotMe_CorePlugin.getInstance(), task, i);
     }
 
     /**
@@ -69,13 +62,10 @@ public class BukkitServerBridge extends IServerBridge {
      */
     @Override
     public void setupHooks() {
-        PluginManager pluginManager = plugin.getServer().getPluginManager();
-        if (pluginManager.getPlugin("Vault") != null) {
-            setEconomy();
-        }
+        PluginManager pluginManager = PlotMe_CorePlugin.getInstance().getServer().getPluginManager();
         if (pluginManager.getPlugin("WorldEdit") != null) {
             WorldEditPlugin worldEdit = (WorldEditPlugin) pluginManager.getPlugin("WorldEdit");
-            worldEdit.getWorldEdit().getEventBus().register(new PlotWorldEditListener(plugin));
+            worldEdit.getWorldEdit().getEventBus().register(new PlotWorldEditListener());
         }
 
         setUsingLwc(pluginManager.getPlugin("LWC") != null);
@@ -104,33 +94,13 @@ public class BukkitServerBridge extends IServerBridge {
     }
 
     @Override
-    public void setupCommands() {
-        plugin.getCommand("plotme").setExecutor(new BukkitCommand(plugin));
-    }
-
-    @Override
-    public void unHook() {
-    }
-
-    @Override
-    public void setupListeners() {
-        PluginManager pm = plugin.getServer().getPluginManager();
-
-        BukkitPlotListener bukkitPlotListener = new BukkitPlotListener(plugin);
-        getEventBus().register(bukkitPlotListener);
-        pm.registerEvents(bukkitPlotListener, plugin);
-        pm.registerEvents(new BukkitPlotDenyListener(plugin), plugin);
-
-    }
-
-    @Override
     public void runTaskAsynchronously(Runnable runnable) {
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, runnable);
+        Bukkit.getScheduler().runTaskAsynchronously(PlotMe_CorePlugin.getInstance(), runnable);
     }
 
     @Override
     public void runTaskLaterAsynchronously(Runnable runnable, long delay) {
-        Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, runnable, delay);
+        Bukkit.getScheduler().runTaskLaterAsynchronously(PlotMe_CorePlugin.getInstance(), runnable, delay);
     }
 
     @Override
@@ -139,17 +109,7 @@ public class BukkitServerBridge extends IServerBridge {
         if (player == null) {
             return null;
         } else {
-            return plugin.wrapPlayer(player);
-        }
-    }
-
-    @Override
-    public IPlayer getPlayerExact(String name) {
-        Player player = Bukkit.getPlayerExact(name);
-        if (player == null) {
-            return null;
-        } else {
-            return new BukkitPlayer(player);
+            return PlotMe_CorePlugin.getInstance().wrapPlayer(player);
         }
     }
 
@@ -161,19 +121,12 @@ public class BukkitServerBridge extends IServerBridge {
      */
     @Override
     public IPlayer getPlayer(String playerName) {
-        Player player = Bukkit.getPlayer(playerName);
+        Player player = Bukkit.getPlayerExact(playerName);
         if (player == null) {
             return null;
         } else {
-            return new BukkitPlayer(player);
+            return PlotMe_CorePlugin.getInstance().wrapPlayer(player);
         }
-    }
-
-    @Override
-    public IOfflinePlayer getOfflinePlayer(String player) {
-        @SuppressWarnings("deprecation")
-        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(player);
-        return new BukkitOfflinePlayer(offlinePlayer);
     }
 
     protected IPlayer internalGetPlayer(String name) {
@@ -182,7 +135,7 @@ public class BukkitServerBridge extends IServerBridge {
 
     @Override
     public File getDataFolder() {
-        return plugin.getDataFolder();
+        return PlotMe_CorePlugin.getInstance().getDataFolder();
     }
 
     @Override
@@ -218,7 +171,7 @@ public class BukkitServerBridge extends IServerBridge {
         Collection<IPlayer> players = new ArrayList<>();
 
         for (Player player : Bukkit.getOnlinePlayers()) {
-            players.add(plugin.wrapPlayer(player));
+            players.add(PlotMe_CorePlugin.getInstance().wrapPlayer(player));
         }
 
         return players;
@@ -365,25 +318,16 @@ public class BukkitServerBridge extends IServerBridge {
     }
 
     public void clearBukkitPlayerMap() {
-        plugin.getBukkitPlayerMap().clear();
+        PlotMe_CorePlugin.getInstance().getBukkitPlayerMap().clear();
     }
 
     public File getWorldFolder() {
-        return plugin.getServer().getWorldContainer();
+        return PlotMe_CorePlugin.getInstance().getServer().getWorldContainer();
     }
 
     public ConfigurationSection getDefaultWorld() {
         return org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(
                 new InputStreamReader(getClass().getClassLoader().getResourceAsStream("default-world.yml"), StandardCharsets.UTF_8));
-    }
-
-    @Override
-    public List<IOfflinePlayer> getOfflinePlayers() {
-        List<IOfflinePlayer> list = new ArrayList<>();
-        for (OfflinePlayer player : plugin.getServer().getOfflinePlayers()) {
-            list.add(new BukkitOfflinePlayer(player));
-        }
-        return list;
     }
 
     @Override

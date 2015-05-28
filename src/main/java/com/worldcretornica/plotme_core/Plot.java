@@ -1,6 +1,7 @@
 package com.worldcretornica.plotme_core;
 
 import com.worldcretornica.plotme_core.api.IOfflinePlayer;
+import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.Vector;
 
 import java.sql.Date;
@@ -22,7 +23,7 @@ public class Plot {
     private final HashMap<String, Map<String, String>> metadata = new HashMap<>();
     private String owner = "Unknown";
     private UUID ownerId = UUID.randomUUID();
-    private String world = "Unknown";
+    private IWorld world;
     private String biome = "PLAINS";
     private Date expiredDate = null;
     private boolean finished = false;
@@ -38,20 +39,11 @@ public class Plot {
     private HashSet<String> likers = new HashSet<>();
     private String createdDate;
 
-    public Plot(String owner, UUID uuid, String world, PlotId plotId, int days, Vector plotTopLoc, Vector plotBottomLoc) {
+    public Plot(String owner, UUID uuid, IWorld world, PlotId plotId, Vector plotTopLoc, Vector plotBottomLoc) {
         setOwner(owner);
         setOwnerId(uuid);
-        setWorld(world.toLowerCase());
+        setWorld(world);
         setId(plotId);
-
-        if (days == 0) {
-            setExpiredDate(null);
-        } else {
-            Calendar cal = Calendar.getInstance();
-            cal.add(Calendar.DAY_OF_YEAR, days);
-            java.util.Date utlDate = cal.getTime();
-            expiredDate = new Date(utlDate.getTime());
-        }
         topX = plotTopLoc.getBlockX();
         topZ = plotTopLoc.getBlockZ();
         bottomX = plotBottomLoc.getBlockX();
@@ -59,7 +51,7 @@ public class Plot {
         createdDate = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
     }
 
-    public Plot(int internalID, String owner, UUID ownerId, String world, String biome, Date expiredDate,
+    public Plot(long internalID, String owner, UUID ownerId, IWorld world, String biome, Date expiredDate,
             HashMap<String, AccessLevel> allowed,
             HashSet<String>
                     denied,
@@ -151,10 +143,10 @@ public class Plot {
         return denied;
     }
 
-    public void addAllowed(String name) {
+    public void addMember(String name, AccessLevel level) {
         if (!isAllowedConsulting(name)) {
-            getAllowed().put(name, AccessLevel.ALLOWED);
-            PlotMeCoreManager.getInstance().getSQLManager().addPlotAllowed(name, getInternalID());
+            getMembers().put(name, level);
+            PlotMeCoreManager.getInstance().getSQLManager().addPlotMember(name, getInternalID(), level);
         }
     }
 
@@ -166,7 +158,7 @@ public class Plot {
     }
 
     public void removeAllowed(String name) {
-        if (getAllowed().containsKey(name)) {
+        if (getMembers().containsKey(name)) {
             PlotMeCoreManager.getInstance().getSQLManager().deletePlotAllowed(getInternalID(), name);
         }
     }
@@ -179,7 +171,7 @@ public class Plot {
 
     public void removeAllAllowed() {
         PlotMeCoreManager.getInstance().getSQLManager().deleteAllAllowed(getInternalID());
-        getAllowed().clear();
+        getMembers().clear();
     }
 
     public void removeAllDenied() {
@@ -191,32 +183,35 @@ public class Plot {
         if ("*".equals(name)) {
             return isAllowedInternal(name);
         }
-        UUID player = PlotMeCoreManager.getInstance().getOfflinePlayer(name).getUniqueId();
+        UUID player = PlotMeCoreManager.getInstance().getPlayer(name).getUniqueId();
         return player != null && isAllowedInternal(name);
     }
 
     public boolean isAllowed(UUID uuid) {
         return isAllowedInternal(uuid.toString());
     }
+    public boolean isAllowed(String uuid) {
+        return isAllowedInternal(uuid);
+    }
 
     private boolean isAllowedInternal(String name) {
-        if (getAllowed().containsKey(name)) {
-            AccessLevel accessLevel = getAllowed().get(name);
+        if (getMembers().containsKey(name)) {
+            AccessLevel accessLevel = getMembers().get(name);
             if (accessLevel == AccessLevel.ALLOWED) {
                 return true;
-            } else if (!"*".equals(name)) {
-                if (accessLevel == AccessLevel.TRUSTED) {
-                    return PlotMeCoreManager.getInstance().getOfflinePlayer(name).isOnline();
-                }
+            } else if ("*".equals(name)) {
+                return false;
+            }if (accessLevel == AccessLevel.TRUSTED) {
+                return PlotMeCoreManager.getInstance().getPlayer(name) != null;
             }
         } else {
-            return getAllowed().containsKey("*");
+            return getMembers().containsKey("*");
         }
         return false;
     }
 
     public boolean isDeniedConsulting(String name) {
-        IOfflinePlayer player = PlotMeCoreManager.getInstance().getOfflinePlayer(name);
+        IOfflinePlayer player = PlotMeCoreManager.getInstance().getPlayer(name);
         return player != null && isDeniedInternal(name);
     }
 
@@ -228,7 +223,11 @@ public class Plot {
         return getDenied().contains("*") || getDenied().contains(name);
     }
 
-    public HashMap<String, Plot.AccessLevel> getAllowed() {
+    /**
+     * A map of allowed and trusted players
+     * @return allowed and trusted player map
+     */
+    public HashMap<String, Plot.AccessLevel> getMembers() {
         return allowed;
     }
 
@@ -241,12 +240,12 @@ public class Plot {
         PlotMeCoreManager.getInstance().getSQLManager().updatePlot(getId(), getWorld(), field, value);
     }
 
-    public final String getWorld() {
+    public final IWorld getWorld() {
         return world;
     }
 
-    public final void setWorld(String world) {
-        this.world = world.toLowerCase();
+    public final void setWorld(IWorld world) {
+        this.world = world;
     }
 
     public final Date getExpiredDate() {
@@ -392,8 +391,12 @@ public class Plot {
         return createdDate;
     }
 
-    public void addTrusted(String s) {
+    public void addDenied(HashSet<String> denied) {
+        this.denied.addAll(denied);
+    }
 
+    public void addMembers(HashMap<String, AccessLevel> allowed) {
+        this.allowed.putAll(allowed);
     }
 
     public enum AccessLevel {

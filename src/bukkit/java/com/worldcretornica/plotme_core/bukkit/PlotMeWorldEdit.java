@@ -21,11 +21,11 @@ public class PlotMeWorldEdit extends AbstractDelegateExtent {
     private final PlotMeCoreManager manager = PlotMeCoreManager.getInstance();
     private final IPlayer player;
 
-    public PlotMeWorldEdit(PlotMe_CorePlugin plugin, Extent extent, Actor actor) {
+    public PlotMeWorldEdit(Extent extent, Actor actor) {
         super(extent);
         this.extent = extent;
         this.actor = actor;
-        player = plugin.wrapPlayer(((BukkitPlayer) actor).getPlayer());
+        player = PlotMe_CorePlugin.getInstance().wrapPlayer(((BukkitPlayer) actor).getPlayer());
 
 
     }

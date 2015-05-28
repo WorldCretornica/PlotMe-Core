@@ -9,8 +9,11 @@ import com.worldcretornica.plotme_core.api.IServerBridge;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitEntity;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitPlayer;
+import com.worldcretornica.plotme_core.bukkit.listener.BukkitPlotDenyListener;
+import com.worldcretornica.plotme_core.bukkit.listener.BukkitPlotListener;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.Metrics;
 import org.mcstats.Metrics.Graph;
@@ -21,9 +24,14 @@ import java.util.UUID;
 
 public class PlotMe_CorePlugin extends JavaPlugin {
 
+    private static PlotMe_CorePlugin INSTANCE;
     private final HashMap<UUID, BukkitPlayer> bukkitPlayerMap = new HashMap<>();
     private PlotMe_Core plotme;
     private IServerBridge serverObjectBuilder;
+
+    public static PlotMe_CorePlugin getInstance() {
+        return INSTANCE;
+    }
 
     @Override
     public void onDisable() {
@@ -33,11 +41,21 @@ public class PlotMe_CorePlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        INSTANCE = this;
         getLogger().info("Enabling PlotMe...Waiting for generator data.");
-        serverObjectBuilder = new BukkitServerBridge(this, getLogger());
+        serverObjectBuilder = new BukkitServerBridge(getLogger());
         plotme = new PlotMe_Core(serverObjectBuilder);
         getAPI().enable();
         doMetric();
+
+        //Register Bukkit Events
+        PluginManager pm = getServer().getPluginManager();
+        pm.registerEvents(new BukkitPlotListener(), this);
+        pm.registerEvents(new BukkitPlotDenyListener(), this);
+
+        //Register Command
+        this.getCommand("plotme").setExecutor(new BukkitCommand(this));
+
     }
 
     public PlotMe_Core getAPI() {
@@ -129,5 +147,6 @@ public class PlotMe_CorePlugin extends JavaPlugin {
     public HashMap<UUID, BukkitPlayer> getBukkitPlayerMap() {
         return bukkitPlayerMap;
     }
+
 
 }

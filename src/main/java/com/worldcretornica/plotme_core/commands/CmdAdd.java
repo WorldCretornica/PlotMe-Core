@@ -5,7 +5,6 @@ import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ICommandSender;
-import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.PlotAddAllowedEvent;
@@ -24,7 +23,7 @@ public class CmdAdd extends PlotCommand {
         return "add";
     }
 
-    public boolean execute(ICommandSender sender, String[] args) throws Exception{
+    public boolean execute(ICommandSender sender, String[] args) throws Exception {
         if (args.length < 2 && args.length >= 3) {
             throw new BadUsageException(getUsage());
         }
@@ -44,9 +43,19 @@ public class CmdAdd extends PlotCommand {
                 PlotMapInfo pmi = manager.getMap(world);
                 Plot plot = manager.getPlot(player);
                 if (plot != null) {
-                    IOfflinePlayer allowed = resolvePlayerByName(args[1]);
+                    String allowed;
+                    if ("*".equals(args[1])) {
+                        allowed = "*";
+                    } else {
+                        if (serverBridge.getPlayer(args[1]) != null) {
+                            allowed = serverBridge.getPlayer(args[1]).getUniqueId().toString();
+                        } else {
+                            player.sendMessage(args[1] + " was not found. Are they online?");
+                            return true;
+                        }
+                    }
                     if (player.getUniqueId().equals(plot.getOwnerId()) || player.hasPermission(PermissionNames.ADMIN_ADD)) {
-                        if (plot.isAllowedConsulting(allowed.getUniqueId())) {
+                        if (plot.isAllowed(allowed)) {
                             player.sendMessage(C("WordPlayer") + " " + allowed + " " + C("MsgAlreadyAllowed"));
                         } else {
                             PlotAddAllowedEvent event = new PlotAddAllowedEvent(world, plot, player, allowed);
@@ -71,14 +80,8 @@ public class CmdAdd extends PlotCommand {
                             }
 
                             if (!event.isCancelled()) {
-                                IPlayer allowed2 = plugin.getServerBridge().getPlayer(allowed);
-                                if (allowed2 != null) {
-                                    plot.addAllowed(allowed2.getUniqueId().toString());
-                                    plot.removeDenied(allowed2.getUniqueId().toString());
-                                } else {
-                                    plot.addAllowed(allowed);
-                                    plot.removeDenied(allowed);
-                                }
+                                plot.addMember(allowed, Plot.AccessLevel.ALLOWED);
+                                plot.removeDenied(allowed);
                                 player.sendMessage(C("WordPlayer") + " " + allowed + " " + C("MsgNowAllowed"));
 
                                 if (isAdvancedLogging()) {

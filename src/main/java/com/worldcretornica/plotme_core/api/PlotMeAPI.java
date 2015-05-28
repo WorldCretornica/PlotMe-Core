@@ -1,6 +1,7 @@
 package com.worldcretornica.plotme_core.api;
 
-import com.google.common.eventbus.EventBus;
+
+import com.worldcretornica.plotme_core.api.event.eventbus.EventBus;
 
 public class PlotMeAPI {
 

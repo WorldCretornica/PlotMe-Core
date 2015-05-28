@@ -85,6 +85,10 @@ public class BukkitWorld implements IWorld {
         return getBlockAt(add.getBlockX(), add.getBlockY(), add.getBlockZ());
     }
 
+    @Override public void getBiome(Vector position) {
+
+    }
+
     @Override
     public List<IEntity> getEntities() {
         List<IEntity> bukkitEntites = new ArrayList<>(world.getEntities().size());

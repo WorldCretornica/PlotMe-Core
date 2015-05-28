@@ -12,7 +12,6 @@ public class PlotMapInfo {
     private final PlotMe_Core plugin;
 
     private final ConcurrentHashMap<PlotId, Plot> plots;
-    private final String worldName;
     private final ConfigurationSection config;
     private final ConfigAccessor configFile;
     private final IWorld world;
@@ -20,11 +19,9 @@ public class PlotMapInfo {
     public PlotMapInfo(PlotMe_Core instance, ConfigAccessor config, IWorld world) {
         plugin = instance;
         this.world = world;
-        this.worldName = world.getName().toLowerCase();
         this.configFile = config;
-        this.config = config.getConfig().getConfigurationSection("worlds." + world);
+        this.config = config.getConfig().getConfigurationSection("worlds." + world.getName().toLowerCase());
         plots = new ConcurrentHashMap<>(1000, 0.75f, 5);
-        plugin.getSqlManager().loadPlotsAsynchronously(this.worldName);
     }
 
     public int getNbPlots() {
@@ -36,7 +33,7 @@ public class PlotMapInfo {
             return null;
         }
         if (!plots.containsKey(id)) {
-            Plot plot = plugin.getSqlManager().getPlot(worldName, id);
+            Plot plot = plugin.getSqlManager().getPlot(world, id);
             if (plot == null) {
                 return null;
             }
