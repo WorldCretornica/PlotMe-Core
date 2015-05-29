@@ -36,7 +36,7 @@ public class CmdTP extends PlotCommand {
                     IWorld world;
                     if (args.length == 3) {
 
-                        world = serverBridge.getWorld(args[2]);
+                        world = manager.getWorld(args[2]);
 
                         if (world == null) {
                             player.sendMessage(C("MsgNoPlotworldFound"));
@@ -56,10 +56,10 @@ public class CmdTP extends PlotCommand {
                             ILocation location = manager.getPlotHome(id2, player.getWorld());
                             Plot plot = manager.getPlotById(id2, world);
                             PlotTeleportEvent event = new PlotTeleportEvent(world, plot, player, location, id2);
-                            serverBridge.getEventBus().post(event);
+                            plugin.getEventBus().post(event);
 
                             if (!event.isCancelled()) {
-                                player.setLocation(location);
+                                player.teleport(location);
                             }
                         }
                     }

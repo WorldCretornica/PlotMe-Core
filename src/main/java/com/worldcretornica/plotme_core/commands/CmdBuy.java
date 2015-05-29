@@ -53,7 +53,7 @@ public class CmdBuy extends PlotCommand {
                                         player.sendMessage(C("MsgNotEnoughBuy"));
                                     } else {
                                         PlotBuyEvent event = new PlotBuyEvent(world, plot, player, cost);
-                                        serverBridge.getEventBus().post(event);
+                                        plugin.getEventBus().post(event);
 
                                         if (!event.isCancelled()) {
                                             EconomyResponse er = serverBridge.withdrawPlayer(player, cost);

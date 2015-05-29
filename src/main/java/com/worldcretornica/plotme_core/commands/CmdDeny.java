@@ -74,7 +74,7 @@ public class CmdDeny extends PlotCommand {
                         if (manager.isEconomyEnabled(pmi)) {
                             price = pmi.getDenyPlayerPrice();
                             if (serverBridge.has(player, price)) {
-                                serverBridge.getEventBus().post(event);
+                                plugin.getEventBus().post(event);
                                 if (event.isCancelled()) {
                                     return true;
                                 }
@@ -91,7 +91,7 @@ public class CmdDeny extends PlotCommand {
                                 return true;
                             }
                         } else {
-                            serverBridge.getEventBus().post(event);
+                            plugin.getEventBus().post(event);
                         }
 
                         if (!event.isCancelled()) {

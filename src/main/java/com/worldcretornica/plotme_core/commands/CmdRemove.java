@@ -54,7 +54,7 @@ public class CmdRemove extends PlotCommand {
                             double price = 0.0;
 
                             PlotRemoveAllowedEvent event = new PlotRemoveAllowedEvent(world, plot, player, allowed);
-                            serverBridge.getEventBus().post(event);
+                            plugin.getEventBus().post(event);
 
                             if (manager.isEconomyEnabled(pmi) && !event.isCancelled()) {
                                 price = pmi.getRemovePlayerPrice();

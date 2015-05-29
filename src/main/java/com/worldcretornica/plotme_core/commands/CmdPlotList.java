@@ -43,7 +43,7 @@ public class CmdPlotList extends PlotCommand {
 
                 // Get plots of that player
                 for (Plot plot : plugin.getSqlManager().getPlayerPlots(uuid)) {
-                    IWorld world = serverBridge.getWorld(plot.getWorld());
+                    IWorld world = plot.getWorld();
                     if (world != null) {
                         manager.getMap(world).addPlot(plot.getId(), plot);
                     }
@@ -51,9 +51,9 @@ public class CmdPlotList extends PlotCommand {
                     StringBuilder addition = new StringBuilder();
 
                     // Display worlds
-                    if (!oldWorld.equalsIgnoreCase(plot.getWorld())) {
-                        oldWorld = plot.getWorld();
-                        player.sendMessage("World: " + plot.getWorld());
+                    if (!oldWorld.equalsIgnoreCase(plot.getWorld().getName())) {
+                        oldWorld = plot.getWorld().getName();
+                        player.sendMessage("World: " + plot.getWorld().getName());
                     }
 
                     // Is it expired?
@@ -61,15 +61,15 @@ public class CmdPlotList extends PlotCommand {
                         Date expiredDate = plot.getExpiredDate();
 
                         if (expiredDate.before(Calendar.getInstance().getTime())) {
-                            addition.append(" @" + plot.getExpiredDate());
+                            addition.append(" @").append(plot.getExpiredDate());
                         } else {
-                            addition.append(" @" + plot.getExpiredDate());
+                            addition.append(" @").append(plot.getExpiredDate());
                         }
                     }
 
                     // Is it for sale?
                     if (plot.isForSale()) {
-                        addition.append(C("WordSell") + ": " + Math.round(plot.getPrice()));
+                        addition.append(C("WordSell")).append(": ").append(Math.round(plot.getPrice()));
                     }
 
                     // Is the plot owner the name?

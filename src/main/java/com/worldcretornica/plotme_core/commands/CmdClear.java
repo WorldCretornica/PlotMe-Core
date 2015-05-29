@@ -53,7 +53,7 @@ public class CmdClear extends PlotCommand {
                                 price = pmi.getClearPrice();
 
                                 if (serverBridge.has(player, price)) {
-                                    serverBridge.getEventBus().post(event);
+                                    plugin.getEventBus().post(event);
                                     if (event.isCancelled()) {
                                         return true;
                                     } else {
@@ -71,7 +71,7 @@ public class CmdClear extends PlotCommand {
                                     return true;
                                 }
                             } else {
-                                serverBridge.getEventBus().post(event);
+                                plugin.getEventBus().post(event);
                             }
 
                             if (!event.isCancelled()) {

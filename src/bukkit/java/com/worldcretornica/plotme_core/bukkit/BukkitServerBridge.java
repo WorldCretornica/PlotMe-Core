@@ -26,7 +26,6 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Logger;
@@ -178,53 +177,6 @@ public class BukkitServerBridge extends IServerBridge {
     }
 
     @Override
-    public List<String> getBiomes() {
-        List<String> biomes = new ArrayList<>(39);
-        biomes.add("Ocean");
-        biomes.add("Plains");
-        biomes.add("Desert");
-        biomes.add("Extreme Hills");
-        biomes.add("Forest");
-        biomes.add("Tiaga");
-        biomes.add("Forest");
-        biomes.add("Swampland");
-        biomes.add("River");
-        biomes.add("Hell");
-        biomes.add("The End");
-        biomes.add("FrozenOcean");
-        biomes.add("FrozenRiver");
-        biomes.add("Ice Plains");
-        biomes.add("Ice Mountains");
-        biomes.add("MushroomIsland");
-        biomes.add("MushroomIslandShore");
-        biomes.add("Beach");
-        biomes.add("DesertHills");
-        biomes.add("ForestHills");
-        biomes.add("TiagaHills");
-        biomes.add("Extreme Hills Edge");
-        biomes.add("Jungle");
-        biomes.add("JungleHills");
-        biomes.add("JungleEdge");
-        biomes.add("Deep Ocean");
-        biomes.add("Stone Beach");
-        biomes.add("Cold Beach");
-        biomes.add("Birch Forest");
-        biomes.add("Birch Forest Hills");
-        biomes.add("Roofed Forest");
-        biomes.add("Cold Taiga");
-        biomes.add("Cold Taiga Hills");
-        biomes.add("Mega Taiga");
-        biomes.add("Mega Taiga Hills");
-        biomes.add("Extreme Hills+");
-        biomes.add("Savanna");
-        biomes.add("Savanna Plateau");
-        biomes.add("Mesa");
-        biomes.add("Mesa Plateau F");
-        biomes.add("Mesa Plateau");
-        return Collections.unmodifiableList(biomes);
-    }
-
-    @Override
     public Collection<IWorld> getWorlds() {
         List<IWorld> worlds = new ArrayList<>();
 
@@ -330,8 +282,11 @@ public class BukkitServerBridge extends IServerBridge {
                 new InputStreamReader(getClass().getClassLoader().getResourceAsStream("default-world.yml"), StandardCharsets.UTF_8));
     }
 
-    @Override
-    public String addColor(char c, String string) {
+    @Override public String addColor(char c, String string) {
         return ChatColor.translateAlternateColorCodes(c, string);
+    }
+
+    @Override public void runTaskLater(Runnable runnable, long delay) {
+        Bukkit.getServer().getScheduler().runTaskLater(PlotMe_CorePlugin.getInstance(),runnable,delay);
     }
 }

@@ -49,7 +49,7 @@ public class CmdDispose extends PlotCommand {
                                     return true;
                                 }
 
-                                serverBridge.getEventBus().post(event);
+                                plugin.getEventBus().post(event);
 
                                 if (event.isCancelled()) {
                                     return true;
@@ -62,7 +62,7 @@ public class CmdDispose extends PlotCommand {
                                     return true;
                                 }
                             } else {
-                                serverBridge.getEventBus().post(event);
+                                plugin.getEventBus().post(event);
                             }
 
                             if (!event.isCancelled()) {

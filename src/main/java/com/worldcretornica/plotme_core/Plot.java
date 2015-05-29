@@ -383,10 +383,6 @@ public class Plot {
         return bottomZ;
     }
 
-    public void setLikers(HashSet<String> likers) {
-        this.likers = likers;
-    }
-
     public String getCreatedDate() {
         return createdDate;
     }
@@ -397,6 +393,18 @@ public class Plot {
 
     public void addMembers(HashMap<String, AccessLevel> allowed) {
         this.allowed.putAll(allowed);
+    }
+
+    /**
+     * Gets a set of players who have liked this plot
+     * @return
+     */
+    public HashSet<String> getLikers() {
+        return likers;
+    }
+
+    public void setLikers(HashSet<String> likers) {
+        this.likers = likers;
     }
 
     public enum AccessLevel {

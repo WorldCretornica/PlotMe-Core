@@ -7,8 +7,6 @@ import com.worldcretornica.plotme_core.api.IWorld;
 
 public class PlotTeleportHomeEvent extends PlotTeleportEvent implements ICancellable, Event {
 
-    private boolean canceled;
-
     public PlotTeleportHomeEvent(IWorld world, Plot plot, IPlayer player, ILocation location) {
         super(world, plot, player, location, plot.getId());
     }

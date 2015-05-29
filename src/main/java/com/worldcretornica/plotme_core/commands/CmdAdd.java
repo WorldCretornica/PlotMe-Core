@@ -59,7 +59,7 @@ public class CmdAdd extends PlotCommand {
                             player.sendMessage(C("WordPlayer") + " " + allowed + " " + C("MsgAlreadyAllowed"));
                         } else {
                             PlotAddAllowedEvent event = new PlotAddAllowedEvent(world, plot, player, allowed);
-                            serverBridge.getEventBus().post(event);
+                            plugin.getEventBus().post(event);
                             double price = 0.0;
                             if (manager.isEconomyEnabled(pmi)) {
                                 price = pmi.getAddPlayerPrice();

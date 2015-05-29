@@ -98,7 +98,7 @@ public class CmdHome extends PlotCommand {
                                         price = pmi.getPlotHomePrice();
 
                                         if (serverBridge.has(player, price)) {
-                                            serverBridge.getEventBus().post(event);
+                                            plugin.getEventBus().post(event);
 
                                             if (event.isCancelled()) {
                                                 return true;
@@ -115,7 +115,7 @@ public class CmdHome extends PlotCommand {
                                             return true;
                                         }
                                     } else {
-                                        serverBridge.getEventBus().post(event);
+                                        plugin.getEventBus().post(event);
                                     }
 
                                     if (!event.isCancelled()) {
@@ -141,7 +141,7 @@ public class CmdHome extends PlotCommand {
                                     price = pmi.getPlotHomePrice();
 
                                     if (serverBridge.has(player, price)) {
-                                        serverBridge.getEventBus().post(event);
+                                        plugin.getEventBus().post(event);
 
                                         if (!event.isCancelled()) {
                                             EconomyResponse er = serverBridge.withdrawPlayer(player, price);
@@ -157,11 +157,11 @@ public class CmdHome extends PlotCommand {
                                         return true;
                                     }
                                 } else {
-                                    serverBridge.getEventBus().post(event);
+                                    plugin.getEventBus().post(event);
                                 }
 
                                 if (!event.isCancelled()) {
-                                    player.setLocation(event.getHomeLocation());
+                                    player.teleport(event.getHomeLocation());
 
                                     if (price != 0) {
                                         player.sendMessage(serverBridge.getEconomy().format(price));

@@ -1,11 +1,13 @@
 package com.worldcretornica.plotme_core.sponge.api;
 
 import com.google.common.base.Optional;
+import com.worldcretornica.plotme_core.TeleportRunnable;
 import com.worldcretornica.plotme_core.api.IItemStack;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.Vector;
+import com.worldcretornica.plotme_core.bukkit.PlotMe_CorePlugin;
 import org.spongepowered.api.entity.player.Player;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.text.chat.ChatTypes;
@@ -41,6 +43,18 @@ public class SpongePlayer extends SpongeUser implements IPlayer {
 
     @Override
     public void setLocation(ILocation location) {
+    }
+
+    /**
+     * Uses the code that allows a delay while
+     * "Teleporting" or moving the entity
+     *
+
+     * @param location new location
+     */
+    @Override public void teleport(ILocation location) {
+        PlotMe_CorePlugin.getInstance().getServerObjectBuilder().runTaskLater(new TeleportRunnable(this, location), PlotMe_CorePlugin.getInstance()
+                .getAPI().getConfig().getInt("tp-delay"));
     }
 
     public Player getPlayer() {

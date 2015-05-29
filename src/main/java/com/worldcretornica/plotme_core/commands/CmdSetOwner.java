@@ -48,7 +48,7 @@ public class CmdSetOwner extends PlotCommand {
 
             if (!plot.getOwnerId().equals(newOwner.getUniqueId())) {
                 PlotOwnerChangeEvent event = new PlotOwnerChangeEvent(world, plot, player, newOwner);
-                serverBridge.getEventBus().post(event);
+                plugin.getEventBus().post(event);
 
                 if (!event.isCancelled()) {
                     plot.setForSale(false);

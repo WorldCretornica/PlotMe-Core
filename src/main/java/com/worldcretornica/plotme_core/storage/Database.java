@@ -144,7 +144,7 @@ public abstract class Database {
             }
             ps.setInt(1, plot.getId().getX());
             ps.setInt(2, plot.getId().getZ());
-            ps.setString(3, plot.getWorld().toLowerCase());
+            ps.setString(3, plot.getWorld().getName().toLowerCase());
             ps.setString(4, plot.getOwnerId().toString());
             ps.setString(5, plot.getOwner());
             ps.setString(6, plot.getBiome());
@@ -314,11 +314,11 @@ public abstract class Database {
                 for (PlotId id : plots.keySet()) {
                     pmi.addPlot(id, plots.get(id));
                     PlotLoadEvent event = new PlotLoadEvent(world, plots.get(id));
-                    plugin.getServerBridge().getEventBus().post(event);
+                    plugin.getEventBus().post(event);
 
                 }
                 PlotWorldLoadEvent event = new PlotWorldLoadEvent(world, pmi.getNbPlots());
-                plugin.getServerBridge().getEventBus().post(event);
+                plugin.getEventBus().post(event);
 
             }
 

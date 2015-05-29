@@ -17,14 +17,13 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.spongepowered.api.entity.player.Player;
 import org.spongepowered.api.entity.player.User;
 import org.spongepowered.api.service.profile.GameProfileResolver;
+import org.spongepowered.api.service.scheduler.SynchronousScheduler;
 import org.spongepowered.api.service.user.UserStorage;
 import org.spongepowered.api.world.World;
-import org.spongepowered.api.world.biome.BiomeType;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Logger;
@@ -161,15 +160,6 @@ public class SpongeServerBridge extends IServerBridge {
     }
 
     @Override
-    public List<String> getBiomes() {
-        List<String> biomes = new ArrayList<>();
-        for (BiomeType type : plugin.getGame().getRegistry().getAllOf(BiomeType.class)) {
-            biomes.add(type.getName());
-        }
-        return biomes;
-    }
-
-    @Override
     public Collection<IWorld> getWorlds() {
         Collection<IWorld> worlds = new ArrayList<>();
 
@@ -212,6 +202,10 @@ public class SpongeServerBridge extends IServerBridge {
     @Override
     public String addColor(char c, String string) {
         return null;
+    }
+
+    @Override public void runTaskLater(Runnable runnable, long delay) {
+        plugin.getGame().getServiceManager().provide(SynchronousScheduler.class).get().runTaskAfter(plugin,runnable,delay);
     }
 
     @Override

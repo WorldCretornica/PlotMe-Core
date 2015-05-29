@@ -68,7 +68,7 @@ public class CmdClaim extends PlotCommand {
                         price = pmi.getClaimPrice();
 
                         if (serverBridge.has(player, price)) {
-                            serverBridge.getEventBus().post(event);
+                            plugin.getEventBus().post(event);
                             if (event.isCancelled()) {
                                 return true;
                             }
@@ -85,7 +85,7 @@ public class CmdClaim extends PlotCommand {
                             return true;
                         }
                     } else {
-                        serverBridge.getEventBus().post(event);
+                        plugin.getEventBus().post(event);
                     }
 
                     if (!event.isCancelled()) {

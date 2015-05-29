@@ -49,7 +49,7 @@ public class CmdMiddle extends PlotCommand {
                 } else if (plot.isAllowed(player.getUniqueId()) || player.hasPermission(PermissionNames.ADMIN_MIDDLE_OTHER)) {
                     Vector middleloc = manager.getPlotMiddle(world, plot.getId());
                     PlotTeleportMiddleEvent event = new PlotTeleportMiddleEvent(world, plot, player, middleloc);
-                    serverBridge.getEventBus().post(event);
+                    plugin.getEventBus().post(event);
                     if (!event.isCancelled()) {
                         player.setLocation(event.getMiddleLocation());
                     }

@@ -31,9 +31,8 @@ public class CmdBiome extends PlotCommand {
 
                     if (args.length == 2) {
 
-                        boolean exists = serverBridge.doesBiomeExist(args[1]);
-                        String biomeName = args[1].toUpperCase();
-
+                        boolean exists = serverBridge.getBiome(args[1]);
+                        String biomeName = args[1];
                         if (!exists) {
                             player.sendMessage(biomeName + " " + C("MsgIsInvalidBiome"));
                             return true;
@@ -46,13 +45,13 @@ public class CmdBiome extends PlotCommand {
                             double price = 0.0;
 
                             PlotBiomeChangeEvent event = new PlotBiomeChangeEvent(world, plot, player, biomeName);
-                            serverBridge.getEventBus().post(event);
+                            plugin.getEventBus().post(event);
 
                             if (manager.isEconomyEnabled(pmi)) {
                                 price = pmi.getBiomeChangePrice();
 
                                 if (serverBridge.has(player, price)) {
-                                    player.sendMessage("It costs " + serverBridge.getEconomy().format(price) + " to change the biome.");
+                                    player.sendMessage("It costs " + serverBridge.getEconomy().get().format(price) + " to change the biome.");
                                     return true;
                                 } else if (!event.isCancelled()) {
                                     EconomyResponse er = serverBridge.withdrawPlayer(player, price);
@@ -71,7 +70,7 @@ public class CmdBiome extends PlotCommand {
                                 plot.setBiome(biomeName);
                                 manager.setBiome(plot.getId(), world, biomeName.toUpperCase());
 
-                                player.sendMessage(C("MsgBiomeSet") + " " + biomeName + " " + serverBridge.getEconomy().format(price));
+                                player.sendMessage(C("MsgBiomeSet") + " " + biomeName + " " + serverBridge.getEconomy().get().format(price));
 
                                 if (isAdvancedLogging()) {
                                     if (price == 0) {
@@ -90,7 +89,7 @@ public class CmdBiome extends PlotCommand {
                         }
                     }
                 } else {
-                    player.sendMessage(C("MsgThisPlot") + "(" + plot.getId() + ") " + C("MsgHasNoOwner"));
+                    player.sendMessage(C("MsgThisPlot") + C("MsgHasNoOwner"));
                 }
             } else {
                 player.sendMessage(C("MsgNotPlotWorld"));

@@ -59,7 +59,7 @@ public class CmdUndeny extends PlotCommand {
 
                                 //noinspection ConstantConditions
                                 if (serverBridge.has(player, price)) {
-                                    serverBridge.getEventBus().post(event);
+                                    plugin.getEventBus().post(event);
                                     if (event.isCancelled()) {
                                         return true;
                                     } else {
@@ -77,7 +77,7 @@ public class CmdUndeny extends PlotCommand {
                                     return true;
                                 }
                             } else {
-                                serverBridge.getEventBus().post(event);
+                                plugin.getEventBus().post(event);
                             }
 
                             if (!event.isCancelled()) {
@@ -129,7 +129,7 @@ public class CmdUndeny extends PlotCommand {
 
                 //noinspection ConstantConditions
                 if (serverBridge.has(player, price)) {
-                    serverBridge.getEventBus().post(event);
+                    plugin.getEventBus().post(event);
                     if (!event.isCancelled()) {
                         EconomyResponse er = serverBridge.withdrawPlayer(player, price);
 
@@ -146,7 +146,7 @@ public class CmdUndeny extends PlotCommand {
                     return true;
                 }
             } else {
-                serverBridge.getEventBus().post(event);
+                plugin.getEventBus().post(event);
             }
 
             if (!event.isCancelled()) {

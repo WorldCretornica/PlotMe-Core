@@ -1,10 +1,12 @@
 package com.worldcretornica.plotme_core.bukkit.api;
 
+import com.worldcretornica.plotme_core.TeleportRunnable;
 import com.worldcretornica.plotme_core.api.IItemStack;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.Vector;
+import com.worldcretornica.plotme_core.bukkit.PlotMe_CorePlugin;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -46,6 +48,20 @@ public class BukkitPlayer extends BukkitOfflinePlayer implements IPlayer {
     @Override
     public void setLocation(ILocation location) {
         player.teleport(new Location(((BukkitWorld) location.getWorld()).getWorld(), location.getX(), location.getY(), location.getZ()));
+    }
+
+    /**
+     * Uses the code that allows a delay while
+     * "Teleporting" or moving the entity
+     *
+
+     * @param location new location
+     */
+    @Override public void teleport(ILocation location) {
+        final int delay = PlotMe_CorePlugin.getInstance()
+                .getAPI().getConfig().getInt("tp-delay");
+        player.sendMessage(String.format("You will be teleported in %d seconds.", delay));
+        PlotMe_CorePlugin.getInstance().getServerObjectBuilder().runTaskLater(new TeleportRunnable(this, location), delay);
     }
 
     public Player getPlayer() {

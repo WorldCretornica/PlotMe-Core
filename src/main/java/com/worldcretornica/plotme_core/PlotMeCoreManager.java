@@ -435,7 +435,7 @@ public class PlotMeCoreManager {
         if (pmi != null) {
             pmi.addPlot(id, plot);
             PlotLoadEvent event = new PlotLoadEvent(pmi.getWorld(), plot);
-            plugin.getServerBridge().getEventBus().post(event);
+            plugin.getEventBus().post(event);
 
         }
     }
@@ -628,12 +628,7 @@ public class PlotMeCoreManager {
      */
 
     public boolean isPlotAvailable(PlotId id, PlotMapInfo pmi) {
-        if (pmi != null) {
-            if (pmi.getPlot(id) == null) {
-                return true;
-            }
-        }
-        return false;
+        return pmi != null && pmi.getPlot(id) == null;
     }
 
     /**
@@ -822,15 +817,19 @@ public class PlotMeCoreManager {
 
     public boolean isPlotAvailable(ILocation location) {
         PlotId id = getPlotId(location);
-        if (id != null) {
-            if (getPlotById(id, location) == null) {
-                return true;
-            }
-        }
-        return false;
+        return id != null && getPlotById(id, location) == null;
     }
 
     private Plot getPlotById(PlotId id, ILocation location) {
         return getPlotById(id, location.getWorld());
+    }
+
+    public IWorld getWorld(String world) {
+        for(IWorld iw : getPlotMaps().keySet()) {
+            if(iw.getName().equalsIgnoreCase(world)) {
+                return iw;
+            }
+        }
+        return null;
     }
 }

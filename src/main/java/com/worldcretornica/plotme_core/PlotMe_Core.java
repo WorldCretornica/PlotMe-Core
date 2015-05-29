@@ -19,19 +19,19 @@ import java.util.logging.Logger;
 
 public class PlotMe_Core {
 
-    //Bridge
-    private final IServerBridge serverBridge;
     private final AbstractSchematicUtil schematicutil;
     private final HashMap<IWorld, IPlotMe_GeneratorManager> managers = new HashMap<>();
     //Spool stuff
     private final ConcurrentLinkedQueue<PlotToClear> plotsToClear = new ConcurrentLinkedQueue<>();
+    //Bridge
+    private IServerBridge serverBridge;
     private IWorld worldcurrentlyprocessingexpired;
     private int counterExpired;
     private Database sqlManager;
     //Caption and Config File.
     private ConfigAccessor configFile;
     private ConfigAccessor captionFile;
-    private EventBus eventBus;
+    private EventBus eventBus = new EventBus();
 
 
     public PlotMe_Core(IServerBridge serverObjectBuilder) {
@@ -47,6 +47,9 @@ public class PlotMe_Core {
         return this.schematicutil;
     }
 
+    public void registerServerBridge(IServerBridge bridge) {
+        serverBridge = bridge;
+    }
     public void disable() {
         getSqlManager().closeConnection();
         PlotMeCoreManager.getInstance().getPlotMaps().clear();
@@ -56,8 +59,6 @@ public class PlotMe_Core {
     }
 
     public void enable() {
-        EventBus plotmeEventBus = new EventBus();
-        setEventBus(plotmeEventBus);
         PlotMeCoreManager.getInstance().setPlugin(this);
         configFile = new ConfigAccessor(getServerBridge().getDataFolder(), "config.yml");
         captionFile = new ConfigAccessor(getServerBridge().getDataFolder(), "captions.yml");
@@ -230,7 +231,4 @@ public class PlotMe_Core {
         return eventBus;
     }
 
-    public void setEventBus(EventBus eventBus) {
-        this.eventBus = eventBus;
-    }
 }

@@ -6,6 +6,7 @@ import com.worldcretornica.plotme_core.api.IBlock;
 import com.worldcretornica.plotme_core.api.IEntity;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.bukkit.api.BukkitEntity;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitWorld;
 import com.worldcretornica.schematic.Attribute;
 import com.worldcretornica.schematic.Display;
@@ -290,7 +291,7 @@ public class SchematicUtil extends AbstractSchematicUtil {
             for (LastBlock lastblock : lastblocks) {
                 try {
                     if (setBlock) {
-                        lastblock.block.setTypeIdAndData(lastblock.id, lastblock.data, false);
+                        lastblock.block.setTypeIdAndData((short) lastblock.id, lastblock.data, false);
                     }
                     lastblock.block.setData(lastblock.data, false);
                 } catch (NullPointerException e) {
@@ -352,10 +353,10 @@ public class SchematicUtil extends AbstractSchematicUtil {
         is.setItemMeta(itemmeta);
     }
 
-    private org.bukkit.entity.Entity getLeash(Leash leash, ILocation loc, int originX, int originY, int originZ) {
+    private org.bukkit.entity.Entity getLeash(IWorld world1, Leash leash, com.worldcretornica.plotme_core.api.Vector loc, int originX, int originY,
+            int originZ) {
         org.bukkit.entity.Entity ent = null;
-        World world = ((BukkitWorld) loc.getWorld()).getWorld();
-
+        World world = ((BukkitWorld) world1).getWorld();
 
         int x = leash.getX() - originX;
         int y = leash.getY() - originY;
@@ -605,7 +606,7 @@ public class SchematicUtil extends AbstractSchematicUtil {
         short hurttime = 0;
         short fuel = 0;
 
-        String id = bukkitentity.getType().getName();
+        String id = ((BukkitEntity) bukkitentity).entity.getType().getName();
         String motive = null;
         String customname = null;
         String owneruuid = null;
@@ -625,15 +626,15 @@ public class SchematicUtil extends AbstractSchematicUtil {
 
         List<Item> items = null;
 
-        if (bukkitentity.getPassenger() != null) {
-            riding = getEntity(bukkitentity.getPassenger(), minX, minY, minZ);
+        if (((BukkitEntity) bukkitentity).entity.getPassenger() != null) {
+            riding = getEntity(new BukkitEntity(((BukkitEntity) bukkitentity).entity.getPassenger()), minX, minY, minZ);
         }
 
-        float falldistance = bukkitentity.getFallDistance();
-        short fire = (short) bukkitentity.getFireTicks();
-        int age = bukkitentity.getTicksLived();
+        float falldistance = ((BukkitEntity) bukkitentity).entity.getFallDistance();
+        short fire = (short) ((BukkitEntity) bukkitentity).entity.getFireTicks();
+        int age = ((BukkitEntity) bukkitentity).entity.getTicksLived();
 
-        Vector velocity = bukkitentity.getVelocity();
+        Vector velocity = ((BukkitEntity) bukkitentity).entity.getVelocity();
         List<Double> motion = new ArrayList<>();
         motion.add(velocity.getX());
         motion.add(velocity.getY());
@@ -989,6 +990,7 @@ public class SchematicUtil extends AbstractSchematicUtil {
         positions.add(y);
         positions.add(z);
 
+        byte onground = 0;
         return new Entity(dir, direction, invulnerable, onground, air, fire, dimension, portalcooldown,
                 tilex, tiley, tilez, falldistance, id, motive, motion, positions, rotation, canpickuploot,
                 color, customnamevisible, leashed, persistencerequired, sheared, attacktime, deathtime, health,
@@ -1387,7 +1389,7 @@ public class SchematicUtil extends AbstractSchematicUtil {
 
                 List<Item> items = e.getItems();
 
-                Location etloc = new Location(world, x + loc.getBlockX(), y + loc.getBlockY(), z + loc.getBlockZ());
+                Location etloc = new Location(((BukkitWorld) world).getWorld(), x + loc.getBlockX(), y + loc.getBlockY(), z + loc.getBlockZ());
 
                 if (entitytype == EntityType.ITEM_FRAME) {
                     etloc.setX(Math.floor(etloc.getX()));
@@ -1441,7 +1443,7 @@ public class SchematicUtil extends AbstractSchematicUtil {
                             setTag(is, itemtag);
                         }
 
-                        ent = world.dropItem(etloc, is);
+                        ent = ((BukkitWorld) world).getWorld().dropItem(etloc, is);
                     }
                 } else {
                     ent = world.spawnEntity(etloc, entitytype);
@@ -1506,7 +1508,7 @@ public class SchematicUtil extends AbstractSchematicUtil {
                     livingentity.setRemainingAir(air);
                     livingentity.setRemoveWhenFarAway(persistencerequired == 0);
                     if (leash != null) {
-                        org.bukkit.entity.Entity leashentity = getLeash(leash, loc, originX, originY, originZ);
+                        org.bukkit.entity.Entity leashentity = getLeash(world, leash, loc, originX, originY, originZ);
                         if (leashentity != null) {
                             livingentity.setLeashHolder(leashentity);
                         }
@@ -2151,7 +2153,7 @@ public class SchematicUtil extends AbstractSchematicUtil {
 
     private class LastBlock {
 
-        final Block block;
+        final IBlock block;
         final int id;
         final byte data;
 

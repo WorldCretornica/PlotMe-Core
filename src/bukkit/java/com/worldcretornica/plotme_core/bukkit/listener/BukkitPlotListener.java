@@ -157,21 +157,19 @@ public class BukkitPlotListener implements Listener {
         Location bloc = event.getBlockClicked().getLocation();
         ILocation location = new ILocation(player.getWorld(), bloc.getX(), bloc.getY(), bloc.getZ());
 
-        if (manager.isPlotWorld(location)) {
-            if (!player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE)) {
-                Plot plot = manager.getPlot(location);
+        if (manager.isPlotWorld(location) && !player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE)) {
+            Plot plot = manager.getPlot(location);
 
-                if (plot == null) {
+            if (plot == null) {
+                player.sendMessage(api.C("ErrCannotBuild"));
+                event.setCancelled(true);
+            } else if (!plot.isAllowed(player.getUniqueId())) {
+                if (api.isPlotLocked(plot)) {
+                    player.sendMessage(api.C("PlotLocked"));
+                    event.setCancelled(true);
+                } else {
                     player.sendMessage(api.C("ErrCannotBuild"));
                     event.setCancelled(true);
-                } else if (!plot.isAllowed(player.getUniqueId())) {
-                    if (api.isPlotLocked(plot)) {
-                        player.sendMessage(api.C("PlotLocked"));
-                        event.setCancelled(true);
-                    } else {
-                        player.sendMessage(api.C("ErrCannotBuild"));
-                        event.setCancelled(true);
-                    }
                 }
             }
         }
@@ -216,13 +214,9 @@ public class BukkitPlotListener implements Listener {
                     }
                 }
 
-                if (blocked) {
-                    if (plot == null || !plot.isAllowed(player.getUniqueId())) {
-                        if (canBuild) {
-                            player.sendMessage(api.C("ErrCannotUse"));
-                            event.setCancelled(true);
-                        }
-                    }
+                if (blocked && (plot == null || !plot.isAllowed(player.getUniqueId())) && canBuild) {
+                    player.sendMessage(api.C("ErrCannotUse"));
+                    event.setCancelled(true);
                 }
             }
         }
@@ -514,30 +508,28 @@ public class BukkitPlotListener implements Listener {
                 return;
             }
             //This includes everything except for Monsters which were excluded above.
-            if (event.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)) {
-                if (event instanceof EntityDamageByEntityEvent) {
-                    EntityDamageByEntityEvent damageByEntityEvent = (EntityDamageByEntityEvent) event;
-                    //Specific to Players to allow PVP. event.getEntity() is the damaged entity
-                    if (event.getEntity() instanceof Player) {
-                        //Don't allow PVP on the roads. Only allow pvp if both entities are in the plot.
-                        PlotId id = manager.getPlotId(entity.getLocation());
-                        IEntity damager = plugin.wrapEntity(damageByEntityEvent.getDamager());
-                        PlotId id2 = manager.getPlotId(damager.getLocation());
-                        if (id == null) {
-                            event.setCancelled(true);
-                        }
-                        if (id2 == null) {
-                            event.setCancelled(true);
-                        }
+            if (event.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK) && event instanceof EntityDamageByEntityEvent) {
+                EntityDamageByEntityEvent damageByEntityEvent = (EntityDamageByEntityEvent) event;
+                //Specific to Players to allow PVP. event.getEntity() is the damaged entity
+                if (event.getEntity() instanceof Player) {
+                    //Don't allow PVP on the roads. Only allow pvp if both entities are in the plot.
+                    PlotId id = manager.getPlotId(entity.getLocation());
+                    IEntity damager = plugin.wrapEntity(damageByEntityEvent.getDamager());
+                    PlotId id2 = manager.getPlotId(damager.getLocation());
+                    if (id == null) {
+                        event.setCancelled(true);
+                    }
+                    if (id2 == null) {
+                        event.setCancelled(true);
+                    }
+                } else {
+                    PlotId id = manager.getPlotId(entity.getLocation());
+                    if (id == null) {
+                        event.setCancelled(true);
                     } else {
-                        PlotId id = manager.getPlotId(entity.getLocation());
-                        if (id == null) {
+                        Plot plot = manager.getPlotById(id, entity.getWorld());
+                        if (plot == null || !plot.isAllowed(damageByEntityEvent.getDamager().getUniqueId())) {
                             event.setCancelled(true);
-                        } else {
-                            Plot plot = manager.getPlotById(id, entity.getWorld());
-                            if (plot == null || !plot.isAllowed(damageByEntityEvent.getDamager().getUniqueId())) {
-                                event.setCancelled(true);
-                            }
                         }
                     }
                 }

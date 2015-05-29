@@ -27,7 +27,7 @@ public class CmdAuto extends PlotCommand {
                 IWorld world;
                 if (!manager.isPlotWorld(player) && plugin.getConfig().getBoolean("allowWorldTeleport")) {
                     if (args.length == 2) {
-                        world = serverBridge.getWorld(args[1]);
+                        world = manager.getWorld(args[1]);
                     } else {
                         world = manager.getFirstWorld();
                     }
@@ -69,7 +69,7 @@ public class CmdAuto extends PlotCommand {
                             double price = 0.0;
 
                             PlotCreateEvent event = new PlotCreateEvent(world, id, player);
-                            serverBridge.getEventBus().post(event);
+                            plugin.getEventBus().post(event);
                             if (manager.isEconomyEnabled(pmi)) {
                                 price = pmi.getClaimPrice();
 

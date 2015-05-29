@@ -20,6 +20,14 @@ public interface IEntity extends IActor {
     void setLocation(ILocation location);
 
     /**
+     * Uses the code that allows a delay while
+     * "Teleporting" or moving the entity
+     *
+     * @param location new location
+     */
+    void teleport(ILocation location);
+
+    /**
      * Get the world the entity is currently in.
      *
      * @return the world the entity is in

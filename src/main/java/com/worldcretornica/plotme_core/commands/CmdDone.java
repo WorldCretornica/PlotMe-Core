@@ -30,7 +30,7 @@ public class CmdDone extends PlotCommand {
                         PlotDoneChangeEvent
                                 event =
                                 new PlotDoneChangeEvent(player.getWorld(), plot, player, plot.isFinished());
-                        serverBridge.getEventBus().post(event);
+                        plugin.getEventBus().post(event);
 
                         if (!event.isCancelled()) {
                             if (plot.isFinished()) {

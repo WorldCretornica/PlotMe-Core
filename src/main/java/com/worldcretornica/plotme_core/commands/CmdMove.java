@@ -55,7 +55,7 @@ public class CmdMove extends PlotCommand {
                         }
                     }
                     PlotMoveEvent event = new PlotMoveEvent(world, id1, id2, player);
-                    serverBridge.getEventBus().post(event);
+                    plugin.getEventBus().post(event);
                     if (!event.isCancelled()) {
                         if (manager.movePlot(world, id1, id2)) {
                             player.sendMessage(C("MsgPlotMovedSuccess"));

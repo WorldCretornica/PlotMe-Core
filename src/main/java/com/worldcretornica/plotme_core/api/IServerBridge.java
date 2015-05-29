@@ -2,7 +2,6 @@ package com.worldcretornica.plotme_core.api;
 
 import com.google.common.base.Optional;
 import com.worldcretornica.configuration.ConfigAccessor;
-import com.worldcretornica.plotme_core.api.event.eventbus.EventBus;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.configuration.ConfigurationSection;
@@ -11,6 +10,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -18,17 +18,21 @@ import java.util.logging.Logger;
 
 public abstract class IServerBridge {
 
-    private final EventBus eventBus = new EventBus();
     private final Logger logger;
 
     private boolean usingLwc;
 
+    private List<String> biomes = Arrays.asList("Ocean", "Plains", "Desert", "Extreme Hills", "Forest", "Tiaga", "Forest", "Swampland", "River",
+            "Hell",
+            "The End",
+            "FrozenOcean", "FrozenRiver", "Ice Plains", "Ice Mountains", "MushroomIsland", "MushroomIslandShore", "Beach", "DesertHills",
+            "ForestHills", "TiagaHills", "Extreme Hills Edge", "Jungle", "JungleHills", "JungleEdge", "Deep Ocean", "Stone Beach", "Cold Beach",
+            "Birch Forest", "Birch Forest Hills", "Roofed Forest", "Cold Taiga", "Cold Taiga Hills", "Mega Taiga", "Mega Taiga Hills",
+            "Extreme Hills+", "Savanna", "Savanna Plateau", "Mesa", "Mesa Plateau F", "Mesa Plateau");
+
+
     public IServerBridge(Logger bridgeLogger) {
         logger = bridgeLogger;
-    }
-
-    public EventBus getEventBus() {
-        return eventBus;
     }
 
     public abstract IOfflinePlayer getOfflinePlayer(UUID uuid);
@@ -95,7 +99,7 @@ public abstract class IServerBridge {
     public abstract void runTaskLaterAsynchronously(Runnable runnable, long delay);
 
     public boolean getBiome(String name) {
-
+        return biomes.contains(name);
     }
 
     public abstract File getDataFolder();
@@ -105,7 +109,9 @@ public abstract class IServerBridge {
                 new InputStreamReader(getClass().getClassLoader().getResourceAsStream("default-world.yml"), StandardCharsets.UTF_8));
     }
 
-    public abstract List<String> getBiomes();
+    public List<String> getBiomes() {
+        return biomes;
+    }
 
     /**
      * Get all Existing Plotworlds.
@@ -139,4 +145,6 @@ public abstract class IServerBridge {
     public abstract File getWorldFolder();
 
     public abstract String addColor(char c, String string);
+
+    public abstract void runTaskLater(Runnable runnable, long delay);
 }
