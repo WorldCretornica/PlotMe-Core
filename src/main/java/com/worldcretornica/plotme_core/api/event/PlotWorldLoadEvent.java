@@ -1,11 +1,13 @@
 package com.worldcretornica.plotme_core.api.event;
 
+import com.worldcretornica.plotme_core.api.IWorld;
+
 public class PlotWorldLoadEvent implements Event {
 
-    private final String world;
+    private final IWorld world;
     private final int nbPlots;
 
-    public PlotWorldLoadEvent(String world, int nbPlots) {
+    public PlotWorldLoadEvent(IWorld world, int nbPlots) {
         this.world = world;
         this.nbPlots = nbPlots;
     }
@@ -15,7 +17,7 @@ public class PlotWorldLoadEvent implements Event {
      *
      * @return world
      */
-    public String getWorldName() {
+    public IWorld getWorldName() {
         return world;
     }
 

@@ -60,7 +60,7 @@ public class CmdHome extends PlotCommand {
 
                 String playerName = player.getName();
                 if (args.length == 2) {
-                    if (serverBridge.getWorld(args[1]) == null) {
+                    if (manager.getWorld(args[1]) == null) {
                         playerName = args[1];
                         uuid = null;
                     } else {
@@ -69,7 +69,7 @@ public class CmdHome extends PlotCommand {
                 }
 
                 if (args.length == 3) {
-                    if (serverBridge.getWorld(args[2]) == null) {
+                    if (manager.getWorld(args[2]) == null) {
                         player.sendMessage(args[2] + C("MsgWorldNotPlot"));
                         return true;
                     }
@@ -92,7 +92,7 @@ public class CmdHome extends PlotCommand {
                                     double price = 0.0;
 
                                     location = manager.getPlotHome(plot.getId(), player.getWorld());
-                                    PlotTeleportHomeEvent event = new PlotTeleportHomeEvent(world, plot, player, location);
+                                    PlotTeleportHomeEvent event = new PlotTeleportHomeEvent(plot, player, location);
 
                                     if (manager.isEconomyEnabled(pmi)) {
                                         price = pmi.getPlotHomePrice();
@@ -135,7 +135,7 @@ public class CmdHome extends PlotCommand {
                                 double price = 0.0;
 
                                 location = manager.getPlotHome(plot.getId(), player.getWorld());
-                                PlotTeleportHomeEvent event = new PlotTeleportHomeEvent(world, plot, player, location);
+                                PlotTeleportHomeEvent event = new PlotTeleportHomeEvent(plot, player, location);
 
                                 if (manager.isEconomyEnabled(pmi)) {
                                     price = pmi.getPlotHomePrice();

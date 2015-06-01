@@ -112,30 +112,30 @@ public class CmdDeny extends PlotCommand {
                                 if (deniedPlayer != null && deniedPlayer.getWorld().equals(world)) {
                                     PlotId plotId = manager.getPlotId(deniedPlayer);
 
-                                    if (plotId.equals(id)) {
+                                    if (plot.getId().equals(plotId)) {
                                         deniedPlayer.setLocation(manager.getPlotHome(plot.getId(), player.getWorld()));
                                     }
                                 }
                             }
 
                             player.sendMessage(
-                                    C("WordPlayer") + " " + denied + " " + C("MsgNowDenied") + " " + serverBridge.getEconomy().format(price));
+                                    C("WordPlayer") + " " + denied + " " + C("MsgNowDenied") + " " + serverBridge.getEconomy().get().format(price));
 
                             if (isAdvancedLogging()) {
                                 if (price == 0) {
                                     serverBridge.getLogger()
                                             .info(player.getName() + " " + C("MsgDeniedPlayer") + " " + denied + " " + C("MsgToPlot") + " "
-                                                    + id);
+                                                    + plot.getId().getID());
                                 } else {
                                     serverBridge.getLogger()
                                             .info(player.getName() + " " + C("MsgDeniedPlayer") + " " + denied + " " + C("MsgToPlot") + " "
-                                                    + id + (" " + C("WordFor") + " " + price));
+                                                    + plot.getId().getID() + (" " + C("WordFor") + " " + price));
                                 }
                             }
                         }
                     }
                 } else {
-                    player.sendMessage(C("MsgThisPlot") + "(" + id + ") " + C("MsgNotYoursNotAllowedDeny"));
+                    player.sendMessage(C("MsgThisPlot") + "(" + plot.getId().getID() + ") " + C("MsgNotYoursNotAllowedDeny"));
                 }
             } else {
                 player.sendMessage(C("MsgNotPlotWorld"));

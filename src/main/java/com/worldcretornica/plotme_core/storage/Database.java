@@ -2,7 +2,6 @@ package com.worldcretornica.plotme_core.storage;
 
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotId;
-import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IWorld;
@@ -16,11 +15,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class Database {
 
@@ -28,12 +29,12 @@ public abstract class Database {
     final PlotMe_Core plugin;
     private final PlotMeCoreManager manager = PlotMeCoreManager.getInstance();
     public long nextPlotId;
+    ConcurrentHashMap<IWorld, ArrayList<Plot>> worldToPlotMap = new ConcurrentHashMap<>();
+    ArrayList<Plot> plots = new ArrayList<>();
     Connection connection;
 
     public Database(PlotMe_Core plugin) {
         this.plugin = plugin;
-        this.startConnection();
-        this.createTables();
     }
 
     /**
@@ -306,24 +307,21 @@ public abstract class Database {
         plugin.getServerBridge().runTaskAsynchronously(new Runnable() {
             @Override
             public void run() {
-                plugin.getLogger().info("Starting to load plots for world " + world);
-                HashMap<PlotId, Plot> plots = getPlots(world);
+                plugin.getLogger().info("Loading plots for world " + world);
+                ArrayList<Plot> plots = getPlots(world);
 
-                PlotMapInfo pmi = manager.getMap(world);
-
-                for (PlotId id : plots.keySet()) {
-                    pmi.addPlot(id, plots.get(id));
-                    PlotLoadEvent event = new PlotLoadEvent(world, plots.get(id));
+                for (Plot plot : plots) {
+                    PlotLoadEvent event = new PlotLoadEvent(world, plot);
                     plugin.getEventBus().post(event);
 
                 }
-                PlotWorldLoadEvent event = new PlotWorldLoadEvent(world, pmi.getNbPlots());
+                PlotWorldLoadEvent event = new PlotWorldLoadEvent(world, plots.size());
                 plugin.getEventBus().post(event);
 
             }
 
-            private HashMap<PlotId, Plot> getPlots(IWorld world) {
-                HashMap<PlotId, Plot> ret = new HashMap<>();
+            private ArrayList<Plot> getPlots(IWorld world) {
+                ArrayList<Plot> ret = new ArrayList<>();
                 Connection connection = getConnection();
                 try (PreparedStatement statementPlot = connection.prepareStatement("SELECT * FROM plotmecore_plots WHERE LOWER(world) = ?");
                         PreparedStatement statementAllowed = connection.prepareStatement("SELECT * FROM plotmecore_allowed WHERE plot_id = ?");
@@ -392,7 +390,7 @@ public abstract class Database {
                                     new Plot(internalID, owner, ownerId, world, biome, expiredDate, allowed, denied,
                                             likers, id, price, forSale, finished, finishedDate, protect, metadata, plotLikes, plotName, topX, bottomX,
                                             topZ, bottomZ, createdDate);
-                            ret.put(id, plot);
+                            ret.add(plot);
                         }
                     }
                 } catch (SQLException ex) {

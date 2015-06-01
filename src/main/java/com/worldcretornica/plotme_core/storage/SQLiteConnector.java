@@ -13,6 +13,8 @@ public class SQLiteConnector extends Database {
 
     public SQLiteConnector(PlotMe_Core plugin) {
         super(plugin);
+        this.startConnection();
+        this.createTables();
     }
 
     /**

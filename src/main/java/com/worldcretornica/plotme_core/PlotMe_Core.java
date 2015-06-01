@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 
 public class PlotMe_Core {
 
-    private final AbstractSchematicUtil schematicutil;
+    private final AbstractSchematicUtil schematicutil = new SchematicUtil(this);
     private final HashMap<IWorld, IPlotMe_GeneratorManager> managers = new HashMap<>();
     //Spool stuff
     private final ConcurrentLinkedQueue<PlotToClear> plotsToClear = new ConcurrentLinkedQueue<>();
@@ -34,9 +34,7 @@ public class PlotMe_Core {
     private EventBus eventBus = new EventBus();
 
 
-    public PlotMe_Core(IServerBridge serverObjectBuilder) {
-        this.serverBridge = serverObjectBuilder;
-        this.schematicutil = new SchematicUtil(this);
+    public PlotMe_Core() {
     }
 
     public IPlotMe_GeneratorManager getGenManager(IWorld world) {
@@ -50,6 +48,7 @@ public class PlotMe_Core {
     public void registerServerBridge(IServerBridge bridge) {
         serverBridge = bridge;
     }
+
     public void disable() {
         getSqlManager().closeConnection();
         PlotMeCoreManager.getInstance().getPlotMaps().clear();
@@ -137,7 +136,6 @@ public class PlotMe_Core {
         } else {
             setSqlManager(new SQLiteConnector(this));
         }
-        getSqlManager().startConnection();
     }
 
     /**

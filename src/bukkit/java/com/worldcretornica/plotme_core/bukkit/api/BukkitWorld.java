@@ -1,10 +1,10 @@
 package com.worldcretornica.plotme_core.bukkit.api;
 
 import com.worldcretornica.plotme_core.api.IBlock;
-import com.worldcretornica.plotme_core.api.IChunk;
 import com.worldcretornica.plotme_core.api.IEntity;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.Vector;
+import com.worldcretornica.plotme_core.bukkit.BukkitUtil;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
@@ -66,11 +66,6 @@ public class BukkitWorld implements IWorld {
     }
 
     @Override
-    public IChunk getChunkAt(int x, int z) {
-        return new BukkitChunk(world.getChunkAt(x, z));
-    }
-
-    @Override
     public void refreshChunk(int x, int z) {
         world.refreshChunk(x, z);
     }
@@ -93,7 +88,7 @@ public class BukkitWorld implements IWorld {
     public List<IEntity> getEntities() {
         List<IEntity> bukkitEntites = new ArrayList<>(world.getEntities().size());
         for (Entity entity : world.getEntities()) {
-            bukkitEntites.add(new BukkitEntity(entity));
+            bukkitEntites.add(BukkitUtil.adapt(entity));
         }
         return bukkitEntites;
     }

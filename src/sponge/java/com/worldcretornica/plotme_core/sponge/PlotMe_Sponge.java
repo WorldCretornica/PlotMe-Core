@@ -88,7 +88,7 @@ public class PlotMe_Sponge {
         game.getEventManager().register(this, new SpongePlotDenyListener(this));
         serverObjectBuilder = new SpongeServerBridge(this, new BridgeLogger(logger));
 
-        plotme = new PlotMe_Core(serverObjectBuilder);
+        plotme = new PlotMe_Core();
         setupCommands();
     }
 

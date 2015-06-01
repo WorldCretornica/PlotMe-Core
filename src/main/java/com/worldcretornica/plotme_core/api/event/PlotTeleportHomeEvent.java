@@ -3,12 +3,11 @@ package com.worldcretornica.plotme_core.api.event;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
-import com.worldcretornica.plotme_core.api.IWorld;
 
 public class PlotTeleportHomeEvent extends PlotTeleportEvent implements ICancellable, Event {
 
-    public PlotTeleportHomeEvent(IWorld world, Plot plot, IPlayer player, ILocation location) {
-        super(world, plot, player, location, plot.getId());
+    public PlotTeleportHomeEvent(Plot plot, IPlayer player, ILocation location) {
+        super(plot, player, location, plot.getId());
     }
 
     @Deprecated

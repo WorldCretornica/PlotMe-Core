@@ -2,19 +2,16 @@ package com.worldcretornica.plotme_core.bukkit;
 
 import com.google.common.base.Optional;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
-import com.worldcretornica.plotme_core.api.IMaterial;
 import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IServerBridge;
 import com.worldcretornica.plotme_core.api.IWorld;
-import com.worldcretornica.plotme_core.bukkit.api.BukkitMaterial;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitOfflinePlayer;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitWorld;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -263,11 +260,6 @@ public class BukkitServerBridge extends IServerBridge {
         return false;
     }
 */
-
-    @Override
-    public IMaterial getMaterial(String string) {
-        return new BukkitMaterial(Material.valueOf(string));
-    }
 
     public void clearBukkitPlayerMap() {
         PlotMe_CorePlugin.getInstance().getBukkitPlayerMap().clear();

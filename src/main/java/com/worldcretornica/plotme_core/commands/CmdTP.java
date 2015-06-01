@@ -55,7 +55,7 @@ public class CmdTP extends PlotCommand {
                         } else {
                             ILocation location = manager.getPlotHome(id2, player.getWorld());
                             Plot plot = manager.getPlotById(id2, world);
-                            PlotTeleportEvent event = new PlotTeleportEvent(world, plot, player, location, id2);
+                            PlotTeleportEvent event = new PlotTeleportEvent(plot, player, location, id2);
                             plugin.getEventBus().post(event);
 
                             if (!event.isCancelled()) {

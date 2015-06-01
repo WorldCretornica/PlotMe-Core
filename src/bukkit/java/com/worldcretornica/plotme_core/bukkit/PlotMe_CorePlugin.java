@@ -44,7 +44,8 @@ public class PlotMe_CorePlugin extends JavaPlugin {
         INSTANCE = this;
         getLogger().info("Enabling PlotMe...Waiting for generator data.");
         serverObjectBuilder = new BukkitServerBridge(getLogger());
-        plotme = new PlotMe_Core(serverObjectBuilder);
+        plotme = new PlotMe_Core();
+        plotme.registerServerBridge(serverObjectBuilder);
         getAPI().enable();
         doMetric();
 

@@ -5,11 +5,8 @@ import com.worldcretornica.configuration.ConfigAccessor;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -19,16 +16,14 @@ import java.util.logging.Logger;
 public abstract class IServerBridge {
 
     private final Logger logger;
-
-    private boolean usingLwc;
-
-    private List<String> biomes = Arrays.asList("Ocean", "Plains", "Desert", "Extreme Hills", "Forest", "Tiaga", "Forest", "Swampland", "River",
+    private final List<String> biomes = Arrays.asList("Ocean", "Plains", "Desert", "Extreme Hills", "Forest", "Tiaga", "Forest", "Swampland", "River",
             "Hell",
             "The End",
             "FrozenOcean", "FrozenRiver", "Ice Plains", "Ice Mountains", "MushroomIsland", "MushroomIslandShore", "Beach", "DesertHills",
             "ForestHills", "TiagaHills", "Extreme Hills Edge", "Jungle", "JungleHills", "JungleEdge", "Deep Ocean", "Stone Beach", "Cold Beach",
             "Birch Forest", "Birch Forest Hills", "Roofed Forest", "Cold Taiga", "Cold Taiga Hills", "Mega Taiga", "Mega Taiga Hills",
             "Extreme Hills+", "Savanna", "Savanna Plateau", "Mesa", "Mesa Plateau F", "Mesa Plateau");
+    private boolean usingLwc;
 
 
     public IServerBridge(Logger bridgeLogger) {
@@ -104,11 +99,6 @@ public abstract class IServerBridge {
 
     public abstract File getDataFolder();
 
-    public void saveResource(boolean replace) {
-        YamlConfiguration.loadConfiguration(
-                new InputStreamReader(getClass().getClassLoader().getResourceAsStream("default-world.yml"), StandardCharsets.UTF_8));
-    }
-
     public List<String> getBiomes() {
         return biomes;
     }
@@ -120,8 +110,6 @@ public abstract class IServerBridge {
     public abstract Collection<IWorld> getWorlds();
 
     //public abstract boolean createPlotWorld(String worldName, String generator, Map<String, String> args);
-
-    public abstract IMaterial getMaterial(String string);
 
     public ConfigurationSection loadDefaultConfig(ConfigAccessor configFile, String world) {
         ConfigurationSection defaultWorld = getDefaultWorld();

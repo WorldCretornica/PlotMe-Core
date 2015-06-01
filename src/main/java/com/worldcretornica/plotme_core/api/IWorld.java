@@ -28,8 +28,6 @@ public interface IWorld {
     @Override
     boolean equals(Object obj);
 
-    IChunk getChunkAt(int x, int z);
-
     void refreshChunk(int x, int z);
 
     IBlock getBlockAt(int x, int y, int z);

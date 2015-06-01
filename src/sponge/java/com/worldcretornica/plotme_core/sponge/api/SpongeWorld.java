@@ -1,16 +1,12 @@
 package com.worldcretornica.plotme_core.sponge.api;
 
-import com.flowpowered.math.vector.Vector3i;
-import com.google.common.base.Optional;
 import com.worldcretornica.plotme_core.api.IBlock;
-import com.worldcretornica.plotme_core.api.IChunk;
 import com.worldcretornica.plotme_core.api.IEntity;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.Vector;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.spongepowered.api.world.Chunk;
 import org.spongepowered.api.world.World;
 
 import java.io.File;
@@ -56,15 +52,6 @@ public class SpongeWorld implements IWorld {
             result = this.hashCode() == obj.hashCode();
         }
         return result;
-    }
-
-    @Override
-    public IChunk getChunkAt(int x, int z) {
-        Optional<Chunk> chunk = world.getChunk(new Vector3i(x, 0, z));
-        if (chunk.orNull() != null) {
-            return new SpongeChunk(chunk.get());
-        }
-        return null;
     }
 
     @Override

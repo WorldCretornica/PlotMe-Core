@@ -3,7 +3,6 @@ package com.worldcretornica.plotme_core.sponge;
 import com.google.common.base.Optional;
 import com.worldcretornica.configuration.ConfigAccessor;
 import com.worldcretornica.plotme_core.api.BridgeLogger;
-import com.worldcretornica.plotme_core.api.IMaterial;
 import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IServerBridge;
@@ -176,12 +175,6 @@ public class SpongeServerBridge extends IServerBridge {
         return false;
     }
 */
-
-    @Override
-    public IMaterial getMaterial(String string) {
-        // TODO Auto-generated method stub
-        return null;
-    }
 
     @Override
     public ConfigurationSection loadDefaultConfig(ConfigAccessor configFile, String world) {
