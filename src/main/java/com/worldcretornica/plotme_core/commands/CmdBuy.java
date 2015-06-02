@@ -40,7 +40,7 @@ public class CmdBuy extends PlotCommand {
                             } else {
                                 int plotLimit = getPlotLimit(player);
 
-                                int plotsOwned = manager.getOwnedPlotCount(player.getUniqueId(), world.getName());
+                                int plotsOwned = manager.getOwnedPlotCount(player.getUniqueId(), world);
 
                                 if (plotLimit != -1 && plotsOwned >= plotLimit) {
                                     player.sendMessage(C("MsgAlreadyReachedMaxPlots") + " ("

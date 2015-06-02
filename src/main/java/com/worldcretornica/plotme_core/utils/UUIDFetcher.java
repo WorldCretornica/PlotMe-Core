@@ -1,6 +1,6 @@
 package com.worldcretornica.plotme_core.utils;
 
-import com.google.common.collect.Iterables;
+import com.google.common.collect.ImmutableList;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -12,7 +12,6 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -21,21 +20,13 @@ import java.util.UUID;
 import java.util.concurrent.Callable;
 
 public class UUIDFetcher implements Callable<Map<String, UUID>> {
-
     private static final double PROFILES_PER_REQUEST = 100;
     private static final String PROFILE_URL = "https://api.mojang.com/profiles/minecraft";
-    private static final String PROFILE_AT_TIME_URL = "https://api.mojang.com/users/profiles/minecraft/@USERNAME@?at=1420156800";
     private final JSONParser jsonParser = new JSONParser();
-    private final ArrayList<String> names = new ArrayList<>();
-    private final boolean rateLimiting;
-
-    public UUIDFetcher(List<String> names, boolean rateLimiting) {
-        this.names.addAll(names);
-        this.rateLimiting = rateLimiting;
-    }
+    private final List<String> names;
 
     public UUIDFetcher(List<String> names) {
-        this(names, true);
+        this.names = ImmutableList.copyOf(names);
     }
 
     private static void writeBody(HttpURLConnection connection, String body) throws IOException {
@@ -56,18 +47,7 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
         return connection;
     }
 
-    private static HttpURLConnection createAtTimeConnection(String username) throws IOException {
-        URL url = new URL(PROFILE_AT_TIME_URL.replace("@USERNAME@", username));
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestMethod("GET");
-        connection.setRequestProperty("Content-Type", "application/json");
-        connection.setUseCaches(false);
-        connection.setDoInput(true);
-        connection.setDoOutput(false);
-        return connection;
-    }
-
-    public static UUID getUUID(String id) {
+    private static UUID getUUID(String id) {
         return UUID.fromString(id.substring(0, 8) + "-" + id.substring(8, 12) + "-" + id.substring(12, 16) + "-" + id.substring(16, 20) + "-" + id
                 .substring(20, 32));
     }
@@ -89,94 +69,27 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
         return new UUID(mostSignificant, leastSignificant);
     }
 
-    public static UUID getUUIDOf(String name) {
-        return new UUIDFetcher(Collections.singletonList(name)).call().get(name.toLowerCase());
+    public static UUID getUUIDOf(String name) throws Exception {
+        return new UUIDFetcher(Collections.singletonList(name)).call().get(name);
     }
 
-    @Override
-    public Map<String, UUID> call() {
+    public Map<String, UUID> call() throws IOException, ParseException, InterruptedException {
         Map<String, UUID> uuidMap = new HashMap<>();
         int requests = (int) Math.ceil(names.size() / PROFILES_PER_REQUEST);
-        for (ArrayList<String> map : Iterables.partition(names, 2)) {
-            int failedAttempts = 0;
-            boolean failed;
-
-            List<String> missinguuid = new ArrayList<>();
-
-            //First step, get people that didn't change name
-            boolean success = false;
-            while (!success) {
-                try {
-                    HttpURLConnection connection = createConnection();
-                    String body = JSONArray.toJSONString(sublist);
-                    writeBody(connection, body);
-                    JSONArray array = (JSONArray) jsonParser.parse(new InputStreamReader(connection.getInputStream()));
-                    for (Object profile : array) {
-                        JSONObject jsonProfile = (JSONObject) profile;
-                        String id = (String) jsonProfile.get("id");
-                        String name = (String) jsonProfile.get("name");
-                        UUID uuid = UUIDFetcher.getUUID(id);
-                        uuidMap.put(name.toLowerCase(), uuid);
-                    }
-
-                    for (String name : sublist) {
-                        if (!uuidMap.containsKey(name)) {
-                            missinguuid.add(name);
-                        }
-                    }
-
-                    success = true;
-                } catch (ParseException | IOException e) {
-                    try {
-                        //If we got an exception, retry in 30 seconds
-                        Thread.sleep(90000L);
-                    } catch (InterruptedException ignored) {
-                    }
-                }
+        for (int i = 0; i < requests; i++) {
+            HttpURLConnection connection = createConnection();
+            String body = JSONArray.toJSONString(names.subList(i * 100, Math.min((i + 1) * 100, names.size())));
+            writeBody(connection, body);
+            JSONArray array = (JSONArray) jsonParser.parse(new InputStreamReader(connection.getInputStream()));
+            for (Object profile : array) {
+                JSONObject jsonProfile = (JSONObject) profile;
+                String id = (String) jsonProfile.get("id");
+                String name = (String) jsonProfile.get("name");
+                UUID uuid = UUIDFetcher.getUUID(id);
+                uuidMap.put(name, uuid);
             }
-
-            //Step 2, check people that changed name since Febuary 2nd
-            if (!missinguuid.isEmpty()) {
-                for (String name : missinguuid) {
-                    success = false;
-                    while (!success) {
-                        HttpURLConnection connection = null;
-
-                        try {
-                            connection = createAtTimeConnection(name);
-                        } catch (IOException e) {
-                            try {
-                                //If we got an exception, retry in 30 seconds
-                                Thread.sleep(90000L);
-                            } catch (InterruptedException ignored) {
-                            }
-                        }
-
-                        if (connection != null) {
-                            try {
-                                JSONObject jsonProfile = (JSONObject) jsonParser.parse(new InputStreamReader(connection.getInputStream()));
-                                String id = (String) jsonProfile.get("id");
-                                String newname = (String) jsonProfile.get("name");
-                                UUID uuid = UUIDFetcher.getUUID(id);
-                                uuidMap.put(name.toLowerCase() + ";" + newname, uuid);
-                            } catch (IOException | ParseException ex) {
-                                //Unable to find name at mojang...
-                                uuidMap.put(name.toLowerCase() + ";", null);
-                            }
-                            success = true;
-                        } else {
-                            //Unable to find name at mojang...
-                            uuidMap.put(name.toLowerCase() + ";", null);
-                        }
-                    }
-                }
-            }
-
-            if (rateLimiting && i != requests - 1) {
-                try {
-                    Thread.sleep(1100L);
-                } catch (InterruptedException ignored) {
-                }
+            if (i != requests - 1) {
+                Thread.sleep(100L);
             }
         }
         return uuidMap;

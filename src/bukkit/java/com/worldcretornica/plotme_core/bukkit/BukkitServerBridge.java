@@ -81,15 +81,6 @@ public class BukkitServerBridge extends IServerBridge {
     }
 
     @Override
-    public IWorld getWorld(String worldName) {
-        World world = Bukkit.getWorld(worldName);
-        if (world == null) {
-            return null;
-        }
-        return new BukkitWorld(world);
-    }
-
-    @Override
     public void runTaskAsynchronously(Runnable runnable) {
         Bukkit.getScheduler().runTaskAsynchronously(PlotMe_CorePlugin.getInstance(), runnable);
     }

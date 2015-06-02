@@ -138,16 +138,6 @@ public class SpongeServerBridge extends IServerBridge {
 
 
     @Override
-    public IWorld getWorld(String worldName) {
-        World world = plugin.getGame().getServer().getWorld(worldName).orNull();
-        if (world != null) {
-            return new SpongeWorld(world);
-        } else {
-            return null;
-        }
-    }
-
-    @Override
     public void runTaskAsynchronously(Runnable runnable) {
         // TODO Auto-generated method stub
 

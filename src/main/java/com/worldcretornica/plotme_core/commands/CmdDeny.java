@@ -87,7 +87,7 @@ public class CmdDeny extends PlotCommand {
                                 }
                             } else {
                                 player.sendMessage(
-                                        C("MsgNotEnoughDeny") + " " + C("WordMissing") + " " + serverBridge.getEconomy().format(price));
+                                        C("MsgNotEnoughDeny") + " " + C("WordMissing") + " " + serverBridge.getEconomy().get().format(price));
                                 return true;
                             }
                         } else {
@@ -96,10 +96,10 @@ public class CmdDeny extends PlotCommand {
 
                         if (!event.isCancelled()) {
                             plot.addDenied(denied);
-                            plot.removeAllowed(denied);
+                            plot.removeMember(denied);
 
                             if ("*".equals(denied)) {
-                                List<IPlayer> playersInPlot = manager.getPlayersInPlot(id, world);
+                                List<IPlayer> playersInPlot = manager.getPlayersInPlot(plot.getId(), world);
 
                                 for (IPlayer iPlayer : playersInPlot) {
                                     if (!plot.isAllowed(iPlayer.getUniqueId())) {
@@ -107,8 +107,6 @@ public class CmdDeny extends PlotCommand {
                                     }
                                 }
                             } else {
-                                IPlayer deniedPlayer = serverBridge.getPlayer(denied);
-
                                 if (deniedPlayer != null && deniedPlayer.getWorld().equals(world)) {
                                     PlotId plotId = manager.getPlotId(deniedPlayer);
 

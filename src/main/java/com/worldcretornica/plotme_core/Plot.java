@@ -14,13 +14,11 @@ import java.util.UUID;
 
 public class Plot {
 
-    private final int topX;
-    private final int bottomX;
-    private final int topZ;
-    private final int bottomZ;
     private final HashMap<String, Plot.AccessLevel> allowed = new HashMap<>();
     private final HashSet<String> denied = new HashSet<>();
     private final HashMap<String, Map<String, String>> metadata = new HashMap<>();
+    private final Vector plotTopLoc;
+    private final Vector plotBottomLoc;
     private String owner = "Unknown";
     private UUID ownerId = UUID.randomUUID();
     private IWorld world;
@@ -44,10 +42,8 @@ public class Plot {
         setOwnerId(uuid);
         setWorld(world);
         setId(plotId);
-        topX = plotTopLoc.getBlockX();
-        topZ = plotTopLoc.getBlockZ();
-        bottomX = plotBottomLoc.getBlockX();
-        bottomZ = plotBottomLoc.getBlockZ();
+        this.plotTopLoc = plotTopLoc;
+        this.plotBottomLoc = plotBottomLoc;
         createdDate = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
     }
 
@@ -56,8 +52,7 @@ public class Plot {
             HashSet<String>
                     denied,
             HashSet<String> likers, PlotId id, double price, boolean forSale, boolean finished, String finishedDate, boolean protect,
-            Map<String, Map<String, String>> metadata, int plotLikes, String plotName, int topX, int bottomX, int topZ, int bottomZ,
-            String createdDate) {
+            Map<String, Map<String, String>> metadata, int plotLikes, String plotName, Vector topLoc, Vector bottomLoc, String createdDate) {
         setInternalID(internalID);
         setOwner(owner);
         setOwnerId(ownerId);
@@ -76,10 +71,8 @@ public class Plot {
         setPlotName(plotName);
         this.denied.addAll(denied);
         this.metadata.putAll(metadata);
-        this.topX = topX;
-        this.bottomX = bottomX;
-        this.topZ = topZ;
-        this.bottomZ = bottomZ;
+        this.plotTopLoc = topLoc;
+        this.plotBottomLoc = bottomLoc;
         this.createdDate = createdDate;
     }
 
@@ -159,12 +152,21 @@ public class Plot {
 
     public void removeAllowed(String name) {
         if (getMembers().containsKey(name)) {
-            PlotMeCoreManager.getInstance().getSQLManager().deletePlotAllowed(getInternalID(), name);
+            getMembers().remove(name, AccessLevel.ALLOWED);
+            PlotMeCoreManager.getInstance().getSQLManager().deletePlotMember(getInternalID(), name);
+        }
+    }
+
+    public void removeMember(String name) {
+        if (getMembers().containsKey(name)) {
+            getMembers().remove(name);
+            PlotMeCoreManager.getInstance().getSQLManager().deletePlotMember(getInternalID(), name);
         }
     }
 
     public void removeDenied(String name) {
         if (getDenied().contains(name)) {
+            getDenied().remove(name);
             PlotMeCoreManager.getInstance().getSQLManager().deletePlotDenied(getInternalID(), name);
         }
     }
@@ -368,19 +370,19 @@ public class Plot {
     }
 
     public int getTopX() {
-        return topX;
+        return plotTopLoc.getBlockX();
     }
 
     public int getTopZ() {
-        return topZ;
+        return plotTopLoc.getBlockZ();
     }
 
     public int getBottomX() {
-        return bottomX;
+        return plotBottomLoc.getBlockX();
     }
 
     public int getBottomZ() {
-        return bottomZ;
+        return plotBottomLoc.getBlockZ();
     }
 
     public String getCreatedDate() {

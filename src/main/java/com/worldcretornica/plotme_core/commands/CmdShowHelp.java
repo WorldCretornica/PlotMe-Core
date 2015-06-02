@@ -120,7 +120,7 @@ public class CmdShowHelp extends PlotCommand {
 
                     IWorld world = ((IPlayer) player).getWorld();
 
-                    int ownedPlots = manager.getOwnedPlotCount(((IPlayer) player).getUniqueId(), world.getName().toLowerCase());
+                    int ownedPlots = manager.getOwnedPlotCount(((IPlayer) player).getUniqueId(), world);
 
                     if (plotLimit == -1) {
                         player.sendMessage(
@@ -132,7 +132,7 @@ public class CmdShowHelp extends PlotCommand {
 
                     IWorld world = manager.getFirstWorld();
 
-                    int ownedPlots = manager.getOwnedPlotCount(((IPlayer) player).getUniqueId(), world.getName().toLowerCase());
+                    int ownedPlots = manager.getOwnedPlotCount(((IPlayer) player).getUniqueId(), world);
 
                     if (plotLimit == -1) {
                         player.sendMessage(

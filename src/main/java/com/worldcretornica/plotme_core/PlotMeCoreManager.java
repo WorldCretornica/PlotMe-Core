@@ -241,7 +241,7 @@ public class PlotMeCoreManager {
      * @param world plotworld
      * @return number of plots the player owns
      */
-    public int getOwnedPlotCount(UUID uuid, String world) {
+    public int getOwnedPlotCount(UUID uuid, IWorld world) {
         return plugin.getSqlManager().getPlotCount(world, uuid);
     }
 
@@ -376,6 +376,7 @@ public class PlotMeCoreManager {
      * @return plot
      */
     public Plot getPlotById(PlotId id, IWorld world) {
+        plugin.getSqlManager().getPlot(id, world);
         PlotMapInfo pmi = getMap(world);
 
         if (pmi == null) {

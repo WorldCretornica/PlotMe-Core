@@ -47,7 +47,7 @@ public class CmdInfo extends PlotCommand {
                     player.sendMessage("Internal ID: " + plot.getInternalID());
                     player.sendMessage("ID: " + id + " " + C("InfoOwner") + ": " + plot.getOwner()
                             + " " + C("InfoBiome") + ": " + plot.getBiome());
-
+                    player.sendMessage("Created: " + plot.getCreatedDate());
                     final String neverExpire = C("InfoExpire") + ": " + C("WordNever");
                     if (plot.getExpiredDate() == null) {
                         if (plot.isFinished()) {

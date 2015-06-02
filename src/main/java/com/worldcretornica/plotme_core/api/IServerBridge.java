@@ -79,16 +79,6 @@ public abstract class IServerBridge {
         this.usingLwc = usingLwc;
     }
 
-    /**
-     * Gets the world with the given name.
-     *
-     * @param worldName the name of the world
-     * @return a world with the given name, or null if none exists
-     */
-    public abstract IWorld getWorld(String worldName) {
-
-    }
-
     public abstract void runTaskAsynchronously(Runnable runnable);
 
     public abstract void runTaskLaterAsynchronously(Runnable runnable, long delay);

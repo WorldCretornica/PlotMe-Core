@@ -45,7 +45,7 @@ public class CmdAuto extends PlotCommand {
 
                 int playerLimit = getPlotLimit(player);
 
-                int plotsOwned = manager.getOwnedPlotCount(player.getUniqueId(), world.getName().toLowerCase());
+                int plotsOwned = manager.getOwnedPlotCount(player.getUniqueId(), world);
 
                 if (playerLimit != -1 && plotsOwned >= playerLimit && !player.hasPermission("PlotMe.admin")) {
                     player.sendMessage(C("MsgAlreadyReachedMaxPlots") + " (" + plotsOwned + "/" + playerLimit + "). " + C("WordUse")
@@ -74,7 +74,7 @@ public class CmdAuto extends PlotCommand {
                                 price = pmi.getClaimPrice();
 
                                 if (serverBridge.has(player, price)) {
-                                    player.sendMessage("It costs " + serverBridge.getEconomy().format(price) + " to use the auto command.");
+                                    player.sendMessage("It costs " + serverBridge.getEconomy().get().format(price) + " to use the auto command.");
                                     return true;
                                 } else {
                                     if (event.isCancelled()) {

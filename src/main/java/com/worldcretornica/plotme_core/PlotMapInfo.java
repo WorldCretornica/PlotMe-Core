@@ -33,7 +33,7 @@ public class PlotMapInfo {
             return null;
         }
         if (!plots.containsKey(id)) {
-            Plot plot = plugin.getSqlManager().getPlot(world, id);
+            Plot plot = plugin.getSqlManager().getPlot(id, world);
             if (plot == null) {
                 return null;
             }
