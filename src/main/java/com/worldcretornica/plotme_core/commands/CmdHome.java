@@ -5,9 +5,9 @@ import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ICommandSender;
-import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.api.Location;
 import com.worldcretornica.plotme_core.api.event.PlotTeleportHomeEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
 
@@ -81,7 +81,7 @@ public class CmdHome extends PlotCommand {
                     int i = nb - 1;
 
                     for (Plot plot : plugin.getSqlManager().getOwnedPlots(world, uuid)) {
-                        ILocation location;
+                        Location location;
                         if (plot.getOwnerId().equals(uuid)) {
                             if (i == 0) {
 

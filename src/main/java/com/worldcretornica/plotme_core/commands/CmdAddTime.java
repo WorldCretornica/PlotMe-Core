@@ -32,8 +32,8 @@ public class CmdAddTime extends PlotCommand {
                         player.sendMessage(C("MsgNoPlotFound"));
                         return true;
                     }
-                    if (!manager.isPlotAvailable(id, pmi)) {
-                        Plot plot = manager.getPlotById(id, pmi);
+                    if (!manager.isPlotAvailable(id, player.getWorld())) {
+                        Plot plot = manager.getPlotById(id, player.getWorld());
                         if (plot != null) {
                             String name = player.getName();
 

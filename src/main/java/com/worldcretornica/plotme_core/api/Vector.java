@@ -58,9 +58,32 @@ public class Vector implements Comparable<Vector> {
         return (int) z;
     }
 
+    public double lengthSquared() {
+        return x * x + y * y + z * z;
+    }
+
+    public double length() {
+        return Math.sqrt(lengthSquared());
+    }
+
     @Override
     public int compareTo(Vector o) {
-        return 0;
+        return (int) (lengthSquared() - o.lengthSquared());
+    }
+
+    @Override public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof Vector)) {
+            return false;
+        }
+        Vector vector = ((Vector) obj);
+        //noinspection RedundantIfStatement
+        if (Double.compare(vector.x, this.x) != 0 || Double.compare(vector.y, this.y) != 0 || Double.compare(vector.z, this.z) != 0) {
+            return false;
+        }
+        return true;
     }
 
     @Override

@@ -1,8 +1,8 @@
 package com.worldcretornica.plotme_core.bukkit.api;
 
 import com.worldcretornica.plotme_core.api.IBlock;
-import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.api.Location;
 import com.worldcretornica.plotme_core.api.Vector;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
@@ -18,8 +18,8 @@ public class BukkitBlock implements IBlock {
     }
 
     @Override
-    public ILocation getLocation() {
-        return new ILocation(getWorld(), getPosition());
+    public Location getLocation() {
+        return new Location(getWorld(), getPosition());
     }
 
     @Override

@@ -41,8 +41,7 @@ public class CmdReset extends PlotCommand {
 
                     if (!event.isCancelled()) {
                         manager.clear(plot, world, player, ClearReason.Reset);
-                        manager.deletePlot(pmi, plot);
-                        plugin.getSqlManager().deletePlot(plot.getInternalID());
+                        manager.deletePlot(world, plot);
 
                         if (isAdvancedLogging()) {
                             serverBridge.getLogger().info(player.getName() + " " + C("MsgResetPlot") + " " + plot.getId().toString());

@@ -35,8 +35,8 @@ public class CmdProtect extends PlotCommand {
                 if (id == null) {
                     player.sendMessage(C("MsgNoPlotFound"));
                     return true;
-                } else if (!manager.isPlotAvailable(id, pmi)) {
-                    Plot plot = manager.getPlotById(id, pmi);
+                } else if (!manager.isPlotAvailable(id, world)) {
+                    Plot plot = manager.getPlotById(id, world);
 
                     String name = player.getName();
 

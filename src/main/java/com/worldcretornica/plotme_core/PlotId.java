@@ -55,12 +55,10 @@ public class PlotId {
 
     @Override
     public boolean equals(Object obj) {
-        boolean result = false;
         if (obj instanceof PlotId) {
-            PlotId me = (PlotId) obj;
-            result = this.getX() == me.getX() && this.getZ() == me.getZ();
+            return this.x == ((PlotId) obj).getX() && this.z == ((PlotId) obj).getZ();
         }
-        return result;
+        return false;
     }
 
     @Override

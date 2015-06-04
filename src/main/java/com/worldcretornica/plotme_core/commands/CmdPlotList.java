@@ -5,7 +5,6 @@ import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
-import com.worldcretornica.plotme_core.api.IWorld;
 
 import java.sql.Date;
 import java.util.Calendar;
@@ -43,11 +42,6 @@ public class CmdPlotList extends PlotCommand {
 
                 // Get plots of that player
                 for (Plot plot : plugin.getSqlManager().getPlayerPlots(uuid)) {
-                    IWorld world = plot.getWorld();
-                    if (world != null) {
-                        manager.getMap(world).addPlot(plot.getId(), plot);
-                    }
-
                     StringBuilder addition = new StringBuilder();
 
                     // Display worlds

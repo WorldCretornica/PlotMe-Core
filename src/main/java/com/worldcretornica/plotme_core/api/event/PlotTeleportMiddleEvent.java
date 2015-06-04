@@ -1,17 +1,17 @@
 package com.worldcretornica.plotme_core.api.event;
 
 import com.worldcretornica.plotme_core.Plot;
-import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.api.Location;
 
 public class PlotTeleportMiddleEvent extends PlotTeleportEvent implements ICancellable, Event {
 
-    public PlotTeleportMiddleEvent(Plot plot, IPlayer player, ILocation middlelocation) {
+    public PlotTeleportMiddleEvent(Plot plot, IPlayer player, Location middlelocation) {
         super(plot, player, middlelocation, plot.getId());
     }
 
     @Deprecated
-    public ILocation getMiddleLocation() {
+    public Location getMiddleLocation() {
         return getLocation();
     }
 

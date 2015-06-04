@@ -4,8 +4,8 @@ import com.worldcretornica.plotme_core.AbstractSchematicUtil;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IBlock;
 import com.worldcretornica.plotme_core.api.IEntity;
-import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.api.Location;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitEntity;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitWorld;
 import com.worldcretornica.schematic.Attribute;
@@ -35,7 +35,6 @@ import com.worldcretornica.schematic.jnbt.Tag;
 import org.bukkit.Art;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Rotation;
 import org.bukkit.SkullType;
@@ -185,7 +184,7 @@ public class SchematicUtil extends AbstractSchematicUtil {
     }
 
     private Leash getLeash(org.bukkit.entity.Entity leashHolder) {
-        Location loc = leashHolder.getLocation();
+        org.bukkit.Location loc = leashHolder.getLocation();
         return new Leash(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
     }
 
@@ -362,7 +361,7 @@ public class SchematicUtil extends AbstractSchematicUtil {
         int y = leash.getY() - originY;
         int z = leash.getZ() - originZ;
 
-        Location etloc = new Location(world, x + loc.getBlockX(), y + loc.getBlockY(), z + loc.getBlockZ());
+        org.bukkit.Location etloc = new org.bukkit.Location(world, x + loc.getBlockX(), y + loc.getBlockY(), z + loc.getBlockZ());
 
         Block block = world.getBlockAt(etloc);
 
@@ -539,7 +538,7 @@ public class SchematicUtil extends AbstractSchematicUtil {
     @SuppressWarnings("deprecation")
     private Entity getEntity(IEntity bukkitentity, int minX, int minY, int minZ) {
 
-        ILocation entLoc = bukkitentity.getLocation();
+        Location entLoc = bukkitentity.getLocation();
         double x = entLoc.getX() - minX;
         double y = entLoc.getY() - minY;
         double z = entLoc.getZ() - minZ;
@@ -1389,7 +1388,7 @@ public class SchematicUtil extends AbstractSchematicUtil {
 
                 List<Item> items = e.getItems();
 
-                Location etloc = new Location(((BukkitWorld) world).getWorld(), x + loc.getBlockX(), y + loc.getBlockY(), z + loc.getBlockZ());
+                org.bukkit.Location etloc = new org.bukkit.Location(((BukkitWorld) world).getWorld(), x + loc.getBlockX(), y + loc.getBlockY(), z + loc.getBlockZ());
 
                 if (entitytype == EntityType.ITEM_FRAME) {
                     etloc.setX(Math.floor(etloc.getX()));
@@ -2136,7 +2135,7 @@ public class SchematicUtil extends AbstractSchematicUtil {
         }
 
         for (IEntity bukkitentity : world.getEntities()) {
-            ILocation entloc = bukkitentity.getLocation();
+            Location entloc = bukkitentity.getLocation();
 
             if (entloc.getX() >= minX && entloc.getX() <= maxX &&
                     entloc.getY() >= minY && entloc.getY() <= maxY &&

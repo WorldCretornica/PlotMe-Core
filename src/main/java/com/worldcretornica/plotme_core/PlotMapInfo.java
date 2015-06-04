@@ -28,34 +28,6 @@ public class PlotMapInfo {
         return plots.size();
     }
 
-    public Plot getPlot(PlotId id) {
-        if (id == null) {
-            return null;
-        }
-        if (!plots.containsKey(id)) {
-            Plot plot = plugin.getSqlManager().getPlot(id, world);
-            if (plot == null) {
-                return null;
-            }
-
-            plots.put(id, plot);
-        }
-
-        return plots.get(id);
-    }
-
-    public ConcurrentHashMap<PlotId, Plot> getLoadedPlots() {
-        return plots;
-    }
-
-    public void addPlot(PlotId id, Plot plot) {
-        plots.putIfAbsent(id, plot);
-    }
-
-    public void removePlot(PlotId id) {
-        plots.remove(id);
-    }
-
     private List<Integer> getProtectedBlocks() {
         return config.getIntegerList("ProtectedBlocks");
     }

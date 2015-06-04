@@ -3,9 +3,9 @@ package com.worldcretornica.plotme_core.sponge.api;
 import com.google.common.base.Optional;
 import com.worldcretornica.plotme_core.TeleportRunnable;
 import com.worldcretornica.plotme_core.api.IItemStack;
-import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.api.Location;
 import com.worldcretornica.plotme_core.api.Vector;
 import com.worldcretornica.plotme_core.bukkit.PlotMe_CorePlugin;
 import org.spongepowered.api.entity.player.Player;
@@ -37,12 +37,12 @@ public class SpongePlayer extends SpongeUser implements IPlayer {
     }
 
     @Override
-    public ILocation getLocation() {
-        return new ILocation(getWorld(), getPosition());
+    public Location getLocation() {
+        return new Location(getWorld(), getPosition());
     }
 
     @Override
-    public void setLocation(ILocation location) {
+    public void setLocation(Location location) {
     }
 
     /**
@@ -52,7 +52,7 @@ public class SpongePlayer extends SpongeUser implements IPlayer {
 
      * @param location new location
      */
-    @Override public void teleport(ILocation location) {
+    @Override public void teleport(Location location) {
         PlotMe_CorePlugin.getInstance().getServerObjectBuilder().runTaskLater(new TeleportRunnable(this, location), PlotMe_CorePlugin.getInstance()
                 .getAPI().getConfig().getInt("tp-delay"));
     }

@@ -3,12 +3,11 @@ package com.worldcretornica.plotme_core.bukkit;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.worldcretornica.plotme_core.api.IEntity;
-import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.api.Location;
 import com.worldcretornica.plotme_core.api.Vector;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitEntity;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitWorld;
-import org.bukkit.Location;
 import org.bukkit.World;
 
 /**
@@ -17,8 +16,8 @@ import org.bukkit.World;
  */
 public class BukkitUtil {
 
-    public static Location adapt(ILocation location) {
-        return new Location(adapt(location.getWorld()), 0, 0, 0);
+    public static org.bukkit.Location adapt(Location location) {
+        return new org.bukkit.Location(adapt(location.getWorld()), 0, 0, 0);
     }
 
     private static World adapt(IWorld world) {
@@ -28,7 +27,7 @@ public class BukkitUtil {
         return null;
     }
 
-    public static Vector locationToVector(Location location) {
+    public static Vector locationToVector(org.bukkit.Location location) {
         return new Vector(location.getX(), location.getY(), location.getZ());
     }
 

@@ -8,7 +8,7 @@ import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 
-import java.util.HashSet;
+import java.util.TreeSet;
 
 public class CmdExpired extends PlotCommand {
 
@@ -33,7 +33,7 @@ public class CmdExpired extends PlotCommand {
                         page = Integer.parseInt(args[1]);
                     }
 
-                    HashSet<Plot> expiredPlots = plugin.getSqlManager().getExpiredPlots(world);
+                    TreeSet<Plot> expiredPlots = plugin.getSqlManager().getExpiredPlots(world);
 
                     if (expiredPlots.isEmpty()) {
                         player.sendMessage(C("MsgNoPlotExpired"));

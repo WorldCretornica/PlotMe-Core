@@ -16,10 +16,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -76,7 +79,7 @@ public abstract class Database {
      * @param world plotworld to check
      * @return number of plots in the world
      */
-    public int getPlotCount(IWorld world) {
+    public int getWorldPlotCount(IWorld world) {
         return worldToPlotMap.get(world).size();
     }
 
@@ -114,24 +117,24 @@ public abstract class Database {
                 plot.setInternalID(nextPlotId);
                 incrementNextInternalPlotId();
             }
-            ps.setInt(1, plot.getId().getX());
-            ps.setInt(2, plot.getId().getZ());
-            ps.setString(3, plot.getWorld().getName().toLowerCase());
-            ps.setString(4, plot.getOwnerId().toString());
-            ps.setString(5, plot.getOwner());
-            ps.setString(6, plot.getBiome());
-            ps.setBoolean(7, plot.isFinished());
-            ps.setString(8, plot.getFinishedDate());
-            ps.setBoolean(9, plot.isForSale());
-            ps.setDouble(10, plot.getPrice());
-            ps.setBoolean(11, plot.isProtected());
-            ps.setDate(12, plot.getExpiredDate());
-            ps.setInt(13, plot.getTopX());
-            ps.setInt(14, plot.getTopZ());
-            ps.setInt(15, plot.getBottomX());
-            ps.setInt(16, plot.getBottomZ());
-            ps.setInt(17, plot.getLikes());
-            ps.setString(18, plot.getCreatedDate());
+            ps.setInt(2, plot.getId().getX());
+            ps.setInt(3, plot.getId().getZ());
+            ps.setString(4, plot.getWorld().getName().toLowerCase());
+            ps.setString(5, plot.getOwnerId().toString());
+            ps.setString(6, plot.getOwner());
+            ps.setString(7, plot.getBiome());
+            ps.setBoolean(8, plot.isFinished());
+            ps.setString(9, plot.getFinishedDate());
+            ps.setBoolean(10, plot.isForSale());
+            ps.setDouble(11, plot.getPrice());
+            ps.setBoolean(12, plot.isProtected());
+            ps.setDate(13, plot.getExpiredDate());
+            ps.setInt(14, plot.getTopX());
+            ps.setInt(15, plot.getTopZ());
+            ps.setInt(16, plot.getBottomX());
+            ps.setInt(17, plot.getBottomZ());
+            ps.setInt(18, plot.getLikes());
+            ps.setString(19, plot.getCreatedDate());
             ps.executeUpdate();
             getConnection().commit();
         } catch (SQLException ex) {
@@ -171,6 +174,16 @@ public abstract class Database {
         }
     }
 
+    public void deletePlot(Plot plot) {
+        worldToPlotMap.get(plot.getWorld()).remove(plot);
+        plots.remove(plot);
+        deletePlotInternal(plot.getInternalID(), "plotmecore_allowed");
+        deletePlotInternal(plot.getInternalID(), "plotmecore_denied");
+        deletePlotInternal(plot.getInternalID(), "plotmecore_metadata");
+        deletePlotInternal(plot.getInternalID(), "plotmecore_likes");
+        deletePlotInternal(plot.getInternalID(), "plotmecore_plots");
+    }
+
     private void deletePlotInternal(long internalID, String table) {
         try (PreparedStatement ps = getConnection().prepareStatement("DELETE FROM " + table + " WHERE plot_id = ?")) {
             ps.setLong(1, internalID);
@@ -182,31 +195,42 @@ public abstract class Database {
         }
     }
 
-    public void deletePlot(long internalID) {
+    /**
+     * Placeholder.
+     *
+     * @param uuid
+     * @return plots. unmodifiable.
+     */
 
-        deletePlotInternal(internalID, "plotmecore_allowed");
-        deletePlotInternal(internalID, "plotmecore_denied");
-        deletePlotInternal(internalID, "plotmecore_metadata");
-        deletePlotInternal(internalID, "plotmecore_likes");
-        deletePlotInternal(internalID, "plotmecore_plots");
-    }
-
-    public HashSet<Plot> getPlayerPlots(UUID uuid) {
-        return null;
+    public Set<Plot> getPlayerPlots(UUID uuid) {
+        HashSet<Plot> playerPlots = new HashSet<>();
+        for (Plot plot : plots) {
+            if (plot.getOwnerId().equals(uuid)) {
+                playerPlots.add(plot);
+            }
+        }
+        return Collections.unmodifiableSet(playerPlots);
     }
 
     public void updatePlotsNewUUID(UUID uuid, String name) {
 
     }
 
-    public HashSet<Plot> getOwnedPlots(IWorld world, UUID uuid) {
+    /**
+     * Placeholder.
+     *
+     * @param world
+     * @param uuid
+     * @return owned plots. unmodifiable.
+     */
+    public Set<Plot> getOwnedPlots(IWorld world, UUID uuid) {
         HashSet<Plot> plots = new HashSet<>();
         for (Plot plot : worldToPlotMap.get(world)) {
             if (plot.getOwnerId().equals(uuid)) {
                 plots.add(plot);
             }
         }
-        return plots;
+        return Collections.unmodifiableSet(plots);
     }
 
     public void loadPlotsAsynchronously(final IWorld world) {
@@ -319,6 +343,28 @@ public abstract class Database {
         //TODO Get rid of this ugly method
     }
 
+    public void updatePlot(Plot plot) {
+        Connection connection = getConnection();
+        try (PreparedStatement statement = connection.prepareStatement("UPDATE plotmecore_plots SET plotX = ?, plotZ = ?, world = ?, ownerID = ?, "
+                + "owner = ?, biome = ?, finished = ?, finishedDate = ?, forSale = ?, price = ?, protected = ?, expiredDate = ?, topX = ?, topZ = "
+                + "?, bottomX = ?, bottomZ = ?, plotName = ?, plotLikes = ?, homeX = ?, homeY = ?, homeZ = ?, homeName = ?, createdDate = ? WHERE "
+                + "id = ?")) {
+            statement.setInt(1, plot.getId().getX());
+            statement.setInt(2, plot.getId().getZ());
+            statement.setString(3, plot.getWorld().getName().toLowerCase());
+            statement.setString(4, plot.getOwnerId().toString());
+            statement.setString(5, plot.getOwner());
+            statement.setString(6, plot.getBiome());
+            statement.setBoolean(7, plot.isFinished());
+            statement.setBoolean(7, plot.isFinished());
+            statement.execute();
+            connection.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     public void deletePlotMember(long internalID, String player) {
         internalDeletePlotPlayer("plotmecore_allowed", internalID, player);
     }
@@ -373,34 +419,18 @@ public abstract class Database {
         return false;
     }
 
-    public HashSet<Plot> getExpiredPlots(IWorld world) {
-        HashSet<Plot> ret = new HashSet<>();
-
-        try (PreparedStatement statementExpired = getConnection().prepareStatement("SELECT * FROM plotmecore_plots WHERE LOWER(world) = ? AND "
-                + "protected = 0 AND finished = 0 AND expireddate < ? ORDER BY expireddate")) {
-            Calendar cal = Calendar.getInstance();
-            java.util.Date utilDate = cal.getTime();
-            Date sqlDate = new Date(utilDate.getTime());
-            statementExpired.setString(1, world.getName().toLowerCase());
-            statementExpired.setDate(2, sqlDate);
-            try (ResultSet setPlots = statementExpired.executeQuery()) {
-                while (setPlots.next()) {
-                    PlotId id = new PlotId(setPlots.getInt("idX"), setPlots.getInt("idZ"));
-                    String owner = setPlots.getString("owner");
-                    Date expireddate = setPlots.getDate("expireddate");
-                    Plot plot = null;
-                    plot.setOwner(owner);
-                    plot.setId(id);
-                    plot.setExpiredDate(expireddate);
-
-                    ret.add(plot);
-                }
+    public TreeSet<Plot> getExpiredPlots(IWorld world) {
+        TreeSet<Plot> expiredPlots = new TreeSet<>(new Comparator<Plot>() {
+            @Override public int compare(Plot o1, Plot o2) {
+                return o1.getExpiredDate().compareTo(o2.getExpiredDate());
             }
-        } catch (SQLException ex) {
-            plugin.getLogger().severe("ExpiredPlots Exception :");
-            plugin.getLogger().severe(ex.getMessage());
+        });
+        for (Plot plot : worldToPlotMap.get(world)) {
+            if (plot.getExpiredDate() != null) {
+                expiredPlots.add(plot);
+            }
         }
-        return ret;
+        return expiredPlots;
     }
 
     public HashSet<Plot> getFinishedPlots(String name, int page, int i) {

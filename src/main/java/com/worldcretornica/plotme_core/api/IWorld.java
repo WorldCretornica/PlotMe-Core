@@ -20,13 +20,7 @@ public interface IWorld {
 
     File getWorldFolder();
 
-    @Override
-    int hashCode();
-
     UUID getUUID();
-
-    @Override
-    boolean equals(Object obj);
 
     void refreshChunk(int x, int z);
 

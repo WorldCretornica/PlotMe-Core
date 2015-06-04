@@ -2,17 +2,17 @@ package com.worldcretornica.plotme_core.api.event;
 
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotId;
-import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.api.Location;
 
 public class PlotTeleportEvent extends PlotEvent implements ICancellable, Event {
 
     private final IPlayer player;
     private final PlotId plotId;
-    private final ILocation location;
+    private final Location location;
     private boolean canceled;
 
-    public PlotTeleportEvent(Plot plot, IPlayer player, ILocation location, PlotId plotId) {
+    public PlotTeleportEvent(Plot plot, IPlayer player, Location location, PlotId plotId) {
         super(plot, location.getWorld());
         this.player = player;
         this.location = location;
@@ -39,10 +39,10 @@ public class PlotTeleportEvent extends PlotEvent implements ICancellable, Event 
     }
 
     /**
-     * Get the home {@link ILocation} of the plot
+     * Get the home {@link Location} of the plot
      * @return internal home location of the plot
      */
-    public ILocation getLocation() {
+    public Location getLocation() {
         return location;
     }
 

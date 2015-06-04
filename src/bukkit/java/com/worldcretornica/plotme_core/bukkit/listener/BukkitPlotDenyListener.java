@@ -3,8 +3,8 @@ package com.worldcretornica.plotme_core.bukkit.listener;
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
-import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.api.Location;
 import com.worldcretornica.plotme_core.bukkit.BukkitUtil;
 import com.worldcretornica.plotme_core.bukkit.PlotMe_CorePlugin;
 import org.bukkit.event.EventHandler;
@@ -28,7 +28,7 @@ public class BukkitPlotDenyListener implements Listener {
         IPlayer player = plugin.wrapPlayer(event.getPlayer());
 
         if (manager.isPlotWorld(player) && !player.hasPermission(PermissionNames.ADMIN_BYPASSDENY)) {
-            ILocation to = new ILocation(player.getWorld(), BukkitUtil.locationToVector(event.getTo()));
+            Location to = new Location(player.getWorld(), BukkitUtil.locationToVector(event.getTo()));
 
             Plot plot = manager.getPlot(to);
 

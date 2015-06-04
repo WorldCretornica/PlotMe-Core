@@ -2,12 +2,11 @@ package com.worldcretornica.plotme_core.bukkit.api;
 
 import com.worldcretornica.plotme_core.TeleportRunnable;
 import com.worldcretornica.plotme_core.api.IEntity;
-import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.api.Location;
 import com.worldcretornica.plotme_core.api.Vector;
 import com.worldcretornica.plotme_core.bukkit.BukkitUtil;
 import com.worldcretornica.plotme_core.bukkit.PlotMe_CorePlugin;
-import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.metadata.MetadataValue;
 
@@ -25,16 +24,16 @@ public class BukkitEntity implements IEntity {
     }
 
     @Override
-    public ILocation getLocation() {
-        return new ILocation(getWorld(), getPosition());
+    public Location getLocation() {
+        return new Location(getWorld(), getPosition());
     }
 
     @Override
-    public void setLocation(ILocation location) {
-        entity.teleport(new Location(((BukkitWorld) location.getWorld()).getWorld(), location.getX(), location.getY(), location.getZ()));
+    public void setLocation(Location location) {
+        entity.teleport(new org.bukkit.Location(((BukkitWorld) location.getWorld()).getWorld(), location.getX(), location.getY(), location.getZ()));
     }
 
-    @Override public void teleport(ILocation location) {
+    @Override public void teleport(Location location) {
         PlotMe_CorePlugin.getInstance().getServerObjectBuilder().runTaskLater(new TeleportRunnable(this, location), PlotMe_CorePlugin.getInstance()
                 .getAPI().getConfig().getInt("tp-delay"));
     }

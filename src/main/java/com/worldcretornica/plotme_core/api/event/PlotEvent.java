@@ -2,8 +2,8 @@ package com.worldcretornica.plotme_core.api.event;
 
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
-import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.api.Location;
 
 public class PlotEvent implements Event {
 
@@ -52,7 +52,7 @@ public class PlotEvent implements Event {
      *
      * @return home location
      */
-    public ILocation getHomeLocation() {
+    public Location getHomeLocation() {
         if (getPlot() != null) {
             return PlotMeCoreManager.getInstance().getPlotHome(getPlot().getId(), getWorld());
         } else {

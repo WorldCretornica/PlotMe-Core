@@ -6,7 +6,7 @@ import org.bukkit.block.BlockState;
 
 public interface IBlock {
 
-    ILocation getLocation();
+    Location getLocation();
 
     IWorld getWorld();
 

@@ -54,7 +54,7 @@ public interface IPlotMe_GeneratorManager {
 
     int topZ(PlotId id);
 
-    ILocation getPlotHome(PlotId id);
+    Location getPlotHome(PlotId id);
 
     int getPlotSize();
 

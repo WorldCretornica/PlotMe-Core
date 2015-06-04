@@ -5,9 +5,9 @@ import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotId;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ICommandSender;
-import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.api.Location;
 import com.worldcretornica.plotme_core.api.event.PlotTeleportEvent;
 
 import java.util.Collections;
@@ -53,7 +53,7 @@ public class CmdTP extends PlotCommand {
                         if (!manager.isPlotWorld(world)) {
                             player.sendMessage(C("MsgNoPlotworldFound"));
                         } else {
-                            ILocation location = manager.getPlotHome(id2, player.getWorld());
+                            Location location = manager.getPlotHome(id2, player.getWorld());
                             Plot plot = manager.getPlotById(id2, world);
                             PlotTeleportEvent event = new PlotTeleportEvent(plot, player, location, id2);
                             plugin.getEventBus().post(event);

@@ -65,7 +65,7 @@ public class CmdAuto extends PlotCommand {
                 for (int i = 0; i < maxPlots; i++) {
                     if (-limit / 2 <= x && x <= limit / 2 && -limit / 2 <= z && z <= limit / 2) {
                         PlotId id = new PlotId(x, z);
-                        if (manager.isPlotAvailable(id, pmi)) {
+                        if (manager.isPlotAvailable(id, world)) {
                             double price = 0.0;
 
                             PlotCreateEvent event = new PlotCreateEvent(world, id, player);

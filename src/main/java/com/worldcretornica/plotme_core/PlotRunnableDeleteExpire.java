@@ -5,7 +5,7 @@ import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.PlotResetEvent;
 import com.worldcretornica.plotme_core.storage.Database;
 
-import java.util.HashSet;
+import java.util.TreeSet;
 
 public class PlotRunnableDeleteExpire implements Runnable {
 
@@ -24,7 +24,7 @@ public class PlotRunnableDeleteExpire implements Runnable {
 
         if (plugin.getWorldCurrentlyProcessingExpired() != null) {
             IWorld world = plugin.getWorldCurrentlyProcessingExpired();
-            HashSet<Plot> expiredPlots = sqlmanager.getExpiredPlots(world);
+            TreeSet<Plot> expiredPlots = sqlmanager.getExpiredPlots(world);
 
             if (expiredPlots.isEmpty()) {
                 plugin.setCounterExpired(0);
@@ -40,12 +40,7 @@ public class PlotRunnableDeleteExpire implements Runnable {
                         PlotId id = expiredPlot.getId();
                         ids += id + ", ";
 
-                        plotMeCoreManager.deletePlot(world, id);
-                        plotMeCoreManager.removeOwnerSign(expiredPlot, world);
-                        plotMeCoreManager.removeSellSign(expiredPlot, world);
-
-                        sqlmanager.deletePlot(expiredPlot.getInternalID());
-
+                        plotMeCoreManager.deletePlot(world, expiredPlot);
                         plugin.setCounterExpired(plugin.getCounterExpired() - 1);
                     }
                 }

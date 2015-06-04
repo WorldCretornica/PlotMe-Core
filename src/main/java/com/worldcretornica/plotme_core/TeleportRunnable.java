@@ -1,14 +1,14 @@
 package com.worldcretornica.plotme_core;
 
 import com.worldcretornica.plotme_core.api.IEntity;
-import com.worldcretornica.plotme_core.api.ILocation;
+import com.worldcretornica.plotme_core.api.Location;
 
 public class TeleportRunnable implements Runnable {
 
     private final IEntity entity;
-    private final ILocation location;
+    private final Location location;
 
-    public TeleportRunnable(IEntity entity, ILocation location) {
+    public TeleportRunnable(IEntity entity, Location location) {
         this.entity = entity;
         this.location = location;
     }

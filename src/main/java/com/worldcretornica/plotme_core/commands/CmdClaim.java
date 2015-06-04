@@ -33,7 +33,7 @@ public class CmdClaim extends PlotCommand {
                 if (id == null) {
                     player.sendMessage(C("MsgCannotClaimRoad"));
                     return true;
-                } else if (!manager.isPlotAvailable(id, pmi)) {
+                } else if (!manager.isPlotAvailable(id, world)) {
                     player.sendMessage(C("MsgThisPlotOwned"));
                     return true;
                 }

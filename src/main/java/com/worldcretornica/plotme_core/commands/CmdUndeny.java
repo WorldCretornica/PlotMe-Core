@@ -43,8 +43,8 @@ public class CmdUndeny extends PlotCommand {
                     return true;
                 }
                 PlotMapInfo pmi = manager.getMap(world);
-                if (!manager.isPlotAvailable(id, pmi)) {
-                    Plot plot = manager.getPlotById(id, pmi);
+                if (!manager.isPlotAvailable(id, world)) {
+                    Plot plot = manager.getPlotById(id, world);
                     String denied = args[1];
                     if (player.getUniqueId().equals(plot.getOwnerId()) || player.hasPermission(PermissionNames.ADMIN_DENY)) {
                         if ("*".equals(denied)) {
@@ -57,7 +57,6 @@ public class CmdUndeny extends PlotCommand {
                             if (manager.isEconomyEnabled(pmi)) {
                                 price = pmi.getUndenyPlayerPrice();
 
-                                //noinspection ConstantConditions
                                 if (serverBridge.has(player, price)) {
                                     plugin.getEventBus().post(event);
                                     if (event.isCancelled()) {

@@ -11,8 +11,8 @@ import com.sk89q.worldedit.extent.Extent;
 import com.sk89q.worldedit.world.biome.BaseBiome;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
-import com.worldcretornica.plotme_core.api.ILocation;
 import com.worldcretornica.plotme_core.api.IPlayer;
+import com.worldcretornica.plotme_core.api.Location;
 
 public class PlotMeWorldEdit extends AbstractDelegateExtent {
 
@@ -35,7 +35,7 @@ public class PlotMeWorldEdit extends AbstractDelegateExtent {
         if (manager.isPlayerIgnoringWELimit(player)) {
             return extent.setBlock(location, block);
         } else {
-            ILocation loc = new ILocation(player.getWorld(), location.getX(), location.getY(), location.getZ());
+            Location loc = new Location(player.getWorld(), location.getX(), location.getY(), location.getZ());
             Plot plot = manager.getPlot(loc);
             return plot != null && plot.isAllowed(actor.getUniqueId()) && extent.setBlock(location, block);
         }
@@ -46,7 +46,7 @@ public class PlotMeWorldEdit extends AbstractDelegateExtent {
         if (manager.isPlayerIgnoringWELimit(player)) {
             return extent.setBiome(position, biome);
         } else {
-            ILocation loc = new ILocation(player.getWorld(), position.getX(), 0, position.getZ());
+            Location loc = new Location(player.getWorld(), position.getX(), 0, position.getZ());
             Plot plot = manager.getPlot(loc);
             return plot != null && plot.isAllowed(actor.getUniqueId()) && extent.setBiome(position, biome);
         }

@@ -9,7 +9,7 @@ public interface IEntity extends IActor {
      *
      * @return the location of entity
      */
-    ILocation getLocation();
+    Location getLocation();
 
     /**
      * Sets the location of the entity
@@ -17,7 +17,7 @@ public interface IEntity extends IActor {
      *
      * @param location new location
      */
-    void setLocation(ILocation location);
+    void setLocation(Location location);
 
     /**
      * Uses the code that allows a delay while
@@ -25,7 +25,7 @@ public interface IEntity extends IActor {
      *
      * @param location new location
      */
-    void teleport(ILocation location);
+    void teleport(Location location);
 
     /**
      * Get the world the entity is currently in.

@@ -192,6 +192,7 @@ public class Plot {
     public boolean isAllowed(UUID uuid) {
         return isAllowedInternal(uuid.toString());
     }
+
     public boolean isAllowed(String uuid) {
         return isAllowedInternal(uuid);
     }
@@ -203,7 +204,8 @@ public class Plot {
                 return true;
             } else if ("*".equals(name)) {
                 return false;
-            }if (accessLevel == AccessLevel.TRUSTED) {
+            }
+            if (accessLevel == AccessLevel.TRUSTED) {
                 return PlotMeCoreManager.getInstance().getPlayer(name) != null;
             }
         } else {
@@ -407,6 +409,19 @@ public class Plot {
 
     public void setLikers(HashSet<String> likers) {
         this.likers = likers;
+    }
+
+    //todo test equals to make sure it is reliable.
+    @Override public boolean equals(Object obj) {
+        if (obj instanceof Plot) {
+            Plot obj1 = (Plot) obj;
+            if (obj1.getInternalID() == this.internalID && obj1.getId().equals(this.id) && obj1.getOwnerId().equals(this.ownerId) && obj1.getWorld()
+                    .equals(this.world)) {
+                return true;
+            }
+
+        }
+        return false;
     }
 
     public enum AccessLevel {
