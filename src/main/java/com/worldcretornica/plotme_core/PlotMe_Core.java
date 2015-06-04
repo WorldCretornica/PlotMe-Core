@@ -114,7 +114,7 @@ public class PlotMe_Core {
 
     private void setupWorld(IWorld world) {
         getServerBridge().loadDefaultConfig(configFile, "worlds." + world.getName().toLowerCase());
-        PlotMapInfo pmi = new PlotMapInfo(this, configFile, world);
+        PlotMapInfo pmi = new PlotMapInfo(configFile, world.getName().toLowerCase());
         PlotMeCoreManager.getInstance().addPlotMap(world, pmi);
         getSqlManager().loadPlotsAsynchronously(world);
     }

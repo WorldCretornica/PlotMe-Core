@@ -1,31 +1,18 @@
 package com.worldcretornica.plotme_core;
 
 import com.worldcretornica.configuration.ConfigAccessor;
-import com.worldcretornica.plotme_core.api.IWorld;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class PlotMapInfo {
 
-    private final PlotMe_Core plugin;
-
-    private final ConcurrentHashMap<PlotId, Plot> plots;
     private final ConfigurationSection config;
     private final ConfigAccessor configFile;
-    private final IWorld world;
 
-    public PlotMapInfo(PlotMe_Core instance, ConfigAccessor config, IWorld world) {
-        plugin = instance;
-        this.world = world;
+    public PlotMapInfo(ConfigAccessor config, String world) {
         this.configFile = config;
-        this.config = config.getConfig().getConfigurationSection("worlds." + world.getName().toLowerCase());
-        plots = new ConcurrentHashMap<>(1000, 0.75f, 5);
-    }
-
-    public int getNbPlots() {
-        return plots.size();
+        this.config = config.getConfig().getConfigurationSection("worlds." + world);
     }
 
     private List<Integer> getProtectedBlocks() {
@@ -245,10 +232,6 @@ public class PlotMapInfo {
     public void setDisableIgnition(boolean disableIgnition) {
         config.set("DisableIgnition", disableIgnition);
         configFile.saveConfig();
-    }
-
-    public IWorld getWorld() {
-        return world;
     }
 
 }
