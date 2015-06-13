@@ -113,6 +113,7 @@ public class PlotMe_Core {
     }
 
     private void setupWorld(IWorld world) {
+        getLogger().info("PlotMe is recieving data from the Generator");
         getServerBridge().loadDefaultConfig(configFile, "worlds." + world.getName().toLowerCase());
         PlotMapInfo pmi = new PlotMapInfo(configFile, world.getName().toLowerCase());
         PlotMeCoreManager.getInstance().addPlotMap(world, pmi);

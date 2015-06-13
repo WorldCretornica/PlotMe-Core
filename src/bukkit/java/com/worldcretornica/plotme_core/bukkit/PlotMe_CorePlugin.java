@@ -26,7 +26,7 @@ public class PlotMe_CorePlugin extends JavaPlugin {
 
     private static PlotMe_CorePlugin INSTANCE;
     private final HashMap<UUID, BukkitPlayer> bukkitPlayerMap = new HashMap<>();
-    private PlotMe_Core plotme;
+    private PlotMe_Core plotme = new PlotMe_Core();
     private IServerBridge serverObjectBuilder;
 
     public static PlotMe_CorePlugin getInstance() {
@@ -44,7 +44,6 @@ public class PlotMe_CorePlugin extends JavaPlugin {
         INSTANCE = this;
         getLogger().info("Enabling PlotMe...Waiting for generator data.");
         serverObjectBuilder = new BukkitServerBridge(getLogger());
-        plotme = new PlotMe_Core();
         plotme.registerServerBridge(serverObjectBuilder);
         getAPI().enable();
         doMetric();
