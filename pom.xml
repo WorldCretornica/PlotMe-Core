@@ -13,6 +13,7 @@
     <build>
         <defaultGoal>clean package install</defaultGoal>
         <sourceDirectory>src/main/java</sourceDirectory>
+        <finalName>PlotMe-Core</finalName>
         <testSourceDirectory>src/main/test</testSourceDirectory>
         <resources>
             <resource>
