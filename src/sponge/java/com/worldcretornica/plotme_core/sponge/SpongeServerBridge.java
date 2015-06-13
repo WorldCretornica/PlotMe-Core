@@ -13,7 +13,6 @@ import com.worldcretornica.plotme_core.sponge.api.SpongeWorld;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.configuration.ConfigurationSection;
-import org.jetbrains.annotations.Nullable;
 import org.spongepowered.api.entity.player.Player;
 import org.spongepowered.api.entity.player.User;
 import org.spongepowered.api.service.profile.GameProfileResolver;
@@ -56,7 +55,7 @@ public class SpongeServerBridge extends IServerBridge {
         return null;
     }
 
-    @Nullable @Override public IOfflinePlayer getOfflinePlayer(String string) {
+    @Override public IOfflinePlayer getOfflinePlayer(String string) {
         return null;
     }
 

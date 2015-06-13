@@ -18,7 +18,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.InputStreamReader;
@@ -40,7 +39,7 @@ public class BukkitServerBridge extends IServerBridge {
         return new BukkitOfflinePlayer(Bukkit.getOfflinePlayer(uuid));
     }
 
-    @Nullable @Override public IOfflinePlayer getOfflinePlayer(String string) {
+    @Override public IOfflinePlayer getOfflinePlayer(String string) {
         OfflinePlayer player = Bukkit.getOfflinePlayer(string);
         if (player == null) {
             return null;
