@@ -46,10 +46,7 @@ public class CmdSell extends PlotCommand {
                                     if (!event.isCancelled()) {
                                         plot.setPrice(0.0);
                                         plot.setForSale(false);
-
-                                        plot.updateField("customprice", 0);
-                                        plot.updateField("forsale", false);
-
+                                        plugin.getSqlManager().savePlot(plot);
                                         manager.adjustWall(player);
                                         manager.removeSellSign(plot, world);
 
@@ -82,11 +79,8 @@ public class CmdSell extends PlotCommand {
                                         if (!event.isCancelled()) {
                                             plot.setPrice(price);
                                             plot.setForSale(true);
-
-                                            plot.updateField("customprice", price);
-                                            plot.updateField("forsale", true);
-
-                                            manager.adjustWall(player);
+                                            plugin.getSqlManager().savePlot(plot);
+                                            manager.getGenManager(world).adjustPlotFor(plot, true, plot.isProtected(), plot.isForSale());
                                             manager.setSellSign(plot, world);
 
                                             player.sendMessage(C("MsgPlotForSale"));

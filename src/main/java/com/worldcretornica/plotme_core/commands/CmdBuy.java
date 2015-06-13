@@ -85,12 +85,7 @@ public class CmdBuy extends PlotCommand {
                                                 plot.setOwnerId(player.getUniqueId());
                                                 plot.setPrice(0.0);
                                                 plot.setForSale(false);
-
-                                                plot.updateField("owner", buyer);
-                                                plot.updateField("ownerid", player.getUniqueId());
-                                                plot.updateField("customprice", 0);
-                                                plot.updateField("forsale", false);
-
+                                                plugin.getSqlManager().savePlot(plot);
                                                 manager.adjustWall(plot, world, true);
                                                 manager.removeSellSign(plot, world);
                                                 manager.setOwnerSign(world, plot);

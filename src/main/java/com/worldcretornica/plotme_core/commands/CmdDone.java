@@ -34,14 +34,14 @@ public class CmdDone extends PlotCommand {
 
                         if (!event.isCancelled()) {
                             if (plot.isFinished()) {
-                                plot.setUnfinished();
+                                plot.setFinished(false);
                                 player.sendMessage(C("MsgUnmarkFinished"));
 
                                 if (isAdvancedLogging()) {
                                     serverBridge.getLogger().info(name + " " + C("WordMarked") + " " + plot.getId() + " " + C("WordFinished"));
                                 }
                             } else {
-                                plot.setFinished();
+                                plot.setFinished(true);
                                 player.sendMessage(C("MsgMarkFinished"));
 
                                 if (isAdvancedLogging()) {

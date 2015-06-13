@@ -9,7 +9,7 @@ public class PlotToClear {
     private final PlotId plotId;
     private final ClearReason reason;
     private final ICommandSender requester;
-    private IWorld world;
+    private final IWorld world;
 
     public PlotToClear(Plot plot, PlotId id, IWorld world, ClearReason reason, ICommandSender requester) {
         this.plot = plot;

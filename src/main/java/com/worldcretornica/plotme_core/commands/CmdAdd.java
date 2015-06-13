@@ -27,7 +27,7 @@ public class CmdAdd extends PlotCommand {
         if (args.length < 2 && args.length >= 3) {
             throw new BadUsageException(getUsage());
         }
-        if (args[1].length() > 16 || !validUserPattern.matcher(args[1]).matches()) {
+        if (args[1].length() > 16) {
             throw new IllegalArgumentException(C("InvalidCommandInput"));
         }
         if ("*".equals(args[1]) && plugin.getConfig().getBoolean("disableWildCard")) {
@@ -82,6 +82,7 @@ public class CmdAdd extends PlotCommand {
                             if (!event.isCancelled()) {
                                 plot.addMember(allowed, Plot.AccessLevel.ALLOWED);
                                 plot.removeDenied(allowed);
+                                plugin.getSqlManager().savePlot(plot);
                                 player.sendMessage(C("WordPlayer") + " " + allowed + " " + C("MsgNowAllowed"));
 
                                 if (isAdvancedLogging()) {

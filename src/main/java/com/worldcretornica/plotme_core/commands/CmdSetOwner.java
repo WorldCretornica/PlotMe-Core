@@ -9,8 +9,6 @@ import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.PlotOwnerChangeEvent;
 
-import java.util.UUID;
-
 public class CmdSetOwner extends PlotCommand {
 
     public CmdSetOwner(PlotMe_Core instance) {
@@ -43,8 +41,6 @@ public class CmdSetOwner extends PlotCommand {
                 return true;
             }
 
-            UUID oldowner = plot.getOwnerId();
-
 
             if (!plot.getOwnerId().equals(newOwner.getUniqueId())) {
                 PlotOwnerChangeEvent event = new PlotOwnerChangeEvent(world, plot, player, newOwner);
@@ -52,13 +48,11 @@ public class CmdSetOwner extends PlotCommand {
 
                 if (!event.isCancelled()) {
                     plot.setForSale(false);
-                    manager.removeSellSign(plot, world);
                     plot.resetExpire(pmi.getDaysToExpiration());
-                    plot.updateField("forsale", false);
                     plot.setOwner(newOwner.getName());
                     plot.setOwnerId(newOwner.getUniqueId());
+                    plugin.getSqlManager().savePlot(plot);
                     manager.setOwnerSign(world, plot);
-                    //todo new function to change the plot owner in database or just modify the plot class to do this.
                     player.sendMessage(C("MsgOwnerChangedTo") + " " + newOwner);
                 }
             } else {

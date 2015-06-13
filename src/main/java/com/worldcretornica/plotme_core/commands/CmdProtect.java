@@ -50,8 +50,7 @@ public class CmdProtect extends PlotCommand {
                             if (!event.isCancelled()) {
                                 plot.setProtected(false);
                                 manager.adjustWall(player);
-
-                                plot.updateField("protected", false);
+                                plugin.getSqlManager().savePlot(plot);
 
                                 player.sendMessage(C("MsgPlotNoLongerProtected"));
 
@@ -92,8 +91,7 @@ public class CmdProtect extends PlotCommand {
                                 plot.setProtected(true);
                                 manager.adjustWall(player);
 
-                                plot.updateField("protected", true);
-
+                                plugin.getSqlManager().savePlot(plot);
                                 player.sendMessage(C("MsgPlotNowProtected") + " " + serverBridge.getEconomy().get().format(cost));
 
                                 if (isAdvancedLogging()) {

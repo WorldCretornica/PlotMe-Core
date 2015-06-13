@@ -36,22 +36,22 @@ public class SQLiteConnector extends Database {
         }
     }
 
-    @Override
-    public void createTables() {
+    @Override protected void createTables() {
         Connection connection = getConnection();
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS plotmecore_nextplotid (nextid INT(15));");
             //MySQL specific plot table creation.
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS `plotmecore_plots` ("
                     + "`id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
-                    + "`plotX` INTEGER NOT NULL,"
-                    + "`plotZ` INTEGER NOT NULL,"
-                    + "`world` VARCHAR(32) NOT NULL,"
-                    + "`ownerID` VARCHAR(50) NOT NULL,"
-                    + "`owner` VARCHAR(32) NOT NULL,"
+                    + "`plotX` INTEGER NOT NULL DEFAULT '0',"
+                    + "`plotZ` INTEGER NOT NULL DEFAULT '0',"
+                    + "`world` VARCHAR(32) NOT NULL DEFAULT 'world',"
+                    + "`ownerID` VARCHAR(50) NOT NULL DEFAULT '473cd4a7927741fabdbbdf98df801776',"
+                    + "`owner` VARCHAR(32) NOT NULL DEFAULT 'MBon29',"
                     + "`biome` VARCHAR(50) NOT NULL DEFAULT 'PLAINS',"
                     + "`finished` BOOLEAN NOT NULL DEFAULT '0',"
                     + "`finishedDate` VARCHAR(20) DEFAULT NULL,"
+                    + "`createdDate` VARCHAR(20) DEFAULT 'Unknown',"
                     + "`forSale` BOOLEAN NOT NULL DEFAULT '0',"
                     + "`price` DOUBLE NOT NULL DEFAULT '0',"
                     + "`protected` BOOLEAN NOT NULL DEFAULT '0',"
@@ -72,37 +72,39 @@ public class SQLiteConnector extends Database {
             connection.commit();
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS `plotmecore_denied` ("
                     + "`id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
-                    + "`plot_id` INTEGER NOT NULL,"
-                    + "`player` VARCHAR(50) NOT NULL"
+                    + "`plot_id` INTEGER NOT NULL DEFAULT '0',"
+                    + "`player` VARCHAR(50) NOT NULL DEFAULT '*'"
                     + ");");
             statement.executeUpdate("CREATE UNIQUE INDEX IF NOT EXISTS `denied` ON plotmecore_denied(plot_id,player)");
             connection.commit();
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS `plotmecore_allowed` ("
                     + "`id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
-                    + "`plot_id` INTEGER NOT NULL,"
-                    + "`player` VARCHAR(50) NOT NULL,"
+                    + "`plot_id` INTEGER NOT NULL DEFAULT '0',"
+                    + "`player` VARCHAR(50) NOT NULL DEFAULT '*',"
                     + "`access` INTEGER NOT NULL DEFAULT '1'"
                     + ");");
             statement.executeUpdate("CREATE UNIQUE INDEX IF NOT EXISTS `allowed` ON plotmecore_allowed(plot_id,player)");
             connection.commit();
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS plotmecore_likes ("
                     + "`id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
-                    + "`plot_id` INTEGER NOT NULL,"
-                    + "`player` VARCHAR(50) NOT NULL"
+                    + "`plot_id` INTEGER NOT NULL DEFAULT '0',"
+                    + "`player` VARCHAR(50) NOT NULL DEFAULT '*'"
                     + ");");
             statement.executeUpdate("CREATE UNIQUE INDEX IF NOT EXISTS `likes` ON plotmecore_likes(plot_id,player)");
             connection.commit();
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS `plotmecore_metadata` ("
                     + "`id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
-                    + "`plot_id` INTEGER NOT NULL,"
+                    + "`plot_id` INTEGER NOT NULL DEFAULT '0',"
                     + "`pluginName` VARCHAR(100) NOT NULL,"
                     + "`propertyName` VARCHAR(100) NOT NULL,"
                     + "`propertyValue` VARCHAR(255) DEFAULT NULL"
                     + ");");
             connection.commit();
-            try (ResultSet results = statement.executeQuery("SELECT * FROM plotmecore_nextplotid;")) {
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS `plotmecore_nextid` (`nextId` INTEGER NOT NULL DEFAULT '0');");
+            connection.commit();
+            try (ResultSet results = statement.executeQuery("SELECT * FROM plotmecore_nextid;")) {
                 if (!results.next()) {
-                    statement.execute("INSERT INTO plotmecore_nextplotid VALUES(1);");
+                    statement.execute("INSERT INTO plotmecore_nextid VALUES(1);");
                     this.nextPlotId = 1;
                 } else {
                     this.nextPlotId = results.getLong("nextid");

@@ -1,6 +1,5 @@
 package com.worldcretornica.plotme_core;
 
-import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.Vector;
 
@@ -19,6 +18,8 @@ public class Plot {
     private final HashMap<String, Map<String, String>> metadata = new HashMap<>();
     private final Vector plotTopLoc;
     private final Vector plotBottomLoc;
+    private final PlotMeCoreManager manager = PlotMeCoreManager.getInstance();
+    private final String createdDate;
     private String owner = "Unknown";
     private UUID ownerId = UUID.randomUUID();
     private IWorld world;
@@ -34,8 +35,7 @@ public class Plot {
     //defaults to 0 until it is saved to the database
     private long internalID = 0;
     private String plotName;
-    private HashSet<String> likers = new HashSet<>();
-    private String createdDate;
+    private HashSet<UUID> likers = new HashSet<>();
 
     public Plot(String owner, UUID uuid, IWorld world, PlotId plotId, Vector plotTopLoc, Vector plotBottomLoc) {
         setOwner(owner);
@@ -51,24 +51,25 @@ public class Plot {
             HashMap<String, AccessLevel> allowed,
             HashSet<String>
                     denied,
-            HashSet<String> likers, PlotId id, double price, boolean forSale, boolean finished, String finishedDate, boolean protect,
+            HashSet<UUID> likers, PlotId id, double price, boolean forSale, boolean finished, String finishedDate, boolean protect,
             Map<String, Map<String, String>> metadata, int plotLikes, String plotName, Vector topLoc, Vector bottomLoc, String createdDate) {
-        setInternalID(internalID);
-        setOwner(owner);
-        setOwnerId(ownerId);
-        setWorld(world);
-        setBiome(biome);
-        setExpiredDate(expiredDate);
-        setFinished(finished);
+        this.internalID = internalID;
+        this.owner = owner;
+        this.ownerId = ownerId;
+        this.world = world;
+        this.biome = biome;
+        this.expiredDate = expiredDate;
+        this.finished = finished;
+        this.finishedDate = finishedDate;
         this.allowed.putAll(allowed);
-        setId(id);
-        setPrice(price);
-        setForSale(forSale);
-        setFinishedDate(finishedDate);
-        setProtected(protect);
-        setLikers(likers);
-        setLikes(plotLikes);
-        setPlotName(plotName);
+        this.id = id;
+        this.price = price;
+        this.forSale = forSale;
+        this.finishedDate = finishedDate;
+        this.protect = protect;
+        this.likers.addAll(likers);
+        this.plotName = plotName;
+        this.likes = plotLikes;
         this.denied.addAll(denied);
         this.metadata.putAll(metadata);
         this.plotTopLoc = topLoc;
@@ -80,32 +81,16 @@ public class Plot {
         if (days == 0) {
             if (getExpiredDate() != null) {
                 setExpiredDate(null);
-                updateField("expireddate", getExpiredDate());
             }
         } else {
             Calendar cal = Calendar.getInstance();
             cal.add(Calendar.DAY_OF_YEAR, days);
             java.util.Date utlDate = cal.getTime();
             java.sql.Date temp = new java.sql.Date(utlDate.getTime());
-            if (expiredDate == null || !temp.toString().equalsIgnoreCase(expiredDate.toString())) {
+            if (expiredDate == null || temp.after(expiredDate)) {
                 expiredDate = temp;
-                updateField("expireddate", expiredDate);
             }
         }
-    }
-
-    public void setFinished() {
-        setFinishedDate(new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()));
-        setFinished(true);
-
-        updateFinished(getFinishedDate(), true);
-    }
-
-    public void setUnfinished() {
-        setFinishedDate(null);
-        setFinished(false);
-
-        updateFinished(null, false);
     }
 
     public String getBiome() {
@@ -114,6 +99,7 @@ public class Plot {
 
     public final void setBiome(String biome) {
         this.biome = biome;
+
     }
 
     public final String getOwner() {
@@ -138,46 +124,42 @@ public class Plot {
 
     public void addMember(String name, AccessLevel level) {
         if (!isAllowedConsulting(name)) {
+            if ("*".equals(name)) {
+                this.getMembers().clear();
+            }
             getMembers().put(name, level);
-            PlotMeCoreManager.getInstance().getSQLManager().addPlotMember(name, getInternalID(), level);
         }
     }
 
     public void addDenied(String name) {
         if (!isDeniedConsulting(name)) {
             getDenied().add(name);
-            PlotMeCoreManager.getInstance().getSQLManager().addPlotDenied(name, getInternalID());
         }
     }
 
     public void removeAllowed(String name) {
         if (getMembers().containsKey(name)) {
             getMembers().remove(name, AccessLevel.ALLOWED);
-            PlotMeCoreManager.getInstance().getSQLManager().deletePlotMember(getInternalID(), name);
         }
     }
 
     public void removeMember(String name) {
         if (getMembers().containsKey(name)) {
             getMembers().remove(name);
-            PlotMeCoreManager.getInstance().getSQLManager().deletePlotMember(getInternalID(), name);
         }
     }
 
     public void removeDenied(String name) {
         if (getDenied().contains(name)) {
             getDenied().remove(name);
-            PlotMeCoreManager.getInstance().getSQLManager().deletePlotDenied(getInternalID(), name);
         }
     }
 
     public void removeAllAllowed() {
-        PlotMeCoreManager.getInstance().getSQLManager().deleteAllAllowed(getInternalID());
         getMembers().clear();
     }
 
     public void removeAllDenied() {
-        PlotMeCoreManager.getInstance().getSQLManager().deleteAllDenied(getInternalID());
         getDenied().clear();
     }
 
@@ -185,7 +167,7 @@ public class Plot {
         if ("*".equals(name)) {
             return isAllowedInternal(name);
         }
-        UUID player = PlotMeCoreManager.getInstance().getPlayer(name).getUniqueId();
+        UUID player = manager.getPlayer(name).getUniqueId();
         return player != null && isAllowedInternal(name);
     }
 
@@ -206,7 +188,7 @@ public class Plot {
                 return false;
             }
             if (accessLevel == AccessLevel.TRUSTED) {
-                return PlotMeCoreManager.getInstance().getPlayer(name) != null;
+                return manager.getPlayer(name) != null;
             }
         } else {
             return getMembers().containsKey("*");
@@ -215,15 +197,14 @@ public class Plot {
     }
 
     public boolean isDeniedConsulting(String name) {
-        IOfflinePlayer player = PlotMeCoreManager.getInstance().getPlayer(name);
-        return player != null && isDeniedInternal(name);
+        return isDeniedInternal(name);
     }
 
     public boolean isDenied(UUID uuid) {
         return isDeniedInternal(uuid.toString());
     }
 
-    public boolean isDeniedInternal(String name) {
+    private boolean isDeniedInternal(String name) {
         return getDenied().contains("*") || getDenied().contains(name);
     }
 
@@ -233,15 +214,6 @@ public class Plot {
      */
     public HashMap<String, Plot.AccessLevel> getMembers() {
         return allowed;
-    }
-
-    private void updateFinished(String finishTime, boolean isFinished) {
-        updateField("finisheddate", finishTime);
-        updateField("finished", isFinished);
-    }
-
-    public void updateField(String field, Object value) {
-        PlotMeCoreManager.getInstance().getSQLManager().updatePlot(getId(), getWorld(), field, value);
     }
 
     public final IWorld getWorld() {
@@ -266,6 +238,11 @@ public class Plot {
 
     public final void setFinished(boolean finished) {
         this.finished = finished;
+        if (finished) {
+            setFinishedDate(new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()));
+        } else {
+            setFinishedDate(null);
+        }
     }
 
     public final PlotId getId() {
@@ -303,14 +280,16 @@ public class Plot {
      */
     public final void setForSale(boolean forSale) {
         this.forSale = forSale;
+
     }
 
     public final String getFinishedDate() {
         return finishedDate;
     }
 
-    public final void setFinishedDate(String finishedDate) {
+    private void setFinishedDate(String finishedDate) {
         this.finishedDate = finishedDate;
+
     }
 
     public final boolean isProtected() {
@@ -330,7 +309,7 @@ public class Plot {
             metadata.put(pluginname, new HashMap<String, String>());
         }
         metadata.get(pluginname).put(property, value);
-        return PlotMeCoreManager.getInstance().getSQLManager().savePlotProperty(getId(), this.world, pluginname, property, value);
+        return true;
     }
 
     public Map<String, Map<String, String>> getAllPlotProperties() {
@@ -360,6 +339,11 @@ public class Plot {
     }
 
     public void setLikes(int likes) {
+        this.likes = likes;
+    }
+
+    public void addLike(int likes, UUID player) {
+        this.getLikers().add(player);
         this.likes = likes;
     }
 
@@ -403,11 +387,11 @@ public class Plot {
      * Gets a set of players who have liked this plot
      * @return
      */
-    public HashSet<String> getLikers() {
+    public HashSet<UUID> getLikers() {
         return likers;
     }
 
-    public void setLikers(HashSet<String> likers) {
+    public void setLikers(HashSet<UUID> likers) {
         this.likers = likers;
     }
 
@@ -423,6 +407,16 @@ public class Plot {
         }
         return false;
     }
+
+    public boolean canPlayerLike(UUID uniqueId) {
+        return !likers.contains(uniqueId);
+    }
+
+    public void removeLike(int i, UUID uniqueId) {
+        likes -= i;
+        likers.remove(uniqueId);
+    }
+
 
     public enum AccessLevel {
         ALLOWED(0),

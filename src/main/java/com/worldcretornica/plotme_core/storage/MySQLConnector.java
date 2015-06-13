@@ -38,8 +38,7 @@ public class MySQLConnector extends Database {
 
     }
 
-    @Override
-    public void createTables() {
+    @Override protected void createTables() {
         Connection connection = getConnection();
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS plotmecore_nextplotid (nextid INT(15));");
@@ -54,6 +53,7 @@ public class MySQLConnector extends Database {
                     + "`biome` VARCHAR(50) NOT NULL DEFAULT 'PLAINS',"
                     + "`finished` BOOLEAN NOT NULL DEFAULT '0',"
                     + "`finishedDate` VARCHAR(20) DEFAULT NULL,"
+                    + "`createdDate` VARCHAR(20) DEFAULT 'Unknown',"
                     + "`forSale` BOOLEAN NOT NULL DEFAULT '0',"
                     + "`price` DOUBLE NOT NULL DEFAULT '0',"
                     + "`protected` BOOLEAN NOT NULL DEFAULT '0',"
@@ -101,9 +101,11 @@ public class MySQLConnector extends Database {
                     + "`propertyvalue` VARCHAR(255) DEFAULT NULL"
                     + ");");
             connection.commit();
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS `plotmecore_nextid` (`nextId` INTEGER NOT NULL DEFAULT '0');");
+            connection.commit();
             try (ResultSet results = statement.executeQuery("SELECT * FROM plotmecore_nextplotid;")) {
                 if (!results.next()) {
-                    statement.execute("INSERT INTO plotmecore_nextplotid VALUES(1);");
+                    statement.execute("INSERT INTO plotmecore_nextid VALUES(1);");
                     this.nextPlotId = 1;
                 } else {
                     this.nextPlotId = results.getLong("nextid");

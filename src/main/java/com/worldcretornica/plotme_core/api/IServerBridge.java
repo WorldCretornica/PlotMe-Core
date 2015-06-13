@@ -20,7 +20,7 @@ public abstract class IServerBridge {
             "Hell",
             "The End",
             "FrozenOcean", "FrozenRiver", "Ice Plains", "Ice Mountains", "MushroomIsland", "MushroomIslandShore", "Beach", "DesertHills",
-            "ForestHills", "TiagaHills", "Extreme Hills Edge", "Jungle", "JungleHills", "JungleEdge", "Deep Ocean", "Stone Beach", "Cold Beach",
+            "ForestHills", "TiagaHills", "Jungle", "JungleHills", "JungleEdge", "Deep Ocean", "Stone Beach", "Cold Beach",
             "Birch Forest", "Birch Forest Hills", "Roofed Forest", "Cold Taiga", "Cold Taiga Hills", "Mega Taiga", "Mega Taiga Hills",
             "Extreme Hills+", "Savanna", "Savanna Plateau", "Mesa", "Mesa Plateau F", "Mesa Plateau");
     private boolean usingLwc;
@@ -31,6 +31,8 @@ public abstract class IServerBridge {
     }
 
     public abstract IOfflinePlayer getOfflinePlayer(UUID uuid);
+
+    public abstract IOfflinePlayer getOfflinePlayer(String string);
 
     /**
      * Gets the player from the given UUID.
@@ -83,8 +85,13 @@ public abstract class IServerBridge {
 
     public abstract void runTaskLaterAsynchronously(Runnable runnable, long delay);
 
-    public boolean getBiome(String name) {
-        return biomes.contains(name);
+    public Optional<String> getBiome(String name) {
+        for (String biome : biomes) {
+            if (biome.equalsIgnoreCase(name)) {
+                return Optional.of(biome);
+            }
+        }
+        return Optional.absent();
     }
 
     public abstract File getDataFolder();

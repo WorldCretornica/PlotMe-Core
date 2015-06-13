@@ -14,7 +14,7 @@ import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.Location;
 
-public class PlotMeWorldEdit extends AbstractDelegateExtent {
+class PlotMeWorldEdit extends AbstractDelegateExtent {
 
     private final Extent extent;
     private final Actor actor;

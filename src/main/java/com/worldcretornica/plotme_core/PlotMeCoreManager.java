@@ -11,9 +11,9 @@ import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.Location;
 import com.worldcretornica.plotme_core.api.Vector;
 import com.worldcretornica.plotme_core.api.event.PlotLoadEvent;
-import com.worldcretornica.plotme_core.storage.Database;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -27,8 +27,8 @@ public class PlotMeCoreManager {
 
     private static final PlotMeCoreManager INSTANCE = new PlotMeCoreManager();
     private final HashMap<IWorld, PlotMapInfo> plotmaps = new HashMap<>();
+    private final HashSet<UUID> playersignoringwelimit = new HashSet<>();
     private PlotMe_Core plugin;
-    private HashSet<UUID> playersignoringwelimit = new HashSet<>();
 
     private PlotMeCoreManager() {
     }
@@ -43,10 +43,6 @@ public class PlotMeCoreManager {
 
     void setPlugin(PlotMe_Core instance) {
         plugin = instance;
-    }
-
-    public Database getSQLManager() {
-        return plugin.getSqlManager();
     }
 
     /**
@@ -599,8 +595,8 @@ public class PlotMeCoreManager {
         getGenManager(world).adjustPlotFor(plot, claimed, plot.isProtected(), plot.isForSale());
     }
 
-    public void setBiome(PlotId id, IWorld world, String biome) {
-        plugin.getSqlManager().updatePlot(id, world, "biome", biome.toUpperCase());
+    public void setBiome(Plot plot) {
+        getGenManager(plot.getWorld()).setBiome(plot.getId(), plot.getBiome());
     }
 
 
@@ -671,56 +667,22 @@ public class PlotMeCoreManager {
     }
 
     public void UpdatePlayerNameFromId(final UUID uuid, final String name) {
-        plugin.getSqlManager().updatePlotsNewUUID(uuid, name);
         plugin.getServerBridge().runTaskAsynchronously(new Runnable() {
             @Override
             public void run() {
-                for (Plot plot : plugin.getSqlManager().plots) {
+                for (ArrayList<Plot> plotList : plugin.getSqlManager().worldToPlotMap.values()) {
+                    for (Plot plot : plotList) {
                         if (plot.getOwnerId().equals(uuid)) {
                             plot.setOwner(name);
                             final int i = plugin.getSqlManager().worldToPlotMap.get(plot.getWorld()).indexOf(plot);
                             plugin.getSqlManager().worldToPlotMap.get(plot.getWorld()).get(i).setOwner(name);
+                            plugin.getSqlManager().savePlot(plot);
                         }
+                    }
+
                 }
             }
         });
-    }
-
-    /**
-     * Gets the value of that plot property
-     *
-     * @param plot the plot to get data from
-     * @param pluginname Name of the plugin owning this property
-     * @param property Name of the property to get the value of
-     * @return Value of the property
-     */
-    public String getPlotProperty(Plot plot, IWorld world, String pluginname, String property) {
-        return getPlotProperty(plot, pluginname, property);
-    }
-
-    /**
-     * Gets the value of that plot property
-     *
-     * @param plot Plot to get the property from
-     * @param pluginname Name of the plugin owning this property
-     * @param property Name of the property to get the value of
-     * @return Value of the property
-     */
-    public String getPlotProperty(Plot plot, String pluginname, String property) {
-        return plot.getPlotProperty(pluginname, property);
-    }
-
-    /**
-     * Sets the value of that plot property
-     *
-     * @param plot Plot to set the property
-     * @param pluginname Name of the plugin owning this property
-     * @param property Name of the property
-     * @param value Value of the property
-     * @return If the property was set successfully
-     */
-    public boolean setPlotProperty(Plot plot, String pluginname, String property, String value) {
-        return plot.setPlotProperty(pluginname, property, value);
     }
 
     public IOfflinePlayer getPlayer(String name) {
@@ -760,4 +722,6 @@ public class PlotMeCoreManager {
         }
         return null;
     }
+
+
 }

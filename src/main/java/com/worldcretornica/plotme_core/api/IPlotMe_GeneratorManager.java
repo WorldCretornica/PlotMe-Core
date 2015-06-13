@@ -63,4 +63,6 @@ public interface IPlotMe_GeneratorManager {
     Vector getPlotMiddle(PlotId id);
 
     Schematic getPlotSchematic(PlotId id);
+
+    void setBiome(PlotId id, String biome);
 }

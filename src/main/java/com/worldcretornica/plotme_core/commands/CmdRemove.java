@@ -5,6 +5,7 @@ import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ICommandSender;
+import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.PlotRemoveAllowedEvent;
@@ -49,6 +50,15 @@ public class CmdRemove extends PlotCommand {
                     String allowed = args[1];
 
                     if (plot.getOwnerId().equals(playerUniqueId) || player.hasPermission(PermissionNames.ADMIN_REMOVE)) {
+                        if (!allowed.equals("*")) {
+                            IOfflinePlayer offlinePlayer = serverBridge.getOfflinePlayer(allowed);
+                            if (offlinePlayer == null) {
+                                player.sendMessage("An error occured while trying to remove " + allowed);
+                                return true;
+                            } else {
+                                allowed = offlinePlayer.getUniqueId().toString();
+                            }
+                        }
                         if (plot.isAllowedConsulting(allowed)) {
 
                             double price = 0.0;

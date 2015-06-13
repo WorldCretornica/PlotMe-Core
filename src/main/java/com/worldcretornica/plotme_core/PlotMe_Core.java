@@ -23,6 +23,7 @@ public class PlotMe_Core {
     private final HashMap<IWorld, IPlotMe_GeneratorManager> managers = new HashMap<>();
     //Spool stuff
     private final ConcurrentLinkedQueue<PlotToClear> plotsToClear = new ConcurrentLinkedQueue<>();
+    private final EventBus eventBus = new EventBus();
     //Bridge
     private IServerBridge serverBridge;
     private IWorld worldcurrentlyprocessingexpired;
@@ -31,7 +32,6 @@ public class PlotMe_Core {
     //Caption and Config File.
     private ConfigAccessor configFile;
     private ConfigAccessor captionFile;
-    private EventBus eventBus = new EventBus();
 
 
     public PlotMe_Core() {

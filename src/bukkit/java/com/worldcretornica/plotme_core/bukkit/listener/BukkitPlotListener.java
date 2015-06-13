@@ -100,6 +100,7 @@ public class BukkitPlotListener implements Listener {
                 event.setCancelled(true);
             } else {
                 plot.resetExpire(manager.getMap(location).getDaysToExpiration());
+                plugin.getAPI().getSqlManager().savePlot(plot);
             }
         }
     }
@@ -122,6 +123,7 @@ public class BukkitPlotListener implements Listener {
                 event.setCancelled(true);
             } else {
                 plot.resetExpire(manager.getMap(location).getDaysToExpiration());
+                plugin.getAPI().getSqlManager().savePlot(plot);
             }
         }
     }
@@ -193,6 +195,7 @@ public class BukkitPlotListener implements Listener {
                     }
                 } else {
                     plot.resetExpire(pmi.getDaysToExpiration());
+                    plugin.getAPI().getSqlManager().savePlot(plot);
                 }
             } else {
                 boolean blocked = false;
@@ -410,12 +413,9 @@ public class BukkitPlotListener implements Listener {
                     player.sendMessage(api.C("ErrCannotBuild"));
                     event.setCancelled(true);
                 }
-            } else {
-                if (api.isPlotLocked(plot)) {
-                    player.sendMessage(api.C("PlotLocked"));
-                    event.setCancelled(true);
-                }
-                plot.resetExpire(manager.getMap(location).getDaysToExpiration());
+            } else if (api.isPlotLocked(plot)) {
+                player.sendMessage(api.C("PlotLocked"));
+                event.setCancelled(true);
             }
         }
 
@@ -439,6 +439,7 @@ public class BukkitPlotListener implements Listener {
                     }
                 } else if (plot.isAllowed(player.getUniqueId())) {
                     plot.resetExpire(manager.getMap(player).getDaysToExpiration());
+                    plugin.getAPI().getSqlManager().savePlot(plot);
                 } else {
                     player.sendMessage(api.C("ErrCannotBuild"));
                     event.setCancelled(true);
@@ -468,6 +469,7 @@ public class BukkitPlotListener implements Listener {
                 }
             } else if (plot.isAllowed(player.getUniqueId())) {
                 plot.resetExpire(manager.getMap(location).getDaysToExpiration());
+                plugin.getAPI().getSqlManager().savePlot(plot);
             } else {
                 player.sendMessage(api.C("ErrCannotBuild"));
                 event.setCancelled(true);
@@ -551,9 +553,7 @@ public class BukkitPlotListener implements Listener {
                     player.sendMessage(api.C("ErrCannotBuild"));
                     event.setCancelled(true);
                 }
-            } else if (plot.isAllowed(player.getUniqueId())) {
-                plot.resetExpire(manager.getMap(location).getDaysToExpiration());
-            } else {
+            } else if (!plot.isAllowed(player.getUniqueId())) {
                 player.sendMessage(api.C("ErrCannotBuild"));
                 event.setCancelled(true);
             }
@@ -633,8 +633,6 @@ public class BukkitPlotListener implements Listener {
             } else if (api.isPlotLocked(plot)) {
                 player.sendMessage(api.C("PlotLocked"));
                 event.setCancelled(true);
-            } else {
-                plot.resetExpire(manager.getMap(location).getDaysToExpiration());
             }
         }
     }

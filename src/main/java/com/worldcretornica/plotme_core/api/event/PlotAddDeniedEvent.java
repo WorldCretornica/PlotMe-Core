@@ -7,7 +7,7 @@ import com.worldcretornica.plotme_core.api.IWorld;
 public class PlotAddDeniedEvent extends PlotEvent implements ICancellable, Event {
 
     private final String denied;
-    private IPlayer player;
+    private final IPlayer player;
     private boolean canceled;
 
     public PlotAddDeniedEvent(IWorld world, Plot plot, IPlayer player, String denied) {

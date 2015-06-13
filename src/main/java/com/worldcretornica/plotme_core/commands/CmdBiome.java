@@ -1,5 +1,6 @@
 package com.worldcretornica.plotme_core.commands;
 
+import com.google.common.base.Optional;
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
@@ -20,7 +21,11 @@ public class CmdBiome extends PlotCommand {
         return "biome";
     }
 
-    public boolean execute(ICommandSender sender, String[] args) throws Exception{
+    public boolean execute(ICommandSender sender, String[] args) throws Exception {
+        if (args.length > 4) {
+            throw new BadUsageException(getUsage());
+        }
+
         IPlayer player = (IPlayer) sender;
         if (player.hasPermission(PermissionNames.USER_BIOME)) {
             IWorld world = player.getWorld();
@@ -28,65 +33,68 @@ public class CmdBiome extends PlotCommand {
             if (manager.isPlotWorld(world)) {
                 Plot plot = manager.getPlot(player);
                 if (plot != null) {
-
+                    Optional<String> biome = Optional.absent();
                     if (args.length == 2) {
+                        biome = serverBridge.getBiome(args[1]);
+                    } else if (args.length == 3) {
+                        biome = serverBridge.getBiome(args[1] + " " + args[2]);
+                    } else if (args.length == 4) {
+                        biome = serverBridge.getBiome(args[1] + " " + args[2] + " " + args[3]);
+                    }
+                    if (!biome.isPresent()) {
+                        player.sendMessage(biome.get() + " " + C("MsgIsInvalidBiome"));
+                        return true;
+                    }
 
-                        boolean exists = serverBridge.getBiome(args[1]);
-                        String biomeName = args[1];
-                        if (!exists) {
-                            player.sendMessage(biomeName + " " + C("MsgIsInvalidBiome"));
-                            return true;
+                    String playerName = player.getName();
+
+                    if (player.getUniqueId().equals(plot.getOwnerId()) || player.hasPermission("PlotMe.admin")) {
+
+                        double price = 0.0;
+
+                        PlotBiomeChangeEvent event = new PlotBiomeChangeEvent(world, plot, player, biome.get());
+                        plugin.getEventBus().post(event);
+
+                        if (manager.isEconomyEnabled(pmi)) {
+                            price = pmi.getBiomeChangePrice();
+
+                            if (serverBridge.has(player, price)) {
+                                player.sendMessage("It costs " + serverBridge.getEconomy().get().format(price) + " to change the biome.");
+                                return true;
+                            } else if (!event.isCancelled()) {
+                                EconomyResponse er = serverBridge.withdrawPlayer(player, price);
+
+                                if (!er.transactionSuccess()) {
+                                    player.sendMessage(er.errorMessage);
+                                    serverBridge.getLogger().warning(er.errorMessage);
+                                    return true;
+                                }
+                            } else {
+                                return true;
+                            }
                         }
 
-                        String playerName = player.getName();
+                        if (!event.isCancelled()) {
+                            plot.setBiome(biome.get());
+                            manager.setBiome(plot);
+                            plugin.getSqlManager().savePlot(plot);
 
-                        if (player.getUniqueId().equals(plot.getOwnerId()) || player.hasPermission("PlotMe.admin")) {
+                            player.sendMessage(C("MsgBiomeSet") + " " + biome.get() + " " + serverBridge.getEconomy().get().format(price));
 
-                            double price = 0.0;
-
-                            PlotBiomeChangeEvent event = new PlotBiomeChangeEvent(world, plot, player, biomeName);
-                            plugin.getEventBus().post(event);
-
-                            if (manager.isEconomyEnabled(pmi)) {
-                                price = pmi.getBiomeChangePrice();
-
-                                if (serverBridge.has(player, price)) {
-                                    player.sendMessage("It costs " + serverBridge.getEconomy().get().format(price) + " to change the biome.");
-                                    return true;
-                                } else if (!event.isCancelled()) {
-                                    EconomyResponse er = serverBridge.withdrawPlayer(player, price);
-
-                                    if (!er.transactionSuccess()) {
-                                        player.sendMessage(er.errorMessage);
-                                        serverBridge.getLogger().warning(er.errorMessage);
-                                        return true;
-                                    }
+                            if (isAdvancedLogging()) {
+                                if (price == 0) {
+                                    serverBridge.getLogger()
+                                            .info(playerName + " " + C("MsgChangedBiome") + " " + plot.getId() + " " + C("WordTo") + " "
+                                                    + biome.get());
                                 } else {
-                                    return true;
+                                    serverBridge.getLogger()
+                                            .info(playerName + " " + C("MsgChangedBiome") + " " + plot.getId() + " " + C("WordTo") + " "
+                                                    + biome.get() + (" " + C("WordFor") + " " + price));
                                 }
                             }
-
-                            if (!event.isCancelled()) {
-                                plot.setBiome(biomeName);
-                                manager.setBiome(plot.getId(), world, biomeName.toUpperCase());
-
-                                player.sendMessage(C("MsgBiomeSet") + " " + biomeName + " " + serverBridge.getEconomy().get().format(price));
-
-                                if (isAdvancedLogging()) {
-                                    if (price == 0) {
-                                        serverBridge.getLogger()
-                                                .info(playerName + " " + C("MsgChangedBiome") + " " + plot.getId() + " " + C("WordTo") + " "
-                                                + biomeName);
-                                    } else {
-                                        serverBridge.getLogger()
-                                                .info(playerName + " " + C("MsgChangedBiome") + " " + plot.getId() + " " + C("WordTo") + " "
-                                                + biomeName + (" " + C("WordFor") + " " + price));
-                                    }
-                                }
-                            }
-                        } else {
-                            player.sendMessage(C("MsgThisPlot") + "(" + plot.getId() + ") " + C("MsgNotYoursNotAllowedBiome"));
                         }
+                    } else {
+                        player.sendMessage(C("MsgThisPlot") + "(" + plot.getId() + ") " + C("MsgNotYoursNotAllowedBiome"));
                     }
                 } else {
                     player.sendMessage(C("MsgThisPlot") + C("MsgHasNoOwner"));

@@ -12,11 +12,13 @@ import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.InputStreamReader;
@@ -36,6 +38,15 @@ public class BukkitServerBridge extends IServerBridge {
     @Override
     public IOfflinePlayer getOfflinePlayer(UUID uuid) {
         return new BukkitOfflinePlayer(Bukkit.getOfflinePlayer(uuid));
+    }
+
+    @Nullable @Override public IOfflinePlayer getOfflinePlayer(String string) {
+        OfflinePlayer player = Bukkit.getOfflinePlayer(string);
+        if (player == null) {
+            return null;
+        } else {
+            return new BukkitOfflinePlayer(player);
+        }
     }
 
     @Override
