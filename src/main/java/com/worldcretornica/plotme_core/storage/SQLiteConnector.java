@@ -42,7 +42,7 @@ public class SQLiteConnector extends Database {
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS plotmecore_nextplotid (nextid INT(15));");
             //MySQL specific plot table creation.
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS `plotmecore_plots` ("
-                    + "`id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
+                    + "`plot_id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
                     + "`plotX` INTEGER NOT NULL DEFAULT '0',"
                     + "`plotZ` INTEGER NOT NULL DEFAULT '0',"
                     + "`world` VARCHAR(32) NOT NULL DEFAULT 'world',"

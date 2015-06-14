@@ -44,7 +44,7 @@ public class MySQLConnector extends Database {
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS plotmecore_nextplotid (nextid INT(15));");
             //MySQL specific plot table creation.
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS `plotmecore_plots` ("
-                    + "`id` INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,"
+                    + "`plot_id` INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,"
                     + "`plotX` INTEGER NOT NULL,"
                     + "`plotZ` INTEGER NOT NULL,"
                     + "`world` VARCHAR(32) NOT NULL,"
