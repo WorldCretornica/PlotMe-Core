@@ -92,7 +92,7 @@ public class CmdProtect extends PlotCommand {
                                 manager.adjustWall(player);
 
                                 plugin.getSqlManager().savePlot(plot);
-                                player.sendMessage(C("MsgPlotNowProtected") + " " + serverBridge.getEconomy().get().format(cost));
+                                player.sendMessage(C("MsgPlotNowProtected"));
 
                                 if (isAdvancedLogging()) {
                                     serverBridge.getLogger().info(name + " " + C("MsgProtectedPlot") + " " + id);

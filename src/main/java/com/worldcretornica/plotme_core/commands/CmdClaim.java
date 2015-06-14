@@ -94,11 +94,10 @@ public class CmdClaim extends PlotCommand {
                         //plugin.getPlotMeCoreManager().adjustLinkedPlots(id, world);
                         if (player.getUniqueId().equals(futurePlotOwner.getUniqueId())) {
                             player.sendMessage(
-                                    C("MsgThisPlotYours") + " " + C("WordUse") + " /plotme home " + C("MsgToGetToIt") + " " + serverBridge
-                                            .getEconomy().get().format(price));
+                                    C("MsgThisPlotYours") + " " + C("WordUse") + " /plotme home " + C("MsgToGetToIt"));
                         } else {
                             player.sendMessage(C("MsgThisPlotIsNow") + " " + player.getName() + C("WordPossessive") + ". " + C("WordUse")
-                                    + " /plotme home " + C("MsgToGetToIt") + " " + serverBridge.getEconomy().get().format(price));
+                                    + " /plotme home " + C("MsgToGetToIt"));
                         }
 
                         if (isAdvancedLogging()) {

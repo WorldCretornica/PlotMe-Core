@@ -27,7 +27,7 @@ public class PlotMe_CorePlugin extends JavaPlugin {
     private static PlotMe_CorePlugin INSTANCE;
     private final HashMap<UUID, BukkitPlayer> bukkitPlayerMap = new HashMap<>();
     private PlotMe_Core plotme = new PlotMe_Core();
-    private IServerBridge serverObjectBuilder;
+    private BukkitServerBridge serverObjectBuilder;
 
     public static PlotMe_CorePlugin getInstance() {
         return INSTANCE;

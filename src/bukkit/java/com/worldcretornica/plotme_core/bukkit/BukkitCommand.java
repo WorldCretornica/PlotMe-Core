@@ -61,15 +61,14 @@ public class BukkitCommand extends CommandExBase implements CommandExecutor {
                 }
             }
         } else {
-            sender.sendMessage("You can only reload plotme from the console.");
-        }
-        if ("reload".equalsIgnoreCase(args[0])) {
-            PlotCommand command = commandMap.get("reload");
-            if (command != null) {
-                try {
-                    return command.execute(new BukkitCommandSender(sender), args);
-                } catch (Exception e) {
-                    e.printStackTrace();
+            if ("reload".equalsIgnoreCase(args[0])) {
+                PlotCommand command = commandMap.get("reload");
+                if (command != null) {
+                    try {
+                        return command.execute(new BukkitCommandSender(sender), args);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }

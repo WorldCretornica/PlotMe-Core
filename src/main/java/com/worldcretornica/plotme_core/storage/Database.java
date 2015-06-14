@@ -179,7 +179,7 @@ public abstract class Database {
         plugin.getServerBridge().runTaskAsynchronously(new Runnable() {
             @Override
             public void run() {
-                plugin.getLogger().info("Loading plots for world " + world);
+                plugin.getLogger().info("Loading plots for world " + world.getName());
                 ArrayList<Plot> plots = getPlots(world);
                 worldToPlotMap.put(world, plots);
                 PlotWorldLoadEvent eventWorld = new PlotWorldLoadEvent(world, plots.size());
