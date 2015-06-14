@@ -79,7 +79,7 @@ public class CmdBiome extends PlotCommand {
                             manager.setBiome(plot);
                             plugin.getSqlManager().savePlot(plot);
 
-                            player.sendMessage(C("MsgBiomeSet") + " " + biome.get() + " " + serverBridge.getEconomy().get().format(price));
+                            player.sendMessage(C("MsgBiomeSet") + " " + biome.get());
 
                             if (isAdvancedLogging()) {
                                 if (price == 0) {

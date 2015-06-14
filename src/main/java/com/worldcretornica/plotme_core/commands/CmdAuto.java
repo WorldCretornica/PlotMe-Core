@@ -56,6 +56,7 @@ public class CmdAuto extends PlotCommand {
                 final PlotMapInfo pmi = manager.getMap(world);
                 serverBridge.runTaskAsynchronously(new Runnable() {
                     @Override public void run() {
+                        loop:
                         for (int i = 0; i < 50000; i++) {
                             for (int x = -i; x <= i; x++) {
                                 for (int z = -i; z <= i; z++) {
@@ -86,6 +87,7 @@ public class CmdAuto extends PlotCommand {
 
                                         player.sendMessage(C("MsgThisPlotYours") + " " + C("WordUse") + " /plotme " + C("CommandHome") + " " + C
                                                 ("MsgToGetToIt"));
+                                        break loop;
                                     }
                                 }
                             }
