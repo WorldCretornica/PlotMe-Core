@@ -23,12 +23,10 @@ public class CmdAdd extends PlotCommand {
         return "add";
     }
 
-    public boolean execute(ICommandSender sender, String[] args) throws Exception {
+    public boolean execute(ICommandSender sender, String[] args) {
         if (args.length < 2 && args.length >= 3) {
-            throw new BadUsageException(getUsage());
-        }
-        if (args[1].length() > 16) {
-            throw new IllegalArgumentException(C("InvalidCommandInput"));
+            sender.sendMessage(getUsage());
+            return true;
         }
         if ("*".equals(args[1]) && plugin.getConfig().getBoolean("disableWildCard")) {
             sender.sendMessage("Wildcards are disabled.");
@@ -104,7 +102,7 @@ public class CmdAdd extends PlotCommand {
                         player.sendMessage(C("MsgThisPlot") + "(" + plot.getId() + ") " + C("MsgNotYoursNotAllowedAdd"));
                     }
                 } else {
-                    player.sendMessage(C("MsgThisPlot") + "(" + plot.getId() + ") " + C("MsgHasNoOwner"));
+                    player.sendMessage(C("MsgNoPlotFound"));
                 }
             } else {
                 player.sendMessage(C("MsgNotPlotWorld"));

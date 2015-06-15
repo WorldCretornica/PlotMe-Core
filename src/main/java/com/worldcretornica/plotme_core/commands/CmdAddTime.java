@@ -2,7 +2,6 @@ package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
-import com.worldcretornica.plotme_core.PlotId;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ICommandSender;
@@ -18,36 +17,29 @@ public class CmdAddTime extends PlotCommand {
         return "addtime";
     }
 
-    public boolean execute(ICommandSender sender, String[] args) throws Exception{
+    public boolean execute(ICommandSender sender, String[] args) {
         if (args.length > 1) {
-            throw new BadUsageException(getUsage());
+            sender.sendMessage(getUsage());
+            return true;
         }
         IPlayer player = (IPlayer) sender;
         if (player.hasPermission(PermissionNames.ADMIN_ADDTIME)) {
             if (manager.isPlotWorld(player)) {
                 PlotMapInfo pmi = manager.getMap(player);
                 if (pmi.getDaysToExpiration() != 0) {
-                    PlotId id = manager.getPlotId(player);
-                    if (id == null) {
+                    Plot plot = manager.getPlot(player);
+                    if (plot == null) {
                         player.sendMessage(C("MsgNoPlotFound"));
                         return true;
                     }
-                    if (!manager.isPlotAvailable(id, player.getWorld())) {
-                        Plot plot = manager.getPlotById(id, player.getWorld());
-                        if (plot != null) {
-                            String name = player.getName();
+                    String name = player.getName();
 
-                            plot.resetExpire(pmi.getDaysToExpiration());
-                            plugin.getSqlManager().savePlot(plot);
-                            player.sendMessage(C("MsgPlotExpirationReset"));
+                    plot.resetExpire(pmi.getDaysToExpiration());
+                    plugin.getSqlManager().savePlot(plot);
+                    player.sendMessage(C("MsgPlotExpirationReset"));
 
-                            if (isAdvancedLogging()) {
-                                serverBridge.getLogger().info(name + " reset expiration on plot " + id);
-                            }
-                        }
-                    } else {
-                        player.sendMessage(C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
-                        return true;
+                    if (isAdvancedLogging()) {
+                        serverBridge.getLogger().info(name + " reset expiration on plot " + plot.getId().getID());
                     }
                 } else {
                     return true;

@@ -19,7 +19,7 @@ public class CmdMove extends PlotCommand {
         return "move";
     }
 
-    public boolean execute(ICommandSender sender, String[] args) throws Exception{
+    public boolean execute(ICommandSender sender, String[] args) {
         IPlayer player = (IPlayer) sender;
         if (player.hasPermission(PermissionNames.ADMIN_MOVE)) {
             if (!manager.isPlotWorld(player)) {

@@ -3,7 +3,6 @@ package com.worldcretornica.plotme_core.commands;
 import com.worldcretornica.plotme_core.ClearReason;
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
-import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
@@ -20,14 +19,14 @@ public class CmdReset extends PlotCommand {
         return "reset";
     }
 
-    public boolean execute(ICommandSender sender, String[] args) throws Exception{
+    public boolean execute(ICommandSender sender, String[] args) {
         if (args.length > 1) {
-            throw new BadUsageException(getUsage());
+            sender.sendMessage(getUsage());
+            return true;
         }
         IPlayer player = (IPlayer) sender;
         if (player.hasPermission(PermissionNames.ADMIN_RESET) || player.hasPermission("PlotMe.use.reset")) {
             IWorld world = player.getWorld();
-            PlotMapInfo pmi = manager.getMap(world);
             if (manager.isPlotWorld(world)) {
                 Plot plot = manager.getPlot(player);
 

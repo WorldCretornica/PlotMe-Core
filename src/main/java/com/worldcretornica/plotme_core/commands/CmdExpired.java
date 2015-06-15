@@ -1,5 +1,6 @@
 package com.worldcretornica.plotme_core.commands;
 
+import com.google.common.collect.Lists;
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
@@ -8,7 +9,7 @@ import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 
-import java.util.TreeSet;
+import java.util.List;
 
 public class CmdExpired extends PlotCommand {
 
@@ -20,7 +21,7 @@ public class CmdExpired extends PlotCommand {
         return "expired";
     }
 
-    public boolean execute(ICommandSender sender, String[] args) throws Exception{
+    public boolean execute(ICommandSender sender, String[] args) {
         IPlayer player = (IPlayer) sender;
         if (player.hasPermission(PermissionNames.ADMIN_EXPIRED)) {
             IWorld world = player.getWorld();
@@ -33,16 +34,14 @@ public class CmdExpired extends PlotCommand {
                         page = Integer.parseInt(args[1]);
                     }
 
-                    TreeSet<Plot> expiredPlots = plugin.getSqlManager().getExpiredPlots(world);
-
-                    if (expiredPlots.isEmpty()) {
+                    List<List<Plot>> partition = Lists.partition(plugin.getSqlManager().getExpiredPlots(world), 10);
+                    if (partition.isEmpty()) {
                         player.sendMessage(C("MsgNoPlotExpired"));
                     } else {
-                        player.sendMessage(C("MsgExpiredPlotsPage") + " " + page + "/" + expiredPlots.size() / 5);
-
-                        for (int i = (page - 1) * 5; i < expiredPlots.size() && i < page * 5; i++) {
-                            //Plot plot = expiredPlots;
-                            //player.sendMessage(plot.getId() + " -> " + plot.getOwner() + " @ " + plot.getExpiredDate().toString());
+                        player.sendMessage(C("MsgExpiredPlotsPage") + " (" + page + "/" + partition.size() + ") : ");
+                        for (Plot plot : partition.get(page)) {
+                            assert plot.getExpiredDate() != null;
+                            player.sendMessage(plot.getId() + " -> " + plot.getOwner() + " @ " + plot.getExpiredDate().toString());
                         }
                     }
                 }

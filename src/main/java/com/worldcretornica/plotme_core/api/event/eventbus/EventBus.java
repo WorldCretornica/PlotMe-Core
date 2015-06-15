@@ -48,7 +48,6 @@ public class EventBus implements EventManager {
      */
     private final LoadingCache<Class<? extends Event>, HandlerCache> handlersCache =
             CacheBuilder.newBuilder().build(new CacheLoader<Class<? extends Event>, HandlerCache>() {
-
                 @Override
                 public HandlerCache load(Class<? extends Event> type) throws Exception {
                     return bakeHandlers(type);

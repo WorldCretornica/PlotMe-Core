@@ -2,7 +2,6 @@ package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
-import com.worldcretornica.plotme_core.PlotId;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ICommandSender;
@@ -21,89 +20,80 @@ public class CmdProtect extends PlotCommand {
         return "protect";
     }
 
-    public boolean execute(ICommandSender sender, String[] args) throws Exception{
+    public boolean execute(ICommandSender sender, String[] args) {
         if (args.length > 1) {
-            throw new BadUsageException(getUsage());
+            sender.sendMessage(getUsage());
+            return true;
         }
         IPlayer player = (IPlayer) sender;
         if (player.hasPermission(PermissionNames.ADMIN_PROTECT) || player.hasPermission(PermissionNames.USER_PROTECT)) {
             IWorld world = player.getWorld();
             PlotMapInfo pmi = manager.getMap(world);
             if (manager.isPlotWorld(world)) {
-                PlotId id = manager.getPlotId(player);
+                Plot plot = manager.getPlot(player);
 
-                if (id == null) {
+                if (plot == null) {
                     player.sendMessage(C("MsgNoPlotFound"));
                     return true;
-                } else if (!manager.isPlotAvailable(id, world)) {
-                    Plot plot = manager.getPlotById(id, world);
+                } else if (player.getUniqueId().equals(plot.getOwnerId()) || player.hasPermission(PermissionNames.ADMIN_PROTECT)) {
+                    PlotProtectChangeEvent event;
 
-                    String name = player.getName();
+                    if (plot.isProtected()) {
+                        event = new PlotProtectChangeEvent(world, plot, player, false);
+                        plugin.getEventBus().post(event);
 
-                    if (player.getUniqueId().equals(plot.getOwnerId()) || player.hasPermission(PermissionNames.ADMIN_PROTECT)) {
-                        PlotProtectChangeEvent event;
+                        if (!event.isCancelled()) {
+                            plot.setProtected(false);
+                            manager.adjustWall(player);
+                            plugin.getSqlManager().savePlot(plot);
 
-                        if (plot.isProtected()) {
-                            event = new PlotProtectChangeEvent(world, plot, player, false);
-                            plugin.getEventBus().post(event);
+                            player.sendMessage(C("MsgPlotNoLongerProtected"));
 
-                            if (!event.isCancelled()) {
-                                plot.setProtected(false);
-                                manager.adjustWall(player);
-                                plugin.getSqlManager().savePlot(plot);
-
-                                player.sendMessage(C("MsgPlotNoLongerProtected"));
-
-                                if (isAdvancedLogging()) {
-                                    serverBridge.getLogger().info(name + " " + C("MsgUnprotectedPlot") + " " + id);
-                                }
-                            }
-                        } else {
-
-                            double cost = pmi.getProtectPrice();
-
-                            if (manager.isEconomyEnabled(pmi)) {
-                                if (serverBridge.has(player, cost)) {
-                                    player.sendMessage(C("MsgNotEnoughProtectPlot"));
-                                    return true;
-                                } else {
-                                    event = new PlotProtectChangeEvent(world, plot, player, true);
-                                    plugin.getEventBus().post(event);
-                                    if (!event.isCancelled()) {
-                                        EconomyResponse er = serverBridge.withdrawPlayer(player, cost);
-
-                                        if (!er.transactionSuccess()) {
-                                            player.sendMessage(er.errorMessage);
-                                            serverBridge.getLogger().warning(er.errorMessage);
-                                            return true;
-                                        }
-                                    } else {
-                                        return true;
-                                    }
-                                }
-
-                            } else {
-                                event = new PlotProtectChangeEvent(world, plot, player, true);
-                                plugin.getEventBus().post(event);
-                            }
-
-                            if (!event.isCancelled()) {
-                                plot.setProtected(true);
-                                manager.adjustWall(player);
-
-                                plugin.getSqlManager().savePlot(plot);
-                                player.sendMessage(C("MsgPlotNowProtected"));
-
-                                if (isAdvancedLogging()) {
-                                    serverBridge.getLogger().info(name + " " + C("MsgProtectedPlot") + " " + id);
-                                }
+                            if (isAdvancedLogging()) {
+                                serverBridge.getLogger().info(player.getName() + " " + C("MsgUnprotectedPlot") + " " + plot.getId().getID());
                             }
                         }
                     } else {
-                        player.sendMessage(C("MsgDoNotOwnPlot"));
+                        double cost = pmi.getProtectPrice();
+                        if (manager.isEconomyEnabled(pmi)) {
+                            if (serverBridge.has(player, cost)) {
+                                player.sendMessage(C("MsgNotEnoughProtectPlot"));
+                                return true;
+                            } else {
+                                event = new PlotProtectChangeEvent(world, plot, player, true);
+                                plugin.getEventBus().post(event);
+                                if (!event.isCancelled()) {
+                                    EconomyResponse er = serverBridge.withdrawPlayer(player, cost);
+
+                                    if (!er.transactionSuccess()) {
+                                        player.sendMessage(er.errorMessage);
+                                        serverBridge.getLogger().warning(er.errorMessage);
+                                        return true;
+                                    }
+                                } else {
+                                    return true;
+                                }
+                            }
+
+                        } else {
+                            event = new PlotProtectChangeEvent(world, plot, player, true);
+                            plugin.getEventBus().post(event);
+                        }
+
+                        if (!event.isCancelled()) {
+                            plot.setProtected(true);
+                            manager.adjustWall(player);
+
+                            plugin.getSqlManager().savePlot(plot);
+                            player.sendMessage(C("MsgPlotNowProtected"));
+
+                            if (isAdvancedLogging()) {
+                                serverBridge.getLogger().info(player.getName() + " " + C("MsgProtectedPlot") + " " + plot.getId());
+                            }
+                        }
                     }
                 } else {
-                    player.sendMessage(C("MsgThisPlot") + "(" + id + ") " + C("MsgHasNoOwner"));
+                    player.sendMessage(C("MsgDoNotOwnPlot"));
                 }
             } else {
                 player.sendMessage(C("MsgNotPlotWorld"));

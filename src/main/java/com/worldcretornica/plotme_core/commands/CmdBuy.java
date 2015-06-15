@@ -20,9 +20,10 @@ public class CmdBuy extends PlotCommand {
         return "buy";
     }
 
-    public boolean execute(ICommandSender sender, String[] args) throws Exception{
+    public boolean execute(ICommandSender sender, String[] args) {
         if (args.length > 1) {
-            throw new BadUsageException(getUsage());
+            sender.sendMessage(getUsage());
+            return true;
         }
         IPlayer player = (IPlayer) sender;
         IWorld world = player.getWorld();
@@ -89,7 +90,6 @@ public class CmdBuy extends PlotCommand {
                                                 manager.adjustWall(plot, world, true);
                                                 manager.removeSellSign(plot, world);
                                                 manager.setOwnerSign(world, plot);
-
                                                 player.sendMessage(C("MsgPlotBought") + " " + serverBridge.getEconomy().get().format(cost));
 
                                                 if (isAdvancedLogging()) {

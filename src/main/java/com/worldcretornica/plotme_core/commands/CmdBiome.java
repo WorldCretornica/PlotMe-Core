@@ -21,9 +21,10 @@ public class CmdBiome extends PlotCommand {
         return "biome";
     }
 
-    public boolean execute(ICommandSender sender, String[] args) throws Exception {
+    public boolean execute(ICommandSender sender, String[] args) {
         if (args.length > 4) {
-            throw new BadUsageException(getUsage());
+            sender.sendMessage(getUsage());
+            return true;
         }
 
         IPlayer player = (IPlayer) sender;

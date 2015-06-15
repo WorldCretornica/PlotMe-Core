@@ -1,12 +1,13 @@
 package com.worldcretornica.plotme_core.commands;
 
+import com.google.common.collect.Lists;
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 
-import java.util.HashSet;
+import java.util.List;
 
 public class CmdDoneList extends PlotCommand {
 
@@ -18,7 +19,7 @@ public class CmdDoneList extends PlotCommand {
         return "donelist";
     }
 
-    public boolean execute(ICommandSender sender, String[] args) throws Exception{
+    public boolean execute(ICommandSender sender, String[] args) {
         IPlayer player = (IPlayer) sender;
         if (manager.isPlotWorld(player)) {
             if (player.hasPermission(PermissionNames.ADMIN_DONE)) {
@@ -29,23 +30,14 @@ public class CmdDoneList extends PlotCommand {
                     page = Integer.parseInt(args[1]);
                 }
 
-                //int maxPage = (int) Math.ceil(plugin.getSqlManager().getFinishedPlotCount(player.getWorld().getName()) / 8F);
-                int maxPage = 8;
-                if (page < 1) {
-                    page = 1;
-                } else if (page > maxPage) {
-                    page = maxPage;
-                }
+                List<List<Plot>> partition = Lists.partition(plugin.getSqlManager().getFinishedPlots(player.getWorld()), 10);
 
-                HashSet<Plot> donePlots = plugin.getSqlManager().getFinishedPlots(player.getWorld().getName(), page, 8);
-
-                if (donePlots.isEmpty()) {
+                if (partition.isEmpty()) {
                     player.sendMessage(C("MsgNoPlotsFinished"));
                 } else {
-                    player.sendMessage(C("MsgFinishedPlotsPage") + " " + page + "/" + maxPage);
+                    player.sendMessage(C("MsgFinishedPlotsPage") + " " + page + "/" + partition.size());
 
-                    for (Plot plot : donePlots) {
-
+                    for (Plot plot : partition.get(page)) {
                         player.sendMessage(plot.getId() + " -> " + plot.getOwner() + " @ " + plot.getFinishedDate());
                     }
                 }

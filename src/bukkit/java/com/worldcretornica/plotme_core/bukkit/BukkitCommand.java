@@ -23,11 +23,7 @@ public class BukkitCommand extends CommandExBase implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player) {
             if (args.length == 0) {
-                try {
-                    return commandMap.get("help").execute(plugin.wrapPlayer((Player) sender), args);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                return commandMap.get("help").execute(plugin.wrapPlayer((Player) sender), args);
             }
             if (args[0] == null) {
                 api.getLogger().severe("A critical command error occurred.");
@@ -38,37 +34,24 @@ public class BukkitCommand extends CommandExBase implements CommandExecutor {
                 sender.sendMessage("PlotMe does not have a command by that name.");
                 return true;
             } else {
-                try {
-                    return _command.execute(new BukkitPlayer((Player) sender), args);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                return _command.execute(new BukkitPlayer((Player) sender), args);
             }
         } else {
             return handleConsoleCommands(sender, args);
         }
-        return false;
     }
 
     private boolean handleConsoleCommands(CommandSender sender, String[] args) {
         if (args.length == 0) {
             PlotCommand command = commandMap.get("reload");
             if (command != null) {
-                try {
-                    return command.execute(new BukkitCommandSender(sender), args);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                return command.execute(new BukkitCommandSender(sender), args);
             }
         } else {
             if ("reload".equalsIgnoreCase(args[0])) {
                 PlotCommand command = commandMap.get("reload");
                 if (command != null) {
-                    try {
-                        return command.execute(new BukkitCommandSender(sender), args);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    return command.execute(new BukkitCommandSender(sender), args);
                 }
             }
         }

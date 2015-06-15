@@ -355,12 +355,35 @@ public class Plot {
         this.plotName = plotName;
     }
 
+    /**
+     * Do not use for teleporting players. It will suffocate or kill them.
+     * @return
+     */
+    public Vector getMiddle() {
+        Vector bottom = plotBottomLoc;
+        Vector top = plotTopLoc;
+
+        double x = (top.getX() + bottom.getX() + 1) / 2;
+        double z = (top.getZ() + bottom.getZ() + 1) / 2;
+
+
+        return new Vector(x, 0, z);
+    }
+
     public int getTopX() {
         return plotTopLoc.getBlockX();
     }
 
     public int getTopZ() {
         return plotTopLoc.getBlockZ();
+    }
+
+    public Vector getPlotTopLoc() {
+        return plotTopLoc;
+    }
+
+    public Vector getPlotBottomLoc() {
+        return plotBottomLoc;
     }
 
     public int getBottomX() {

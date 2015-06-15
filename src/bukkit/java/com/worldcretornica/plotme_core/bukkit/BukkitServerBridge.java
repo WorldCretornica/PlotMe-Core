@@ -30,8 +30,11 @@ import java.util.logging.Logger;
 
 public class BukkitServerBridge extends IServerBridge {
 
-    public BukkitServerBridge(Logger logger) {
+    private final PlotMe_CorePlugin plotMeCorePlugin;
+
+    public BukkitServerBridge(PlotMe_CorePlugin plotMeCorePlugin, Logger logger) {
         super(logger);
+        this.plotMeCorePlugin = plotMeCorePlugin;
     }
 
     @Override
@@ -50,7 +53,7 @@ public class BukkitServerBridge extends IServerBridge {
 
     @Override
     public int scheduleSyncRepeatingTask(Runnable func, long l, long l2) {
-        return Bukkit.getScheduler().scheduleSyncRepeatingTask(PlotMe_CorePlugin.getInstance(), func, l, l2);
+        return Bukkit.getScheduler().scheduleSyncRepeatingTask(plotMeCorePlugin, func, l, l2);
     }
 
     @Override
@@ -60,7 +63,7 @@ public class BukkitServerBridge extends IServerBridge {
 
     @Override
     public void scheduleSyncDelayedTask(Runnable task, int i) {
-        Bukkit.getScheduler().scheduleSyncDelayedTask(PlotMe_CorePlugin.getInstance(), task, i);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(plotMeCorePlugin, task, i);
     }
 
     /**
@@ -68,7 +71,7 @@ public class BukkitServerBridge extends IServerBridge {
      */
     @Override
     public void setupHooks() {
-        PluginManager pluginManager = PlotMe_CorePlugin.getInstance().getServer().getPluginManager();
+        PluginManager pluginManager = plotMeCorePlugin.getServer().getPluginManager();
         if (pluginManager.getPlugin("WorldEdit") != null) {
             WorldEditPlugin worldEdit = (WorldEditPlugin) pluginManager.getPlugin("WorldEdit");
             worldEdit.getWorldEdit().getEventBus().register(new PlotWorldEditListener());
@@ -92,7 +95,7 @@ public class BukkitServerBridge extends IServerBridge {
 
     @Override
     public void runTaskAsynchronously(Runnable runnable) {
-        Bukkit.getScheduler().runTaskAsynchronously(PlotMe_CorePlugin.getInstance(), runnable);
+        Bukkit.getScheduler().runTaskAsynchronously(plotMeCorePlugin, runnable);
     }
 
     @Override
@@ -126,13 +129,9 @@ public class BukkitServerBridge extends IServerBridge {
         }
     }
 
-    protected IPlayer internalGetPlayer(String name) {
-        return null;
-    }
-
     @Override
     public File getDataFolder() {
-        return PlotMe_CorePlugin.getInstance().getDataFolder();
+        return plotMeCorePlugin.getDataFolder();
     }
 
     @Override
@@ -267,7 +266,7 @@ public class BukkitServerBridge extends IServerBridge {
     }
 
     public File getWorldFolder() {
-        return PlotMe_CorePlugin.getInstance().getServer().getWorldContainer();
+        return plotMeCorePlugin.getServer().getWorldContainer();
     }
 
     public ConfigurationSection getDefaultWorld() {
@@ -280,6 +279,6 @@ public class BukkitServerBridge extends IServerBridge {
     }
 
     @Override public void runTaskLater(Runnable runnable, long delay) {
-        Bukkit.getServer().getScheduler().runTaskLater(PlotMe_CorePlugin.getInstance(),runnable,delay);
+        Bukkit.getServer().getScheduler().runTaskLater(plotMeCorePlugin, runnable, delay);
     }
 }

@@ -26,6 +26,8 @@ public interface IWorld {
 
     IBlock getBlockAt(int x, int y, int z);
 
+    IWorldBorder getWorldBorder();
+
     IBlock getBlockAt(Vector add);
 
     void getBiome(Vector position);

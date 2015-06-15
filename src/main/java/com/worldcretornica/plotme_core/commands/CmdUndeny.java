@@ -21,12 +21,10 @@ public class CmdUndeny extends PlotCommand {
         return "undeny";
     }
 
-    public boolean execute(ICommandSender sender, String[] args) throws Exception {
+    public boolean execute(ICommandSender sender, String[] args) {
         if (args.length < 2 && args.length >= 3) {
-            throw new BadUsageException(getUsage());
-        }
-        if (args[1].length() > 16) {
-            throw new IllegalArgumentException(C("InvalidCommandInput"));
+            sender.sendMessage(getUsage());
+            return true;
         }
         if ("*".equals(args[1]) && plugin.getConfig().getBoolean("disableWildCard")) {
             sender.sendMessage("Wildcards are disabled.");

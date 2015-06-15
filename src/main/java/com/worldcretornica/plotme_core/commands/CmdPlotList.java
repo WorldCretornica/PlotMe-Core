@@ -21,7 +21,7 @@ public class CmdPlotList extends PlotCommand {
         return "list";
     }
 
-    public boolean execute(ICommandSender sender, String[] args) throws Exception{
+    public boolean execute(ICommandSender sender, String[] args) {
         IPlayer player = (IPlayer) sender;
         if (player.hasPermission(PermissionNames.USER_LIST)) {
             if (manager.isPlotWorld(player)) {
@@ -106,7 +106,7 @@ public class CmdPlotList extends PlotCommand {
                             player.sendMessage(plot.getId() + " -> " + C("WordYours") + addition + ", " + C("WordHelpers") + ": " + helpers);
                         } else {
                             player.sendMessage(plot.getId() + " -> " + plot.getOwner() + C("WordPossessive") + addition + ", " + C("WordHelpers")
-                                            + ": " + helpers);
+                                    + ": " + helpers);
                         }
                     }
 

@@ -58,7 +58,7 @@ public abstract class PlotCommand {
 
     public abstract String getName();
 
-    public abstract boolean execute(ICommandSender sender, String[] args) throws Exception;
+    public abstract boolean execute(ICommandSender sender, String[] args);
 
     public abstract String getUsage();
 

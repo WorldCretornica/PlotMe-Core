@@ -1,5 +1,8 @@
 package com.worldcretornica.plotme_core.storage;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.ImmutableList;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotId;
 import com.worldcretornica.plotme_core.PlotMe_Core;
@@ -15,16 +18,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 public abstract class Database {
 
@@ -32,7 +35,6 @@ public abstract class Database {
     public final ArrayList<PlotId> plotIds = new ArrayList<>();
     final PlotMe_Core plugin;
     public long nextPlotId = 1;
-    ConcurrentLinkedQueue<String> plotSaveQueue = new ConcurrentLinkedQueue<>();
     Connection connection;
 
     public Database(PlotMe_Core plugin) {
@@ -284,22 +286,24 @@ public abstract class Database {
     }
 
 
-    public TreeSet<Plot> getExpiredPlots(IWorld world) {
-        TreeSet<Plot> expiredPlots = new TreeSet<>(new Comparator<Plot>() {
-            @Override public int compare(Plot o1, Plot o2) {
-                return o1.getExpiredDate().compareTo(o2.getExpiredDate());
+    public List<Plot> getExpiredPlots(IWorld world) {
+        Collection<Plot> filter = Collections2.filter(worldToPlotMap.get(world), new Predicate<Plot>() {
+            @Override public boolean apply(Plot plot) {
+                Date temp = new Date(Calendar.getInstance().getTime().getTime());
+                return plot.getExpiredDate() != null && temp.after(plot.getExpiredDate());
             }
         });
-        for (Plot plot : worldToPlotMap.get(world)) {
-            if (plot.getExpiredDate() != null) {
-                expiredPlots.add(plot);
-            }
-        }
-        return expiredPlots;
+        return ImmutableList.copyOf(filter);
     }
 
-    public HashSet<Plot> getFinishedPlots(String name, int page, int i) {
-        return null;
+    public List<Plot> getFinishedPlots(IWorld world) {
+        Collection<Plot> filter = Collections2.filter(worldToPlotMap.get(world), new Predicate<Plot>() {
+            @Override public boolean apply(Plot plot) {
+                return plot.isFinished();
+            }
+        });
+
+        return ImmutableList.copyOf(filter);
     }
 
     public void incrementNextPlotId() {
@@ -316,10 +320,6 @@ public abstract class Database {
             plugin.getLogger().severe("Error setting next internal Plot id. Details below: ");
             plugin.getLogger().severe(e.getMessage());
         }
-    }
-
-    public void setBiome(Plot plot) {
-        plotSaveQueue.add("UPDATE plotmecore_plots SET biome = " + plot.getBiome() + " WHERE plot_id = " + plot.getInternalID());
     }
 
     public void savePlot(Plot plot) {

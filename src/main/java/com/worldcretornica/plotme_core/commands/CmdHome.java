@@ -30,7 +30,7 @@ public class CmdHome extends PlotCommand {
         return Collections.singletonList("h");
     }
 
-    public boolean execute(ICommandSender sender, String[] args) throws Exception{
+    public boolean execute(ICommandSender sender, String[] args) {
         IPlayer player = (IPlayer) sender;
         if (player.hasPermission(PermissionNames.USER_HOME)) {
             if (manager.isPlotWorld(player) || plugin.getConfig().getBoolean("allowWorldTeleport")) {

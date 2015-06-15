@@ -3,6 +3,7 @@ package com.worldcretornica.plotme_core.sponge.api;
 import com.worldcretornica.plotme_core.api.IBlock;
 import com.worldcretornica.plotme_core.api.IEntity;
 import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.api.IWorldBorder;
 import com.worldcretornica.plotme_core.api.Vector;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -63,6 +64,10 @@ public class SpongeWorld implements IWorld {
     public IBlock getBlockAt(int x, int y, int z) {
         //Todo not possible yet
         return null;
+    }
+
+    @Override public IWorldBorder getWorldBorder() {
+        return new SpongeWorldBorder();
     }
 
     @Override

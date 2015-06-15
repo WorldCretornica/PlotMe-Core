@@ -568,7 +568,17 @@ public class PlotMeCoreManager {
                 return false;
             }
         }
-        return true;
+        if (getPlotTopLoc(world, id).getX() > world.getWorldBorder().minX()) {
+            if (getPlotBottomLoc(world, id).getX() < world.getWorldBorder().maxX()) {
+                if (getPlotTopLoc(world, id).getZ() > world.getWorldBorder().minZ()) {
+                    if (getPlotBottomLoc(world, id).getZ() < world.getWorldBorder().maxZ()) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -703,15 +713,6 @@ public class PlotMeCoreManager {
             return null;
         }
         return getPlotById(id, player.getWorld());
-    }
-
-    public boolean isPlotAvailable(Location location) {
-        PlotId id = getPlotId(location);
-        return id != null && getPlotById(id, location) == null;
-    }
-
-    private Plot getPlotById(PlotId id, Location location) {
-        return getPlotById(id, location.getWorld());
     }
 
     public IWorld getWorld(String world) {

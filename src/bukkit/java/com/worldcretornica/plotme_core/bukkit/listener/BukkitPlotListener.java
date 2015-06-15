@@ -74,9 +74,9 @@ public class BukkitPlotListener implements Listener {
     private final PlotMe_CorePlugin plugin;
     private final PlotMeCoreManager manager;
 
-    public BukkitPlotListener() {
-        api = PlotMe_CorePlugin.getInstance().getAPI();
-        this.plugin = PlotMe_CorePlugin.getInstance();
+    public BukkitPlotListener(PlotMe_CorePlugin plotMeCorePlugin) {
+        api = plotMeCorePlugin.getAPI();
+        this.plugin = plotMeCorePlugin;
         manager = PlotMeCoreManager.getInstance();
     }
 

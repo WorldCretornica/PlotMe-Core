@@ -25,9 +25,10 @@ public class CmdRemove extends PlotCommand {
         return "remove";
     }
 
-    public boolean execute(ICommandSender sender, String[] args) throws Exception {
+    public boolean execute(ICommandSender sender, String[] args) {
         if (args.length < 2 && args.length >= 3) {
-            throw new BadUsageException(getUsage());
+            sender.sendMessage(getUsage());
+            return true;
         }
         if (args[1].length() > 16 || !validUserPattern.matcher(args[1]).matches()) {
             throw new IllegalArgumentException(C("InvalidCommandInput"));

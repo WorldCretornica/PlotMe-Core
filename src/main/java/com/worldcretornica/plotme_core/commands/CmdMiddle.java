@@ -2,7 +2,6 @@ package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
-import com.worldcretornica.plotme_core.PlotId;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
@@ -29,25 +28,21 @@ public class CmdMiddle extends PlotCommand {
         return Arrays.asList("center", "mid");
     }
 
-    public boolean execute(ICommandSender sender, String[] args) throws Exception{
+    public boolean execute(ICommandSender sender, String[] args) {
         if (args.length > 1) {
-            throw new BadUsageException(getUsage());
+            sender.sendMessage(getUsage());
+            return true;
         }
         IPlayer player = (IPlayer) sender;
         if (player.hasPermission(PermissionNames.USER_MIDDLE) || player.hasPermission(PermissionNames.ADMIN_MIDDLE_OTHER)) {
             if (manager.isPlotWorld(player)) {
                 IWorld world = player.getWorld();
-                PlotId id = manager.getPlotId(player);
-                if (id == null) {
+                Plot plot = manager.getPlot(player);
+                if (plot == null) {
                     player.sendMessage(C("MsgNoPlotFound"));
                     return true;
                 }
-                Plot plot = manager.getPlotById(id, world);
-
-                if (plot == null) {
-                    player.sendMessage(C("MsgNoPlotFound"));
-
-                } else if (plot.isAllowed(player.getUniqueId()) || player.hasPermission(PermissionNames.ADMIN_MIDDLE_OTHER)) {
+                if (plot.isAllowed(player.getUniqueId()) || player.hasPermission(PermissionNames.ADMIN_MIDDLE_OTHER)) {
                     Vector middleloc = manager.getPlotMiddle(world, plot.getId());
                     Location location = new Location(world, middleloc);
                     PlotTeleportMiddleEvent event = new PlotTeleportMiddleEvent(plot, player, location);

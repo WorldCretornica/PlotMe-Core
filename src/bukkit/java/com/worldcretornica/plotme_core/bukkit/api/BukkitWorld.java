@@ -3,6 +3,7 @@ package com.worldcretornica.plotme_core.bukkit.api;
 import com.worldcretornica.plotme_core.api.IBlock;
 import com.worldcretornica.plotme_core.api.IEntity;
 import com.worldcretornica.plotme_core.api.IWorld;
+import com.worldcretornica.plotme_core.api.IWorldBorder;
 import com.worldcretornica.plotme_core.api.Vector;
 import com.worldcretornica.plotme_core.bukkit.BukkitUtil;
 import org.bukkit.Location;
@@ -73,6 +74,10 @@ public class BukkitWorld implements IWorld {
     @Override
     public IBlock getBlockAt(int x, int y, int z) {
         return new BukkitBlock(world.getBlockAt(x, y, z));
+    }
+
+    @Override public IWorldBorder getWorldBorder() {
+        return new BukkitWorldBorder(world.getWorldBorder());
     }
 
     @Override

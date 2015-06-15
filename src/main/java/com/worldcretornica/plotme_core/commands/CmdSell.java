@@ -2,7 +2,6 @@ package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
-import com.worldcretornica.plotme_core.PlotId;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ICommandSender;
@@ -20,16 +19,14 @@ public class CmdSell extends PlotCommand {
         return "sell";
     }
 
-    public boolean execute(ICommandSender sender, String[] args) throws Exception{
+    public boolean execute(ICommandSender sender, String[] args) {
         IPlayer player = (IPlayer) sender;
         IWorld world = player.getWorld();
         if (manager.isPlotWorld(world)) {
             PlotMapInfo pmi = manager.getMap(world);
             if (manager.isEconomyEnabled(pmi)) {
-
                 if (pmi.isCanPutOnSale()) {
                     if (player.hasPermission(PermissionNames.USER_SELL) || player.hasPermission(PermissionNames.ADMIN_SELL)) {
-                        PlotId id = manager.getPlotId(player);
 
                         Plot plot = manager.getPlot(player);
                         if (plot == null) {
@@ -87,7 +84,9 @@ public class CmdSell extends PlotCommand {
 
                                             if (isAdvancedLogging()) {
                                                 serverBridge.getLogger()
-                                                        .info(player.getName() + " " + C("MsgPutOnSalePlot") + " " + id + " " + C("WordFor") + " "
+                                                        .info(player.getName() + " " + C("MsgPutOnSalePlot") + " " + plot.getId().getID() + " " + C
+                                                                ("WordFor") +
+                                                                " "
                                                                 + price);
                                             }
                                         }

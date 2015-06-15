@@ -60,7 +60,9 @@ public class BukkitPlayer extends BukkitOfflinePlayer implements IPlayer {
     @Override public void teleport(Location location) {
         final int delay = PlotMe_CorePlugin.getInstance()
                 .getAPI().getConfig().getInt("tp-delay");
-        player.sendMessage(String.format("You will be teleported in %d seconds.", delay));
+        if (delay != 0) {
+            player.sendMessage(String.format("You will be teleported in %d seconds.", delay));
+        }
         PlotMe_CorePlugin.getInstance().getServerObjectBuilder().runTaskLater(new TeleportRunnable(this, location), delay);
     }
 

@@ -19,9 +19,10 @@ public class CmdLike extends PlotCommand {
         return "like";
     }
 
-    public boolean execute(ICommandSender sender, String[] args) throws Exception{
+    public boolean execute(ICommandSender sender, String[] args) {
         if (args.length > 1) {
-            throw new BadUsageException(getUsage());
+            sender.sendMessage(getUsage());
+            return true;
         }
         IPlayer player = (IPlayer) sender;
         if (player.hasPermission(PermissionNames.USER_LIKE)) {
@@ -34,11 +35,11 @@ public class CmdLike extends PlotCommand {
                     return true;
                 }
                 if (plot.canPlayerLike(player.getUniqueId())) {
-                    plot.addLike(1,player.getUniqueId());
+                    plot.addLike(1, player.getUniqueId());
                     plugin.getSqlManager().savePlot(plot);
                     player.sendMessage(MessageFormat.format("Added like to plot {0}", plot.getId().getID()));
                 } else {
-                    plot.removeLike(1,player.getUniqueId());
+                    plot.removeLike(1, player.getUniqueId());
                     player.sendMessage(MessageFormat.format("Removed like from plot {0}", plot.getId().getID()));
                 }
             } else {
