@@ -206,7 +206,7 @@ public abstract class Database {
                     statementPlot.setString(1, world.getName().toLowerCase());
                     try (ResultSet setPlots = statementPlot.executeQuery()) {
                         while (setPlots.next()) {
-                            long internalID = setPlots.getLong("id");
+                            long internalID = setPlots.getLong("plot_id");
                             PlotId id = new PlotId(setPlots.getInt("plotX"), setPlots.getInt("plotZ"));
                             //quickly add the id to a list for fast lookups if the plot is avaliable
                             plotIds.add(id);
