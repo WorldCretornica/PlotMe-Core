@@ -10,9 +10,9 @@ public class PlotEvent implements Event {
     protected final IWorld world;
     private final Plot plot;
 
-    public PlotEvent(Plot plot, IWorld world) {
+    public PlotEvent(Plot plot) {
         this.plot = plot;
-        this.world = world;
+        this.world = plot.getWorld();
     }
 
     /**

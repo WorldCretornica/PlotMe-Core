@@ -53,9 +53,9 @@ public class CmdUndeny extends PlotCommand {
                     } else {
                         denied = offlinePlayer.getUniqueId().toString();
                     }
-                    if (plot.isDeniedConsulting(denied)) {
+                    if (plot.isDenied(denied)) {
                         double price = 0.0;
-                        PlotRemoveDeniedEvent event = new PlotRemoveDeniedEvent(world, plot, player, denied);
+                        PlotRemoveDeniedEvent event = new PlotRemoveDeniedEvent(plot, player, denied);
 
                         if (manager.isEconomyEnabled(pmi)) {
                             price = pmi.getUndenyPlayerPrice();
@@ -120,7 +120,7 @@ public class CmdUndeny extends PlotCommand {
     private boolean undenyAll(Plot plot, IPlayer player, PlotMapInfo pmi) {
         if (!plot.getDenied().isEmpty()) {
             double price = pmi.getUndenyPlayerPrice();
-            PlotRemoveDeniedEvent event = new PlotRemoveDeniedEvent(player.getWorld(), plot, player, "*");
+            PlotRemoveDeniedEvent event = new PlotRemoveDeniedEvent(plot, player, "*");
             if (manager.isEconomyEnabled(pmi)) {
 
                 //noinspection ConstantConditions

@@ -6,10 +6,11 @@ import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
-import com.worldcretornica.plotme_core.utils.NameFetcher;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public class CmdInfo extends PlotCommand {
 
@@ -42,8 +43,9 @@ public class CmdInfo extends PlotCommand {
                     return true;
                 }
                 player.sendMessage("Internal ID: " + plot.getInternalID());
-                player.sendMessage("ID: " + plot + " " + C("InfoOwner") + ": " + plot.getOwner()
+                player.sendMessage("ID: " + plot.getId().getID() + " " + C("InfoOwner") + ": " + plot.getOwner()
                         + " " + C("InfoBiome") + ": " + plot.getBiome());
+                player.sendMessage("Likes: " + plot.getLikes());
                 player.sendMessage("Created: " + plot.getCreatedDate());
                 final String neverExpire = C("InfoExpire") + ": " + C("WordNever");
                 if (plot.getExpiredDate() == null) {
@@ -88,33 +90,43 @@ public class CmdInfo extends PlotCommand {
                             + " " + C("InfoProtected") + ": " + C("WordNo"));
                 }
 
-                if (plot.getMembers().size() > 0) {
-                    player.sendMessage(C("InfoAllowed") + ": " + plot.getMembers().keySet().toString());
+                if (!plot.getMembers().isEmpty()) {
+                    StringBuilder builder = new StringBuilder("Members: ");
+                    if (!plot.getMembers().containsKey("*")) {
+                        for (Map.Entry<String, Plot.AccessLevel> member : plot.getMembers().entrySet()) {
+                            builder.append(plugin.getServerBridge().getOfflinePlayer(UUID.fromString(member.getKey())).getName()).append(" (")
+                                    .append(member.getValue().toString()).append(")   ");
+                        }
+                    } else {
+                        builder.append("*");
+                    }
+                    player.sendMessage(builder.toString());
                 }
 
-                if (plot.getDenied().size() > 0) {
-                    if (plot.getDenied().contains("*")) {
-                        player.sendMessage(C("InfoDenied") + ": " + plot.getDenied().toString());
+                if (!plot.getDenied().isEmpty()) {
+                    StringBuilder builder = new StringBuilder(C("InfoDenied"));
+                    builder.append(": ");
+                    if (!plot.getDenied().contains("*")) {
+                        for (String s : plot.getDenied()) {
+                            builder.append(plugin.getServerBridge().getOfflinePlayer(UUID.fromString(s)).getName()).append("  ");
+                        }
+                    } else {
+                        builder.append('*');
                     }
 
-                    NameFetcher nameFetcher = new NameFetcher(plot.getDenied());
-                    player.sendMessage(C("InfoDenied") + ": " + nameFetcher.call().toString());
+                    player.sendMessage(builder.toString());
                 }
 
                 if (manager.isEconomyEnabled(world)) {
                     if (plot.isForSale()) {
-                        player.sendMessage(C("InfoForSale") + ": " + (Math.round(plot.getPrice())));
+                        player.sendMessage(C("InfoForSale") + ": " + plot.getPrice());
                     } else {
                         player.sendMessage(C("InfoForSale") + ": " + C("WordNo"));
                     }
                 }
-                int bottomX = plot.getBottomX();
-                int bottomZ = plot.getBottomZ();
-                int topX = plot.getTopX();
-                int topZ = plot.getTopZ();
 
-                player.sendMessage(C("WordBottom") + ": " + bottomX + "," + bottomZ);
-                player.sendMessage(C("WordTop") + ": " + topX + "," + topZ);
+                player.sendMessage(C("WordBottom") + ": " + plot.getPlotBottomLoc().toString());
+                player.sendMessage(C("WordTop") + ": " + plot.getPlotTopLoc());
 
             } else {
                 player.sendMessage(C("MsgNotPlotWorld"));

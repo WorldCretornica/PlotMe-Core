@@ -1,6 +1,7 @@
 package com.worldcretornica.plotme_core;
 
 import com.worldcretornica.configuration.ConfigAccessor;
+import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlotMe_GeneratorManager;
 import com.worldcretornica.plotme_core.api.IServerBridge;
 import com.worldcretornica.plotme_core.api.IWorld;
@@ -64,6 +65,11 @@ public class PlotMe_Core {
         setupConfigFiles();
         setupSQL();
         serverBridge.setupHooks();
+        if (getConfig().getInt("ExpirePlotCleanupTimer") > 0) {
+            //20L * 60 = 1 minute in ticks
+            serverBridge
+                    .runTaskTimerAsynchronously(new PlotExpireCleanup(this), 20L * 60 * 30, 20L * 60 * getConfig().getInt("ExpirePlotCleanupTimer"));
+        }
         //getSqlManager().plotConvertToUUIDAsynchronously();
     }
 
@@ -183,16 +189,13 @@ public class PlotMe_Core {
         this.counterExpired = counterExpired;
     }
 
-    public void addPlotToClear(PlotToClear plotToClear) {
-        plotsToClear.offer(plotToClear);
-        getLogger().log(Level.INFO, "plot to clear add {0}", plotToClear.getPlotId());
-        PlotMeSpool pms = new PlotMeSpool(this, plotToClear);
+    public void addPlotToClear(Plot plot, ClearReason reason, ICommandSender sender) {
+        getLogger().log(Level.INFO, "plot to clear add {0}", plot.getId());
+        PlotMeSpool pms = new PlotMeSpool(this, plot, reason, sender);
         pms.setTaskId(serverBridge.scheduleSyncRepeatingTask(pms, 40, 60));
     }
 
-    public void removePlotToClear(PlotToClear plotToClear, int taskId) {
-        plotsToClear.remove(plotToClear);
-
+    public void removePlotToClear(int taskId) {
         serverBridge.cancelTask(taskId);
         getLogger().log(Level.INFO, "removed taskid {0}", taskId);
     }

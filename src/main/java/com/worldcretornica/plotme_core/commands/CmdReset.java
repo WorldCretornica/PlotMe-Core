@@ -35,12 +35,12 @@ public class CmdReset extends PlotCommand {
                 } else if (plot.isProtected()) {
                     player.sendMessage(C("MsgPlotProtectedCannotReset"));
                 } else if (player.getUniqueId().equals(plot.getOwnerId()) || player.hasPermission(PermissionNames.ADMIN_RESET)) {
-                    PlotResetEvent event = new PlotResetEvent(world, plot, player);
+                    PlotResetEvent event = new PlotResetEvent(plot, player);
                     plugin.getEventBus().post(event);
 
                     if (!event.isCancelled()) {
-                        manager.clear(plot, world, player, ClearReason.Reset);
-                        manager.deletePlot(world, plot);
+                        manager.clear(plot, player, ClearReason.Reset);
+                        manager.deletePlot(plot);
 
                         if (isAdvancedLogging()) {
                             serverBridge.getLogger().info(player.getName() + " " + C("MsgResetPlot") + " " + plot.getId().toString());

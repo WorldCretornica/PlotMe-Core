@@ -44,7 +44,7 @@ public class CmdSetOwner extends PlotCommand {
 
 
             if (!plot.getOwnerId().equals(newOwner.getUniqueId())) {
-                PlotOwnerChangeEvent event = new PlotOwnerChangeEvent(world, plot, player, newOwner);
+                PlotOwnerChangeEvent event = new PlotOwnerChangeEvent(plot, player, newOwner);
                 plugin.getEventBus().post(event);
 
                 if (!event.isCancelled()) {
@@ -53,7 +53,7 @@ public class CmdSetOwner extends PlotCommand {
                     plot.setOwner(newOwner.getName());
                     plot.setOwnerId(newOwner.getUniqueId());
                     plugin.getSqlManager().savePlot(plot);
-                    manager.setOwnerSign(world, plot);
+                    manager.setOwnerSign(plot);
                     player.sendMessage(C("MsgOwnerChangedTo") + " " + newOwner);
                 }
             } else {

@@ -42,7 +42,7 @@ public class CmdDispose extends PlotCommand {
 
                             double cost = pmi.getDisposePrice();
 
-                            PlotDisposeEvent event = new PlotDisposeEvent(world, plot, player);
+                            PlotDisposeEvent event = new PlotDisposeEvent(plot, player);
 
                             if (manager.isEconomyEnabled(pmi)) {
                                 if (serverBridge.has(player, cost)) {
@@ -67,12 +67,12 @@ public class CmdDispose extends PlotCommand {
                             }
 
                             if (!event.isCancelled()) {
-                                manager.deletePlot(world, plot);
+                                manager.deletePlot(plot);
 
-                                manager.removeOwnerSign(plot, world);
-                                manager.removeSellSign(plot, world);
+                                manager.removeOwnerSign(plot);
+                                manager.removeSellSign(plot);
 
-                                manager.adjustWall(plot, world, false);
+                                manager.adjustWall(plot, false);
                                 player.sendMessage(C("MsgPlotDisposedAnyoneClaim"));
 
                                 if (isAdvancedLogging()) {

@@ -47,28 +47,26 @@ public class PlotMeCoreManager {
 
     /**
      * Removes the plot from the plotmap
-     * @param world plotmap
      * @param plot plot id
      */
-    public void deletePlot(IWorld world, Plot plot) {
-        removeSellSign(plot, world);
-        removeOwnerSign(plot, world);
+    public void deletePlot(Plot plot) {
+        removeSellSign(plot);
+        removeOwnerSign(plot);
         plugin.getSqlManager().deletePlot(plot);
     }
 
     /**
      * Sets the sign for the plot owner
      *
-     * @param world
      * @param plot  plot to set sign on
      */
-    public void setOwnerSign(IWorld world, Plot plot) {
+    public void setOwnerSign(Plot plot) {
         PlotId id = plot.getId();
         String line1 = "ID: " + id.toString();
         String line2 = "";
         String line3 = plot.getOwner();
         String line4 = "";
-        getGenManager(world).setOwnerDisplay(id, line1, line2, line3, line4);
+        getGenManager(plot.getWorld()).setOwnerDisplay(id, line1, line2, line3, line4);
     }
 
     /**
@@ -103,32 +101,30 @@ public class PlotMeCoreManager {
      * Removes the owner sign from the plot.
      * @param plot    plot to remove the sign from
      */
-    public void removeOwnerSign(Plot plot, IWorld world) {
-        getGenManager(world).removeOwnerDisplay(plot.getId());
+    public void removeOwnerSign(Plot plot) {
+        getGenManager(plot.getWorld()).removeOwnerDisplay(plot.getId());
     }
 
     /**
      * Remove the sell sign from the plot
      * @param plot    plot id to remove the sign from
-     * @param world
      */
-    public void removeSellSign(Plot plot, IWorld world) {
-        getGenManager(world).removeSellerDisplay(plot.getId());
+    public void removeSellSign(Plot plot) {
+        getGenManager(plot.getWorld()).removeSellerDisplay(plot.getId());
     }
 
     /**
      * Set the sell sign on the plot
      *
      * @param plot  plot to add sign to
-     * @param world
      */
-    public void setSellSign(Plot plot, IWorld world) {
+    public void setSellSign(Plot plot) {
         String line1 = plugin.C("SignForSale");
         String line2 = plugin.C("SignPrice");
         String line3 = String.valueOf(plot.getPrice());
         String line4 = "/plotme buy";
 
-        getGenManager(world).setSellerDisplay(plot.getId(), line1, line2, line3, line4);
+        getGenManager(plot.getWorld()).setSellerDisplay(plot.getId(), line1, line2, line3, line4);
     }
 
     /**
@@ -377,11 +373,10 @@ public class PlotMeCoreManager {
     /**
      * Plot to add to loaded plotmap.
      *  @param plot Plot to be added
-     * @param world
      */
-    public void loadPlot(Plot plot, IWorld world) {
-        plugin.getSqlManager().worldToPlotMap.get(world).add(plot);
-        PlotLoadEvent event = new PlotLoadEvent(world, plot);
+    public void loadPlot(Plot plot) {
+        plugin.getSqlManager().worldToPlotMap.get(plot.getWorld()).add(plot);
+        PlotLoadEvent event = new PlotLoadEvent(plot);
         plugin.getEventBus().post(event);
 
     }
@@ -449,9 +444,9 @@ public class PlotMeCoreManager {
         }
 
 
-        setOwnerSign(world, plot);
-        loadPlot(plot, world);
-        adjustWall(plot, world, true);
+        setOwnerSign(plot);
+        loadPlot(plot);
+        adjustWall(plot, true);
 
         plugin.getSqlManager().addPlot(plot);
         return plot;
@@ -477,23 +472,23 @@ public class PlotMeCoreManager {
 
         if (plotFrom != null) {
             if (plotTo != null) {
-                deletePlot(world, plotFrom);
-                deletePlot(world, plotTo);
+                deletePlot(plotFrom);
+                deletePlot(plotTo);
                 plotTo.setId(idFrom);
                 plugin.getSqlManager().addPlot(plotTo);
-                loadPlot(plotTo, world);
+                loadPlot(plotTo);
 
                 plotFrom.setId(idTo);
                 plugin.getSqlManager().addPlot(plotFrom);
-                loadPlot(plotFrom, world);
+                loadPlot(plotFrom);
 
-                setOwnerSign(world, plotFrom);
-                setOwnerSign(world, plotTo);
+                setOwnerSign(plotFrom);
+                setOwnerSign(plotTo);
             } else {
-                movePlotToEmpty(world, plotFrom, idTo);
+                movePlotToEmpty(plotFrom, idTo);
             }
         } else if (plotTo != null) {
-            movePlotToEmpty(world, plotTo, idFrom);
+            movePlotToEmpty(plotTo, idFrom);
         }
 
         return true;
@@ -502,15 +497,15 @@ public class PlotMeCoreManager {
     /**
      * Move a plot to an spot where there is no plot existing.
      */
-    private void movePlotToEmpty(IWorld world, Plot filledPlot, PlotId idDestination) {
-        deletePlot(world, filledPlot);
+    private void movePlotToEmpty(Plot filledPlot, PlotId idDestination) {
+        deletePlot(filledPlot);
 
         filledPlot.setId(idDestination);
         plugin.getSqlManager().addPlot(filledPlot);
-        loadPlot(filledPlot, world);
+        loadPlot(filledPlot);
 
-        setOwnerSign(world, filledPlot);
-        setSellSign(filledPlot, world);
+        setOwnerSign(filledPlot);
+        setSellSign(filledPlot);
     }
 
     /**
@@ -538,21 +533,19 @@ public class PlotMeCoreManager {
     /**
      * Clears a plot
      *  @param plot   the plot to be cleared
-     * @param world
      * @param sender the sender of the command
      * @param reason The reason they will be cleared. The cause can be: EXPIRED, RESET, CLEAR
      */
-    public void clear(Plot plot, IWorld world, ICommandSender sender, ClearReason reason) {
-        PlotId id = plot.getId();
+    public void clear(Plot plot, ICommandSender sender, ClearReason reason) {
         if (plugin.getServerBridge().isUsingLwc()) {
             removeLWC(plot);
         }
         if (reason.equals(ClearReason.Clear)) {
-            adjustWall(plot, world, true);
+            adjustWall(plot, true);
         } else {
-            adjustWall(plot, world, false);
+            adjustWall(plot, false);
         }
-        plugin.addPlotToClear(new PlotToClear(plot, id, world, reason, sender));
+        plugin.addPlotToClear(plot, reason, sender);
     }
 
     /**
@@ -598,11 +591,10 @@ public class PlotMeCoreManager {
     /**
      * Updates the blocks on the plot border
      * @param plot      plot id
-     * @param world
      * @param claimed is the plot claimed
      */
-    public void adjustWall(Plot plot, IWorld world, boolean claimed) {
-        getGenManager(world).adjustPlotFor(plot, claimed, plot.isProtected(), plot.isForSale());
+    public void adjustWall(Plot plot, boolean claimed) {
+        getGenManager(plot.getWorld()).adjustPlotFor(plot, claimed, plot.isProtected(), plot.isForSale());
     }
 
     public void setBiome(Plot plot) {

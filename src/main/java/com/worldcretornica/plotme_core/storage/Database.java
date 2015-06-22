@@ -25,20 +25,27 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class Database {
 
     public final ConcurrentHashMap<IWorld, ArrayList<Plot>> worldToPlotMap = new ConcurrentHashMap<>();
-    public final ArrayList<PlotId> plotIds = new ArrayList<>();
+    public final ArrayList<Plot> plots = new ArrayList<>();
     final PlotMe_Core plugin;
     public long nextPlotId = 1;
     Connection connection;
-
     public Database(PlotMe_Core plugin) {
         this.plugin = plugin;
+    }
+
+    /**
+     * Very demanding task depending on how many plots in each world.
+     *
+     * @return all plots
+     */
+    public List<Plot> getPlots() {
+        return Collections.unmodifiableList(plots);
     }
 
     /**
@@ -90,7 +97,7 @@ public abstract class Database {
      * @return number of plots in the world
      */
     public int getTotalPlotCount() {
-        return plotIds.size();
+        return plots.size();
     }
 
     public int getPlotCount(IWorld worldIC, UUID uuid) {
@@ -110,7 +117,7 @@ public abstract class Database {
     }
 
     private void addPlotToCache(Plot plot) {
-        plotIds.add(plot.getId());
+        plots.add(plot);
         worldToPlotMap.get(plot.getWorld()).add(plot);
     }
 
@@ -121,7 +128,7 @@ public abstract class Database {
 
     private void deletePlotFromCache(Plot plot) {
         worldToPlotMap.get(plot.getWorld()).remove(plot);
-        plotIds.remove(plot.getId());
+        plots.remove(plot);
     }
 
     private void deletePlotFromStorage(Plot plot) {
@@ -148,16 +155,16 @@ public abstract class Database {
      * @return plots. unmodifiable.
      */
 
-    public Set<Plot> getPlayerPlots(UUID uuid) {
-        HashSet<Plot> playerPlots = new HashSet<>();
+    public List<Plot> getPlayerPlots(final UUID uuid) {
+        ArrayList<Plot> filter = new ArrayList<>();
         for (ArrayList<Plot> plotList : worldToPlotMap.values()) {
-            for (Plot plot : plotList) {
-                if (plot.getOwnerId().equals(uuid)) {
-                    playerPlots.add(plot);
+            filter.addAll(Collections2.filter(plotList, new Predicate<Plot>() {
+                @Override public boolean apply(Plot plot) {
+                    return plot.getOwnerId().equals(uuid);
                 }
-            }
+            }));
         }
-        return Collections.unmodifiableSet(playerPlots);
+        return ImmutableList.copyOf(filter);
     }
 
     /**
@@ -167,14 +174,13 @@ public abstract class Database {
      * @param uuid
      * @return owned plots. unmodifiable.
      */
-    public Set<Plot> getOwnedPlots(IWorld world, UUID uuid) {
-        HashSet<Plot> plots = new HashSet<>();
-        for (Plot plot : worldToPlotMap.get(world)) {
-            if (plot.getOwnerId().equals(uuid)) {
-                plots.add(plot);
+    public List<Plot> getOwnedPlots(final IWorld world, final UUID uuid) {
+        Collection<Plot> filter = Collections2.filter(worldToPlotMap.get(world), new Predicate<Plot>() {
+            @Override public boolean apply(Plot plot) {
+                return plot.getOwnerId().equals(uuid) && plot.getWorld().equals(world);
             }
-        }
-        return Collections.unmodifiableSet(plots);
+        });
+        return ImmutableList.copyOf(filter);
     }
 
     public void loadPlotsAsynchronously(final IWorld world) {
@@ -182,12 +188,13 @@ public abstract class Database {
             @Override
             public void run() {
                 plugin.getLogger().info("Loading plots for world " + world.getName());
-                ArrayList<Plot> plots = getPlots(world);
-                worldToPlotMap.put(world, plots);
-                PlotWorldLoadEvent eventWorld = new PlotWorldLoadEvent(world, plots.size());
+                ArrayList<Plot> plots2 = getPlots(world);
+                worldToPlotMap.put(world, plots2);
+                plots.addAll(plots2);
+                PlotWorldLoadEvent eventWorld = new PlotWorldLoadEvent(world, plots2.size());
                 plugin.getEventBus().post(eventWorld);
-                for (Plot plot : plots) {
-                    PlotLoadEvent event = new PlotLoadEvent(world, plot);
+                for (Plot plot : plots2) {
+                    PlotLoadEvent event = new PlotLoadEvent(plot);
                     plugin.getEventBus().post(event);
 
                 }
@@ -208,8 +215,6 @@ public abstract class Database {
                         while (setPlots.next()) {
                             long internalID = setPlots.getLong("plot_id");
                             PlotId id = new PlotId(setPlots.getInt("plotX"), setPlots.getInt("plotZ"));
-                            //quickly add the id to a list for fast lookups if the plot is avaliable
-                            plotIds.add(id);
                             String owner = setPlots.getString("owner");
                             UUID ownerId = UUID.fromString(setPlots.getString("ownerID"));
                             String biome = setPlots.getString("biome");
@@ -289,8 +294,7 @@ public abstract class Database {
     public List<Plot> getExpiredPlots(IWorld world) {
         Collection<Plot> filter = Collections2.filter(worldToPlotMap.get(world), new Predicate<Plot>() {
             @Override public boolean apply(Plot plot) {
-                Date temp = new Date(Calendar.getInstance().getTime().getTime());
-                return plot.getExpiredDate() != null && temp.after(plot.getExpiredDate());
+                return plot.getExpiredDate() != null && Calendar.getInstance().getTime().after(plot.getExpiredDate());
             }
         });
         return ImmutableList.copyOf(filter);

@@ -62,7 +62,7 @@ public class CmdClaim extends PlotCommand {
 
                     double price = 0.0;
 
-                    PlotCreateEvent event = new PlotCreateEvent(world, id, player);
+                    PlotCreateEvent event = new PlotCreateEvent(id, player);
 
                     if (manager.isEconomyEnabled(pmi)) {
                         price = pmi.getClaimPrice();

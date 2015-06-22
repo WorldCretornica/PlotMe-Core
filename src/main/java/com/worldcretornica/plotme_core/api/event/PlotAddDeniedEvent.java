@@ -11,7 +11,7 @@ public class PlotAddDeniedEvent extends PlotEvent implements ICancellable, Event
     private boolean canceled;
 
     public PlotAddDeniedEvent(IWorld world, Plot plot, IPlayer player, String denied) {
-        super(plot, world);
+        super(plot);
         this.player = player;
         this.denied = denied;
     }

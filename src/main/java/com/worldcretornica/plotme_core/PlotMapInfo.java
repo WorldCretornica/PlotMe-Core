@@ -104,10 +104,6 @@ public class PlotMapInfo {
         configFile.saveConfig();
     }
 
-    public boolean isRefundClaimPriceOnReset() {
-        return getEconomySection().getBoolean("RefundClaimPriceOnReset");
-    }
-
     public double getClaimPrice() {
         return getEconomySection().getDouble("ClaimPrice");
     }

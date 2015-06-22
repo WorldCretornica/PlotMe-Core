@@ -94,9 +94,12 @@ public class SpongeServerBridge extends IServerBridge {
         return bridgeLogger;
     }
 
+    @Override public int runTaskTimerAsynchronously(Runnable task, long delay, long period) {
+        return 0;
+    }
+
     @Override
-    public int scheduleSyncRepeatingTask(Runnable func, long l, long l2) {
-        // TODO Auto-generated method stub
+    public int scheduleSyncRepeatingTask(Runnable func, long delay, long l2) {
         return 0;
     }
 
@@ -150,6 +153,10 @@ public class SpongeServerBridge extends IServerBridge {
     @Override
     public File getDataFolder() {
         return plugin.getConfigDir();
+    }
+
+    @Override public int runTask(Runnable task) {
+        return 0;
     }
 
     @Override

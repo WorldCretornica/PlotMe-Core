@@ -42,7 +42,7 @@ public class CmdMiddle extends PlotCommand {
                     player.sendMessage(C("MsgNoPlotFound"));
                     return true;
                 }
-                if (plot.isAllowed(player.getUniqueId()) || player.hasPermission(PermissionNames.ADMIN_MIDDLE_OTHER)) {
+                if (plot.isMember(player.getUniqueId()).isPresent() || player.hasPermission(PermissionNames.ADMIN_MIDDLE_OTHER)) {
                     Vector middleloc = manager.getPlotMiddle(world, plot.getId());
                     Location location = new Location(world, middleloc);
                     PlotTeleportMiddleEvent event = new PlotTeleportMiddleEvent(plot, player, location);

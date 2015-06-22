@@ -11,4 +11,5 @@ AdvancedLogging: false
 PlotEnterAnnouncement: false
 mySQLConverter: true
 Version: 0.17
+ExpirePlotCleanupTimer: 90
 

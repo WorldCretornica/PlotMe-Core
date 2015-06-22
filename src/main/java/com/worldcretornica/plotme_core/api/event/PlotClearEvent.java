@@ -2,15 +2,14 @@ package com.worldcretornica.plotme_core.api.event;
 
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.api.IPlayer;
-import com.worldcretornica.plotme_core.api.IWorld;
 
 public class PlotClearEvent extends PlotEvent implements ICancellable, Event {
 
     private final IPlayer clearer;
     private boolean canceled;
 
-    public PlotClearEvent(IWorld world, Plot plot, IPlayer clearer) {
-        super(plot, world);
+    public PlotClearEvent(Plot plot, IPlayer clearer) {
+        super(plot);
         this.clearer = clearer;
     }
 

@@ -37,7 +37,7 @@ public class CmdSell extends PlotCommand {
 
                                 PlotSellChangeEvent event;
                                 if (plot.isForSale()) {
-                                    event = new PlotSellChangeEvent(world, plot, player, plot.getPrice(), false);
+                                    event = new PlotSellChangeEvent(plot, player, plot.getPrice(), false);
                                     plugin.getEventBus().post(event);
 
                                     if (!event.isCancelled()) {
@@ -45,7 +45,7 @@ public class CmdSell extends PlotCommand {
                                         plot.setForSale(false);
                                         plugin.getSqlManager().savePlot(plot);
                                         manager.adjustWall(player);
-                                        manager.removeSellSign(plot, world);
+                                        manager.removeSellSign(plot);
 
                                         player.sendMessage(C("MsgPlotNoLongerSale"));
 
@@ -70,7 +70,7 @@ public class CmdSell extends PlotCommand {
                                     if (price < 0.0) {
                                         player.sendMessage(C("MsgInvalidAmount"));
                                     } else {
-                                        event = new PlotSellChangeEvent(world, plot, player, price, true);
+                                        event = new PlotSellChangeEvent(plot, player, price, true);
                                         plugin.getEventBus().post(event);
 
                                         if (!event.isCancelled()) {
@@ -78,7 +78,7 @@ public class CmdSell extends PlotCommand {
                                             plot.setForSale(true);
                                             plugin.getSqlManager().savePlot(plot);
                                             manager.getGenManager(world).adjustPlotFor(plot, true, plot.isProtected(), plot.isForSale());
-                                            manager.setSellSign(plot, world);
+                                            manager.setSellSign(plot);
 
                                             player.sendMessage(C("MsgPlotForSale"));
 

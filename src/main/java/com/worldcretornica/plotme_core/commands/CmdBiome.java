@@ -53,7 +53,7 @@ public class CmdBiome extends PlotCommand {
 
                         double price = 0.0;
 
-                        PlotBiomeChangeEvent event = new PlotBiomeChangeEvent(world, plot, player, biome.get());
+                        PlotBiomeChangeEvent event = new PlotBiomeChangeEvent(plot, player, biome.get());
                         plugin.getEventBus().post(event);
 
                         if (manager.isEconomyEnabled(pmi)) {

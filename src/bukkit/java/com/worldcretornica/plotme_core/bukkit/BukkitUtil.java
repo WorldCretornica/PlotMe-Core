@@ -40,4 +40,7 @@ public class BukkitUtil {
         return new BukkitEntity(entity);
     }
 
+    public static Location adapt(org.bukkit.Location location) {
+        return new Location(adapt(location.getWorld()), location.getX(), location.getY(), location.getZ());
+    }
 }

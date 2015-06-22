@@ -2,7 +2,6 @@ package com.worldcretornica.plotme_core.api.event;
 
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.api.IPlayer;
-import com.worldcretornica.plotme_core.api.IWorld;
 
 public class PlotSellChangeEvent extends PlotEvent implements ICancellable, Event {
 
@@ -11,8 +10,8 @@ public class PlotSellChangeEvent extends PlotEvent implements ICancellable, Even
     private final boolean isForSale;
     private boolean canceled;
 
-    public PlotSellChangeEvent(IWorld world, Plot plot, IPlayer seller, double price, boolean isForSale) {
-        super(plot, world);
+    public PlotSellChangeEvent(Plot plot, IPlayer seller, double price, boolean isForSale) {
+        super(plot);
         this.seller = seller;
         this.price = price;
         this.isForSale = isForSale;

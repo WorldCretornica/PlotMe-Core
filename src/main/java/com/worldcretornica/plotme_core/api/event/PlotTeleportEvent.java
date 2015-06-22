@@ -13,7 +13,7 @@ public class PlotTeleportEvent extends PlotEvent implements ICancellable, Event 
     private boolean canceled;
 
     public PlotTeleportEvent(Plot plot, IPlayer player, Location location, PlotId plotId) {
-        super(plot, location.getWorld());
+        super(plot);
         this.player = player;
         this.location = location;
         this.plotId = plotId;

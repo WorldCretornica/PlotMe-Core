@@ -29,7 +29,7 @@ public class CmdDone extends PlotCommand {
                     if (player.getUniqueId().equals(plot.getOwnerId()) || player.hasPermission(PermissionNames.ADMIN_DONE)) {
                         PlotDoneChangeEvent
                                 event =
-                                new PlotDoneChangeEvent(player.getWorld(), plot, player, plot.isFinished());
+                                new PlotDoneChangeEvent(plot, player, plot.isFinished());
                         plugin.getEventBus().post(event);
 
                         if (!event.isCancelled()) {

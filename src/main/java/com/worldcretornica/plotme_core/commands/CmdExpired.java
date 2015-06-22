@@ -7,7 +7,6 @@ import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
-import com.worldcretornica.plotme_core.api.IWorld;
 
 import java.util.List;
 
@@ -24,8 +23,7 @@ public class CmdExpired extends PlotCommand {
     public boolean execute(ICommandSender sender, String[] args) {
         IPlayer player = (IPlayer) sender;
         if (player.hasPermission(PermissionNames.ADMIN_EXPIRED)) {
-            IWorld world = player.getWorld();
-            if (manager.isPlotWorld(world)) {
+            if (manager.isPlotWorld(player.getWorld())) {
                 PlotMapInfo pmi = manager.getMap(player);
                 if (pmi.getDaysToExpiration() != 0) {
                     int page = 1;
@@ -33,8 +31,7 @@ public class CmdExpired extends PlotCommand {
                     if (args.length == 2) {
                         page = Integer.parseInt(args[1]);
                     }
-
-                    List<List<Plot>> partition = Lists.partition(plugin.getSqlManager().getExpiredPlots(world), 10);
+                    List<List<Plot>> partition = Lists.partition(plugin.getSqlManager().getExpiredPlots(player.getWorld()), 10);
                     if (partition.isEmpty()) {
                         player.sendMessage(C("MsgNoPlotExpired"));
                     } else {
@@ -44,6 +41,8 @@ public class CmdExpired extends PlotCommand {
                             player.sendMessage(plot.getId() + " -> " + plot.getOwner() + " @ " + plot.getExpiredDate().toString());
                         }
                     }
+                } else {
+                    return true;
                 }
             } else {
                 player.sendMessage(C("MsgNotPlotWorld"));

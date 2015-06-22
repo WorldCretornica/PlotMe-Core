@@ -50,9 +50,10 @@ public class PlotMe_CorePlugin extends JavaPlugin {
 
         //Register Bukkit Events
         PluginManager pm = getServer().getPluginManager();
-        pm.registerEvents(new BukkitPlotListener(this), this);
+        BukkitPlotListener listener = new BukkitPlotListener(this);
+        pm.registerEvents(listener, this);
         pm.registerEvents(new BukkitPlotDenyListener(this), this);
-
+        plotme.getEventBus().register(listener);
         //Register Command
         this.getCommand("plotme").setExecutor(new BukkitCommand(this));
 

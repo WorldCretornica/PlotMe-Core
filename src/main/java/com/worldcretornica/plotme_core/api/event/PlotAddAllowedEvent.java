@@ -2,7 +2,6 @@ package com.worldcretornica.plotme_core.api.event;
 
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.api.IPlayer;
-import com.worldcretornica.plotme_core.api.IWorld;
 
 public class PlotAddAllowedEvent extends PlotEvent implements ICancellable, Event {
 
@@ -10,8 +9,8 @@ public class PlotAddAllowedEvent extends PlotEvent implements ICancellable, Even
     private final String allowedPlayer;
     private boolean canceled;
 
-    public PlotAddAllowedEvent(IWorld world, Plot plot, IPlayer player, String allowed) {
-        super(plot, world);
+    public PlotAddAllowedEvent(Plot plot, IPlayer player, String allowed) {
+        super(plot);
         this.player = player;
         this.allowedPlayer = allowed;
     }

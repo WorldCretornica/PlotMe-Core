@@ -2,7 +2,6 @@ package com.worldcretornica.plotme_core.api.event;
 
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.api.IPlayer;
-import com.worldcretornica.plotme_core.api.IWorld;
 
 public class PlotBuyEvent extends PlotEvent implements ICancellable, Event {
 
@@ -10,8 +9,8 @@ public class PlotBuyEvent extends PlotEvent implements ICancellable, Event {
     private final double price;
     private boolean canceled;
 
-    public PlotBuyEvent(IWorld world, Plot plot, IPlayer buyer, double price) {
-        super(plot, world);
+    public PlotBuyEvent(Plot plot, IPlayer buyer, double price) {
+        super(plot);
         this.buyer = buyer;
         this.price = price;
     }

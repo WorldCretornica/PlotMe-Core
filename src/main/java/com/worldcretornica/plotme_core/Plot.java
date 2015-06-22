@@ -1,5 +1,6 @@
 package com.worldcretornica.plotme_core;
 
+import com.google.common.base.Optional;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.Vector;
 
@@ -123,21 +124,21 @@ public class Plot {
     }
 
     public void addMember(String name, AccessLevel level) {
-        if (!isAllowedConsulting(name)) {
-            if ("*".equals(name)) {
-                this.getMembers().clear();
-            }
+        if ("*".equals(name)) {
+            this.getMembers().clear();
+            getMembers().put(name, AccessLevel.ALLOWED);
+        } else {
             getMembers().put(name, level);
         }
     }
 
     public void addDenied(String name) {
-        if (!isDeniedConsulting(name)) {
+        if (isDeniedInternal(name)) {
             getDenied().add(name);
         }
     }
 
-    public void removeAllowed(String name) {
+    public void removeMembers(String name) {
         if (getMembers().containsKey(name)) {
             getMembers().remove(name, AccessLevel.ALLOWED);
         }
@@ -155,7 +156,7 @@ public class Plot {
         }
     }
 
-    public void removeAllAllowed() {
+    public void removeAllMembers() {
         getMembers().clear();
     }
 
@@ -163,40 +164,7 @@ public class Plot {
         getDenied().clear();
     }
 
-    public boolean isAllowedConsulting(String name) {
-        if ("*".equals(name)) {
-            return isAllowedInternal(name);
-        }
-        UUID player = manager.getPlayer(name).getUniqueId();
-        return player != null && isAllowedInternal(name);
-    }
-
-    public boolean isAllowed(UUID uuid) {
-        return isAllowedInternal(uuid.toString());
-    }
-
-    public boolean isAllowed(String uuid) {
-        return isAllowedInternal(uuid);
-    }
-
-    private boolean isAllowedInternal(String name) {
-        if (getMembers().containsKey(name)) {
-            AccessLevel accessLevel = getMembers().get(name);
-            if (accessLevel == AccessLevel.ALLOWED) {
-                return true;
-            } else if ("*".equals(name)) {
-                return false;
-            }
-            if (accessLevel == AccessLevel.TRUSTED) {
-                return manager.getPlayer(name) != null;
-            }
-        } else {
-            return getMembers().containsKey("*");
-        }
-        return false;
-    }
-
-    public boolean isDeniedConsulting(String name) {
+    public boolean isDenied(String name) {
         return isDeniedInternal(name);
     }
 
@@ -438,6 +406,18 @@ public class Plot {
     public void removeLike(int i, UUID uniqueId) {
         likes -= i;
         likers.remove(uniqueId);
+    }
+
+    public Optional<AccessLevel> isMember(String allowed) {
+        if (getMembers().containsKey("*")) {
+            return Optional.of(AccessLevel.ALLOWED);
+        } else {
+            return Optional.fromNullable(getMembers().get(allowed));
+        }
+    }
+
+    public Optional<AccessLevel> isMember(UUID uniqueId) {
+        return isMember(uniqueId.toString());
     }
 
 

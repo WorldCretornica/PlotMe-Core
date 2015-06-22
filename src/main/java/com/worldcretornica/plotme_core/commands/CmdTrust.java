@@ -51,10 +51,10 @@ public class CmdTrust extends PlotCommand {
                         }
                     }
                     if (player.getUniqueId().equals(plot.getOwnerId()) || player.hasPermission(PermissionNames.ADMIN_ADD)) {
-                        if (plot.isAllowed(allowed)) {
+                        if (plot.isMember(allowed).isPresent()) {
                             player.sendMessage(C("WordPlayer") + " " + allowed + " " + C("MsgAlreadyAllowed"));
                         } else {
-                            PlotAddAllowedEvent event = new PlotAddAllowedEvent(world, plot, player, allowed);
+                            PlotAddAllowedEvent event = new PlotAddAllowedEvent(plot, player, allowed);
                             plugin.getEventBus().post(event);
                             double price = 0.0;
                             if (manager.isEconomyEnabled(pmi)) {
@@ -99,7 +99,7 @@ public class CmdTrust extends PlotCommand {
                         player.sendMessage(C("MsgThisPlot") + "(" + plot.getId() + ") " + C("MsgNotYoursNotAllowedAdd"));
                     }
                 } else {
-                    player.sendMessage(C("MsgThisPlot") + "(" + plot.getId() + ") " + C("MsgHasNoOwner"));
+                    player.sendMessage(C("MsgThisPlot") + C("MsgHasNoOwner"));
                 }
             } else {
                 player.sendMessage(C("MsgNotPlotWorld"));

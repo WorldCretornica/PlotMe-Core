@@ -1,17 +1,17 @@
 package com.worldcretornica.plotme_core.api.event;
 
+import com.google.common.base.Optional;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.api.ICommandSender;
-import com.worldcretornica.plotme_core.api.IWorld;
 
 public class PlotResetEvent extends PlotEvent implements ICancellable, Event {
 
-    private final ICommandSender reseter;
+    private final Optional<ICommandSender> reseter;
     private boolean canceled;
 
-    public PlotResetEvent(IWorld world, Plot plot, ICommandSender reseter) {
-        super(plot, world);
-        this.reseter = reseter;
+    public PlotResetEvent(Plot plot, ICommandSender reseter) {
+        super(plot);
+        this.reseter = Optional.fromNullable(reseter);
     }
 
     @Override
@@ -24,7 +24,7 @@ public class PlotResetEvent extends PlotEvent implements ICancellable, Event {
         canceled = cancel;
     }
 
-    public ICommandSender getReseter() {
+    public Optional<ICommandSender> getReseter() {
         return reseter;
     }
 }

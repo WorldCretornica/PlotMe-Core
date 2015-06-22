@@ -66,6 +66,10 @@ public class Vector implements Comparable<Vector> {
         return Math.sqrt(lengthSquared());
     }
 
+    @Override public String toString() {
+        return "X: " + y + " Y: " + y + " Z: " + z;
+    }
+
     @Override
     public int compareTo(Vector o) {
         return (int) (lengthSquared() - o.lengthSquared());

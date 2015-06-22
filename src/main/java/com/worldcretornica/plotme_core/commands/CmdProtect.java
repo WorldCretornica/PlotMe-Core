@@ -39,7 +39,7 @@ public class CmdProtect extends PlotCommand {
                     PlotProtectChangeEvent event;
 
                     if (plot.isProtected()) {
-                        event = new PlotProtectChangeEvent(world, plot, player, false);
+                        event = new PlotProtectChangeEvent(plot, player, false);
                         plugin.getEventBus().post(event);
 
                         if (!event.isCancelled()) {
@@ -60,7 +60,7 @@ public class CmdProtect extends PlotCommand {
                                 player.sendMessage(C("MsgNotEnoughProtectPlot"));
                                 return true;
                             } else {
-                                event = new PlotProtectChangeEvent(world, plot, player, true);
+                                event = new PlotProtectChangeEvent(plot, player, true);
                                 plugin.getEventBus().post(event);
                                 if (!event.isCancelled()) {
                                     EconomyResponse er = serverBridge.withdrawPlayer(player, cost);
@@ -76,7 +76,7 @@ public class CmdProtect extends PlotCommand {
                             }
 
                         } else {
-                            event = new PlotProtectChangeEvent(world, plot, player, true);
+                            event = new PlotProtectChangeEvent(plot, player, true);
                             plugin.getEventBus().post(event);
                         }
 

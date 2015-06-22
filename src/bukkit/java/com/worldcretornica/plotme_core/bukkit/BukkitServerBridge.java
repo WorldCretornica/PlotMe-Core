@@ -18,6 +18,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.io.File;
 import java.io.InputStreamReader;
@@ -52,8 +53,8 @@ public class BukkitServerBridge extends IServerBridge {
     }
 
     @Override
-    public int scheduleSyncRepeatingTask(Runnable func, long l, long l2) {
-        return Bukkit.getScheduler().scheduleSyncRepeatingTask(plotMeCorePlugin, func, l, l2);
+    public int scheduleSyncRepeatingTask(Runnable func, long delay, long period) {
+        return Bukkit.getScheduler().scheduleSyncRepeatingTask(plotMeCorePlugin, func, delay, period);
     }
 
     @Override
@@ -74,7 +75,7 @@ public class BukkitServerBridge extends IServerBridge {
         PluginManager pluginManager = plotMeCorePlugin.getServer().getPluginManager();
         if (pluginManager.getPlugin("WorldEdit") != null) {
             WorldEditPlugin worldEdit = (WorldEditPlugin) pluginManager.getPlugin("WorldEdit");
-            worldEdit.getWorldEdit().getEventBus().register(new PlotWorldEditListener());
+            worldEdit.getWorldEdit().getEventBus().register(new PlotWorldEditListener(plotMeCorePlugin.getAPI()));
         }
 
         setUsingLwc(pluginManager.getPlugin("LWC") != null);
@@ -95,7 +96,7 @@ public class BukkitServerBridge extends IServerBridge {
 
     @Override
     public void runTaskAsynchronously(Runnable runnable) {
-        Bukkit.getScheduler().runTaskAsynchronously(plotMeCorePlugin, runnable);
+        BukkitTask bukkitTask = Bukkit.getScheduler().runTaskAsynchronously(plotMeCorePlugin, runnable);
     }
 
     @Override
@@ -173,6 +174,13 @@ public class BukkitServerBridge extends IServerBridge {
         return players;
     }
 
+    @Override public int runTaskTimerAsynchronously(Runnable task, long delay, long period) {
+        return Bukkit.getScheduler().runTaskTimerAsynchronously(plotMeCorePlugin, task, delay, period).getTaskId();
+    }
+
+    @Override public int runTask(Runnable task) {
+        return Bukkit.getScheduler().runTask(plotMeCorePlugin, task).getTaskId();
+    }
     @Override
     public Collection<IWorld> getWorlds() {
         List<IWorld> worlds = new ArrayList<>();

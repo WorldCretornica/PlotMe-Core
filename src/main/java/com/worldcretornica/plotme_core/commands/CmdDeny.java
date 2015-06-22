@@ -64,7 +64,7 @@ public class CmdDeny extends PlotCommand {
                         }
                     }
 
-                    if (plot.isDeniedConsulting(denied)) {
+                    if (plot.isDenied(denied)) {
                         player.sendMessage(C("WordPlayer") + " " + args[1] + " " + C("MsgAlreadyDenied"));
                     } else {
 
@@ -103,17 +103,16 @@ public class CmdDeny extends PlotCommand {
                                 List<IPlayer> playersInPlot = manager.getPlayersInPlot(plot.getId(), world);
 
                                 for (IPlayer iPlayer : playersInPlot) {
-                                    if (!plot.isAllowed(iPlayer.getUniqueId())) {
-                                        iPlayer.setLocation(manager.getPlotHome(plot.getId(), player.getWorld()));
+                                    if (plot.isMember(iPlayer.getUniqueId()).isPresent()) {
+                                        continue;
                                     }
+                                    iPlayer.setLocation(manager.getPlotHome(plot.getId(), player.getWorld()));
                                 }
-                            } else {
-                                if (deniedPlayer != null && deniedPlayer.getWorld().equals(world)) {
-                                    PlotId plotId = manager.getPlotId(deniedPlayer);
+                            } else if (deniedPlayer != null && deniedPlayer.getWorld().equals(world)) {
+                                PlotId plotId = manager.getPlotId(deniedPlayer);
 
-                                    if (plot.getId().equals(plotId)) {
-                                        deniedPlayer.setLocation(manager.getPlotHome(plot.getId(), player.getWorld()));
-                                    }
+                                if (plot.getId().equals(plotId)) {
+                                    deniedPlayer.setLocation(manager.getPlotHome(plot.getId(), player.getWorld()));
                                 }
                             }
 

@@ -53,7 +53,7 @@ public class CmdBuy extends PlotCommand {
                                     if (serverBridge.has(player, cost)) {
                                         player.sendMessage(C("MsgNotEnoughBuy"));
                                     } else {
-                                        PlotBuyEvent event = new PlotBuyEvent(world, plot, player, cost);
+                                        PlotBuyEvent event = new PlotBuyEvent(plot, player, cost);
                                         plugin.getEventBus().post(event);
 
                                         if (!event.isCancelled()) {
@@ -87,9 +87,9 @@ public class CmdBuy extends PlotCommand {
                                                 plot.setPrice(0.0);
                                                 plot.setForSale(false);
                                                 plugin.getSqlManager().savePlot(plot);
-                                                manager.adjustWall(plot, world, true);
-                                                manager.removeSellSign(plot, world);
-                                                manager.setOwnerSign(world, plot);
+                                                manager.adjustWall(plot, true);
+                                                manager.removeSellSign(plot);
+                                                manager.setOwnerSign(plot);
                                                 player.sendMessage(C("MsgPlotBought") + " " + serverBridge.getEconomy().get().format(cost));
 
                                                 if (isAdvancedLogging()) {

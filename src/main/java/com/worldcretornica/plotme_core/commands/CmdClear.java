@@ -44,7 +44,7 @@ public class CmdClear extends PlotCommand {
 
                         double price = 0.0;
 
-                        PlotClearEvent event = new PlotClearEvent(world, plot, player);
+                        PlotClearEvent event = new PlotClearEvent(plot, player);
 
                         if (manager.isEconomyEnabled(pmi)) {
                             price = pmi.getClearPrice();
@@ -72,7 +72,7 @@ public class CmdClear extends PlotCommand {
                         }
 
                         if (!event.isCancelled()) {
-                            manager.clear(plot, world, player, ClearReason.Clear);
+                            manager.clear(plot, player, ClearReason.Clear);
 
                             if (isAdvancedLogging()) {
                                 if (price == 0) {

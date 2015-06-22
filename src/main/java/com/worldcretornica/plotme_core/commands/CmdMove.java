@@ -54,7 +54,7 @@ public class CmdMove extends PlotCommand {
                             return true;
                         }
                     }
-                    PlotMoveEvent event = new PlotMoveEvent(world, id1, id2, player);
+                    PlotMoveEvent event = new PlotMoveEvent(id1, id2, player);
                     plugin.getEventBus().post(event);
                     if (!event.isCancelled()) {
                         if (manager.movePlot(world, id1, id2)) {

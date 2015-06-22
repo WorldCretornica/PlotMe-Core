@@ -2,7 +2,6 @@ package com.worldcretornica.plotme_core.api.event;
 
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.api.IPlayer;
-import com.worldcretornica.plotme_core.api.IWorld;
 
 public class PlotProtectChangeEvent extends PlotEvent implements ICancellable, Event {
 
@@ -10,8 +9,8 @@ public class PlotProtectChangeEvent extends PlotEvent implements ICancellable, E
     private final boolean _protected;
     private boolean canceled;
 
-    public PlotProtectChangeEvent(IWorld world, Plot plot, IPlayer player, boolean protect) {
-        super(plot, world);
+    public PlotProtectChangeEvent(Plot plot, IPlayer player, boolean protect) {
+        super(plot);
         this.player = player;
         _protected = protect;
     }

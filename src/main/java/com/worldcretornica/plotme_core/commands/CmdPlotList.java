@@ -1,18 +1,18 @@
 package com.worldcretornica.plotme_core.commands;
 
+import com.google.common.collect.Lists;
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.ICommandSender;
+import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import com.worldcretornica.plotme_core.api.IPlayer;
 
-import java.sql.Date;
-import java.util.Calendar;
+import java.util.List;
 import java.util.UUID;
 
 public class CmdPlotList extends PlotCommand {
 
-    //todo rewrite this command
     public CmdPlotList(PlotMe_Core instance) {
         super(instance);
     }
@@ -27,10 +27,18 @@ public class CmdPlotList extends PlotCommand {
             if (manager.isPlotWorld(player)) {
                 String name;
                 UUID uuid;
-
-                if (args.length == 2) {
-                    name = args[1];
-                    uuid = null;
+                int page = 1;
+                if (args.length > 2) {
+                    IOfflinePlayer offlinePlayer = serverBridge.getOfflinePlayer(args[1]);
+                    if (offlinePlayer == null) {
+                        player.sendMessage("No player found by that name");
+                        return true;
+                    }
+                    name = offlinePlayer.getName();
+                    uuid = offlinePlayer.getUniqueId();
+                    if (args.length == 3) {
+                        page = Integer.parseInt(args[2]);
+                    }
                     player.sendMessage(C("MsgListOfPlotsWhere") + " " + name + " " + C("MsgCanBuild"));
                 } else {
                     name = player.getName();
@@ -38,77 +46,11 @@ public class CmdPlotList extends PlotCommand {
                     player.sendMessage(C("MsgListOfPlotsWhereYou"));
                 }
 
-                String oldWorld = "";
-
                 // Get plots of that player
-                for (Plot plot : plugin.getSqlManager().getPlayerPlots(uuid)) {
-                    StringBuilder addition = new StringBuilder();
-
-                    // Display worlds
-                    if (!oldWorld.equalsIgnoreCase(plot.getWorld().getName())) {
-                        oldWorld = plot.getWorld().getName();
-                        player.sendMessage("World: " + plot.getWorld().getName());
-                    }
-
-                    // Is it expired?
-                    if (plot.getExpiredDate() != null) {
-                        Date expiredDate = plot.getExpiredDate();
-
-                        if (expiredDate.before(Calendar.getInstance().getTime())) {
-                            addition.append(" @").append(plot.getExpiredDate());
-                        } else {
-                            addition.append(" @").append(plot.getExpiredDate());
-                        }
-                    }
-
-                    // Is it for sale?
-                    if (plot.isForSale()) {
-                        addition.append(C("WordSell")).append(": ").append(Math.round(plot.getPrice()));
-                    }
-
-                    // Is the plot owner the name?
-
-                    if (plot.getOwner().equals(name)) {
-                        if (plot.getMembers().size() == 0) {
-                            // Is the name the current player too?
-                            if (name.equals(player.getName())) {
-                                player.sendMessage(plot.getId() + " -> " + C("WordYours") + addition);
-                            } else {
-                                player.sendMessage(plot.getId() + " -> " + plot.getOwner() + addition);
-                            }
-                        } else if (plot.getOwner().equals(player.getName())) {
-                            player.sendMessage(plot.getId() + " -> " + C("WordYours") + addition + ", " + C("WordHelpers") + ": " + plot
-                                    .getMembers().toString()); //todo fix this to work with allowed and trusted
-                        } else {
-                            player.sendMessage(plot.getId() + " -> " + plot.getOwner() + addition + ", " + C("WordHelpers") + ": " + plot
-                                    .getMembers().toString()); //todo fix this to work with allowed and trusted
-                        }
-
-                        // Is the name allowed to build there?
-                    } else if (plot.isAllowedConsulting(name)) {
-                        StringBuilder helpers = new StringBuilder();
-                        for (String allowed : plot.getMembers().keySet()) {
-                            if (player.getName().equals(allowed)) {
-                                if (name.equals(player.getName())) {
-                                    helpers.append("You").append(", ");
-                                } else {
-                                    helpers.append(args[1]).append(", ");
-                                }
-                            } else {
-                                helpers.append(allowed).append(", ");
-                            }
-                        }
-                        if (helpers.length() > 2) {
-                            helpers.delete(helpers.length() - 2, helpers.length());
-                        }
-
-                        if (plot.getOwner().equals(player.getName())) {
-                            player.sendMessage(plot.getId() + " -> " + C("WordYours") + addition + ", " + C("WordHelpers") + ": " + helpers);
-                        } else {
-                            player.sendMessage(plot.getId() + " -> " + plot.getOwner() + C("WordPossessive") + addition + ", " + C("WordHelpers")
-                                    + ": " + helpers);
-                        }
-                    }
+                List<List<Plot>> partition = Lists.partition(plugin.getSqlManager().getPlayerPlots(uuid), 5);
+                player.sendMessage("Plot List" + " (" + page + "/" + partition.size() + ") : ");
+                for (Plot plot : partition.get(page)) {
+                    player.sendMessage("Plot ID: " + plot.getId().getID() + "World: " + plot.getWorld().getName());
 
                 }
             } else {

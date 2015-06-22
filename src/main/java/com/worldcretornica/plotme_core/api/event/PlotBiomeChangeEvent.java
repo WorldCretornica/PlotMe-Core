@@ -2,7 +2,6 @@ package com.worldcretornica.plotme_core.api.event;
 
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.api.IPlayer;
-import com.worldcretornica.plotme_core.api.IWorld;
 
 public class PlotBiomeChangeEvent extends PlotEvent implements ICancellable, Event {
 
@@ -10,8 +9,8 @@ public class PlotBiomeChangeEvent extends PlotEvent implements ICancellable, Eve
     private boolean canceled;
     private String biome;
 
-    public PlotBiomeChangeEvent(IWorld world, Plot plot, IPlayer player, String biome) {
-        super(plot, world);
+    public PlotBiomeChangeEvent(Plot plot, IPlayer player, String biome) {
+        super(plot);
         this.player = player;
         this.biome = biome;
     }

@@ -2,7 +2,6 @@ package com.worldcretornica.plotme_core.api.event;
 
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.api.IPlayer;
-import com.worldcretornica.plotme_core.api.IWorld;
 
 public class PlotDoneChangeEvent extends PlotEvent implements ICancellable, Event {
 
@@ -10,8 +9,8 @@ public class PlotDoneChangeEvent extends PlotEvent implements ICancellable, Even
     private final boolean done;
     private boolean canceled;
 
-    public PlotDoneChangeEvent(IWorld world, Plot plot, IPlayer player, boolean done) {
-        super(plot, world);
+    public PlotDoneChangeEvent(Plot plot, IPlayer player, boolean done) {
+        super(plot);
         this.player = player;
         this.done = done;
     }

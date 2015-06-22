@@ -50,7 +50,9 @@ public abstract class IServerBridge {
         return logger;
     }
 
-    public abstract int scheduleSyncRepeatingTask(Runnable func, long l, long l2);
+    public abstract int runTaskTimerAsynchronously(Runnable task, long delay, long period);
+
+    public abstract int scheduleSyncRepeatingTask(Runnable func, long delay, long period);
 
     public abstract void cancelTask(int taskId);
 
@@ -99,6 +101,8 @@ public abstract class IServerBridge {
     public List<String> getBiomes() {
         return biomes;
     }
+
+    public abstract int runTask(Runnable task);
 
     /**
      * Get all Existing Plotworlds.

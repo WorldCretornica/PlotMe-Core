@@ -2,7 +2,6 @@ package com.worldcretornica.plotme_core.api.event;
 
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.api.IPlayer;
-import com.worldcretornica.plotme_core.api.IWorld;
 
 public class PlotRemoveDeniedEvent extends PlotEvent implements ICancellable, Event {
 
@@ -10,8 +9,8 @@ public class PlotRemoveDeniedEvent extends PlotEvent implements ICancellable, Ev
     private final String denied;
     private boolean canceled;
 
-    public PlotRemoveDeniedEvent(IWorld world, Plot plot, IPlayer player, String denied) {
-        super(plot, world);
+    public PlotRemoveDeniedEvent(Plot plot, IPlayer player, String denied) {
+        super(plot);
         this.player = player;
         this.denied = denied;
     }

@@ -26,12 +26,9 @@ public class CmdRemove extends PlotCommand {
     }
 
     public boolean execute(ICommandSender sender, String[] args) {
-        if (args.length < 2 && args.length >= 3) {
+        if (args.length < 2 && args.length >= 3 || args[1].length() > 16) {
             sender.sendMessage(getUsage());
             return true;
-        }
-        if (args[1].length() > 16 || !validUserPattern.matcher(args[1]).matches()) {
-            throw new IllegalArgumentException(C("InvalidCommandInput"));
         }
         if ("*".equals(args[1]) && plugin.getConfig().getBoolean("disableWildCard")) {
             sender.sendMessage("Wildcards are disabled.");
@@ -48,23 +45,24 @@ public class CmdRemove extends PlotCommand {
                     return true;
                 } else {
                     UUID playerUniqueId = player.getUniqueId();
-                    String allowed = args[1];
+                    String allowed;
 
                     if (plot.getOwnerId().equals(playerUniqueId) || player.hasPermission(PermissionNames.ADMIN_REMOVE)) {
-                        if (!allowed.equals("*")) {
-                            IOfflinePlayer offlinePlayer = serverBridge.getOfflinePlayer(allowed);
+                        if (args[1].equals("*")) {
+                            allowed = "*";
+                        } else {
+                            IOfflinePlayer offlinePlayer = serverBridge.getOfflinePlayer(args[1]);
                             if (offlinePlayer == null) {
-                                player.sendMessage("An error occured while trying to remove " + allowed);
+                                player.sendMessage("An error occured while trying to remove " + args[1]);
                                 return true;
                             } else {
                                 allowed = offlinePlayer.getUniqueId().toString();
                             }
                         }
-                        if (plot.isAllowedConsulting(allowed)) {
-
+                        if (plot.isMember(allowed).isPresent()) {
                             double price = 0.0;
 
-                            PlotRemoveAllowedEvent event = new PlotRemoveAllowedEvent(world, plot, player, allowed);
+                            PlotRemoveAllowedEvent event = new PlotRemoveAllowedEvent(plot, player, allowed);
                             plugin.getEventBus().post(event);
 
                             if (manager.isEconomyEnabled(pmi) && !event.isCancelled()) {
@@ -88,9 +86,9 @@ public class CmdRemove extends PlotCommand {
 
                             if (!event.isCancelled()) {
                                 if ("*".equals(allowed)) {
-                                    plot.removeAllAllowed();
+                                    plot.removeAllMembers();
                                 } else {
-                                    plot.removeAllowed(allowed);
+                                    plot.removeMembers(allowed);
                                 }
                                 player.sendMessage(
                                         C("WordPlayer") + " " + allowed + " " + C("WordRemoved") + ". " + serverBridge.getEconomy().get().format
