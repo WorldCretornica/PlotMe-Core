@@ -1,11 +1,12 @@
 package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.api.CommandExBase;
 import com.worldcretornica.plotme_core.api.ICommandSender;
 
 public class CmdReload extends PlotCommand {
 
-    public CmdReload(PlotMe_Core instance) {
+    public CmdReload(PlotMe_Core instance, CommandExBase commandExBase) {
         super(instance);
     }
 

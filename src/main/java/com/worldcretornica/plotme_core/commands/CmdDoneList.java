@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.api.CommandExBase;
 import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 
@@ -11,7 +12,7 @@ import java.util.List;
 
 public class CmdDoneList extends PlotCommand {
 
-    public CmdDoneList(PlotMe_Core instance) {
+    public CmdDoneList(PlotMe_Core instance, CommandExBase commandExBase) {
         super(instance);
     }
 
@@ -22,7 +23,7 @@ public class CmdDoneList extends PlotCommand {
     public boolean execute(ICommandSender sender, String[] args) {
         IPlayer player = (IPlayer) sender;
         if (manager.isPlotWorld(player)) {
-            if (player.hasPermission(PermissionNames.ADMIN_DONE)) {
+            if (player.hasPermission(PermissionNames.ADMIN_DONE) || player.hasPermission(PermissionNames.USER_DONE)) {
 
                 int page = 1;
 

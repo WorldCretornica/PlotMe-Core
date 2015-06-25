@@ -4,6 +4,7 @@ import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.api.CommandExBase;
 import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
@@ -12,7 +13,7 @@ import net.milkbowl.vault.economy.EconomyResponse;
 
 public class CmdDispose extends PlotCommand {
 
-    public CmdDispose(PlotMe_Core instance) {
+    public CmdDispose(PlotMe_Core instance, CommandExBase commandExBase) {
         super(instance);
     }
 
@@ -59,7 +60,7 @@ public class CmdDispose extends PlotCommand {
 
                                 if (!economyResponse.transactionSuccess()) {
                                     player.sendMessage(economyResponse.errorMessage);
-                                    serverBridge.getLogger().warning(economyResponse.errorMessage);
+                                    plugin.getLogger().warning(economyResponse.errorMessage);
                                     return true;
                                 }
                             } else {
@@ -76,7 +77,7 @@ public class CmdDispose extends PlotCommand {
                                 player.sendMessage(C("MsgPlotDisposedAnyoneClaim"));
 
                                 if (isAdvancedLogging()) {
-                                    serverBridge.getLogger().info(name + " " + C("MsgDisposedPlot") + " " + plot.getId());
+                                    plugin.getLogger().info(name + " " + C("MsgDisposedPlot") + " " + plot.getId());
                                 }
                             }
                         } else {

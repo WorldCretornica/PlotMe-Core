@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.api.CommandExBase;
 import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import com.worldcretornica.plotme_core.api.IPlayer;
@@ -13,7 +14,7 @@ import java.util.UUID;
 
 public class CmdPlotList extends PlotCommand {
 
-    public CmdPlotList(PlotMe_Core instance) {
+    public CmdPlotList(PlotMe_Core instance, CommandExBase commandExBase) {
         super(instance);
     }
 
@@ -25,7 +26,6 @@ public class CmdPlotList extends PlotCommand {
         IPlayer player = (IPlayer) sender;
         if (player.hasPermission(PermissionNames.USER_LIST)) {
             if (manager.isPlotWorld(player)) {
-                String name;
                 UUID uuid;
                 int page = 1;
                 if (args.length > 2) {
@@ -34,14 +34,12 @@ public class CmdPlotList extends PlotCommand {
                         player.sendMessage("No player found by that name");
                         return true;
                     }
-                    name = offlinePlayer.getName();
                     uuid = offlinePlayer.getUniqueId();
                     if (args.length == 3) {
                         page = Integer.parseInt(args[2]);
                     }
-                    player.sendMessage(C("MsgListOfPlotsWhere") + " " + name + " " + C("MsgCanBuild"));
+                    player.sendMessage(C("MsgListOfPlotsWhere") + " " + offlinePlayer.getName() + " " + C("MsgCanBuild"));
                 } else {
-                    name = player.getName();
                     uuid = player.getUniqueId();
                     player.sendMessage(C("MsgListOfPlotsWhereYou"));
                 }

@@ -4,6 +4,7 @@ import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.api.CommandExBase;
 import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
@@ -17,7 +18,7 @@ import java.util.UUID;
 
 public class CmdHome extends PlotCommand {
 
-    public CmdHome(PlotMe_Core instance) {
+    public CmdHome(PlotMe_Core instance, CommandExBase commandExBase) {
         super(instance);
     }
 
@@ -26,7 +27,7 @@ public class CmdHome extends PlotCommand {
     }
 
     @Override
-    public List getAliases() {
+    public List<String> getAliases() {
         return Collections.singletonList("h");
     }
 

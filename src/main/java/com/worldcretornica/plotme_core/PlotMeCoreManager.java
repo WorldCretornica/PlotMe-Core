@@ -673,12 +673,17 @@ public class PlotMeCoreManager {
             @Override
             public void run() {
                 for (ArrayList<Plot> plotList : plugin.getSqlManager().worldToPlotMap.values()) {
-                    for (Plot plot : plotList) {
+                    for (final Plot plot : plotList) {
                         if (plot.getOwnerId().equals(uuid)) {
                             plot.setOwner(name);
                             final int i = plugin.getSqlManager().worldToPlotMap.get(plot.getWorld()).indexOf(plot);
                             plugin.getSqlManager().worldToPlotMap.get(plot.getWorld()).get(i).setOwner(name);
                             plugin.getSqlManager().savePlot(plot);
+                            plugin.getServerBridge().runTask(new Runnable() {
+                                @Override public void run() {
+                                    setOwnerSign(plot);
+                                }
+                            });
                         }
                     }
 

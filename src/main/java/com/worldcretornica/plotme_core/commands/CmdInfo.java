@@ -3,6 +3,7 @@ package com.worldcretornica.plotme_core.commands;
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.api.CommandExBase;
 import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
@@ -14,7 +15,7 @@ import java.util.UUID;
 
 public class CmdInfo extends PlotCommand {
 
-    public CmdInfo(PlotMe_Core instance) {
+    public CmdInfo(PlotMe_Core instance, CommandExBase commandExBase) {
         super(instance);
     }
 

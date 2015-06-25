@@ -3,6 +3,7 @@ package com.worldcretornica.plotme_core.commands;
 import com.google.common.collect.Lists;
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.api.CommandExBase;
 import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 
@@ -10,7 +11,7 @@ import java.util.List;
 
 public class CmdBiomes extends PlotCommand {
 
-    public CmdBiomes(PlotMe_Core instance) {
+    public CmdBiomes(PlotMe_Core instance, CommandExBase commandExBase) {
         super(instance);
     }
 

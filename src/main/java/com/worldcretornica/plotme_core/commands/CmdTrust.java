@@ -4,6 +4,7 @@ import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.api.CommandExBase;
 import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
@@ -13,7 +14,7 @@ import net.milkbowl.vault.economy.EconomyResponse;
 //TODO DOES NOT WORK. CODE NEEDS TO BE MODIFIED FOR TRUST
 public class CmdTrust extends PlotCommand {
 
-    public CmdTrust(PlotMe_Core instance) {
+    public CmdTrust(PlotMe_Core instance, CommandExBase commandExBase) {
         super(instance);
     }
 

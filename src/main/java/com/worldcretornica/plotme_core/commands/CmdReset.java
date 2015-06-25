@@ -4,6 +4,7 @@ import com.worldcretornica.plotme_core.ClearReason;
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.api.CommandExBase;
 import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
@@ -11,7 +12,7 @@ import com.worldcretornica.plotme_core.api.event.PlotResetEvent;
 
 public class CmdReset extends PlotCommand {
 
-    public CmdReset(PlotMe_Core instance) {
+    public CmdReset(PlotMe_Core instance, CommandExBase commandExBase) {
         super(instance);
     }
 
@@ -25,7 +26,7 @@ public class CmdReset extends PlotCommand {
             return true;
         }
         IPlayer player = (IPlayer) sender;
-        if (player.hasPermission(PermissionNames.ADMIN_RESET) || player.hasPermission("PlotMe.use.reset")) {
+        if (player.hasPermission(PermissionNames.ADMIN_RESET) || player.hasPermission(PermissionNames.USER_RESET)) {
             IWorld world = player.getWorld();
             if (manager.isPlotWorld(world)) {
                 Plot plot = manager.getPlot(player);

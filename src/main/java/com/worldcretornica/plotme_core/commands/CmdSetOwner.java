@@ -4,6 +4,7 @@ import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.api.CommandExBase;
 import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
@@ -11,7 +12,7 @@ import com.worldcretornica.plotme_core.api.event.PlotOwnerChangeEvent;
 
 public class CmdSetOwner extends PlotCommand {
 
-    public CmdSetOwner(PlotMe_Core instance) {
+    public CmdSetOwner(PlotMe_Core instance, CommandExBase commandExBase) {
         super(instance);
     }
 
@@ -24,7 +25,7 @@ public class CmdSetOwner extends PlotCommand {
             sender.sendMessage(getUsage());
             return true;
         }
-        if (args[1].length() > 16 || !validUserPattern.matcher(args[1]).matches()) {
+        if (args[1].length() > 16) {
             throw new IllegalArgumentException(C("InvalidCommandInput"));
         }
         IPlayer player = (IPlayer) sender;

@@ -5,6 +5,7 @@ import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotId;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.api.CommandExBase;
 import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
@@ -15,7 +16,7 @@ import java.util.List;
 
 public class CmdDeny extends PlotCommand {
 
-    public CmdDeny(PlotMe_Core instance) {
+    public CmdDeny(PlotMe_Core instance, CommandExBase commandExBase) {
         super(instance);
     }
 
@@ -28,7 +29,7 @@ public class CmdDeny extends PlotCommand {
             sender.sendMessage(getUsage());
             return true;
         }
-        if (args[1].length() > 16 || !validUserPattern.matcher(args[1]).matches()) {
+        if (args[1].length() > 16) {
             throw new IllegalArgumentException(C("InvalidCommandInput"));
         }
         if ("*".equals(args[1]) && plugin.getConfig().getBoolean("disableWildCard")) {
@@ -83,7 +84,7 @@ public class CmdDeny extends PlotCommand {
 
                                 if (!er.transactionSuccess()) {
                                     player.sendMessage(er.errorMessage);
-                                    serverBridge.getLogger().warning(er.errorMessage);
+                                    plugin.getLogger().warning(er.errorMessage);
                                     return true;
                                 }
                             } else {
@@ -121,11 +122,11 @@ public class CmdDeny extends PlotCommand {
 
                             if (isAdvancedLogging()) {
                                 if (price == 0) {
-                                    serverBridge.getLogger()
+                                    plugin.getLogger()
                                             .info(player.getName() + " " + C("MsgDeniedPlayer") + " " + denied + " " + C("MsgToPlot") + " "
                                                     + plot.getId().getID());
                                 } else {
-                                    serverBridge.getLogger()
+                                    plugin.getLogger()
                                             .info(player.getName() + " " + C("MsgDeniedPlayer") + " " + denied + " " + C("MsgToPlot") + " "
                                                     + plot.getId().getID() + (" " + C("WordFor") + " " + price));
                                 }

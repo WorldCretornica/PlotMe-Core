@@ -2,12 +2,13 @@ package com.worldcretornica.plotme_core.commands;
 
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.PlotRunnableDeleteExpire;
+import com.worldcretornica.plotme_core.api.CommandExBase;
 import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 
 public class CmdResetExpired extends PlotCommand {
 
-    public CmdResetExpired(PlotMe_Core instance) {
+    public CmdResetExpired(PlotMe_Core instance, CommandExBase commandExBase) {
         super(instance);
     }
 

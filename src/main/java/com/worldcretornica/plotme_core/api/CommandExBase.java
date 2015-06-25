@@ -38,48 +38,49 @@ import java.util.HashMap;
 
 public class CommandExBase {
 
-    protected final HashMap<String, PlotCommand> commandMap = new HashMap<>();
+    public final HashMap<String, PlotCommand> commandMap = new HashMap<>();
     protected final PlotMe_Core api;
 
     protected CommandExBase(PlotMe_Core api) {
         this.api = api;
-        registerCommand(new CmdAdd(api));
-        registerCommand(new CmdAddTime(api));
-        registerCommand(new CmdAuto(api));
-        registerCommand(new CmdBiome(api));
-        registerCommand(new CmdBiomes(api));
-        registerCommand(new CmdBuy(api));
-        registerCommand(new CmdClaim(api));
-        registerCommand(new CmdClear(api));
-        registerCommand(new CmdDeny(api));
-        registerCommand(new CmdDispose(api));
-        registerCommand(new CmdDone(api));
-        registerCommand(new CmdDoneList(api));
-        registerCommand(new CmdExpired(api));
-        registerCommand(new CmdHome(api));
-        registerCommand(new CmdInfo(api));
-        registerCommand(new CmdMove(api));
-        registerCommand(new CmdPlotList(api));
-        registerCommand(new CmdProtect(api));
-        registerCommand(new CmdReload(api));
+        registerCommand(new CmdAdd(api, this));
+        registerCommand(new CmdAddTime(api, this));
+        registerCommand(new CmdAuto(api, this));
+        registerCommand(new CmdBiome(api, this));
+        registerCommand(new CmdBiomes(api, this));
+        registerCommand(new CmdBuy(api, this));
+        registerCommand(new CmdClaim(api, this));
+        registerCommand(new CmdClear(api, this));
+        registerCommand(new CmdDeny(api, this));
+        registerCommand(new CmdDispose(api, this));
+        registerCommand(new CmdDone(api, this));
+        registerCommand(new CmdDoneList(api, this));
+        registerCommand(new CmdExpired(api, this));
+        registerCommand(new CmdHome(api, this));
+        registerCommand(new CmdInfo(api, this));
+        registerCommand(new CmdMove(api, this));
+        registerCommand(new CmdPlotList(api, this));
+        registerCommand(new CmdProtect(api, this));
+        registerCommand(new CmdReload(api, this));
         registerCommand(new CmdRemove(api));
-        registerCommand(new CmdReset(api));
-        registerCommand(new CmdResetExpired(api));
-        registerCommand(new CmdSell(api));
-        registerCommand(new CmdTrust(api));
-        registerCommand(new CmdLike(api));
-        registerCommand(new CmdSetOwner(api));
-        registerCommand(new CmdShowHelp(api));
-        registerCommand(new CmdTP(api));
-        registerCommand(new CmdUndeny(api));
-        registerCommand(new CmdMiddle(api));
-        registerCommand(new CmdWEAnywhere(api));
+        registerCommand(new CmdReset(api, this));
+        registerCommand(new CmdResetExpired(api, this));
+        registerCommand(new CmdSell(api, this));
+        registerCommand(new CmdTrust(api, this));
+        registerCommand(new CmdLike(api, this));
+        registerCommand(new CmdSetOwner(api, this));
+        registerCommand(new CmdShowHelp(api, this));
+        registerCommand(new CmdTP(api, this));
+        registerCommand(new CmdUndeny(api, this));
+        registerCommand(new CmdMiddle(api, this));
+        registerCommand(new CmdWEAnywhere(api, this));
     }
 
     private void registerCommand(PlotCommand cmd) {
-        if (cmd.getName().equalsIgnoreCase("home")) {
-            commandMap.put("h", cmd);
+        for (String aliases : cmd.getAliases()) {
+            commandMap.put(aliases, cmd);
         }
+
         this.commandMap.put(cmd.getName(), cmd);
     }
 

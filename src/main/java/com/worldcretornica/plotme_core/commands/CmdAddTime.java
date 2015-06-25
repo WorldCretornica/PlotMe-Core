@@ -4,12 +4,13 @@ import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.api.CommandExBase;
 import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 
 public class CmdAddTime extends PlotCommand {
 
-    public CmdAddTime(PlotMe_Core instance) {
+    public CmdAddTime(PlotMe_Core instance, CommandExBase commandExBase) {
         super(instance);
     }
 

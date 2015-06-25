@@ -5,6 +5,7 @@ import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotId;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
+import com.worldcretornica.plotme_core.api.CommandExBase;
 import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import com.worldcretornica.plotme_core.api.IPlayer;
@@ -14,7 +15,7 @@ import net.milkbowl.vault.economy.EconomyResponse;
 
 public class CmdClaim extends PlotCommand {
 
-    public CmdClaim(PlotMe_Core instance) {
+    public CmdClaim(PlotMe_Core instance, CommandExBase commandExBase) {
         super(instance);
     }
 
@@ -40,7 +41,7 @@ public class CmdClaim extends PlotCommand {
 
                 IOfflinePlayer futurePlotOwner = player;
                 if (args.length == 2 && player.hasPermission(PermissionNames.ADMIN_CLAIM_OTHER)) {
-                    if (args[1].length() > 16 || !validUserPattern2.matcher(args[1]).matches()) {
+                    if (args[1].length() > 16) {
                         throw new IllegalArgumentException(C("InvalidCommandInput"));
                     }
                     if (serverBridge.getPlayer(args[1]) == null) {

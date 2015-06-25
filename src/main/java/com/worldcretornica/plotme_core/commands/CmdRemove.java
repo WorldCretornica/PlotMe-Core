@@ -35,7 +35,8 @@ public class CmdRemove extends PlotCommand {
             return true;
         }
         IPlayer player = (IPlayer) sender;
-        if (player.hasPermission(PermissionNames.ADMIN_REMOVE) || player.hasPermission(PermissionNames.USER_REMOVE)) {
+        if (player.hasPermission(PermissionNames.ADMIN_ADD) || player.hasPermission(PermissionNames.USER_ADD) || player.hasPermission
+                (PermissionNames.ADMIN_TRUST) || player.hasPermission(PermissionNames.USER_TRUST)) {
             IWorld world = player.getWorld();
             if (manager.isPlotWorld(world)) {
                 PlotMapInfo pmi = manager.getMap(world);
@@ -47,7 +48,8 @@ public class CmdRemove extends PlotCommand {
                     UUID playerUniqueId = player.getUniqueId();
                     String allowed;
 
-                    if (plot.getOwnerId().equals(playerUniqueId) || player.hasPermission(PermissionNames.ADMIN_REMOVE)) {
+                    if (plot.getOwnerId().equals(playerUniqueId) || player.hasPermission(PermissionNames.ADMIN_TRUST) || player.hasPermission
+                            (PermissionNames.ADMIN_ADD)) {
                         if (args[1].equals("*")) {
                             allowed = "*";
                         } else {
@@ -124,7 +126,7 @@ public class CmdRemove extends PlotCommand {
     }
 
     @Override
-    public List getAliases() {
+    public List<String> getAliases() {
         return Collections.singletonList("-");
     }
 
