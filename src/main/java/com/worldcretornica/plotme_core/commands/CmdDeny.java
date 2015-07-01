@@ -116,12 +116,12 @@ public class CmdDeny extends PlotCommand {
                                 if (plot.getId().equals(plotId)) {
                                     deniedPlayer.setLocation(manager.getPlotHome(plot.getId(), player.getWorld()));
                                 }
-                                player.sendMessage(denied + " " + C("NowDenied", deniedPlayer.getName()));
+                                player.sendMessage(C("NowDenied", args[1]));
                             }
 
                             if (isAdvancedLogging()) {
                                 plugin.getLogger()
-                                        .info(player.getName() + " " + C("MsgDeniedPlayer") + " " + denied + " " + C("MsgToPlot") + " "
+                                        .info(player.getName() + " " + C("MsgDeniedPlayer") + " " + args[1] + " " + C("MsgToPlot") + " "
                                                 + plot.getId().getID());
                             }
                         }

@@ -49,7 +49,7 @@ public class CmdUndeny extends PlotCommand {
                     }
                     IOfflinePlayer offlinePlayer = serverBridge.getOfflinePlayer(denied);
                     if (offlinePlayer == null) {
-                        player.sendMessage("An error occured while trying to remove " + denied);
+                        player.sendMessage("An error occured while trying to remove " + args[1]);
                         return true;
                     } else {
                         denied = offlinePlayer.getUniqueId().toString();
@@ -93,12 +93,12 @@ public class CmdUndeny extends PlotCommand {
                             if (isAdvancedLogging()) {
                                 if (price != 0) {
                                     serverBridge.getLogger()
-                                            .info(player.getName() + " " + C("MsgUndeniedPlayer") + " " + denied + " " + C("MsgFromPlot") + " "
+                                            .info(player.getName() + " " + C("MsgUndeniedPlayer") + " " + args[1] + " " + C("MsgFromPlot") + " "
                                                     + plot.getId().getID()
                                                     + (" " + C("WordFor") + " " + price));
                                 } else {
                                     serverBridge.getLogger()
-                                            .info(player.getName() + " " + C("MsgUndeniedPlayer") + " " + denied + " " + C("MsgFromPlot") + " "
+                                            .info(player.getName() + " " + C("MsgUndeniedPlayer") + " " + args[1] + " " + C("MsgFromPlot") + " "
                                                     + plot.getId().getID());
                                 }
                             }

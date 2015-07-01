@@ -45,7 +45,7 @@ public class CmdPlotList extends PlotCommand {
                 // Get plots of that player
                 List<List<Plot>> partition = Lists.partition(plugin.getSqlManager().getPlayerPlots(uuid), 5);
                 player.sendMessage("Plot List" + " (" + page + "/" + partition.size() + ") : ");
-                for (Plot plot : partition.get(page)) {
+                for (Plot plot : partition.get(page - 1)) {
                     player.sendMessage("Plot ID: " + plot.getId().getID() + "World: " + plot.getWorld().getName());
 
                 }

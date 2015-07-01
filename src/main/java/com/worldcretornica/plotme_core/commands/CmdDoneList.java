@@ -38,7 +38,7 @@ public class CmdDoneList extends PlotCommand {
                 } else {
                     player.sendMessage(C("MsgFinishedPlotsPage", page, partition.size()));
 
-                    for (Plot plot : partition.get(page)) {
+                    for (Plot plot : partition.get(page - 1)) {
                         player.sendMessage(plot.getId() + " -> " + plot.getOwner() + " @ " + plot.getFinishedDate());
                     }
                 }

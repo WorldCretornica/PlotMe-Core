@@ -25,7 +25,8 @@ public class BukkitCommand extends CommandExBase implements CommandExecutor {
             if (args.length == 0) {
                 return commandMap.get("help").execute(plugin.wrapPlayer((Player) sender), args);
             }
-            if (args[0] == null) {
+            //noinspection ConstantConditions
+            if (args[0] == null || args == null) {
                 api.getLogger().severe("A critical command error occurred.");
                 return false;
             }

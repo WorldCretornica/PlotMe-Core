@@ -37,7 +37,7 @@ public class CmdExpired extends PlotCommand {
                         player.sendMessage(C("MsgNoPlotExpired"));
                     } else {
                         player.sendMessage(C("MsgExpiredPlotsPage", page, partition.size()));
-                        for (Plot plot : partition.get(page)) {
+                        for (Plot plot : partition.get(page - 1)) {
                             assert plot.getExpiredDate() != null;
                             player.sendMessage(plot.getId() + " -> " + plot.getOwner() + " @ " + plot.getExpiredDate().toString());
                         }

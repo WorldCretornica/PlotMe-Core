@@ -93,17 +93,17 @@ public class CmdRemove extends PlotCommand {
                                     plot.removeMembers(allowed);
                                 }
                                 player.sendMessage(
-                                        C("WordPlayer") + " " + allowed + " " + C("WordRemoved") + ". " + serverBridge.getEconomy().get().format
+                                        C("WordPlayer") + " " + args[1] + " " + C("WordRemoved") + ". " + serverBridge.getEconomy().get().format
                                                 (price));
 
                                 if (isAdvancedLogging()) {
                                     if (price == 0) {
                                         serverBridge.getLogger()
-                                                .info(allowed + " " + C("MsgRemovedPlayer") + " " + allowed + " " + C("MsgFromPlot") + " " + plot
+                                                .info(args[1] + " " + C("MsgRemovedPlayer") + " " + args[1] + " " + C("MsgFromPlot") + " " + plot
                                                         .getId());
                                     } else {
                                         serverBridge.getLogger()
-                                                .info(allowed + " " + C("MsgRemovedPlayer") + " " + allowed + " " + C("MsgFromPlot") + " " + plot
+                                                .info(args[1] + " " + C("MsgRemovedPlayer") + " " + args[1] + " " + C("MsgFromPlot") + " " + plot
                                                         .getId()
                                                         + (" " + C("WordFor") + " " + price));
                                     }

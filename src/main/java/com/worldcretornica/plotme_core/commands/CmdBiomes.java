@@ -30,7 +30,7 @@ public class CmdBiomes extends PlotCommand {
                 }
 
                 player.sendMessage(C("WordBiomes") + " (" + page + "/" + partition.size() + ") : ");
-                for (String s : partition.get(page)) {
+                for (String s : partition.get(page - 1)) {
                     player.sendMessage(s);
                 }
             } else {
