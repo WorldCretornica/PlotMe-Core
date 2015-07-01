@@ -38,9 +38,9 @@ public class PlotExpireCleanup implements Runnable {
                 plugin.getServerBridge().runTask(new Runnable() {
                     @Override public void run() {
                         PlotMeCoreManager.getInstance().clear(plot, null, ClearReason.Expired);
+                        PlotMeCoreManager.getInstance().deletePlot(plot);
                     }
                 });
-                PlotMeCoreManager.getInstance().deletePlot(plot);
             }
         }
         plugin.getLogger().info(filter.size() + " Expired Plots were deleted");
