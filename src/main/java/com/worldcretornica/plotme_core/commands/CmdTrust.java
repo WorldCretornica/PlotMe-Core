@@ -11,7 +11,6 @@ import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.PlotAddAllowedEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
 
-//TODO DOES NOT WORK. CODE NEEDS TO BE MODIFIED FOR TRUST
 public class CmdTrust extends PlotCommand {
 
     public CmdTrust(PlotMe_Core instance, CommandExBase commandExBase) {
@@ -23,7 +22,7 @@ public class CmdTrust extends PlotCommand {
     }
 
     public boolean execute(ICommandSender sender, String[] args) {
-        if (args.length < 2 && args.length >= 3) {
+        if (args.length != 2) {
             sender.sendMessage(getUsage());
             return true;
         }

@@ -25,7 +25,7 @@ public class CmdAdd extends PlotCommand {
     }
 
     public boolean execute(ICommandSender sender, String[] args) {
-        if (args.length < 2 && args.length >= 3) {
+        if (args.length != 2) {
             sender.sendMessage(getUsage());
             return true;
         }
