@@ -41,7 +41,7 @@ public class CmdWEAnywhere extends PlotCommand {
                     plugin.getLogger().info(name + "enabled WorldEdit Anywhere");
                 }
             } else {
-                player.sendMessage(C("MsgWorldEditInYourPlots"));
+                player.sendMessage("You can now worldedit in only your plots.");
                 if (isAdvancedLogging()) {
                     plugin.getLogger().info(name + "disabled WorldEdit Anywhere");
                 }

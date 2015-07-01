@@ -36,53 +36,46 @@ public class CmdDispose extends PlotCommand {
                 if (plot != null) {
                     if (plot.isProtected()) {
                         player.sendMessage(C("MsgPlotProtectedNotDisposed"));
-                    } else {
-                        String name = player.getName();
+                    } else if (player.getUniqueId().equals(plot.getOwnerId()) || player.hasPermission(PermissionNames.ADMIN_DISPOSE)) {
 
-                        if (player.getUniqueId().equals(plot.getOwnerId()) || player.hasPermission(PermissionNames.ADMIN_DISPOSE)) {
+                        double cost = pmi.getDisposePrice();
 
-                            double cost = pmi.getDisposePrice();
+                        PlotDisposeEvent event = new PlotDisposeEvent(plot, player);
 
-                            PlotDisposeEvent event = new PlotDisposeEvent(plot, player);
-
-                            if (manager.isEconomyEnabled(pmi)) {
-                                if (serverBridge.has(player, cost)) {
-                                    player.sendMessage(C("MsgNotEnoughDispose"));
-                                    return true;
-                                }
-
-                                plugin.getEventBus().post(event);
-
-                                if (event.isCancelled()) {
-                                    return true;
-                                }
-                                EconomyResponse economyResponse = serverBridge.withdrawPlayer(player, cost);
-
-                                if (!economyResponse.transactionSuccess()) {
-                                    player.sendMessage(economyResponse.errorMessage);
-                                    plugin.getLogger().warning(economyResponse.errorMessage);
-                                    return true;
-                                }
-                            } else {
-                                plugin.getEventBus().post(event);
+                        if (manager.isEconomyEnabled(pmi)) {
+                            if (serverBridge.has(player, cost)) {
+                                player.sendMessage(C("MsgNotEnoughDispose"));
+                                return true;
                             }
 
-                            if (!event.isCancelled()) {
-                                manager.deletePlot(plot);
+                            plugin.getEventBus().post(event);
 
-                                manager.removeOwnerSign(plot);
-                                manager.removeSellSign(plot);
+                            if (event.isCancelled()) {
+                                return true;
+                            }
+                            EconomyResponse economyResponse = serverBridge.withdrawPlayer(player, cost);
 
-                                manager.adjustWall(plot, false);
-                                player.sendMessage(C("PlotDisposed"));
-
-                                if (isAdvancedLogging()) {
-                                    plugin.getLogger().info(name + " " + C("MsgDisposedPlot") + " " + plot.getId());
-                                }
+                            if (!economyResponse.transactionSuccess()) {
+                                player.sendMessage(economyResponse.errorMessage);
+                                plugin.getLogger().warning(economyResponse.errorMessage);
+                                return true;
                             }
                         } else {
-                            player.sendMessage(C("MsgThisPlot") + "(" + plot.getId() + ") " + C("MsgNotYoursCannotDispose"));
+                            plugin.getEventBus().post(event);
                         }
+
+                        if (!event.isCancelled()) {
+                            manager.deletePlot(plot);
+
+                            manager.adjustWall(plot, false);
+                            player.sendMessage(C("PlotDisposed"));
+
+                            if (isAdvancedLogging()) {
+                                plugin.getLogger().info(player.getName() + " " + C("MsgDisposedPlot") + " " + plot.getId());
+                            }
+                        }
+                    } else {
+                        player.sendMessage(C("MsgThisPlot") + "(" + plot.getId() + ") " + C("MsgNotYoursCannotDispose"));
                     }
                 }
             } else {

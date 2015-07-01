@@ -16,6 +16,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -159,7 +160,13 @@ public class PlotMe_Core {
     public String C(String caption, Object... args) {
         ResourceBundle captions = ResourceBundle.getBundle("messages");
         MessageFormat formatter = new MessageFormat("", Locale.ENGLISH);
-        formatter.applyPattern(captions.getString(caption));
+        String string;
+        try {
+            string = captions.getString(caption);
+        } catch (MissingResourceException exception) {
+            return "Missing caption for " + caption + ". Please report this to the author of plotme.";
+        }
+        formatter.applyPattern(string);
         return formatter.format(args);
     }
 
