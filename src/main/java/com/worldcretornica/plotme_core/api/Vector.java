@@ -47,15 +47,15 @@ public class Vector implements Comparable<Vector> {
     }
 
     public int getBlockX() {
-        return (int) x;
+        return (int) Math.round(x);
     }
 
     public int getBlockY() {
-        return (int) y;
+        return (int) Math.round(y);
     }
 
     public int getBlockZ() {
-        return (int) z;
+        return (int) Math.round(z);
     }
 
     public double lengthSquared() {
