@@ -95,6 +95,9 @@ public class BukkitPlotListener implements Listener {
                 player.sendMessage(api.C("CannotBuild"));
                 event.setCancelled(true);
             } else {
+                if (plot.getOwnerId().equals(player.getUniqueId())) {
+                    return;
+                }
                 Optional<Plot.AccessLevel> member = plot.isMember(player.getUniqueId());
                 if (member.isPresent()) {
                     if (member.get().equals(Plot.AccessLevel.TRUSTED) && !api.getServerBridge().getOfflinePlayer(plot.getOwnerId()).isOnline()) {
@@ -128,6 +131,9 @@ public class BukkitPlotListener implements Listener {
                     event.setCancelled(true);
                 }
             } else {
+                if (plot.getOwnerId().equals(player.getUniqueId())) {
+                    return;
+                }
                 Optional<Plot.AccessLevel> member = plot.isMember(player.getUniqueId());
                 if (member.isPresent()) {
                     if (member.get().equals(Plot.AccessLevel.TRUSTED) && !api.getServerBridge().getOfflinePlayer(plot.getOwnerId()).isOnline()) {
@@ -161,6 +167,9 @@ public class BukkitPlotListener implements Listener {
                 player.sendMessage(api.C("CannotBuild"));
                 event.setCancelled(true);
             } else {
+                if (plot.getOwnerId().equals(event.getPlayer().getUniqueId())) {
+                    return;
+                }
                 Optional<Plot.AccessLevel> member = plot.isMember(player.getUniqueId());
                 if (member.isPresent()) {
                     if (member.get().equals(Plot.AccessLevel.TRUSTED) && !api.getServerBridge().getOfflinePlayer(plot.getOwnerId()).isOnline()) {
@@ -190,6 +199,9 @@ public class BukkitPlotListener implements Listener {
                 player.sendMessage(api.C("CannotBuild"));
                 event.setCancelled(true);
             } else {
+                if (plot.getOwnerId().equals(event.getPlayer().getUniqueId())) {
+                    return;
+                }
                 Optional<Plot.AccessLevel> member = plot.isMember(player.getUniqueId());
                 if (member.isPresent()) {
                     if (member.get().equals(Plot.AccessLevel.TRUSTED) && !api.getServerBridge().getOfflinePlayer(plot.getOwnerId()).isOnline()) {
@@ -226,6 +238,9 @@ public class BukkitPlotListener implements Listener {
                         }
                     } else {
                         Optional<Plot.AccessLevel> member = plot.isMember(player.getUniqueId());
+                        if (plot.getOwnerId().equals(event.getPlayer().getUniqueId())) {
+                            return;
+                        }
                         if (member.isPresent()) {
                             if (member.get().equals(Plot.AccessLevel.TRUSTED) && !api.getServerBridge().getOfflinePlayer(plot.getOwnerId())
                                     .isOnline()) {
@@ -249,6 +264,9 @@ public class BukkitPlotListener implements Listener {
 
                     if (blocked && plot != null) {
                         Optional<Plot.AccessLevel> member = plot.isMember(player.getUniqueId());
+                        if (plot.getOwnerId().equals(event.getPlayer().getUniqueId())) {
+                            return;
+                        }
                         if (member.isPresent() && member.get().equals(Plot.AccessLevel.TRUSTED) && !api.getServerBridge()
                                 .getOfflinePlayer(plot.getOwnerId()).isOnline()) {
                             player.sendMessage(api.C("CannotBuild"));
@@ -287,6 +305,9 @@ public class BukkitPlotListener implements Listener {
                         event.setCancelled(true);
                     }
                 } else {
+                    if (plot.getOwnerId().equals(event.getPlayer().getUniqueId())) {
+                        return;
+                    }
                     Optional<Plot.AccessLevel> member = plot.isMember(player.getUniqueId());
                     if (member.isPresent()) {
                         if (member.isPresent() && member.get().equals(Plot.AccessLevel.TRUSTED) && !api.getServerBridge()
@@ -498,6 +519,9 @@ public class BukkitPlotListener implements Listener {
                     event.setCancelled(true);
                 } else {
                     Optional<Plot.AccessLevel> member = plot.isMember(event.getIgnitingEntity().getUniqueId());
+                    if (plot.getOwnerId().equals(event.getPlayer().getUniqueId())) {
+                        return;
+                    }
                     if (member.isPresent()) {
                         if (member.get().equals(Plot.AccessLevel.TRUSTED) && !api.getServerBridge().getOfflinePlayer(plot.getOwnerId()).isOnline()
                                 || api.isPlotLocked(plot.getId())) {
@@ -525,6 +549,9 @@ public class BukkitPlotListener implements Listener {
                     event.setCancelled(true);
                 }
             } else {
+                if (plot.getOwnerId().equals(event.getPlayer().getUniqueId())) {
+                    return;
+                }
                 Optional<Plot.AccessLevel> member = plot.isMember(player.getUniqueId());
                 if (!player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE)) {
                     if (member.isPresent()) {
@@ -562,6 +589,9 @@ public class BukkitPlotListener implements Listener {
                         event.setCancelled(true);
                     }
                 } else {
+                    if (plot.getOwnerId().equals(player.getUniqueId())) {
+                        return;
+                    }
                     Optional<Plot.AccessLevel> member = plot.isMember(player.getUniqueId());
                     if (member.isPresent()) {
                         if (member.get().equals(Plot.AccessLevel.TRUSTED) && !api.getServerBridge().getOfflinePlayer(plot.getOwnerId()).isOnline()) {
@@ -597,8 +627,14 @@ public class BukkitPlotListener implements Listener {
                     event.setCancelled(true);
                 }
             } else {
+                if (plot.getOwnerId().equals(event.getPlayer().getUniqueId())) {
+                    return;
+                }
                 if (!event.getPlayer().hasPermission(PermissionNames.ADMIN_BUILDANYWHERE)) {
                     Optional<Plot.AccessLevel> member = plot.isMember(event.getPlayer().getUniqueId());
+                    if (plot.getOwnerId().equals(event.getPlayer().getUniqueId())) {
+                        return;
+                    }
                     if (member.isPresent()) {
                         if (member.get().equals(Plot.AccessLevel.TRUSTED) && !api.getServerBridge().getOfflinePlayer(plot.getOwnerId()).isOnline()) {
                             event.getPlayer().sendMessage(api.C("CannotBuild"));
@@ -666,6 +702,9 @@ public class BukkitPlotListener implements Listener {
                     if (plot == null) {
                         event.setCancelled(true);
                     } else {
+                        if (plot.getOwnerId().equals(((EntityDamageByEntityEvent) event).getDamager().getUniqueId())) {
+                            return;
+                        }
                         Optional<Plot.AccessLevel> member = plot.isMember(((EntityDamageByEntityEvent) event).getDamager().getUniqueId());
                         if (member.isPresent() && member.get().equals(Plot.AccessLevel.TRUSTED) && !api.getServerBridge()
                                 .getOfflinePlayer(plot.getOwnerId()).isOnline()) {
@@ -695,6 +734,9 @@ public class BukkitPlotListener implements Listener {
                     event.setCancelled(true);
                 }
             } else {
+                if (plot.getOwnerId().equals(event.getPlayer().getUniqueId())) {
+                    return;
+                }
                 Optional<Plot.AccessLevel> member = plot.isMember(event.getPlayer().getUniqueId());
                 if (member.isPresent()) {
                     if (member.get().equals(Plot.AccessLevel.TRUSTED) && !api.getServerBridge().getOfflinePlayer(plot.getOwnerId()).isOnline()) {
@@ -784,6 +826,9 @@ public class BukkitPlotListener implements Listener {
                 }
             } else {
                 Optional<Plot.AccessLevel> member = plot.isMember(event.getPlayer().getUniqueId());
+                if (plot.getOwnerId().equals(event.getPlayer().getUniqueId())) {
+                    return;
+                }
                 if (member.isPresent()) {
                     if (member.get().equals(Plot.AccessLevel.TRUSTED) && !api.getServerBridge().getOfflinePlayer(plot.getOwnerId()).isOnline()) {
                         player.sendMessage(api.C("CannotBuild"));
