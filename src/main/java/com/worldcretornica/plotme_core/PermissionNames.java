@@ -1,7 +1,5 @@
 package com.worldcretornica.plotme_core;
 
-import org.jetbrains.annotations.NonNls;
-
 public class PermissionNames {
 
     //User Permissions
@@ -43,5 +41,5 @@ public class PermissionNames {
     public static final String ADMIN_PROTECT = "PlotMe.admin.protect";
     public static final String ADMIN_MIDDLE_OTHER = "PlotMe.admin.middle";
     public static final String ADMIN_RESET = "PlotMe.admin.reset";
-    @NonNls public static final String USER_RESET = "PlotMe.use.reset";
+    public static final String USER_RESET = "PlotMe.use.reset";
 }
