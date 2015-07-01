@@ -26,7 +26,7 @@ public class CmdRemove extends PlotCommand {
     }
 
     public boolean execute(ICommandSender sender, String[] args) {
-        if (args.length < 2 && args.length >= 3 || args[1].length() > 16) {
+        if (args.length != 2) {
             sender.sendMessage(getUsage());
             return true;
         }
