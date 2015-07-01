@@ -38,10 +38,8 @@ public class CmdPlotList extends PlotCommand {
                     if (args.length == 3) {
                         page = Integer.parseInt(args[2]);
                     }
-                    player.sendMessage(C("MsgListOfPlotsWhere") + " " + offlinePlayer.getName() + " " + C("MsgCanBuild"));
                 } else {
                     uuid = player.getUniqueId();
-                    player.sendMessage(C("MsgListOfPlotsWhereYou"));
                 }
 
                 // Get plots of that player
@@ -52,7 +50,7 @@ public class CmdPlotList extends PlotCommand {
 
                 }
             } else {
-                player.sendMessage(C("MsgNotPlotWorld"));
+                player.sendMessage(C("NotPlotWorld"));
             }
         } else {
             return false;

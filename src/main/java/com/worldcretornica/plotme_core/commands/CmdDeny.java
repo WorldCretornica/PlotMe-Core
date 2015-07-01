@@ -25,15 +25,15 @@ public class CmdDeny extends PlotCommand {
     }
 
     public boolean execute(ICommandSender sender, String[] args) {
-        if (args.length < 2 && args.length >= 3) {
+        if (args.length != 2) {
             sender.sendMessage(getUsage());
             return true;
         }
         if (args[1].length() > 16) {
-            throw new IllegalArgumentException(C("InvalidCommandInput"));
+            sender.sendMessage(C("InvalidCommandInput"));
         }
         if ("*".equals(args[1]) && plugin.getConfig().getBoolean("disableWildCard")) {
-            sender.sendMessage("Wildcards are disabled.");
+            sender.sendMessage(C("WildcardsDisabled"));
             return true;
         }
         IPlayer player = (IPlayer) sender;
@@ -42,7 +42,7 @@ public class CmdDeny extends PlotCommand {
             if (manager.isPlotWorld(world)) {
                 Plot plot = manager.getPlot(player);
                 if (plot == null) {
-                    player.sendMessage(C("MsgNoPlotFound"));
+                    player.sendMessage(C("NoPlotFound"));
                     return true;
                 }
                 PlotMapInfo pmi = manager.getMap(world);
@@ -50,11 +50,11 @@ public class CmdDeny extends PlotCommand {
                 IPlayer deniedPlayer = serverBridge.getPlayer(args[1]);
                 if ("*".equals(args[1])) {
                     denied = "*";
-                } else if (deniedPlayer != null) {
-                    denied = deniedPlayer.getUniqueId().toString();
-                } else {
+                } else if (deniedPlayer == null) {
                     player.sendMessage(args[1] + " was not found. Are they online?");
                     return true;
+                } else {
+                    denied = deniedPlayer.getUniqueId().toString();
                 }
 
                 if (player.getUniqueId().equals(plot.getOwnerId()) || player.hasPermission(PermissionNames.ADMIN_DENY)) {
@@ -66,7 +66,7 @@ public class CmdDeny extends PlotCommand {
                     }
 
                     if (plot.isDenied(denied)) {
-                        player.sendMessage(C("WordPlayer") + " " + args[1] + " " + C("MsgAlreadyDenied"));
+                        player.sendMessage(C("PlayerAlreadyDenied", args[1]));
                     } else {
 
                         double price = 0.0;
@@ -109,27 +109,20 @@ public class CmdDeny extends PlotCommand {
                                     }
                                     iPlayer.setLocation(manager.getPlotHome(plot.getId(), player.getWorld()));
                                 }
+                                player.sendMessage(denied + " " + C("NowDenied", "*"));
                             } else if (deniedPlayer != null && deniedPlayer.getWorld().equals(world)) {
                                 PlotId plotId = manager.getPlotId(deniedPlayer);
 
                                 if (plot.getId().equals(plotId)) {
                                     deniedPlayer.setLocation(manager.getPlotHome(plot.getId(), player.getWorld()));
                                 }
+                                player.sendMessage(denied + " " + C("NowDenied", deniedPlayer.getName()));
                             }
 
-                            player.sendMessage(
-                                    C("WordPlayer") + " " + denied + " " + C("MsgNowDenied"));
-
                             if (isAdvancedLogging()) {
-                                if (price == 0) {
-                                    plugin.getLogger()
-                                            .info(player.getName() + " " + C("MsgDeniedPlayer") + " " + denied + " " + C("MsgToPlot") + " "
-                                                    + plot.getId().getID());
-                                } else {
-                                    plugin.getLogger()
-                                            .info(player.getName() + " " + C("MsgDeniedPlayer") + " " + denied + " " + C("MsgToPlot") + " "
-                                                    + plot.getId().getID() + (" " + C("WordFor") + " " + price));
-                                }
+                                plugin.getLogger()
+                                        .info(player.getName() + " " + C("MsgDeniedPlayer") + " " + denied + " " + C("MsgToPlot") + " "
+                                                + plot.getId().getID());
                             }
                         }
                     }
@@ -137,7 +130,7 @@ public class CmdDeny extends PlotCommand {
                     player.sendMessage(C("MsgThisPlot") + "(" + plot.getId().getID() + ") " + C("MsgNotYoursNotAllowedDeny"));
                 }
             } else {
-                player.sendMessage(C("MsgNotPlotWorld"));
+                player.sendMessage(C("NotPlotWorld"));
             }
         } else {
             return false;

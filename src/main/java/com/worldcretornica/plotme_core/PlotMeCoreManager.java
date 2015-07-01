@@ -120,11 +120,10 @@ public class PlotMeCoreManager {
      */
     public void setSellSign(Plot plot) {
         String line1 = plugin.C("SignForSale");
-        String line2 = plugin.C("SignPrice");
-        String line3 = String.valueOf(plot.getPrice());
+        String line2 = plugin.C("SignPrice", plot.getPrice());
         String line4 = "/plotme buy";
 
-        getGenManager(plot.getWorld()).setSellerDisplay(plot.getId(), line1, line2, line3, line4);
+        getGenManager(plot.getWorld()).setSellerDisplay(plot.getId(), line1, line2, "", line4);
     }
 
     /**
@@ -582,7 +581,7 @@ public class PlotMeCoreManager {
     public void adjustWall(IPlayer player) {
         Plot plot = getPlot(player);
         if (plot == null) {
-            player.sendMessage(plugin.C("MsgNoPlotFound"));
+            player.sendMessage(plugin.C("NoPlotFound"));
         } else {
             getGenManager(player.getWorld()).adjustPlotFor(plot, true, plot.isProtected(), plot.isForSale());
         }

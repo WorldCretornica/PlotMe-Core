@@ -26,6 +26,8 @@ permissions:
         plotme.use.home: true
         plotme.use.info: true
         plotme.use.biome: true
+        plotme.use.trust: true
+        plotme.use.like: true
         plotme.use.clear: true
         plotme.use.list: true
         plotme.use.buy: true
@@ -33,7 +35,6 @@ permissions:
         plotme.use.dispose: true
         plotme.use.done: true
         plotme.use.deny: true
-        plotme.use.undeny: true
         plotme.use.reset: true
         plotme.use.middle: true
         plotme.limit.1: true
@@ -45,17 +46,14 @@ permissions:
         plotme.admin.clear: true
         plotme.admin.reset: true
         plotme.admin.add: true
-        plotme.admin.remove: true
         plotme.admin.setowner: true
         plotme.admin.move: true
-        plotme.admin.list: true
         plotme.admin.sell: true
         plotme.admin.dispose: true
         plotme.admin.done: true
         plotme.admin.addtime: true
         plotme.admin.expired: true
         plotme.admin.deny: true
-        plotme.admin.undeny: true
         plotme.admin.bypassdeny: true
         plotme.admin.buildanywhere: true
         plotme.admin.reload: true
@@ -94,8 +92,6 @@ permissions:
       description: Gives the deny command for plots owned
     plotme.use.remove:
       description: Gives the remove command for plots owned
-    plotme.use.undeny:
-      description: Gives the undeny command for plots owned
     plotme.use.protect:
       description: Gives the protect command
     plotme.use.nameplot:
@@ -122,10 +118,6 @@ permissions:
       description: Gives the add command for any plots
     plotme.admin.deny:
       description: Gives the deny command for any plots
-    plotme.admin.remove:
-      description: Gives the remove command for any plots
-    plotme.admin.undeny:
-      description: Gives the undeny command for any plots
     plotme.admin.bypassdeny:
       description: Allows to enter denied plots
     plotme.admin.setowner:

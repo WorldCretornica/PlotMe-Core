@@ -52,11 +52,11 @@ public class CmdDone extends PlotCommand {
                         }
                     }
                 } else {
-                    player.sendMessage(C("MsgThisPlot") + "(" + plot.getId() + ") " + C("MsgHasNoOwner"));
+                    player.sendMessage(C("MsgThisPlot") + C("MsgHasNoOwner"));
                 }
             } else {
 
-                player.sendMessage(C("MsgNotPlotWorld"));
+                player.sendMessage(C("NotPlotWorld"));
                 return true;
             }
         } else {

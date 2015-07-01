@@ -24,7 +24,6 @@ import org.spongepowered.api.service.ServiceManager;
 import org.spongepowered.api.service.ServiceReference;
 import org.spongepowered.api.service.config.ConfigDir;
 import org.spongepowered.api.service.config.DefaultConfig;
-import org.spongepowered.api.service.scheduler.AsynchronousScheduler;
 import org.spongepowered.api.service.sql.SqlService;
 import org.spongepowered.api.text.Texts;
 import org.spongepowered.api.util.command.spec.CommandSpec;
@@ -60,14 +59,12 @@ public class PlotMe_Sponge {
     private PlotMe_Core plotme;
     private IServerBridge serverObjectBuilder;
     private ServiceReference<SqlService> sql;
-    private ServiceReference<AsynchronousScheduler> aSync;
     private CommentedConfigurationNode rawConfig;
     private ConfigurationNode fallbackConfig;
 
     @Subscribe
     public void onInit(PreInitializationEvent event) {
         sql = services.potentiallyProvide(SqlService.class);
-        aSync = services.potentiallyProvide(AsynchronousScheduler.class);
         configDir.mkdirs();
         load();
     }
@@ -87,7 +84,6 @@ public class PlotMe_Sponge {
         game.getEventManager().register(this, new SpongePlotListener(this));
         game.getEventManager().register(this, new SpongePlotDenyListener(this));
         serverObjectBuilder = new SpongeServerBridge(this, new BridgeLogger(logger));
-
         plotme = new PlotMe_Core();
         setupCommands();
     }

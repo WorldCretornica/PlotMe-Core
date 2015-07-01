@@ -30,7 +30,7 @@ public class CmdAdd extends PlotCommand {
             return true;
         }
         if ("*".equals(args[1]) && plugin.getConfig().getBoolean("disableWildCard")) {
-            sender.sendMessage("Wildcards are disabled.");
+            sender.sendMessage(C("WildcardsDisabled"));
             return true;
         }
 
@@ -49,13 +49,13 @@ public class CmdAdd extends PlotCommand {
                         if (serverBridge.getPlayer(args[1]) != null) {
                             allowed = serverBridge.getPlayer(args[1]).getUniqueId().toString();
                         } else {
-                            player.sendMessage(args[1] + " was not found. Are they online?");
+                            player.sendMessage(String.format("%s was not found. Are they online?", args[1]));
                             return true;
                         }
                     }
                     if (player.getUniqueId().equals(plot.getOwnerId()) || player.hasPermission(PermissionNames.ADMIN_ADD)) {
                         if (plot.isMember(allowed).isPresent()) {
-                            player.sendMessage(C("WordPlayer") + " " + allowed + " " + C("MsgAlreadyAllowed"));
+                            player.sendMessage(C("MsgAlreadyAllowed", args[1]));
                         } else {
                             PlotAddTrustedEvent event = new PlotAddTrustedEvent(plot, player, allowed);
                             plugin.getEventBus().post(event);
@@ -103,10 +103,10 @@ public class CmdAdd extends PlotCommand {
                         player.sendMessage(C("MsgThisPlot") + "(" + plot.getId() + ") " + C("MsgNotYoursNotAllowedAdd"));
                     }
                 } else {
-                    player.sendMessage(C("MsgNoPlotFound"));
+                    player.sendMessage(C("NoPlotFound"));
                 }
             } else {
-                player.sendMessage(C("MsgNotPlotWorld"));
+                player.sendMessage(C("NotPlotWorld"));
                 return true;
             }
         } else {

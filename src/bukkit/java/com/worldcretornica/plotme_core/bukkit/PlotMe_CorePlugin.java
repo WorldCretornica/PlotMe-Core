@@ -56,7 +56,6 @@ public class PlotMe_CorePlugin extends JavaPlugin {
         plotme.getEventBus().register(listener);
         //Register Command
         this.getCommand("plotme").setExecutor(new BukkitCommand(this));
-
     }
 
     public PlotMe_Core getAPI() {

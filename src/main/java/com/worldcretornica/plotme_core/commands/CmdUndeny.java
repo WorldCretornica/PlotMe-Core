@@ -38,7 +38,7 @@ public class CmdUndeny extends PlotCommand {
             if (manager.isPlotWorld(world)) {
                 Plot plot = manager.getPlot(player);
                 if (plot == null) {
-                    player.sendMessage(C("MsgNoPlotFound"));
+                    player.sendMessage(C("NoPlotFound"));
                     return true;
                 }
                 PlotMapInfo pmi = manager.getMap(world);
@@ -110,7 +110,7 @@ public class CmdUndeny extends PlotCommand {
                     player.sendMessage(C("MsgThisPlot") + " (" + plot.getId().getID() + ") " + C("MsgNotYoursNotAllowedUndeny"));
                 }
             } else {
-                player.sendMessage(C("MsgNotPlotWorld"));
+                player.sendMessage(C("NotPlotWorld"));
             }
         } else {
             return false;

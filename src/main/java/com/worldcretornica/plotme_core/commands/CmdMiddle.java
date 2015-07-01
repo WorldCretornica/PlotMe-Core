@@ -25,7 +25,7 @@ public class CmdMiddle extends PlotCommand {
     }
 
     @Override
-    public List getAliases() {
+    public List<String> getAliases() {
         return Arrays.asList("center", "mid");
     }
 
@@ -40,7 +40,7 @@ public class CmdMiddle extends PlotCommand {
                 IWorld world = player.getWorld();
                 Plot plot = manager.getPlot(player);
                 if (plot == null) {
-                    player.sendMessage(C("MsgNoPlotFound"));
+                    player.sendMessage(C("NoPlotFound"));
                     return true;
                 }
                 if (plot.isMember(player.getUniqueId()).isPresent() || player.hasPermission(PermissionNames.ADMIN_MIDDLE_OTHER)) {
@@ -51,11 +51,9 @@ public class CmdMiddle extends PlotCommand {
                     if (!event.isCancelled()) {
                         player.setLocation(event.getMiddleLocation());
                     }
-                } else {
-                    player.sendMessage(C("MsgPermissionDenied"));
                 }
             } else {
-                player.sendMessage(C("MsgNotPlotWorld"));
+                player.sendMessage(C("NotPlotWorld"));
             }
         } else {
             return false;

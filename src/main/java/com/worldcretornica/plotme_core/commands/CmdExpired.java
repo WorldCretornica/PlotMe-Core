@@ -36,7 +36,7 @@ public class CmdExpired extends PlotCommand {
                     if (partition.isEmpty()) {
                         player.sendMessage(C("MsgNoPlotExpired"));
                     } else {
-                        player.sendMessage(C("MsgExpiredPlotsPage") + " (" + page + "/" + partition.size() + ") : ");
+                        player.sendMessage(C("MsgExpiredPlotsPage", page, partition.size()));
                         for (Plot plot : partition.get(page)) {
                             assert plot.getExpiredDate() != null;
                             player.sendMessage(plot.getId() + " -> " + plot.getOwner() + " @ " + plot.getExpiredDate().toString());
@@ -46,7 +46,7 @@ public class CmdExpired extends PlotCommand {
                     return true;
                 }
             } else {
-                player.sendMessage(C("MsgNotPlotWorld"));
+                player.sendMessage(C("NotPlotWorld"));
                 return true;
             }
         } else {

@@ -42,7 +42,7 @@ public class CmdRemove extends PlotCommand {
                 PlotMapInfo pmi = manager.getMap(world);
                 Plot plot = manager.getPlot(player);
                 if (plot == null) {
-                    player.sendMessage(C("MsgNoPlotFound"));
+                    player.sendMessage(C("NoPlotFound"));
                     return true;
                 } else {
                     UUID playerUniqueId = player.getUniqueId();
@@ -117,7 +117,7 @@ public class CmdRemove extends PlotCommand {
                     }
                 }
             } else {
-                player.sendMessage(C("MsgNotPlotWorld"));
+                player.sendMessage(C("NotPlotWorld"));
             }
         } else {
             return false;

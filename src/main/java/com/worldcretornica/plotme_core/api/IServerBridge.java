@@ -26,7 +26,7 @@ public abstract class IServerBridge {
     private boolean usingLwc;
 
 
-    public IServerBridge(Logger bridgeLogger) {
+    protected IServerBridge(Logger bridgeLogger) {
         logger = bridgeLogger;
     }
 
@@ -132,8 +132,6 @@ public abstract class IServerBridge {
     public abstract ConfigurationSection getDefaultWorld();
 
     public abstract File getWorldFolder();
-
-    public abstract String addColor(char c, String string);
 
     public abstract void runTaskLater(Runnable runnable, long delay);
 }

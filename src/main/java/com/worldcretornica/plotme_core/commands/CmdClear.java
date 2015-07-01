@@ -34,7 +34,7 @@ public class CmdClear extends PlotCommand {
             if (manager.isPlotWorld(world)) {
                 Plot plot = manager.getPlot(player);
                 if (plot == null) {
-                    player.sendMessage(C("MsgNoPlotFound"));
+                    player.sendMessage(C("NoPlotFound"));
                     return true;
                 } else if (plot.isProtected()) {
                     player.sendMessage(C("MsgPlotProtectedCannotClear"));
@@ -90,7 +90,7 @@ public class CmdClear extends PlotCommand {
                     }
                 }
             } else {
-                player.sendMessage(C("MsgNotPlotWorld"));
+                player.sendMessage(C("NotPlotWorld"));
             }
         } else {
             return false;

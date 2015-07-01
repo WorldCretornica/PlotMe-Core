@@ -6,6 +6,7 @@ import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.CommandExBase;
 import com.worldcretornica.plotme_core.api.ICommandSender;
+import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.Location;
@@ -42,40 +43,29 @@ public class CmdHome extends PlotCommand {
                 } else {
                     world = manager.getFirstWorld();
                 }
-
+                //noinspection ConstantConditions -- Stops IntelliJ from attempting to optimize this
+                if (world == null) {
+                    player.sendMessage(C("NotPlotWorld"));
+                    return true;
+                }
                 int nb = 1;
-                if (args[1].contains(":")) {
-                    if (args[1].split(":").length == 1 || args[0].split(":")[1].isEmpty()) {
-                        player.sendMessage(getUsage());
-                        return true;
-                    }
+                if (args.length == 2) {
                     try {
-                        nb = Integer.parseInt(args[1].split(":")[1]);
+                        nb = Integer.parseInt(args[1]);
                     } catch (NumberFormatException e) {
                         player.sendMessage(getUsage());
                         return true;
                     }
                 }
 
-                String playerName = player.getName();
-                if (args.length == 2) {
-                    if (manager.getWorld(args[1]) == null) {
-                        playerName = args[1];
-                        uuid = null;
-                    } else {
-                        world = manager.getWorld(args[1]);
-                    }
-                }
-
                 if (args.length == 3) {
-                    if (manager.getWorld(args[2]) == null) {
-                        player.sendMessage(args[2] + C("MsgWorldNotPlot"));
+                    nb = Integer.parseInt(args[2]);
+                    IOfflinePlayer offlinePlayer = serverBridge.getOfflinePlayer(args[1]);
+                    if (offlinePlayer == null) {
+                        player.sendMessage("Error in Home Command!");
                         return true;
                     }
-                    world = manager.getWorld(args[2]);
-                }
-                if (world == null) {
-                    return true;
+                    uuid = offlinePlayer.getUniqueId();
                 }
                 PlotMapInfo pmi = manager.getMap(world);
                 if (manager.isPlotWorld(world)) {
@@ -127,22 +117,11 @@ public class CmdHome extends PlotCommand {
                         }
                     }
 
-                    if (nb > 0) {
-                        if (playerName.equals(player.getName())) {
-                            player.sendMessage(C("MsgPlotNotFound") + " #" + nb);
-                        } else {
-                            player.sendMessage(playerName + " " + C("MsgDoesNotHavePlot") + " #" + nb);
-                        }
-                    } else if (!playerName.equals(player.getName())) {
-                        player.sendMessage(playerName + " " + C("MsgDoesNotHavePlot"));
-                    } else {
-                        player.sendMessage(C("MsgYouHaveNoPlot"));
-                    }
                 } else {
-                    player.sendMessage(world.getName() + C("MsgWorldNotPlot"));
+                    player.sendMessage(C("MsgWorldNotPlot", world.getName()));
                 }
             } else {
-                player.sendMessage(C("MsgNotPlotWorld"));
+                player.sendMessage(C("NotPlotWorld"));
             }
         } else {
             return false;

@@ -13,8 +13,10 @@ import com.worldcretornica.plotme_core.storage.SQLiteConnector;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import java.text.MessageFormat;
 import java.util.HashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,7 +25,7 @@ public class PlotMe_Core {
     private final AbstractSchematicUtil schematicutil = new SchematicUtil(this);
     private final HashMap<IWorld, IPlotMe_GeneratorManager> managers = new HashMap<>();
     //Spool stuff
-    private final ConcurrentLinkedQueue<PlotToClear> plotsToClear = new ConcurrentLinkedQueue<>();
+    //private final ConcurrentLinkedQueue<PlotToClear> plotsToClear = new ConcurrentLinkedQueue<>();
     private final EventBus eventBus = new EventBus();
     //Bridge
     private IServerBridge serverBridge;
@@ -32,7 +34,6 @@ public class PlotMe_Core {
     private Database sqlManager;
     //Caption and Config File.
     private ConfigAccessor configFile;
-    private ConfigAccessor captionFile;
 
 
     public PlotMe_Core() {
@@ -54,14 +55,13 @@ public class PlotMe_Core {
         getSqlManager().closeConnection();
         PlotMeCoreManager.getInstance().getPlotMaps().clear();
         setWorldCurrentlyProcessingExpired(null);
-        plotsToClear.clear();
+        //plotsToClear.clear();
         managers.clear();
     }
 
     public void enable() {
         PlotMeCoreManager.getInstance().setPlugin(this);
         configFile = new ConfigAccessor(getServerBridge().getDataFolder(), "config.yml");
-        captionFile = new ConfigAccessor(getServerBridge().getDataFolder(), "captions.yml");
         setupConfigFiles();
         setupSQL();
         serverBridge.setupHooks();
@@ -77,7 +77,6 @@ public class PlotMe_Core {
         getSqlManager().closeConnection();
         setupConfigFiles();
         configFile.reloadFile();
-        captionFile.reloadFile();
         setupSQL();
         PlotMeCoreManager.getInstance().getPlotMaps().clear();
 
@@ -92,7 +91,6 @@ public class PlotMe_Core {
 
     private void setupConfigFiles() {
         createConfigs();
-        captionFile.saveConfig();
         // Get the config we will be working with
         FileConfiguration config = getConfig();
         // Do any config validation
@@ -113,9 +111,6 @@ public class PlotMe_Core {
         if (configFile.createFile()) {
             getLogger().info("Created Config File");
         }
-        if (captionFile.createFile()) {
-            getLogger().info("Created Caption File");
-        }
     }
 
     private void setupWorld(IWorld world) {
@@ -124,10 +119,6 @@ public class PlotMe_Core {
         PlotMapInfo pmi = new PlotMapInfo(configFile, world.getName().toLowerCase());
         PlotMeCoreManager.getInstance().addPlotMap(world, pmi);
         getSqlManager().loadPlotsAsynchronously(world);
-    }
-
-    public FileConfiguration getCaptionConfig() {
-        return captionFile.getConfig();
     }
 
     /**
@@ -165,12 +156,11 @@ public class PlotMe_Core {
         }
     }
 
-    public String C(String caption) {
-        return addColor(this.getCaptionConfig().getString(caption, "Missing caption: " + caption));
-    }
-
-    private String addColor(String string) {
-        return getServerBridge().addColor('&', string);
+    public String C(String caption, Object... args) {
+        ResourceBundle captions = ResourceBundle.getBundle("messages");
+        MessageFormat formatter = new MessageFormat("", Locale.ENGLISH);
+        formatter.applyPattern(captions.getString(caption));
+        return formatter.format(args);
     }
 
     public IWorld getWorldCurrentlyProcessingExpired() {
@@ -192,7 +182,7 @@ public class PlotMe_Core {
     public void addPlotToClear(Plot plot, ClearReason reason, ICommandSender sender) {
         getLogger().log(Level.INFO, "plot to clear add {0}", plot.getId());
         PlotMeSpool pms = new PlotMeSpool(this, plot, reason, sender);
-        pms.setTaskId(serverBridge.scheduleSyncRepeatingTask(pms, 40, 60));
+        pms.setTaskId(serverBridge.scheduleSyncRepeatingTask(pms, 20L * 10, 20L * 50));
     }
 
     public void removePlotToClear(int taskId) {
@@ -200,15 +190,16 @@ public class PlotMe_Core {
         getLogger().log(Level.INFO, "removed taskid {0}", taskId);
     }
 
-    public boolean isPlotLocked(Plot plot) {
-        if (plotsToClear.isEmpty()) {
+    public boolean isPlotLocked(PlotId id) {
+/*        if (plotsToClear.isEmpty()) {
             return false;
         }
         for (PlotToClear ptc : plotsToClear) {
-            if (ptc.getPlot().equals(plot)) {
+            if (ptc.getPlot().getId().equals(id)) {
                 return true;
             }
-        }
+        }*/
+        //TODO fix this for 0.17.1
 
         return false;
     }

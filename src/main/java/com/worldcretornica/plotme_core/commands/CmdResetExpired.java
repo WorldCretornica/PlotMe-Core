@@ -21,7 +21,7 @@ public class CmdResetExpired extends PlotCommand {
         if (plugin.getWorldCurrentlyProcessingExpired() != null) {
             serverBridge.getLogger().info(C("MsgAlreadyProcessingPlots"));
         } else if (!manager.isPlotWorld(player.getWorld())) {
-            serverBridge.getLogger().info(C("MsgNotPlotWorld"));
+            serverBridge.getLogger().info(C("NotPlotWorld"));
         } else if (manager.getMap(player.getWorld()).getDaysToExpiration() != 0 && plugin.getConfig().getInt("ExpirePlotCleanupTimer") == 0) {
             plugin.setWorldCurrentlyProcessingExpired(player.getWorld());
             plugin.setCounterExpired(50);

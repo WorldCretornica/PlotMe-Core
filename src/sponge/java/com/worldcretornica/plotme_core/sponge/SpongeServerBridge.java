@@ -16,7 +16,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.spongepowered.api.entity.player.Player;
 import org.spongepowered.api.entity.player.User;
 import org.spongepowered.api.service.profile.GameProfileResolver;
-import org.spongepowered.api.service.scheduler.SynchronousScheduler;
 import org.spongepowered.api.service.user.UserStorage;
 import org.spongepowered.api.world.World;
 
@@ -193,13 +192,7 @@ public class SpongeServerBridge extends IServerBridge {
         return null;
     }
 
-    @Override
-    public String addColor(char c, String string) {
-        return null;
-    }
-
     @Override public void runTaskLater(Runnable runnable, long delay) {
-        plugin.getGame().getServiceManager().provide(SynchronousScheduler.class).get().runTaskAfter(plugin,runnable,delay);
     }
 
     @Override

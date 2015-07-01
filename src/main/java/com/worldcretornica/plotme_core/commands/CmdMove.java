@@ -24,7 +24,7 @@ public class CmdMove extends PlotCommand {
         IPlayer player = (IPlayer) sender;
         if (player.hasPermission(PermissionNames.ADMIN_MOVE)) {
             if (!manager.isPlotWorld(player)) {
-                player.sendMessage(C("MsgNotPlotWorld"));
+                player.sendMessage(C("NotPlotWorld"));
             } else if (args.length < 3 || args[1].isEmpty() || args[2].isEmpty()) {
                 player.sendMessage(getUsage());
             } else {
@@ -64,7 +64,7 @@ public class CmdMove extends PlotCommand {
                             serverBridge.getLogger()
                                     .info(player.getName() + " " + C("MsgExchangedPlot") + " " + plot1 + " " + C("MsgAndPlot") + " " + plot2);
                         } else {
-                            player.sendMessage(C("ErrMovingPlot"));
+                            player.sendMessage(C("MovePlotError"));
                         }
                     }
                 }

@@ -69,7 +69,7 @@ public class CmdTP extends PlotCommand {
                     return true;
                 }
             } else {
-                player.sendMessage(C("MsgNotPlotWorld"));
+                player.sendMessage(C("NotPlotWorld"));
                 return true;
             }
         } else {

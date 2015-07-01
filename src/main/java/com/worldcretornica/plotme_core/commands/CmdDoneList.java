@@ -34,9 +34,9 @@ public class CmdDoneList extends PlotCommand {
                 List<List<Plot>> partition = Lists.partition(plugin.getSqlManager().getFinishedPlots(player.getWorld()), 10);
 
                 if (partition.isEmpty()) {
-                    player.sendMessage(C("MsgNoPlotsFinished"));
+                    player.sendMessage(C("NoFinishedPlots"));
                 } else {
-                    player.sendMessage(C("MsgFinishedPlotsPage") + " " + page + "/" + partition.size());
+                    player.sendMessage(C("MsgFinishedPlotsPage", page, partition.size()));
 
                     for (Plot plot : partition.get(page)) {
                         player.sendMessage(plot.getId() + " -> " + plot.getOwner() + " @ " + plot.getFinishedDate());
@@ -46,7 +46,7 @@ public class CmdDoneList extends PlotCommand {
                 return false;
             }
         } else {
-            player.sendMessage(C("MsgNotPlotWorld"));
+            player.sendMessage(C("NotPlotWorld"));
         }
         return true;
     }

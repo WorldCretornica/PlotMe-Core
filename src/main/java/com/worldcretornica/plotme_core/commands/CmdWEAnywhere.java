@@ -36,7 +36,7 @@ public class CmdWEAnywhere extends PlotCommand {
                 manager.addPlayerIgnoringWELimit(uuid);
             }
             if (manager.isPlayerIgnoringWELimit(player)) {
-                player.sendMessage(C("MsgWorldEditAnywhere"));
+                player.sendMessage(C("WorldEditAnywhere"));
                 if (isAdvancedLogging()) {
                     plugin.getLogger().info(name + "enabled WorldEdit Anywhere");
                 }

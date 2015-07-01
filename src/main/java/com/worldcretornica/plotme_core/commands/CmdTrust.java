@@ -28,7 +28,7 @@ public class CmdTrust extends PlotCommand {
             return true;
         }
         if ("*".equals(args[1]) && plugin.getConfig().getBoolean("disableWildCard")) {
-            sender.sendMessage("Wildcards are disabled.");
+            sender.sendMessage(C("WildcardsDisabled"));
             return true;
         }
 
@@ -53,7 +53,7 @@ public class CmdTrust extends PlotCommand {
                     }
                     if (player.getUniqueId().equals(plot.getOwnerId()) || player.hasPermission(PermissionNames.ADMIN_ADD)) {
                         if (plot.isMember(allowed).isPresent()) {
-                            player.sendMessage(C("WordPlayer") + " " + allowed + " " + C("MsgAlreadyAllowed"));
+                            player.sendMessage(C("MsgAlreadyAllowed", args[1]));
                         } else {
                             PlotAddAllowedEvent event = new PlotAddAllowedEvent(plot, player, allowed);
                             plugin.getEventBus().post(event);
@@ -103,7 +103,7 @@ public class CmdTrust extends PlotCommand {
                     player.sendMessage(C("MsgThisPlot") + C("MsgHasNoOwner"));
                 }
             } else {
-                player.sendMessage(C("MsgNotPlotWorld"));
+                player.sendMessage(C("NotPlotWorld"));
                 return true;
             }
         } else {

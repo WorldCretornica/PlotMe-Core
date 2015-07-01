@@ -34,7 +34,7 @@ public class CmdProtect extends PlotCommand {
                 Plot plot = manager.getPlot(player);
 
                 if (plot == null) {
-                    player.sendMessage(C("MsgNoPlotFound"));
+                    player.sendMessage(C("NoPlotFound"));
                     return true;
                 } else if (player.getUniqueId().equals(plot.getOwnerId()) || player.hasPermission(PermissionNames.ADMIN_PROTECT)) {
                     PlotProtectChangeEvent event;
@@ -97,7 +97,7 @@ public class CmdProtect extends PlotCommand {
                     player.sendMessage(C("MsgDoNotOwnPlot"));
                 }
             } else {
-                player.sendMessage(C("MsgNotPlotWorld"));
+                player.sendMessage(C("NotPlotWorld"));
                 return true;
             }
         } else {

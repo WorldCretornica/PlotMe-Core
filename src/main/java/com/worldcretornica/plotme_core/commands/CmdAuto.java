@@ -34,11 +34,11 @@ public class CmdAuto extends PlotCommand {
                         world = manager.getFirstWorld();
                     }
                     if (world == null) {
-                        player.sendMessage(C("MsgNotPlotWorld"));
+                        player.sendMessage(C("NotPlotWorld"));
                         return true;
                     }
                     if (!manager.isPlotWorld(world)) {
-                        player.sendMessage(world + " " + C("MsgWorldNotPlot"));
+                        player.sendMessage(C("MsgWorldNotPlot", world));
                         return true;
                     }
                 } else {
@@ -95,9 +95,9 @@ public class CmdAuto extends PlotCommand {
                         }
                     }
                 });
-                player.sendMessage(C("MsgNoPlotFound"));
+                player.sendMessage(C("NoPlotFound"));
             } else {
-                player.sendMessage(C("MsgNotPlotWorld"));
+                player.sendMessage(C("NotPlotWorld"));
             }
         } else {
             return false;

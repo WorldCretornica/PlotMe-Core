@@ -32,7 +32,7 @@ public class CmdLike extends PlotCommand {
                 Plot plot = manager.getPlot(player);
 
                 if (plot == null) {
-                    player.sendMessage(C("MsgNoPlotFound"));
+                    player.sendMessage(C("NoPlotFound"));
                     return true;
                 }
                 if (plot.canPlayerLike(player.getUniqueId())) {
@@ -44,7 +44,7 @@ public class CmdLike extends PlotCommand {
                     player.sendMessage(MessageFormat.format("Removed like from plot {0}", plot.getId().getID()));
                 }
             } else {
-                player.sendMessage(C("MsgNotPlotWorld"));
+                player.sendMessage(C("NotPlotWorld"));
             }
         } else {
             return false;

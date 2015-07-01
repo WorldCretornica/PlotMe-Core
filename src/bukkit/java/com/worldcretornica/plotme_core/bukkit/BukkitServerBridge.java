@@ -11,7 +11,6 @@ import com.worldcretornica.plotme_core.bukkit.api.BukkitWorld;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
@@ -280,10 +279,6 @@ public class BukkitServerBridge extends IServerBridge {
     public ConfigurationSection getDefaultWorld() {
         return org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(
                 new InputStreamReader(getClass().getClassLoader().getResourceAsStream("default-world.yml"), StandardCharsets.UTF_8));
-    }
-
-    @Override public String addColor(char c, String string) {
-        return ChatColor.translateAlternateColorCodes(c, string);
     }
 
     @Override public void runTaskLater(Runnable runnable, long delay) {

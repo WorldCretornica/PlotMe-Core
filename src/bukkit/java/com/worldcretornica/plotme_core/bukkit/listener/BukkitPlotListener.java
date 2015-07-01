@@ -92,23 +92,23 @@ public class BukkitPlotListener implements Listener {
             }
             Plot plot = manager.getPlot(location);
             if (plot == null) {
-                player.sendMessage(api.C("ErrCannotBuild"));
+                player.sendMessage(api.C("CannotBuild"));
                 event.setCancelled(true);
             } else {
                 Optional<Plot.AccessLevel> member = plot.isMember(player.getUniqueId());
                 if (member.isPresent()) {
                     if (member.get().equals(Plot.AccessLevel.TRUSTED) && !api.getServerBridge().getOfflinePlayer(plot.getOwnerId()).isOnline()) {
-                        player.sendMessage(api.C("ErrCannotBuild"));
+                        player.sendMessage(api.C("CannotBuild"));
                         event.setCancelled(true);
                         return;
-                    } else if (api.isPlotLocked(plot)) {
+                    } else if (api.isPlotLocked(plot.getId())) {
                         player.sendMessage(api.C("PlotLocked"));
                         event.setCancelled(true);
                     }
                     plot.resetExpire(manager.getMap(player).getDaysToExpiration());
                     plugin.getAPI().getSqlManager().savePlot(plot);
                 } else {
-                    player.sendMessage(api.C("ErrCannotBuild"));
+                    player.sendMessage(api.C("CannotBuild"));
                     event.setCancelled(true);
                 }
             }
@@ -124,24 +124,24 @@ public class BukkitPlotListener implements Listener {
             Plot plot = manager.getPlot(location);
             if (plot == null) {
                 if (!player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE)) {
-                    player.sendMessage(api.C("ErrCannotBuild"));
+                    player.sendMessage(api.C("CannotBuild"));
                     event.setCancelled(true);
                 }
             } else {
                 Optional<Plot.AccessLevel> member = plot.isMember(player.getUniqueId());
                 if (member.isPresent()) {
                     if (member.get().equals(Plot.AccessLevel.TRUSTED) && !api.getServerBridge().getOfflinePlayer(plot.getOwnerId()).isOnline()) {
-                        player.sendMessage(api.C("ErrCannotBuild"));
+                        player.sendMessage(api.C("CannotBuild"));
                         event.setCancelled(true);
                         return;
-                    } else if (api.isPlotLocked(plot)) {
+                    } else if (api.isPlotLocked(plot.getId())) {
                         player.sendMessage(api.C("PlotLocked"));
                         event.setCancelled(true);
                     }
                     plot.resetExpire(manager.getMap(player).getDaysToExpiration());
                     plugin.getAPI().getSqlManager().savePlot(plot);
                 } else {
-                    player.sendMessage(api.C("ErrCannotBuild"));
+                    player.sendMessage(api.C("CannotBuild"));
                     event.setCancelled(true);
                 }
             }
@@ -158,20 +158,20 @@ public class BukkitPlotListener implements Listener {
                     manager.getPlot(location.add(event.getBlockFace().getModX(), event.getBlockFace().getModY(), event.getBlockFace().getModZ()));
 
             if (plot == null) {
-                player.sendMessage(api.C("ErrCannotBuild"));
+                player.sendMessage(api.C("CannotBuild"));
                 event.setCancelled(true);
             } else {
                 Optional<Plot.AccessLevel> member = plot.isMember(player.getUniqueId());
                 if (member.isPresent()) {
                     if (member.get().equals(Plot.AccessLevel.TRUSTED) && !api.getServerBridge().getOfflinePlayer(plot.getOwnerId()).isOnline()) {
-                        player.sendMessage(api.C("ErrCannotBuild"));
+                        player.sendMessage(api.C("CannotBuild"));
                         event.setCancelled(true);
-                    } else if (api.isPlotLocked(plot)) {
+                    } else if (api.isPlotLocked(plot.getId())) {
                         player.sendMessage(api.C("PlotLocked"));
                         event.setCancelled(true);
                     }
                 } else {
-                    player.sendMessage(api.C("ErrCannotBuild"));
+                    player.sendMessage(api.C("CannotBuild"));
                     event.setCancelled(true);
                 }
             }
@@ -187,20 +187,20 @@ public class BukkitPlotListener implements Listener {
             Plot plot = manager.getPlot(location);
 
             if (plot == null) {
-                player.sendMessage(api.C("ErrCannotBuild"));
+                player.sendMessage(api.C("CannotBuild"));
                 event.setCancelled(true);
             } else {
                 Optional<Plot.AccessLevel> member = plot.isMember(player.getUniqueId());
                 if (member.isPresent()) {
                     if (member.get().equals(Plot.AccessLevel.TRUSTED) && !api.getServerBridge().getOfflinePlayer(plot.getOwnerId()).isOnline()) {
-                        player.sendMessage(api.C("ErrCannotBuild"));
+                        player.sendMessage(api.C("CannotBuild"));
                         event.setCancelled(true);
-                    } else if (api.isPlotLocked(plot)) {
+                    } else if (api.isPlotLocked(plot.getId())) {
                         player.sendMessage(api.C("PlotLocked"));
                         event.setCancelled(true);
                     }
                 } else {
-                    player.sendMessage(api.C("ErrCannotBuild"));
+                    player.sendMessage(api.C("CannotBuild"));
                     event.setCancelled(true);
                 }
             }
@@ -221,7 +221,7 @@ public class BukkitPlotListener implements Listener {
                 if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
                     if (plot == null) {
                         if (!player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE)) {
-                            player.sendMessage(api.C("ErrCannotBuild"));
+                            player.sendMessage(api.C("CannotBuild"));
                             event.setCancelled(true);
                         }
                     } else {
@@ -229,14 +229,14 @@ public class BukkitPlotListener implements Listener {
                         if (member.isPresent()) {
                             if (member.get().equals(Plot.AccessLevel.TRUSTED) && !api.getServerBridge().getOfflinePlayer(plot.getOwnerId())
                                     .isOnline()) {
-                                player.sendMessage(api.C("ErrCannotBuild"));
+                                player.sendMessage(api.C("CannotBuild"));
                                 event.setCancelled(true);
                             } else {
                                 plot.resetExpire(pmi.getDaysToExpiration());
                                 plugin.getAPI().getSqlManager().savePlot(plot);
                             }
                         } else if (!player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE)) {
-                            player.sendMessage(api.C("ErrCannotBuild"));
+                            player.sendMessage(api.C("CannotBuild"));
                             event.setCancelled(true);
                         }
                     }
@@ -247,24 +247,17 @@ public class BukkitPlotListener implements Listener {
                         blocked = true;
                     }
 
-                    if (blocked) {
-                        if (plot == null) {
-                            if (!player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE)) {
-                                player.sendMessage(api.C("ErrCannotUse"));
-                                event.setCancelled(true);
-                            }
-                        } else {
-                            Optional<Plot.AccessLevel> member = plot.isMember(player.getUniqueId());
-                            if (member.isPresent() && member.get().equals(Plot.AccessLevel.TRUSTED) && !api.getServerBridge()
-                                    .getOfflinePlayer(plot.getOwnerId()).isOnline()) {
-                                player.sendMessage(api.C("ErrCannotBuild"));
-                                event.setCancelled(true);
-                            }
-                            if (!player
-                                    .hasPermission(PermissionNames.ADMIN_BUILDANYWHERE)) {
-                                player.sendMessage(api.C("ErrCannotUse"));
-                                event.setCancelled(true);
-                            }
+                    if (blocked && plot != null) {
+                        Optional<Plot.AccessLevel> member = plot.isMember(player.getUniqueId());
+                        if (member.isPresent() && member.get().equals(Plot.AccessLevel.TRUSTED) && !api.getServerBridge()
+                                .getOfflinePlayer(plot.getOwnerId()).isOnline()) {
+                            player.sendMessage(api.C("CannotBuild"));
+                            event.setCancelled(true);
+                        }
+                        if (!player
+                                .hasPermission(PermissionNames.ADMIN_BUILDANYWHERE)) {
+                            player.sendMessage(api.C("CannotBuild"));
+                            event.setCancelled(true);
                         }
                     }
                 }
@@ -290,7 +283,7 @@ public class BukkitPlotListener implements Listener {
                 if (plot == null) {
                     if (blocked && !player
                             .hasPermission(PermissionNames.ADMIN_BUILDANYWHERE)) {
-                        player.sendMessage(api.C("ErrCannotUse"));
+                        player.sendMessage(api.C("CannotBuild"));
                         event.setCancelled(true);
                     }
                 } else {
@@ -298,7 +291,7 @@ public class BukkitPlotListener implements Listener {
                     if (member.isPresent()) {
                         if (member.isPresent() && member.get().equals(Plot.AccessLevel.TRUSTED) && !api.getServerBridge()
                                 .getOfflinePlayer(plot.getOwnerId()).isOnline()) {
-                            player.sendMessage(api.C("ErrCannotUse"));
+                            player.sendMessage(api.C("CannotBuild"));
                             event.setCancelled(true);
                             return;
                         }
@@ -306,7 +299,7 @@ public class BukkitPlotListener implements Listener {
                             .hasPermission(PermissionNames.ADMIN_BUILDANYWHERE)) {
                         return;
                     }
-                    player.sendMessage(api.C("ErrCannotUse"));
+                    player.sendMessage(api.C("CannotBuild"));
                     event.setCancelled(true);
                 }
             }
@@ -322,6 +315,9 @@ public class BukkitPlotListener implements Listener {
 
             if (id == null) {
                 event.setCancelled(true);
+            } else {
+                event.setCancelled(api.isPlotLocked(id));
+
             }
         }
     }
@@ -335,6 +331,9 @@ public class BukkitPlotListener implements Listener {
 
             if (id == null) {
                 event.setCancelled(true);
+            } else {
+                event.setCancelled(api.isPlotLocked(id));
+
             }
         }
     }
@@ -348,6 +347,9 @@ public class BukkitPlotListener implements Listener {
 
             if (id == null) {
                 event.setCancelled(true);
+            } else {
+                event.setCancelled(api.isPlotLocked(id));
+
             }
         }
     }
@@ -361,6 +363,9 @@ public class BukkitPlotListener implements Listener {
 
             if (id == null) {
                 event.setCancelled(true);
+            } else {
+                event.setCancelled(api.isPlotLocked(id));
+
             }
         }
     }
@@ -372,6 +377,8 @@ public class BukkitPlotListener implements Listener {
             PlotId id = manager.getPlotId(location);
             if (id == null) {
                 event.setCancelled(true);
+            } else {
+                event.setCancelled(api.isPlotLocked(id));
             }
         }
     }
@@ -385,6 +392,8 @@ public class BukkitPlotListener implements Listener {
 
             if (id == null) {
                 event.setCancelled(true);
+            } else {
+                event.setCancelled(api.isPlotLocked(id));
             }
         }
     }
@@ -415,6 +424,9 @@ public class BukkitPlotListener implements Listener {
                 PlotId id = manager.getPlotId(new Location(world, BukkitUtil.locationToVector(moved.getLocation())));
                 if (id == null) {
                     event.setCancelled(true);
+                } else {
+                    event.setCancelled(api.isPlotLocked(id));
+
                 }
             }
         }
@@ -429,6 +441,8 @@ public class BukkitPlotListener implements Listener {
                 if (id == null) {
                     event.getBlocks().remove(i);
                     i--;
+                } else {
+                    event.setCancelled(api.isPlotLocked(id));
                 }
             }
         }
@@ -486,7 +500,7 @@ public class BukkitPlotListener implements Listener {
                     Optional<Plot.AccessLevel> member = plot.isMember(event.getIgnitingEntity().getUniqueId());
                     if (member.isPresent()) {
                         if (member.get().equals(Plot.AccessLevel.TRUSTED) && !api.getServerBridge().getOfflinePlayer(plot.getOwnerId()).isOnline()
-                                || api.isPlotLocked(plot)) {
+                                || api.isPlotLocked(plot.getId())) {
                             event.setCancelled(true);
                         }
                     } else {
@@ -507,7 +521,7 @@ public class BukkitPlotListener implements Listener {
 
             if (plot == null) {
                 if (!player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE)) {
-                    player.sendMessage(api.C("ErrCannotBuild"));
+                    player.sendMessage(api.C("CannotBuild"));
                     event.setCancelled(true);
                 }
             } else {
@@ -515,14 +529,14 @@ public class BukkitPlotListener implements Listener {
                 if (!player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE)) {
                     if (member.isPresent()) {
                         if (member.get().equals(Plot.AccessLevel.TRUSTED) && !api.getServerBridge().getOfflinePlayer(plot.getOwnerId()).isOnline()) {
-                            player.sendMessage(api.C("ErrCannotBuild"));
+                            player.sendMessage(api.C("CannotBuild"));
                             event.setCancelled(true);
-                        } else if (api.isPlotLocked(plot)) {
+                        } else if (api.isPlotLocked(plot.getId())) {
                             player.sendMessage(api.C("PlotLocked"));
                             event.setCancelled(true);
                         }
                     } else {
-                        player.sendMessage(api.C("ErrCannotBuild"));
+                        player.sendMessage(api.C("CannotBuild"));
                         event.setCancelled(true);
                     }
                 }
@@ -544,21 +558,21 @@ public class BukkitPlotListener implements Listener {
 
                 if (plot == null) {
                     if (cannotBuildAnywhere) {
-                        player.sendMessage(api.C("ErrCannotBuild"));
+                        player.sendMessage(api.C("CannotBuild"));
                         event.setCancelled(true);
                     }
                 } else {
                     Optional<Plot.AccessLevel> member = plot.isMember(player.getUniqueId());
                     if (member.isPresent()) {
                         if (member.get().equals(Plot.AccessLevel.TRUSTED) && !api.getServerBridge().getOfflinePlayer(plot.getOwnerId()).isOnline()) {
-                            player.sendMessage(api.C("ErrCannotBuild"));
+                            player.sendMessage(api.C("CannotBuild"));
                             event.setCancelled(true);
-                        } else if (api.isPlotLocked(plot)) {
+                        } else if (api.isPlotLocked(plot.getId())) {
                             player.sendMessage(api.C("PlotLocked"));
                             event.setCancelled(true);
                         }
                     } else {
-                        player.sendMessage(api.C("ErrCannotBuild"));
+                        player.sendMessage(api.C("CannotBuild"));
                         event.setCancelled(true);
                     }
                 }
@@ -579,7 +593,7 @@ public class BukkitPlotListener implements Listener {
 
             if (plot == null) {
                 if (!event.getPlayer().hasPermission(PermissionNames.ADMIN_BUILDANYWHERE)) {
-                    event.getPlayer().sendMessage(api.C("ErrCannotBuild"));
+                    event.getPlayer().sendMessage(api.C("CannotBuild"));
                     event.setCancelled(true);
                 }
             } else {
@@ -587,14 +601,14 @@ public class BukkitPlotListener implements Listener {
                     Optional<Plot.AccessLevel> member = plot.isMember(event.getPlayer().getUniqueId());
                     if (member.isPresent()) {
                         if (member.get().equals(Plot.AccessLevel.TRUSTED) && !api.getServerBridge().getOfflinePlayer(plot.getOwnerId()).isOnline()) {
-                            event.getPlayer().sendMessage(api.C("ErrCannotBuild"));
+                            event.getPlayer().sendMessage(api.C("CannotBuild"));
                             event.setCancelled(true);
-                        } else if (api.isPlotLocked(plot)) {
+                        } else if (api.isPlotLocked(plot.getId())) {
                             event.getPlayer().sendMessage(api.C("PlotLocked"));
                             event.setCancelled(true);
                         }
                     } else {
-                        event.getPlayer().sendMessage(api.C("ErrCannotBuild"));
+                        event.getPlayer().sendMessage(api.C("CannotBuild"));
                         event.setCancelled(true);
                     }
                 }
@@ -627,7 +641,6 @@ public class BukkitPlotListener implements Listener {
 
     @EventHandler
     public void onEntityDamage(EntityDamageEvent event) {
-        IEntity entity = plugin.wrapEntity(event.getEntity());
         Location loc = BukkitUtil.adapt(event.getEntity().getLocation());
         if (manager.isPlotWorld(loc)) {
             //Don't protect Monsters!
@@ -678,21 +691,21 @@ public class BukkitPlotListener implements Listener {
 
             if (plot == null) {
                 if (cannotBuildAnywhere) {
-                    event.getPlayer().sendMessage(api.C("ErrCannotBuild"));
+                    event.getPlayer().sendMessage(api.C("CannotBuild"));
                     event.setCancelled(true);
                 }
             } else {
                 Optional<Plot.AccessLevel> member = plot.isMember(event.getPlayer().getUniqueId());
                 if (member.isPresent()) {
                     if (member.get().equals(Plot.AccessLevel.TRUSTED) && !api.getServerBridge().getOfflinePlayer(plot.getOwnerId()).isOnline()) {
-                        event.getPlayer().sendMessage(api.C("ErrCannotBuild"));
+                        event.getPlayer().sendMessage(api.C("CannotBuild"));
                         event.setCancelled(true);
-                    } else if (api.isPlotLocked(plot)) {
+                    } else if (api.isPlotLocked(plot.getId())) {
                         event.getPlayer().sendMessage(api.C("PlotLocked"));
                         event.setCancelled(true);
                     }
                 } else if (!event.getPlayer().hasPermission(PermissionNames.ADMIN_BUILDANYWHERE)) {
-                    event.getPlayer().sendMessage(api.C("ErrCannotBuild"));
+                    event.getPlayer().sendMessage(api.C("CannotBuild"));
                     event.setCancelled(true);
                 }
             }
@@ -766,21 +779,21 @@ public class BukkitPlotListener implements Listener {
             Plot plot = manager.getPlot(location);
             if (plot == null) {
                 if (!player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE)) {
-                    player.sendMessage(api.C("ErrCannotBuild"));
+                    player.sendMessage(api.C("CannotBuild"));
                     event.setCancelled(true);
                 }
             } else {
                 Optional<Plot.AccessLevel> member = plot.isMember(event.getPlayer().getUniqueId());
                 if (member.isPresent()) {
                     if (member.get().equals(Plot.AccessLevel.TRUSTED) && !api.getServerBridge().getOfflinePlayer(plot.getOwnerId()).isOnline()) {
-                        player.sendMessage(api.C("ErrCannotBuild"));
+                        player.sendMessage(api.C("CannotBuild"));
                         event.setCancelled(true);
-                    } else if (api.isPlotLocked(plot)) {
+                    } else if (api.isPlotLocked(plot.getId())) {
                         player.sendMessage(api.C("PlotLocked"));
                         event.setCancelled(true);
                     }
                 } else if (!player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE)) {
-                    player.sendMessage(api.C("ErrCannotBuild"));
+                    player.sendMessage(api.C("CannotBuild"));
                     event.setCancelled(true);
                 }
             }

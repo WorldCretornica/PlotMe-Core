@@ -44,13 +44,13 @@ public class CmdBiome extends PlotCommand {
                         biome = serverBridge.getBiome(args[1] + " " + args[2] + " " + args[3]);
                     }
                     if (!biome.isPresent()) {
-                        player.sendMessage(biome.get() + " " + C("MsgIsInvalidBiome"));
+                        player.sendMessage(C("InvalidBiome", biome.get()));
                         return true;
                     }
 
                     String playerName = player.getName();
 
-                    if (player.getUniqueId().equals(plot.getOwnerId()) || player.hasPermission("PlotMe.admin")) {
+                    if (player.getUniqueId().equals(plot.getOwnerId())) {
 
                         double price = 0.0;
 
@@ -60,7 +60,7 @@ public class CmdBiome extends PlotCommand {
                         if (manager.isEconomyEnabled(pmi)) {
                             price = pmi.getBiomeChangePrice();
 
-                            if (serverBridge.has(player, price)) {
+                            if (!serverBridge.has(player, price)) {
                                 player.sendMessage("It costs " + serverBridge.getEconomy().get().format(price) + " to change the biome.");
                                 return true;
                             } else if (!event.isCancelled()) {
@@ -81,7 +81,7 @@ public class CmdBiome extends PlotCommand {
                             manager.setBiome(plot);
                             plugin.getSqlManager().savePlot(plot);
 
-                            player.sendMessage(C("MsgBiomeSet") + " " + biome.get());
+                            player.sendMessage(C("BiomeChanged", biome.get()));
 
                             if (isAdvancedLogging()) {
                                 if (price == 0) {
@@ -102,7 +102,7 @@ public class CmdBiome extends PlotCommand {
                     player.sendMessage(C("MsgThisPlot") + C("MsgHasNoOwner"));
                 }
             } else {
-                player.sendMessage(C("MsgNotPlotWorld"));
+                player.sendMessage(C("NotPlotWorld"));
                 return true;
             }
         } else {

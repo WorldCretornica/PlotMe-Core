@@ -49,8 +49,8 @@ public abstract class PlotCommand {
     }
 
 
-    String C(String caption) {
-        return plugin.C(caption);
+    String C(String caption, Object... args) {
+        return plugin.C(caption, args);
     }
 
     public abstract String getName();

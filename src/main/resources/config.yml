@@ -4,12 +4,13 @@ mySQLuname: root
 mySQLpass: password
 globalUseEconomy: false
 allowWorldTeleport: true
+disableWildCard: false
 defaultWEAnywhere: true
 NbClearSpools: 3
 NbBlocksPerClearStep: 50000
 AdvancedLogging: false
 PlotEnterAnnouncement: false
-mySQLConverter: true
 Version: 0.17
 ExpirePlotCleanupTimer: 90
+tp-delay: 0
 

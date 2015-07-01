@@ -42,7 +42,7 @@ public class CmdClaim extends PlotCommand {
                 IOfflinePlayer futurePlotOwner = player;
                 if (args.length == 2 && player.hasPermission(PermissionNames.ADMIN_CLAIM_OTHER)) {
                     if (args[1].length() > 16) {
-                        throw new IllegalArgumentException(C("InvalidCommandInput"));
+                        player.sendMessage(C("InvalidCommandInput"));
                     }
                     if (serverBridge.getPlayer(args[1]) == null) {
                         player.sendMessage("No player found by that name.");
@@ -97,7 +97,7 @@ public class CmdClaim extends PlotCommand {
                             player.sendMessage(
                                     C("MsgThisPlotYours") + " " + C("WordUse") + " /plotme home " + C("MsgToGetToIt"));
                         } else {
-                            player.sendMessage(C("MsgThisPlotIsNow") + " " + player.getName() + C("WordPossessive") + ". " + C("WordUse")
+                            player.sendMessage(C("MsgThisPlotIsNow") + " " + player.getName() + ". " + C("WordUse")
                                     + " /plotme home " + C("MsgToGetToIt"));
                         }
 
@@ -112,7 +112,7 @@ public class CmdClaim extends PlotCommand {
                     }
                 }
             } else {
-                player.sendMessage(C("MsgNotPlotWorld"));
+                player.sendMessage(C("NotPlotWorld"));
             }
         } else {
             return false;

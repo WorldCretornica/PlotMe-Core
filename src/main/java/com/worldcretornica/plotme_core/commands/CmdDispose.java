@@ -74,7 +74,7 @@ public class CmdDispose extends PlotCommand {
                                 manager.removeSellSign(plot);
 
                                 manager.adjustWall(plot, false);
-                                player.sendMessage(C("MsgPlotDisposedAnyoneClaim"));
+                                player.sendMessage(C("PlotDisposed"));
 
                                 if (isAdvancedLogging()) {
                                     plugin.getLogger().info(name + " " + C("MsgDisposedPlot") + " " + plot.getId());
@@ -86,7 +86,7 @@ public class CmdDispose extends PlotCommand {
                     }
                 }
             } else {
-                player.sendMessage(C("MsgNotPlotWorld"));
+                player.sendMessage(C("NotPlotWorld"));
             }
         } else {
             return false;

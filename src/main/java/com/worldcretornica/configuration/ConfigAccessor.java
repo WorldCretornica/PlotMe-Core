@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 
 public class ConfigAccessor {
 
@@ -26,7 +27,7 @@ public class ConfigAccessor {
         // Look for defaults in the jar
         try (InputStream defConfigStream = getResource(fileName)) {
 
-            YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(defConfigStream));
+            YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(defConfigStream, StandardCharsets.UTF_8));
             fileConfiguration.setDefaults(defConfig);
         } catch (IOException e) {
             e.printStackTrace();

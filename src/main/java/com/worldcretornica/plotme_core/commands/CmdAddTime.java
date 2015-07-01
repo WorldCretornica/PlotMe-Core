@@ -30,7 +30,7 @@ public class CmdAddTime extends PlotCommand {
                 if (pmi.getDaysToExpiration() != 0) {
                     Plot plot = manager.getPlot(player);
                     if (plot == null) {
-                        player.sendMessage(C("MsgNoPlotFound"));
+                        player.sendMessage(C("NoPlotFound"));
                         return true;
                     }
                     String name = player.getName();
@@ -46,7 +46,7 @@ public class CmdAddTime extends PlotCommand {
                     return true;
                 }
             } else {
-                player.sendMessage(C("MsgNotPlotWorld"));
+                player.sendMessage(C("NotPlotWorld"));
                 return true;
             }
         } else {

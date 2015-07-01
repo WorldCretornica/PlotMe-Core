@@ -28,9 +28,11 @@ public class PlotMeSpool implements Runnable {
             IPlotMe_GeneratorManager genmanager = PlotMeCoreManager.getInstance().getGenManager(plot.getWorld());
 
             if (currentClear == null) {
-                currentClear = genmanager.clear(plot.getId(), plugin.getConfig().getInt("NbBlocksPerClearStep"), null);
+                currentClear = genmanager.clear(plot.getPlotBottomLoc(), plot.getPlotTopLoc(), plugin.getConfig().getInt("NbBlocksPerClearStep"),
+                        null);
             } else {
-                currentClear = genmanager.clear(plot.getId(), plugin.getConfig().getInt("NbBlocksPerClearStep"), currentClear);
+                currentClear = genmanager
+                        .clear(plot.getPlotBottomLoc(), plot.getPlotTopLoc(), plugin.getConfig().getInt("NbBlocksPerClearStep"), currentClear);
             }
             if (currentClear == null) {
                 if (reason.equals(ClearReason.Clear)) {

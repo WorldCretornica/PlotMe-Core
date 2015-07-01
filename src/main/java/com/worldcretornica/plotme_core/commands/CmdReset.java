@@ -7,7 +7,6 @@ import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.CommandExBase;
 import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
-import com.worldcretornica.plotme_core.api.IWorld;
 import com.worldcretornica.plotme_core.api.event.PlotResetEvent;
 
 public class CmdReset extends PlotCommand {
@@ -27,12 +26,10 @@ public class CmdReset extends PlotCommand {
         }
         IPlayer player = (IPlayer) sender;
         if (player.hasPermission(PermissionNames.ADMIN_RESET) || player.hasPermission(PermissionNames.USER_RESET)) {
-            IWorld world = player.getWorld();
-            if (manager.isPlotWorld(world)) {
+            if (manager.isPlotWorld(player)) {
                 Plot plot = manager.getPlot(player);
-
                 if (plot == null) {
-                    player.sendMessage(C("MsgNoPlotFound"));
+                    player.sendMessage(C("NoPlotFound"));
                 } else if (plot.isProtected()) {
                     player.sendMessage(C("MsgPlotProtectedCannotReset"));
                 } else if (player.getUniqueId().equals(plot.getOwnerId()) || player.hasPermission(PermissionNames.ADMIN_RESET)) {
@@ -51,7 +48,7 @@ public class CmdReset extends PlotCommand {
                     player.sendMessage(C("MsgThisPlot") + "(" + plot.getId().toString() + ") " + C("MsgNotYoursNotAllowedReset"));
                 }
             } else {
-                player.sendMessage(C("MsgNotPlotWorld"));
+                player.sendMessage(C("NotPlotWorld"));
             }
         } else {
             return false;

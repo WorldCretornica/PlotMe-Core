@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -46,7 +47,7 @@ public class NameFetcher implements Callable<Map<String, String>> {
             }
             JSONObject response;
             if (connection != null) {
-                try (InputStreamReader reader = new InputStreamReader(connection.getInputStream())) {
+                try (InputStreamReader reader = new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8)) {
                     try {
                         response = (JSONObject) jsonParser.parse(reader);
                         String name = (String) response.get("name");

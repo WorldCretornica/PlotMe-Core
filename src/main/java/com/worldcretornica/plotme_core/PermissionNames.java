@@ -19,14 +19,13 @@ public class PermissionNames {
     public static final String USER_BUY = "PlotMe.use.buy";
     public static final String USER_DENY = "PlotMe.use.deny";
     public static final String USER_ADD = "PlotMe.use.add";
-    public static final String USER_REMOVE = "PlotMe.use.remove";
     public static final String USER_MIDDLE = "PlotMe.use.middle";
     public static final String USER_PROTECT = "PlotMe.use.protect";
     public static final String USER_TRUST = "PlotMe.use.trust";
 
     //Admin Permissions
     public static final String ADMIN_TRUST = "PlotMe.admin.trust";
-    public static final String ADMIN_BUILDANYWHERE = "plotme.admin.buildanywhere";
+    public static final String ADMIN_BUILDANYWHERE = "plotme.buildanywhere";
     public static final String ADMIN_BYPASSDENY = "plotme.admin.bypassdeny";
     public static final String ADMIN_MOVE = "PlotMe.admin.move";
     public static final String ADMIN_DISPOSE = "PlotMe.admin.dispose";
@@ -41,7 +40,6 @@ public class PermissionNames {
     public static final String ADMIN_CLAIM_OTHER = "PlotMe.admin.claim.other";
     public static final String ADMIN_WEANYWHERE = "PlotMe.admin.weanywhere";
     public static final String ADMIN_DENY = "PlotMe.admin.deny";
-    public static final String ADMIN_REMOVE = "PlotMe.admin.remove";
     public static final String ADMIN_PROTECT = "PlotMe.admin.protect";
     public static final String ADMIN_MIDDLE_OTHER = "PlotMe.admin.middle";
     public static final String ADMIN_RESET = "PlotMe.admin.reset";

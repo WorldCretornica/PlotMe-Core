@@ -40,12 +40,11 @@ public class CmdInfo extends PlotCommand {
                 Plot plot = manager.getPlot(player);
 
                 if (plot == null) {
-                    player.sendMessage(C("MsgNoPlotFound"));
+                    player.sendMessage(C("NoPlotFound"));
                     return true;
                 }
                 player.sendMessage("Internal ID: " + plot.getInternalID());
-                player.sendMessage("ID: " + plot.getId().getID() + " " + C("InfoOwner") + ": " + plot.getOwner()
-                        + " " + C("InfoBiome") + ": " + plot.getBiome());
+                player.sendMessage("ID: " + plot.getId().getID() + " " + C("InfoOwner", plot.getOwner()) + " " + C("InfoBiome", plot.getBiome()));
                 player.sendMessage("Likes: " + plot.getLikes());
                 player.sendMessage("Created: " + plot.getCreatedDate());
                 final String neverExpire = C("InfoExpire") + ": " + C("WordNever");
@@ -130,7 +129,7 @@ public class CmdInfo extends PlotCommand {
                 player.sendMessage(C("WordTop") + ": " + plot.getPlotTopLoc());
 
             } else {
-                player.sendMessage(C("MsgNotPlotWorld"));
+                player.sendMessage(C("NotPlotWorld"));
             }
         } else {
             return false;
