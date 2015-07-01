@@ -90,8 +90,6 @@ permissions:
       description: Gives the add command for plots owned
     plotme.use.deny:
       description: Gives the deny command for plots owned
-    plotme.use.remove:
-      description: Gives the remove command for plots owned
     plotme.use.protect:
       description: Gives the protect command
     plotme.use.nameplot:
@@ -124,7 +122,7 @@ permissions:
       description: Gives the setowner command
     plotme.admin.move:
       description: Gives the move command
-    plotme.admin.weanywhere:
+    plotme.weanywhere:
       description: Gives the weanywhere command
     plotme.admin.list:
       description: Gives the list command for any players
