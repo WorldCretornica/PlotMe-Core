@@ -89,7 +89,7 @@ public class CmdAuto extends PlotCommand {
 
                                         player.teleport(manager.getPlotHome(id, world));
 
-                                        player.sendMessage(C("MsgThisPlotYours") + " " + C("WordUse") + " /plotme " + C("CommandHome") + " " + C
+                                        player.sendMessage(C("MsgThisPlotYours") + " " + C("WordUse") + " /plotme home" + " " + C
                                                 ("MsgToGetToIt"));
                                         break loop;
                                     }
