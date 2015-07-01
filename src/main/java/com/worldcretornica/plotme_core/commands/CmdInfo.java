@@ -20,7 +20,7 @@ public class CmdInfo extends PlotCommand {
     }
 
     @Override
-    public List getAliases() {
+    public List<String> getAliases() {
         return Collections.singletonList("i");
     }
 
