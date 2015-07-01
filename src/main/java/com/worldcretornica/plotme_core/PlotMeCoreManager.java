@@ -366,6 +366,9 @@ public class PlotMeCoreManager {
      * @return plot
      */
     public Plot getPlotById(PlotId id, IWorld world) {
+        if (world == null || id == null) {
+            return null;
+        }
         return plugin.getSqlManager().getPlot(id, world);
     }
 
