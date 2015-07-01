@@ -61,11 +61,11 @@ public class CmdAuto extends PlotCommand {
                         for (int i = 0; i < 50000; i++) {
                             for (int x = -i; x <= i; x++) {
                                 for (int z = -i; z <= i; z++) {
-                                    PlotId id = new PlotId(x, z);
+                                    final PlotId id = new PlotId(x, z);
 
                                     if (manager.isPlotAvailable(id, world)) {
-                                        String name = player.getName();
-                                        UUID uuid = player.getUniqueId();
+                                        final String name = player.getName();
+                                        final UUID uuid = player.getUniqueId();
 
 
                                         if (manager.isEconomyEnabled(world)) {
@@ -81,8 +81,11 @@ public class CmdAuto extends PlotCommand {
                                                 player.sendMessage("You do not have enough money to buy this plot");
                                             }
                                         }
-
-                                        manager.createPlot(id, world, name, uuid, pmi);
+                                        plugin.getServerBridge().runTask(new Runnable() {
+                                            @Override public void run() {
+                                                manager.createPlot(id, world, name, uuid, pmi);
+                                            }
+                                        });
 
                                         player.teleport(manager.getPlotHome(id, world));
 
