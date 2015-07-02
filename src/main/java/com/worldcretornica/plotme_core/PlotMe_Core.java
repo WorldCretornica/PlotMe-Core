@@ -1,16 +1,5 @@
 package com.worldcretornica.plotme_core;
 
-import java.text.MessageFormat;
-import java.util.HashMap;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import org.bukkit.ChatColor;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
-
 import com.worldcretornica.configuration.ConfigAccessor;
 import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlotMe_GeneratorManager;
@@ -21,6 +10,16 @@ import com.worldcretornica.plotme_core.bukkit.SchematicUtil;
 import com.worldcretornica.plotme_core.storage.Database;
 import com.worldcretornica.plotme_core.storage.MySQLConnector;
 import com.worldcretornica.plotme_core.storage.SQLiteConnector;
+import org.bukkit.ChatColor;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
+
+import java.text.MessageFormat;
+import java.util.HashMap;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class PlotMe_Core {
 
@@ -104,6 +103,7 @@ public class PlotMe_Core {
         if (!config.contains("worlds")) {
             getServerBridge().loadDefaultConfig(configFile, "worlds.plotworld");
         }
+        getConfig().set("Version", "0.17.1");
         // Copy new values over
         getConfig().options().copyDefaults(true);
         configFile.saveConfig();

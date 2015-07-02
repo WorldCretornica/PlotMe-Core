@@ -22,7 +22,16 @@ public class PlotWorldEditListener {
         if (event.getWorld() == null) {
             return;
         }
-        BukkitWorld plotmeWorld = new BukkitWorld(((com.sk89q.worldedit.bukkit.BukkitWorld) event.getWorld()).getWorld());
+        BukkitWorld plotmeWorld = null;
+        if (event.getWorld() instanceof com.sk89q.worldedit.bukkit.BukkitWorld) {
+            plotmeWorld = BukkitUtil.adapt(((com.sk89q.worldedit.bukkit.BukkitWorld) event.getWorld()).getWorld());
+        } else if (event.getWorld() instanceof org.primesoft.asyncworldedit.worldedit.world.AsyncWorld) {
+            org.primesoft.asyncworldedit.worldedit.world.AsyncWorld world =
+                    (org.primesoft.asyncworldedit.worldedit.world.AsyncWorld) event.getWorld();
+            plotmeWorld = BukkitUtil.adapt(((com.sk89q.worldedit.bukkit.BukkitWorld) world.getWorld()).getWorld());
+        } else {
+            return;
+        }
         if (PlotMeCoreManager.getInstance().isPlotWorld(plotmeWorld)) {
             if (actor != null && actor.isPlayer()) {
                 event.setExtent(new PlotMeWorldEdit(api, event.getExtent(), event.getActor()));

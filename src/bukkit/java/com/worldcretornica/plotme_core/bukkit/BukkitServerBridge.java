@@ -1,7 +1,7 @@
 package com.worldcretornica.plotme_core.bukkit;
 
 import com.google.common.base.Optional;
-import com.sk89q.worldedit.bukkit.WorldEditPlugin;
+import com.sk89q.worldedit.WorldEdit;
 import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IServerBridge;
@@ -73,8 +73,7 @@ public class BukkitServerBridge extends IServerBridge {
     public void setupHooks() {
         PluginManager pluginManager = plotMeCorePlugin.getServer().getPluginManager();
         if (pluginManager.getPlugin("WorldEdit") != null) {
-            WorldEditPlugin worldEdit = (WorldEditPlugin) pluginManager.getPlugin("WorldEdit");
-            worldEdit.getWorldEdit().getEventBus().register(new PlotWorldEditListener(plotMeCorePlugin.getAPI()));
+            WorldEdit.getInstance().getEventBus().register(new PlotWorldEditListener(plotMeCorePlugin.getAPI()));
         }
 
         setUsingLwc(pluginManager.getPlugin("LWC") != null);
