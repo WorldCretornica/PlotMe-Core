@@ -59,7 +59,7 @@ public class EventBus implements EventManager {
     private static boolean isValidHandler(Method method) {
         Class<?>[] paramTypes = method.getParameterTypes();
         if (!Modifier.isStatic(method.getModifiers()) && !Modifier.isAbstract(method.getModifiers())) {
-            if (!Modifier.isInterface(method.getDeclaringClass().getModifiers()) && method.getReturnType() == void.class) {
+            if (!Modifier.isInterface(method.getDeclaringClass().getModifiers()) && method.getReturnType().equals(void.class)) {
                 if (paramTypes.length == 1 && Event.class.isAssignableFrom(paramTypes[0])) {
                     return true;
                 }

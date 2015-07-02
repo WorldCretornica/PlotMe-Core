@@ -131,7 +131,13 @@ public abstract class Database {
     }
 
     private boolean deletePlotFromCache(Plot plot) {
-        return plots.remove(plot);
+        if (plots.remove(plot)) {
+            plugin.getLogger().info(plots.toArray().toString());
+            return true;
+        } else {
+            plugin.getLogger().info(plots.toArray().toString());
+            return false;
+        }
     }
 
     private void deletePlotFromStorage(Plot plot) {
@@ -145,6 +151,7 @@ public abstract class Database {
     public void deleteAllFrom(long internalID, String table) {
         try (Statement statement = getConnection().createStatement()) {
             statement.execute("DELETE FROM " + table + " WHERE plot_id = " + internalID);
+            getConnection().commit();
         } catch (SQLException e) {
             plugin.getLogger().severe("Error deleting plot " + internalID + "'s data from table: " + table);
             plugin.getLogger().severe("Details: " + e.getMessage());
