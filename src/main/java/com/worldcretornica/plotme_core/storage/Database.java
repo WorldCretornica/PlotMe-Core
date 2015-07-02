@@ -7,7 +7,6 @@ import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotId;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.api.IWorld;
-import com.worldcretornica.plotme_core.api.Vector;
 import com.worldcretornica.plotme_core.api.event.PlotLoadEvent;
 import com.worldcretornica.plotme_core.api.event.PlotWorldLoadEvent;
 
@@ -26,11 +25,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class Database {
 
-    public final ConcurrentHashMap<IWorld, ArrayList<Plot>> worldToPlotMap = new ConcurrentHashMap<>();
+    public final ConcurrentHashMap<IWorld, Vector<Plot>> worldToPlotMap = new ConcurrentHashMap<>();
     final PlotMe_Core plugin;
     public long nextPlotId = 1;
     Connection connection;
@@ -45,8 +45,8 @@ public abstract class Database {
      * @return all plots
      */
     public List<Plot> getPlots() {
-        ArrayList<Plot> arrayList = new ArrayList<>();
-        for (ArrayList<Plot> plotArrayList : worldToPlotMap.values()) {
+        Vector<Plot> arrayList = new Vector<>();
+        for (Vector<Plot> plotArrayList : worldToPlotMap.values()) {
             arrayList.addAll(plotArrayList);
         }
         return Collections.unmodifiableList(arrayList);
@@ -102,14 +102,14 @@ public abstract class Database {
      */
     public int getTotalPlotCount() {
         int size = 0;
-        for (ArrayList<Plot> plotArrayList : worldToPlotMap.values()) {
+        for (Vector<Plot> plotArrayList : worldToPlotMap.values()) {
             size += plotArrayList.size();
         }
         return size;
     }
 
     public int getPlotCount(IWorld worldIC, UUID uuid) {
-        ArrayList<Plot> plots = worldToPlotMap.get(worldIC);
+        Vector<Plot> plots = worldToPlotMap.get(worldIC);
         int count = 0;
         for (Plot plot : plots) {
             if (plot.getOwnerId().equals(uuid)) {
@@ -135,7 +135,7 @@ public abstract class Database {
     }
 
     private boolean deletePlotFromCache(Plot plot) {
-        ArrayList<Plot> plots = worldToPlotMap.get(plot.getWorld());
+        Vector<Plot> plots = worldToPlotMap.get(plot.getWorld());
         for (int index = 0; index < plots.size(); index++) {
             if (plot.equals(plots.get(index))) {
                 plots.remove(index);
@@ -171,7 +171,7 @@ public abstract class Database {
 
     public List<Plot> getPlayerPlots(final UUID uuid) {
         ArrayList<Plot> filter = new ArrayList<>();
-        for (ArrayList<Plot> plotList : worldToPlotMap.values()) {
+        for (Vector<Plot> plotList : worldToPlotMap.values()) {
             filter.addAll(Collections2.filter(plotList, new Predicate<Plot>() {
                 @Override public boolean apply(Plot plot) {
                     return plot.getOwnerId().equals(uuid);
@@ -202,7 +202,7 @@ public abstract class Database {
             @Override
             public void run() {
                 plugin.getLogger().info("Loading plots for world " + world.getName());
-                ArrayList<Plot> plots2 = getPlots(world);
+                Vector<Plot> plots2 = getPlots(world);
                 worldToPlotMap.put(world, plots2);
                 PlotWorldLoadEvent eventWorld = new PlotWorldLoadEvent(world, plots2.size());
                 plugin.getEventBus().post(eventWorld);
@@ -214,8 +214,8 @@ public abstract class Database {
 
             }
 
-            private ArrayList<Plot> getPlots(IWorld world) {
-                ArrayList<Plot> ret = new ArrayList<>();
+            private Vector<Plot> getPlots(IWorld world) {
+                Vector<Plot> ret = new Vector<>();
                 Connection connection = getConnection();
                 try (PreparedStatement statementPlot = connection.prepareStatement("SELECT * FROM plotmecore_plots WHERE LOWER(world) = ?");
                         PreparedStatement statementAllowed = connection.prepareStatement("SELECT * FROM plotmecore_allowed WHERE plot_id = ?");
@@ -240,8 +240,10 @@ public abstract class Database {
                             boolean protect = setPlots.getBoolean("protected");
                             String plotName = setPlots.getString("plotName");
                             int plotLikes = setPlots.getInt("plotLikes");
-                            Vector topLoc = new Vector(setPlots.getInt("topX"), 255, setPlots.getInt("topZ"));
-                            Vector bottomLoc = new Vector(setPlots.getInt("bottomX"), 0, setPlots.getInt("bottomZ"));
+                            com.worldcretornica.plotme_core.api.Vector
+                                    topLoc = new com.worldcretornica.plotme_core.api.Vector(setPlots.getInt("topX"), 255, setPlots.getInt("topZ"));
+                            com.worldcretornica.plotme_core.api.Vector bottomLoc =
+                                    new com.worldcretornica.plotme_core.api.Vector(setPlots.getInt("bottomX"), 0, setPlots.getInt("bottomZ"));
                             HashMap<String, Map<String, String>> metadata = new HashMap<>();
                             HashMap<String, Plot.AccessLevel> allowed = new HashMap<>();
                             HashSet<String> denied = new HashSet<>();

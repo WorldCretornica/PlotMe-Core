@@ -13,7 +13,6 @@ import com.worldcretornica.plotme_core.api.Vector;
 import com.worldcretornica.plotme_core.api.event.PlotLoadEvent;
 
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -674,7 +673,7 @@ public class PlotMeCoreManager {
         plugin.getServerBridge().runTaskAsynchronously(new Runnable() {
             @Override
             public void run() {
-                for (ArrayList<Plot> plotList : plugin.getSqlManager().worldToPlotMap.values()) {
+                for (java.util.Vector<Plot> plotList : plugin.getSqlManager().worldToPlotMap.values()) {
                     for (final Plot plot : plotList) {
                         if (plot.getOwnerId().equals(uuid)) {
                             plot.setOwner(name);
