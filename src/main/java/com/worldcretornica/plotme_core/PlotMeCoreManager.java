@@ -376,7 +376,6 @@ public class PlotMeCoreManager {
      *  @param plot Plot to be added
      */
     public void loadPlot(Plot plot) {
-        plugin.getSqlManager().plots.add(plot);
         PlotLoadEvent event = new PlotLoadEvent(plot);
         plugin.getEventBus().post(event);
 
