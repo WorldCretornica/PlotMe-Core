@@ -132,10 +132,10 @@ public abstract class Database {
 
     private boolean deletePlotFromCache(Plot plot) {
         if (plots.remove(plot)) {
-            plugin.getLogger().info(plots.toArray().toString());
+            plugin.getLogger().info(plots.toString());
             return true;
         } else {
-            plugin.getLogger().info(plots.toArray().toString());
+            plugin.getLogger().info(plots.toString());
             return false;
         }
     }

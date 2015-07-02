@@ -429,6 +429,32 @@ public class Plot {
         return isMember(uniqueId.toString());
     }
 
+    @Override public String toString() {
+        return "Plot{" +
+                "allowed=" + allowed +
+                ", denied=" + denied +
+                ", metadata=" + metadata +
+                ", plotTopLoc=" + plotTopLoc +
+                ", plotBottomLoc=" + plotBottomLoc +
+                ", createdDate='" + createdDate + '\'' +
+                ", owner='" + owner + '\'' +
+                ", ownerId=" + ownerId +
+                ", world=" + world +
+                ", biome='" + biome + '\'' +
+                ", expiredDate=" + expiredDate +
+                ", finished=" + finished +
+                ", id=" + id +
+                ", price=" + price +
+                ", forSale=" + forSale +
+                ", finishedDate='" + finishedDate + '\'' +
+                ", protect=" + protect +
+                ", likes=" + likes +
+                ", internalID=" + internalID +
+                ", plotName='" + plotName + '\'' +
+                ", likers=" + likers +
+                '}';
+    }
+
 
     public enum AccessLevel {
         ALLOWED(0),
