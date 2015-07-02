@@ -11,12 +11,11 @@ public class PlotMeSpool implements Runnable {
     private final ICommandSender sender;
     private long[] currentClear;
 
-    private PlotToClear plotToClear;
     private int taskId;
 
 
     public PlotMeSpool(PlotMe_Core plotMe_core, Plot plot, ClearReason reason, ICommandSender sender) {
-        plugin = plotMe_core;
+        this.plugin = plotMe_core;
         this.plot = plot;
         this.reason = reason;
         this.sender = sender;
@@ -27,31 +26,27 @@ public class PlotMeSpool implements Runnable {
         if (sender != null) {
             sender.sendMessage("Clearing Plot " + plot.getId().getID());
         }
-        if (getPlotToClear() != null) {
-            IPlotMe_GeneratorManager genmanager = PlotMeCoreManager.getInstance().getGenManager(plot.getWorld());
+        IPlotMe_GeneratorManager genmanager = PlotMeCoreManager.getInstance().getGenManager(plot.getWorld());
 
-            if (currentClear == null) {
-                currentClear = genmanager.clear(plot.getPlotBottomLoc(), plot.getPlotTopLoc(), plugin.getConfig().getInt("NbBlocksPerClearStep"),
-                        null);
+        if (currentClear == null) {
+            currentClear = genmanager.clear(plot.getPlotBottomLoc(), plot.getPlotTopLoc(), plugin.getConfig().getInt("NbBlocksPerClearStep"),
+                    null);
+        } else {
+            currentClear = genmanager
+                    .clear(plot.getPlotBottomLoc(), plot.getPlotTopLoc(), plugin.getConfig().getInt("NbBlocksPerClearStep"), currentClear);
+        }
+        if (currentClear == null) {
+            if (reason.equals(ClearReason.Clear)) {
+                genmanager.adjustPlotFor(plot, true, false, false);
             } else {
-                currentClear = genmanager
-                        .clear(plot.getPlotBottomLoc(), plot.getPlotTopLoc(), plugin.getConfig().getInt("NbBlocksPerClearStep"), currentClear);
+                genmanager.adjustPlotFor(plot, false, false, false);
             }
-            if (currentClear == null) {
-                if (reason.equals(ClearReason.Clear)) {
-                    genmanager.adjustPlotFor(plot, true, false, false);
-                } else {
-                    genmanager.adjustPlotFor(plot, false, false, false);
-                }
-                genmanager.refreshPlotChunks(plot.getId());
+            genmanager.refreshPlotChunks(plot.getId());
 
-                assert plotToClear != null;
-                if (sender != null) {
-                    sender.sendMessage(plugin.C("WordPlot") + " " + plot.getId().getID() + " " + plugin.C("WordCleared"));
-                }
-                plugin.removePlotToClear(taskId);
-                plotToClear = null;
+            if (sender != null) {
+                sender.sendMessage(plugin.C("WordPlot") + " " + plot.getId().getID() + " " + plugin.C("WordCleared"));
             }
+            plugin.removePlotToClear(taskId);
         }
     }
 
@@ -59,7 +54,4 @@ public class PlotMeSpool implements Runnable {
         this.taskId = taskId;
     }
 
-    private PlotToClear getPlotToClear() {
-        return plotToClear;
-    }
 }
