@@ -98,16 +98,8 @@ public class CmdRemove extends PlotCommand {
                                 plugin.getSqlManager().savePlot(plot);
 
                                 if (isAdvancedLogging()) {
-                                    if (price == 0) {
-                                        serverBridge.getLogger()
-                                                .info(args[1] + " " + C("MsgRemovedPlayer") + " " + args[1] + " " + C("MsgFromPlot") + " " + plot
-                                                        .getId());
-                                    } else {
-                                        serverBridge.getLogger()
-                                                .info(args[1] + " " + C("MsgRemovedPlayer") + " " + args[1] + " " + C("MsgFromPlot") + " " + plot
-                                                        .getId()
-                                                        + (" " + C("WordFor") + " " + price));
-                                    }
+                                    serverBridge.getLogger()
+                                            .info(C("MsgRemovedPlayer",player.getName(),args[1],plot.getId().getID()));
                                 }
                             }
                         } else {
@@ -133,6 +125,6 @@ public class CmdRemove extends PlotCommand {
 
     @Override
     public String getUsage() {
-        return C("WordUsage") + ": /plotme remove <" + C("WordPlayer") + ">";
+        return C("CmdRemoveUsage");
     }
 }

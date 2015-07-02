@@ -29,7 +29,6 @@ public class PlotRunnableDeleteExpire implements Runnable {
             if (expiredPlots.isEmpty()) {
                 plugin.setCounterExpired(0);
             } else {
-                String ids = "";
 
                 for (Plot expiredPlot : expiredPlots) {
                     PlotResetEvent event = new PlotResetEvent(expiredPlot, sender);
@@ -37,19 +36,12 @@ public class PlotRunnableDeleteExpire implements Runnable {
                     if (!event.isCancelled()) {
                         plotMeCoreManager.clear(expiredPlot, sender, ClearReason.Expired);
 
-                        PlotId id = expiredPlot.getId();
-                        ids += id + ", ";
-
                         plotMeCoreManager.deletePlot(expiredPlot);
                         plugin.setCounterExpired(plugin.getCounterExpired() - 1);
                     }
                 }
 
-                if (", ".equals(ids.substring(ids.length() - 2))) {
-                    ids = ids.substring(0, ids.length() - 2);
-                }
-
-                plugin.getLogger().info(plugin.C("MsgDeletedExpiredPlots") + " " + ids);
+                plugin.getLogger().info(plugin.C("DeletedExpiredPlots", expiredPlots.size()));
             }
 
             if (plugin.getCounterExpired() == 0) {

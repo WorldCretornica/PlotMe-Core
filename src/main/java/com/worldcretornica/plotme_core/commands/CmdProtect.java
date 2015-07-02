@@ -108,6 +108,6 @@ public class CmdProtect extends PlotCommand {
 
     @Override
     public String getUsage() {
-        return C("WordUsage") + ": /plotme protect";
+        return C("CmdProtectUsage");
     }
 }

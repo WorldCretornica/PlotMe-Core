@@ -44,7 +44,7 @@ public class CmdReset extends PlotCommand {
                             player.sendMessage("Plot was not reset? Something stopped this command.");
                         }
                         if (isAdvancedLogging()) {
-                            serverBridge.getLogger().info(player.getName() + " " + C("MsgResetPlot") + " " + plot.getId().toString());
+                            serverBridge.getLogger().info(C("MsgResetPlot", player.getName(), plot.getId().getID()));
                         }
                     }
                 } else {

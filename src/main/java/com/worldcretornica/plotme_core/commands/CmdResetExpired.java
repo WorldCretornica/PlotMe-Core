@@ -35,6 +35,6 @@ public class CmdResetExpired extends PlotCommand {
 
     @Override
     public String getUsage() {
-        return C("WordUsage") + ": /plotme resetexpired";
+        return C("CmdResetExpiredUsage");
     }
 }

@@ -67,6 +67,6 @@ public class CmdDone extends PlotCommand {
 
     @Override
     public String getUsage() {
-        return C("WordUsage") + ": /plotme done";
+        return C("CmdDoneUsage");
     }
 }

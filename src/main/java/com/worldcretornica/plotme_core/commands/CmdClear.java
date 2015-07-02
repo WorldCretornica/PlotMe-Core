@@ -100,6 +100,6 @@ public class CmdClear extends PlotCommand {
 
     @Override
     public String getUsage() {
-        return C("WordUsage") + ": /plotme clear";
+        return C("CmdClearUsage");
     }
 }

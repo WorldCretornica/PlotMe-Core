@@ -53,6 +53,6 @@ public class CmdDoneList extends PlotCommand {
 
     @Override
     public String getUsage() {
-        return C("WordUsage") + ": /plotme donelist";
+        return C("CmdDoneListUsage");
     }
 }

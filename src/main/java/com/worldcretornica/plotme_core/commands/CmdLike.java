@@ -55,7 +55,7 @@ public class CmdLike extends PlotCommand {
 
     @Override
     public String getUsage() {
-        return C("WordUsage") + ": /plotme like";
+        return C("CmdLikeUsage");
     }
 
 }

@@ -1,8 +1,5 @@
 package com.worldcretornica.plotme_core.commands;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
@@ -10,6 +7,9 @@ import com.worldcretornica.plotme_core.api.CommandExBase;
 import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CmdShowHelp extends PlotCommand {
 
@@ -27,12 +27,9 @@ public class CmdShowHelp extends PlotCommand {
             try {
                 page = Integer.parseInt(args[1]);
                 if (page < 1) {
-                    player.sendMessage(C("InvalidPage", page));
-                    return true;
+                    page = 1;
                 }
-            } catch (NumberFormatException ex) {
-                player.sendMessage(C("NotANumber", args[1]));
-                return true;
+            } catch (NumberFormatException ignored) {
             }
         }
 
@@ -130,10 +127,9 @@ public class CmdShowHelp extends PlotCommand {
                     int ownedPlots = manager.getOwnedPlotCount(((IPlayer) player).getUniqueId(), world);
 
                     if (plotLimit == -1) {
-                        player.sendMessage(
-                                C("HelpYourPlotLimitWorld") + " : " + ownedPlots + " " + C("HelpUsedOf") + " " + C("WordInfinite"));
+                        player.sendMessage(C("HelpInfinitePlotLimit"));
                     } else {
-                        player.sendMessage(C("HelpYourPlotLimitWorld") + " : " + ownedPlots + " " + C("HelpUsedOf") + " " + plotLimit);
+                        player.sendMessage(C("HelpPlayerPlotLimit", ownedPlots, plotLimit));
                     }
                 } else if (plugin.getConfig().getBoolean("allowWorldTeleport")) {
 
@@ -142,153 +138,139 @@ public class CmdShowHelp extends PlotCommand {
                     int ownedPlots = manager.getOwnedPlotCount(((IPlayer) player).getUniqueId(), world);
 
                     if (plotLimit == -1) {
-                        player.sendMessage(
-                                C("HelpYourPlotLimitWorld") + " : " + ownedPlots + " " + C("HelpUsedOf") + " " + C("WordInfinite"));
+                        player.sendMessage(C("HelpInfinitePlotLimit"));
                     } else {
-                        player.sendMessage(
-                                C("HelpYourPlotLimitWorld") + " : " + ownedPlots + " " + C("HelpUsedOf") + " " + plotLimit);
+                        player.sendMessage(C("HelpPlayerPlotLimit", ownedPlots, plotLimit));
                     }
                 } else {
-                    player.sendMessage(C("HelpYourPlotLimitWorld") + " : " + C("MsgNotPlotWorld"));
+                    player.sendMessage(C("NotPlotWorld"));
                 }
             } else if ("claim".equalsIgnoreCase(allowedCommand)) {
-                player.sendMessage(" /plotme claim");
+                player.sendMessage("CmdClaimUsage");
                 if (economyEnabled && pmi.getClaimPrice() != 0) {
                     player.sendMessage(C("HelpClaim") + " " + C("WordPrice") + " : " + Math.round(pmi.getClaimPrice()));
                 } else {
                     player.sendMessage(C("HelpClaim"));
                 }
             } else if ("claim.other".equalsIgnoreCase(allowedCommand)) {
-                player.sendMessage(" /plotme claim <" + C("WordPlayer") + ">");
+                player.sendMessage("CmdClaimOtherUsage");
                 if (economyEnabled && pmi.getClaimPrice() != 0) {
-                    player.sendMessage(" " + C("HelpClaimOther") + " " + C("WordPrice") + " : " + Math.round(pmi.getClaimPrice()));
+                    player.sendMessage(C("HelpClaimOther") + " " + C("WordPrice") + " : " + Math.round(pmi.getClaimPrice()));
                 } else {
-                    player.sendMessage(" " + C("HelpClaimOther"));
+                    player.sendMessage(C("HelpClaimOther"));
                 }
             } else if ("auto".equalsIgnoreCase(allowedCommand)) {
                 if (plugin.getConfig().getBoolean("allowWorldTeleport")) {
-                    player.sendMessage("/plotme auto [" + C("WordWorld") + "]");
+                    player.sendMessage("CmdAutoUsageWTP");
                 } else {
-                    player.sendMessage("/plotme auto");
+                    player.sendMessage("CmdAutoUsage");
                 }
-
                 if (economyEnabled && pmi.getClaimPrice() != 0) {
                     player.sendMessage(C("HelpAuto") + " " + C("WordPrice") + " : " + Math.round(pmi.getClaimPrice()));
                 } else {
                     player.sendMessage(C("HelpAuto"));
                 }
             } else if ("home".equalsIgnoreCase(allowedCommand)) {
-                if (plugin.getConfig().getBoolean("allowWorldTeleport")) {
-                    player.sendMessage(" /plotme home <number/name> <" + C("WordPlayer") + "> [" + C("WordWorld") + "]");
-                } else {
-                    player.sendMessage(" /plotme home[:#] <" + C("WordPlayer") + ">");
-                }
-
+                player.sendMessage("CmdHomeUsage");
                 if (economyEnabled && pmi.getPlotHomePrice() != 0) {
-                    player.sendMessage(" " + C("HelpHomeOther") + " " + C("WordPrice") + " : " + Math.round(pmi.getPlotHomePrice()));
+                    player.sendMessage(C("HelpHome") + " " + C("WordPrice") + " : " + Math.round(pmi.getPlotHomePrice()));
                 } else {
-                    player.sendMessage(" " + C("HelpHomeOther"));
+                    player.sendMessage(C("HelpHome"));
                 }
             } else if ("info".equalsIgnoreCase(allowedCommand)) {
-                player.sendMessage("/plotme info");
+                player.sendMessage("CmdInfoUsage");
                 player.sendMessage(C("HelpInfo"));
             } else if ("list".equalsIgnoreCase(allowedCommand)) {
-                player.sendMessage("/plotme list <" + C("WordPlayer") + ">");
+                player.sendMessage("CmdListUsage");
                 player.sendMessage(C("HelpList"));
             } else if ("biome".equalsIgnoreCase(allowedCommand)) {
-                player.sendMessage("/plotme biome <" + C("WordBiome") + ">");
+                player.sendMessage("CmdBiomeUsage");
                 if (economyEnabled && pmi.getBiomeChangePrice() != 0) {
                     player.sendMessage(C("HelpBiome") + " " + C("WordPrice") + " : " + Math.round(pmi.getBiomeChangePrice()));
                 } else {
                     player.sendMessage(C("HelpBiome"));
                 }
-                player.sendMessage("/plotme biomes");
+                player.sendMessage("CmdBiomesUsage");
                 player.sendMessage(C("HelpBiomeList"));
             } else if ("done".equalsIgnoreCase(allowedCommand)) {
-                player.sendMessage("/plotme done");
+                player.sendMessage("CmdDoneUsage");
                 player.sendMessage(C("HelpDone"));
-                player.sendMessage("/plotme donelist [page]");
+                player.sendMessage("CmdDoneListUsage");
                 player.sendMessage(C("HelpDoneList"));
             } else if ("tp".equalsIgnoreCase(allowedCommand)) {
                 if (plugin.getConfig().getBoolean("allowWorldTeleport")) {
-                    player.sendMessage("/plotme tp <ID> [" + C("WordWorld") + "]");
+                    player.sendMessage("CmdTeleportUsageWTP");
                 } else {
-                    player.sendMessage("/plotme tp <ID>");
+                    player.sendMessage("CmdTeleportUsage");
                 }
                 player.sendMessage(C("HelpTp"));
             } else if ("clear".equalsIgnoreCase(allowedCommand)) {
-                player.sendMessage("/plotme clear");
+                player.sendMessage("CmdClearUsage");
                 if (economyEnabled && pmi.getClearPrice() != 0) {
-                    player.sendMessage(C("HelpId") + " " + C("WordPrice") + " : " + Math.round(pmi.getClearPrice()));
+                    player.sendMessage(C("HelpClear") + " " + C("WordPrice") + " : " + Math.round(pmi.getClearPrice()));
                 } else {
                     player.sendMessage(C("HelpClear"));
                 }
             } else if ("reset".equalsIgnoreCase(allowedCommand)) {
-                player.sendMessage("/plotme reset");
+                player.sendMessage("CmdResetUsage");
                 player.sendMessage(C("HelpReset"));
             } else if ("add".equalsIgnoreCase(allowedCommand)) {
-                player.sendMessage("/plotme add <" + C("WordPlayer") + ">");
+                player.sendMessage("CmdAddUsage");
                 if (economyEnabled && pmi.getAddPlayerPrice() != 0) {
                     player.sendMessage(C("HelpAdd") + " " + C("WordPrice") + " : " + Math.round(pmi.getAddPlayerPrice()));
                 } else {
                     player.sendMessage(C("HelpAdd"));
                 }
-                player.sendMessage("/plotme remove <" + C("WordPlayer") + ">");
+                player.sendMessage("CmdRemoveUsage");
                 if (economyEnabled && pmi.getRemovePlayerPrice() != 0) {
                     player.sendMessage(C("HelpRemove") + " " + C("WordPrice") + " : " + Math.round(pmi.getRemovePlayerPrice()));
                 } else {
-                    player.sendMessage(" " + C("HelpRemove"));
+                    player.sendMessage(C("HelpRemove"));
                 }
             } else if ("deny".equalsIgnoreCase(allowedCommand)) {
-                player.sendMessage("/plotme deny <" + C("WordPlayer") + ">");
+                player.sendMessage("CmdDenyUsage");
                 if (economyEnabled && pmi.getDenyPlayerPrice() != 0) {
                     player.sendMessage(C("HelpDeny") + " " + C("WordPrice") + " : " + Math.round(pmi.getDenyPlayerPrice()));
                 } else {
                     player.sendMessage(C("HelpDeny"));
                 }
-                player.sendMessage("/plotme undeny <" + C("WordPlayer") + ">");
+                player.sendMessage("CmdUndenyUsage");
                 if (economyEnabled && pmi.getUndenyPlayerPrice() != 0) {
                     player.sendMessage(C("HelpUndeny") + " " + C("WordPrice") + " : " + Math.round(pmi.getUndenyPlayerPrice()));
                 } else {
                     player.sendMessage(C("HelpUndeny"));
                 }
             } else if ("setowner".equalsIgnoreCase(allowedCommand)) {
-                player.sendMessage("/plotme setowner <" + C("WordPlayer") + ">");
+                player.sendMessage("CmdSetOwnerUsage");
                 player.sendMessage(C("HelpSetowner"));
             } else if ("move".equalsIgnoreCase(allowedCommand)) {
-                player.sendMessage("/plotme move <" + C("WordIdFrom") + "> <" + C("WordIdTo") + ">");
+                player.sendMessage("CmdMoveUsage");
                 player.sendMessage(C("HelpMove"));
             } else if ("weanywhere".equalsIgnoreCase(allowedCommand)) {
-                player.sendMessage("/plotme weanywhere");
+                player.sendMessage("CmdWEAnywhereUsage");
                 player.sendMessage(C("HelpWEAnywhere"));
             } else if ("expired".equalsIgnoreCase(allowedCommand)) {
-                player.sendMessage("/plotme expired");
+                player.sendMessage("CmdExpiredUsage");
                 player.sendMessage(C("HelpExpired"));
             } else if ("addtime".equalsIgnoreCase(allowedCommand)) {
-                player.sendMessage("/plotme addtime");
-                int days;
-                if (pmi == null) {
-                    days = 0;
-                } else {
-                    days = pmi.getDaysToExpiration();
-                }
+                player.sendMessage("CmdAddTimeUsage");
+                int days = pmi.getDaysToExpiration();
                 if (days != 0) {
-                    player.sendMessage(C("HelpAddTime1") + " " + days + " " + C("HelpAddTime2"));
+                    player.sendMessage(C("HelpAddTime"));
                 }
             } else if ("dispose".equalsIgnoreCase(allowedCommand)) {
-                player.sendMessage("/plotme dispose");
+                player.sendMessage("CmdDisposeUsage");
                 if (economyEnabled && pmi.getDisposePrice() != 0) {
                     player.sendMessage(C("HelpDispose") + " " + C("WordPrice") + " : " + Math.round(pmi.getDisposePrice()));
                 } else {
                     player.sendMessage(C("HelpDispose"));
                 }
             } else if ("buy".equalsIgnoreCase(allowedCommand)) {
-                player.sendMessage("/plotme buy");
+                player.sendMessage("CmdBuyUsage");
                 player.sendMessage(C("HelpBuy"));
             } else if ("sell".equalsIgnoreCase(allowedCommand)) {
-                player.sendMessage("/plotme sell [" + C("WordAmount") + "]");
-                assert pmi != null;
-                player.sendMessage(C("HelpSell") + " " + C("WordDefault") + " : " + Math.round(pmi.getSellToPlayerPrice()));
+                player.sendMessage("CmdSellUsage");
+                player.sendMessage(C("HelpSell"));
             }
         }
         return true;

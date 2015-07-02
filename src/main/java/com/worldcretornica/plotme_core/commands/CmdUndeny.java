@@ -159,7 +159,7 @@ public class CmdUndeny extends PlotCommand {
 
     @Override
     public String getUsage() {
-        return C("WordUsage") + ": /plotme undeny <" + C("WordPlayer") + ">";
+        return C("CmdUndenyUsage");
     }
 
 }

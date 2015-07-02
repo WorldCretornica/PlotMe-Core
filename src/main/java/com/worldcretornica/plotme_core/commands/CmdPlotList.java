@@ -60,6 +60,6 @@ public class CmdPlotList extends PlotCommand {
 
     @Override
     public String getUsage() {
-        return C("WordUsage") + ": /plotme list <" + C("WordPlayer") + ">";
+        return C("CmdListUsage");
     }
 }

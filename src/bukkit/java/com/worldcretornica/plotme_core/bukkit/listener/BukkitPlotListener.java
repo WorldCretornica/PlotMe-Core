@@ -787,9 +787,7 @@ public class BukkitPlotListener implements Listener {
                         player.sendMessage(api.C("PlotLocked"));
                         event.setCancelled(true);
                     }
-                } else if (player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE)) {
-                    return;
-                } else {
+                } else if (!player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE)) {
                     player.sendMessage(api.C("CannotBuild"));
                     event.setCancelled(true);
                 }

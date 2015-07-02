@@ -78,7 +78,7 @@ public class CmdTrust extends PlotCommand {
                             if (!event.isCancelled()) {
                                 plot.addMember(allowed, Plot.AccessLevel.TRUSTED);
                                 plot.removeDenied(allowed);
-                                player.sendMessage(C("WordPlayer") + " " + args[1] + " " + C("MsgNowAllowed"));
+                                player.sendMessage(C("MsgNowAllowed", args[1]));
 
                                 if (isAdvancedLogging()) {
                                     if (price == 0) {

@@ -139,6 +139,6 @@ public class CmdInfo extends PlotCommand {
 
     @Override
     public String getUsage() {
-        return C("WordUsage") + ": /plotme info";
+        return C("CmdInfoUsage");
     }
 }

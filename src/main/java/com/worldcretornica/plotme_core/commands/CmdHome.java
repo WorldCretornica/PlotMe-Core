@@ -35,10 +35,11 @@ public class CmdHome extends PlotCommand {
     public boolean execute(ICommandSender sender, String[] args) {
         IPlayer player = (IPlayer) sender;
         if (player.hasPermission(PermissionNames.USER_HOME)) {
-            if (manager.isPlotWorld(player) || plugin.getConfig().getBoolean("allowWorldTeleport")) {
+            boolean plotWorld = manager.isPlotWorld(player);
+            if (plotWorld || plugin.getConfig().getBoolean("allowWorldTeleport")) {
                 UUID uuid = player.getUniqueId();
                 IWorld world;
-                if (manager.isPlotWorld(player)) {
+                if (plotWorld) {
                     world = player.getWorld();
                 } else {
                     world = manager.getFirstWorld();

@@ -32,18 +32,17 @@ public class CmdTP extends PlotCommand {
     public boolean execute(ICommandSender sender, String[] args) {
         IPlayer player = (IPlayer) sender;
         if (player.hasPermission(PermissionNames.ADMIN_TP)) {
-            if (manager.isPlotWorld(player) || plugin.getConfig().getBoolean("allowWorldTeleport")) {
+            boolean plotWorld = manager.isPlotWorld(player);
+            if (plotWorld || plugin.getConfig().getBoolean("allowWorldTeleport")) {
                 if (args.length == 2 || args.length == 3) {
                     IWorld world;
                     if (args.length == 3) {
-
                         world = manager.getWorld(args[2]);
-
                         if (world == null) {
                             player.sendMessage(C("MsgNoPlotworldFound"));
                             return true;
                         }
-                    } else if (manager.isPlotWorld(player)) {
+                    } else if (plotWorld) {
                         world = player.getWorld();
                     } else {
                         world = manager.getFirstWorld();
@@ -51,9 +50,7 @@ public class CmdTP extends PlotCommand {
 
                     if (PlotId.isValidID(args[1])) {
                         PlotId id2 = new PlotId(args[1]);
-                        if (!manager.isPlotWorld(world)) {
-                            player.sendMessage(C("MsgNoPlotworldFound"));
-                        } else {
+                        if (manager.isPlotWorld(world)) {
                             Location location = manager.getPlotHome(id2, player.getWorld());
                             Plot plot = manager.getPlotById(id2, world);
                             PlotTeleportEvent event = new PlotTeleportEvent(plot, player, location, id2);
@@ -62,6 +59,8 @@ public class CmdTP extends PlotCommand {
                             if (!event.isCancelled()) {
                                 player.teleport(location);
                             }
+                        } else {
+                            player.sendMessage(C("MsgNoPlotworldFound"));
                         }
                     }
                 } else {

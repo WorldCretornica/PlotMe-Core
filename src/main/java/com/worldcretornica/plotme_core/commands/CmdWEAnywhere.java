@@ -54,7 +54,7 @@ public class CmdWEAnywhere extends PlotCommand {
 
     @Override
     public String getUsage() {
-        return C("WordUsage") + ": /plotme weanywhere";
+        return C("CmdWEAnywhereUsage");
     }
 
 }

@@ -37,7 +37,7 @@ public class CmdAddTime extends PlotCommand {
 
                     plot.resetExpire(pmi.getDaysToExpiration());
                     plugin.getSqlManager().savePlot(plot);
-                    player.sendMessage(C("MsgPlotExpirationReset"));
+                    player.sendMessage(C("PlotExpirationReset"));
 
                     if (isAdvancedLogging()) {
                         serverBridge.getLogger().info(name + " reset expiration on plot " + plot.getId().getID());

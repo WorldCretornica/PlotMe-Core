@@ -82,7 +82,7 @@ public class CmdAdd extends PlotCommand {
                                 plot.addMember(allowed, Plot.AccessLevel.ALLOWED);
                                 plot.removeDenied(allowed);
                                 plugin.getSqlManager().savePlot(plot);
-                                player.sendMessage(C("WordPlayer") + " " + args[1] + " " + C("MsgNowAllowed"));
+                                player.sendMessage(C("MsgNowAllowed", args[1]));
 
                                 if (isAdvancedLogging()) {
                                     if (price == 0) {

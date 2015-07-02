@@ -60,9 +60,6 @@ public class CmdMove extends PlotCommand {
                     if (!event.isCancelled()) {
                         if (manager.movePlot(world, id1, id2)) {
                             player.sendMessage(C("MsgPlotMovedSuccess"));
-
-                            serverBridge.getLogger()
-                                    .info(player.getName() + " " + C("MsgExchangedPlot") + " " + plot1 + " " + C("MsgAndPlot") + " " + plot2);
                         } else {
                             player.sendMessage(C("MovePlotError"));
                         }
@@ -77,6 +74,6 @@ public class CmdMove extends PlotCommand {
 
     @Override
     public String getUsage() {
-        return C("WordUsage") + ": /plotme move <" + C("WordIdFrom") + "> <" + C("WordIdTo") + "> ";
+        return C("CmdMoveUsage");
     }
 }

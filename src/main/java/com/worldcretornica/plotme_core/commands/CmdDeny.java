@@ -137,6 +137,6 @@ public class CmdDeny extends PlotCommand {
 
     @Override
     public String getUsage() {
-        return C("WordUsage") + ": /plotme deny <" + C("WordPlayer") + ">";
+        return C("CmdDenyUsage");
     }
 }

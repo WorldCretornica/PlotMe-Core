@@ -63,6 +63,6 @@ public class CmdMiddle extends PlotCommand {
 
     @Override
     public String getUsage() {
-        return C("WordUsage") + ": /plotme middle";
+        return C("CmdMiddleUsage");
     }
 }

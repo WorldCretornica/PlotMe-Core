@@ -91,6 +91,6 @@ public class CmdDispose extends PlotCommand {
 
     @Override
     public String getUsage() {
-        return C("WordUsage") + ": /plotme dispose";
+        return C("CmdDisposeUsage");
     }
 }

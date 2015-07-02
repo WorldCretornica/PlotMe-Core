@@ -68,6 +68,6 @@ public class CmdSetOwner extends PlotCommand {
 
     @Override
     public String getUsage() {
-        return C("WordUsage") + ": /plotme setowner <" + C("WordPlayer") + ">";
+        return C("CmdSetOwnerUsage");
     }
 }

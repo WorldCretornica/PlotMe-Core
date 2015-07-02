@@ -50,8 +50,7 @@ public class CmdAuto extends PlotCommand {
                 int plotsOwned = manager.getOwnedPlotCount(player.getUniqueId(), world);
 
                 if (playerLimit != -1 && plotsOwned >= playerLimit && !player.hasPermission("PlotMe.admin")) {
-                    player.sendMessage(C("MsgAlreadyReachedMaxPlots") + " (" + plotsOwned + "/" + playerLimit + "). " + C("WordUse")
-                            + " /plotme home " + C("MsgToGetToIt"));
+                    player.sendMessage(C("MsgAlreadyReachedMaxPlots", plotsOwned,playerLimit));
                     return true;
                 }
                 final PlotMapInfo pmi = manager.getMap(world);
