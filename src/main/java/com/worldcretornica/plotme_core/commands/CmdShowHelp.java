@@ -18,8 +18,6 @@ public class CmdShowHelp extends PlotCommand {
     }
 
     public boolean execute(ICommandSender player, String[] args) {
-        player.sendMessage("Command is broken and will be fixed soon! Thank you for understanding!");
-        player.sendMessage("Go to http://plotme.worldcretornica.com/cmdsandperms.html for a list of commands.");
         return true;
     }
 

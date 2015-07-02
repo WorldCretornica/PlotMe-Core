@@ -121,14 +121,16 @@ public abstract class Database {
         worldToPlotMap.get(plot.getWorld()).add(plot);
     }
 
-    public void deletePlot(Plot plot) {
-        deletePlotFromCache(plot);
+    public boolean deletePlot(Plot plot) {
         deletePlotFromStorage(plot);
+        return deletePlotFromCache(plot);
+
     }
 
-    private void deletePlotFromCache(Plot plot) {
-        worldToPlotMap.get(plot.getWorld()).remove(plot);
-        plots.remove(plot);
+    private boolean deletePlotFromCache(Plot plot) {
+        boolean remove = worldToPlotMap.get(plot.getWorld()).remove(plot);
+        boolean remove1 = plots.remove(plot);
+        return remove && remove1;
     }
 
     private void deletePlotFromStorage(Plot plot) {

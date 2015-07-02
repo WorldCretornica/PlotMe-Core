@@ -49,10 +49,10 @@ public class PlotMeCoreManager {
      * Removes the plot from the plotmap
      * @param plot plot id
      */
-    public void deletePlot(Plot plot) {
+    public boolean deletePlot(Plot plot) {
         removeSellSign(plot);
         removeOwnerSign(plot);
-        plugin.getSqlManager().deletePlot(plot);
+        return plugin.getSqlManager().deletePlot(plot);
     }
 
     /**

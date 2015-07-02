@@ -95,6 +95,7 @@ public class CmdRemove extends PlotCommand {
                                 player.sendMessage(
                                         C("WordPlayer") + " " + args[1] + " " + C("WordRemoved") + ". " + serverBridge.getEconomy().get().format
                                                 (price));
+                                plugin.getSqlManager().savePlot(plot);
 
                                 if (isAdvancedLogging()) {
                                     if (price == 0) {

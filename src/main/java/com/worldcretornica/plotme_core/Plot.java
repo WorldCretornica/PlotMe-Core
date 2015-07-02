@@ -10,6 +10,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 public class Plot {
@@ -19,7 +20,6 @@ public class Plot {
     private final HashMap<String, Map<String, String>> metadata = new HashMap<>();
     private final Vector plotTopLoc;
     private final Vector plotBottomLoc;
-    private final PlotMeCoreManager manager = PlotMeCoreManager.getInstance();
     private final String createdDate;
     private String owner = "Unknown";
     private UUID ownerId = UUID.randomUUID();
@@ -133,7 +133,7 @@ public class Plot {
     }
 
     public void addDenied(String name) {
-        if (isDeniedInternal(name)) {
+        if (!isDeniedInternal(name)) {
             getDenied().add(name);
         }
     }
@@ -390,9 +390,16 @@ public class Plot {
     @Override public boolean equals(Object obj) {
         if (obj instanceof Plot) {
             Plot obj1 = (Plot) obj;
-            if (obj1.getInternalID() == this.internalID && obj1.getId().equals(this.id) && obj1.getOwnerId().equals(this.ownerId) && obj1.getWorld()
-                    .equals(this.world)) {
-                return true;
+            if (obj1.getInternalID() == this.internalID) {
+                if (obj1.getId().equals(this.id)) {
+                    if (obj1.getOwnerId().equals(this.ownerId)) {
+                        if (obj1.getWorld().equals(this.world)) {
+                            if (Objects.equals(obj1.getExpiredDate(), this.expiredDate)) {
+                                return true;
+                            }
+                        }
+                    }
+                }
             }
 
         }

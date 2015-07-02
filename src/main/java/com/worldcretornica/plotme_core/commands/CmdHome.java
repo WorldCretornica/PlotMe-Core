@@ -71,7 +71,7 @@ public class CmdHome extends PlotCommand {
                 if (manager.isPlotWorld(world)) {
                     int i = nb - 1;
 
-                    for (Plot plot : plugin.getSqlManager().getOwnedPlots(world, uuid)) {
+                    for (Plot plot : plugin.getSqlManager().getPlayerPlots(uuid)) {
                         Location location;
                         if (plot.getOwnerId().equals(uuid)) {
                             if (i == 0) {

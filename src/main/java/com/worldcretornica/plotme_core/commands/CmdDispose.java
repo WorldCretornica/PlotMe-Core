@@ -65,10 +65,12 @@ public class CmdDispose extends PlotCommand {
                         }
 
                         if (!event.isCancelled()) {
-                            manager.deletePlot(plot);
-
                             manager.adjustWall(plot, false);
-                            player.sendMessage(C("PlotDisposed"));
+                            if (manager.deletePlot(plot)) {
+                                player.sendMessage(C("PlotDisposed"));
+                            } else {
+                                player.sendMessage("Plot was not disposed? Something stopped this command.");
+                            }
 
                             if (isAdvancedLogging()) {
                                 plugin.getLogger().info(player.getName() + " " + C("MsgDisposedPlot") + " " + plot.getId());

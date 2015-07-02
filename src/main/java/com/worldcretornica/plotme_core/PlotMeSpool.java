@@ -24,6 +24,9 @@ public class PlotMeSpool implements Runnable {
 
     @Override
     public void run() {
+        if (sender != null) {
+            sender.sendMessage("Clearing Plot " + plot.getId().getID());
+        }
         if (getPlotToClear() != null) {
             IPlotMe_GeneratorManager genmanager = PlotMeCoreManager.getInstance().getGenManager(plot.getWorld());
 

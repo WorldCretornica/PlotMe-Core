@@ -38,8 +38,11 @@ public class CmdReset extends PlotCommand {
 
                     if (!event.isCancelled()) {
                         manager.clear(plot, player, ClearReason.Reset);
-                        manager.deletePlot(plot);
-
+                        if (manager.deletePlot(plot)) {
+                            sender.sendMessage("Plot Reset");
+                        } else {
+                            player.sendMessage("Plot was not reset? Something stopped this command.");
+                        }
                         if (isAdvancedLogging()) {
                             serverBridge.getLogger().info(player.getName() + " " + C("MsgResetPlot") + " " + plot.getId().toString());
                         }
@@ -58,6 +61,6 @@ public class CmdReset extends PlotCommand {
 
     @Override
     public String getUsage() {
-        return C("WordUsage") + ": /plotme reset";
+        return C("CmdResetUsage");
     }
 }

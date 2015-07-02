@@ -29,9 +29,6 @@ public class CmdDeny extends PlotCommand {
             sender.sendMessage(getUsage());
             return true;
         }
-        if (args[1].length() > 16) {
-            sender.sendMessage(C("InvalidCommandInput"));
-        }
         if ("*".equals(args[1]) && plugin.getConfig().getBoolean("disableWildCard")) {
             sender.sendMessage(C("WildcardsDisabled"));
             return true;
@@ -39,13 +36,13 @@ public class CmdDeny extends PlotCommand {
         IPlayer player = (IPlayer) sender;
         if (player.hasPermission(PermissionNames.ADMIN_DENY) || player.hasPermission(PermissionNames.USER_DENY)) {
             IWorld world = player.getWorld();
-            if (manager.isPlotWorld(world)) {
+            if (manager.isPlotWorld(player)) {
                 Plot plot = manager.getPlot(player);
                 if (plot == null) {
                     player.sendMessage(C("NoPlotFound"));
                     return true;
                 }
-                PlotMapInfo pmi = manager.getMap(world);
+                PlotMapInfo pmi = manager.getMap(player);
                 String denied;
                 IPlayer deniedPlayer = serverBridge.getPlayer(args[1]);
                 if ("*".equals(args[1])) {
@@ -68,10 +65,9 @@ public class CmdDeny extends PlotCommand {
                     if (plot.isDenied(denied)) {
                         player.sendMessage(C("PlayerAlreadyDenied", args[1]));
                     } else {
+                        double price;
 
-                        double price = 0.0;
-
-                        PlotAddDeniedEvent event = new PlotAddDeniedEvent(world, plot, player, denied);
+                        PlotAddDeniedEvent event = new PlotAddDeniedEvent(plot, player, denied);
 
                         if (manager.isEconomyEnabled(pmi)) {
                             price = pmi.getDenyPlayerPrice();
@@ -101,7 +97,7 @@ public class CmdDeny extends PlotCommand {
                             plot.removeMember(denied);
 
                             if ("*".equals(denied)) {
-                                List<IPlayer> playersInPlot = manager.getPlayersInPlot(plot.getId(), world);
+                                List<IPlayer> playersInPlot = manager.getPlayersInPlot(plot.getId(), plot.getWorld());
 
                                 for (IPlayer iPlayer : playersInPlot) {
                                     if (plot.isMember(iPlayer.getUniqueId()).isPresent()) {
@@ -110,7 +106,7 @@ public class CmdDeny extends PlotCommand {
                                     iPlayer.setLocation(manager.getPlotHome(plot.getId(), player.getWorld()));
                                 }
                                 player.sendMessage(denied + " " + C("NowDenied", "*"));
-                            } else if (deniedPlayer != null && deniedPlayer.getWorld().equals(world)) {
+                            } else if (deniedPlayer.getWorld().equals(plot.getWorld())) {
                                 PlotId plotId = manager.getPlotId(deniedPlayer);
 
                                 if (plot.getId().equals(plotId)) {
@@ -118,6 +114,7 @@ public class CmdDeny extends PlotCommand {
                                 }
                                 player.sendMessage(C("NowDenied", args[1]));
                             }
+                            plugin.getSqlManager().savePlot(plot);
 
                             if (isAdvancedLogging()) {
                                 plugin.getLogger()

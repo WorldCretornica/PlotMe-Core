@@ -189,7 +189,7 @@ public class PlotMe_Core {
     public void addPlotToClear(Plot plot, ClearReason reason, ICommandSender sender) {
         getLogger().log(Level.INFO, "plot to clear add {0}", plot.getId());
         PlotMeSpool pms = new PlotMeSpool(this, plot, reason, sender);
-        pms.setTaskId(serverBridge.scheduleSyncRepeatingTask(pms, 20L * 10, 20L * 50));
+        pms.setTaskId(serverBridge.scheduleSyncRepeatingTask(pms, 20L * 5, 20L * 10));
     }
 
     public void removePlotToClear(int taskId) {

@@ -23,7 +23,7 @@ public class CmdUndeny extends PlotCommand {
     }
 
     public boolean execute(ICommandSender sender, String[] args) {
-        if (args.length < 2 && args.length >= 3) {
+        if (args.length != 2) {
             sender.sendMessage(getUsage());
             return true;
         }
@@ -87,7 +87,7 @@ public class CmdUndeny extends PlotCommand {
                             plot.removeDenied(denied);
                             plugin.getSqlManager().savePlot(plot);
                             player.sendMessage(
-                                    C("WordPlayer") + " " + denied + " " + C("MsgNowUndenied") + " " + serverBridge.getEconomy().get().format
+                                    C("WordPlayer") + " " + args[1] + " " + C("MsgNowUndenied") + " " + serverBridge.getEconomy().get().format
                                             (price));
 
                             if (isAdvancedLogging()) {
