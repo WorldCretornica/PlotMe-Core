@@ -60,8 +60,12 @@ public class CmdHome extends PlotCommand {
                 }
 
                 if (args.length == 3) {
-                    nb = Integer.parseInt(args[2]);
-                    IOfflinePlayer offlinePlayer = serverBridge.getOfflinePlayer(args[1]);
+                    try {
+                        nb = Integer.parseInt(args[1]);
+                    } catch (NumberFormatException e) {
+                        player.sendMessage(getUsage());
+                    }
+                    IOfflinePlayer offlinePlayer = serverBridge.getOfflinePlayer(args[2]);
                     if (offlinePlayer == null) {
                         player.sendMessage("Error in Home Command!");
                         return true;

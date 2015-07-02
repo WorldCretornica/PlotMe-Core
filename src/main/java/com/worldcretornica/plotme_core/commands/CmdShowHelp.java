@@ -146,7 +146,7 @@ public class CmdShowHelp extends PlotCommand {
                     player.sendMessage(C("NotPlotWorld"));
                 }
             } else if ("claim".equalsIgnoreCase(allowedCommand)) {
-                player.sendMessage("CmdClaimUsage");
+                player.sendMessage(C("CmdClaimUsage"));
                 if (economyEnabled && pmi.getClaimPrice() != 0) {
                     player.sendMessage(C("HelpClaim") + " " + C("WordPrice") + " : " + Math.round(pmi.getClaimPrice()));
                 } else {
@@ -163,7 +163,7 @@ public class CmdShowHelp extends PlotCommand {
                 if (plugin.getConfig().getBoolean("allowWorldTeleport")) {
                     player.sendMessage("CmdAutoUsageWTP");
                 } else {
-                    player.sendMessage("CmdAutoUsage");
+                    player.sendMessage(C("CmdAutoUsage"));
                 }
                 if (economyEnabled && pmi.getClaimPrice() != 0) {
                     player.sendMessage(C("HelpAuto") + " " + C("WordPrice") + " : " + Math.round(pmi.getClaimPrice()));
@@ -171,105 +171,105 @@ public class CmdShowHelp extends PlotCommand {
                     player.sendMessage(C("HelpAuto"));
                 }
             } else if ("home".equalsIgnoreCase(allowedCommand)) {
-                player.sendMessage("CmdHomeUsage");
+                player.sendMessage(C("CmdHomeUsage"));
                 if (economyEnabled && pmi.getPlotHomePrice() != 0) {
                     player.sendMessage(C("HelpHome") + " " + C("WordPrice") + " : " + Math.round(pmi.getPlotHomePrice()));
                 } else {
                     player.sendMessage(C("HelpHome"));
                 }
             } else if ("info".equalsIgnoreCase(allowedCommand)) {
-                player.sendMessage("CmdInfoUsage");
+                player.sendMessage(C("CmdInfoUsage"));
                 player.sendMessage(C("HelpInfo"));
             } else if ("list".equalsIgnoreCase(allowedCommand)) {
-                player.sendMessage("CmdListUsage");
+                player.sendMessage(C("CmdListUsage"));
                 player.sendMessage(C("HelpList"));
             } else if ("biome".equalsIgnoreCase(allowedCommand)) {
-                player.sendMessage("CmdBiomeUsage");
+                player.sendMessage(C("CmdBiomeUsage"));
                 if (economyEnabled && pmi.getBiomeChangePrice() != 0) {
                     player.sendMessage(C("HelpBiome") + " " + C("WordPrice") + " : " + Math.round(pmi.getBiomeChangePrice()));
                 } else {
                     player.sendMessage(C("HelpBiome"));
                 }
-                player.sendMessage("CmdBiomesUsage");
+                player.sendMessage(C("CmdBiomesUsage"));
                 player.sendMessage(C("HelpBiomeList"));
             } else if ("done".equalsIgnoreCase(allowedCommand)) {
-                player.sendMessage("CmdDoneUsage");
+                player.sendMessage(C("CmdDoneUsage"));
                 player.sendMessage(C("HelpDone"));
                 player.sendMessage("CmdDoneListUsage");
                 player.sendMessage(C("HelpDoneList"));
             } else if ("tp".equalsIgnoreCase(allowedCommand)) {
                 if (plugin.getConfig().getBoolean("allowWorldTeleport")) {
-                    player.sendMessage("CmdTeleportUsageWTP");
+                    player.sendMessage(C("CmdTeleportUsageWTP"));
                 } else {
-                    player.sendMessage("CmdTeleportUsage");
+                    player.sendMessage(C("CmdTeleportUsage"));
                 }
                 player.sendMessage(C("HelpTp"));
             } else if ("clear".equalsIgnoreCase(allowedCommand)) {
-                player.sendMessage("CmdClearUsage");
+                player.sendMessage(C("CmdClearUsage"));
                 if (economyEnabled && pmi.getClearPrice() != 0) {
                     player.sendMessage(C("HelpClear") + " " + C("WordPrice") + " : " + Math.round(pmi.getClearPrice()));
                 } else {
                     player.sendMessage(C("HelpClear"));
                 }
             } else if ("reset".equalsIgnoreCase(allowedCommand)) {
-                player.sendMessage("CmdResetUsage");
+                player.sendMessage(C("CmdResetUsage"));
                 player.sendMessage(C("HelpReset"));
             } else if ("add".equalsIgnoreCase(allowedCommand)) {
-                player.sendMessage("CmdAddUsage");
+                player.sendMessage(C("CmdAddUsage"));
                 if (economyEnabled && pmi.getAddPlayerPrice() != 0) {
                     player.sendMessage(C("HelpAdd") + " " + C("WordPrice") + " : " + Math.round(pmi.getAddPlayerPrice()));
                 } else {
                     player.sendMessage(C("HelpAdd"));
                 }
-                player.sendMessage("CmdRemoveUsage");
+                player.sendMessage(C("CmdRemoveUsage"));
                 if (economyEnabled && pmi.getRemovePlayerPrice() != 0) {
                     player.sendMessage(C("HelpRemove") + " " + C("WordPrice") + " : " + Math.round(pmi.getRemovePlayerPrice()));
                 } else {
                     player.sendMessage(C("HelpRemove"));
                 }
             } else if ("deny".equalsIgnoreCase(allowedCommand)) {
-                player.sendMessage("CmdDenyUsage");
+                player.sendMessage(C("CmdDenyUsage"));
                 if (economyEnabled && pmi.getDenyPlayerPrice() != 0) {
                     player.sendMessage(C("HelpDeny") + " " + C("WordPrice") + " : " + Math.round(pmi.getDenyPlayerPrice()));
                 } else {
                     player.sendMessage(C("HelpDeny"));
                 }
-                player.sendMessage("CmdUndenyUsage");
+                player.sendMessage(C("CmdUndenyUsage"));
                 if (economyEnabled && pmi.getUndenyPlayerPrice() != 0) {
                     player.sendMessage(C("HelpUndeny") + " " + C("WordPrice") + " : " + Math.round(pmi.getUndenyPlayerPrice()));
                 } else {
                     player.sendMessage(C("HelpUndeny"));
                 }
             } else if ("setowner".equalsIgnoreCase(allowedCommand)) {
-                player.sendMessage("CmdSetOwnerUsage");
+                player.sendMessage(C("CmdSetOwnerUsage"));
                 player.sendMessage(C("HelpSetowner"));
             } else if ("move".equalsIgnoreCase(allowedCommand)) {
-                player.sendMessage("CmdMoveUsage");
+                player.sendMessage(C("CmdMoveUsage"));
                 player.sendMessage(C("HelpMove"));
             } else if ("weanywhere".equalsIgnoreCase(allowedCommand)) {
-                player.sendMessage("CmdWEAnywhereUsage");
+                player.sendMessage(C("CmdWEAnywhereUsage"));
                 player.sendMessage(C("HelpWEAnywhere"));
             } else if ("expired".equalsIgnoreCase(allowedCommand)) {
-                player.sendMessage("CmdExpiredUsage");
+                player.sendMessage(C("CmdExpiredUsage"));
                 player.sendMessage(C("HelpExpired"));
             } else if ("addtime".equalsIgnoreCase(allowedCommand)) {
-                player.sendMessage("CmdAddTimeUsage");
+                player.sendMessage(C("CmdAddTimeUsage"));
                 int days = pmi.getDaysToExpiration();
                 if (days != 0) {
                     player.sendMessage(C("HelpAddTime"));
                 }
             } else if ("dispose".equalsIgnoreCase(allowedCommand)) {
-                player.sendMessage("CmdDisposeUsage");
+                player.sendMessage(C("CmdDisposeUsage"));
                 if (economyEnabled && pmi.getDisposePrice() != 0) {
                     player.sendMessage(C("HelpDispose") + " " + C("WordPrice") + " : " + Math.round(pmi.getDisposePrice()));
                 } else {
                     player.sendMessage(C("HelpDispose"));
                 }
             } else if ("buy".equalsIgnoreCase(allowedCommand)) {
-                player.sendMessage("CmdBuyUsage");
+                player.sendMessage(C("CmdBuyUsage"));
                 player.sendMessage(C("HelpBuy"));
             } else if ("sell".equalsIgnoreCase(allowedCommand)) {
-                player.sendMessage("CmdSellUsage");
+                player.sendMessage(C("CmdSellUsage"));
                 player.sendMessage(C("HelpSell"));
             }
         }

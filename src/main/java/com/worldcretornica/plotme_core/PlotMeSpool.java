@@ -41,8 +41,6 @@ public class PlotMeSpool implements Runnable {
             } else {
                 genmanager.adjustPlotFor(plot, false, false, false);
             }
-            genmanager.refreshPlotChunks(plot.getId());
-
             if (sender != null) {
                 sender.sendMessage(plugin.C("WordPlot") + " " + plot.getId().getID() + " " + plugin.C("WordCleared"));
             }

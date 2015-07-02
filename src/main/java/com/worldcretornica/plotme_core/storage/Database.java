@@ -249,7 +249,7 @@ public abstract class Database {
                                 }
                             }
                             statementDenied.setLong(1, internalID);
-                            try (ResultSet setDenied = statementAllowed.executeQuery()) {
+                            try (ResultSet setDenied = statementDenied.executeQuery()) {
                                 while (setDenied.next()) {
                                     denied.add(setDenied.getString("player"));
                                 }
