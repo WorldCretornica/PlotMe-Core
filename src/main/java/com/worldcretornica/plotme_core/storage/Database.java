@@ -34,6 +34,7 @@ public abstract class Database {
     final PlotMe_Core plugin;
     public long nextPlotId = 1;
     Connection connection;
+
     public Database(PlotMe_Core plugin) {
         this.plugin = plugin;
     }
@@ -134,8 +135,14 @@ public abstract class Database {
     }
 
     private boolean deletePlotFromCache(Plot plot) {
-        boolean remove = worldToPlotMap.get(plot.getWorld()).remove(plot);
-        return remove;
+        ArrayList<Plot> plots = worldToPlotMap.get(plot.getWorld());
+        for (int index = 0; index < plots.size(); index++) {
+            if (plot.equals(plots.get(index))) {
+                plots.remove(index);
+                return true;
+            }
+        }
+        return true;
     }
 
     private void deletePlotFromStorage(Plot plot) {
