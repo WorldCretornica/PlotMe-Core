@@ -4,7 +4,7 @@
 
     <groupId>com.worldcretornica</groupId>
     <artifactId>PlotMe-Core</artifactId>
-    <version>0.17.1-SNAPSHOT</version>
+    <version>0.17.1</version>
     <packaging>jar</packaging>
 
     <name>PlotMe-Core</name>
@@ -185,6 +185,13 @@
             <artifactId>junit</artifactId>
             <version>4.12</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.primesoft.asyncworldedit</groupId>
+            <artifactId>AsyncWorldEdit</artifactId>
+            <version>2.2.2</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/AsyncWorldEdit.jar</systemPath>
         </dependency>
     </dependencies>
 
