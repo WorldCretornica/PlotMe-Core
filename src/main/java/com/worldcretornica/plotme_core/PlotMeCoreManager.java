@@ -376,7 +376,7 @@ public class PlotMeCoreManager {
      *  @param plot Plot to be added
      */
     public void loadPlot(Plot plot) {
-        plugin.getSqlManager().worldToPlotMap.get(plot.getWorld()).add(plot);
+        plugin.getSqlManager().plots.add(plot);
         PlotLoadEvent event = new PlotLoadEvent(plot);
         plugin.getEventBus().post(event);
 
@@ -557,8 +557,8 @@ public class PlotMeCoreManager {
      * @return true if the plot is unclaimed, false otherwise
      */
     public boolean isPlotAvailable(PlotId id, IWorld world) {
-        for (Plot plot : plugin.getSqlManager().worldToPlotMap.get(world)) {
-            if (plot.getId().equals(id)) {
+        for (Plot plot : plugin.getSqlManager().getPlots()) {
+            if (plot.getId().equals(id) && plot.getWorld().equals(world)) {
                 return false;
             }
         }
@@ -673,12 +673,11 @@ public class PlotMeCoreManager {
         plugin.getServerBridge().runTaskAsynchronously(new Runnable() {
             @Override
             public void run() {
-                for (java.util.Vector<Plot> plotList : plugin.getSqlManager().worldToPlotMap.values()) {
-                    for (final Plot plot : plotList) {
+                for (final Plot plot : plugin.getSqlManager().plots) {
                         if (plot.getOwnerId().equals(uuid)) {
                             plot.setOwner(name);
-                            final int i = plugin.getSqlManager().worldToPlotMap.get(plot.getWorld()).indexOf(plot);
-                            plugin.getSqlManager().worldToPlotMap.get(plot.getWorld()).get(i).setOwner(name);
+                            final int i = plugin.getSqlManager().plots.indexOf(plot);
+                            plugin.getSqlManager().plots.get(i).setOwner(name);
                             plugin.getSqlManager().savePlot(plot);
                             plugin.getServerBridge().runTask(new Runnable() {
                                 @Override public void run() {
@@ -687,8 +686,6 @@ public class PlotMeCoreManager {
                             });
                         }
                     }
-
-                }
             }
         });
     }

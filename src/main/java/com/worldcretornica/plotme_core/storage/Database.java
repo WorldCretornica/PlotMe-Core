@@ -26,11 +26,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.Vector;
-import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class Database {
 
-    public final ConcurrentHashMap<IWorld, Vector<Plot>> worldToPlotMap = new ConcurrentHashMap<>();
+    public final Vector<Plot> plots = new Vector<>();
     final PlotMe_Core plugin;
     public long nextPlotId = 1;
     Connection connection;
@@ -45,11 +44,7 @@ public abstract class Database {
      * @return all plots
      */
     public List<Plot> getPlots() {
-        Vector<Plot> arrayList = new Vector<>();
-        for (Vector<Plot> plotArrayList : worldToPlotMap.values()) {
-            arrayList.addAll(plotArrayList);
-        }
-        return Collections.unmodifiableList(arrayList);
+        return Collections.unmodifiableList(plots);
     }
 
     /**
@@ -93,7 +88,13 @@ public abstract class Database {
      * @return number of plots in the world
      */
     public int getWorldPlotCount(IWorld world) {
-        return worldToPlotMap.get(world).size();
+        int size = 0;
+        for (Plot plot : plots) {
+            if (plot.getWorld().equals(world)) {
+                size++;
+            }
+        }
+        return size;
     }
 
     /**
@@ -101,18 +102,13 @@ public abstract class Database {
      * @return number of plots in the world
      */
     public int getTotalPlotCount() {
-        int size = 0;
-        for (Vector<Plot> plotArrayList : worldToPlotMap.values()) {
-            size += plotArrayList.size();
-        }
-        return size;
+        return plots.size();
     }
 
-    public int getPlotCount(IWorld worldIC, UUID uuid) {
-        Vector<Plot> plots = worldToPlotMap.get(worldIC);
+    public int getPlotCount(IWorld world, UUID uuid) {
         int count = 0;
         for (Plot plot : plots) {
-            if (plot.getOwnerId().equals(uuid)) {
+            if (plot.getOwnerId().equals(uuid) && plot.getWorld().equals(world)) {
                 count++;
             }
         }
@@ -125,7 +121,7 @@ public abstract class Database {
     }
 
     private void addPlotToCache(Plot plot) {
-        worldToPlotMap.get(plot.getWorld()).add(plot);
+        plots.add(plot);
     }
 
     public boolean deletePlot(Plot plot) {
@@ -135,14 +131,7 @@ public abstract class Database {
     }
 
     private boolean deletePlotFromCache(Plot plot) {
-        Vector<Plot> plots = worldToPlotMap.get(plot.getWorld());
-        for (int index = 0; index < plots.size(); index++) {
-            if (plot.equals(plots.get(index))) {
-                plots.remove(index);
-                return true;
-            }
-        }
-        return true;
+        return plots.remove(plot);
     }
 
     private void deletePlotFromStorage(Plot plot) {
@@ -171,13 +160,11 @@ public abstract class Database {
 
     public List<Plot> getPlayerPlots(final UUID uuid) {
         ArrayList<Plot> filter = new ArrayList<>();
-        for (Vector<Plot> plotList : worldToPlotMap.values()) {
-            filter.addAll(Collections2.filter(plotList, new Predicate<Plot>() {
+        filter.addAll(Collections2.filter(plots, new Predicate<Plot>() {
                 @Override public boolean apply(Plot plot) {
                     return plot.getOwnerId().equals(uuid);
                 }
             }));
-        }
         return ImmutableList.copyOf(filter);
     }
 
@@ -189,7 +176,7 @@ public abstract class Database {
      * @return owned plots. unmodifiable.
      */
     public List<Plot> getOwnedPlots(final IWorld world, final UUID uuid) {
-        Collection<Plot> filter = Collections2.filter(worldToPlotMap.get(world), new Predicate<Plot>() {
+        Collection<Plot> filter = Collections2.filter(plots, new Predicate<Plot>() {
             @Override public boolean apply(Plot plot) {
                 return plot.getOwnerId().equals(uuid) && plot.getWorld().equals(world);
             }
@@ -203,7 +190,7 @@ public abstract class Database {
             public void run() {
                 plugin.getLogger().info("Loading plots for world " + world.getName());
                 Vector<Plot> plots2 = getPlots(world);
-                worldToPlotMap.put(world, plots2);
+                plots.addAll(plots2);
                 PlotWorldLoadEvent eventWorld = new PlotWorldLoadEvent(world, plots2.size());
                 plugin.getEventBus().post(eventWorld);
                 for (Plot plot : plots2) {
@@ -297,8 +284,8 @@ public abstract class Database {
     }
 
     public Plot getPlot(PlotId id, IWorld world) {
-        for (Plot plot : worldToPlotMap.get(world)) {
-            if (plot.getId().equals(id)) {
+        for (Plot plot : plots) {
+            if (plot.getId().equals(id) && plot.getWorld().equals(world)) {
                 return plot;
             }
         }
@@ -306,19 +293,20 @@ public abstract class Database {
     }
 
 
-    public List<Plot> getExpiredPlots(IWorld world) {
-        Collection<Plot> filter = Collections2.filter(worldToPlotMap.get(world), new Predicate<Plot>() {
+    public List<Plot> getExpiredPlots(final IWorld world) {
+        Collection<Plot> filter = Collections2.filter(plots, new Predicate<Plot>() {
             @Override public boolean apply(Plot plot) {
-                return plot.getExpiredDate() != null && Calendar.getInstance().getTime().after(plot.getExpiredDate());
+                return plot.getExpiredDate() != null && Calendar.getInstance().getTime().after(plot.getExpiredDate()) && plot.getWorld().equals
+                        (world);
             }
         });
         return ImmutableList.copyOf(filter);
     }
 
-    public List<Plot> getFinishedPlots(IWorld world) {
-        Collection<Plot> filter = Collections2.filter(worldToPlotMap.get(world), new Predicate<Plot>() {
+    public List<Plot> getFinishedPlots(final IWorld world) {
+        Collection<Plot> filter = Collections2.filter(plots, new Predicate<Plot>() {
             @Override public boolean apply(Plot plot) {
-                return plot.isFinished();
+                return plot.isFinished() && plot.getWorld().equals(world);
             }
         });
 
