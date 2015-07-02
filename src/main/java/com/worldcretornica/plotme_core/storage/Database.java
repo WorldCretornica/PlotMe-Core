@@ -31,7 +31,6 @@ import java.util.concurrent.ConcurrentHashMap;
 public abstract class Database {
 
     public final ConcurrentHashMap<IWorld, ArrayList<Plot>> worldToPlotMap = new ConcurrentHashMap<>();
-    public final ArrayList<Plot> plots = new ArrayList<>();
     final PlotMe_Core plugin;
     public long nextPlotId = 1;
     Connection connection;
@@ -45,7 +44,11 @@ public abstract class Database {
      * @return all plots
      */
     public List<Plot> getPlots() {
-        return Collections.unmodifiableList(plots);
+        ArrayList<Plot> arrayList = new ArrayList<>();
+        for (ArrayList<Plot> plotArrayList : worldToPlotMap.values()) {
+            arrayList.addAll(plotArrayList);
+        }
+        return Collections.unmodifiableList(arrayList);
     }
 
     /**
@@ -97,7 +100,11 @@ public abstract class Database {
      * @return number of plots in the world
      */
     public int getTotalPlotCount() {
-        return plots.size();
+        int size = 0;
+        for (ArrayList<Plot> plotArrayList : worldToPlotMap.values()) {
+            size += plotArrayList.size();
+        }
+        return size;
     }
 
     public int getPlotCount(IWorld worldIC, UUID uuid) {
@@ -117,7 +124,6 @@ public abstract class Database {
     }
 
     private void addPlotToCache(Plot plot) {
-        plots.add(plot);
         worldToPlotMap.get(plot.getWorld()).add(plot);
     }
 
@@ -129,8 +135,7 @@ public abstract class Database {
 
     private boolean deletePlotFromCache(Plot plot) {
         boolean remove = worldToPlotMap.get(plot.getWorld()).remove(plot);
-        boolean remove1 = plots.remove(plot);
-        return remove && remove1;
+        return remove;
     }
 
     private void deletePlotFromStorage(Plot plot) {
@@ -192,7 +197,6 @@ public abstract class Database {
                 plugin.getLogger().info("Loading plots for world " + world.getName());
                 ArrayList<Plot> plots2 = getPlots(world);
                 worldToPlotMap.put(world, plots2);
-                plots.addAll(plots2);
                 PlotWorldLoadEvent eventWorld = new PlotWorldLoadEvent(world, plots2.size());
                 plugin.getEventBus().post(eventWorld);
                 for (Plot plot : plots2) {
