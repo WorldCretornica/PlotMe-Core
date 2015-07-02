@@ -1,5 +1,16 @@
 package com.worldcretornica.plotme_core;
 
+import java.text.MessageFormat;
+import java.util.HashMap;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import org.bukkit.ChatColor;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
+
 import com.worldcretornica.configuration.ConfigAccessor;
 import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlotMe_GeneratorManager;
@@ -10,16 +21,6 @@ import com.worldcretornica.plotme_core.bukkit.SchematicUtil;
 import com.worldcretornica.plotme_core.storage.Database;
 import com.worldcretornica.plotme_core.storage.MySQLConnector;
 import com.worldcretornica.plotme_core.storage.SQLiteConnector;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
-
-import java.text.MessageFormat;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class PlotMe_Core {
 
@@ -159,15 +160,15 @@ public class PlotMe_Core {
 
     public String C(String caption, Object... args) {
         ResourceBundle captions = ResourceBundle.getBundle("messages");
-        MessageFormat formatter = new MessageFormat("", Locale.ENGLISH);
+
         String string;
         try {
             string = captions.getString(caption);
-        } catch (MissingResourceException exception) {
-            return "Missing caption for " + caption + ". Please report this to the author of plotme.";
+        } catch (MissingResourceException ex) {
+            return "[Missing caption \"" + caption + "\". Please report this to the author of PlotMe.]";
         }
-        formatter.applyPattern(string);
-        return formatter.format(args);
+
+        return ChatColor.translateAlternateColorCodes('&', MessageFormat.format(string, args));
     }
 
     public IWorld getWorldCurrentlyProcessingExpired() {

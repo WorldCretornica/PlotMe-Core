@@ -140,7 +140,9 @@ public class Plot {
 
     public void removeMembers(String name) {
         if (getMembers().containsKey(name)) {
-            getMembers().remove(name, AccessLevel.ALLOWED);
+            // HashMap#remove doesn't take 2 arguments
+            // getMembers().remove(name, AccessLevel.ALLOWED);
+            getMembers().remove(name);
         }
     }
 
