@@ -4,7 +4,7 @@
 
     <groupId>com.worldcretornica</groupId>
     <artifactId>PlotMe-Core</artifactId>
-    <version>0.17.2-SNAPSHOT</version>
+    <version>0.17.2</version>
     <packaging>jar</packaging>
 
     <name>PlotMe-Core</name>
