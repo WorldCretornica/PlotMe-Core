@@ -153,7 +153,7 @@ public class CmdShowHelp extends PlotCommand {
                     player.sendMessage(C("HelpClaim"));
                 }
             } else if ("claim.other".equalsIgnoreCase(allowedCommand)) {
-                player.sendMessage("CmdClaimOtherUsage");
+                player.sendMessage(C("CmdClaimOtherUsage"));
                 if (economyEnabled && pmi.getClaimPrice() != 0) {
                     player.sendMessage(C("HelpClaimOther") + " " + C("WordPrice") + " : " + Math.round(pmi.getClaimPrice()));
                 } else {
@@ -161,7 +161,7 @@ public class CmdShowHelp extends PlotCommand {
                 }
             } else if ("auto".equalsIgnoreCase(allowedCommand)) {
                 if (plugin.getConfig().getBoolean("allowWorldTeleport")) {
-                    player.sendMessage("CmdAutoUsageWTP");
+                    player.sendMessage(C("CmdAutoUsageWTP"));
                 } else {
                     player.sendMessage(C("CmdAutoUsage"));
                 }
@@ -195,7 +195,7 @@ public class CmdShowHelp extends PlotCommand {
             } else if ("done".equalsIgnoreCase(allowedCommand)) {
                 player.sendMessage(C("CmdDoneUsage"));
                 player.sendMessage(C("HelpDone"));
-                player.sendMessage("CmdDoneListUsage");
+                player.sendMessage(C("CmdDoneListUsage"));
                 player.sendMessage(C("HelpDoneList"));
             } else if ("tp".equalsIgnoreCase(allowedCommand)) {
                 if (plugin.getConfig().getBoolean("allowWorldTeleport")) {

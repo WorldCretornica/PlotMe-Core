@@ -66,7 +66,7 @@ public class PlotMe_Core {
         setupConfigFiles();
         setupSQL();
         serverBridge.setupHooks();
-        if (getConfig().getInt("ExpirePlotCleanupTimer") > 0) {
+        if (getConfig().getBoolean("ExpirePlotCleanup")) {
             //20L * 60 = 1 minute in ticks
             serverBridge
                     .runTaskTimerAsynchronously(new PlotExpireCleanup(this), 20L * 60 * 30, 20L * 60 * getConfig().getInt("ExpirePlotCleanupTimer"));
