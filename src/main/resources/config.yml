@@ -10,6 +10,6 @@ NbClearSpools: 3
 NbBlocksPerClearStep: 50000
 AdvancedLogging: false
 PlotEnterAnnouncement: false
-Version: 0.17.1
+Version: 0.17.2
 ExpirePlotCleanupTimer: 90
 tp-delay: 0
