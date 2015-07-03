@@ -7,6 +7,7 @@ import com.sk89q.worldedit.util.eventbus.Subscribe;
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.bukkit.api.BukkitWorld;
+import org.bukkit.World;
 
 public class PlotWorldEditListener {
 
@@ -22,17 +23,9 @@ public class PlotWorldEditListener {
         if (event.getWorld() == null) {
             return;
         }
-        BukkitWorld plotmeWorld = null;
-        if (event.getWorld() instanceof com.sk89q.worldedit.bukkit.BukkitWorld) {
-            plotmeWorld = BukkitUtil.adapt(((com.sk89q.worldedit.bukkit.BukkitWorld) event.getWorld()).getWorld());
-        } else if (event.getWorld() instanceof org.primesoft.asyncworldedit.worldedit.world.AsyncWorld) {
-            org.primesoft.asyncworldedit.worldedit.world.AsyncWorld world =
-                    (org.primesoft.asyncworldedit.worldedit.world.AsyncWorld) event.getWorld();
-            plotmeWorld = BukkitUtil.adapt(((com.sk89q.worldedit.bukkit.BukkitWorld) world.getWorld()).getWorld());
-        } else {
-            return;
-        }
-        if (PlotMeCoreManager.getInstance().isPlotWorld(plotmeWorld)) {
+        World world1 = PlotMe_CorePlugin.getInstance().getServer().getWorld(event.getWorld().getName());
+        BukkitWorld adapt = BukkitUtil.adapt(world1);
+        if (PlotMeCoreManager.getInstance().isPlotWorld(adapt)) {
             if (actor != null && actor.isPlayer()) {
                 event.setExtent(new PlotMeWorldEdit(api, event.getExtent(), event.getActor()));
             }

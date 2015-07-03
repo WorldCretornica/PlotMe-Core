@@ -5,7 +5,6 @@ import com.sk89q.worldedit.Vector;
 import com.sk89q.worldedit.Vector2D;
 import com.sk89q.worldedit.WorldEditException;
 import com.sk89q.worldedit.blocks.BaseBlock;
-import com.sk89q.worldedit.bukkit.BukkitPlayer;
 import com.sk89q.worldedit.extension.platform.Actor;
 import com.sk89q.worldedit.extent.AbstractDelegateExtent;
 import com.sk89q.worldedit.extent.Extent;
@@ -29,7 +28,7 @@ class PlotMeWorldEdit extends AbstractDelegateExtent {
         this.api = api;
         this.extent = extent;
         this.actor = actor;
-        player = PlotMe_CorePlugin.getInstance().wrapPlayer(((BukkitPlayer) actor).getPlayer());
+        player = api.getServerBridge().getPlayer(actor.getUniqueId());
 
 
     }
