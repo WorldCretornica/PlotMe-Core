@@ -31,13 +31,15 @@ public class PlotRunnableDeleteExpire implements Runnable {
             } else {
 
                 for (Plot expiredPlot : expiredPlots) {
-                    PlotResetEvent event = new PlotResetEvent(expiredPlot, sender);
-                    plugin.getEventBus().post(event);
-                    if (!event.isCancelled()) {
-                        plotMeCoreManager.clear(expiredPlot, sender, ClearReason.Expired);
+                    if (!expiredPlot.isProtected()) {
+                        PlotResetEvent event = new PlotResetEvent(expiredPlot, sender);
+                        plugin.getEventBus().post(event);
+                        if (!event.isCancelled()) {
+                            plotMeCoreManager.clear(expiredPlot, sender, ClearReason.Expired);
 
-                        plotMeCoreManager.deletePlot(expiredPlot);
-                        plugin.setCounterExpired(plugin.getCounterExpired() - 1);
+                            plotMeCoreManager.deletePlot(expiredPlot);
+                            plugin.setCounterExpired(plugin.getCounterExpired() - 1);
+                        }
                     }
                 }
 
