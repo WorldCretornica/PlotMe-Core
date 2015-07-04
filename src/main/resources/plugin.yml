@@ -1,6 +1,6 @@
 name: PlotMe
 main: com.worldcretornica.plotme_core.bukkit.PlotMe_CorePlugin
-version: 0.17.3
+version: 0.17.4-BETA
 author: ZachBora
 authors: [MattBDev]
 website: http://worldcretornica.github.io/PlotMe-Core/
@@ -136,5 +136,3 @@ permissions:
       description: Gives the addtime command for any plots
     plotme.admin.expired:
       description: Gives the expired command
-    plotme.admin.buildanywhere:
-      description: Allows to build anywhere in the plot world
