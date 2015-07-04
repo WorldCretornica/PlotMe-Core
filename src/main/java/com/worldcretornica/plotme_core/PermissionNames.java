@@ -36,7 +36,7 @@ public class PermissionNames {
     public static final String ADMIN_EXPIRED = "PlotMe.admin.expired";
     public static final String ADMIN_CLEAR = "PlotMe.admin.clear";
     public static final String ADMIN_CLAIM_OTHER = "PlotMe.admin.claim.other";
-    public static final String ADMIN_WEANYWHERE = "PlotMe.admin.weanywhere";
+    public static final String ADMIN_WEANYWHERE = "PlotMe.weanywhere";
     public static final String ADMIN_DENY = "PlotMe.admin.deny";
     public static final String ADMIN_PROTECT = "PlotMe.admin.protect";
     public static final String ADMIN_MIDDLE_OTHER = "PlotMe.admin.middle";

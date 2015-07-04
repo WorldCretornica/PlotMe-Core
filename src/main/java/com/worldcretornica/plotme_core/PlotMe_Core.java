@@ -103,7 +103,7 @@ public class PlotMe_Core {
         if (!config.contains("worlds")) {
             getServerBridge().loadDefaultConfig(configFile, "worlds.plotworld");
         }
-        getConfig().set("Version", "0.17.1");
+        getConfig().set("Version", "0.17.3");
         // Copy new values over
         getConfig().options().copyDefaults(true);
         configFile.saveConfig();

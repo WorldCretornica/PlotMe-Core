@@ -36,15 +36,6 @@ public class PlotMapInfo {
         return getPreventedItems().contains(itemId);
     }
 
-    public int getPlotAutoLimit() {
-        return config.getInt("PlotAutoLimit");
-    }
-
-    public void setPlotAutoLimit(int plotAutoLimit) {
-        config.set("PlotAutoLimit", plotAutoLimit);
-        configFile.saveConfig();
-    }
-
     public int getDaysToExpiration() {
         return config.getInt("DaysToExpiration");
     }
