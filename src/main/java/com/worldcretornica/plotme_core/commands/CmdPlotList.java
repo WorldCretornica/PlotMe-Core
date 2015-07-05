@@ -28,7 +28,7 @@ public class CmdPlotList extends PlotCommand {
             if (manager.isPlotWorld(player)) {
                 UUID uuid;
                 int page = 1;
-                if (args.length > 2) {
+                if (args.length >= 2) {
                     IOfflinePlayer offlinePlayer = serverBridge.getOfflinePlayer(args[1]);
                     if (offlinePlayer == null) {
                         player.sendMessage("No player found by that name");

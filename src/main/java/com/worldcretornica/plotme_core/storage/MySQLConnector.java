@@ -103,7 +103,7 @@ public class MySQLConnector extends Database {
             connection.commit();
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS `plotmecore_nextid` (`nextId` INTEGER NOT NULL DEFAULT '0');");
             connection.commit();
-            try (ResultSet results = statement.executeQuery("SELECT * FROM plotmecore_nextplotid;")) {
+            try (ResultSet results = statement.executeQuery("SELECT * FROM plotmecore_nextid;")) {
                 if (!results.next()) {
                     statement.execute("INSERT INTO plotmecore_nextid VALUES(1);");
                     this.nextPlotId = 1;
