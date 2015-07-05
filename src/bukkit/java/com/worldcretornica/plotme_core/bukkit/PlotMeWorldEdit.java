@@ -41,14 +41,13 @@ class PlotMeWorldEdit extends AbstractDelegateExtent {
             Location loc = new Location(player.getWorld(), location.getX(), location.getY(), location.getZ());
             Plot plot = manager.getPlot(loc);
             if (plot != null) {
+                if (plot.getOwnerId().equals(player.getUniqueId())) {
+                    return extent.setBlock(location, block);
+                }
                 Optional<Plot.AccessLevel> member = plot.isMember(actor.getUniqueId());
                 if (member.isPresent()) {
-                    if (member.get().equals(Plot.AccessLevel.TRUSTED) && !api.getServerBridge().getOfflinePlayer(plot.getOwnerId()).isOnline()) {
-                        return false;
-                    }
-                    if (extent.setBlock(location, block)) {
-                        return true;
-                    }
+                    return !(member.get().equals(Plot.AccessLevel.TRUSTED) && !api.getServerBridge().getOfflinePlayer(plot.getOwnerId()).isOnline())
+                            && extent.setBlock(location, block);
                 }
             }
             return false;
@@ -63,14 +62,13 @@ class PlotMeWorldEdit extends AbstractDelegateExtent {
             Location loc = new Location(player.getWorld(), position.getX(), 0, position.getZ());
             Plot plot = manager.getPlot(loc);
             if (plot != null) {
+                if (plot.getOwnerId().equals(player.getUniqueId())) {
+                    return extent.setBiome(position, biome);
+                }
                 Optional<Plot.AccessLevel> member = plot.isMember(actor.getUniqueId());
                 if (member.isPresent()) {
-                    if (member.get().equals(Plot.AccessLevel.TRUSTED) && !api.getServerBridge().getOfflinePlayer(plot.getOwnerId()).isOnline()) {
-                        return false;
-                    }
-                    if (extent.setBiome(position, biome)) {
-                        return true;
-                    }
+                    return !(member.get().equals(Plot.AccessLevel.TRUSTED) && !api.getServerBridge().getOfflinePlayer(plot.getOwnerId()).isOnline())
+                            && extent.setBiome(position, biome);
                 }
             }
             return false;

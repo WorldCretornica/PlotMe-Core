@@ -6,8 +6,6 @@ import com.worldcretornica.plotme_core.api.CommandExBase;
 import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 
-import java.util.UUID;
-
 public class CmdWEAnywhere extends PlotCommand {
 
     public CmdWEAnywhere(PlotMe_Core instance, CommandExBase commandExBase) {
@@ -26,24 +24,22 @@ public class CmdWEAnywhere extends PlotCommand {
 
         IPlayer player = (IPlayer) sender;
         if (player.hasPermission(PermissionNames.ADMIN_WEANYWHERE)) {
-            String name = player.getName();
-            UUID uuid = player.getUniqueId();
             boolean defaultWEAnywhere = plugin.getConfig().getBoolean("defaultWEAnywhere");
             boolean playerIgnoringWELimit = manager.isPlayerIgnoringWELimit(player);
             if (playerIgnoringWELimit && !defaultWEAnywhere || !playerIgnoringWELimit && defaultWEAnywhere) {
-                manager.removePlayerIgnoringWELimit(uuid);
+                manager.removePlayerIgnoringWELimit(player.getUniqueId());
             } else {
-                manager.addPlayerIgnoringWELimit(uuid);
+                manager.addPlayerIgnoringWELimit(player.getUniqueId());
             }
             if (manager.isPlayerIgnoringWELimit(player)) {
                 player.sendMessage(C("WorldEditAnywhere"));
                 if (isAdvancedLogging()) {
-                    plugin.getLogger().info(name + "enabled WorldEdit Anywhere");
+                    plugin.getLogger().info(player.getName() + "enabled WorldEdit Anywhere");
                 }
             } else {
                 player.sendMessage("You can now worldedit in only your plots.");
                 if (isAdvancedLogging()) {
-                    plugin.getLogger().info(name + "disabled WorldEdit Anywhere");
+                    plugin.getLogger().info(player.getName() + "disabled WorldEdit Anywhere");
                 }
             }
         } else {

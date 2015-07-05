@@ -1,4 +1,3 @@
-PlotAutoLimit: 1000
 DaysToExpiration: 7
 ProtectedBlocks:
 - 54
