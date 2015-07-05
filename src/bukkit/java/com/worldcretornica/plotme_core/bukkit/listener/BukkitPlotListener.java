@@ -121,12 +121,12 @@ public class BukkitPlotListener implements Listener {
         IPlayer player = plugin.wrapPlayer(event.getPlayer());
         Location location = BukkitUtil.adapt(event.getBlockPlaced().getLocation());
 
+        if (player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE)) {
+            return;
+        }
         if (manager.isPlotWorld(location)) {
             Plot plot = manager.getPlot(location);
             if (plot == null) {
-                if (player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE)) {
-                    return;
-                }
                 player.sendMessage(api.C("CannotBuild"));
                 event.setCancelled(true);
             } else {
@@ -158,7 +158,10 @@ public class BukkitPlotListener implements Listener {
         IPlayer player = plugin.wrapPlayer(event.getPlayer());
         Location location = BukkitUtil.adapt(event.getBlockClicked().getLocation());
 
-        if (!player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE) && manager.isPlotWorld(location)) {
+        if (player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE)) {
+            return;
+        }
+        if (manager.isPlotWorld(location)) {
             Plot plot =
                     manager.getPlot(location.add(event.getBlockFace().getModX(), event.getBlockFace().getModY(), event.getBlockFace().getModZ()));
 
@@ -191,7 +194,10 @@ public class BukkitPlotListener implements Listener {
         IPlayer player = plugin.wrapPlayer(event.getPlayer());
         Location location = BukkitUtil.adapt(event.getBlockClicked().getLocation());
 
-        if (manager.isPlotWorld(location) && !player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE)) {
+        if (player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE)) {
+            return;
+        }
+        if (manager.isPlotWorld(location)) {
             Plot plot = manager.getPlot(location);
 
             if (plot == null) {
@@ -224,55 +230,56 @@ public class BukkitPlotListener implements Listener {
         IPlayer player = plugin.wrapPlayer(event.getPlayer());
         Location location = BukkitUtil.adapt(event.getClickedBlock().getLocation());
         PlotMapInfo pmi = manager.getMap(location);
+        if (player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE)) {
+            return;
+        }
         if (manager.isPlotWorld(location)) {
             Plot plot = manager.getPlot(location);
-            if (!player.hasPermission(PermissionNames.ADMIN_BUILDANYWHERE)) {
-                if (plot == null) {
-                    player.sendMessage(api.C("CannotBuild"));
-                    event.setCancelled(true);
-                } else if (!plot.getOwnerId().equals(event.getPlayer().getUniqueId())) {
-                    Optional<Plot.AccessLevel> member = plot.isMember(player.getUniqueId());
-                    if (member.isPresent()) {
-                        if (member.get().equals(Plot.AccessLevel.TRUSTED)) {
-                            if (!api.getServerBridge().getOfflinePlayer(plot.getOwnerId())
-                                    .isOnline()) {
-                                if (event.hasBlock() && pmi.isProtectedBlock(event.getClickedBlock().getTypeId())) {
-                                    if (!player.hasPermission("plotme.unblock." + event.getClickedBlock().getTypeId())) {
-                                        player.sendMessage(api.C("CannotBuild"));
-                                        event.setCancelled(true);
-                                        return;
-                                    } else {
-                                        return;
-                                    }
-                                }
-                                if (event.hasItem() && (pmi.isPreventedItem(String.valueOf(event.getItem().getTypeId())) || pmi
-                                        .isPreventedItem(event.getItem().getTypeId() + ":" + event.getItem().getData()))) {
-                                    if (!player.hasPermission("plotme.unblock." + event.getClickedBlock().getTypeId())) {
-                                        player.sendMessage(api.C("CannotBuild"));
-                                        event.setCancelled(true);
-                                    }
-
+            if (plot == null) {
+                player.sendMessage(api.C("CannotBuild"));
+                event.setCancelled(true);
+            } else if (!plot.getOwnerId().equals(event.getPlayer().getUniqueId())) {
+                Optional<Plot.AccessLevel> member = plot.isMember(player.getUniqueId());
+                if (member.isPresent()) {
+                    if (member.get().equals(Plot.AccessLevel.TRUSTED)) {
+                        if (!api.getServerBridge().getOfflinePlayer(plot.getOwnerId())
+                                .isOnline()) {
+                            if (event.hasBlock() && pmi.isProtectedBlock(event.getClickedBlock().getTypeId())) {
+                                if (!player.hasPermission("plotme.unblock." + event.getClickedBlock().getTypeId())) {
+                                    player.sendMessage(api.C("CannotBuild"));
+                                    event.setCancelled(true);
+                                    return;
+                                } else {
+                                    return;
                                 }
                             }
-                        }
-                    } else {
-                        if (event.hasBlock() && pmi.isProtectedBlock(event.getClickedBlock().getTypeId())) {
-                            if (player.hasPermission("plotme.unblock." + event.getClickedBlock().getTypeId())) {
-                                return;
-                            } else {
-                                player.sendMessage(api.C("CannotBuild"));
-                                event.setCancelled(true);
-                                return;
-                            }
-                        }
-                        if (event.hasItem() && (pmi.isPreventedItem(String.valueOf(event.getItem().getTypeId())) || pmi.isPreventedItem(
-                                event.getItem().getTypeId() + ":" + event.getItem().getData()))) {
-                            if (!player.hasPermission("plotme.unblock." + event.getClickedBlock().getTypeId())) {
-                                player.sendMessage(api.C("CannotBuild"));
-                                event.setCancelled(true);
-                            }
+                            if (event.hasItem() && (pmi.isPreventedItem(String.valueOf(event.getItem().getTypeId())) || pmi
+                                    .isPreventedItem(event.getItem().getTypeId() + ":" + event.getItem().getData()))) {
+                                if (!player.hasPermission("plotme.unblock." + event.getClickedBlock().getTypeId())) {
+                                    player.sendMessage(api.C("CannotBuild"));
+                                    event.setCancelled(true);
+                                }
 
+                            }
                         }
+                    }
+                } else {
+                    if (event.hasBlock() && pmi.isProtectedBlock(event.getClickedBlock().getTypeId())) {
+                        if (player.hasPermission("plotme.unblock." + event.getClickedBlock().getTypeId())) {
+                            return;
+                        } else {
+                            player.sendMessage(api.C("CannotBuild"));
+                            event.setCancelled(true);
+                            return;
+                        }
+                    }
+                    if (event.hasItem() && (pmi.isPreventedItem(String.valueOf(event.getItem().getTypeId())) || pmi.isPreventedItem(
+                            event.getItem().getTypeId() + ":" + event.getItem().getData()))) {
+                        if (!player.hasPermission("plotme.unblock." + event.getClickedBlock().getTypeId())) {
+                            player.sendMessage(api.C("CannotBuild"));
+                            event.setCancelled(true);
+                        }
+
                     }
                 }
             }
