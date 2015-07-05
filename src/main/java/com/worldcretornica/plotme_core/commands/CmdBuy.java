@@ -45,7 +45,7 @@ public class CmdBuy extends PlotCommand {
                                 int plotsOwned = manager.getOwnedPlotCount(player.getUniqueId(), world);
 
                                 if (plotLimit != -1 && plotsOwned >= plotLimit) {
-                                    player.sendMessage(C("MsgAlreadyReachedMaxPlots",plotsOwned,plotLimit));
+                                    player.sendMessage(C("MsgAlreadyReachedMaxPlots", plotsOwned, plotLimit));
                                 } else {
                                     double cost = plot.getPrice();
 
@@ -69,8 +69,7 @@ public class CmdBuy extends PlotCommand {
                                                     for (IPlayer onlinePlayers : serverBridge.getOnlinePlayers()) {
                                                         if (onlinePlayers.getName().equals(oldOwner)) {
                                                             onlinePlayers.sendMessage(C("WordPlot") + " " + plot.getId() + " "
-                                                                    + C("SoldTo", buyer) + serverBridge.getEconomy().get().format
-                                                                    (cost));
+                                                                    + C("SoldTo", buyer) + serverBridge.getEconomy().get().format(cost));
                                                             break;
                                                         }
                                                     }

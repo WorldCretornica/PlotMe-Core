@@ -86,8 +86,7 @@ public class CmdUndeny extends PlotCommand {
                         if (!event.isCancelled()) {
                             plot.removeDenied(denied);
                             plugin.getSqlManager().savePlot(plot);
-                            player.sendMessage(
-                                    C("WordPlayer") + " " + args[1] + " " + C("MsgNowUndenied") + " " + serverBridge.getEconomy().get().format
+                            player.sendMessage(args[1] + " " + C("MsgNowUndenied") + " " + serverBridge.getEconomy().get().format
                                             (price));
 
                             if (isAdvancedLogging()) {
@@ -104,7 +103,7 @@ public class CmdUndeny extends PlotCommand {
                             }
                         }
                     } else {
-                        player.sendMessage(C("WordPlayer") + " " + args[1] + " " + C("MsgWasNotDenied"));
+                        player.sendMessage(args[1] + " " + C("MsgWasNotDenied"));
                     }
                 } else {
                     player.sendMessage(C("MsgThisPlot") + " (" + plot.getId().getID() + ") " + C("MsgNotYoursNotAllowedUndeny"));

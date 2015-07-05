@@ -148,14 +148,14 @@ public class CmdShowHelp extends PlotCommand {
             } else if ("claim".equalsIgnoreCase(allowedCommand)) {
                 player.sendMessage(C("CmdClaimUsage"));
                 if (economyEnabled && pmi.getClaimPrice() != 0) {
-                    player.sendMessage(C("HelpClaim") + " " + C("WordPrice") + " : " + Math.round(pmi.getClaimPrice()));
+                    player.sendMessage(C("HelpClaim") + " " + C("WordPrice",pmi.getClaimPrice()));
                 } else {
                     player.sendMessage(C("HelpClaim"));
                 }
             } else if ("claim.other".equalsIgnoreCase(allowedCommand)) {
                 player.sendMessage(C("CmdClaimOtherUsage"));
                 if (economyEnabled && pmi.getClaimPrice() != 0) {
-                    player.sendMessage(C("HelpClaimOther") + " " + C("WordPrice") + " : " + Math.round(pmi.getClaimPrice()));
+                    player.sendMessage(C("HelpClaimOther") + " " + C("WordPrice", pmi.getClaimPrice()));
                 } else {
                     player.sendMessage(C("HelpClaimOther"));
                 }
@@ -166,14 +166,14 @@ public class CmdShowHelp extends PlotCommand {
                     player.sendMessage(C("CmdAutoUsage"));
                 }
                 if (economyEnabled && pmi.getClaimPrice() != 0) {
-                    player.sendMessage(C("HelpAuto") + " " + C("WordPrice") + " : " + Math.round(pmi.getClaimPrice()));
+                    player.sendMessage(C("HelpAuto") + " " + C("WordPrice",pmi.getClaimPrice()));
                 } else {
                     player.sendMessage(C("HelpAuto"));
                 }
             } else if ("home".equalsIgnoreCase(allowedCommand)) {
                 player.sendMessage(C("CmdHomeUsage"));
                 if (economyEnabled && pmi.getPlotHomePrice() != 0) {
-                    player.sendMessage(C("HelpHome") + " " + C("WordPrice") + " : " + Math.round(pmi.getPlotHomePrice()));
+                    player.sendMessage(C("HelpHome") + " " + C("WordPrice",pmi.getPlotHomePrice()));
                 } else {
                     player.sendMessage(C("HelpHome"));
                 }
@@ -186,7 +186,7 @@ public class CmdShowHelp extends PlotCommand {
             } else if ("biome".equalsIgnoreCase(allowedCommand)) {
                 player.sendMessage(C("CmdBiomeUsage"));
                 if (economyEnabled && pmi.getBiomeChangePrice() != 0) {
-                    player.sendMessage(C("HelpBiome") + " " + C("WordPrice") + " : " + Math.round(pmi.getBiomeChangePrice()));
+                    player.sendMessage(C("HelpBiome") + " " + C("WordPrice",pmi.getBiomeChangePrice()));
                 } else {
                     player.sendMessage(C("HelpBiome"));
                 }
@@ -207,7 +207,7 @@ public class CmdShowHelp extends PlotCommand {
             } else if ("clear".equalsIgnoreCase(allowedCommand)) {
                 player.sendMessage(C("CmdClearUsage"));
                 if (economyEnabled && pmi.getClearPrice() != 0) {
-                    player.sendMessage(C("HelpClear") + " " + C("WordPrice") + " : " + Math.round(pmi.getClearPrice()));
+                    player.sendMessage(C("HelpClear") + " " + C("WordPrice",pmi.getClearPrice()));
                 } else {
                     player.sendMessage(C("HelpClear"));
                 }
@@ -217,26 +217,26 @@ public class CmdShowHelp extends PlotCommand {
             } else if ("add".equalsIgnoreCase(allowedCommand)) {
                 player.sendMessage(C("CmdAddUsage"));
                 if (economyEnabled && pmi.getAddPlayerPrice() != 0) {
-                    player.sendMessage(C("HelpAdd") + " " + C("WordPrice") + " : " + Math.round(pmi.getAddPlayerPrice()));
+                    player.sendMessage(C("HelpAdd") + " " + C("WordPrice",pmi.getAddPlayerPrice()));
                 } else {
                     player.sendMessage(C("HelpAdd"));
                 }
                 player.sendMessage(C("CmdRemoveUsage"));
                 if (economyEnabled && pmi.getRemovePlayerPrice() != 0) {
-                    player.sendMessage(C("HelpRemove") + " " + C("WordPrice") + " : " + Math.round(pmi.getRemovePlayerPrice()));
+                    player.sendMessage(C("HelpRemove") + " " + C("WordPrice",pmi.getRemovePlayerPrice()));
                 } else {
                     player.sendMessage(C("HelpRemove"));
                 }
             } else if ("deny".equalsIgnoreCase(allowedCommand)) {
                 player.sendMessage(C("CmdDenyUsage"));
                 if (economyEnabled && pmi.getDenyPlayerPrice() != 0) {
-                    player.sendMessage(C("HelpDeny") + " " + C("WordPrice") + " : " + Math.round(pmi.getDenyPlayerPrice()));
+                    player.sendMessage(C("HelpDeny") + " " + C("WordPrice",pmi.getDenyPlayerPrice()));
                 } else {
                     player.sendMessage(C("HelpDeny"));
                 }
                 player.sendMessage(C("CmdUndenyUsage"));
                 if (economyEnabled && pmi.getUndenyPlayerPrice() != 0) {
-                    player.sendMessage(C("HelpUndeny") + " " + C("WordPrice") + " : " + Math.round(pmi.getUndenyPlayerPrice()));
+                    player.sendMessage(C("HelpUndeny") + " " + C("WordPrice",pmi.getUndenyPlayerPrice()));
                 } else {
                     player.sendMessage(C("HelpUndeny"));
                 }
@@ -261,7 +261,7 @@ public class CmdShowHelp extends PlotCommand {
             } else if ("dispose".equalsIgnoreCase(allowedCommand)) {
                 player.sendMessage(C("CmdDisposeUsage"));
                 if (economyEnabled && pmi.getDisposePrice() != 0) {
-                    player.sendMessage(C("HelpDispose") + " " + C("WordPrice") + " : " + Math.round(pmi.getDisposePrice()));
+                    player.sendMessage(C("HelpDispose") + " " + C("WordPrice",pmi.getDisposePrice()));
                 } else {
                     player.sendMessage(C("HelpDispose"));
                 }

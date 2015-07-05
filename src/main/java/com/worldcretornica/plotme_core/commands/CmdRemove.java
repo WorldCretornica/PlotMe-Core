@@ -92,8 +92,7 @@ public class CmdRemove extends PlotCommand {
                                 } else {
                                     plot.removeMembers(allowed);
                                 }
-                                player.sendMessage(
-                                        C("WordPlayer") + " " + args[1] + " " + C("WordRemoved") + ". " + serverBridge.getEconomy().get().format
+                                player.sendMessage(args[1] + " " + C("WordRemoved") + ". " + serverBridge.getEconomy().get().format
                                                 (price));
                                 plugin.getSqlManager().savePlot(plot);
 
@@ -103,7 +102,7 @@ public class CmdRemove extends PlotCommand {
                                 }
                             }
                         } else {
-                            player.sendMessage(C("WordPlayer") + " " + args[1] + " " + C("MsgWasNotAllowed"));
+                            player.sendMessage(C("WasNotAMember",args[1]));
                         }
                     } else {
                         player.sendMessage(C("MsgThisPlot") + "(" + plot.getId() + ") " + C("MsgNotYoursNotAllowedRemove"));
