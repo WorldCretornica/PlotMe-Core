@@ -4,14 +4,13 @@ import com.worldcretornica.plotme_core.ClearReason;
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.CommandExBase;
 import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.event.PlotResetEvent;
 
 public class CmdReset extends PlotCommand {
 
-    public CmdReset(PlotMe_Core instance, CommandExBase commandExBase) {
+    public CmdReset(PlotMe_Core instance) {
         super(instance);
     }
 

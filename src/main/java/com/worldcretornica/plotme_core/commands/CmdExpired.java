@@ -5,7 +5,6 @@ import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMapInfo;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.CommandExBase;
 import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 
@@ -13,7 +12,7 @@ import java.util.List;
 
 public class CmdExpired extends PlotCommand {
 
-    public CmdExpired(PlotMe_Core instance, CommandExBase commandExBase) {
+    public CmdExpired(PlotMe_Core instance) {
         super(instance);
     }
 

@@ -3,7 +3,6 @@ package com.worldcretornica.plotme_core.commands;
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.CommandExBase;
 import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IOfflinePlayer;
 import com.worldcretornica.plotme_core.api.IPlayer;
@@ -13,7 +12,7 @@ import net.milkbowl.vault.economy.EconomyResponse;
 
 public class CmdBuy extends PlotCommand {
 
-    public CmdBuy(PlotMe_Core instance, CommandExBase commandExBase) {
+    public CmdBuy(PlotMe_Core instance) {
         super(instance);
     }
 

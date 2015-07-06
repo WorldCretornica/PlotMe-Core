@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.CommandExBase;
 import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 
@@ -12,7 +11,7 @@ import java.util.List;
 
 public class CmdDoneList extends PlotCommand {
 
-    public CmdDoneList(PlotMe_Core instance, CommandExBase commandExBase) {
+    public CmdDoneList(PlotMe_Core instance) {
         super(instance);
     }
 

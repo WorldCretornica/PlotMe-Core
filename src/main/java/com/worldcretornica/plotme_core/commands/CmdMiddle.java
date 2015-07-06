@@ -3,7 +3,6 @@ package com.worldcretornica.plotme_core.commands;
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.CommandExBase;
 import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
@@ -16,7 +15,7 @@ import java.util.List;
 
 public class CmdMiddle extends PlotCommand {
 
-    public CmdMiddle(PlotMe_Core instance, CommandExBase commandExBase) {
+    public CmdMiddle(PlotMe_Core instance) {
         super(instance);
     }
 

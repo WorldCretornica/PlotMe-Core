@@ -3,7 +3,6 @@ package com.worldcretornica.plotme_core.commands;
 import com.worldcretornica.plotme_core.PermissionNames;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMe_Core;
-import com.worldcretornica.plotme_core.api.CommandExBase;
 import com.worldcretornica.plotme_core.api.ICommandSender;
 import com.worldcretornica.plotme_core.api.IPlayer;
 import com.worldcretornica.plotme_core.api.IWorld;
@@ -12,7 +11,7 @@ import java.text.MessageFormat;
 
 public class CmdLike extends PlotCommand {
 
-    public CmdLike(PlotMe_Core instance, CommandExBase commandExBase) {
+    public CmdLike(PlotMe_Core instance) {
         super(instance);
     }
 
@@ -21,11 +20,7 @@ public class CmdLike extends PlotCommand {
     }
 
     public boolean execute(ICommandSender sender, String[] args) {
-        if (args.length > 1) {
-            sender.sendMessage(getUsage());
-            return true;
-        }
-        IPlayer player = (IPlayer) sender;
+       IPlayer player = (IPlayer) sender;
         if (player.hasPermission(PermissionNames.USER_LIKE)) {
             IWorld world = player.getWorld();
             if (manager.isPlotWorld(world)) {
