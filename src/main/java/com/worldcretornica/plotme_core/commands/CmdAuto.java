@@ -97,7 +97,6 @@ public class CmdAuto extends PlotCommand {
                         }
                     }
                 });
-                player.sendMessage(C("NoPlotFound"));
             } else {
                 player.sendMessage(C("NotPlotWorld"));
             }
