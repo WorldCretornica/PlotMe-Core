@@ -28,9 +28,12 @@ public class BukkitPlotDenyListener implements Listener {
         Location location = BukkitUtil.adapt(event.getTo());
         if (manager.isPlotWorld(location) && !event.getPlayer().hasPermission(PermissionNames.ADMIN_BYPASSDENY)) {
             Plot plot = manager.getPlot(location);
-
-            if (plot != null && plot.isDenied(event.getPlayer().getUniqueId())) {
-                event.setTo(event.getFrom());
+            if (plot != null) {
+                if (!plot.getOwnerId().equals(event.getPlayer().getUniqueId())) {
+                    if (plot.isDenied(event.getPlayer().getUniqueId())) {
+                        event.setTo(event.getFrom());
+                    }
+                }
             }
         }
     }
