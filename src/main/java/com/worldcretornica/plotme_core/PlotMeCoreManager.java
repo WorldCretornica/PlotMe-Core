@@ -670,21 +670,11 @@ public class PlotMeCoreManager {
     }
 
     public void UpdatePlayerNameFromId(final UUID uuid, final String name) {
-        plugin.getServerBridge().runTaskAsynchronously(new Runnable() {
-            @Override
-            public void run() {
-                for (final Plot plot : plugin.getSqlManager().getPlayerPlots(uuid)) {
-                    plot.setOwner(name);
-                    plugin.getSqlManager().savePlot(plot);
-                    plugin.getServerBridge().runTask(new Runnable() {
-                        @Override public void run() {
-                            setOwnerSign(plot);
-                        }
-                    });
-                }
-            }
-        });
+        for (final Plot plot : plugin.getSqlManager().getPlayerPlots(uuid)) {
+            setOwnerSign(plot);
+        }
     }
+
 
     public IOfflinePlayer getPlayer(String name) {
         return plugin.getServerBridge().getPlayer(name);
@@ -707,8 +697,8 @@ public class PlotMeCoreManager {
     }
 
     public IWorld getWorld(String world) {
-        for(IWorld iw : getPlotMaps().keySet()) {
-            if(iw.getName().equalsIgnoreCase(world)) {
+        for (IWorld iw : getPlotMaps().keySet()) {
+            if (iw.getName().equalsIgnoreCase(world)) {
                 return iw;
             }
         }

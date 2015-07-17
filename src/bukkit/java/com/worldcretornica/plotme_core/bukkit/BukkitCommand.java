@@ -25,11 +25,7 @@ public class BukkitCommand extends CommandExBase implements CommandExecutor {
                 return commandMap.get("help").execute(plugin.wrapPlayer((Player) sender), args);
             }
             //noinspection ConstantConditions
-            if (args[0] == null || args == null) {
-                api.getLogger().severe("A critical command error occurred.");
-                return false;
-            }
-            PlotCommand _command = commandMap.get(args[0]);
+            PlotCommand _command = commandMap.get(args[0].toLowerCase());
             if (_command == null) {
                 sender.sendMessage("PlotMe does not have a command by that name.");
                 return true;
