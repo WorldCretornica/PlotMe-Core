@@ -150,6 +150,8 @@ public abstract class Database {
                 } catch (SQLException e) {
                     plugin.getLogger().severe("Error deleting plot " + internalID + "'s data from table: " + table);
                     plugin.getLogger().severe("Details: " + e.getMessage());
+                    plugin.getLogger().severe("Error Code: " + e.getErrorCode());
+                    plugin.getLogger().severe("SQLState: " + e.getSQLState());
                 }
             }
         });
@@ -283,6 +285,9 @@ public abstract class Database {
                 } catch (SQLException ex) {
                     plugin.getLogger().severe("Load exception :");
                     plugin.getLogger().severe(ex.getMessage());
+                    plugin.getLogger().severe("Details: " + ex.getMessage());
+                    plugin.getLogger().severe("Error Code: " + ex.getErrorCode());
+                    plugin.getLogger().severe("SQLState: " + ex.getSQLState());
                 }
                 return ret;
             }
@@ -372,9 +377,13 @@ public abstract class Database {
                     ps.setString(19, plot.getCreatedDate());
                     ps.executeUpdate();
                     getConnection().commit();
-                } catch (SQLException ex) {
+                } catch (SQLException e) {
                     plugin.getLogger().severe("Insert Exception :");
-                    plugin.getLogger().severe(ex.getMessage());
+                    plugin.getLogger().severe(e.getMessage());
+                    plugin.getLogger().severe("Details: " + e.getMessage());
+                    plugin.getLogger().severe("Error Code: " + e.getErrorCode());
+                    plugin.getLogger().severe("SQLState: " + e.getSQLState());
+
                 }
                 for (String denied : plot.getDenied()) {
                     try (PreparedStatement ps = getConnection()
@@ -385,6 +394,10 @@ public abstract class Database {
                         getConnection().commit();
                     } catch (SQLException e) {
                         plugin.getLogger().severe("Error adding allowed data for plot with internal id " + plot.getInternalID());
+                        plugin.getLogger().severe("Details: " + e.getMessage());
+                        plugin.getLogger().severe("Error Code: " + e.getErrorCode());
+                        plugin.getLogger().severe("SQLState: " + e.getSQLState());
+
                         e.printStackTrace();
                     }
                 }
@@ -398,6 +411,10 @@ public abstract class Database {
                         getConnection().commit();
                     } catch (SQLException e) {
                         plugin.getLogger().severe("Error adding allowed data for plot with internal id " + plot.getInternalID());
+                        plugin.getLogger().severe("Details: " + e.getMessage());
+                        plugin.getLogger().severe("Error Code: " + e.getErrorCode());
+                        plugin.getLogger().severe("SQLState: " + e.getSQLState());
+
                         e.printStackTrace();
                     }
                 }
@@ -410,6 +427,9 @@ public abstract class Database {
                         getConnection().commit();
                     } catch (SQLException e) {
                         plugin.getLogger().severe("Error adding allowed data for plot with internal id " + plot.getInternalID());
+                        plugin.getLogger().severe("Details: " + e.getMessage());
+                        plugin.getLogger().severe("Error Code: " + e.getErrorCode());
+                        plugin.getLogger().severe("SQLState: " + e.getSQLState());
                         e.printStackTrace();
                     }
                 }
@@ -423,6 +443,9 @@ public abstract class Database {
                             ps.setString(3, stringStringEntry.getKey());
                             ps.setString(4, stringStringEntry.getValue());
                         } catch (SQLException e) {
+                            plugin.getLogger().severe("Details: " + e.getMessage());
+                            plugin.getLogger().severe("Error Code: " + e.getErrorCode());
+                            plugin.getLogger().severe("SQLState: " + e.getSQLState());
                             e.printStackTrace();
                         }
                     }
