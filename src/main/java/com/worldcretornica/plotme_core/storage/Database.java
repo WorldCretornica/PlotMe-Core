@@ -196,7 +196,7 @@ public abstract class Database {
             public void run() {
                 plugin.getLogger().info("Loading plots for world " + world.getName());
                 HashMap<PlotId, Plot> plots2 = getPlots(world);
-                plots.get(world).putAll(plots2);
+                plots.put(world, plots2);
                 PlotWorldLoadEvent eventWorld = new PlotWorldLoadEvent(world, plots2.size());
                 plugin.getEventBus().post(eventWorld);
                 for (Plot plot : plots2.values()) {
