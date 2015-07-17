@@ -14,6 +14,8 @@ public interface IPlotMe_GeneratorManager {
 
     List<IPlayer> getPlayersInPlot(PlotId id);
 
+    void clearEntities(Vector bottom, Vector top);
+
     void fillRoad(PlotId id1, PlotId id2);
 
     void fillMiddleRoad(PlotId id1, PlotId id2);
@@ -36,9 +38,7 @@ public interface IPlotMe_GeneratorManager {
 
     Vector getBottom(PlotId id);
 
-    long[] clear(PlotId id, long maxBlocks, long[] start);
-
-    long[] clear(Vector bottom, Vector top, long maxBlocks, long[] start);
+    void clear(Vector bottom, Vector top);
 
     void adjustPlotFor(Plot id, boolean claimed, boolean protect, boolean forSale);
 

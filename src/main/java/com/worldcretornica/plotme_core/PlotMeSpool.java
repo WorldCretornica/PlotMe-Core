@@ -9,9 +9,6 @@ public class PlotMeSpool implements Runnable {
     private final Plot plot;
     private final ClearReason reason;
     private final ICommandSender sender;
-    private long[] currentClear;
-
-    private int taskId;
 
 
     public PlotMeSpool(PlotMe_Core plotMe_core, Plot plot, ClearReason reason, ICommandSender sender) {
@@ -28,28 +25,17 @@ public class PlotMeSpool implements Runnable {
         }
         IPlotMe_GeneratorManager genmanager = PlotMeCoreManager.getInstance().getGenManager(plot.getWorld());
 
-        if (currentClear == null) {
-            currentClear = genmanager.clear(plot.getPlotBottomLoc(), plot.getPlotTopLoc(), plugin.getConfig().getInt("NbBlocksPerClearStep"),
-                    null);
+        genmanager.clear(plot.getPlotBottomLoc(), plot.getPlotTopLoc());
+        if (reason.equals(ClearReason.Clear)) {
+            genmanager.adjustPlotFor(plot, true, false, false);
         } else {
-            currentClear = genmanager
-                    .clear(plot.getPlotBottomLoc(), plot.getPlotTopLoc(), plugin.getConfig().getInt("NbBlocksPerClearStep"), currentClear);
+            genmanager.adjustPlotFor(plot, false, false, false);
         }
-        if (currentClear == null) {
-            if (reason.equals(ClearReason.Clear)) {
-                genmanager.adjustPlotFor(plot, true, false, false);
-            } else {
-                genmanager.adjustPlotFor(plot, false, false, false);
-            }
-            if (sender != null) {
-                sender.sendMessage(plugin.C("WordPlot") + " " + plot.getId().getID() + " " + plugin.C("WordCleared"));
-            }
-            plugin.removePlotToClear(taskId);
+        if (sender != null) {
+            sender.sendMessage(plugin.C("WordPlot") + " " + plot.getId().getID() + " " + plugin.C("WordCleared"));
         }
+
     }
 
-    public void setTaskId(int taskId) {
-        this.taskId = taskId;
-    }
 
 }

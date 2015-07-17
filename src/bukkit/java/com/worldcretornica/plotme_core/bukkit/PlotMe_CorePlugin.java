@@ -129,7 +129,7 @@ public class PlotMe_CorePlugin extends JavaPlugin {
         } else {
             BukkitPlayer bukkitplayer = new BukkitPlayer(player);
             bukkitPlayerMap.put(player.getUniqueId(), bukkitplayer);
-            return getServerObjectBuilder().getPlayer(player.getUniqueId());
+            return bukkitplayer;
         }
     }
 

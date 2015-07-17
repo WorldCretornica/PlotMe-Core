@@ -43,6 +43,7 @@ public class SpongePlayer extends SpongeUser implements IPlayer {
 
     @Override
     public void setLocation(Location location) {
+        //player.setLocation(location);
     }
 
     /**
@@ -53,8 +54,13 @@ public class SpongePlayer extends SpongeUser implements IPlayer {
      * @param location new location
      */
     @Override public void teleport(Location location) {
-        PlotMe_CorePlugin.getInstance().getServerObjectBuilder().runTaskLater(new TeleportRunnable(this, location), PlotMe_CorePlugin.getInstance()
-                .getAPI().getConfig().getInt("tp-delay"));
+        int anInt = PlotMe_CorePlugin.getInstance()
+                .getAPI().getConfig().getInt("tp-delay");
+        if (anInt == 0) {
+            setLocation(location);
+        } else {
+            PlotMe_CorePlugin.getInstance().getServerObjectBuilder().runTaskLater(new TeleportRunnable(this, location), anInt);
+        }
     }
 
     public Player getPlayer() {

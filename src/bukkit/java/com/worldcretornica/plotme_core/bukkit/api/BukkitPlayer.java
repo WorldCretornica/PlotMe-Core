@@ -47,7 +47,7 @@ public class BukkitPlayer extends BukkitOfflinePlayer implements IPlayer {
 
     @Override
     public void setLocation(Location location) {
-        player.teleport(new org.bukkit.Location(((BukkitWorld) location.getWorld()).getWorld(), location.getX(), location.getY(), location.getZ()));
+        player.teleport(BukkitUtil.adapt(location));
     }
 
     /**
@@ -62,8 +62,10 @@ public class BukkitPlayer extends BukkitOfflinePlayer implements IPlayer {
                 .getAPI().getConfig().getInt("tp-delay");
         if (delay != 0) {
             player.sendMessage(String.format("You will be teleported in %d seconds.", delay));
+            PlotMe_CorePlugin.getInstance().getServerObjectBuilder().runTaskLater(new TeleportRunnable(this, location), delay);
+        } else {
+            setLocation(location);
         }
-        PlotMe_CorePlugin.getInstance().getServerObjectBuilder().runTaskLater(new TeleportRunnable(this, location), delay);
     }
 
     public Player getPlayer() {

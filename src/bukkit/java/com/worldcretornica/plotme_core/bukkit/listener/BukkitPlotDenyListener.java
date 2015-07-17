@@ -26,13 +26,17 @@ public class BukkitPlotDenyListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerMove(PlayerMoveEvent event) {
         Location location = BukkitUtil.adapt(event.getTo());
-        if (manager.isPlotWorld(location) && !event.getPlayer().hasPermission(PermissionNames.ADMIN_BYPASSDENY)) {
+        if (manager.isPlotWorld(location)) {
+            if (event.getPlayer().hasPermission(PermissionNames.ADMIN_BYPASSDENY)) {
+                return;
+            }
             Plot plot = manager.getPlot(location);
             if (plot != null) {
-                if (!plot.getOwnerId().equals(event.getPlayer().getUniqueId())) {
-                    if (plot.isDenied(event.getPlayer().getUniqueId())) {
-                        event.setTo(event.getFrom());
-                    }
+                if (plot.getOwnerId().equals(event.getPlayer().getUniqueId())) {
+                    return;
+                }
+                if (plot.isDenied(event.getPlayer().getUniqueId())) {
+                    event.setTo(event.getFrom());
                 }
             }
         }
@@ -44,8 +48,13 @@ public class BukkitPlotDenyListener implements Listener {
 
         if (manager.isPlotWorld(player) && !player.hasPermission(PermissionNames.ADMIN_BYPASSDENY)) {
             Plot plot = manager.getPlot(player);
-            if (plot != null && plot.isDenied(player.getUniqueId())) {
-                player.setLocation(manager.getPlotHome(plot.getId(), player.getWorld()));
+            if (plot != null) {
+                if (plot.getOwnerId().equals(event.getPlayer().getUniqueId())) {
+                    return;
+                }
+                if (plot.isDenied(player.getUniqueId())) {
+                    player.setLocation(manager.getPlotHome(plot.getId(), player.getWorld()));
+                }
             }
         }
     }

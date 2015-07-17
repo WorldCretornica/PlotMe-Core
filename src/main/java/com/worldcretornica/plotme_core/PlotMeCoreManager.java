@@ -540,6 +540,7 @@ public class PlotMeCoreManager {
         if (plugin.getServerBridge().isUsingLwc()) {
             removeLWC(plot);
         }
+        getGenManager(plot.getWorld()).clearEntities(plot.getPlotBottomLoc(), plot.getPlotTopLoc());
         if (reason.equals(ClearReason.Clear)) {
             adjustWall(plot, true);
         } else {
@@ -672,19 +673,15 @@ public class PlotMeCoreManager {
         plugin.getServerBridge().runTaskAsynchronously(new Runnable() {
             @Override
             public void run() {
-                for (final Plot plot : plugin.getSqlManager().plots) {
-                        if (plot.getOwnerId().equals(uuid)) {
-                            plot.setOwner(name);
-                            final int i = plugin.getSqlManager().plots.indexOf(plot);
-                            plugin.getSqlManager().plots.get(i).setOwner(name);
-                            plugin.getSqlManager().savePlot(plot);
-                            plugin.getServerBridge().runTask(new Runnable() {
-                                @Override public void run() {
-                                    setOwnerSign(plot);
-                                }
-                            });
+                for (final Plot plot : plugin.getSqlManager().getPlayerPlots(uuid)) {
+                    plot.setOwner(name);
+                    plugin.getSqlManager().savePlot(plot);
+                    plugin.getServerBridge().runTask(new Runnable() {
+                        @Override public void run() {
+                            setOwnerSign(plot);
                         }
-                    }
+                    });
+                }
             }
         });
     }
