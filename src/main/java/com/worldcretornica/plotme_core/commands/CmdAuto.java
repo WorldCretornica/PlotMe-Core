@@ -81,7 +81,7 @@ public class CmdAuto extends PlotCommand {
                                             }
                                         });
 
-                                        player.teleport(manager.getPlotHome(id, world));
+                                        player.teleport(manager.getPlotHome(id, world), plugin);
 
                                         player.sendMessage(C("MsgThisPlotYours") + " " + C("WordUse") + " /plotme home" + " " + C("MsgToGetToIt"));
                                         break loop;

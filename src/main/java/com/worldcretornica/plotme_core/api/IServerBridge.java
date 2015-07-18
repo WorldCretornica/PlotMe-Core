@@ -104,6 +104,8 @@ public abstract class IServerBridge {
 
     public abstract int runTask(Runnable task);
 
+    public abstract int runTaskTimer(Runnable task, long period, long delay);
+
     /**
      * Get all Existing Plotworlds.
      * @return all plotworlds on the server

@@ -1,5 +1,7 @@
 package com.worldcretornica.plotme_core.api;
 
+import com.worldcretornica.plotme_core.PlotMe_Core;
+
 import java.util.UUID;
 
 public interface IEntity extends IActor {
@@ -24,8 +26,9 @@ public interface IEntity extends IActor {
      * "Teleporting" or moving the entity
      *
      * @param location new location
+     * @param plugin
      */
-    void teleport(Location location);
+    void teleport(Location location, PlotMe_Core plugin);
 
     /**
      * Get the world the entity is currently in.

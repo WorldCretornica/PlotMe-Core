@@ -17,6 +17,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.inject.Singleton;
@@ -387,7 +388,8 @@ public class PlotMeCoreManager {
      * @return plotworld
      */
     public IWorld getFirstWorld() {
-        return (IWorld) getPlotMaps().keySet().toArray()[0];
+        Set<IWorld> iWorlds = getPlotMaps().keySet();
+        return iWorlds.toArray(new IWorld[iWorlds.size()])[0];
     }
 
     /**

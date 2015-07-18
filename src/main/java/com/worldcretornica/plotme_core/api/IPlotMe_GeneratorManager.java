@@ -2,6 +2,7 @@ package com.worldcretornica.plotme_core.api;
 
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotId;
+import com.worldcretornica.plotme_core.utils.ClearEntry;
 import com.worldcretornica.schematic.Schematic;
 
 import java.util.List;
@@ -38,7 +39,7 @@ public interface IPlotMe_GeneratorManager {
 
     Vector getBottom(PlotId id);
 
-    void clear(Vector bottom, Vector top);
+    void clear(Vector bottom, Vector top, PlotId clearMap, ClearEntry entry);
 
     void adjustPlotFor(Plot id, boolean claimed, boolean protect, boolean forSale);
 

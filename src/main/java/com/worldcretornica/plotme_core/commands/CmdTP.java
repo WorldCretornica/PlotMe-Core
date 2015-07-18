@@ -56,7 +56,7 @@ public class CmdTP extends PlotCommand {
                             plugin.getEventBus().post(event);
 
                             if (!event.isCancelled()) {
-                                player.teleport(location);
+                                player.teleport(location, plugin);
                             }
                         } else {
                             player.sendMessage(C("MsgNoPlotworldFound"));

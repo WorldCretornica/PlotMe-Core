@@ -10,6 +10,7 @@ import com.worldcretornica.plotme_core.bukkit.SchematicUtil;
 import com.worldcretornica.plotme_core.storage.Database;
 import com.worldcretornica.plotme_core.storage.MySQLConnector;
 import com.worldcretornica.plotme_core.storage.SQLiteConnector;
+import com.worldcretornica.plotme_core.utils.ClearEntry;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -66,6 +67,7 @@ public class PlotMe_Core {
         setupConfigFiles();
         setupSQL();
         serverBridge.setupHooks();
+        serverBridge.runTaskTimer(new PlotMeSpool(this), 15, 15);
         if (getConfig().getBoolean("ExpirePlotCleanup")) {
             //20L * 60 = 1 minute in ticks
             serverBridge
@@ -189,25 +191,21 @@ public class PlotMe_Core {
 
     public void addPlotToClear(Plot plot, ClearReason reason, ICommandSender sender) {
         getLogger().log(Level.INFO, "plot to clear add {0}", plot.getId());
-        PlotMeSpool pms = new PlotMeSpool(this, plot, reason, sender);
-        serverBridge.runTask(pms);
-    }
-
-    public void removePlotToClear(int taskId) {
-        serverBridge.cancelTask(taskId);
-        getLogger().log(Level.INFO, "removed taskid {0}", taskId);
+        PlotMeSpool.clearList.add(new ClearEntry(plot, reason, sender));
+        if (sender != null) {
+            sender.sendMessage("Clearing Plot " + plot.getId().getID());
+        }
     }
 
     public boolean isPlotLocked(PlotId id) {
-/*        if (plotsToClear.isEmpty()) {
+        if (PlotMeSpool.clearList.isEmpty()) {
             return false;
-        }
-        for (PlotToClear ptc : plotsToClear) {
-            if (ptc.getPlot().getId().equals(id)) {
-                return true;
+        } else {
+            for (ClearEntry clearEntry : PlotMeSpool.clearList) {
+                clearEntry.getPlot().getId().equals(id);
             }
-        }*/
-        //TODO fix this for 0.17.1
+
+        }
 
         return false;
     }

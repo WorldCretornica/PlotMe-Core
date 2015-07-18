@@ -1,5 +1,6 @@
 package com.worldcretornica.plotme_core.sponge.api;
 
+import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.TeleportRunnable;
 import com.worldcretornica.plotme_core.api.IEntity;
 import com.worldcretornica.plotme_core.api.IWorld;
@@ -36,10 +37,10 @@ public class SpongeEntity implements IEntity {
      * Uses the code that allows a delay while
      * "Teleporting" or moving the entity
      *
-
      * @param location new location
+     * @param plugin
      */
-    @Override public void teleport(Location location) {
+    @Override public void teleport(Location location, PlotMe_Core plugin) {
         PlotMe_CorePlugin.getInstance().getServerObjectBuilder().runTaskLater(new TeleportRunnable(this, location), PlotMe_CorePlugin.getInstance()
                 .getAPI().getConfig().getInt("tp-delay"));
     }

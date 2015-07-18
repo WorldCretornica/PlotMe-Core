@@ -1,6 +1,7 @@
 package com.worldcretornica.plotme_core.sponge.api;
 
 import com.google.common.base.Optional;
+import com.worldcretornica.plotme_core.PlotMe_Core;
 import com.worldcretornica.plotme_core.TeleportRunnable;
 import com.worldcretornica.plotme_core.api.IItemStack;
 import com.worldcretornica.plotme_core.api.IPlayer;
@@ -50,10 +51,10 @@ public class SpongePlayer extends SpongeUser implements IPlayer {
      * Uses the code that allows a delay while
      * "Teleporting" or moving the entity
      *
-
      * @param location new location
+     * @param plugin
      */
-    @Override public void teleport(Location location) {
+    @Override public void teleport(Location location, PlotMe_Core plugin) {
         int anInt = PlotMe_CorePlugin.getInstance()
                 .getAPI().getConfig().getInt("tp-delay");
         if (anInt == 0) {

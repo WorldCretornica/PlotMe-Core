@@ -179,6 +179,11 @@ public class BukkitServerBridge extends IServerBridge {
     @Override public int runTask(Runnable task) {
         return Bukkit.getScheduler().runTask(plotMeCorePlugin, task).getTaskId();
     }
+
+    @Override public int runTaskTimer(Runnable task, long period, long delay) {
+        return Bukkit.getScheduler().runTaskTimer(plotMeCorePlugin, task, delay, period).getTaskId();
+    }
+
     @Override
     public Collection<IWorld> getWorlds() {
         List<IWorld> worlds = new ArrayList<>();
