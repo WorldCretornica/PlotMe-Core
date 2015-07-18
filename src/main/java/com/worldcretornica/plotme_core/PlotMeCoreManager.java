@@ -205,7 +205,9 @@ public class PlotMeCoreManager {
      * @return an ILocation of the plot home location
      */
     public Location getPlotHome(PlotId id, IWorld world) {
-        return getGenManager(world).getPlotHome(id);
+        Location plotHome = getGenManager(world).getPlotHome(id);
+        plugin.getLogger().info(plotHome.toString());
+        return plotHome;
     }
 
     /**

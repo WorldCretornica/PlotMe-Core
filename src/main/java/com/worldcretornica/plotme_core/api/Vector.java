@@ -67,7 +67,7 @@ public class Vector implements Comparable<Vector> {
     }
 
     @Override public String toString() {
-        return "X: " + y + " Y: " + y + " Z: " + z;
+        return "X: " + x + " Y: " + y + " Z: " + z;
     }
 
     @Override
