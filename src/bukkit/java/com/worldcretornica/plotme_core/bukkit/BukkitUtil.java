@@ -17,7 +17,7 @@ import org.bukkit.World;
 public class BukkitUtil {
 
     public static org.bukkit.Location adapt(Location location) {
-        return new org.bukkit.Location(adapt(location.getWorld()), 0, 0, 0);
+        return new org.bukkit.Location(adapt(location.getWorld()), location.getX(), location.getY(), location.getZ());
     }
 
     private static World adapt(IWorld world) {
