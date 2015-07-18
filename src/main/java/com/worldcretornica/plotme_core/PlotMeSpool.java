@@ -17,6 +17,9 @@ public class PlotMeSpool implements Runnable {
 
     @Override
     public void run() {
+        if (clearList.isEmpty()) {
+            return;
+        }
         ClearEntry first = clearList.getFirst();
         IPlotMe_GeneratorManager genmanager = PlotMeCoreManager.getInstance().getGenManager(first.getPlot().getWorld());
         genmanager.clear(first.getPlot().getPlotBottomLoc(), first.getPlot().getPlotTopLoc(), first.getPlot().getId(), first);
