@@ -434,6 +434,8 @@ public abstract class Database {
                     ps.setString(2, metadata.getKey());
                     ps.setString(3, stringStringEntry.getKey());
                     ps.setString(4, stringStringEntry.getValue());
+                    ps.execute();
+                    getConnection().commit();
                 } catch (SQLException e) {
                     plugin.getLogger().severe("Details: " + e.getMessage());
                     plugin.getLogger().severe("Error Code: " + e.getErrorCode());
