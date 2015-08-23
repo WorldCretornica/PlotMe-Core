@@ -263,9 +263,9 @@ public abstract class Database {
                             statementMetadata.setLong(1, internalID);
                             try (ResultSet setMetadata = statementMetadata.executeQuery()) {
                                 while (setMetadata.next()) {
-                                    String pluginname = setMetadata.getString("pluginname");
-                                    String propertyname = setMetadata.getString("propertyname");
-                                    String propertyvalue = setMetadata.getString("propertyvalue");
+                                    String pluginname = setMetadata.getString("pluginName");
+                                    String propertyname = setMetadata.getString("propertyName");
+                                    String propertyvalue = setMetadata.getString("propertyValue");
                                     if (!metadata.containsKey(pluginname)) {
                                         metadata.put(pluginname, new HashMap<String, String>());
                                     }
